@@ -2,10 +2,12 @@ FROM couchbase
 
 RUN apt-get update && \
     apt-get install -y \
-	git curl wget \
-	atop htop psmisc \
-	emacs
+	git curl wget jq \
+	atop htop psmisc strace \
+	emacs golang-go
 
-COPY init-sample-buckets.sh /init-sample-buckets.sh
-RUN chmod +x /init-sample-buckets.sh
-RUN /init-sample-buckets.sh
+RUN mkdir -p /init-couchbase
+
+COPY init-couchbase /init-couchbase
+
+RUN chmod +x /init-couchbase/*.sh
