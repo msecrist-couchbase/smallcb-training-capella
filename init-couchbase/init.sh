@@ -19,6 +19,10 @@ mv /etc/service/couchbase-server/run.tmp \
 
 chmod +x /etc/service/couchbase-server/run
 
+# append to /opt/couchbase/etc/couchbase/static_config...
+cat /init-couchbase/init-static-config.txt >> \
+    /opt/couchbase/etc/couchbase/static_config
+
 echo "Starting couchbase-server..."
 /entrypoint.sh couchbase-server &
 
