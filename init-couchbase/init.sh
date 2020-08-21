@@ -39,14 +39,9 @@ done
 
 echo "Waiting for couchbase-server... ready"
 
-# check if cluster is already initialized
-# if ! couchbase-cli server-list -c localhost:8091 -u Administrator -p password > /dev/null; then
-# fi
-#
-# fg 1
-
-echo "couchbase cluster-init..."
-couchbase-cli cluster-init \
+if ! couchbase-cli server-list -c localhost:8091 -u Administrator -p password > /dev/null; then
+  echo "couchbase cluster-init..."
+  couchbase-cli cluster-init \
         --services data,query,index,fts \
         --index-storage-setting default \
         --cluster-ramsize 1024 \
@@ -57,6 +52,7 @@ couchbase-cli cluster-init \
         --cluster-username Administrator \
         --cluster-password password \
         --cluster-name smallcb
+fi
 
 sleep 3
 
@@ -72,16 +68,6 @@ sleep 3
 
 curl http://Administrator:password@127.0.0.1:9102/internal/settings?internal=ok | jq .
 
-# echo "couchbase bucket-create test..."
-# couchbase-cli bucket-create \
-#         --cluster localhost \
-#         --username Administrator \
-#         --password password \
-#         --bucket test \
-#         --bucket-type couchbase \
-#         --bucket-ramsize 128 \
-#         --wait
-
 echo "cbdocloader beer-sample..."
 /opt/couchbase/bin/cbdocloader \
         -c localhost -u Administrator -p password \
@@ -93,6 +79,16 @@ echo "cbdocloader beer-sample..."
 #         -c localhost -u Administrator -p password \
 #         -b travel-sample -m 128 -v \
 # 	-d /opt/couchbase/samples/travel-sample.zip
+
+# echo "couchbase bucket-create test..."
+# couchbase-cli bucket-create \
+#         --cluster localhost \
+#         --username Administrator \
+#         --password password \
+#         --bucket test \
+#         --bucket-type couchbase \
+#         --bucket-ramsize 128 \
+#         --wait
 
 sleep 5
 
