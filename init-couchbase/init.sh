@@ -26,10 +26,12 @@ cat /init-couchbase/init-static-config.txt >> \
 echo "Starting couchbase-server..."
 /entrypoint.sh couchbase-server &
 
+echo "Restarting couchbase-server..."
 /opt/couchbase/bin/couchbase-server -k
 
 sleep 5
 
+echo "Waiting for couchbase-server..."
 until curl -s http://localhost:8091/pools > /dev/null; do
     sleep 5
     echo "Waiting for couchbase-server..."
