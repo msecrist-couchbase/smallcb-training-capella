@@ -33,3 +33,12 @@ restart:
 	rm -rf data/*
 	cp -R data-snapshot/ data/
 	docker start $(CONTAINER_NAME)
+
+# After a restart, wait until couchbase-server is healthy via polling.
+restart-wait: restart
+	echo "Checking couchbase-server healthy..."
+	until \
+           curl http://Administrator:password@127.0.0.1:8091/pools/default/buckets | jq . | grep healthy; \
+        do \
+           sleep 1; \
+        done
