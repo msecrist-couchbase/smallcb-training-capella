@@ -1,4 +1,4 @@
-FROM couchbase
+FROM couchbase:enterprise-6.6.0
 
 RUN apt-get update && \
     apt-get install -y \
