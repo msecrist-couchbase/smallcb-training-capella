@@ -26,6 +26,8 @@ cat /init-couchbase/init-static-config.txt >> \
 echo "Starting couchbase-server..."
 /entrypoint.sh couchbase-server &
 
+sleep 5
+
 echo "Restarting couchbase-server..."
 /opt/couchbase/bin/couchbase-server -k
 
