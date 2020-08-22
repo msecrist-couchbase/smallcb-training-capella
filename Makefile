@@ -27,6 +27,8 @@ create:
 	docker rm $(CONTAINER_NAME)
 	sleep 3
 	cp -R vol-data/ vol-data.snapshot/
+	rm -rf vol-data.snapshot/lib/couchbase/logs/*
+	rm -rf vol-data.snapshot/lib/couchbase/stats/*
 
 # Restart the docker container instance from the vol-data.snapshot.
 restart-snapshot:
