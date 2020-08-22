@@ -29,7 +29,7 @@ create:
 	cp -R vol-data/ vol-data.snapshot/
 
 # Restart the docker container instance from the vol-data.snapshot.
-restart:
+restart-snapshot:
 	docker stop $(CONTAINER_NAME) || true
 	docker rm $(CONTAINER_NAME) || true
 	rm -rf vol-data/*
@@ -40,8 +40,8 @@ restart:
                    --name=$(CONTAINER_NAME) \
                    -d $(IMAGE_NAME)
 
-# After restart, wait until couchbase-server is healthy via polling.
-restart-wait: restart
+# After restart-snapshot, wait until couchbase-server is healthy.
+restart: restart-snapshot
 	echo "Checking couchbase-server healthy..."
 	until \
            curl http://Administrator:password@127.0.0.1:8091/pools/default/buckets | jq . | grep healthy; \
