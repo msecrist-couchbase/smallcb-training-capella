@@ -1,4 +1,8 @@
-FROM couchbase:enterprise-6.6.0
+ARG CB_EDITION=enterprise
+ARG CB_VERSION=6.6.0
+ARG CB_IMAGE=couchbase:$CB_EDITION-$CB_VERSION
+
+FROM $CB_IMAGE
 
 RUN apt-get update && \
     apt-get install -y \
