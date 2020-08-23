@@ -51,5 +51,5 @@ restart: restart-snapshot
            sleep 1; \
         done
 
-play-server: cmd/play-server/main.go cmd/play-server/form.html.template
+play-server: cmd/play-server/main.go cmd/play-server/main.html.template
 	go build ./...

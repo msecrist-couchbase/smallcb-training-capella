@@ -33,30 +33,30 @@ func initMux(mux *http.ServeMux) {
 }
 
 func handleHome(w http.ResponseWriter, r *http.Request) {
-	emit(w, r, &form{})
+	emit(w, r, &mainData{})
 }
 
 func handleRun(w http.ResponseWriter, r *http.Request) {
 	code := r.FormValue("code")
 
-	emit(w, r, &form{
+	emit(w, r, &mainData{
 		Code:   code,
 		Output: "output would go here, but still TBD",
 	})
 }
 
-type form struct {
+type mainData struct {
 	Code   string
 	Output string
 }
 
-var formTemplate = template.Must(template.ParseFiles("cmd/play-server/form.html.template"))
+var mainTemplate = template.Must(template.ParseFiles("cmd/play-server/main.html.template"))
 
-func emit(w http.ResponseWriter, r *http.Request, data *form) {
+func emit(w http.ResponseWriter, r *http.Request, data *mainData) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 
-	if err := formTemplate.Execute(w, data); err != nil {
-		log.Printf("formTemplate.Execute, data: %+v, err: %v",
+	if err := mainTemplate.Execute(w, data); err != nil {
+		log.Printf("mainTemplate.Execute, data: %+v, err: %v",
 			data, err)
 	}
 }

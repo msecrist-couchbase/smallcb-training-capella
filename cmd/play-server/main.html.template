@@ -32,7 +32,12 @@
                 spellcheck="false">{{.Code}}</textarea>
     </form>
 
-    <pre>{{.Output}}</pre>
+    {{if .Output}}
+      <div>
+        <h2>output...</h2>
+        <pre>{{.Output}}</pre>
+      </div>
+    {{end}}
   </div>
 </body>
 </html>
