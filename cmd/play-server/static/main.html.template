@@ -10,8 +10,11 @@
     }
 
     textarea {
-      width: 40em;
-      height: 10em;
+      width: 60em;
+      height: 20em;
+      background-color: #333;
+      color: #eee;
+      font-family: courier, monospace;
     }
   </style>
 
@@ -23,6 +26,8 @@
 
   <div>
     <form action="run" method="post">
+      <input type="radio" value="py" name="lang"/>
+
       <input type="submit" value="run"/>
 
       <textarea name="code"

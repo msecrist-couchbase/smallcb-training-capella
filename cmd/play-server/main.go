@@ -91,33 +91,46 @@ func handleRun(w http.ResponseWriter, r *http.Request) {
 }
 
 func handleRunCode(w http.ResponseWriter, r *http.Request) *mainData {
+	lang := r.FormValue("lang")
 	code := r.FormValue("code")
 
-	tmpDir, err := ioutil.TempDir("", "sandbox")
-	if err != nil {
-		http.Error(w,
-			http.StatusText(http.StatusInternalServerError)+
-				fmt.Sprintf(" - ioutil.TempDir, err: %v", err),
-			http.StatusInternalServerError)
-		return nil
-	}
-	defer os.RemoveAll(tmpDir)
+	if lang != "" && code != "" {
+		tmpDir, err := ioutil.TempDir("", "sandbox")
+		if err != nil {
+			http.Error(w,
+				http.StatusText(http.StatusInternalServerError)+
+					fmt.Sprintf(" - ioutil.TempDir, err: %v", err),
+				http.StatusInternalServerError)
+			return nil
+		}
+		defer os.RemoveAll(tmpDir)
 
-	// Bound the # of concurrent requests.
-	select {
-	case token := <-concurrencyCh:
-		defer func() { concurrencyCh <- token }()
-	case <-r.Context().Done():
-		return nil
+		// Bound the # of concurrent requests.
+		select {
+		case token := <-concurrencyCh:
+			defer func() { concurrencyCh <- token }()
+		case <-r.Context().Done():
+			return nil
+		}
+	}
+
+	if lang == "" {
+		lang = "py"
+	}
+
+	if code == "" {
+		code = langCodes[lang]
 	}
 
 	return &mainData{
+		Lang:   lang,
 		Code:   code,
 		Output: "output would go here, but still TBD",
 	}
 }
 
 type mainData struct {
+	Lang   string
 	Code   string
 	Output string
 }
