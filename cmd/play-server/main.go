@@ -11,8 +11,12 @@ import (
 )
 
 var (
-	dir = flag.String("dir", "cmd/play-server",
-		"dir that holds lang-code files and static dir")
+	static = flag.String("static", "cmd/play-server/static",
+		"path to the 'static' resources directory")
+
+	h = flag.Bool("h", false, "help/usage info")
+
+	help = flag.Bool("help", false, "help/usage info")
 
 	listen = flag.String("listen", ":8080",
 		"HTTP listen [address]:port")
@@ -31,7 +35,7 @@ var (
 
 func init() {
 	for _, lang := range langs {
-		code, err := ioutil.ReadFile(*dir + "/lang-code." + lang)
+		code, err := ioutil.ReadFile(*static + "/lang-code." + lang)
 		if err != nil {
 			log.Fatalf("ioutil.ReadFile, lang: %s, err: %v",
 				lang, err)
@@ -42,6 +46,13 @@ func init() {
 }
 
 func main() {
+	flag.Parse()
+
+	if *h || *help {
+		flag.Usage()
+		os.Exit(2)
+	}
+
 	concurrencyN := *concurrency
 	if concurrencyN < 1 {
 		concurrencyN = 1
@@ -64,7 +75,7 @@ func main() {
 func initMux(mux *http.ServeMux) {
 	mux.Handle("/static/",
 		http.StripPrefix("/static/",
-			http.FileServer(http.Dir(*dir+"/static"))))
+			http.FileServer(http.Dir(*static))))
 
 	mux.HandleFunc("/run", handleRun)
 
@@ -111,7 +122,7 @@ type mainData struct {
 	Output string
 }
 
-var mainTemplate = template.Must(template.ParseFiles(*dir + "/main.html.template"))
+var mainTemplate = template.Must(template.ParseFiles(*static + "/main.html.template"))
 
 func emit(w http.ResponseWriter, r *http.Request, data *mainData) {
 	if data == nil {
