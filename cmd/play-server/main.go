@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"html/template"
 	"io/ioutil"
@@ -9,19 +10,26 @@ import (
 	"os"
 )
 
+var (
+	listen = flag.String("listen", ":8080",
+		"HTTP listen [address]:port")
+
+	concurrency = flag.Int("concurrency", 1,
+		"max # of concurrent run requests supported")
+
+	concurrencyCh chan struct{}
+)
+
 func main() {
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8080"
-	}
+	concurrencyCh = make(chan struct{}, *concurrency)
 
 	mux := http.NewServeMux()
 
 	initMux(mux)
 
-	log.Printf("listening on port: %v", port)
+	log.Printf("listening on... %v", *listen)
 
-	log.Fatal(http.ListenAndServe(":"+port, mux))
+	log.Fatal(http.ListenAndServe(*listen, mux))
 }
 
 func initMux(mux *http.ServeMux) {
@@ -39,6 +47,10 @@ func handleHome(w http.ResponseWriter, r *http.Request) {
 }
 
 func handleRun(w http.ResponseWriter, r *http.Request) {
+	emit(w, r, handleRunCode(w, r))
+}
+
+func handleRunCode(w http.ResponseWriter, r *http.Request) *mainData {
 	code := r.FormValue("code")
 
 	tmpDir, err := ioutil.TempDir("", "sandbox")
@@ -47,14 +59,22 @@ func handleRun(w http.ResponseWriter, r *http.Request) {
 			http.StatusText(http.StatusInternalServerError)+
 				fmt.Sprintf(" - ioutil.TempDir, err: %v", err),
 			http.StatusInternalServerError)
-		return
+		return nil
 	}
 	defer os.RemoveAll(tmpDir)
 
-	emit(w, r, &mainData{
+	// Bound the # of concurrent requests.
+	select {
+	case concurrencyCh <- struct{}{}:
+	case <-r.Context().Done():
+		return nil
+	}
+	defer func() { <-concurrencyCh }()
+
+	return &mainData{
 		Code:   code,
 		Output: "output would go here, but still TBD",
-	})
+	}
 }
 
 type mainData struct {
@@ -65,6 +85,10 @@ type mainData struct {
 var mainTemplate = template.Must(template.ParseFiles("cmd/play-server/main.html.template"))
 
 func emit(w http.ResponseWriter, r *http.Request, data *mainData) {
+	if data == nil {
+		return
+	}
+
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 
 	if err := mainTemplate.Execute(w, data); err != nil {
