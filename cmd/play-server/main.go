@@ -25,10 +25,10 @@ var (
 	listen = flag.String("listen", ":8080",
 		"HTTP listen [address]:port")
 
-	concurrency = flag.Int("concurrency", 1,
-		"max # of concurrent run requests supported")
+	workers = flag.Int("workers", 1,
+		"# of workers (containers) supported")
 
-	concurrencyCh chan int
+	workersCh chan int
 
 	langPairs = [][]string{
 		[]string{"py", "python"}, // Pair of lang (file suffix) and langName.
@@ -62,14 +62,14 @@ func main() {
 		os.Exit(2)
 	}
 
-	concurrencyN := *concurrency
-	if concurrencyN < 1 {
-		concurrencyN = 1
+	workersN := *workers
+	if workersN < 1 {
+		workersN = 1
 	}
 
-	concurrencyCh = make(chan int, concurrencyN)
-	for i := 0; i < concurrencyN; i++ {
-		concurrencyCh <- i
+	workersCh = make(chan int, workersN)
+	for i := 0; i < workersN; i++ {
+		workersCh <- i
 	}
 
 	mux := http.NewServeMux()
@@ -123,12 +123,11 @@ func runLangCode(context context.Context, lang, langCode string) (
 	}
 	defer os.RemoveAll(tmpDir)
 
-	// Bound the # of concurrent requests.
-	var token int
+	var workerId int
 
 	select {
-	case token = <-concurrencyCh:
-		defer func() { concurrencyCh <- token }()
+	case workerId = <-workersCh:
+		defer func() { workersCh <- workerId }()
 	case <-context.Done():
 		return "", nil
 	}
