@@ -1,0 +1,24 @@
+<!doctype html>
+<html>
+<head>
+</head>
+<body>
+<h1>
+  hello, world
+</h1>
+<div>
+  hi from smallcb
+</div>
+<div>
+  <form action="run" method="post">
+    <input type="submit" value="run"/>
+    <textarea name="code"
+              autocorrect="off"
+              autocomplete="off"
+              autocapitalize="off"
+              spellcheck="false">{{.Code}}</textarea>
+  </form>
+  <pre>{{.Output}}</pre>
+</div>
+</body>
+</html>
