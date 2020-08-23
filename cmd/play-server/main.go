@@ -11,6 +11,9 @@ import (
 )
 
 var (
+	dir = flag.String("dir", "cmd/play-server",
+		"dir that holds lang-code files and static dir")
+
 	listen = flag.String("listen", ":8080",
 		"HTTP listen [address]:port")
 
@@ -18,7 +21,25 @@ var (
 		"max # of concurrent run requests supported")
 
 	concurrencyCh chan int
+
+	langs = []string{
+		"py",
+	}
+
+	langCodes = map[string]string{}
 )
+
+func init() {
+	for _, lang := range langs {
+		code, err := ioutil.ReadFile(*dir + "/lang-code." + lang)
+		if err != nil {
+			log.Fatalf("ioutil.ReadFile, lang: %s, err: %v",
+				lang, err)
+		}
+
+		langCodes[lang] = string(code)
+	}
+}
 
 func main() {
 	concurrencyN := *concurrency
@@ -43,7 +64,7 @@ func main() {
 func initMux(mux *http.ServeMux) {
 	mux.Handle("/static/",
 		http.StripPrefix("/static/",
-			http.FileServer(http.Dir("cmd/play-server/static"))))
+			http.FileServer(http.Dir(*dir+"/static"))))
 
 	mux.HandleFunc("/run", handleRun)
 
@@ -90,7 +111,7 @@ type mainData struct {
 	Output string
 }
 
-var mainTemplate = template.Must(template.ParseFiles("cmd/play-server/main.html.template"))
+var mainTemplate = template.Must(template.ParseFiles(*dir + "/main.html.template"))
 
 func emit(w http.ResponseWriter, r *http.Request, data *mainData) {
 	if data == nil {
