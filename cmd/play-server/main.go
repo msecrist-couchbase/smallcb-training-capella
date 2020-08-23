@@ -1,7 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"html/template"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -19,7 +21,7 @@ func main() {
 
 	log.Printf("listening on port: %v", port)
 
-	log.Fatalf("err: %v", http.ListenAndServe(":"+port, mux))
+	log.Fatal(http.ListenAndServe(":"+port, mux))
 }
 
 func initMux(mux *http.ServeMux) {
@@ -38,6 +40,16 @@ func handleHome(w http.ResponseWriter, r *http.Request) {
 
 func handleRun(w http.ResponseWriter, r *http.Request) {
 	code := r.FormValue("code")
+
+	tmpDir, err := ioutil.TempDir("", "sandbox")
+	if err != nil {
+		http.Error(w,
+			http.StatusText(http.StatusInternalServerError)+
+				fmt.Sprintf(" - ioutil.TempDir, err: %v", err),
+			http.StatusInternalServerError)
+		return
+	}
+	defer os.RemoveAll(tmpDir)
 
 	emit(w, r, &mainData{
 		Code:   code,
