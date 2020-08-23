@@ -18,7 +18,7 @@
     }
   </style>
 
-  <h1>Couchbase API Playground</h1>
+  <h1>Couchbase API Playground - for {{.LangName}}</h1>
 
   <div>
     powered by smallcb
@@ -26,15 +26,16 @@
 
   <div>
     <form action="run" method="post">
-      <input type="radio" value="py" name="lang"/>
+      <input name="lang"
+             type="hidden" value="{{.Lang}}"/>
 
       <input type="submit" value="run"/>
 
-      <textarea name="code"
+      <textarea name="langCode"
                 autocorrect="off"
                 autocomplete="off"
                 autocapitalize="off"
-                spellcheck="false">{{.Code}}</textarea>
+                spellcheck="false">{{.LangCode}}</textarea>
     </form>
 
     {{if .Output}}

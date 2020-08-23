@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
 	"html/template"
@@ -11,12 +12,15 @@ import (
 )
 
 var (
-	static = flag.String("static", "cmd/play-server/static",
-		"path to the 'static' resources directory")
-
 	h = flag.Bool("h", false, "help/usage info")
 
 	help = flag.Bool("help", false, "help/usage info")
+
+	langDefault = flag.String("langDefault", "py",
+		"default programming lang (e.g., file suffix)")
+
+	static = flag.String("static", "cmd/play-server/static",
+		"path to the 'static' resources directory")
 
 	listen = flag.String("listen", ":8080",
 		"HTTP listen [address]:port")
@@ -26,22 +30,27 @@ var (
 
 	concurrencyCh chan int
 
-	langs = []string{
-		"py",
+	langPairs = [][]string{
+		[]string{"py", "python"}, // Pair of lang (file suffix) and langName.
 	}
 
-	langCodes = map[string]string{}
+	langNames = map[string]string{} // Map from 'py' to 'python'.
+	langCodes = map[string]string{} // Map from 'py' to example python code.
 )
 
 func init() {
-	for _, lang := range langs {
-		code, err := ioutil.ReadFile(*static + "/lang-code." + lang)
+	for _, langPair := range langPairs {
+		lang, langName := langPair[0], langPair[1]
+
+		langCode, err :=
+			ioutil.ReadFile(*static + "/lang-code." + langPair[0])
 		if err != nil {
 			log.Fatalf("ioutil.ReadFile, lang: %s, err: %v",
 				lang, err)
 		}
 
-		langCodes[lang] = string(code)
+		langNames[lang] = langName
+		langCodes[lang] = string(langCode)
 	}
 }
 
@@ -83,63 +92,74 @@ func initMux(mux *http.ServeMux) {
 }
 
 func handleHome(w http.ResponseWriter, r *http.Request) {
-	emit(w, r, &mainData{})
+	mainTemplateEmit(w, "", "", "")
 }
 
 func handleRun(w http.ResponseWriter, r *http.Request) {
-	emit(w, r, handleRunCode(w, r))
-}
-
-func handleRunCode(w http.ResponseWriter, r *http.Request) *mainData {
 	lang := r.FormValue("lang")
-	code := r.FormValue("code")
 
-	if lang != "" && code != "" {
-		tmpDir, err := ioutil.TempDir("", "sandbox")
-		if err != nil {
-			http.Error(w,
-				http.StatusText(http.StatusInternalServerError)+
-					fmt.Sprintf(" - ioutil.TempDir, err: %v", err),
-				http.StatusInternalServerError)
-			return nil
-		}
-		defer os.RemoveAll(tmpDir)
+	langCode := r.FormValue("langCode")
 
-		// Bound the # of concurrent requests.
-		select {
-		case token := <-concurrencyCh:
-			defer func() { concurrencyCh <- token }()
-		case <-r.Context().Done():
-			return nil
-		}
+	output, err := runLangCode(r.Context(), lang, langCode)
+	if err != nil {
+		http.Error(w,
+			http.StatusText(http.StatusInternalServerError)+
+				fmt.Sprintf(" - err: %v", err),
+			http.StatusInternalServerError)
 	}
 
-	if lang == "" {
-		lang = "py"
-	}
-
-	if code == "" {
-		code = langCodes[lang]
-	}
-
-	return &mainData{
-		Lang:   lang,
-		Code:   code,
-		Output: "output would go here, but still TBD",
-	}
+	mainTemplateEmit(w, lang, langCode, output)
 }
 
-type mainData struct {
-	Lang   string
-	Code   string
-	Output string
+func runLangCode(context context.Context, lang, langCode string) (
+	string, error) {
+	if lang == "" || langCode == "" {
+		return "", nil
+	}
+
+	tmpDir, err := ioutil.TempDir("", "sandbox")
+	if err != nil {
+		return "", err
+	}
+	defer os.RemoveAll(tmpDir)
+
+	// Bound the # of concurrent requests.
+	var token int
+
+	select {
+	case token = <-concurrencyCh:
+		defer func() { concurrencyCh <- token }()
+	case <-context.Done():
+		return "", nil
+	}
+
+	return "output would go here / TODO\n", nil
 }
 
 var mainTemplate = template.Must(template.ParseFiles(*static + "/main.html.template"))
 
-func emit(w http.ResponseWriter, r *http.Request, data *mainData) {
-	if data == nil {
-		return
+type mainTemplateData struct {
+	Lang     string // Ex: 'py'.
+	LangName string // Ex: 'python'.
+	LangCode string
+	Output   string
+}
+
+func mainTemplateEmit(w http.ResponseWriter,
+	lang, langCode, output string) {
+	if lang == "" {
+		lang = *langDefault
+	}
+
+	if langCode == "" {
+		langCode, _ = langCodes[lang]
+	}
+
+	data := &mainTemplateData{
+		Lang:     lang,
+		LangName: langNames[lang],
+		LangCode: langCode,
+		Output:   output,
 	}
 
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
