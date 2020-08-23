@@ -1,24 +1,38 @@
 <!doctype html>
 <html>
 <head>
+  <title>Couchbase API Playground</title>
 </head>
 <body>
-<h1>
-  hello, world
-</h1>
-<div>
-  hi from smallcb
-</div>
-<div>
-  <form action="run" method="post">
-    <input type="submit" value="run"/>
-    <textarea name="code"
-              autocorrect="off"
-              autocomplete="off"
-              autocapitalize="off"
-              spellcheck="false">{{.Code}}</textarea>
-  </form>
-  <pre>{{.Output}}</pre>
-</div>
+  <style>
+    input, textarea, pre {
+      display: block;
+    }
+
+    textarea {
+      width: 40em;
+      height: 10em;
+    }
+  </style>
+
+  <h1>Couchbase API Playground</h1>
+
+  <div>
+    powered by smallcb
+  </div>
+
+  <div>
+    <form action="run" method="post">
+      <input type="submit" value="run"/>
+
+      <textarea name="code"
+                autocorrect="off"
+                autocomplete="off"
+                autocapitalize="off"
+                spellcheck="false">{{.Code}}</textarea>
+    </form>
+
+    <pre>{{.Output}}</pre>
+  </div>
 </body>
 </html>

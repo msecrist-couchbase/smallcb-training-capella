@@ -41,7 +41,7 @@ func handleRun(w http.ResponseWriter, r *http.Request) {
 
 	emit(w, r, &form{
 		Code:   code,
-		Output: "an exercise left to the reader",
+		Output: "output would go here, but still TBD",
 	})
 }
 
