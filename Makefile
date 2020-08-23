@@ -50,3 +50,6 @@ restart: restart-snapshot
         do \
            sleep 1; \
         done
+
+play-server: cmd/play-server/main.go cmd/play-server/home.html
+	go build ./...
