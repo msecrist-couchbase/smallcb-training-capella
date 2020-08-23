@@ -17,11 +17,19 @@ var (
 	concurrency = flag.Int("concurrency", 1,
 		"max # of concurrent run requests supported")
 
-	concurrencyCh chan struct{}
+	concurrencyCh chan int
 )
 
 func main() {
-	concurrencyCh = make(chan struct{}, *concurrency)
+	concurrencyN := *concurrency
+	if concurrencyN < 1 {
+		concurrencyN = 1
+	}
+
+	concurrencyCh = make(chan int, concurrencyN)
+	for i := 0; i < concurrencyN; i++ {
+		concurrencyCh <- i
+	}
 
 	mux := http.NewServeMux()
 
@@ -65,11 +73,11 @@ func handleRunCode(w http.ResponseWriter, r *http.Request) *mainData {
 
 	// Bound the # of concurrent requests.
 	select {
-	case concurrencyCh <- struct{}{}:
+	case token := <-concurrencyCh:
+		defer func() { concurrencyCh <- token }()
 	case <-r.Context().Done():
 		return nil
 	}
-	defer func() { <-concurrencyCh }()
 
 	return &mainData{
 		Code:   code,
