@@ -1,45 +1,42 @@
-# IMAGE_NAME is the docker image name.
 IMAGE_NAME = smallcb
 
-# CONTAINER_NAME is the docker container name.
-CONTAINER_NAME = smallcb1
+CONTAINER_NUM = 0
 
 # Build the docker image.
 build:
-	rm -rf vol-data*
+	rm -rf vol-*
 	docker build -t $(IMAGE_NAME) .
 
 # Start a docker container instance, init it, and remove it, with the
-# goal of capturing the vol-data.snapshot subdirectory.
+# goal of creating and capturing the vol-snapshot subdirectory.
 create:
-	rm -rf vol-data*
-	mkdir -p vol-data/
+	rm -rf vol-*
+	mkdir -p vol-snapshot
 	docker run -p 8091-8094:8091-8094 -p 11210:11210 \
-                   -v $(shell pwd)/vol-data:/opt/couchbase/var \
+                   -v $(shell pwd)/vol-snapshot:/opt/couchbase/var \
                    --cap-add=SYS_PTRACE \
-                   --name=$(CONTAINER_NAME) \
+                   --name=$(IMAGE_NAME)-$(CONTAINER_NUM) \
                    -d $(IMAGE_NAME)
 	sleep 3
-	docker exec $(CONTAINER_NAME) /init-couchbase/init.sh
+	docker exec $(IMAGE_NAME)-$(CONTAINER_NUM) /init-couchbase/init.sh
 	sleep 3
-	docker stop $(CONTAINER_NAME)
+	docker stop $(IMAGE_NAME)-$(CONTAINER_NUM)
 	sleep 3
-	docker rm $(CONTAINER_NAME)
+	docker rm $(IMAGE_NAME)-$(CONTAINER_NUM)
 	sleep 3
-	cp -R vol-data/ vol-data.snapshot/
-	rm -rf vol-data.snapshot/lib/couchbase/logs/*
-	rm -rf vol-data.snapshot/lib/couchbase/stats/*
+	rm -rf vol-snapshot/lib/couchbase/logs/*
+	rm -rf vol-snapshot/lib/couchbase/stats/*
 
-# Restart the docker container instance from the vol-data.snapshot.
+# Restart the docker container instance from the vol-snapshot.
 restart-snapshot:
-	docker stop $(CONTAINER_NAME) || true
-	docker rm $(CONTAINER_NAME) || true
-	rm -rf vol-data/*
-	cp -R vol-data.snapshot/ vol-data/
+	docker stop $(IMAGE_NAME)-$(CONTAINER_NUM) || true
+	docker rm $(IMAGE_NAME)-$(CONTAINER_NUM) || true
+	rm -rf vol-$(CONTAINER_NUM)/*
+	cp -R vol-snapshot/ vol-$(CONTAINER_NUM)/
 	docker run -p 8091-8094:8091-8094 -p 11210:11210 \
-                   -v $(shell pwd)/vol-data:/opt/couchbase/var \
+                   -v $(shell pwd)/vol-$(CONTAINER_NUM):/opt/couchbase/var \
                    --cap-add=SYS_PTRACE \
-                   --name=$(CONTAINER_NAME) \
+                   --name=$(IMAGE_NAME)-$(CONTAINER_NUM) \
                    -d $(IMAGE_NAME)
 
 # After restart-snapshot, wait until couchbase-server is healthy.
