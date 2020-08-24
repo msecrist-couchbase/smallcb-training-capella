@@ -27,6 +27,10 @@ create:
 	rm -rf vol-snapshot/lib/couchbase/logs/*
 	rm -rf vol-snapshot/lib/couchbase/stats/*
 
+# Restart the docker container instance and wait until
+# couchbase-server is healthy.
+restart: restart-snapshot wait-healthy
+
 # Restart the docker container instance from the vol-snapshot.
 restart-snapshot:
 	docker stop $(IMAGE_NAME)-$(CONTAINER_NUM) || true
@@ -39,14 +43,9 @@ restart-snapshot:
                    --name=$(IMAGE_NAME)-$(CONTAINER_NUM) \
                    -d $(IMAGE_NAME)
 
-# After restart-snapshot, wait until couchbase-server is healthy.
-restart: restart-snapshot
-	echo "Checking couchbase-server healthy..."
-	until \
-           curl http://Administrator:password@127.0.0.1:8091/pools/default/buckets | jq . | grep healthy; \
-        do \
-           sleep 1; \
-        done
+wait-healthy:
+	echo "Waiting until couchbase-server is healthy..."
+	docker exec $(IMAGE_NAME)-$(CONTAINER_NUM) /init-couchbase/wait-healthy.sh
 
 play-server: cmd/play-server/main.go
 	go build ./...
