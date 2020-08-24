@@ -2,6 +2,8 @@ IMAGE_NAME = smallcb
 
 CONTAINER_NUM = 0
 
+PORTS = -p 8091-8094:8091-8094 -p 11210:11210
+
 # Build the docker image.
 build:
 	rm -rf vol-*
@@ -12,7 +14,7 @@ build:
 create:
 	rm -rf vol-*
 	mkdir -p vol-snapshot
-	docker run -p 8091-8094:8091-8094 -p 11210:11210 \
+	docker run $(PORTS) \
                    -v $(shell pwd)/vol-snapshot:/opt/couchbase/var \
                    --cap-add=SYS_PTRACE \
                    --name=$(IMAGE_NAME)-$(CONTAINER_NUM) \
@@ -37,7 +39,7 @@ restart-snapshot:
 	docker rm $(IMAGE_NAME)-$(CONTAINER_NUM) || true
 	rm -rf vol-$(CONTAINER_NUM)/*
 	cp -R vol-snapshot/ vol-$(CONTAINER_NUM)/
-	docker run -p 8091-8094:8091-8094 -p 11210:11210 \
+	docker run $(PORTS) \
                    -v $(shell pwd)/vol-$(CONTAINER_NUM):/opt/couchbase/var \
                    --cap-add=SYS_PTRACE \
                    --name=$(IMAGE_NAME)-$(CONTAINER_NUM) \
