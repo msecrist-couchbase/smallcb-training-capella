@@ -47,7 +47,7 @@ var (
 
 	restarterCh chan int
 
-	langPairs = [][]string{
+	langs = [][]string{
 		// Tuple of [ lang (file suffix),
 		//            langName,
 		//            exec command prefix ].
@@ -61,7 +61,7 @@ var (
 )
 
 func init() {
-	for _, item := range langPairs {
+	for _, item := range langs {
 		lang, langName, langExec := item[0], item[1], item[2]
 
 		langCode, err :=
@@ -118,7 +118,9 @@ func initMux(mux *http.ServeMux) {
 }
 
 func handleHome(w http.ResponseWriter, r *http.Request) {
-	mainTemplateEmit(w, "", "", "")
+	lang := r.FormValue("lang")
+
+	mainTemplateEmit(w, lang, "", "")
 }
 
 func handleRun(w http.ResponseWriter, r *http.Request) {
@@ -215,6 +217,7 @@ var mainTemplate = template.Must(template.ParseFiles(
 	*static + "/main.html.template"))
 
 type mainTemplateData struct {
+	Langs    [][]string
 	Lang     string // Ex: 'py'.
 	LangName string // Ex: 'python'.
 	Code     string
@@ -232,6 +235,7 @@ func mainTemplateEmit(w http.ResponseWriter,
 	}
 
 	data := &mainTemplateData{
+		Langs:    langs,
 		Lang:     lang,
 		LangName: langNames[lang],
 		Code:     code,

@@ -5,13 +5,30 @@
 </head>
 <body>
   <style>
+    .main {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      width: 95%;
+    }
+
+    .main .langs {
+      flex: 1;
+    }
+
+    .main .form {
+      flex: 2;
+    }
+
     input, textarea, pre {
       display: block;
+      margin-bottom: 10px;
     }
 
     textarea {
       width: 60em;
       height: 20em;
+      overflow-y: scroll;
       background-color: #333;
       color: #eee;
       font-family: courier, monospace;
@@ -23,32 +40,49 @@
     }
   </style>
 
-  <h1>Couchbase API Playground - for {{.LangName}}</h1>
+  <h1>Couchbase API / SDK Playground</h1>
 
-  <div>
-    powered by smallcb
+  <div class="main">
+    <div class="langs">
+      <h2>Languages</h2>
+      <ul class="langs">
+      {{range .Langs}}
+        <li>
+          <a href="?lang={{index . 0}}">{{index . 1}}</a>
+        </li>
+      {{end}}
+      </ul>
+    </div>
+
+    <div class="form">
+      <h2>Playground for {{.LangName}}</h2>
+
+      <form action="run" method="post">
+        <input name="lang"
+               type="hidden" value="{{.Lang}}"/>
+
+        <input type="submit" value="run"/>
+
+        <textarea name="code"
+                  autocorrect="off"
+                  autocomplete="off"
+                  autocapitalize="off"
+                  spellcheck="false">{{.Code}}</textarea>
+
+        <input type="submit" value="run"/>
+      </form>
+
+      {{if .Output}}
+        <div>
+          <h2>Output</h2>
+          <div class="output">{{.Output}}</div>
+        </div>
+      {{end}}
+    </div>
   </div>
 
-  <div>
-    <form action="run" method="post">
-      <input name="lang"
-             type="hidden" value="{{.Lang}}"/>
-
-      <input type="submit" value="run"/>
-
-      <textarea name="code"
-                autocorrect="off"
-                autocomplete="off"
-                autocapitalize="off"
-                spellcheck="false">{{.Code}}</textarea>
-    </form>
-
-    {{if .Output}}
-      <div>
-        <h2>output...</h2>
-        <div class="output">{{.Output}}</div>
-      </div>
-    {{end}}
+  <div class="footer">
+    powered by the smallcb project
   </div>
 </body>
 </html>
