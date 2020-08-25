@@ -45,6 +45,7 @@ var (
 		// Tuple of [ lang (file suffix),
 		//            langName,
 		//            exec command prefix ].
+		[]string{"java", "java", "/init-couchbase/run-java.sh"},
 		[]string{"py", "python3", ""},
 	}
 
@@ -179,6 +180,8 @@ func runLangCode(context context.Context, lang, code string) (
 		cmd = exec.Command("docker", "exec", containerName,
 			"/opt/couchbase/var/tmp/play/code."+lang)
 	}
+
+	fmt.Printf("running cmd: %v\n", cmd)
 
 	stdOutErr, err := cmd.CombinedOutput()
 
