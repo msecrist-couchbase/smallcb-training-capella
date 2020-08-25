@@ -116,6 +116,7 @@ func handleRun(w http.ResponseWriter, r *http.Request) {
 			http.StatusText(http.StatusInternalServerError)+
 				fmt.Sprintf(" - err: %v", err),
 			http.StatusInternalServerError)
+		return
 	}
 
 	mainTemplateEmit(w, lang, langCode, output)
@@ -144,7 +145,7 @@ func runLangCode(context context.Context, lang, langCode string) (
 
 	dir := fmt.Sprintf("%s%d", *volPrefix, workerId)
 
-	err = os.Mkdir(dir+"/tmp/play", 0777)
+	err = os.MkdirAll(dir+"/tmp/play", 0777)
 	if err != nil {
 		return "", err
 	}
