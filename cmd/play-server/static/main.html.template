@@ -16,6 +16,11 @@
       color: #eee;
       font-family: courier, monospace;
     }
+
+    .output {
+      width: 90%;
+      font-family: courier, monospace;
+    }
   </style>
 
   <h1>Couchbase API Playground - for {{.LangName}}</h1>
@@ -41,7 +46,7 @@
     {{if .Output}}
       <div>
         <h2>output...</h2>
-        <pre>{{.Output}}</pre>
+        <div class="output">{{.Output}}</div>
       </div>
     {{end}}
   </div>
