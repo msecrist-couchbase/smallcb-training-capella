@@ -149,16 +149,21 @@ func runLangCode(context context.Context, lang, code string) (
 		return "", fmt.Errorf("code too long")
 	}
 
+	// Atomically grab a workerId token, blocking & waiting until
+	// one is available.
 	var workerId int
 
 	select {
 	case workerId = <-workersCh:
 		defer func() {
+			// Put the token back for the next request
+			// handler if we still have it.
 			if workerId >= 0 {
 				workersCh <- workerId
 			}
 		}()
 	case <-context.Done():
+		// Client canceled/timed-out while we were waiting.
 		return "", nil
 	}
 
@@ -177,7 +182,7 @@ func runLangCode(context context.Context, lang, code string) (
 
 	codeBytes := []byte(strings.ReplaceAll(code, "\r\n", "\n"))
 
-	// Executable in case of a script like 'code.py'.
+	// Mode is 0777 executable in case it's a script like 'code.py'.
 	err = ioutil.WriteFile(codePathHost, codeBytes, 0777)
 	if err != nil {
 		return "", err
@@ -189,6 +194,7 @@ func runLangCode(context context.Context, lang, code string) (
 
 	execCommand := langExecs[lang]
 	if len(execCommand) > 0 {
+		// Case when there's an execCommand prefix.
 		cmd = exec.Command("docker", "exec", containerName,
 			execCommand, codePathInst)
 	} else {
