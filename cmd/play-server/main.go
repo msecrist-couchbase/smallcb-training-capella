@@ -138,12 +138,6 @@ func runLangCode(context context.Context, lang, code string) (
 		return "", fmt.Errorf("code too long")
 	}
 
-	tmpDir, err := ioutil.TempDir("", "sandbox")
-	if err != nil {
-		return "", err
-	}
-	defer os.RemoveAll(tmpDir)
-
 	var workerId int
 
 	select {
@@ -155,15 +149,18 @@ func runLangCode(context context.Context, lang, code string) (
 
 	dir := fmt.Sprintf("%s%d", *volPrefix, workerId)
 
-	err = os.MkdirAll(dir+"/tmp/play", 0777)
+	err := os.MkdirAll(dir+"/tmp/play", 0777)
 	if err != nil {
 		return "", err
 	}
 
+	codePathHost := dir + "/tmp/play/code." + lang
+	codePathInst := "/opt/couchbase/var/tmp/play/code." + lang
+
 	codeBytes := []byte(strings.ReplaceAll(code, "\r\n", "\n"))
 
 	// Executable in case of a script like 'code.py'.
-	err = ioutil.WriteFile(dir+"/tmp/play/code."+lang, codeBytes, 0777)
+	err = ioutil.WriteFile(codePathHost, codeBytes, 0777)
 	if err != nil {
 		return "", err
 	}
@@ -175,15 +172,17 @@ func runLangCode(context context.Context, lang, code string) (
 	execCommand := langExecs[lang]
 	if len(execCommand) > 0 {
 		cmd = exec.Command("docker", "exec", containerName,
-			execCommand, "/opt/couchbase/var/tmp/play/code."+lang)
+			execCommand, codePathInst)
 	} else {
 		cmd = exec.Command("docker", "exec", containerName,
-			"/opt/couchbase/var/tmp/play/code."+lang)
+			codePathInst)
 	}
 
 	fmt.Printf("running cmd: %v\n", cmd)
 
 	stdOutErr, err := cmd.CombinedOutput()
+
+	// TODO: asynchronously restart the worker / smallcb-${workerId}.
 
 	return string(stdOutErr), err
 }
