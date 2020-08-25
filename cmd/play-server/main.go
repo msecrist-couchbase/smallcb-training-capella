@@ -142,7 +142,11 @@ func runLangCode(context context.Context, lang, code string) (
 
 	select {
 	case workerId = <-workersCh:
-		defer func() { workersCh <- workerId }()
+		defer func() {
+			if workerId >= 0 {
+				workersCh <- workerId
+			}
+		}()
 	case <-context.Done():
 		return "", nil
 	}
