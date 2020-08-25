@@ -9,6 +9,8 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"os/exec"
+	"strings"
 )
 
 var (
@@ -17,10 +19,13 @@ var (
 	help = flag.Bool("help", false, "help/usage info")
 
 	langDefault = flag.String("langDefault", "py",
-		"default programming lang (e.g., file suffix)")
+		"default programming lang (e.g., code file suffix)")
 
 	maxCodeLen = flag.Int("maxCodeLen", 16000,
 		"max allowed length of request code in bytes")
+
+	containerPrefix = flag.String("containerPrefix", "smallcb-",
+		"prefix of container instance name")
 
 	volPrefix = flag.String("volPrefix", "vol-",
 		"prefix of container instance volume directory")
@@ -37,19 +42,23 @@ var (
 	workersCh chan int
 
 	langPairs = [][]string{
-		[]string{"py", "python"}, // Pair of lang (file suffix) and langName.
+		// Tuple of [ lang (file suffix),
+		//            langName,
+		//            exec command prefix ].
+		[]string{"py", "python3", ""},
 	}
 
-	langNames = map[string]string{} // Map from 'py' to 'python'.
-	langCodes = map[string]string{} // Map from 'py' to example python code.
+	langNames = map[string]string{} // Map from 'py' to 'python3'.
+	langCodes = map[string]string{} // Map from 'py' to example python3 code.
+	langExecs = map[string]string{} // Map from 'py' to exec command prefix.
 )
 
 func init() {
-	for _, langPair := range langPairs {
-		lang, langName := langPair[0], langPair[1]
+	for _, item := range langPairs {
+		lang, langName, langExec := item[0], item[1], item[2]
 
 		langCode, err :=
-			ioutil.ReadFile(*static + "/lang-code." + langPair[0])
+			ioutil.ReadFile(*static + "/lang-code." + lang)
 		if err != nil {
 			log.Fatalf("ioutil.ReadFile, lang: %s, err: %v",
 				lang, err)
@@ -57,6 +66,7 @@ func init() {
 
 		langNames[lang] = langName
 		langCodes[lang] = string(langCode)
+		langExecs[lang] = langExec
 	}
 }
 
@@ -103,14 +113,9 @@ func handleHome(w http.ResponseWriter, r *http.Request) {
 
 func handleRun(w http.ResponseWriter, r *http.Request) {
 	lang := r.FormValue("lang")
+	code := r.FormValue("code")
 
-	langCode := r.FormValue("langCode")
-	if len(langCode) > *maxCodeLen {
-		mainTemplateEmit(w, lang, langCode, "ERROR: code too long")
-		return
-	}
-
-	output, err := runLangCode(r.Context(), lang, langCode)
+	output, err := runLangCode(r.Context(), lang, code)
 	if err != nil {
 		http.Error(w,
 			http.StatusText(http.StatusInternalServerError)+
@@ -119,13 +124,17 @@ func handleRun(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	mainTemplateEmit(w, lang, langCode, output)
+	mainTemplateEmit(w, lang, code, output)
 }
 
-func runLangCode(context context.Context, lang, langCode string) (
+func runLangCode(context context.Context, lang, code string) (
 	string, error) {
-	if lang == "" || langCode == "" {
+	if lang == "" || code == "" {
 		return "", nil
+	}
+
+	if len(code) > *maxCodeLen {
+		return "", fmt.Errorf("code too long")
 	}
 
 	tmpDir, err := ioutil.TempDir("", "sandbox")
@@ -150,32 +159,56 @@ func runLangCode(context context.Context, lang, langCode string) (
 		return "", err
 	}
 
-	return "output would go here / TODO\n", nil
+	codeBytes := []byte(strings.ReplaceAll(code, "\r\n", "\n"))
+
+	// Executable in case of a script like 'code.py'.
+	err = ioutil.WriteFile(dir+"/tmp/play/code."+lang, codeBytes, 0777)
+	if err != nil {
+		return "", err
+	}
+
+	containerName := fmt.Sprintf("%s%d", *containerPrefix, workerId)
+
+	var cmd *exec.Cmd
+
+	execCommand := langExecs[lang]
+	if len(execCommand) > 0 {
+		cmd = exec.Command("docker", "exec", containerName,
+			execCommand, "/opt/couchbase/var/tmp/play/code."+lang)
+	} else {
+		cmd = exec.Command("docker", "exec", containerName,
+			"/opt/couchbase/var/tmp/play/code."+lang)
+	}
+
+	stdOutErr, err := cmd.CombinedOutput()
+
+	return string(stdOutErr), err
 }
 
-var mainTemplate = template.Must(template.ParseFiles(*static + "/main.html.template"))
+var mainTemplate = template.Must(template.ParseFiles(
+	*static + "/main.html.template"))
 
 type mainTemplateData struct {
 	Lang     string // Ex: 'py'.
 	LangName string // Ex: 'python'.
-	LangCode string
+	Code     string
 	Output   string
 }
 
 func mainTemplateEmit(w http.ResponseWriter,
-	lang, langCode, output string) {
+	lang, code, output string) {
 	if lang == "" {
 		lang = *langDefault
 	}
 
-	if langCode == "" {
-		langCode, _ = langCodes[lang]
+	if code == "" {
+		code, _ = langCodes[lang]
 	}
 
 	data := &mainTemplateData{
 		Lang:     lang,
 		LangName: langNames[lang],
-		LangCode: langCode,
+		Code:     code,
 		Output:   output,
 	}
 

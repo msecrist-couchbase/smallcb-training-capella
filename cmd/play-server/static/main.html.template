@@ -31,11 +31,11 @@
 
       <input type="submit" value="run"/>
 
-      <textarea name="langCode"
+      <textarea name="code"
                 autocorrect="off"
                 autocomplete="off"
                 autocapitalize="off"
-                spellcheck="false">{{.LangCode}}</textarea>
+                spellcheck="false">{{.Code}}</textarea>
     </form>
 
     {{if .Output}}
