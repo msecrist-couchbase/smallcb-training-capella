@@ -11,6 +11,7 @@ import (
 	"os"
 	"os/exec"
 	"strings"
+	"time"
 )
 
 var (
@@ -38,6 +39,9 @@ var (
 
 	workers = flag.Int("workers", 1,
 		"# of workers (containers) supported")
+
+	restarters = flag.Int("restarters", 1,
+		"# of restarters")
 
 	workersCh chan int
 
@@ -81,19 +85,18 @@ func main() {
 		os.Exit(2)
 	}
 
-	workersN := *workers
-	if workersN < 1 {
-		workersN = 1
-	}
-
-	workersCh = make(chan int, workersN)
-	for i := 0; i < workersN; i++ {
+	// Fill the workersCh with workerId tokens.
+	workersCh = make(chan int, *workers)
+	for i := 0; i < *workers; i++ {
 		workersCh <- i
 	}
 
-	restarterCh = make(chan int, workersN)
-
-	go restarter(restarterCh, workersCh)
+	// The restarterCh is created with a capacity equal to
+	// the # of workers to reduce workers having to wait.
+	restarterCh = make(chan int, *workers)
+	for i := 0; i < *restarters; i++ {
+		go restarter(restarterCh, workersCh)
+	}
 
 	mux := http.NewServeMux()
 
@@ -247,20 +250,22 @@ func mainTemplateEmit(w http.ResponseWriter,
 
 func restarter(needRestartCh, doneRestartCh chan int) {
 	for workerId := range needRestartCh {
+		start := time.Now()
+
+		fmt.Printf("restarter, workerId: %d\n", workerId)
+
 		cmd := exec.Command("make",
 			fmt.Sprintf("CONTAINER_NUM=%d", workerId),
 			"restart")
 
-		fmt.Printf("restarter, cmd: %v\n", cmd)
-
 		stdOutErr, err := cmd.CombinedOutput()
 		if err != nil {
-			log.Fatalf("restarter, cmd: %v,"+
-				" stdOutErr: %v, err: %v",
+			log.Fatalf("restarter, cmd: %v, stdOutErr: %v, err: %v",
 				cmd, stdOutErr, err)
-
-			return
 		}
+
+		fmt.Printf("restarter, workerId: %d, took: %s\n",
+			workerId, time.Since(start))
 
 		doneRestartCh <- workerId
 	}
