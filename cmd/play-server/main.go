@@ -19,6 +19,9 @@ var (
 	langDefault = flag.String("langDefault", "py",
 		"default programming lang (e.g., file suffix)")
 
+	maxCodeLen = flag.Int("maxCodeLen", 16000,
+		"max allowed length of request code in bytes")
+
 	static = flag.String("static", "cmd/play-server/static",
 		"path to the 'static' resources directory")
 
@@ -99,6 +102,10 @@ func handleRun(w http.ResponseWriter, r *http.Request) {
 	lang := r.FormValue("lang")
 
 	langCode := r.FormValue("langCode")
+	if len(langCode) > *maxCodeLen {
+		mainTemplateEmit(w, lang, langCode, "ERROR: code too long")
+		return
+	}
 
 	output, err := runLangCode(r.Context(), lang, langCode)
 	if err != nil {
