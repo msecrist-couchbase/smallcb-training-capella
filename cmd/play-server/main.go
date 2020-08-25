@@ -22,6 +22,9 @@ var (
 	maxCodeLen = flag.Int("maxCodeLen", 16000,
 		"max allowed length of request code in bytes")
 
+	volPrefix = flag.String("volPrefix", "vol-",
+		"prefix of container instance volume directory")
+
 	static = flag.String("static", "cmd/play-server/static",
 		"path to the 'static' resources directory")
 
@@ -137,6 +140,13 @@ func runLangCode(context context.Context, lang, langCode string) (
 		defer func() { workersCh <- workerId }()
 	case <-context.Done():
 		return "", nil
+	}
+
+	dir := fmt.Sprintf("%s%d", *volPrefix, workerId)
+
+	err = os.Mkdir(dir+"/tmp/play", 0777)
+	if err != nil {
+		return "", err
 	}
 
 	return "output would go here / TODO\n", nil
