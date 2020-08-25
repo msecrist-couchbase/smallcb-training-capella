@@ -45,7 +45,7 @@ var (
 		// Tuple of [ lang (file suffix),
 		//            langName,
 		//            exec command prefix ].
-		[]string{"java", "java", "/init-couchbase/run-java.sh"},
+		[]string{"java", "java", "/run-java.sh"},
 		[]string{"py", "python3", ""},
 	}
 

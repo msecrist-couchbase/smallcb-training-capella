@@ -17,9 +17,11 @@ RUN apt-get update && \
 RUN apt-get install -y python3-dev python3-pip python3-setuptools && \
     pip3 install couchbase
 
+# TODO: Need couchbase java SDK, but seems like have to drag in maven?
+
 RUN apt-get install -y openjdk-8-jdk
 
-# TODO: Install nodejs does not work as root -- need a non-root user for npm install -g.
+# TODO: Install nodejs problem -- need a non-root user so npm install -g works?
 
 # Install nodejs SDK, see:
 # https://docs.couchbase.com/tutorials/getting-started-ce/dev-nodejs/tutorial_en.html
@@ -32,7 +34,10 @@ RUN apt-get install -y openjdk-8-jdk
 # Copy init-couchbase files into image.
 
 RUN mkdir -p /init-couchbase
-
 COPY init-couchbase /init-couchbase
-
 RUN chmod +x /init-couchbase/*.sh
+
+# Copy play-server related files into image.
+
+COPY cmd/play-server/run-java.sh /run-java.sh
+RUN chmod +x /run-java.sh
