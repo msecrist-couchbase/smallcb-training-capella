@@ -95,7 +95,7 @@ func main() {
 	// the # of workers to reduce workers having to wait.
 	restarterCh = make(chan int, *workers)
 	for i := 0; i < *restarters; i++ {
-		go restarter(restarterCh, workersCh)
+		go restarter(i, restarterCh, workersCh)
 	}
 
 	mux := http.NewServeMux()
@@ -248,11 +248,12 @@ func mainTemplateEmit(w http.ResponseWriter,
 
 // ------------------------------------------------
 
-func restarter(needRestartCh, doneRestartCh chan int) {
+func restarter(restarterId int, needRestartCh, doneRestartCh chan int) {
 	for workerId := range needRestartCh {
 		start := time.Now()
 
-		fmt.Printf("restarter, workerId: %d\n", workerId)
+		fmt.Printf("restarterId: %d, workerId: %d\n",
+			restarterId, workerId)
 
 		cmd := exec.Command("make",
 			fmt.Sprintf("CONTAINER_NUM=%d", workerId),
@@ -260,12 +261,12 @@ func restarter(needRestartCh, doneRestartCh chan int) {
 
 		stdOutErr, err := cmd.CombinedOutput()
 		if err != nil {
-			log.Fatalf("restarter, cmd: %v, stdOutErr: %v, err: %v",
-				cmd, stdOutErr, err)
+			log.Fatalf("restarterId: %d, cmd: %v, stdOutErr: %v, err: %v",
+				restarterId, cmd, stdOutErr, err)
 		}
 
-		fmt.Printf("restarter, workerId: %d, took: %s\n",
-			workerId, time.Since(start))
+		fmt.Printf("restarterId: %d, workerId: %d, took: %s\n",
+			restarterId, workerId, time.Since(start))
 
 		doneRestartCh <- workerId
 	}
