@@ -16,18 +16,18 @@ import (
 )
 
 var (
-	h = flag.Bool("h", false, "help/usage info")
+	h = flag.Bool("h", false, "print help/usage and exit")
 
-	help = flag.Bool("help", false, "help/usage info")
+	help = flag.Bool("help", false, "print help/usage and exit")
 
 	langDefault = flag.String("langDefault", "py",
 		"default programming lang (e.g., code file suffix)")
 
-	maxCodeLen = flag.Int("maxCodeLen", 16000,
-		"max allowed length of request code in bytes")
+	codeMaxLen = flag.Int("codeMaxLen", 16000,
+		"max length of a client's request code in bytes")
 
-	maxCodeDuration = flag.Duration("maxCodeDuration", 15*time.Second,
-		"max request code run duration")
+	codeMaxDuration = flag.Duration("codeMaxDuration", 10*time.Second,
+		"max duration that a client's request code is allowed to run")
 
 	containerNamePrefix = flag.String("containerNamePrefix", "smallcb-",
 		"prefix of the names of container instances")
@@ -41,11 +41,14 @@ var (
 	listen = flag.String("listen", ":8080",
 		"HTTP listen [address]:port")
 
+	workersMaxDuration = flag.Duration("workersMaxDuration", 20*time.Second,
+		"max duration that a client's request will wait for a ready worker")
+
 	workers = flag.Int("workers", 1,
-		"# of workers (container instances) supported")
+		"# of workers (container instances)")
 
 	restarters = flag.Int("restarters", 1,
-		"# of restarters")
+		"# of restarters of the container instances")
 
 	workersCh chan int
 
@@ -149,8 +152,8 @@ func runLangCode(ctx context.Context, lang, code string) (
 		return "", nil
 	}
 
-	if len(code) > *maxCodeLen {
-		return "", fmt.Errorf("code too long")
+	if len(code) > *codeMaxLen {
+		return "", fmt.Errorf("code too long, codeMaxLen: %d", *codeMaxLen)
 	}
 
 	// Atomically grab a workerId token, blocking & waiting until
@@ -166,9 +169,13 @@ func runLangCode(ctx context.Context, lang, code string) (
 				workersCh <- workerId
 			}
 		}()
+
+	case <-time.After(*workersMaxDuration):
+		return "", fmt.Errorf("timeout waiting for worker, duration: %v", *workersMaxDuration)
+
 	case <-ctx.Done():
 		// Client canceled/timed-out while we were waiting.
-		return "", nil
+		return "", ctx.Err()
 	}
 
 	dir := fmt.Sprintf("%s%d", *containerVolPrefix, workerId)
@@ -208,7 +215,7 @@ func runLangCode(ctx context.Context, lang, code string) (
 
 	fmt.Printf("running cmd: %v\n", cmd)
 
-	stdOutErr, err := execCmd(ctx, cmd, *maxCodeDuration)
+	stdOutErr, err := execCmd(ctx, cmd, *codeMaxDuration)
 
 	select {
 	case restarterCh <- workerId:
