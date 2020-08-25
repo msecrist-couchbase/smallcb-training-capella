@@ -27,13 +27,13 @@ var (
 		"max allowed length of request code in bytes")
 
 	maxCodeDuration = flag.Duration("maxCodeDuration", 15*time.Second,
-		"max request code run duration (i.e., 15s)")
+		"max request code run duration")
 
-	containerPrefix = flag.String("containerPrefix", "smallcb-",
-		"prefix of names of container instances")
+	containerNamePrefix = flag.String("containerNamePrefix", "smallcb-",
+		"prefix of the names of container instances")
 
-	volPrefix = flag.String("volPrefix", "vol-",
-		"prefix of volume directories of container instances")
+	containerVolPrefix = flag.String("containerVolPrefix", "vol-",
+		"prefix of the volume directories of container instances")
 
 	static = flag.String("static", "cmd/play-server/static",
 		"path to the 'static' resources directory")
@@ -171,7 +171,7 @@ func runLangCode(ctx context.Context, lang, code string) (
 		return "", nil
 	}
 
-	dir := fmt.Sprintf("%s%d", *volPrefix, workerId)
+	dir := fmt.Sprintf("%s%d", *containerVolPrefix, workerId)
 
 	err := os.MkdirAll(dir+"/tmp/play", 0777)
 	if err != nil {
@@ -192,7 +192,7 @@ func runLangCode(ctx context.Context, lang, code string) (
 		return "", err
 	}
 
-	containerName := fmt.Sprintf("%s%d", *containerPrefix, workerId)
+	containerName := fmt.Sprintf("%s%d", *containerNamePrefix, workerId)
 
 	var cmd *exec.Cmd
 
