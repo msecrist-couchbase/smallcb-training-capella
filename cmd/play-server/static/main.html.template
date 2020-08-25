@@ -8,7 +8,7 @@
     .main {
       display: flex;
       flex-direction: row;
-      margin-bottom: 40px;
+      margin-bottom: 80px;
       border-top: 1px solid #666;
     }
 
@@ -27,7 +27,7 @@
     }
 
     textarea {
-      width: 90%;
+      width: 95%;
       height: 20em;
       overflow-y: scroll;
       background-color: #333;
@@ -43,7 +43,7 @@
     .footer {
       border-top: 1px solid #666;
       padding-top: 10px;
-      font-size: 8pt;
+      font-size: 10pt;
       color: #666;
     }
   </style>
