@@ -9,8 +9,12 @@ build:
 	rm -rf vol-*
 	docker build -t $(IMAGE_NAME) .
 
-# Start a docker container instance, init it, and remove it, with the
-# goal of creating and capturing the vol-snapshot subdirectory.
+# Create the vol-snapshot directory.
+#
+# This is done by starting a container instance, initializing the
+# couchbase server with sample data -- configured for lower resource
+# utilization footprint -- and then stopping/removing the container
+# instance, while keeping the vol-snapshot directory.
 create:
 	rm -rf vol-*
 	mkdir -p vol-snapshot
@@ -29,7 +33,7 @@ create:
 	rm -rf vol-snapshot/lib/couchbase/logs/*
 	rm -rf vol-snapshot/lib/couchbase/stats/*
 
-# Restart the docker container instance and wait until
+# Restart the docker container instance and wait until its
 # couchbase-server is healthy.
 restart: restart-snapshot wait-healthy
 
