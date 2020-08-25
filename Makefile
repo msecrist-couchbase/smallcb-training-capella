@@ -26,6 +26,8 @@ create:
 	sleep 3
 	docker exec $(IMAGE_NAME)-$(CONTAINER_NUM) /init-couchbase/init.sh
 	sleep 3
+	docker exec $(IMAGE_NAME)-$(CONTAINER_NUM) /init-couchbase/init-buckets.sh
+	sleep 3
 	docker stop $(IMAGE_NAME)-$(CONTAINER_NUM)
 	sleep 3
 	docker rm $(IMAGE_NAME)-$(CONTAINER_NUM)

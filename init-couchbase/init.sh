@@ -69,28 +69,3 @@ killall indexer
 sleep 3
 
 curl http://Administrator:password@127.0.0.1:9102/internal/settings?internal=ok | jq .
-
-echo "cbdocloader beer-sample..."
-/opt/couchbase/bin/cbdocloader \
-        -c localhost -u Administrator -p password \
-        -b beer-sample -m 128 -v \
-	-d /opt/couchbase/samples/beer-sample.zip
-
-# echo "cbdocloader travel-sample..."
-# /opt/couchbase/bin/cbdocloader \
-#         -c localhost -u Administrator -p password \
-#         -b travel-sample -m 128 -v \
-# 	-d /opt/couchbase/samples/travel-sample.zip
-
-# echo "couchbase bucket-create test..."
-# couchbase-cli bucket-create \
-#         --cluster localhost \
-#         --username Administrator \
-#         --password password \
-#         --bucket test \
-#         --bucket-type couchbase \
-#         --bucket-ramsize 128 \
-#         --wait
-
-sleep 5
-
