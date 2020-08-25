@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"context"
 	"flag"
 	"fmt"
@@ -25,11 +26,14 @@ var (
 	maxCodeLen = flag.Int("maxCodeLen", 16000,
 		"max allowed length of request code in bytes")
 
+	maxCodeDuration = flag.Duration("maxCodeDuration", 15*time.Second,
+		"max request code run duration (i.e., 15s)")
+
 	containerPrefix = flag.String("containerPrefix", "smallcb-",
-		"prefix of container instance name")
+		"prefix of names of container instances")
 
 	volPrefix = flag.String("volPrefix", "vol-",
-		"prefix of container instance volume directory")
+		"prefix of volume directories of container instances")
 
 	static = flag.String("static", "cmd/play-server/static",
 		"path to the 'static' resources directory")
@@ -38,7 +42,7 @@ var (
 		"HTTP listen [address]:port")
 
 	workers = flag.Int("workers", 1,
-		"# of workers (containers) supported")
+		"# of workers (container instances) supported")
 
 	restarters = flag.Int("restarters", 1,
 		"# of restarters")
@@ -139,7 +143,7 @@ func handleRun(w http.ResponseWriter, r *http.Request) {
 	mainTemplateEmit(w, lang, code, output)
 }
 
-func runLangCode(context context.Context, lang, code string) (
+func runLangCode(ctx context.Context, lang, code string) (
 	string, error) {
 	if lang == "" || code == "" {
 		return "", nil
@@ -162,7 +166,7 @@ func runLangCode(context context.Context, lang, code string) (
 				workersCh <- workerId
 			}
 		}()
-	case <-context.Done():
+	case <-ctx.Done():
 		// Client canceled/timed-out while we were waiting.
 		return "", nil
 	}
@@ -204,13 +208,13 @@ func runLangCode(context context.Context, lang, code string) (
 
 	fmt.Printf("running cmd: %v\n", cmd)
 
-	stdOutErr, err := cmd.CombinedOutput()
+	stdOutErr, err := execCmd(ctx, cmd, *maxCodeDuration)
 
 	select {
 	case restarterCh <- workerId:
 		// The restarter now owns the workerId token.
 		workerId = -1
-	case <-context.Done():
+	case <-ctx.Done():
 		return "", nil
 	}
 
@@ -280,4 +284,42 @@ func restarter(restarterId int, needRestartCh, doneRestartCh chan int) {
 
 		doneRestartCh <- workerId
 	}
+}
+
+// ------------------------------------------------
+
+// Run a cmd, waiting for it to finish or timeout, returning its
+// combined stdout and stderr result.
+func execCmd(ctx context.Context, cmd *exec.Cmd, duration time.Duration) (
+	[]byte, error) {
+	var b bytes.Buffer
+
+	cmd.Stdout = &b
+	cmd.Stderr = &b
+
+	if err := cmd.Start(); err != nil {
+		return nil, err
+	}
+
+	doneCh := make(chan error, 1)
+	go func() {
+		doneCh <- cmd.Wait()
+	}()
+
+	select {
+	case <-ctx.Done():
+		cmd.Process.Kill()
+		return nil, ctx.Err()
+
+	case <-time.After(duration):
+		cmd.Process.Kill()
+		return nil, fmt.Errorf("timeout, duration: %v", duration)
+
+	case err := <-doneCh:
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	return b.Bytes(), nil
 }
