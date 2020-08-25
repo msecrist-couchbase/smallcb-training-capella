@@ -41,6 +41,8 @@ var (
 
 	workersCh chan int
 
+	restarterCh chan int
+
 	langPairs = [][]string{
 		// Tuple of [ lang (file suffix),
 		//            langName,
@@ -88,6 +90,10 @@ func main() {
 	for i := 0; i < workersN; i++ {
 		workersCh <- i
 	}
+
+	restarterCh = make(chan int, workersN)
+
+	go restarter(restarterCh, workersCh)
 
 	mux := http.NewServeMux()
 
@@ -158,7 +164,10 @@ func runLangCode(context context.Context, lang, code string) (
 		return "", err
 	}
 
+	// Ex: "vol-0/tmp/play/code.py" path.
 	codePathHost := dir + "/tmp/play/code." + lang
+
+	// Ex: "/opt/couchbase/var/tmp/play/code.py" path.
 	codePathInst := "/opt/couchbase/var/tmp/play/code." + lang
 
 	codeBytes := []byte(strings.ReplaceAll(code, "\r\n", "\n"))
@@ -186,10 +195,18 @@ func runLangCode(context context.Context, lang, code string) (
 
 	stdOutErr, err := cmd.CombinedOutput()
 
-	// TODO: asynchronously restart the worker / smallcb-${workerId}.
+	select {
+	case restarterCh <- workerId:
+		// The restarter now owns the workerId token.
+		workerId = -1
+	case <-context.Done():
+		return "", nil
+	}
 
 	return string(stdOutErr), err
 }
+
+// ------------------------------------------------
 
 var mainTemplate = template.Must(template.ParseFiles(
 	*static + "/main.html.template"))
@@ -223,5 +240,28 @@ func mainTemplateEmit(w http.ResponseWriter,
 	if err := mainTemplate.Execute(w, data); err != nil {
 		log.Printf("mainTemplate.Execute, data: %+v, err: %v",
 			data, err)
+	}
+}
+
+// ------------------------------------------------
+
+func restarter(needRestartCh, doneRestartCh chan int) {
+	for workerId := range needRestartCh {
+		cmd := exec.Command("make",
+			fmt.Sprintf("CONTAINER_NUM=%d", workerId),
+			"restart")
+
+		fmt.Printf("restarter, cmd: %v\n", cmd)
+
+		stdOutErr, err := cmd.CombinedOutput()
+		if err != nil {
+			log.Fatalf("restarter, cmd: %v,"+
+				" stdOutErr: %v, err: %v",
+				cmd, stdOutErr, err)
+
+			return
+		}
+
+		doneRestartCh <- workerId
 	}
 }
