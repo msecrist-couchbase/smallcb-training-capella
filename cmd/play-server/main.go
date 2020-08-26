@@ -126,8 +126,9 @@ func initMux(mux *http.ServeMux) {
 
 func handleHome(w http.ResponseWriter, r *http.Request) {
 	lang := r.FormValue("lang")
+	code := r.FormValue("code")
 
-	mainTemplateEmit(w, lang, "", "")
+	mainTemplateEmit(w, lang, code, "")
 }
 
 func handleRun(w http.ResponseWriter, r *http.Request) {
