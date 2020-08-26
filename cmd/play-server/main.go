@@ -138,8 +138,9 @@ func handleRun(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		http.Error(w,
 			http.StatusText(http.StatusInternalServerError)+
-				fmt.Sprintf(" - err: %v", err),
+				fmt.Sprintf(", runLangCode, err: %v", err),
 			http.StatusInternalServerError)
+		log.Printf("runLangCode, err: %v", err)
 		return
 	}
 
@@ -213,7 +214,7 @@ func runLangCode(ctx context.Context, lang, code string) (
 			codePathInst)
 	}
 
-	fmt.Printf("running cmd: %v\n", cmd)
+	log.Printf("running cmd: %v\n", cmd)
 
 	stdOutErr, err := execCmd(ctx, cmd, *codeMaxDuration)
 
@@ -229,9 +230,6 @@ func runLangCode(ctx context.Context, lang, code string) (
 }
 
 // ------------------------------------------------
-
-var mainTemplate = template.Must(template.ParseFiles(
-	*static + "/main.html.template"))
 
 type mainTemplateData struct {
 	Langs    [][]string
@@ -259,11 +257,21 @@ func mainTemplateEmit(w http.ResponseWriter,
 		Output:   output,
 	}
 
+	t, err := template.ParseFiles(*static + "/main.html.template")
+	if err != nil {
+		http.Error(w,
+			http.StatusText(http.StatusInternalServerError)+
+				fmt.Sprintf(", template.ParseFiles, err: %v", err),
+			http.StatusInternalServerError)
+		log.Printf("template.ParseFiles, err: %v", err)
+		return
+	}
+
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 
-	if err := mainTemplate.Execute(w, data); err != nil {
-		log.Printf("mainTemplate.Execute, data: %+v, err: %v",
-			data, err)
+	err = t.Execute(w, data)
+	if err != nil {
+		log.Printf("t.Execute, data: %+v, err: %v", data, err)
 	}
 }
 
@@ -273,7 +281,7 @@ func restarter(restarterId int, needRestartCh, doneRestartCh chan int) {
 	for workerId := range needRestartCh {
 		start := time.Now()
 
-		fmt.Printf("restarterId: %d, workerId: %d\n",
+		log.Printf("restarterId: %d, workerId: %d\n",
 			restarterId, workerId)
 
 		cmd := exec.Command("make",
@@ -286,7 +294,7 @@ func restarter(restarterId int, needRestartCh, doneRestartCh chan int) {
 				restarterId, cmd, stdOutErr, err)
 		}
 
-		fmt.Printf("restarterId: %d, workerId: %d, took: %s\n",
+		log.Printf("restarterId: %d, workerId: %d, took: %s\n",
 			restarterId, workerId, time.Since(start))
 
 		doneRestartCh <- workerId
