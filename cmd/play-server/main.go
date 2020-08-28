@@ -187,10 +187,10 @@ func runLangCode(ctx context.Context, lang, code string) (
 		return "", err
 	}
 
-	// Ex: "vol-0/tmp/play/code.py" path.
+	// Ex: "vol-0/tmp/play/code.py".
 	codePathHost := dir + "/tmp/play/code." + lang
 
-	// Ex: "/opt/couchbase/var/tmp/play/code.py" path.
+	// Ex: "/opt/couchbase/var/tmp/play/code.py".
 	codePathInst := "/opt/couchbase/var/tmp/play/code." + lang
 
 	codeBytes := []byte(strings.ReplaceAll(code, "\r\n", "\n"))
@@ -201,13 +201,15 @@ func runLangCode(ctx context.Context, lang, code string) (
 		return "", err
 	}
 
+	// Ex: "smallcb-0".
 	containerName := fmt.Sprintf("%s%d", *containerNamePrefix, workerId)
 
 	var cmd *exec.Cmd
 
 	execCommand := langExecs[lang]
 	if len(execCommand) > 0 {
-		// Case when there's an execCommand prefix.
+		// Case when there's an execCommand prefix,
+		// such as "/run-java.sh .../tmp/play/code.java".
 		cmd = exec.Command("docker", "exec", containerName,
 			execCommand, codePathInst)
 	} else {
@@ -291,8 +293,14 @@ func restarter(restarterId int, needRestartCh, doneRestartCh chan int) {
 
 		stdOutErr, err := cmd.CombinedOutput()
 		if err != nil {
-			log.Fatalf("restarterId: %d, cmd: %v, stdOutErr: %v, err: %v",
-				restarterId, cmd, stdOutErr, err)
+			log.Printf("restarterId: %d, workerId: %d,"+
+				" cmd: %v, stdOutErr: %v, err: %v",
+				restarterId, workerId, cmd, stdOutErr, err)
+
+			// Async try to restart the workerId again.
+			go func(workerId int) { needRestartCh <- workerId }(workerId)
+
+			continue
 		}
 
 		log.Printf("restarterId: %d, workerId: %d, took: %s\n",
@@ -314,7 +322,7 @@ func execCmd(ctx context.Context, cmd *exec.Cmd, duration time.Duration) (
 	cmd.Stderr = &b
 
 	if err := cmd.Start(); err != nil {
-		return nil, err
+		return nil, fmt.Errorf("cmd.Start, err: %v", err)
 	}
 
 	doneCh := make(chan error, 1)
@@ -325,7 +333,7 @@ func execCmd(ctx context.Context, cmd *exec.Cmd, duration time.Duration) (
 	select {
 	case <-ctx.Done():
 		cmd.Process.Kill()
-		return nil, ctx.Err()
+		return nil, fmt.Errorf("ctx.Done, err: %v", ctx.Err())
 
 	case <-time.After(duration):
 		cmd.Process.Kill()
@@ -333,7 +341,7 @@ func execCmd(ctx context.Context, cmd *exec.Cmd, duration time.Duration) (
 
 	case err := <-doneCh:
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("doneCh, err: %v", err)
 		}
 	}
 
