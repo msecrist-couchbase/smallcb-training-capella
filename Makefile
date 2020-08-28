@@ -53,7 +53,7 @@ restart-snapshot:
 
 wait-healthy:
 	echo "Waiting until couchbase-server is healthy..."
-	docker exec $(IMAGE_NAME)-$(CONTAINER_NUM) /init-couchbase/wait-healthy.sh
+	time docker exec $(IMAGE_NAME)-$(CONTAINER_NUM) /init-couchbase/wait-healthy.sh
 
 play-server: cmd/play-server/main.go
 	go build ./...
