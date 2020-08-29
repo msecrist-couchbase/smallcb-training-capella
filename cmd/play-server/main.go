@@ -302,6 +302,10 @@ func mainTemplateEmit(w http.ResponseWriter,
 		}
 	}
 
+	if title == "" {
+		title = "API / SDK Playground"
+	}
+
 	data := &mainTemplateData{
 		NameTitles: nameTitles,
 		Name:       name,

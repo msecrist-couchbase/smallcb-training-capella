@@ -73,7 +73,7 @@
 
     <div class="main-center">
       <h2>
-        {{if .Title}}{{.Title}}{{else}}API / SDK Playground{{end}}
+        {{.Title}}
       </h2>
 
       <div class="item">
@@ -103,7 +103,7 @@
   </div>
 
   <div class="footer">
-    powered by the smallcb project
+    powered by the smallcb project from Couchbase Labs
   </div>
 </body>
 </html>
