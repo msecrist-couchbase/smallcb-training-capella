@@ -23,9 +23,6 @@ var (
 
 	help = flag.Bool("help", false, "print help/usage and exit")
 
-	langDefault = flag.String("langDefault", "py",
-		"default programming lang (e.g., code file suffix)")
-
 	codeMaxLen = flag.Int("codeMaxLen", 16000,
 		"max length of a client's request code in bytes")
 
@@ -69,10 +66,10 @@ var (
 	langExecs = map[string]string{} // Map from 'py' to exec command prefix.
 
 	// Ex: { "basic-py": { "lang": "py", "code": "..." }, ... }.
-	contents map[string]map[string]interface{}
+	examples map[string]map[string]interface{}
 
 	// Ex: [ "basic-py", "basic-java", ... ].
-	contentNames []string
+	exampleNames []string
 )
 
 // ------------------------------------------------
@@ -98,16 +95,16 @@ func main() {
 
 	var err error
 
-	contents, err = readYamls(*static + "/contents")
+	examples, err = readYamls(*static + "/examples")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	for name := range contents {
-		contentNames = append(contentNames, name)
+	for name := range examples {
+		exampleNames = append(exampleNames, name)
 	}
 
-	sort.Strings(contentNames)
+	sort.Strings(exampleNames)
 
 	// Fill the workersCh with workerId tokens.
 	workersCh = make(chan int, *workers)
@@ -208,6 +205,7 @@ func runLangCode(ctx context.Context, lang, code string) (
 		return "", ctx.Err()
 	}
 
+	// A worker is ready & assigned, so prepare the code dir & file.
 	dir := fmt.Sprintf("%s%d", *containerVolPrefix, workerId)
 
 	err := os.MkdirAll(dir+"/tmp/play", 0777)
@@ -269,6 +267,7 @@ type NameTitle struct {
 type mainTemplateData struct {
 	NameTitles []NameTitle
 	Name       string
+	Title      string
 	Lang       string // Ex: 'py'.
 	Code       string
 	Output     string
@@ -276,9 +275,9 @@ type mainTemplateData struct {
 
 func mainTemplateEmit(w http.ResponseWriter,
 	name, lang, code string) {
-	nameTitles := make([]NameTitle, 0, len(contentNames))
-	for _, name := range contentNames {
-		title, _ := contents[name]["title"].(string)
+	nameTitles := make([]NameTitle, 0, len(exampleNames))
+	for _, name := range exampleNames {
+		title, _ := examples[name]["title"].(string)
 		if title == "" {
 			title = name
 		}
@@ -289,20 +288,24 @@ func mainTemplateEmit(w http.ResponseWriter,
 		})
 	}
 
-	if lang == "" && code == "" {
-		c := contents[name]
+	var title string
+
+	if name != "" {
+		c := examples[name]
 		if c != nil {
+			title = c["title"].(string)
 			lang = c["lang"].(string)
 			code = c["code"].(string)
 		} else {
-			lang = *langDefault
-			code = contents["basic-"+*langDefault]["code"].(string)
+			mainTemplateEmit(w, "basic-py", "", "")
+			return
 		}
 	}
 
 	data := &mainTemplateData{
 		NameTitles: nameTitles,
 		Name:       name,
+		Title:      title,
 		Lang:       lang,
 		Code:       code,
 	}
@@ -420,7 +423,7 @@ func readYamls(dir string) (
 				return nil, fmt.Errorf("yaml.Unmarshal, f: %+v, err: %v", f, err)
 			}
 
-			rv[f.Name()] = m
+			rv[f.Name()[:len(f.Name())-5]] = m
 		}
 	}
 

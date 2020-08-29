@@ -67,7 +67,10 @@
     </div>
 
     <div class="main-center">
-      <h2>Playground</h2>
+      <h2>
+        Playground
+        {{if .Title}} for {{.Title}}{{end}}
+      </h2>
 
       <div class="item">
         <form class="item-form"
