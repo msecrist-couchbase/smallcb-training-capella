@@ -1,4 +1,4 @@
-title: Basic Python Example
+title: Basic Python example
 lang: py
 code: |
   #!/usr/bin/python3
@@ -17,4 +17,3 @@ code: |
   rv = coll.get('21st_amendment_brewery_cafe')
 
   print(rv.content)
-

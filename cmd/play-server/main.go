@@ -64,12 +64,6 @@ var (
 
 	langNames = map[string]string{} // Map from 'py' to 'python3'.
 	langExecs = map[string]string{} // Map from 'py' to exec command prefix.
-
-	// Ex: { "basic-py": { "lang": "py", "code": "..." }, ... }.
-	examples map[string]map[string]interface{}
-
-	// Ex: [ "basic-py", "basic-java", ... ].
-	exampleNames []string
 )
 
 // ------------------------------------------------
@@ -92,19 +86,6 @@ func main() {
 		flag.Usage()
 		os.Exit(2)
 	}
-
-	var err error
-
-	examples, err = readYamls(*static + "/examples")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	for name := range examples {
-		exampleNames = append(exampleNames, name)
-	}
-
-	sort.Strings(exampleNames)
 
 	// Fill the workersCh with workerId tokens.
 	workersCh = make(chan int, *workers)
@@ -284,6 +265,16 @@ type mainTemplateData struct {
 
 func mainTemplateEmit(w http.ResponseWriter,
 	name, lang, code string) {
+	examples, exampleNames, err := readExamples()
+	if err != nil {
+		http.Error(w,
+			http.StatusText(http.StatusInternalServerError)+
+				fmt.Sprintf(", readExamples, err: %v", err),
+			http.StatusInternalServerError)
+		log.Printf("readExampless, err: %v", err)
+		return
+	}
+
 	nameTitles := make([]NameTitle, 0, len(exampleNames))
 	for _, name := range exampleNames {
 		title, _ := examples[name]["title"].(string)
@@ -405,6 +396,30 @@ func execCmd(ctx context.Context, cmd *exec.Cmd, duration time.Duration) (
 	}
 
 	return b.Bytes(), nil
+}
+
+// ------------------------------------------------
+
+// Ex examples:
+//   { "basic-py": { "lang": "py", "code": "..." }, ... }.
+// Ex exampleNames:
+//   [ "basic-py", "basic-java", ... ].
+func readExamples() (
+	examples map[string]map[string]interface{},
+	exampleNames []string,
+	err error) {
+	examples, err = readYamls(*static + "/examples")
+	if err != nil {
+		return nil, nil, err
+	}
+
+	for name := range examples {
+		exampleNames = append(exampleNames, name)
+	}
+
+	sort.Strings(exampleNames)
+
+	return examples, exampleNames, nil
 }
 
 // ------------------------------------------------

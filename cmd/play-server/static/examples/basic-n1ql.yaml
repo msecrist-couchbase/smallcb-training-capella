@@ -1,8 +1,10 @@
-title: Basic N1QL curl Example
+title: Basic N1QL curl example
 lang: n1ql
 code: |
   #!/bin/sh
   
   curl http://Administrator:password@127.0.0.1:8093/query/service \
-    -d 'statement=SELECT * FROM `beer-sample`
-                   WHERE meta().id = "21st_amendment_brewery_cafe"'
+    -d 'statement=
+        SELECT *
+          FROM `beer-sample`
+         WHERE meta().id = "21st_amendment_brewery_cafe"'
