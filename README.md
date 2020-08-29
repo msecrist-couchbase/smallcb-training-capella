@@ -13,6 +13,8 @@ first end-to-end demo on cloud (staging)?
 
 SECURITY: turn off egress networking?
 
+SECURITY: only allow host to connect (or proxy)?
+
 SECURITY: cpu/memory usage limits?
 
 SECURITY: restart the host system every day?

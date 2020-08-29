@@ -83,6 +83,7 @@
                  type="hidden" value="{{.Lang}}"/>
 
           <textarea name="code"
+                    wrap="off"
                     autocorrect="off"
                     autocomplete="off"
                     autocapitalize="off"
