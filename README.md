@@ -18,6 +18,15 @@ SECURITY: cpu/memory usage limits?
 SECURITY: restart the host system every day?
           unsafe code can escape the container sandbox via kernel hack?
 
+SECURITY: RBAC to limit access?
+
+iframe for access to web admin portal?
+  need server-side proxy in golang?
+  access to just query workbench?
+
+or pop up web admin portal in separate tab?
+  with rewrites / injection of messages?
+
 how about having longer-running instances
 that hang around for a few minutes?
 e.g., uber (per request)
