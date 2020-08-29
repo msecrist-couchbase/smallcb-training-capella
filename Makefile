@@ -2,7 +2,9 @@ IMAGE_NAME = smallcb
 
 CONTAINER_NUM = 0
 
-PORTS = -p 8091-8094:8091-8094 -p 11210:11210
+CONTAINER_PORTS = -p 8091-8094:8091-8094 -p 11210:11210
+
+CONTAINER_EXTRAS = --cap-add=SYS_PTRACE
 
 # Build the docker image.
 build:
@@ -13,15 +15,15 @@ build:
 #
 # This is done by starting a container instance, initializing the
 # couchbase server with sample data -- configured for lower resource
-# utilization footprint -- and then stopping/removing the container
-# instance, while keeping the vol-snapshot directory.
+# utilization (at the potential tradeoff of performance, etc) -- and
+# then stopping/removing the container instance, while keeping the
+# vol-snapshot directory (for later reuse/restart'ing).
 create:
 	rm -rf vol-*
 	mkdir -p vol-snapshot
-	docker run $(PORTS) \
+	docker run --name=$(IMAGE_NAME)-$(CONTAINER_NUM) \
+                   $(CONTAINER_PORTS) $(CONTAINER_EXTRAS) \
                    -v $(shell pwd)/vol-snapshot:/opt/couchbase/var \
-                   --cap-add=SYS_PTRACE \
-                   --name=$(IMAGE_NAME)-$(CONTAINER_NUM) \
                    -d $(IMAGE_NAME)
 	sleep 3
 	docker exec $(IMAGE_NAME)-$(CONTAINER_NUM) /init-couchbase/init.sh
@@ -45,10 +47,9 @@ restart-snapshot:
 	docker rm $(IMAGE_NAME)-$(CONTAINER_NUM) || true
 	rm -rf vol-$(CONTAINER_NUM)/*
 	cp -R vol-snapshot/ vol-$(CONTAINER_NUM)/
-	docker run $(PORTS) \
+	docker run --name=$(IMAGE_NAME)-$(CONTAINER_NUM) \
+                   $(CONTAINER_PORTS) $(CONTAINER_EXTRAS) \
                    -v $(shell pwd)/vol-$(CONTAINER_NUM):/opt/couchbase/var \
-                   --name=$(IMAGE_NAME)-$(CONTAINER_NUM) \
-                   --cap-add=SYS_PTRACE \
                    -d $(IMAGE_NAME)
 
 wait-healthy:
