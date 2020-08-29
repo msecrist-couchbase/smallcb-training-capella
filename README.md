@@ -20,6 +20,8 @@ SECURITY: restart the host system every day?
 
 SECURITY: RBAC to limit access?
 
+SECURITY: need a CAPTCHA?
+
 iframe for access to web admin portal?
   need server-side proxy in golang?
   access to just query workbench?
@@ -28,11 +30,43 @@ or pop up web admin portal in separate tab?
   with rewrites / injection of messages?
 
 how about having longer-running instances
-that hang around for a few minutes?
-e.g., uber (per request)
-   vs zipcar (hourly rental)
-   vs hertz/avis (daily rental)
-   vs monthly car lease
+that hang around more than a single request,
+which are all single-node / no rebalance / no XDCR?
+e.g.,
+  per-request (uber)
+    container instance reset/recycled after every request.
+
+  multi-request (zipcar / hourly rental)
+    container instance has an associated session UUID,
+      and is reset/recycled only after the
+      session times out from inactivity, or
+      from a too-long session (might be a robot, not a human).
+    data is deleted after session times out.
+    and, user / password has to be generated UUID?
+      and network ingres/egress that's enough,
+      intended to allow for cbbackup/restore from elsewhere?
+
+  multi-request-with-data-freezing/thawing (hertz/avid, multi-day rental)
+    after a timeout from inactivity,
+    the data is snapshotted and parked somewhere...
+      like on local disk,
+           or onto S3.
+    when the user comes back, data is thawed
+      against a restarted container,
+      which takes some time (e.g., go get a coffee).
+
+if you want a lease of 1 car or more (clustering),
+  with attached chauffering & mechanics services...
+  use Couchbase Cloud.
+
+-------------------------
+On new CB version release...
+
+Does that mean a new EC2 instance?
+
+What about frozen data --
+  do we thaw them on demand, as requested?
+  eventually give up on versions that's too old?
 
 -------------------------
 # Security
