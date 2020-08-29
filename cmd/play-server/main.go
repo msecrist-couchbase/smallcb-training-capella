@@ -132,7 +132,6 @@ func handleHome(w http.ResponseWriter, r *http.Request) {
 	}
 
 	lang := r.FormValue("lang")
-
 	code := r.FormValue("code")
 
 	mainTemplateEmit(w, name, lang, code)
