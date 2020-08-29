@@ -24,22 +24,27 @@
       flex-grow: 10;
     }
 
+    .main .main-output {
+      flex-grow: 10;
+    }
+
+    .main .main-output iframe {
+      width: 90%;
+      height: 20rem;
+    }
+
     input, textarea, pre {
       display: block;
       margin-bottom: 10px;
+      font-size: 13px;
     }
 
     textarea {
       width: 95%;
-      height: 20em;
+      height: 20rem;
       overflow-y: scroll;
       background-color: #333;
       color: #eee;
-      font-family: courier, monospace;
-    }
-
-    .output {
-      width: 90%;
       font-family: courier, monospace;
     }
 
@@ -77,8 +82,6 @@
           <input name="lang"
                  type="hidden" value="{{.Lang}}"/>
 
-          <input type="submit" value="run"/>
-
           <textarea name="code"
                     autocorrect="off"
                     autocomplete="off"
@@ -91,7 +94,7 @@
       </div>
     </div>
 
-    <div class="main-right">
+    <div class="main-output">
       <h2>Output</h2>
 
       <iframe name="output" id="output"></iframe>
