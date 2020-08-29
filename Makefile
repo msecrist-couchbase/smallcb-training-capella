@@ -47,8 +47,8 @@ restart-snapshot:
 	cp -R vol-snapshot/ vol-$(CONTAINER_NUM)/
 	docker run $(PORTS) \
                    -v $(shell pwd)/vol-$(CONTAINER_NUM):/opt/couchbase/var \
-                   --cap-add=SYS_PTRACE \
                    --name=$(IMAGE_NAME)-$(CONTAINER_NUM) \
+                   --cap-add=SYS_PTRACE \
                    -d $(IMAGE_NAME)
 
 wait-healthy:
