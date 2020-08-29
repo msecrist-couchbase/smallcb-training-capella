@@ -55,23 +55,23 @@
 
   <div class="main flex-row">
     <div class="main-left">
-      <h2>Languages</h2>
+      <h2>Examples</h2>
 
       <ul class="langs">
-      {{range .Langs}}
+      {{range .NameTitles}}
         <li>
-          <a href="?lang={{index . 0}}">{{index . 1}}</a>
+          <a href="/?name={{.Name}}">{{.Title}}</a>
         </li>
       {{end}}
       </ul>
     </div>
 
     <div class="main-center">
-      <h2>Playground for {{.LangName}}</h2>
+      <h2>Playground</h2>
 
       <div class="item">
         <form class="item-form"
-              action="run" method="post">
+              action="run" method="post" target="output">
           <input name="lang"
                  type="hidden" value="{{.Lang}}"/>
 
@@ -85,14 +85,13 @@
 
           <input type="submit" value="run"/>
         </form>
-
-        {{if .Output}}
-          <div class="item-output">
-            <h2>Output</h2>
-            <div class="output">{{.Output}}</div>
-          </div>
-        {{end}}
       </div>
+    </div>
+
+    <div class="main-right">
+      <h2>Output</h2>
+
+      <iframe name="output"></iframe>
     </div>
   </div>
 

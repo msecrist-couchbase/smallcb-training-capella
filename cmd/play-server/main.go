@@ -11,8 +11,11 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
+	"sort"
 	"strings"
 	"time"
+
+	"gopkg.in/yaml.v2"
 )
 
 var (
@@ -50,39 +53,40 @@ var (
 	restarters = flag.Int("restarters", 1,
 		"# of restarters of the container instances")
 
-	workersCh chan int
+	workersCh chan int // Channel of workerId's / container num's.
 
-	restarterCh chan int
+	restarterCh chan int // Channel of workerId's / container num's.
 
 	langs = [][]string{
 		// Tuple of [ lang (file suffix),
-		//            langName,
-		//            exec command prefix ].
+		//            langName (for display),
+		//            exec command prefix (optional) ].
 		[]string{"java", "java", "/run-java.sh"},
 		[]string{"py", "python3", ""},
 	}
 
 	langNames = map[string]string{} // Map from 'py' to 'python3'.
-	langCodes = map[string]string{} // Map from 'py' to example python3 code.
 	langExecs = map[string]string{} // Map from 'py' to exec command prefix.
+
+	// Ex: { "basic-py": { "lang": "py", "code": "..." }, ... }.
+	contents map[string]map[string]interface{}
+
+	// Ex: [ "basic-py", "basic-java", ... ].
+	contentNames []string
 )
+
+// ------------------------------------------------
 
 func init() {
 	for _, item := range langs {
 		lang, langName, langExec := item[0], item[1], item[2]
 
-		langCode, err :=
-			ioutil.ReadFile(*static + "/lang-code." + lang)
-		if err != nil {
-			log.Fatalf("ioutil.ReadFile, lang: %s, err: %v",
-				lang, err)
-		}
-
 		langNames[lang] = langName
-		langCodes[lang] = string(langCode)
 		langExecs[lang] = langExec
 	}
 }
+
+// ------------------------------------------------
 
 func main() {
 	flag.Parse()
@@ -91,6 +95,19 @@ func main() {
 		flag.Usage()
 		os.Exit(2)
 	}
+
+	var err error
+
+	contents, err = readYamls(*static + "/contents")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	for name := range contents {
+		contentNames = append(contentNames, name)
+	}
+
+	sort.Strings(contentNames)
 
 	// Fill the workersCh with workerId tokens.
 	workersCh = make(chan int, *workers)
@@ -114,6 +131,8 @@ func main() {
 	log.Fatal(http.ListenAndServe(*listen, mux))
 }
 
+// ------------------------------------------------
+
 func initMux(mux *http.ServeMux) {
 	mux.Handle("/static/",
 		http.StripPrefix("/static/",
@@ -124,12 +143,17 @@ func initMux(mux *http.ServeMux) {
 	mux.HandleFunc("/", handleHome)
 }
 
+// ------------------------------------------------
+
 func handleHome(w http.ResponseWriter, r *http.Request) {
+	name := r.FormValue("name")
 	lang := r.FormValue("lang")
 	code := r.FormValue("code")
 
-	mainTemplateEmit(w, lang, code, "")
+	mainTemplateEmit(w, name, lang, code)
 }
+
+// ------------------------------------------------
 
 func handleRun(w http.ResponseWriter, r *http.Request) {
 	lang := r.FormValue("lang")
@@ -145,8 +169,12 @@ func handleRun(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	mainTemplateEmit(w, lang, code, output)
+	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
+
+	w.Write([]byte(output))
 }
+
+// ------------------------------------------------
 
 func runLangCode(ctx context.Context, lang, code string) (
 	string, error) {
@@ -195,7 +223,7 @@ func runLangCode(ctx context.Context, lang, code string) (
 
 	codeBytes := []byte(strings.ReplaceAll(code, "\r\n", "\n"))
 
-	// Mode is 0777 executable in case it's a script like 'code.py'.
+	// Mode is 0777 executable, for scripts like 'code.py'.
 	err = ioutil.WriteFile(codePathHost, codeBytes, 0777)
 	if err != nil {
 		return "", err
@@ -234,30 +262,49 @@ func runLangCode(ctx context.Context, lang, code string) (
 
 // ------------------------------------------------
 
+type NameTitle struct {
+	Name, Title string
+}
+
 type mainTemplateData struct {
-	Langs    [][]string
-	Lang     string // Ex: 'py'.
-	LangName string // Ex: 'python'.
-	Code     string
-	Output   string
+	NameTitles []NameTitle
+	Name       string
+	Lang       string // Ex: 'py'.
+	Code       string
+	Output     string
 }
 
 func mainTemplateEmit(w http.ResponseWriter,
-	lang, code, output string) {
-	if lang == "" {
-		lang = *langDefault
+	name, lang, code string) {
+	nameTitles := make([]NameTitle, 0, len(contentNames))
+	for _, name := range contentNames {
+		title, _ := contents[name]["title"].(string)
+		if title == "" {
+			title = name
+		}
+
+		nameTitles = append(nameTitles, NameTitle{
+			Name:  name,
+			Title: title,
+		})
 	}
 
-	if code == "" {
-		code, _ = langCodes[lang]
+	if lang == "" && code == "" {
+		c := contents[name]
+		if c != nil {
+			lang = c["lang"].(string)
+			code = c["code"].(string)
+		} else {
+			lang = *langDefault
+			code = contents["basic-"+*langDefault]["code"].(string)
+		}
 	}
 
 	data := &mainTemplateData{
-		Langs:    langs,
-		Lang:     lang,
-		LangName: langNames[lang],
-		Code:     code,
-		Output:   output,
+		NameTitles: nameTitles,
+		Name:       name,
+		Lang:       lang,
+		Code:       code,
 	}
 
 	t, err := template.ParseFiles(*static + "/main.html.template")
@@ -346,4 +393,36 @@ func execCmd(ctx context.Context, cmd *exec.Cmd, duration time.Duration) (
 	}
 
 	return b.Bytes(), nil
+}
+
+// ------------------------------------------------
+
+func readYamls(dir string) (
+	map[string]map[string]interface{}, error) {
+	rv := map[string]map[string]interface{}{}
+
+	files, err := ioutil.ReadDir(dir)
+	if err != nil {
+		return nil, fmt.Errorf("ioutil.ReadDir, dir: %s, err: %v", dir, err)
+	}
+
+	for _, f := range files {
+		if strings.HasSuffix(f.Name(), ".yaml") {
+			b, err := ioutil.ReadFile(dir + "/" + f.Name())
+			if err != nil {
+				return nil, fmt.Errorf("ioutil.ReadFile, f: %+v, err: %v", f, err)
+			}
+
+			m := make(map[string]interface{})
+
+			err = yaml.Unmarshal(b, &m)
+			if err != nil {
+				return nil, fmt.Errorf("yaml.Unmarshal, f: %+v, err: %v", f, err)
+			}
+
+			rv[f.Name()] = m
+		}
+	}
+
+	return rv, nil
 }

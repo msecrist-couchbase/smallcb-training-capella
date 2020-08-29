@@ -1,0 +1,8 @@
+title: Basic Java Example
+lang: java
+code: |
+  class Program {
+      public static void main(String[] args) {
+          System.out.println("hello, world!");
+      }
+  }
