@@ -5,19 +5,22 @@
 </head>
 <body>
   <style>
-    .main {
+    .flex-row {
       display: flex;
       flex-direction: row;
+    }
+
+    .main {
       margin-bottom: 80px;
       border-top: 1px solid #666;
     }
 
-    .main .langs {
+    .main .main-left {
       flex-grow: 1;
       margin-right: 20px;
     }
 
-    .main .form {
+    .main .main-center {
       flex-grow: 10;
     }
 
@@ -50,9 +53,10 @@
 
   <h1>Couchbase API / SDK Playground</h1>
 
-  <div class="main">
-    <div class="langs">
+  <div class="main flex-row">
+    <div class="main-left">
       <h2>Languages</h2>
+
       <ul class="langs">
       {{range .Langs}}
         <li>
@@ -62,30 +66,33 @@
       </ul>
     </div>
 
-    <div class="form">
+    <div class="main-center">
       <h2>Playground for {{.LangName}}</h2>
 
-      <form action="run" method="post">
-        <input name="lang"
-               type="hidden" value="{{.Lang}}"/>
+      <div class="item">
+        <form class="item-form"
+              action="run" method="post">
+          <input name="lang"
+                 type="hidden" value="{{.Lang}}"/>
 
-        <input type="submit" value="run"/>
+          <input type="submit" value="run"/>
 
-        <textarea name="code"
-                  autocorrect="off"
-                  autocomplete="off"
-                  autocapitalize="off"
-                  spellcheck="false">{{.Code}}</textarea>
+          <textarea name="code"
+                    autocorrect="off"
+                    autocomplete="off"
+                    autocapitalize="off"
+                    spellcheck="false">{{.Code}}</textarea>
 
-        <input type="submit" value="run"/>
-      </form>
+          <input type="submit" value="run"/>
+        </form>
 
-      {{if .Output}}
-        <div>
-          <h2>Output</h2>
-          <div class="output">{{.Output}}</div>
-        </div>
-      {{end}}
+        {{if .Output}}
+          <div class="item-output">
+            <h2>Output</h2>
+            <div class="output">{{.Output}}</div>
+          </div>
+        {{end}}
+      </div>
     </div>
   </div>
 
