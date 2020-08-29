@@ -68,8 +68,7 @@
 
     <div class="main-center">
       <h2>
-        Playground
-        {{if .Title}} for {{.Title}}{{end}}
+        {{if .Title}}{{.Title}}{{else}}API / SDK Playground{{end}}
       </h2>
 
       <div class="item">
