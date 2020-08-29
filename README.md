@@ -59,6 +59,8 @@ if you want a lease of 1 car or more (clustering),
   with attached chauffering & mechanics services...
   use Couchbase Cloud.
 
+should there be a workload generator included?
+
 -------------------------
 On new CB version release...
 
@@ -185,5 +187,7 @@ https://github.com/couchbaselabs?q=sequoia&type=&language=
 https://github.com/couchbaselabs/sequoia/tree/master/containers/sdk
 
 https://github.com/couchbaselabs/sequoia/blob/master/containers/sdk/Dockerfile
+
+https://github.com/couchbaselabs/sequoia/blob/master/containers/catapult/Dockerfile - adoptopenjdk/openjdk12:latest
 
 couchbaselabs/sequoia-provision
