@@ -1,6 +1,6 @@
 title: Basic N1QL curl Example
 lang: n1ql
-code: >
+code: |
   #!/bin/sh
   
   curl http://Administrator:password@127.0.0.1:8093/query/service \
