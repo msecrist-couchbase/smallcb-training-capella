@@ -78,6 +78,8 @@ What about frozen data --
 - timeouts for long-running programs, see:
   codeMaxDuration and workersMaxDuration.
 
+- docker exec as couchbase:couchbase
+
 -------------------------
 use cases
   try it now

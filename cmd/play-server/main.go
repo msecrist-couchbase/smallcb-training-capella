@@ -243,11 +243,13 @@ func runLangCode(ctx context.Context, lang, code string) (
 	if len(execCommand) > 0 {
 		// Case when there's an execCommand prefix,
 		// such as "/run-java.sh .../tmp/play/code.java".
-		cmd = exec.Command("docker", "exec", containerName,
-			execCommand, codePathInst)
+		cmd = exec.Command("docker", "exec",
+			"-u", "couchbase:couchbase",
+			containerName, execCommand, codePathInst)
 	} else {
-		cmd = exec.Command("docker", "exec", containerName,
-			codePathInst)
+		cmd = exec.Command("docker", "exec",
+			"-u", "couchbase:couchbase",
+			containerName, codePathInst)
 	}
 
 	log.Printf("running cmd: %v\n", cmd)
