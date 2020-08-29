@@ -144,7 +144,14 @@ func initMux(mux *http.ServeMux) {
 
 func handleHome(w http.ResponseWriter, r *http.Request) {
 	name := r.FormValue("name")
+
+	if strings.HasPrefix(r.URL.Path, "/example/") &&
+		len(r.URL.Path) > len("/example/") {
+		name = r.URL.Path[len("/example/"):]
+	}
+
 	lang := r.FormValue("lang")
+
 	code := r.FormValue("code")
 
 	mainTemplateEmit(w, name, lang, code)

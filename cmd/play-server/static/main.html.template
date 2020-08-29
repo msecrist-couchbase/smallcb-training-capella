@@ -60,7 +60,7 @@
       <ul class="langs">
       {{range .NameTitles}}
         <li>
-          <a href="/?name={{.Name}}">{{.Title}}</a>
+          <a href="/example/{{.Name}}">{{.Title}}</a>
         </li>
       {{end}}
       </ul>
@@ -74,7 +74,7 @@
 
       <div class="item">
         <form class="item-form"
-              action="run" method="post" target="output">
+              action="/run" method="post" target="output">
           <input name="lang"
                  type="hidden" value="{{.Lang}}"/>
 
@@ -86,7 +86,8 @@
                     autocapitalize="off"
                     spellcheck="false">{{.Code}}</textarea>
 
-          <input type="submit" value="run"/>
+          <input type="submit" value="run"
+                 onclick="document.getElementById('output').contentDocument.body.innerHTML = 'waiting...'; return"/>
         </form>
       </div>
     </div>
@@ -94,7 +95,7 @@
     <div class="main-right">
       <h2>Output</h2>
 
-      <iframe name="output"></iframe>
+      <iframe name="output" id="output"></iframe>
     </div>
   </div>
 
