@@ -13,6 +13,9 @@ first end-to-end demo on cloud (staging)?
 
 need to remap port #'s?
 
+can docker checkpoint (experimental feature)
+  help speed up slow restart times?
+
 SECURITY: turn off egress networking?
 
 SECURITY: only allow host to connect (or proxy)?
