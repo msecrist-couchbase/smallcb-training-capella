@@ -287,17 +287,24 @@ func mainTemplateEmit(w http.ResponseWriter,
 		})
 	}
 
+	if name == "" && lang == "" && code == "" {
+		name = "basic-py"
+	}
+
 	var title string
 
-	if name != "" {
-		c := examples[name]
-		if c != nil {
-			title = c["title"].(string)
-			lang = c["lang"].(string)
-			code = c["code"].(string)
-		} else {
-			mainTemplateEmit(w, "basic-py", "", "")
-			return
+	example := examples[name]
+	if example != nil {
+		if title == "" {
+			title = example["title"].(string)
+		}
+
+		if lang == "" {
+			lang = example["lang"].(string)
+		}
+
+		if code == "" {
+			code = example["code"].(string)
 		}
 	}
 
