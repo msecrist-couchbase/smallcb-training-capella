@@ -40,7 +40,11 @@ first end-to-end demo on laptop?
 first end-to-end demo on cloud (staging)?
 
 need to golang proxy to use the remapped port #'s?
-  and to rewrite REST json maps to list server hostnames/addrs correctly.
+  in the REST responses, to rewrite REST json maps
+  to list server hostnames/addrs correctly.
+
+docker container needs to -p or publish/expose ports on 0.0.0.0 addr
+  instead of 127.0.0.1 addr?
 
 client-side JS to prevent over-clicking on Run/Submit button?
 
