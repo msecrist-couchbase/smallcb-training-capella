@@ -41,6 +41,9 @@ var (
 	containerPortSpan = flag.Int("containerPortSpan", 100,
 		"number of port #'s allocated for each container instance")
 
+	containerAddr = flag.String("containerAddr", "127.0.0.1",
+		"addr for publishing container instance ports")
+
 	listen = flag.String("listen", ":8080",
 		"HTTP listen [address]:port")
 
@@ -136,7 +139,8 @@ func main() {
 	// Spawn the restarter goroutines.
 	for i := 0; i < *restarters; i++ {
 		go Restarter(i, restarterCh, workersCh,
-			*containerPortBase, *containerPortSpan, portMapping)
+			*containerAddr, *containerPortBase, *containerPortSpan,
+			portMapping)
 	}
 
 	// Have the restarters restart the required # of workers.
@@ -388,7 +392,8 @@ func MainTemplateEmit(w http.ResponseWriter,
 // ------------------------------------------------
 
 func Restarter(restarterId int, needRestartCh, doneRestartCh chan int,
-	containerPortBase, containerPortSpan int, portMapping [][]int) {
+	containerAddr string, containerPortBase, containerPortSpan int,
+	portMapping [][]int) {
 	for workerId := range needRestartCh {
 		start := time.Now()
 
@@ -400,8 +405,8 @@ func Restarter(restarterId int, needRestartCh, doneRestartCh chan int,
 		ports := make([]string, 0, len(portMapping))
 		for _, port := range portMapping {
 			ports = append(ports,
-				fmt.Sprintf("-p 127.0.0.1:%d:%d/tcp",
-					portBase+port[1], port[0]))
+				fmt.Sprintf("-p %s:%d:%d/tcp",
+					containerAddr, portBase+port[1], port[0]))
 		}
 
 		cmd.Args = append(cmd.Args,

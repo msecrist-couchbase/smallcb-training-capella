@@ -46,6 +46,10 @@ need to golang proxy to use the remapped port #'s?
 docker container needs to -p or publish/expose ports on 0.0.0.0 addr
   instead of 127.0.0.1 addr?
 
+create couchbase user better than Administrator:password,
+  especially with user & password that look more like
+  UUID's when we're in >= zipcar mode?
+
 client-side JS to prevent over-clicking on Run/Submit button?
 
 client-side JS to prevent Back Button or navigating away
