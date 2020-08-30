@@ -16,6 +16,11 @@ need to remap port #'s?
 can docker checkpoint (experimental feature)
   help speed up slow restart times?
 
+use docker build env vars?
+
+SECURITY: docker build can set ulimits
+  and optional security-opts?
+
 SECURITY: turn off egress networking?
 
 SECURITY: only allow host to connect (or proxy)?
