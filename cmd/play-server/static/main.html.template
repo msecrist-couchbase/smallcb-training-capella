@@ -5,14 +5,31 @@
 </head>
 <body>
   <style>
-    .flex-row {
-      display: flex;
-      flex-direction: row;
+    * {
+      font-family: Verdana, Geneva, sans-serif;
+      font-size: 11pt;
+    }
+
+    h1 {
+      margin-bottom: 10px;
+      border-bottom: 1px solid #666;
+      padding-bottom: 20px;
+      white-space: nowrap;
+      font-size: 13pt;
+    }
+
+    h2 {
+      margin-right: 20px;
+      white-space: nowrap;
+      font-weight: normal;
+    }
+
+    a {
+      color: #333;
     }
 
     .main {
       margin-bottom: 80px;
-      border-top: 1px solid #666;
     }
 
     .main .main-left {
@@ -25,7 +42,7 @@
     }
 
     .main .main-output {
-      flex-grow: 10;
+      flex-grow: 6;
     }
 
     .main .main-output iframe {
@@ -33,9 +50,17 @@
       height: 20rem;
     }
 
+    input[type="submit"] {
+      border: 2px solid #888;
+      padding: 5px 40px 5px 40px;
+      background-color: #8a8;
+      color: #333;
+    }
+
     input, textarea, pre {
       display: block;
       margin-bottom: 10px;
+      border: 1px solid #888;
       font-size: 13px;
     }
 
@@ -48,10 +73,19 @@
       font-family: courier, monospace;
     }
 
+    iframe {
+      border: 1px solid #888;
+    }
+
+    .flex-row {
+      display: flex;
+      flex-direction: row;
+    }
+
     .footer {
       border-top: 1px solid #666;
       padding-top: 10px;
-      font-size: 10pt;
+      font-size: 8pt;
       color: #666;
     }
   </style>
@@ -98,7 +132,7 @@
     <div class="main-output">
       <h2>Output</h2>
 
-      <iframe name="output" id="output"></iframe>
+      <iframe name="output" id="output"/>
     </div>
   </div>
 

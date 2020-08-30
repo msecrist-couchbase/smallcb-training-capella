@@ -66,6 +66,8 @@ var (
 
 	restarterCh chan int // Channel of workerId's / container num's.
 
+	// -----------------------------------
+
 	// The langs is a config table with entries of...
 	//   [ lang (code file suffix),
 	//     langName (for UI display),
@@ -77,6 +79,8 @@ var (
 
 	langNames = map[string]string{} // Map from 'py' to 'python3'.
 	langExecs = map[string]string{} // Map from 'py' to execPrefix.
+
+	// -----------------------------------
 
 	// Port mapping of container port # to containerPortBase + delta.
 	portMapping = [][]int{
