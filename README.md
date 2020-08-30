@@ -18,6 +18,27 @@ can docker checkpoint (experimental feature)
 
 use docker build env vars?
 
+use tmpfs for faster restarts and less real i/o?
+
+use docker on docker?
+
+docker run has interesting tweakable limits?
+
+docker run --read-only flag?
+
+docker run --tmpfs flag?
+
+use nginx proxy for subdomain based routing?
+  See, the following, but which unfortunately doesn't seem to handle
+  multiple virtual ports...
+  https://blog.florianlopes.io/host-multiple-websites-on-single-host-docker/
+
+use docker network overlay --internal mode?
+  https://www.reddit.com/r/docker/comments/hvs7n9/how_do_i_prevent_a_container_from_making_outgoing/
+  If your container is hosted on a VM in Azure, AWS, GCP, OpenStack
+  etc, you'll want to restrict Egress (outgoing) traffic from that VM
+  via Security Rules on the private network
+
 SECURITY: docker build can set ulimits
   and optional security-opts?
 
