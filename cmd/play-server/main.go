@@ -296,7 +296,8 @@ func RunLangCode(ctx context.Context,
 			containerName, codePathInst)
 	}
 
-	log.Printf("INFO: running cmd: %v\n", cmd)
+	log.Printf("INFO: running cmd, containerName: %s, codePathInst: %s\n",
+		containerName, codePathInst)
 
 	stdOutErr, err := ExecCmd(ctx, cmd, codeDuration)
 
