@@ -57,7 +57,7 @@ var (
 	langs = [][]string{
 		// Tuple of [ lang (file suffix),
 		//            langName (for display),
-		//            exec command prefix (optional) ].
+		//            execPrefix (optional) ].
 		[]string{"java", "java", "/run-java.sh"},
 		[]string{"py", "python3", ""},
 	}
@@ -97,12 +97,12 @@ func main() {
 	// the # of workers to reduce workers having to wait.
 	restarterCh = make(chan int, *workers)
 	for i := 0; i < *restarters; i++ {
-		go restarter(i, restarterCh, workersCh)
+		go Restarter(i, restarterCh, workersCh)
 	}
 
 	mux := http.NewServeMux()
 
-	initMux(mux)
+	HttpMuxInit(mux)
 
 	log.Printf("listening on... %v", *listen)
 
@@ -111,19 +111,19 @@ func main() {
 
 // ------------------------------------------------
 
-func initMux(mux *http.ServeMux) {
+func HttpMuxInit(mux *http.ServeMux) {
 	mux.Handle("/static/",
 		http.StripPrefix("/static/",
 			http.FileServer(http.Dir(*static))))
 
-	mux.HandleFunc("/run", handleRun)
+	mux.HandleFunc("/run", HttpHandleRun)
 
-	mux.HandleFunc("/", handleHome)
+	mux.HandleFunc("/", HttpHandleMain)
 }
 
 // ------------------------------------------------
 
-func handleHome(w http.ResponseWriter, r *http.Request) {
+func HttpHandleMain(w http.ResponseWriter, r *http.Request) {
 	name := r.FormValue("name")
 
 	if strings.HasPrefix(r.URL.Path, "/example/") &&
@@ -134,22 +134,24 @@ func handleHome(w http.ResponseWriter, r *http.Request) {
 	lang := r.FormValue("lang")
 	code := r.FormValue("code")
 
-	mainTemplateEmit(w, name, lang, code)
+	MainTemplateEmit(w, *static, *static+"/examples", name, lang, code)
 }
 
 // ------------------------------------------------
 
-func handleRun(w http.ResponseWriter, r *http.Request) {
+func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 	lang := r.FormValue("lang")
 	code := r.FormValue("code")
 
-	output, err := runLangCode(r.Context(), lang, code)
+	output, err := RunLangCode(r.Context(), lang, code,
+		*codeMaxLen, *codeMaxDuration, *workersMaxDuration,
+		*containerNamePrefix, *containerVolPrefix)
 	if err != nil {
 		http.Error(w,
 			http.StatusText(http.StatusInternalServerError)+
-				fmt.Sprintf(", runLangCode, err: %v", err),
+				fmt.Sprintf(", RunLangCode, err: %v", err),
 			http.StatusInternalServerError)
-		log.Printf("runLangCode, err: %v", err)
+		log.Printf("RunLangCode, err: %v", err)
 		return
 	}
 
@@ -160,14 +162,16 @@ func handleRun(w http.ResponseWriter, r *http.Request) {
 
 // ------------------------------------------------
 
-func runLangCode(ctx context.Context, lang, code string) (
+func RunLangCode(ctx context.Context, lang, code string,
+	codeMaxLen int, codeMaxDuration, workersMaxDuration time.Duration,
+	containerNamePrefix, containerVolPrefix string) (
 	string, error) {
 	if lang == "" || code == "" {
 		return "", nil
 	}
 
-	if len(code) > *codeMaxLen {
-		return "", fmt.Errorf("code too long, codeMaxLen: %d", *codeMaxLen)
+	if len(code) > codeMaxLen {
+		return "", fmt.Errorf("code too long, codeMaxLen: %d", codeMaxLen)
 	}
 
 	// Atomically grab a workerId token, blocking & waiting until
@@ -184,8 +188,8 @@ func runLangCode(ctx context.Context, lang, code string) (
 			}
 		}()
 
-	case <-time.After(*workersMaxDuration):
-		return "", fmt.Errorf("timeout waiting for worker, duration: %v", *workersMaxDuration)
+	case <-time.After(workersMaxDuration):
+		return "", fmt.Errorf("timeout waiting for worker, duration: %v", workersMaxDuration)
 
 	case <-ctx.Done():
 		// Client canceled/timed-out while we were waiting.
@@ -193,7 +197,7 @@ func runLangCode(ctx context.Context, lang, code string) (
 	}
 
 	// A worker is ready & assigned, so prepare the code dir & file.
-	dir := fmt.Sprintf("%s%d", *containerVolPrefix, workerId)
+	dir := fmt.Sprintf("%s%d", containerVolPrefix, workerId)
 
 	err := os.MkdirAll(dir+"/tmp/play", 0777)
 	if err != nil {
@@ -215,17 +219,16 @@ func runLangCode(ctx context.Context, lang, code string) (
 	}
 
 	// Ex: "smallcb-0".
-	containerName := fmt.Sprintf("%s%d", *containerNamePrefix, workerId)
+	containerName := fmt.Sprintf("%s%d", containerNamePrefix, workerId)
 
 	var cmd *exec.Cmd
 
-	execCommand := langExecs[lang]
-	if len(execCommand) > 0 {
-		// Case when there's an execCommand prefix,
-		// such as "/run-java.sh .../tmp/play/code.java".
+	execPrefix := langExecs[lang]
+	if len(execPrefix) > 0 {
+		// Case of an execPrefix like "/run-java.sh".
 		cmd = exec.Command("docker", "exec",
 			"-u", "couchbase:couchbase",
-			containerName, execCommand, codePathInst)
+			containerName, execPrefix, codePathInst)
 	} else {
 		cmd = exec.Command("docker", "exec",
 			"-u", "couchbase:couchbase",
@@ -234,7 +237,7 @@ func runLangCode(ctx context.Context, lang, code string) (
 
 	log.Printf("running cmd: %v\n", cmd)
 
-	stdOutErr, err := execCmd(ctx, cmd, *codeMaxDuration)
+	stdOutErr, err := ExecCmd(ctx, cmd, codeMaxDuration)
 
 	select {
 	case restarterCh <- workerId:
@@ -253,7 +256,7 @@ type NameTitle struct {
 	Name, Title string
 }
 
-type mainTemplateData struct {
+type MainTemplateData struct {
 	NameTitles []NameTitle
 	Name       string
 	Title      string
@@ -262,15 +265,15 @@ type mainTemplateData struct {
 	Output     string
 }
 
-func mainTemplateEmit(w http.ResponseWriter,
-	name, lang, code string) {
-	examples, exampleNames, err := readExamples()
+func MainTemplateEmit(w http.ResponseWriter,
+	staticDir, examplesDir, name, lang, code string) {
+	examples, exampleNames, err := ReadExamples(examplesDir)
 	if err != nil {
 		http.Error(w,
 			http.StatusText(http.StatusInternalServerError)+
-				fmt.Sprintf(", readExamples, err: %v", err),
+				fmt.Sprintf(", ReadExamples, err: %v", err),
 			http.StatusInternalServerError)
-		log.Printf("readExampless, err: %v", err)
+		log.Printf("ReadExamples, err: %v", err)
 		return
 	}
 
@@ -312,7 +315,7 @@ func mainTemplateEmit(w http.ResponseWriter,
 		title = "API / SDK Playground"
 	}
 
-	data := &mainTemplateData{
+	data := &MainTemplateData{
 		NameTitles: nameTitles,
 		Name:       name,
 		Title:      title,
@@ -320,7 +323,7 @@ func mainTemplateEmit(w http.ResponseWriter,
 		Code:       code,
 	}
 
-	t, err := template.ParseFiles(*static + "/main.html.template")
+	t, err := template.ParseFiles(staticDir + "/main.html.template")
 	if err != nil {
 		http.Error(w,
 			http.StatusText(http.StatusInternalServerError)+
@@ -340,7 +343,7 @@ func mainTemplateEmit(w http.ResponseWriter,
 
 // ------------------------------------------------
 
-func restarter(restarterId int, needRestartCh, doneRestartCh chan int) {
+func Restarter(restarterId int, needRestartCh, doneRestartCh chan int) {
 	for workerId := range needRestartCh {
 		start := time.Now()
 
@@ -374,7 +377,7 @@ func restarter(restarterId int, needRestartCh, doneRestartCh chan int) {
 
 // Run a cmd, waiting for it to finish or timeout, returning its
 // combined stdout and stderr result.
-func execCmd(ctx context.Context, cmd *exec.Cmd, duration time.Duration) (
+func ExecCmd(ctx context.Context, cmd *exec.Cmd, duration time.Duration) (
 	[]byte, error) {
 	var b bytes.Buffer
 
@@ -414,17 +417,19 @@ func execCmd(ctx context.Context, cmd *exec.Cmd, duration time.Duration) (
 //   { "basic-py": { "lang": "py", "code": "..." }, ... }.
 // Ex exampleNames:
 //   [ "basic-py", "basic-java", ... ].
-func readExamples() (
+func ReadExamples(dir string) (
 	examples map[string]map[string]interface{},
 	exampleNames []string,
 	err error) {
-	examples, err = readYamls(*static + "/examples")
+	examples, err = ReadYamls(dir)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	for name := range examples {
-		exampleNames = append(exampleNames, name)
+	for name, example := range examples {
+		if _, hasTitle := example["title"]; hasTitle {
+			exampleNames = append(exampleNames, name)
+		}
 	}
 
 	sort.Strings(exampleNames)
@@ -434,7 +439,7 @@ func readExamples() (
 
 // ------------------------------------------------
 
-func readYamls(dir string) (
+func ReadYamls(dir string) (
 	map[string]map[string]interface{}, error) {
 	rv := map[string]map[string]interface{}{}
 
@@ -445,16 +450,9 @@ func readYamls(dir string) (
 
 	for _, f := range files {
 		if strings.HasSuffix(f.Name(), ".yaml") {
-			b, err := ioutil.ReadFile(dir + "/" + f.Name())
+			m, err := ReadYaml(dir + "/" + f.Name())
 			if err != nil {
-				return nil, fmt.Errorf("ioutil.ReadFile, f: %+v, err: %v", f, err)
-			}
-
-			m := make(map[string]interface{})
-
-			err = yaml.Unmarshal(b, &m)
-			if err != nil {
-				return nil, fmt.Errorf("yaml.Unmarshal, f: %+v, err: %v", f, err)
+				return nil, fmt.Errorf("ReadYaml, f: %+v, err: %v", f, err)
 			}
 
 			rv[f.Name()[:len(f.Name())-5]] = m
@@ -462,4 +460,20 @@ func readYamls(dir string) (
 	}
 
 	return rv, nil
+}
+
+func ReadYaml(path string) (map[string]interface{}, error) {
+	b, err := ioutil.ReadFile(path)
+	if err != nil {
+		return nil, fmt.Errorf("ioutil.ReadFile, path: %s, err: %v", path, err)
+	}
+
+	m := make(map[string]interface{})
+
+	err = yaml.Unmarshal(b, &m)
+	if err != nil {
+		return nil, fmt.Errorf("yaml.Unmarshal, path: %s, err: %v", path, err)
+	}
+
+	return m, nil
 }
