@@ -44,12 +44,6 @@ var (
 	containerPublishPortSpan = flag.Int("containerPublishPortSpan", 100,
 		"number of port #'s allocated for each container instance")
 
-	listen = flag.String("listen", ":8080",
-		"HTTP listen [addr]:port")
-
-	static = flag.String("static", "cmd/play-server/static",
-		"path to the 'static' resources directory")
-
 	containerWaitDuration = flag.Duration("containerWaitDuration", 20*time.Second,
 		"duration that a client's request will wait for a ready container instance")
 
@@ -58,6 +52,12 @@ var (
 
 	restarters = flag.Int("restarters", 1,
 		"# of restarters of the container instances")
+
+	static = flag.String("static", "cmd/play-server/static",
+		"path to the 'static' resources directory")
+
+	listen = flag.String("listen", ":8080",
+		"HTTP listen [addr]:port")
 
 	// -----------------------------------
 
@@ -74,7 +74,7 @@ var (
 	// The langs is a config table with entries of...
 	//   [ lang (code file suffix),
 	//     langName (for UI display),
-	//     execPrefix (exec command prefix for executing code; "" is ok) ].
+	//     execPrefix (exec command prefix, if any, for executing code) ].
 	langs = [][]string{
 		[]string{"java", "java", "/run-java.sh"},
 		[]string{"py", "python3", ""},
@@ -194,8 +194,12 @@ func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 	code := r.FormValue("code")
 
 	output, err := RunLangCode(r.Context(), lang, code,
-		*codeMaxLen, *codeDuration, *containerWaitDuration,
-		*containerNamePrefix, *containerVolPrefix)
+		*codeMaxLen, *codeDuration,
+		containersCh,
+		*containerWaitDuration,
+		*containerNamePrefix,
+		*containerVolPrefix,
+		restarterCh)
 	if err != nil {
 		http.Error(w,
 			http.StatusText(http.StatusInternalServerError)+
@@ -212,9 +216,16 @@ func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 
 // ------------------------------------------------
 
-func RunLangCode(ctx context.Context, lang, code string,
-	codeMaxLen int, codeDuration, containerWaitDuration time.Duration,
-	containerNamePrefix, containerVolPrefix string) (
+func RunLangCode(ctx context.Context,
+	lang string,
+	code string,
+	codeMaxLen int,
+	codeDuration time.Duration,
+	containersCh chan int,
+	containerWaitDuration time.Duration,
+	containerNamePrefix,
+	containerVolPrefix string,
+	restarterCh chan<- int) (
 	string, error) {
 	if lang == "" || code == "" {
 		return "", nil
