@@ -26,8 +26,8 @@ var (
 	codeMaxLen = flag.Int("codeMaxLen", 16000,
 		"max length of a client's request code in bytes")
 
-	codeMaxDuration = flag.Duration("codeMaxDuration", 10*time.Second,
-		"max duration that a client's request code is allowed to run")
+	codeDuration = flag.Duration("codeDuration", 10*time.Second,
+		"duration that a client's request code may run on an assigned container instance")
 
 	containerNamePrefix = flag.String("containerNamePrefix", "smallcb-",
 		"prefix of the names of container instances")
@@ -45,16 +45,16 @@ var (
 		"number of port #'s allocated for each container instance")
 
 	listen = flag.String("listen", ":8080",
-		"HTTP listen [address]:port")
+		"HTTP listen [addr]:port")
 
 	static = flag.String("static", "cmd/play-server/static",
 		"path to the 'static' resources directory")
 
-	workersMaxDuration = flag.Duration("workersMaxDuration", 20*time.Second,
-		"max duration that a client's request will wait for a ready worker")
+	containerWaitDuration = flag.Duration("containerWaitDuration", 20*time.Second,
+		"duration that a client's request will wait for a ready container instance")
 
-	workers = flag.Int("workers", 1,
-		"# of workers (container instances)")
+	containers = flag.Int("containers", 1,
+		"# of container instances")
 
 	restarters = flag.Int("restarters", 1,
 		"# of restarters of the container instances")
@@ -65,9 +65,9 @@ var (
 
 	// -----------------------------------
 
-	workersCh chan int // Channel of workerId's / container num's.
+	containersCh chan int // Channel of container instance #'s that are ready.
 
-	restarterCh chan int // Channel of workerId's / container num's.
+	restarterCh chan int // Channel of container instance #'s that need restart.
 
 	// -----------------------------------
 
@@ -128,26 +128,26 @@ func main() {
 		os.Exit(2)
 	}
 
-	// The workersCh and restarterCh are created with capacity
-	// equal to the # of workers to reduce the chance of
-	// workers and restarters from having to wait.
+	// The containersCh and restarterCh are created with capacity
+	// equal to the # of containers to lower the chance of
+	// client requests and restarters from having to wait.
 
-	workersCh = make(chan int, *workers)
+	containersCh = make(chan int, *containers)
 
-	restarterCh = make(chan int, *workers)
+	restarterCh = make(chan int, *containers)
 
 	// Spawn the restarter goroutines.
 	for i := 0; i < *restarters; i++ {
-		go Restarter(i, restarterCh, workersCh,
+		go Restarter(i, restarterCh, containersCh,
 			*containerPublishAddr,
 			*containerPublishPortBase,
 			*containerPublishPortSpan,
 			portMapping)
 	}
 
-	// Have the restarters restart the required # of workers.
-	for workerId := 0; workerId < *workers; workerId++ {
-		restarterCh <- workerId
+	// Have the restarters restart the required # of containers.
+	for containerId := 0; containerId < *containers; containerId++ {
+		restarterCh <- containerId
 	}
 
 	mux := http.NewServeMux()
@@ -194,7 +194,7 @@ func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 	code := r.FormValue("code")
 
 	output, err := RunLangCode(r.Context(), lang, code,
-		*codeMaxLen, *codeMaxDuration, *workersMaxDuration,
+		*codeMaxLen, *codeDuration, *containerWaitDuration,
 		*containerNamePrefix, *containerVolPrefix)
 	if err != nil {
 		http.Error(w,
@@ -213,7 +213,7 @@ func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 // ------------------------------------------------
 
 func RunLangCode(ctx context.Context, lang, code string,
-	codeMaxLen int, codeMaxDuration, workersMaxDuration time.Duration,
+	codeMaxLen int, codeDuration, containerWaitDuration time.Duration,
 	containerNamePrefix, containerVolPrefix string) (
 	string, error) {
 	if lang == "" || code == "" {
@@ -224,22 +224,22 @@ func RunLangCode(ctx context.Context, lang, code string,
 		return "", fmt.Errorf("code too long, codeMaxLen: %d", codeMaxLen)
 	}
 
-	// Atomically grab a workerId token, blocking & waiting until
-	// one is available.
-	var workerId int
+	// Atomically grab a containerId token, blocking & waiting
+	// until a container instance is available.
+	var containerId int
 
 	select {
-	case workerId = <-workersCh:
+	case containerId = <-containersCh:
 		defer func() {
 			// Put the token back for the next request
 			// handler if we still have it.
-			if workerId >= 0 {
-				workersCh <- workerId
+			if containerId >= 0 {
+				containersCh <- containerId
 			}
 		}()
 
-	case <-time.After(workersMaxDuration):
-		return "", fmt.Errorf("timeout waiting for worker, duration: %v", workersMaxDuration)
+	case <-time.After(containerWaitDuration):
+		return "", fmt.Errorf("timeout waiting for worker, duration: %v", containerWaitDuration)
 
 	case <-ctx.Done():
 		// Client canceled/timed-out while we were waiting.
@@ -247,7 +247,7 @@ func RunLangCode(ctx context.Context, lang, code string,
 	}
 
 	// A worker is ready & assigned, so prepare the code dir & file.
-	dir := fmt.Sprintf("%s%d", containerVolPrefix, workerId)
+	dir := fmt.Sprintf("%s%d", containerVolPrefix, containerId)
 
 	err := os.MkdirAll(dir+"/tmp/play", 0777)
 	if err != nil {
@@ -269,7 +269,7 @@ func RunLangCode(ctx context.Context, lang, code string,
 	}
 
 	// Ex: "smallcb-0".
-	containerName := fmt.Sprintf("%s%d", containerNamePrefix, workerId)
+	containerName := fmt.Sprintf("%s%d", containerNamePrefix, containerId)
 
 	var cmd *exec.Cmd
 
@@ -287,12 +287,12 @@ func RunLangCode(ctx context.Context, lang, code string,
 
 	log.Printf("INFO: running cmd: %v\n", cmd)
 
-	stdOutErr, err := ExecCmd(ctx, cmd, codeMaxDuration)
+	stdOutErr, err := ExecCmd(ctx, cmd, codeDuration)
 
 	select {
-	case restarterCh <- workerId:
-		// The restarter now owns the workerId token.
-		workerId = -1
+	case restarterCh <- containerId:
+		// The restarter now owns the containerId token.
+		containerId = -1
 	case <-ctx.Done():
 		return "", nil
 	}
@@ -398,13 +398,13 @@ func Restarter(restarterId int, needRestartCh, doneRestartCh chan int,
 	containerPublishPortBase,
 	containerPublishPortSpan int,
 	portMapping [][]int) {
-	for workerId := range needRestartCh {
+	for containerId := range needRestartCh {
 		start := time.Now()
 
 		cmd := exec.Command("make",
-			fmt.Sprintf("CONTAINER_NUM=%d", workerId))
+			fmt.Sprintf("CONTAINER_NUM=%d", containerId))
 
-		portBase := containerPublishPortBase + (containerPublishPortSpan * workerId)
+		portBase := containerPublishPortBase + (containerPublishPortSpan * containerId)
 
 		ports := make([]string, 0, len(portMapping))
 		for _, port := range portMapping {
@@ -418,25 +418,27 @@ func Restarter(restarterId int, needRestartCh, doneRestartCh chan int,
 
 		cmd.Args = append(cmd.Args, "restart")
 
-		log.Printf("INFO: restarterId: %d, workerId: %d\n",
-			restarterId, workerId)
+		log.Printf("INFO: restarterId: %d, containerId: %d\n",
+			restarterId, containerId)
 
 		stdOutErr, err := cmd.CombinedOutput()
 		if err != nil {
-			log.Printf("ERROR: restarterId: %d, workerId: %d,"+
+			log.Printf("ERROR: restarterId: %d, containerId: %d,"+
 				" cmd: %v, stdOutErr: %s, err: %v",
-				restarterId, workerId, cmd, stdOutErr, err)
+				restarterId, containerId, cmd, stdOutErr, err)
 
-			// Async try to restart the workerId again.
-			go func(workerId int) { needRestartCh <- workerId }(workerId)
+			// Async try to restart the containerId again.
+			go func(containerId int) {
+				needRestartCh <- containerId
+			}(containerId)
 
 			continue
 		}
 
-		log.Printf("INFO: restarterId: %d, workerId: %d, took: %s\n",
-			restarterId, workerId, time.Since(start))
+		log.Printf("INFO: restarterId: %d, containerId: %d, took: %s\n",
+			restarterId, containerId, time.Since(start))
 
-		doneRestartCh <- workerId
+		doneRestartCh <- containerId
 	}
 }
 
