@@ -35,11 +35,11 @@ var (
 	containerVolPrefix = flag.String("containerVolPrefix", "vol-",
 		"prefix of the volume directories of container instances")
 
-	static = flag.String("static", "cmd/play-server/static",
-		"path to the 'static' resources directory")
-
 	listen = flag.String("listen", ":8080",
 		"HTTP listen [address]:port")
+
+	static = flag.String("static", "cmd/play-server/static",
+		"path to the 'static' resources directory")
 
 	workersMaxDuration = flag.Duration("workersMaxDuration", 20*time.Second,
 		"max duration that a client's request will wait for a ready worker")
@@ -50,20 +50,23 @@ var (
 	restarters = flag.Int("restarters", 1,
 		"# of restarters of the container instances")
 
+	// -----------------------------------
+
 	workersCh chan int // Channel of workerId's / container num's.
 
 	restarterCh chan int // Channel of workerId's / container num's.
 
+	// The langs is a config table with entries of...
+	//   [ lang (code file suffix),
+	//     langName (for UI display),
+	//     execPrefix (exec command prefix for executing code; "" is ok) ].
 	langs = [][]string{
-		// Tuple of [ lang (file suffix),
-		//            langName (for display),
-		//            execPrefix (optional) ].
 		[]string{"java", "java", "/run-java.sh"},
 		[]string{"py", "python3", ""},
 	}
 
 	langNames = map[string]string{} // Map from 'py' to 'python3'.
-	langExecs = map[string]string{} // Map from 'py' to exec command prefix.
+	langExecs = map[string]string{} // Map from 'py' to execPrefix.
 )
 
 // ------------------------------------------------
@@ -87,17 +90,22 @@ func main() {
 		os.Exit(2)
 	}
 
-	// Fill the workersCh with workerId tokens.
-	workersCh = make(chan int, *workers)
-	for i := 0; i < *workers; i++ {
-		workersCh <- i
-	}
+	// The workersCh and restarterCh are created with capacity
+	// equal to the # of workers to reduce the chance of
+	// workers and restarters from having to wait.
 
-	// The restarterCh is created with a capacity equal to
-	// the # of workers to reduce workers having to wait.
+	workersCh = make(chan int, *workers)
+
 	restarterCh = make(chan int, *workers)
+
+	// Spawn the restarter goroutines.
 	for i := 0; i < *restarters; i++ {
 		go Restarter(i, restarterCh, workersCh)
+	}
+
+	// Have the restarters restart the required # of workers.
+	for workerId := 0; workerId < *workers; workerId++ {
+		restarterCh <- workerId
 	}
 
 	mux := http.NewServeMux()
