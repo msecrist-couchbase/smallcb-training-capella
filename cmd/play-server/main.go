@@ -35,6 +35,12 @@ var (
 	containerVolPrefix = flag.String("containerVolPrefix", "vol-",
 		"prefix of the volume directories of container instances")
 
+	containerPortBase = flag.Int("containerPortBase", 10000,
+		"base or starting port # for container instances")
+
+	containerPortSpan = flag.Int("containerPortSpan", 100,
+		"number of port #'s allocated for each container instance")
+
 	listen = flag.String("listen", ":8080",
 		"HTTP listen [address]:port")
 
@@ -71,6 +77,27 @@ var (
 
 	langNames = map[string]string{} // Map from 'py' to 'python3'.
 	langExecs = map[string]string{} // Map from 'py' to execPrefix.
+
+	// Port mapping of container port # to containerPortBase + delta.
+	portMapping = [][]int{
+		[]int{8091, 1}, // 8091 is exposed on port 10000 + 1.
+		[]int{8092, 2}, // 8092 is exposed on port 10000 + 2.
+		[]int{8093, 3},
+		[]int{8094, 4},
+		[]int{8095, 5},
+		[]int{8096, 6},
+
+		[]int{18091, 11}, // 18091 is exposed on port 10000 + 11.
+		[]int{18092, 12}, // 18092 is exposed on port 10000 + 12.
+		[]int{18093, 13},
+		[]int{18094, 14},
+		[]int{18095, 15},
+		[]int{18096, 16},
+
+		[]int{11207, 27}, // 11207 is exposed on port 10000 + 27.
+		[]int{11210, 30}, // 11210 is exposed on port 10000 + 30.
+		[]int{11211, 31}, // 11211 is exposed on port 10000 + 31.
+	}
 )
 
 // ------------------------------------------------
@@ -104,7 +131,8 @@ func main() {
 
 	// Spawn the restarter goroutines.
 	for i := 0; i < *restarters; i++ {
-		go Restarter(i, restarterCh, workersCh)
+		go Restarter(i, restarterCh, workersCh,
+			*containerPortBase, *containerPortSpan, portMapping)
 	}
 
 	// Have the restarters restart the required # of workers.
@@ -355,21 +383,36 @@ func MainTemplateEmit(w http.ResponseWriter,
 
 // ------------------------------------------------
 
-func Restarter(restarterId int, needRestartCh, doneRestartCh chan int) {
+func Restarter(restarterId int, needRestartCh, doneRestartCh chan int,
+	containerPortBase, containerPortSpan int, portMapping [][]int) {
 	for workerId := range needRestartCh {
 		start := time.Now()
+
+		cmd := exec.Command("make",
+			fmt.Sprintf("CONTAINER_NUM=%d", workerId))
+
+		// $ docker run -p 127.0.0.1:80:8080/tcp ubuntu bash
+		portBase := containerPortBase + (containerPortSpan * workerId)
+
+		ports := make([]string, 0, len(portMapping))
+		for _, port := range portMapping {
+			ports = append(ports,
+				fmt.Sprintf("-p 127.0.0.1:%d:%d/tcp",
+					portBase+port[1], port[0]))
+		}
+
+		cmd.Args = append(cmd.Args,
+			"CONTAINER_PORTS="+strings.Join(ports, " "))
+
+		cmd.Args = append(cmd.Args, "restart")
 
 		log.Printf("restarterId: %d, workerId: %d\n",
 			restarterId, workerId)
 
-		cmd := exec.Command("make",
-			fmt.Sprintf("CONTAINER_NUM=%d", workerId),
-			"restart")
-
 		stdOutErr, err := cmd.CombinedOutput()
 		if err != nil {
 			log.Printf("restarterId: %d, workerId: %d,"+
-				" cmd: %v, stdOutErr: %v, err: %v",
+				" cmd: %v, stdOutErr: %s, err: %v",
 				restarterId, workerId, cmd, stdOutErr, err)
 
 			// Async try to restart the workerId again.
