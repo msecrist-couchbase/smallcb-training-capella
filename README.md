@@ -39,7 +39,21 @@ first end-to-end demo on laptop?
 
 first end-to-end demo on cloud (staging)?
 
-need to remap port #'s?
+need to golang proxy to use the remapped port #'s?
+  and to rewrite REST json maps to list server hostnames/addrs correctly.
+
+client-side JS to prevent over-clicking on Run/Submit button?
+
+client-side JS to prevent Back Button or navigating away
+  from losing work?
+
+client-side code syntax highlighting / styling / codemirror, ACME code editor?
+
+CSS styling / mobile?
+
+google analytics?
+
+DNS & subdomains?
 
 can docker checkpoint (experimental feature)
   help speed up slow restart times?
