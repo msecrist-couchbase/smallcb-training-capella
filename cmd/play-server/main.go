@@ -35,14 +35,14 @@ var (
 	containerVolPrefix = flag.String("containerVolPrefix", "vol-",
 		"prefix of the volume directories of container instances")
 
-	containerPortBase = flag.Int("containerPortBase", 10000,
+	containerPublishAddr = flag.String("containerPublishAddr", "127.0.0.1",
+		"addr for publishing container instance ports")
+
+	containerPublishPortBase = flag.Int("containerPublishPortBase", 10000,
 		"base or starting port # for container instances")
 
-	containerPortSpan = flag.Int("containerPortSpan", 100,
+	containerPublishPortSpan = flag.Int("containerPublishPortSpan", 100,
 		"number of port #'s allocated for each container instance")
-
-	containerAddr = flag.String("containerAddr", "127.0.0.1",
-		"addr for publishing container instance ports")
 
 	listen = flag.String("listen", ":8080",
 		"HTTP listen [address]:port")
@@ -85,7 +85,7 @@ var (
 
 	// -----------------------------------
 
-	// Port mapping of container port # to containerPortBase + delta.
+	// Port mapping of container port # to containerPublishPortBase + delta.
 	portMapping = [][]int{
 		[]int{8091, 1}, // 8091 is exposed on port 10000 + 1.
 		[]int{8092, 2}, // 8092 is exposed on port 10000 + 2.
@@ -139,7 +139,9 @@ func main() {
 	// Spawn the restarter goroutines.
 	for i := 0; i < *restarters; i++ {
 		go Restarter(i, restarterCh, workersCh,
-			*containerAddr, *containerPortBase, *containerPortSpan,
+			*containerPublishAddr,
+			*containerPublishPortBase,
+			*containerPublishPortSpan,
 			portMapping)
 	}
 
@@ -392,7 +394,9 @@ func MainTemplateEmit(w http.ResponseWriter,
 // ------------------------------------------------
 
 func Restarter(restarterId int, needRestartCh, doneRestartCh chan int,
-	containerAddr string, containerPortBase, containerPortSpan int,
+	containerPublishAddr string,
+	containerPublishPortBase,
+	containerPublishPortSpan int,
 	portMapping [][]int) {
 	for workerId := range needRestartCh {
 		start := time.Now()
@@ -400,13 +404,13 @@ func Restarter(restarterId int, needRestartCh, doneRestartCh chan int,
 		cmd := exec.Command("make",
 			fmt.Sprintf("CONTAINER_NUM=%d", workerId))
 
-		portBase := containerPortBase + (containerPortSpan * workerId)
+		portBase := containerPublishPortBase + (containerPublishPortSpan * workerId)
 
 		ports := make([]string, 0, len(portMapping))
 		for _, port := range portMapping {
 			ports = append(ports,
 				fmt.Sprintf("-p %s:%d:%d/tcp",
-					containerAddr, portBase+port[1], port[0]))
+					containerPublishAddr, portBase+port[1], port[0]))
 		}
 
 		cmd.Args = append(cmd.Args,
