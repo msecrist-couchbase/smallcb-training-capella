@@ -52,6 +52,10 @@ var (
 
 	// -----------------------------------
 
+	TitleDefault = "API / SDK Playground"
+
+	// -----------------------------------
+
 	workersCh chan int // Channel of workerId's / container num's.
 
 	restarterCh chan int // Channel of workerId's / container num's.
@@ -320,7 +324,7 @@ func MainTemplateEmit(w http.ResponseWriter,
 	}
 
 	if title == "" {
-		title = "API / SDK Playground"
+		title = TitleDefault
 	}
 
 	data := &MainTemplateData{
