@@ -144,7 +144,7 @@ func main() {
 
 	HttpMuxInit(mux)
 
-	log.Printf("listening on... %v", *listen)
+	log.Printf("INFO: listening on... %v", *listen)
 
 	log.Fatal(http.ListenAndServe(*listen, mux))
 }
@@ -191,7 +191,7 @@ func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 			http.StatusText(http.StatusInternalServerError)+
 				fmt.Sprintf(", RunLangCode, err: %v", err),
 			http.StatusInternalServerError)
-		log.Printf("RunLangCode, err: %v", err)
+		log.Printf("ERROR: RunLangCode, err: %v", err)
 		return
 	}
 
@@ -275,7 +275,7 @@ func RunLangCode(ctx context.Context, lang, code string,
 			containerName, codePathInst)
 	}
 
-	log.Printf("running cmd: %v\n", cmd)
+	log.Printf("INFO: running cmd: %v\n", cmd)
 
 	stdOutErr, err := ExecCmd(ctx, cmd, codeMaxDuration)
 
@@ -313,7 +313,7 @@ func MainTemplateEmit(w http.ResponseWriter,
 			http.StatusText(http.StatusInternalServerError)+
 				fmt.Sprintf(", ReadExamples, err: %v", err),
 			http.StatusInternalServerError)
-		log.Printf("ReadExamples, err: %v", err)
+		log.Printf("ERROR: ReadExamples, err: %v", err)
 		return
 	}
 
@@ -369,7 +369,7 @@ func MainTemplateEmit(w http.ResponseWriter,
 			http.StatusText(http.StatusInternalServerError)+
 				fmt.Sprintf(", template.ParseFiles, err: %v", err),
 			http.StatusInternalServerError)
-		log.Printf("template.ParseFiles, err: %v", err)
+		log.Printf("ERROR: template.ParseFiles, err: %v", err)
 		return
 	}
 
@@ -377,7 +377,7 @@ func MainTemplateEmit(w http.ResponseWriter,
 
 	err = t.Execute(w, data)
 	if err != nil {
-		log.Printf("t.Execute, data: %+v, err: %v", data, err)
+		log.Printf("ERROR: t.Execute, data: %+v, err: %v", data, err)
 	}
 }
 
@@ -405,12 +405,12 @@ func Restarter(restarterId int, needRestartCh, doneRestartCh chan int,
 
 		cmd.Args = append(cmd.Args, "restart")
 
-		log.Printf("restarterId: %d, workerId: %d\n",
+		log.Printf("INFO: restarterId: %d, workerId: %d\n",
 			restarterId, workerId)
 
 		stdOutErr, err := cmd.CombinedOutput()
 		if err != nil {
-			log.Printf("restarterId: %d, workerId: %d,"+
+			log.Printf("ERROR: restarterId: %d, workerId: %d,"+
 				" cmd: %v, stdOutErr: %s, err: %v",
 				restarterId, workerId, cmd, stdOutErr, err)
 
@@ -420,7 +420,7 @@ func Restarter(restarterId int, needRestartCh, doneRestartCh chan int,
 			continue
 		}
 
-		log.Printf("restarterId: %d, workerId: %d, took: %s\n",
+		log.Printf("INFO: restarterId: %d, workerId: %d, took: %s\n",
 			restarterId, workerId, time.Since(start))
 
 		doneRestartCh <- workerId
