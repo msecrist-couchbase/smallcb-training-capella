@@ -4,10 +4,15 @@ CB_USER="${CB_USER:-Administrator}"
 CB_PSWD="${CB_PSWD:-password}"
 CB_HOST="${CB_HOST:-127.0.0.1}"
 CB_PORT="${CB_PORT:-8091}"
-CB_PORT_INDEXER="${CB_PORT_INDEXER:-9102}"
+CB_NAME="${CB_NAME:-smallcb}"
+CB_SERVICES="${CB_SERVICES:-data,query,index,fts}"
 CB_KV_RAMSIZE="${CB_KV_RAMSIZE:-1024}"
 CB_INDEX_RAMSIZE="${CB_INDEX_RAMSIZE:-256}"
 CB_FTS_RAMSIZE="${CB_FTS_RAMSIZE:-256}"
+CB_EVENTING_RAMSIZE="${CB_EVENTING_RAMSIZE:-0}"
+CB_ANALYTICS_RAMSIZE="${CB_ANALYTICS_RAMSIZE:-0}"
+
+CB_INDEXER_PORT="${CB_INDEXER_PORT:-9102}"
 
 # exit immediately if a command fails or if there are unset vars
 set -euo pipefail
@@ -53,23 +58,22 @@ echo "Waiting for couchbase-server... ready"
 if ! couchbase-cli server-list -c ${CB_HOST}:${CB_PORT} -u ${CB_USER} -p ${CB_PSWD} > /dev/null; then
   echo "couchbase cluster-init..."
   couchbase-cli cluster-init \
-        --services data,query,index,fts \
-        --index-storage-setting default \
+        --services ${CB_SERVICES} \
+        --cluster-name ${CB_NAME} \
+        --cluster-username ${CB_USER} \
+        --cluster-password ${CB_PSWD} \
         --cluster-ramsize ${CB_KV_RAMSIZE} \
         --cluster-index-ramsize ${CB_INDEX_RAMSIZE} \
         --cluster-fts-ramsize ${CB_FTS_RAMSIZE} \
-        --cluster-eventing-ramsize 0 \
-        --cluster-analytics-ramsize 0 \
-        --cluster-username ${CB_USER} \
-        --cluster-password ${CB_PSWD} \
-        --cluster-name smallcb
+        --cluster-eventing-ramsize ${CB_EVENTING_RAMSIZE} \
+        --cluster-analytics-ramsize ${CB_ANALYTICS_RAMSIZE}
 fi
 
 sleep 3
 
 echo "Reconfiguring indexer..."
 curl -v -X POST -d @/init-couchbase/init-indexer.json \
-     http://${CB_USER}:${CB_PSWD}@${CB_HOST}:${CB_PORT_INDEXER}/internal/settings?internal=ok
+     http://${CB_USER}:${CB_PSWD}@${CB_HOST}:${CB_INDEXER_PORT}/internal/settings?internal=ok
 
 sleep 3
 
@@ -77,4 +81,4 @@ killall indexer
 
 sleep 3
 
-curl http://${CB_USER}:${CB_PSWD}@${CB_HOST}:${CB_PORT_INDEXER}/internal/settings?internal=ok | jq .
+curl http://${CB_USER}:${CB_PSWD}@${CB_HOST}:${CB_INDEXER_PORT}/internal/settings?internal=ok | jq .
