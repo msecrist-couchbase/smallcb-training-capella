@@ -391,7 +391,6 @@ func Restarter(restarterId int, needRestartCh, doneRestartCh chan int,
 		cmd := exec.Command("make",
 			fmt.Sprintf("CONTAINER_NUM=%d", workerId))
 
-		// $ docker run -p 127.0.0.1:80:8080/tcp ubuntu bash
 		portBase := containerPortBase + (containerPortSpan * workerId)
 
 		ports := make([]string, 0, len(portMapping))
