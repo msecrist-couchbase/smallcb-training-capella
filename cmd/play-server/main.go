@@ -413,20 +413,22 @@ func ExecCmd(ctx context.Context, cmd *exec.Cmd, duration time.Duration) (
 
 // ------------------------------------------------
 
-// Ex examples:
-//   { "basic-py": { "lang": "py", "code": "..." }, ... }.
-// Ex exampleNames:
-//   [ "basic-py", "basic-java", ... ].
+// ReadExamples will return...
+//   examples:
+//     { "basic-py": { "title": "...", "lang": "py", "code": "..." }, ... }.
+//   exampleNames (sorted ASC):
+//     [ "basic-py", ... ].
 func ReadExamples(dir string) (
 	examples map[string]map[string]interface{},
 	exampleNames []string,
 	err error) {
-	examples, err = ReadYamls(dir)
+	examples, err = ReadYamls(dir, ".yaml")
 	if err != nil {
 		return nil, nil, err
 	}
 
 	for name, example := range examples {
+		// Only yaml's with a title are considered examples.
 		if _, hasTitle := example["title"]; hasTitle {
 			exampleNames = append(exampleNames, name)
 		}
@@ -439,7 +441,7 @@ func ReadExamples(dir string) (
 
 // ------------------------------------------------
 
-func ReadYamls(dir string) (
+func ReadYamls(dir, suffix string) (
 	map[string]map[string]interface{}, error) {
 	rv := map[string]map[string]interface{}{}
 
@@ -449,13 +451,13 @@ func ReadYamls(dir string) (
 	}
 
 	for _, f := range files {
-		if strings.HasSuffix(f.Name(), ".yaml") {
+		if strings.HasSuffix(f.Name(), suffix) {
 			m, err := ReadYaml(dir + "/" + f.Name())
 			if err != nil {
 				return nil, fmt.Errorf("ReadYaml, f: %+v, err: %v", f, err)
 			}
 
-			rv[f.Name()[:len(f.Name())-5]] = m
+			rv[f.Name()[:len(f.Name())-len(suffix)]] = m
 		}
 	}
 
