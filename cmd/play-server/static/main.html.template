@@ -90,6 +90,13 @@
     }
   </style>
 
+  <script>
+  function onRunSubmit() {
+    var o = document.getElementById('output');
+    o.contentDocument.body.innerHTML = 'waiting...';
+  }
+  </script>
+
   <h1>Couchbase API / SDK Playground</h1>
 
   <div class="main flex-row">
@@ -124,7 +131,7 @@
                     spellcheck="false">{{.Code}}</textarea>
 
           <input type="submit" value="run"
-                 onclick="document.getElementById('output').contentDocument.body.innerHTML = 'waiting...'; return"/>
+                 onclick="return onRunSubmit()"/>
         </form>
       </div>
     </div>

@@ -55,6 +55,25 @@ when there are enough examples, use a tree-control
   on the left-hand-side with a scrollable panel,
   perhaps with mouseover longer explanations?
 
+capture email to get a longer-running
+  dev tire-kicking instance?
+
+some examples only make sense with a longer-running
+  dev tire-kicking instance?
+
+can i have >1 longer running instance per email?
+
+what if my email is already used?
+
+where do we store email to instance UUID info?
+
+some rough disk usage info...
+
+    % du -s -h vol-0
+    8.1M vol-0
+    % du -s -h vol-snapshot
+    5.6M vol-snapshot
+
 google analytics?
 
 DNS & subdomains?
@@ -127,10 +146,11 @@ e.g.,
 
   multi-request-with-data-freezing/thawing (hertz/avid, multi-day rental)
     after a timeout from inactivity,
-    the data is snapshotted and parked somewhere...
+    the data is snapshotted and parked in
+      long-term-parking somewhere...
       like on local disk,
            or onto S3.
-    when the user comes back, data is thawed
+    when the user comes back, data is thawed,
       against a restarted container,
       which takes some time (e.g., go get a coffee).
 
