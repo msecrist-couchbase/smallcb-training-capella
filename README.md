@@ -51,6 +51,10 @@ client-side code syntax highlighting / styling / codemirror, ACME code editor?
 
 CSS styling / mobile?
 
+when there are enough examples, use a tree-control
+  on the left-hand-side with a scrollable panel,
+  perhaps with mouseover longer explanations?
+
 google analytics?
 
 DNS & subdomains?
