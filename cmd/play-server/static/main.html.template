@@ -64,6 +64,11 @@
       color: #666;
     }
 
+    input.run.waiting, input.run.waiting:hover {
+      background-color: orange;
+      cursor: wait;
+    }
+
     input, textarea, pre {
       display: block;
       margin-bottom: 10px;
@@ -99,8 +104,26 @@
 
   <script>
   function onRunSubmit() {
+    var b = document.getElementById('run');
+    b.disabled = true;
+    b.className = "run waiting";
+
     var o = document.getElementById('output');
     o.contentDocument.body.innerHTML = 'waiting...';
+
+    function checkDone() {
+      var odoc = o.contentDocument || o.contentWindow.document;
+      if (odoc.readyState == "complete" &&
+          odoc.contentType == "text/plain") {
+        b.disabled = false;
+        b.className = "run";
+	return;
+      }
+
+      setTimeout(checkDone, 500);
+    }
+
+    setTimeout(checkDone, 1000);
   }
   </script>
 
@@ -141,7 +164,7 @@
                     autocapitalize="off"
                     spellcheck="false">{{.Code}}</textarea>
 
-          <input type="submit" value="run" class="run"
+          <input type="submit" value="run" class="run" id="run"
                  onclick="return onRunSubmit()"/>
         </form>
 
