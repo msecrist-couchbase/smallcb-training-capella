@@ -33,15 +33,22 @@
     }
 
     .main .main-left {
+      flex-basis: 15rem;
       flex-grow: 1;
       margin-right: 20px;
     }
 
     .main .main-center {
+      flex-basis: 30rem;
       flex-grow: 10;
     }
 
+    .main .main-center .info {
+      width: 95%;
+    }
+
     .main .main-output {
+      flex-basis: 28rem;
       flex-grow: 8;
     }
 
@@ -144,7 +151,7 @@
 
     <div class="main-center">
       <h2>
-        {{.Title}}
+        {{if .Title}}{{.Title}}{{else}}API / SDK Playground{{end}}
       </h2>
 
       <div class="item">

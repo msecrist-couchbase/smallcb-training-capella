@@ -55,10 +55,6 @@ var (
 
 	// -----------------------------------
 
-	TitleDefault = "API / SDK Playground"
-
-	// -----------------------------------
-
 	readyCh chan int // Channel of container instance #'s that are ready.
 
 	restartCh chan Restart // Channel of container instance restart requests.
@@ -262,10 +258,6 @@ func MainTemplateEmit(w http.ResponseWriter,
 		infoBefore = MapGetString(example, "infoBefore")
 
 		infoAfter = MapGetString(example, "infoAfter")
-	}
-
-	if title == "" {
-		title = TitleDefault
 	}
 
 	data := &MainTemplateData{
