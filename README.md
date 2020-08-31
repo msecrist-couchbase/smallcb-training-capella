@@ -112,6 +112,8 @@ use docker network overlay --internal mode?
   etc, you'll want to restrict Egress (outgoing) traffic from that VM
   via Security Rules on the private network
 
+SECURITY: remove ability to strace in production?
+
 SECURITY: docker build can set ulimits
   and optional security-opts?
 
