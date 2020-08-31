@@ -34,22 +34,23 @@ func CheckLangCode(lang, code string, codeMaxLen int) (
 
 func RunLangCode(ctx context.Context, user,
 	execPrefix, lang, code string, codeDuration time.Duration,
-	containersCh chan int,
+	readyCh chan int,
 	containerWaitDuration time.Duration,
 	containerNamePrefix,
 	containerVolPrefix string,
-	restarterCh chan<- int) ([]byte, error) {
+	restartCh chan<- Restart) ([]byte, error) {
 	// Atomically grab a containerId token, blocking
 	// until a container instance is ready or we timeout.
 	var containerId int
 
 	select {
-	case containerId = <-containersCh:
+	case containerId = <-readyCh:
 		defer func() {
-			// Put the containerId token back for
-			// the next request if we still have it.
+			// If we didn't use the container and mess it up,
+			// we can immediately put the containerId token
+			// back into the readyCh for the next request.
 			if containerId >= 0 {
-				containersCh <- containerId
+				readyCh <- containerId
 			}
 		}()
 
@@ -66,13 +67,15 @@ func RunLangCode(ctx context.Context, user,
 		execPrefix, lang, code, codeDuration,
 		containerId, containerNamePrefix, containerVolPrefix)
 
-	select {
-	case restarterCh <- containerId:
-		// The restarterCh now owns the containerId token.
-		containerId = -1
-	case <-ctx.Done():
-		return nil, ctx.Err()
-	}
+	go func(containerId int) {
+		restartCh <- Restart{
+			ContainerId: containerId,
+			DoneCh:      readyCh,
+		}
+	}(containerId)
+
+	// The restartCh now owns the containerId token.
+	containerId = -1
 
 	return result, err
 }
@@ -128,19 +131,24 @@ func RunLangCodeContainer(ctx context.Context, user,
 
 // ------------------------------------------------
 
-func Restarter(restarterId int, needRestartCh, doneRestartCh chan int,
+type Restart struct {
+	ContainerId int
+	DoneCh      chan<- int
+}
+
+func Restarter(restarterId int, restartCh chan Restart,
 	containerPublishAddr string,
 	containerPublishPortBase,
 	containerPublishPortSpan int,
 	portMapping [][]int) {
-	for containerId := range needRestartCh {
+	for restart := range restartCh {
 		start := time.Now()
 
 		cmd := exec.Command("make",
-			fmt.Sprintf("CONTAINER_NUM=%d", containerId))
+			fmt.Sprintf("CONTAINER_NUM=%d", restart.ContainerId))
 
 		portBase := containerPublishPortBase +
-			(containerPublishPortSpan * containerId)
+			(containerPublishPortSpan * restart.ContainerId)
 
 		ports := make([]string, 0, len(portMapping))
 		for _, port := range portMapping {
@@ -154,27 +162,26 @@ func Restarter(restarterId int, needRestartCh, doneRestartCh chan int,
 		cmd.Args = append(cmd.Args, "restart")
 
 		log.Printf("INFO: Restarter, restarterId: %d, containerId: %d\n",
-			restarterId, containerId)
+			restarterId, restart.ContainerId)
 
 		stdOutErr, err := cmd.CombinedOutput()
 		if err != nil {
 			log.Printf("ERROR: Restarter, restarterId: %d,"+
 				" containerId: %d, cmd: %v, stdOutErr: %s, err: %v",
-				restarterId, containerId, cmd, stdOutErr, err)
+				restarterId, restart.ContainerId, cmd, stdOutErr, err)
 
-			// Async try to restart the containerId again.
-			go func(containerId int) {
-				needRestartCh <- containerId
-			}(containerId)
+			go func(restart Restart) {
+				restartCh <- restart // Async try to restart again.
+			}(restart)
 
 			continue
 		}
 
 		log.Printf("INFO: Restarter, restarterId: %d,"+
 			" containerId: %d, took: %s\n",
-			restarterId, containerId, time.Since(start))
+			restarterId, restart.ContainerId, time.Since(start))
 
-		doneRestartCh <- containerId
+		restart.DoneCh <- restart.ContainerId
 	}
 }
 

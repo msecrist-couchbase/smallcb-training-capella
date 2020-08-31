@@ -59,9 +59,9 @@ var (
 
 	// -----------------------------------
 
-	containersCh chan int // Channel of container instance #'s that are ready.
+	readyCh chan int // Channel of container instance #'s that are ready.
 
-	restarterCh chan int // Channel of container instance #'s that need restart.
+	restartCh chan Restart // Channel of container instance restart requests.
 
 	// -----------------------------------
 
@@ -106,17 +106,17 @@ func main() {
 		os.Exit(2)
 	}
 
-	// The containersCh and restarterCh are created with capacity
+	// The readyCh and restartCh are created with capacity
 	// equal to the # of containers to lower the chance of
 	// client requests and restarters from having to wait.
 
-	containersCh = make(chan int, *containers)
+	readyCh = make(chan int, *containers)
 
-	restarterCh = make(chan int, *containers)
+	restartCh = make(chan Restart, *containers)
 
 	// Spawn the restarter goroutines.
 	for i := 0; i < *restarters; i++ {
-		go Restarter(i, restarterCh, containersCh,
+		go Restarter(i, restartCh,
 			*containerPublishAddr,
 			*containerPublishPortBase,
 			*containerPublishPortSpan,
@@ -125,7 +125,10 @@ func main() {
 
 	// Have the restarters restart the required # of containers.
 	for containerId := 0; containerId < *containers; containerId++ {
-		restarterCh <- containerId
+		restartCh <- Restart{
+			ContainerId: containerId,
+			DoneCh:      readyCh,
+		}
 	}
 
 	mux := http.NewServeMux()
@@ -176,12 +179,11 @@ func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 	ok, err := CheckLangCode(lang, code, *codeMaxLen)
 	if ok {
 		result, err = RunLangCode(r.Context(), RunUser,
-			Langs[lang], lang, code, *codeDuration,
-			containersCh,
+			Langs[lang], lang, code, *codeDuration, readyCh,
 			*containerWaitDuration,
 			*containerNamePrefix,
 			*containerVolPrefix,
-			restarterCh)
+			restartCh)
 	}
 
 	if err != nil {
