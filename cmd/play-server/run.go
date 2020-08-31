@@ -12,7 +12,8 @@ import (
 	"time"
 )
 
-func CheckLangCode(lang, code string, codeMaxLen int) (bool, error) {
+func CheckLangCode(lang, code string, codeMaxLen int) (
+	runnable bool, err error) {
 	if lang == "" || code == "" {
 		return false, nil
 	}
