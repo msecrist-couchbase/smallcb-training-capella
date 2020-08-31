@@ -56,5 +56,5 @@ wait-healthy:
 	echo "Waiting until couchbase-server is healthy..."
 	time docker exec $(IMAGE_NAME)-$(CONTAINER_NUM) /init-couchbase/wait-healthy.sh
 
-play-server: cmd/play-server/main.go
+play-server: cmd/play-server/main.go cmd/play-server/misc.go cmd/play-server/run.go
 	go build ./...

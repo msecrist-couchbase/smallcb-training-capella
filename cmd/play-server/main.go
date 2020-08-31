@@ -65,22 +65,17 @@ var (
 
 	// -----------------------------------
 
-	// The langs is a config table with entries of...
-	//   [ lang (code file suffix),
-	//     langName (for UI display),
-	//     execPrefix (exec command prefix, if any, for executing code) ].
-	langs = [][]string{
-		[]string{"java", "java", "/run-java.sh"},
-		[]string{"py", "python3", ""},
+	RunUser = "couchbase:couchbase"
+
+	// Map from lang (code file suffix) to execPrefix (exec command
+	// prefix for executing code, or "").
+	Langs = map[string]string{
+		"java": "/run-java.sh",
+		"py":   "",
 	}
 
-	langNames = map[string]string{} // Map from 'py' to 'python3'.
-	langExecs = map[string]string{} // Map from 'py' to execPrefix.
-
-	// -----------------------------------
-
 	// Port mapping of container port # to containerPublishPortBase + delta.
-	portMapping = [][]int{
+	PortMapping = [][]int{
 		[]int{8091, 1}, // 8091 is exposed on port 10000 + 1.
 		[]int{8092, 2}, // 8092 is exposed on port 10000 + 2.
 		[]int{8093, 3},
@@ -100,17 +95,6 @@ var (
 		[]int{11211, 31}, // 11211 is exposed on port 10000 + 31.
 	}
 )
-
-// ------------------------------------------------
-
-func init() {
-	for _, item := range langs {
-		lang, langName, langExec := item[0], item[1], item[2]
-
-		langNames[lang] = langName
-		langExecs[lang] = langExec
-	}
-}
 
 // ------------------------------------------------
 
@@ -136,7 +120,7 @@ func main() {
 			*containerPublishAddr,
 			*containerPublishPortBase,
 			*containerPublishPortSpan,
-			portMapping)
+			PortMapping)
 	}
 
 	// Have the restarters restart the required # of containers.
@@ -187,8 +171,8 @@ func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 	lang := r.FormValue("lang")
 	code := r.FormValue("code")
 
-	output, err := RunLangCode(r.Context(), lang, code,
-		*codeMaxLen, *codeDuration,
+	output, err := RunLangCode(r.Context(), RunUser,
+		Langs[lang], lang, code, *codeMaxLen, *codeDuration,
 		containersCh,
 		*containerWaitDuration,
 		*containerNamePrefix,
@@ -326,5 +310,3 @@ func ReadExamples(dir string) (
 
 	return examples, exampleNames, nil
 }
-
-// ------------------------------------------------

@@ -12,11 +12,9 @@ import (
 	"time"
 )
 
-func RunLangCode(ctx context.Context,
-	lang string,
-	code string,
-	codeMaxLen int,
-	codeDuration time.Duration,
+func RunLangCode(ctx context.Context, execPrefix,
+	user, lang, code string,
+	codeMaxLen int, codeDuration time.Duration,
 	containersCh chan int,
 	containerWaitDuration time.Duration,
 	containerNamePrefix,
@@ -80,15 +78,14 @@ func RunLangCode(ctx context.Context,
 
 	var cmd *exec.Cmd
 
-	execPrefix := langExecs[lang]
 	if len(execPrefix) > 0 {
 		// Case of an execPrefix like "/run-java.sh".
 		cmd = exec.Command("docker", "exec",
-			"-u", "couchbase:couchbase",
+			"-u", user,
 			containerName, execPrefix, codePathInst)
 	} else {
 		cmd = exec.Command("docker", "exec",
-			"-u", "couchbase:couchbase",
+			"-u", user,
 			containerName, codePathInst)
 	}
 
