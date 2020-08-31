@@ -130,9 +130,15 @@ SECURITY: RBAC to limit access?
 
 SECURITY: need a CAPTCHA?
 
+copy/pastable connection snippets for languages
+  for >= zipcar mode.
+
+need test user / test example / test container instance?
+
 iframe for access to web admin portal?
   need server-side proxy in golang?
   access to just query workbench?
+  ns-server does not like iframes, so need header rewrites?
 
 or pop up web admin portal in separate tab?
   with rewrites / injection of messages?
