@@ -46,3 +46,15 @@ func ReadYaml(path string) (map[string]interface{}, error) {
 
 	return m, nil
 }
+
+// ------------------------------------------------
+
+func MapGetString(m map[string]interface{}, k string) string {
+	if v, exists := m[k]; exists {
+		if s, ok := v.(string); ok {
+			return s
+		}
+	}
+
+	return ""
+}

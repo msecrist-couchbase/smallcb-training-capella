@@ -8,3 +8,6 @@ code: |
         SELECT *
           FROM `beer-sample`
          WHERE meta().id = "21st_amendment_brewery_cafe"'
+infoAfter: |
+  The above example shows a primary key lookup using N1QL
+  through the query service's REST API via curl.

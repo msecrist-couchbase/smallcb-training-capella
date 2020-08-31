@@ -42,7 +42,7 @@
     }
 
     .main .main-output {
-      flex-grow: 6;
+      flex-grow: 8;
     }
 
     .main .main-output iframe {
@@ -125,6 +125,10 @@
       </h2>
 
       <div class="item">
+        {{if .InfoBefore}}
+          <div class="info infoBefore">{{.InfoBefore}}</div>
+        {{end}}
+
         <form class="item-form"
               action="/run" method="post" target="output">
           <input name="lang"
@@ -140,6 +144,10 @@
           <input type="submit" value="run" class="run"
                  onclick="return onRunSubmit()"/>
         </form>
+
+        {{if .InfoAfter}}
+          <div class="info infoAfter">{{.InfoAfter}}</div>
+        {{end}}
       </div>
     </div>
 

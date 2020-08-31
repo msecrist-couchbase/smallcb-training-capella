@@ -210,7 +210,8 @@ type MainTemplateData struct {
 	Title      string
 	Lang       string // Ex: 'py'.
 	Code       string
-	Output     string
+	InfoBefore string
+	InfoAfter  string
 }
 
 func MainTemplateEmit(w http.ResponseWriter,
@@ -227,7 +228,7 @@ func MainTemplateEmit(w http.ResponseWriter,
 
 	nameTitles := make([]NameTitle, 0, len(exampleNames))
 	for _, name := range exampleNames {
-		title, _ := examples[name]["title"].(string)
+		title := MapGetString(examples[name], "title")
 		if title == "" {
 			title = name
 		}
@@ -242,21 +243,23 @@ func MainTemplateEmit(w http.ResponseWriter,
 		name = "basic-py"
 	}
 
-	var title string
+	var title, infoBefore, infoAfter string
 
-	example := examples[name]
-	if example != nil {
-		if title == "" {
-			title = example["title"].(string)
-		}
+	example, exists := examples[name]
+	if exists && example != nil {
+		title = MapGetString(example, "title")
 
 		if lang == "" {
-			lang = example["lang"].(string)
+			lang = MapGetString(example, "lang")
 		}
 
 		if code == "" {
-			code = example["code"].(string)
+			code = MapGetString(example, "code")
 		}
+
+		infoBefore = MapGetString(example, "infoBefore")
+
+		infoAfter = MapGetString(example, "infoAfter")
 	}
 
 	if title == "" {
@@ -269,6 +272,8 @@ func MainTemplateEmit(w http.ResponseWriter,
 		Title:      title,
 		Lang:       lang,
 		Code:       code,
+		InfoBefore: infoBefore,
+		InfoAfter:  infoAfter,
 	}
 
 	t, err := template.ParseFiles(staticDir + "/main.html.template")
