@@ -146,7 +146,7 @@
     <div class="main-output">
       <h2>Output</h2>
 
-      <iframe name="output" id="output"/>
+      <iframe name="output" id="output"></iframe>
     </div>
   </div>
 
