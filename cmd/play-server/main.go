@@ -132,7 +132,7 @@ func main() {
 
 	HttpMuxInit(mux)
 
-	log.Printf("INFO: listening on... %v", *listen)
+	log.Printf("INFO: main, listen: %s", *listen)
 
 	log.Fatal(http.ListenAndServe(*listen, mux))
 }
@@ -171,25 +171,31 @@ func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 	lang := r.FormValue("lang")
 	code := r.FormValue("code")
 
-	output, err := RunLangCode(r.Context(), RunUser,
-		Langs[lang], lang, code, *codeMaxLen, *codeDuration,
-		containersCh,
-		*containerWaitDuration,
-		*containerNamePrefix,
-		*containerVolPrefix,
-		restarterCh)
+	var result []byte
+
+	ok, err := CheckLangCode(lang, code, *codeMaxLen)
+	if ok {
+		result, err = RunLangCode(r.Context(), RunUser,
+			Langs[lang], lang, code, *codeDuration,
+			containersCh,
+			*containerWaitDuration,
+			*containerNamePrefix,
+			*containerVolPrefix,
+			restarterCh)
+	}
+
 	if err != nil {
 		http.Error(w,
 			http.StatusText(http.StatusInternalServerError)+
-				fmt.Sprintf(", RunLangCode, err: %v", err),
+				fmt.Sprintf(", HttpHandleRun, err: %v", err),
 			http.StatusInternalServerError)
-		log.Printf("ERROR: RunLangCode, err: %v", err)
+		log.Printf("ERROR: HttpHandleRun, err: %v", err)
 		return
 	}
 
 	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
 
-	w.Write([]byte(output))
+	w.Write(result)
 }
 
 // ------------------------------------------------

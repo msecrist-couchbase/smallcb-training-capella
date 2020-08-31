@@ -12,25 +12,29 @@ import (
 	"time"
 )
 
-func RunLangCode(ctx context.Context, execPrefix,
-	user, lang, code string,
-	codeMaxLen int, codeDuration time.Duration,
+func CheckLangCode(lang, code string, codeMaxLen int) (bool, error) {
+	if lang == "" || code == "" {
+		return false, nil
+	}
+
+	if len(code) > codeMaxLen {
+		return false, fmt.Errorf("code too long, codeMaxLen: %d", codeMaxLen)
+	}
+
+	return true, nil
+}
+
+// ------------------------------------------------
+
+func RunLangCode(ctx context.Context, user,
+	execPrefix, lang, code string, codeDuration time.Duration,
 	containersCh chan int,
 	containerWaitDuration time.Duration,
 	containerNamePrefix,
 	containerVolPrefix string,
-	restarterCh chan<- int) (
-	string, error) {
-	if lang == "" || code == "" {
-		return "", nil
-	}
-
-	if len(code) > codeMaxLen {
-		return "", fmt.Errorf("code too long, codeMaxLen: %d", codeMaxLen)
-	}
-
-	// Atomically grab a containerId token, blocking & waiting
-	// until a container instance is available.
+	restarterCh chan<- int) ([]byte, error) {
+	// Atomically grab a containerId token, blocking
+	// until a container instance is ready.
 	var containerId int
 
 	select {
@@ -44,19 +48,40 @@ func RunLangCode(ctx context.Context, execPrefix,
 		}()
 
 	case <-time.After(containerWaitDuration):
-		return "", fmt.Errorf("timeout waiting for worker, duration: %v", containerWaitDuration)
+		return nil, fmt.Errorf("timeout waiting for container instance, duration: %v", containerWaitDuration)
 
 	case <-ctx.Done():
 		// Client canceled/timed-out while we were waiting.
-		return "", ctx.Err()
+		return nil, ctx.Err()
 	}
 
-	// A worker is ready & assigned, so prepare the code dir & file.
+	result, err := RunLangCodeContainer(ctx, user,
+		execPrefix, lang, code, codeDuration,
+		containerId, containerNamePrefix, containerVolPrefix)
+
+	select {
+	case restarterCh <- containerId:
+		// The restarter now owns the containerId token.
+		containerId = -1
+	case <-ctx.Done():
+		return nil, ctx.Err()
+	}
+
+	return result, err
+}
+
+// ------------------------------------------------
+
+func RunLangCodeContainer(ctx context.Context, user,
+	execPrefix, lang, code string, codeDuration time.Duration,
+	containerId int,
+	containerNamePrefix,
+	containerVolPrefix string) ([]byte, error) {
 	dir := fmt.Sprintf("%s%d", containerVolPrefix, containerId)
 
 	err := os.MkdirAll(dir+"/tmp/play", 0777)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
 	// Ex: "vol-0/tmp/play/code.py".
@@ -67,10 +92,10 @@ func RunLangCode(ctx context.Context, execPrefix,
 
 	codeBytes := []byte(strings.ReplaceAll(code, "\r\n", "\n"))
 
-	// Mode is 0777 executable, for scripts like 'code.py'.
+	// File mode is 0777 executable, for scripts like 'code.py'.
 	err = ioutil.WriteFile(codePathHost, codeBytes, 0777)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
 	// Ex: "smallcb-0".
@@ -80,29 +105,17 @@ func RunLangCode(ctx context.Context, execPrefix,
 
 	if len(execPrefix) > 0 {
 		// Case of an execPrefix like "/run-java.sh".
-		cmd = exec.Command("docker", "exec",
-			"-u", user,
+		cmd = exec.Command("docker", "exec", "-u", user,
 			containerName, execPrefix, codePathInst)
 	} else {
-		cmd = exec.Command("docker", "exec",
-			"-u", user,
+		cmd = exec.Command("docker", "exec", "-u", user,
 			containerName, codePathInst)
 	}
 
-	log.Printf("INFO: running cmd, containerName: %s, codePathInst: %s\n",
-		containerName, codePathInst)
+	log.Printf("INFO: RunLangCodeContainer, containerId: %d, lang: %s\n",
+		containerId, lang)
 
-	stdOutErr, err := ExecCmd(ctx, cmd, codeDuration)
-
-	select {
-	case restarterCh <- containerId:
-		// The restarter now owns the containerId token.
-		containerId = -1
-	case <-ctx.Done():
-		return "", nil
-	}
-
-	return string(stdOutErr), err
+	return ExecCmd(ctx, cmd, codeDuration)
 }
 
 // ------------------------------------------------
@@ -132,12 +145,12 @@ func Restarter(restarterId int, needRestartCh, doneRestartCh chan int,
 
 		cmd.Args = append(cmd.Args, "restart")
 
-		log.Printf("INFO: restarterId: %d, containerId: %d\n",
+		log.Printf("INFO: Restarter, restarterId: %d, containerId: %d\n",
 			restarterId, containerId)
 
 		stdOutErr, err := cmd.CombinedOutput()
 		if err != nil {
-			log.Printf("ERROR: restarterId: %d, containerId: %d,"+
+			log.Printf("ERROR: Restarter, restarterId: %d, containerId: %d,"+
 				" cmd: %v, stdOutErr: %s, err: %v",
 				restarterId, containerId, cmd, stdOutErr, err)
 
@@ -149,7 +162,7 @@ func Restarter(restarterId int, needRestartCh, doneRestartCh chan int,
 			continue
 		}
 
-		log.Printf("INFO: restarterId: %d, containerId: %d, took: %s\n",
+		log.Printf("INFO: Restarter, restarterId: %d, containerId: %d, took: %s\n",
 			restarterId, containerId, time.Since(start))
 
 		doneRestartCh <- containerId
