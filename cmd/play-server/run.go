@@ -12,6 +12,11 @@ import (
 	"time"
 )
 
+var (
+	DirVar  = "/opt/couchbase/var"
+	DirCode = "/tmp/play"
+)
+
 func CheckLangCode(lang, code string, codeMaxLen int) (
 	runnable bool, err error) {
 	if lang == "" || code == "" {
@@ -35,21 +40,22 @@ func RunLangCode(ctx context.Context, user,
 	containerVolPrefix string,
 	restarterCh chan<- int) ([]byte, error) {
 	// Atomically grab a containerId token, blocking
-	// until a container instance is ready.
+	// until a container instance is ready or we timeout.
 	var containerId int
 
 	select {
 	case containerId = <-containersCh:
 		defer func() {
-			// Put the token back for the next request
-			// handler if we still have it.
+			// Put the containerId token back for
+			// the next request if we still have it.
 			if containerId >= 0 {
 				containersCh <- containerId
 			}
 		}()
 
 	case <-time.After(containerWaitDuration):
-		return nil, fmt.Errorf("timeout waiting for container instance, duration: %v", containerWaitDuration)
+		return nil, fmt.Errorf("timeout waiting for container instance,"+
+			" duration: %v", containerWaitDuration)
 
 	case <-ctx.Done():
 		// Client canceled/timed-out while we were waiting.
@@ -62,7 +68,7 @@ func RunLangCode(ctx context.Context, user,
 
 	select {
 	case restarterCh <- containerId:
-		// The restarter now owns the containerId token.
+		// The restarterCh now owns the containerId token.
 		containerId = -1
 	case <-ctx.Done():
 		return nil, ctx.Err()
@@ -78,18 +84,19 @@ func RunLangCodeContainer(ctx context.Context, user,
 	containerId int,
 	containerNamePrefix,
 	containerVolPrefix string) ([]byte, error) {
+	// Ex: "vol-0".
 	dir := fmt.Sprintf("%s%d", containerVolPrefix, containerId)
 
-	err := os.MkdirAll(dir+"/tmp/play", 0777)
+	err := os.MkdirAll(dir+DirCode, 0777)
 	if err != nil {
 		return nil, err
 	}
 
 	// Ex: "vol-0/tmp/play/code.py".
-	codePathHost := dir + "/tmp/play/code." + lang
+	codePathHost := dir + DirCode + "/code." + lang
 
 	// Ex: "/opt/couchbase/var/tmp/play/code.py".
-	codePathInst := "/opt/couchbase/var/tmp/play/code." + lang
+	codePathInst := DirVar + DirCode + "/code." + lang
 
 	codeBytes := []byte(strings.ReplaceAll(code, "\r\n", "\n"))
 
@@ -132,13 +139,13 @@ func Restarter(restarterId int, needRestartCh, doneRestartCh chan int,
 		cmd := exec.Command("make",
 			fmt.Sprintf("CONTAINER_NUM=%d", containerId))
 
-		portBase := containerPublishPortBase + (containerPublishPortSpan * containerId)
+		portBase := containerPublishPortBase +
+			(containerPublishPortSpan * containerId)
 
 		ports := make([]string, 0, len(portMapping))
 		for _, port := range portMapping {
-			ports = append(ports,
-				fmt.Sprintf("-p %s:%d:%d/tcp",
-					containerPublishAddr, portBase+port[1], port[0]))
+			ports = append(ports, fmt.Sprintf("-p %s:%d:%d/tcp",
+				containerPublishAddr, portBase+port[1], port[0]))
 		}
 
 		cmd.Args = append(cmd.Args,
@@ -151,8 +158,8 @@ func Restarter(restarterId int, needRestartCh, doneRestartCh chan int,
 
 		stdOutErr, err := cmd.CombinedOutput()
 		if err != nil {
-			log.Printf("ERROR: Restarter, restarterId: %d, containerId: %d,"+
-				" cmd: %v, stdOutErr: %s, err: %v",
+			log.Printf("ERROR: Restarter, restarterId: %d,"+
+				" containerId: %d, cmd: %v, stdOutErr: %s, err: %v",
 				restarterId, containerId, cmd, stdOutErr, err)
 
 			// Async try to restart the containerId again.
@@ -163,7 +170,8 @@ func Restarter(restarterId int, needRestartCh, doneRestartCh chan int,
 			continue
 		}
 
-		log.Printf("INFO: Restarter, restarterId: %d, containerId: %d, took: %s\n",
+		log.Printf("INFO: Restarter, restarterId: %d,"+
+			" containerId: %d, took: %s\n",
 			restarterId, containerId, time.Since(start))
 
 		doneRestartCh <- containerId
