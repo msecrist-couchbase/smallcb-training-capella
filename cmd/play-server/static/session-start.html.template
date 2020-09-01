@@ -4,6 +4,39 @@
   <title>Couchbase API / SDK Playground</title>
   <link rel="stylesheet" type="text/css"
         href="/static/style.css">
+  <style>
+    .main {
+      flex-basis: 40rem;
+      padding: 20px 40px 40px 40px;
+    }
+
+    .main h2 {
+      font-size: 12pt;
+      font-weight: bold;
+      margin-bottom: 30px;
+    }
+
+    .main form {
+      margin-top: 30px;
+    }
+
+    .main label {
+      font-weight: bold;
+    }
+
+    .main label span.details {
+      font-weight: normal;
+      font-size: 9pt;
+    }
+
+    .main input[type=text] {
+      width: 20rem;
+    }
+
+    .main input[type=submit] {
+      margin-top: 30px;
+    }
+  </style>
 </head>
 <body>
   <div class="header flex-row">
@@ -18,7 +51,45 @@
     </div>
   </div>
 
-  <div>
+  <div class="flex-row">
+    <div class="main">
+      <h2>Start a Couchbase Server Test-Drive Session</h2>
+
+      <p>
+        A test-drive session means that a Couchbase Server instance is
+        held for you until the session times-out from lack of use &mdash;
+        or is deleted for other reasons like a system reboot.
+      </p>
+
+      <p>
+        A test-drive session is not meant for production usage
+        and is intended for "tire-kicking" exploration by developers.
+      </p>
+
+      <p>
+        Don't keep important data on a test-drive Couchbase Server
+        instance!
+      </p>
+
+      <p>
+        To get started...
+      </p>
+
+      <form>
+        <label>
+          Full Name:
+          <input type="text" name="full-name"/>
+        </label>
+
+        <label>
+          Email: <span class="details">(we'll email session connection details to you)</span>
+          <input type="text" name="email"/>
+        </label>
+
+        <input type="submit" name="session-start"
+               value="start a test-drive session"/>
+      </form>
+    </div>
   </div>
 
   <div class="footer">
