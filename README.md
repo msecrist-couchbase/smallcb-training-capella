@@ -373,3 +373,8 @@ see: https://news.ycombinator.com/item?id=24341867
   more colors)
 
 - docker stats (htop equivalent for docker containers)
+
+Joining a tools/diagnostic container to container you're about to run...
+  In docker, it's done by passing --pid=container:$TARGETCONTAINER to docker run
+  See: https://docs.docker.com/engine/reference/run/#pid-settings--...
+
