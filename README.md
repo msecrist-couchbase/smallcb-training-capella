@@ -75,6 +75,8 @@ couchbase style header / footer?
 
 CSS styling for mobile / narrow screens?
 
+better 404 error screen?
+
 when there are enough examples, use a tree-control
   on the left-hand-side with a scrollable panel,
   perhaps with mouseovers with longer explanations?
