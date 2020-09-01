@@ -149,6 +149,9 @@ SECURITY: remove ability to strace in production?
 
 SECURITY: docker build can set ulimits
   and optional security-opts?
+  See:
+    https://docs.couchbase.com/server/current/install/best-practices-vm.html
+    docker run -d --ulimit nofile=40960:40960 --ulimit core=100000000:100000000 --ulimit memlock=100000000:100000000 --name db -p 8091-8096:8091-8096 -p 11210-11211:11210-11211 couchbase
 
 SECURITY: only allow host to connect (or proxy)?
 
