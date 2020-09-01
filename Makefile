@@ -6,6 +6,8 @@ CONTAINER_PORTS = -p 8091-8096:8091-8096 -p 11210:11210
 
 CONTAINER_EXTRAS = --cap-add=SYS_PTRACE
 
+# -------------------------------------------------
+
 # Build the docker image.
 build:
 	rm -rf vol-*
@@ -37,6 +39,8 @@ create:
 	rm -rf vol-snapshot/lib/couchbase/logs/*
 	rm -rf vol-snapshot/lib/couchbase/stats/*
 
+# -------------------------------------------------
+
 # Restart the docker container instance and wait until its
 # couchbase-server is healthy.
 restart: restart-snapshot wait-healthy
@@ -52,9 +56,13 @@ restart-snapshot:
                    -v $(shell pwd)/vol-$(CONTAINER_NUM):/opt/couchbase/var \
                    -d $(IMAGE_NAME)
 
+# -------------------------------------------------
+
 wait-healthy:
 	echo "Waiting until couchbase-server is healthy..."
 	time docker exec $(IMAGE_NAME)-$(CONTAINER_NUM) /init-couchbase/wait-healthy.sh
+
+# -------------------------------------------------
 
 play-server-src = \
         cmd/play-server/main.go \

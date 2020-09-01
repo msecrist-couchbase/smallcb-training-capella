@@ -38,7 +38,11 @@
     </div>
 
     <div class="header-links">
-      <a href="/session-form">start a session</a>
+      {{if .SessionId}}
+        session: {{.SessionId}}
+      {{else}}
+        <a href="/session">start a session</a>
+      {{end}}
       <a href="https://docs.couchbase.com">docs</a>
       <a href="https://www.couchbase.com">couchbase.com</a>
     </div>
@@ -51,7 +55,7 @@
       <ul class="langs">
       {{range .NameTitles}}
         <li>
-          <a href="/{{$.Examples}}/{{.Name}}">{{.Title}}</a>
+          <a href="/{{$.Examples}}/{{.Name}}{{if $.SessionId}}?s={{$.SessionId}}{{end}}">{{.Title}}</a>
         </li>
       {{end}}
       </ul>
@@ -69,6 +73,9 @@
           {{end}}
 
           <form action="/run" method="post" target="output">
+            <input name="s"
+                   type="hidden" value="{{.SessionId}}"/>
+
             <input name="lang"
                    type="hidden" value="{{.Lang}}"/>
 

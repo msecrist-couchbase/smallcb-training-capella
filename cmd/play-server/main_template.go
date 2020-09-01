@@ -13,6 +13,7 @@ type NameTitle struct {
 }
 
 type MainTemplateData struct {
+	SessionId  string
 	Examples   string
 	NameTitles []NameTitle
 	Name       string
@@ -24,7 +25,7 @@ type MainTemplateData struct {
 }
 
 func MainTemplateEmit(w http.ResponseWriter,
-	staticDir, examplesDir, name, lang, code string) {
+	staticDir, sessionId, examplesDir, name, lang, code string) {
 	examples, exampleNames, err := ReadExamples(staticDir + "/" + examplesDir)
 	if err != nil {
 		http.Error(w,
@@ -68,6 +69,7 @@ func MainTemplateEmit(w http.ResponseWriter,
 	}
 
 	data := &MainTemplateData{
+		SessionId:  sessionId,
 		Examples:   examplesDir,
 		NameTitles: nameTitles,
 		Name:       name,

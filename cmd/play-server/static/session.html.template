@@ -82,17 +82,17 @@
         To get started...
       </p>
 
-      <form action="/session-start" method="post">
+      <form action="/session" method="post">
         <label>
           Full Name:
           <span class="err">{{.errFullName}}</span>
-          <input type="text" name="fullName"/>
+          <input type="text" name="fullName" value="{{.fullName}}"/>
         </label>
 
         <label>
           Email:
           <span class="err">{{.errEmail}}</span>
-          <input type="text" name="email"/>
+          <input type="text" name="email" value="{{.email}}"/>
         </label>
 
         <input type="submit" name="session-start"

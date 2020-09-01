@@ -141,9 +141,7 @@ func HttpMuxInit(mux *http.ServeMux) {
 		http.StripPrefix("/static/",
 			http.FileServer(http.Dir(*staticDir))))
 
-	mux.HandleFunc("/session-form", HttpHandleSessionForm)
-
-	mux.HandleFunc("/session-start", HttpHandleSessionStart)
+	mux.HandleFunc("/session", HttpHandleSession)
 
 	mux.HandleFunc("/run", HttpHandleRun)
 
@@ -153,6 +151,8 @@ func HttpMuxInit(mux *http.ServeMux) {
 // ------------------------------------------------
 
 func HttpHandleMain(w http.ResponseWriter, r *http.Request) {
+	sessionId := r.FormValue("s")
+
 	examplesDir := "examples"
 
 	name := r.FormValue("name")
@@ -172,39 +172,41 @@ func HttpHandleMain(w http.ResponseWriter, r *http.Request) {
 	lang := r.FormValue("lang")
 	code := r.FormValue("code")
 
-	MainTemplateEmit(w, *staticDir, examplesDir, name, lang, code)
+	MainTemplateEmit(w, *staticDir, sessionId, examplesDir, name, lang, code)
 }
 
 // ------------------------------------------------
 
-func HttpHandleSessionForm(w http.ResponseWriter, r *http.Request) {
+func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
+	data := map[string]string{}
+
+	if r.Method == "POST" {
+		errs := 0
+
+		fullName := r.FormValue("fullName")
+		if fullName == "" {
+			data["errFullName"] = "full name required"
+			errs += 1
+		}
+		data["fullName"] = fullName
+
+		email := r.FormValue("email")
+		if email == "" {
+			data["errEmail"] = "email required"
+			errs += 1
+		}
+		data["email"] = email
+
+		if errs <= 0 {
+			sessionId := "1234567" // TODO.
+
+			http.Redirect(w, r, "/?s="+sessionId, http.StatusSeeOther)
+			return
+		}
+	}
+
 	template.Must(template.ParseFiles(
-		*staticDir+"/session-form.html.template")).Execute(w, nil)
-}
-
-// ------------------------------------------------
-
-func HttpHandleSessionStart(w http.ResponseWriter, r *http.Request) {
-	errs := map[string]string{}
-
-	fullName := r.FormValue("fullName")
-	if fullName == "" {
-		errs["errFullName"] = "full name required"
-	}
-
-	email := r.FormValue("email")
-	if email == "" {
-		errs["errEmail"] = "email required"
-	}
-
-	if len(errs) > 0 {
-		template.Must(template.ParseFiles(
-			*staticDir+"/session-form.html.template")).
-			Execute(w, errs)
-		return
-	}
-
-	MainTemplateEmit(w, *staticDir, "examples", "", "", "")
+		*staticDir+"/session.html.template")).Execute(w, data)
 }
 
 // ------------------------------------------------
