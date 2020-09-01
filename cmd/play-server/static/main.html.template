@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-  <title>Couchbase API Playground</title>
+  <title>Couchbase API / SDK Playground</title>
   <link rel="stylesheet" type="text/css"
         href="/static/style.css">
   <script>

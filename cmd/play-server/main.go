@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"html/template"
 	"log"
 	"net/http"
 	"os"
@@ -140,6 +141,8 @@ func HttpMuxInit(mux *http.ServeMux) {
 		http.StripPrefix("/static/",
 			http.FileServer(http.Dir(*staticDir))))
 
+	mux.HandleFunc("/session-start", HttpHandleSessionStart)
+
 	mux.HandleFunc("/run", HttpHandleRun)
 
 	mux.HandleFunc("/", HttpHandleMain)
@@ -168,6 +171,13 @@ func HttpHandleMain(w http.ResponseWriter, r *http.Request) {
 	code := r.FormValue("code")
 
 	MainTemplateEmit(w, *staticDir, examplesDir, name, lang, code)
+}
+
+// ------------------------------------------------
+
+func HttpHandleSessionStart(w http.ResponseWriter, r *http.Request) {
+	template.Must(template.ParseFiles(
+		*staticDir+"/session-start.html.template")).Execute(w, nil)
 }
 
 // ------------------------------------------------

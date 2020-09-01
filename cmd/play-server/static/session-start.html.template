@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+<head>
+  <title>Couchbase API / SDK Playground</title>
+  <link rel="stylesheet" type="text/css"
+        href="/static/style.css">
+</head>
+<body>
+  <div class="header flex-row">
+    <div class="header-title">
+      <a href="/">
+        <h1>Couchbase API / SDK Playground</h1>
+      </a>
+    </div>
+
+    <div class="header-links">
+      <a href="https://docs.couchbase.com">docs</a>
+    </div>
+  </div>
+
+  <div>
+  </div>
+
+  <div class="footer">
+    powered by the smallcb project from Couchbase Labs
+  </div>
+</body>
+</html>
