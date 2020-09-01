@@ -3,7 +3,7 @@ lang: sh
 code: |
   #!/bin/sh
   
-  curl http://Administrator:password@127.0.0.1:8093/query/service \
+  curl http://{{.cbUser}}:{{.cbPswd}}@127.0.0.1:8093/query/service \
     -d 'statement=
         SELECT *
           FROM `beer-sample`

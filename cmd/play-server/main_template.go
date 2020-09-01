@@ -1,11 +1,13 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"html/template"
 	"log"
 	"net/http"
 	"sort"
+	textTemplate "text/template"
 )
 
 type NameTitle struct {
@@ -25,7 +27,8 @@ type MainTemplateData struct {
 }
 
 func MainTemplateEmit(w http.ResponseWriter,
-	staticDir, sessionId, examplesDir, name, lang, code string) {
+	staticDir, sessionId, examplesDir string,
+	name, lang, code string, codeData map[string]string) {
 	examples, exampleNames, err := ReadExamples(staticDir + "/" + examplesDir)
 	if err != nil {
 		http.Error(w,
@@ -61,6 +64,26 @@ func MainTemplateEmit(w http.ResponseWriter,
 
 		if code == "" {
 			code = MapGetString(example, "code")
+
+			if codeData == nil {
+				codeData = map[string]string{}
+			}
+
+			if codeData["cbUser"] == "" {
+				codeData["cbUser"] = "Administrator"
+			}
+
+			if codeData["cbPswd"] == "" {
+				codeData["cbPswd"] = "password"
+			}
+
+			var b bytes.Buffer
+
+			err := textTemplate.Must(textTemplate.New("code").Parse(code)).
+				Execute(&b, codeData)
+			if err == nil {
+				code = b.String()
+			}
 		}
 
 		infoBefore = MapGetString(example, "infoBefore")

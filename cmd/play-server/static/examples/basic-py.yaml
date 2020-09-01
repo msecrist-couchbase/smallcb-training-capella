@@ -6,9 +6,9 @@ code: |
   from couchbase.cluster import Cluster, ClusterOptions, QueryOptions
   from couchbase_core.cluster import PasswordAuthenticator
   
-  pa = PasswordAuthenticator('Administrator', 'password')
+  pa = PasswordAuthenticator('{{.cbUser}}', '{{.cbPswd}}')
   
-  cluster = Cluster('couchbase://localhost', ClusterOptions(pa))
+  cluster = Cluster('couchbase://127.0.0.1', ClusterOptions(pa))
   
   bucket = cluster.bucket('beer-sample')
   
