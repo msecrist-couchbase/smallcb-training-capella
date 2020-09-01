@@ -69,6 +69,10 @@ client-side JS to prevent Back Button or navigating away
 client-side code syntax highlighting / styling via
   codemirror, ACE code editor?
 
+couchbase style header / footer?
+  call-to-action / download couchbase?
+  link to docs?
+
 CSS styling for mobile / narrow screens?
 
 when there are enough examples, use a tree-control
@@ -81,6 +85,7 @@ some examples that only make sense with a longer-running
   dev tire-kicking instance?
 
 allow InfoBefore / InfoAfter to have links?
+  like, link to relevant docs page?
 
 allow examples to be collected into separate "books"?
 
