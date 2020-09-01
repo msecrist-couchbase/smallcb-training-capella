@@ -4,11 +4,6 @@
   <title>Couchbase API Playground</title>
   <link rel="stylesheet" type="text/css"
         href="/static/style.css">
-</head>
-<body>
-  <style>
-  </style>
-
   <script>
   function onRunSubmit() {
     var b = document.getElementById('run');
@@ -33,7 +28,8 @@
     setTimeout(checkDone, 1000);
   }
   </script>
-
+</head>
+<body>
   <div class="header flex-row">
     <div class="header-title">
       <a href="/">
