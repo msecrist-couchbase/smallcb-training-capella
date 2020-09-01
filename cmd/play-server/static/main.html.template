@@ -96,6 +96,10 @@
       border: 1px solid #888;
     }
 
+    ul.langs {
+      padding-left: 20px;
+    }
+
     .flex-row {
       display: flex;
       flex-direction: row;
@@ -151,45 +155,47 @@
       </ul>
     </div>
 
-    {{if .Name}}
     <div class="main-center">
-      <h2>
-        {{if .Title}}{{.Title}}{{else}}API / SDK Playground{{end}}
-      </h2>
+      {{if .Name}}
+        <h2>
+          {{if .Title}}{{.Title}}{{else}}API / SDK Playground{{end}}
+        </h2>
 
-      <div class="item">
-        {{if .InfoBefore}}
-          <div class="info infoBefore">{{.InfoBefore}}</div>
-        {{end}}
+        <div class="item">
+          {{if .InfoBefore}}
+            <div class="info infoBefore">{{.InfoBefore}}</div>
+          {{end}}
 
-        <form class="item-form"
-              action="/run" method="post" target="output">
-          <input name="lang"
-                 type="hidden" value="{{.Lang}}"/>
+          <form class="item-form"
+                action="/run" method="post" target="output">
+            <input name="lang"
+                   type="hidden" value="{{.Lang}}"/>
 
-          <textarea name="code"
-                    wrap="off"
-                    autocorrect="off"
-                    autocomplete="off"
-                    autocapitalize="off"
-                    spellcheck="false">{{.Code}}</textarea>
+            <textarea name="code"
+                      wrap="off"
+                      autocorrect="off"
+                      autocomplete="off"
+                      autocapitalize="off"
+                      spellcheck="false">{{.Code}}</textarea>
 
-          <input type="submit" value="run" class="run" id="run"
-                 onclick="return onRunSubmit()"/>
-        </form>
+            <input type="submit" value="run" class="run" id="run"
+                   onclick="return onRunSubmit()"/>
+          </form>
 
-        {{if .InfoAfter}}
-          <div class="info infoAfter">{{.InfoAfter}}</div>
-        {{end}}
-      </div>
+          {{if .InfoAfter}}
+            <div class="info infoAfter">{{.InfoAfter}}</div>
+          {{end}}
+        </div>
+      {{end}}
     </div>
 
     <div class="main-output">
-      <h2>Output</h2>
+      {{if .Name}}
+        <h2>Output</h2>
 
-      <iframe name="output" id="output"></iframe>
+        <iframe name="output" id="output"></iframe>
+      {{end}}
     </div>
-    {{end}}
   </div>
 
   <div class="footer">
