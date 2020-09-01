@@ -134,7 +134,9 @@
   }
   </script>
 
-  <h1>Couchbase API / SDK Playground</h1>
+  <a href="/">
+    <h1>Couchbase API / SDK Playground</h1>
+  </a>
 
   <div class="main flex-row">
     <div class="main-left">
@@ -149,6 +151,7 @@
       </ul>
     </div>
 
+    {{if .Name}}
     <div class="main-center">
       <h2>
         {{if .Title}}{{.Title}}{{else}}API / SDK Playground{{end}}
@@ -186,6 +189,7 @@
 
       <iframe name="output" id="output"></iframe>
     </div>
+    {{end}}
   </div>
 
   <div class="footer">

@@ -48,10 +48,6 @@ func MainTemplateEmit(w http.ResponseWriter,
 		})
 	}
 
-	if name == "" && lang == "" && code == "" {
-		name = "basic-py"
-	}
-
 	var title, infoBefore, infoAfter string
 
 	example, exists := examples[name]
