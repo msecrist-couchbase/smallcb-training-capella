@@ -141,6 +141,8 @@ func HttpMuxInit(mux *http.ServeMux) {
 		http.StripPrefix("/static/",
 			http.FileServer(http.Dir(*staticDir))))
 
+	mux.HandleFunc("/session-exit", HttpHandleSessionExit)
+
 	mux.HandleFunc("/session", HttpHandleSession)
 
 	mux.HandleFunc("/run", HttpHandleRun)
@@ -173,6 +175,14 @@ func HttpHandleMain(w http.ResponseWriter, r *http.Request) {
 	code := r.FormValue("code")
 
 	MainTemplateEmit(w, *staticDir, sessionId, examplesDir, name, lang, code)
+}
+
+// ------------------------------------------------
+
+func HttpHandleSessionExit(w http.ResponseWriter, r *http.Request) {
+	// TODO.
+
+	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 
 // ------------------------------------------------

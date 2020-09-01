@@ -38,7 +38,9 @@
     </div>
 
     <div class="header-links">
-      {{if not .SessionId}}
+      {{if .SessionId}}
+        <a href="/session-exit?s={{.SessionId}}">exit session</a>
+      {{else}}
         <a href="/session">start a session</a>
       {{end}}
       <a href="https://docs.couchbase.com">docs</a>
