@@ -11,3 +11,5 @@ code: |
 infoAfter: |
   The above example shows a primary key lookup using N1QL
   through the query service's REST API via curl.
+  See <a href="https://docs.couchbase.com">Couchbase docs</a>
+  for more information.

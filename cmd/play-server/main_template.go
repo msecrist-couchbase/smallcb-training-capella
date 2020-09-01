@@ -20,8 +20,8 @@ type MainTemplateData struct {
 	Title      string
 	Lang       string // Ex: 'py'.
 	Code       string
-	InfoBefore string
-	InfoAfter  string
+	InfoBefore template.HTML
+	InfoAfter  template.HTML
 }
 
 func MainTemplateEmit(w http.ResponseWriter,
@@ -76,8 +76,8 @@ func MainTemplateEmit(w http.ResponseWriter,
 		Title:      title,
 		Lang:       lang,
 		Code:       code,
-		InfoBefore: infoBefore,
-		InfoAfter:  infoAfter,
+		InfoBefore: template.HTML(infoBefore),
+		InfoAfter:  template.HTML(infoAfter),
 	}
 
 	t, err := template.ParseFiles(staticDir + "/main.html.template")
