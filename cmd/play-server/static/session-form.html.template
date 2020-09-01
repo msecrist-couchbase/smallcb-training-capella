@@ -61,9 +61,9 @@
       <h2>Start a Couchbase Server Test-Drive Session</h2>
 
       <p>
-        A test-drive session means that a Couchbase Server instance is
-        held for you until the session times-out from lack of use
-        (~4 minutes)
+        A test-drive session means that a Couchbase Server instance
+        is allocated to you until your session times out from
+        inactivity (~5 minutes)
         &mdash;
         or is deleted for other reasons like a system reboot.
       </p>
@@ -74,8 +74,8 @@
       </p>
 
       <p>
-        Don't keep important data on a test-drive Couchbase Server
-        instance!
+        Don't keep important or private data on a test-drive
+        Couchbase Server instance!
       </p>
 
       <p>
