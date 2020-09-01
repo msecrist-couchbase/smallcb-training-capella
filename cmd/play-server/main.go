@@ -61,11 +61,10 @@ var (
 
 	RunUser = "couchbase:couchbase"
 
-	// Map from lang (code file suffix) to execPrefix (exec command
-	// prefix for executing code, or "").
-	Langs = map[string]string{
+	// Map from lang (or code file suffix) to execPrefix (exec command
+	// prefix for executing code).
+	ExecPrefixes = map[string]string{
 		"java": "/run-java.sh",
-		"py":   "",
 	}
 
 	// Port mapping of container port # to containerPublishPortBase + delta.
@@ -182,7 +181,7 @@ func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 	ok, err := CheckLangCode(lang, code, *codeMaxLen)
 	if ok {
 		result, err = RunLangCode(r.Context(), RunUser,
-			Langs[lang], lang, code, *codeDuration, readyCh,
+			ExecPrefixes[lang], lang, code, *codeDuration, readyCh,
 			*containerWaitDuration,
 			*containerNamePrefix,
 			*containerVolPrefix,

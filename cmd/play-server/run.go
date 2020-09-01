@@ -19,7 +19,7 @@ var (
 
 func CheckLangCode(lang, code string, codeMaxLen int) (
 	runnable bool, err error) {
-	if lang == "" || code == "" {
+	if code == "" {
 		return false, nil
 	}
 
