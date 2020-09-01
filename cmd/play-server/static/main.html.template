@@ -38,7 +38,7 @@
     </div>
 
     <div class="header-links">
-      <a href="/session-start">start a session</a>
+      <a href="/session-form">start a session</a>
       <a href="https://docs.couchbase.com">docs</a>
     </div>
   </div>
