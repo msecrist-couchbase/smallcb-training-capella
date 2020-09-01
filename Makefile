@@ -66,6 +66,7 @@ wait-healthy:
 
 play-server-src = \
         cmd/play-server/main.go \
+        cmd/play-server/main_flags.go \
         cmd/play-server/main_template.go \
         cmd/play-server/misc.go \
         cmd/play-server/run.go
