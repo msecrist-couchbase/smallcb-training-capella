@@ -15,12 +15,12 @@ type NameTitle struct {
 }
 
 type MainTemplateData struct {
-	SessionId  string
-	Examples   string
-	NameTitles []NameTitle
-	Name       string
-	Title      string
-	Lang       string // Ex: 'py'.
+	SessionId  string      // The sessionId can be "".
+	Examples   string      // The examplesDir, like "examples".
+	NameTitles []NameTitle // The example names & titles from the examplesDir.
+	Name       string      // Current example name or "".
+	Title      string      // Current example title or "".
+	Lang       string      // Ex: 'py'.
 	Code       string
 	InfoBefore template.HTML
 	InfoAfter  template.HTML

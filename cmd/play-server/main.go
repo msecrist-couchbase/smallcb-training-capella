@@ -126,11 +126,6 @@ func HttpHandleMain(w http.ResponseWriter, r *http.Request) {
 		name = parts[2]        // Ex: "basic-py".
 	}
 
-	if strings.HasPrefix(r.URL.Path, "/examples/") &&
-		len(r.URL.Path) > len("/examples/") {
-		name = r.URL.Path[len("/examples/"):]
-	}
-
 	lang := r.FormValue("lang")
 	code := r.FormValue("code")
 
