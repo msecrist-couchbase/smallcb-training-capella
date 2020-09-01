@@ -185,11 +185,26 @@ func HttpHandleSessionForm(w http.ResponseWriter, r *http.Request) {
 // ------------------------------------------------
 
 func HttpHandleSessionStart(w http.ResponseWriter, r *http.Request) {
-	template.Must(template.ParseFiles(
-		*staticDir+"/session-form.html.template")).Execute(w, map[string]string{
-		"errFullName": "full name required",
-		"errEmail":    "email required",
-	})
+	errs := map[string]string{}
+
+	fullName := r.FormValue("fullName")
+	if fullName == "" {
+		errs["errFullName"] = "full name required"
+	}
+
+	email := r.FormValue("email")
+	if email == "" {
+		errs["errEmail"] = "email required"
+	}
+
+	if len(errs) > 0 {
+		template.Must(template.ParseFiles(
+			*staticDir+"/session-form.html.template")).
+			Execute(w, errs)
+		return
+	}
+
+	MainTemplateEmit(w, *staticDir, "examples", "", "", "")
 }
 
 // ------------------------------------------------

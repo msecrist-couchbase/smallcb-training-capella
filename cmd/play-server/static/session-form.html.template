@@ -86,7 +86,7 @@
         <label>
           Full Name:
           <span class="err">{{.errFullName}}</span>
-          <input type="text" name="full-name"/>
+          <input type="text" name="fullName"/>
         </label>
 
         <label>
