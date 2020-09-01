@@ -32,15 +32,13 @@
 <body>
   <div class="header flex-row">
     <div class="header-title">
-      <a href="/">
+      <a href="/{{if .SessionId}}?s={{.SessionId}}{{end}}">
         <h1>Couchbase API / SDK Playground</h1>
       </a>
     </div>
 
     <div class="header-links">
-      {{if .SessionId}}
-        session: {{.SessionId}}
-      {{else}}
+      {{if not .SessionId}}
         <a href="/session">start a session</a>
       {{end}}
       <a href="https://docs.couchbase.com">docs</a>
