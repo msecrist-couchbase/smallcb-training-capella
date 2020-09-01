@@ -161,13 +161,12 @@
           {{if .Title}}{{.Title}}{{else}}API / SDK Playground{{end}}
         </h2>
 
-        <div class="item">
+        <div>
           {{if .InfoBefore}}
             <div class="info infoBefore">{{.InfoBefore}}</div>
           {{end}}
 
-          <form class="item-form"
-                action="/run" method="post" target="output">
+          <form action="/run" method="post" target="output">
             <input name="lang"
                    type="hidden" value="{{.Lang}}"/>
 
