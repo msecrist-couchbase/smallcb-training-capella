@@ -39,35 +39,49 @@ first end-to-end demo on laptop?
 
 first end-to-end demo on cloud (staging)?
 
+first examples from not-steve?
+
 need to golang proxy to use the remapped port #'s?
   in the REST responses, to rewrite REST json maps
-  to list server hostnames/addrs correctly.
+  to list server hostnames/addrs correctly?
 
-docker container needs to -p or publish/expose ports on 0.0.0.0 addr
-  instead of 127.0.0.1 addr?
+docker container needs to -p or publish/expose ports
+  on 0.0.0.0 addr instead of 127.0.0.1 addr?
+  See "-containerPublishAddr" cmd-line flag.
 
 create couchbase user better than Administrator:password,
-  especially with user & password that look more like
-  UUID's when we're in >= zipcar mode?
+  especially dynamically with user & password that look
+  more like UUID's when we're in >= zipcar mode?
 
-client-side JS to prevent over-clicking on Run/Submit button?
+client-side JS to prevent over-clicking on Run/Submit button,
+  where the current attempt of onRunSubmit()
+  doesn't work very well.
 
 client-side JS to prevent Back Button or navigating away
-  from losing work?
+  from losing work in the code textarea?
 
-client-side code syntax highlighting / styling / codemirror, ACME code editor?
+client-side code syntax highlighting / styling via
+  codemirror, ACE code editor?
 
-CSS styling / mobile?
+CSS styling for mobile / narrow screens?
 
 when there are enough examples, use a tree-control
   on the left-hand-side with a scrollable panel,
-  perhaps with mouseover longer explanations?
+  perhaps with mouseovers with longer explanations?
+
+favorites / recommendeds for examples?
+
+some examples that only make sense with a longer-running
+  dev tire-kicking instance?
+
+allow InfoBefore / InfoAfter to have links?
+
+allow examples to be collected into separate "books"?
 
 capture email to get a longer-running
   dev tire-kicking instance?
-
-some examples only make sense with a longer-running
-  dev tire-kicking instance?
+  full name?  password?
+  CAPTCHA?
 
 can i have >1 longer running instance per email?
 
@@ -75,80 +89,95 @@ what if my email is already used?
 
 where do we store email to instance UUID info?
 
-some rough disk usage info...
+sizing?
+  some rough disk usage info...
 
-    % du -s -h vol-0
-    8.1M vol-0
-    % du -s -h vol-snapshot
-    5.6M vol-snapshot
+    % du -s -h vol-0        ==> 8.1M vol-0
+    % du -s -h vol-snapshot ==> 5.6M vol-snapshot
 
 google analytics?
 
-DNS & subdomains?
+stats?
+  keep average time of restarts, for fake/estimated progress/ETA bars?
 
-can docker checkpoint (experimental feature)
-  help speed up slow restart times?
-
-use docker build env vars?
-
-use tmpfs for faster restarts and less real i/o?
-
-use docker on docker?
-
-docker run has interesting tweakable limits?
-
-docker run --read-only flag?
-
-docker run --tmpfs flag?
+DNS, ELB & subdomains?
 
 use nginx proxy for subdomain based routing?
   See, the following, but which unfortunately doesn't seem to handle
   multiple virtual ports...
   https://blog.florianlopes.io/host-multiple-websites-on-single-host-docker/
 
-use docker network overlay --internal mode?
+can docker checkpoint (experimental feature in docker)
+  help speed up slow restart times?
+
+should we use docker build env vars?
+
+use docker on docker?
+
+use tmpfs for faster restarts and less real i/o,
+  at the cost of RAM?
+  docker run --tmpfs flag?
+
+docker run has interesting tweakable runtime resource limits
+  to look at?
+
+docker run --read-only flag?
+
+SECURITY: turn off egress networking?
   https://www.reddit.com/r/docker/comments/hvs7n9/how_do_i_prevent_a_container_from_making_outgoing/
   If your container is hosted on a VM in Azure, AWS, GCP, OpenStack
-  etc, you'll want to restrict Egress (outgoing) traffic from that VM
-  via Security Rules on the private network
+  etc, you'll want to restrict Egress (outgoing) traffic
+  or new outbound connections from the host
+  via Security Rules on the private network?
+
+use docker network overlay --internal mode?
 
 SECURITY: remove ability to strace in production?
 
 SECURITY: docker build can set ulimits
   and optional security-opts?
 
-SECURITY: turn off egress networking?
-
 SECURITY: only allow host to connect (or proxy)?
 
 SECURITY: cpu/memory usage limits?
 
 SECURITY: restart the host system every day?
-          unsafe code can escape the container sandbox via kernel hack?
+  just in case that unsafe code escapes
+  the container sandbox via kernel hack?
+
+SECURITY: hosting IAM rules?
 
 SECURITY: RBAC to limit access?
 
 SECURITY: need a CAPTCHA?
 
-copy/pastable connection snippets for languages
-  for >= zipcar mode.
+copy/pastable connection snippets for popular languages
+  and SDK's?
+  for >= zipcar mode?
 
-need test user / test example / test container instance?
+need 1 or more test users / test examples / test container instances?
+
+need ping / sanity checking REST endpoints?
 
 iframe for access to web admin portal?
   need server-side proxy in golang?
-  access to just query workbench?
+  perhaps access to just query workbench?
   ns-server does not like iframes, so need header rewrites?
 
 or pop up web admin portal in separate tab?
-  with rewrites / injection of messages?
+  with rewrites / injection of headline messages
+  or advertisements?
+
+should have a one-click workload generator?
 
 how about having longer-running instances
 that hang around more than a single request,
-which are all single-node / no rebalance / no XDCR?
+which are all single-node / no rebalance / no XDCR,
+all for better developer tire-kicking?
 e.g.,
   per-request (uber)
     container instance reset/recycled after every request.
+    similar to https://www.tutorialspoint.com/compile_jdbc_online.php
 
   multi-request (zipcar / hourly rental)
     container instance has an associated session UUID,
@@ -159,22 +188,22 @@ e.g.,
     and, user / password has to be generated UUID?
       and network ingres/egress that's enough,
       intended to allow for cbbackup/restore from elsewhere?
+    similar to katacoda?
 
   multi-request-with-data-freezing/thawing (hertz/avid, multi-day rental)
     after a timeout from inactivity,
-    the data is snapshotted and parked in
-      long-term-parking somewhere...
+    the data is snapshotted and parked in quiescent garage somewhere...
       like on local disk,
            or onto S3.
     when the user comes back, data is thawed,
       against a restarted container,
-      which takes some time (e.g., go get a coffee).
+      perhaps at a different assigned host:port?
+      which takes some time (e.g., go get a coffee) while defrosting?
 
-if you want a lease of 1 car or more (clustering),
-  with attached chauffering & mechanics services...
-  use Couchbase Cloud.
-
-should there be a workload generator included?
+  finally, if you want a lease of 1 or more fleet of cars (clustering),
+    with attached pool of hotel chauffeurs and
+    mechanic/maintenance services...
+    then use Couchbase Cloud.
 
 -------------------------
 On new CB version release...
@@ -185,13 +214,17 @@ What about frozen data --
   do we thaw them on demand, as requested?
   eventually give up on versions that's too old?
 
+How about on data that is super old?
+
+GDPR with emails and PII?
+
 -------------------------
 # Security
 
 - timeouts for long-running programs, see:
-  codeMaxDuration and workersMaxDuration.
+  codeMaxDuration and containerWaitDuration.
 
-- docker exec as couchbase:couchbase
+- docker exec as -u couchbase:couchbase (user:group), not as root.
 
 -------------------------
 use cases
@@ -199,15 +232,16 @@ use cases
     open-ended tire kicking?
     buttons in the docs & tutorials?
 
-use cases with persistent data?
+more use cases with persistent data?
   CI/CD tests?
   backend jobs on-demand?
     analytics?
     quick slice/dice jobs against big data (covid19)?
     AI/ML jobs?
+
     serverless event processing?
 
-dev-mode config?
+dev-mode config is reusable for laptops, too?
 
 --------------------------
 handwave design ideas...
@@ -269,12 +303,11 @@ on the host
 perhaps can docker pause/unpause to reduce footprint?
 
 --------------------------
-
 have a pool of container instances which are ready to go...
 
   db-1, db-2, db-3, db-4, etc?
 
-  write a file on whether db-X is ready to use?
+  perhaps write a file on whether db-X is ready to use?
 
 ----------------
 diagnosis links
