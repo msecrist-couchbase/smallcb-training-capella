@@ -2,6 +2,7 @@
 
 CB_USER="${CB_USER:-Administrator}"
 CB_PSWD="${CB_PSWD:-password}"
+
 CB_BUCKET_RAMSIZE="${CB_BUCKET_RAMSIZE:-128}"
 
 # exit immediately if a command fails or if there are unset vars
