@@ -143,7 +143,7 @@
       <ul class="langs">
       {{range .NameTitles}}
         <li>
-          <a href="/example/{{.Name}}">{{.Title}}</a>
+          <a href="/{{$.Examples}}/{{.Name}}">{{.Title}}</a>
         </li>
       {{end}}
       </ul>

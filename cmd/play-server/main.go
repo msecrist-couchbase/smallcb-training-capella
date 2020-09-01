@@ -47,8 +47,8 @@ var (
 	restarters = flag.Int("restarters", 1,
 		"# of restarters of the container instances")
 
-	static = flag.String("static", "cmd/play-server/static",
-		"path to the 'static' resources directory")
+	staticDir = flag.String("staticDir", "cmd/play-server/static",
+		"path to the 'static' directory")
 
 	listen = flag.String("listen", ":8080",
 		"HTTP listen [addr]:port")
@@ -141,7 +141,7 @@ func main() {
 func HttpMuxInit(mux *http.ServeMux) {
 	mux.Handle("/static/",
 		http.StripPrefix("/static/",
-			http.FileServer(http.Dir(*static))))
+			http.FileServer(http.Dir(*staticDir))))
 
 	mux.HandleFunc("/run", HttpHandleRun)
 
@@ -151,17 +151,26 @@ func HttpMuxInit(mux *http.ServeMux) {
 // ------------------------------------------------
 
 func HttpHandleMain(w http.ResponseWriter, r *http.Request) {
+	examplesDir := "examples"
+
 	name := r.FormValue("name")
 
-	if strings.HasPrefix(r.URL.Path, "/example/") &&
-		len(r.URL.Path) > len("/example/") {
-		name = r.URL.Path[len("/example/"):]
+	// Example URL.Path == "/examples/basic-py"
+	parts := strings.Split(r.URL.Path, "/")
+	if len(parts) >= 3 {
+		examplesDir = parts[1] // Ex: "examples".
+		name = parts[2]        // Ex: "basic-py".
+	}
+
+	if strings.HasPrefix(r.URL.Path, "/examples/") &&
+		len(r.URL.Path) > len("/examples/") {
+		name = r.URL.Path[len("/examples/"):]
 	}
 
 	lang := r.FormValue("lang")
 	code := r.FormValue("code")
 
-	MainTemplateEmit(w, *static, *static+"/examples", name, lang, code)
+	MainTemplateEmit(w, *staticDir, examplesDir, name, lang, code)
 }
 
 // ------------------------------------------------
@@ -203,6 +212,7 @@ type NameTitle struct {
 }
 
 type MainTemplateData struct {
+	Examples   string
 	NameTitles []NameTitle
 	Name       string
 	Title      string
@@ -214,7 +224,7 @@ type MainTemplateData struct {
 
 func MainTemplateEmit(w http.ResponseWriter,
 	staticDir, examplesDir, name, lang, code string) {
-	examples, exampleNames, err := ReadExamples(examplesDir)
+	examples, exampleNames, err := ReadExamples(staticDir + "/" + examplesDir)
 	if err != nil {
 		http.Error(w,
 			http.StatusText(http.StatusInternalServerError)+
@@ -261,6 +271,7 @@ func MainTemplateEmit(w http.ResponseWriter,
 	}
 
 	data := &MainTemplateData{
+		Examples:   examplesDir,
 		NameTitles: nameTitles,
 		Name:       name,
 		Title:      title,
