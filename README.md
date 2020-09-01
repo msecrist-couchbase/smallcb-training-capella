@@ -357,3 +357,19 @@ https://github.com/couchbaselabs/sequoia/blob/master/containers/sdk/Dockerfile
 https://github.com/couchbaselabs/sequoia/blob/master/containers/catapult/Dockerfile - adoptopenjdk/openjdk12:latest
 
 couchbaselabs/sequoia-provision
+
+--------------------------
+More diagnosis tools...
+
+see: https://news.ycombinator.com/item?id=24341867
+
+- atop (great for finding out what's causing system-wide slowness when
+  you're not sure whether it's CPU/disk/network/temperature/etc.)
+
+- iotop/iftop/sar (top equivalents for disk IO, network traffic, and
+  sysstat counters)
+
+- glances/nmon/dstat/iptraf-ng (pretty monitoring CLI-GUI utils with
+  more colors)
+
+- docker stats (htop equivalent for docker containers)
