@@ -11,13 +11,16 @@ import (
 )
 
 var (
-	readyCh chan int // Channel of container instance #'s that are ready.
+	// Channel of container instance #'s that are ready.
+	readyCh chan int
 
-	restartCh chan Restart // Channel of container instance restart requests.
+	// Channel of container instance restart requests.
+	restartCh chan Restart
 
 	// -----------------------------------
 
-	RunUser = "couchbase:couchbase"
+	// The user for docker exec.
+	ExecUser = "couchbase:couchbase"
 
 	// Map from lang (or code file suffix) to execPrefix (exec command
 	// prefix for executing code).
@@ -186,8 +189,9 @@ func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 
 	ok, err := CheckLangCode(lang, code, *codeMaxLen)
 	if ok {
-		result, err = RunLangCode(r.Context(), RunUser,
-			ExecPrefixes[lang], lang, code, *codeDuration, readyCh,
+		result, err = RunLangCode(r.Context(),
+			ExecUser, ExecPrefixes[lang],
+			lang, code, *codeDuration, readyCh,
 			*containerWaitDuration,
 			*containerNamePrefix,
 			*containerVolPrefix,
