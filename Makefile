@@ -49,11 +49,12 @@ restart: restart-snapshot wait-healthy
 restart-snapshot:
 	docker stop $(IMAGE_NAME)-$(CONTAINER_NUM) || true
 	docker rm $(IMAGE_NAME)-$(CONTAINER_NUM) || true
-	rm -rf vol-$(CONTAINER_NUM)/*
-	cp -R vol-snapshot/ vol-$(CONTAINER_NUM)/
+	rm -rf vol-instances/vol-$(CONTAINER_NUM)/*
+	mkdir -p vol-instances/vol-$(CONTAINER_NUM)
+	cp -R vol-snapshot/ vol-instances/vol-$(CONTAINER_NUM)/
 	docker run --name=$(IMAGE_NAME)-$(CONTAINER_NUM) \
                    $(CONTAINER_PORTS) $(CONTAINER_EXTRAS) \
-                   -v $(shell pwd)/vol-$(CONTAINER_NUM):/opt/couchbase/var \
+                   -v $(shell pwd)/vol-instances/vol-$(CONTAINER_NUM):/opt/couchbase/var \
                    -d $(IMAGE_NAME)
 
 # -------------------------------------------------

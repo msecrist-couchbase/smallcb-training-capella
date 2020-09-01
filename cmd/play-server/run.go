@@ -87,7 +87,7 @@ func RunLangCodeContainer(ctx context.Context, user,
 	containerId int,
 	containerNamePrefix,
 	containerVolPrefix string) ([]byte, error) {
-	// Ex: "vol-0".
+	// Ex: "vol-instances/vol-0".
 	dir := fmt.Sprintf("%s%d", containerVolPrefix, containerId)
 
 	err := os.MkdirAll(dir+DirCode, 0777)
@@ -95,7 +95,7 @@ func RunLangCodeContainer(ctx context.Context, user,
 		return nil, err
 	}
 
-	// Ex: "vol-0/tmp/play/code.py".
+	// Ex: "vol-instances/vol-0/tmp/play/code.py".
 	codePathHost := dir + DirCode + "/code." + lang
 
 	// Ex: "/opt/couchbase/var/tmp/play/code.py".

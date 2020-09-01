@@ -17,7 +17,7 @@ var (
 	containerNamePrefix = flag.String("containerNamePrefix", "smallcb-",
 		"prefix of the names of container instances")
 
-	containerVolPrefix = flag.String("containerVolPrefix", "vol-",
+	containerVolPrefix = flag.String("containerVolPrefix", "vol-instances/vol-",
 		"prefix of the volume directories of container instances")
 
 	containerPublishAddr = flag.String("containerPublishAddr", "127.0.0.1",
