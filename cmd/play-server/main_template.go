@@ -65,25 +65,7 @@ func MainTemplateEmit(w http.ResponseWriter,
 		if code == "" {
 			code = MapGetString(example, "code")
 
-			if codeData == nil {
-				codeData = map[string]string{}
-			}
-
-			if codeData["cbUser"] == "" {
-				codeData["cbUser"] = "Administrator"
-			}
-
-			if codeData["cbPswd"] == "" {
-				codeData["cbPswd"] = "password"
-			}
-
-			var b bytes.Buffer
-
-			err := textTemplate.Must(textTemplate.New("code").Parse(code)).
-				Execute(&b, codeData)
-			if err == nil {
-				code = b.String()
-			}
+			code = CodeTemplateExecute(code, codeData)
 		}
 
 		infoBefore = MapGetString(example, "infoBefore")
@@ -119,6 +101,34 @@ func MainTemplateEmit(w http.ResponseWriter,
 	if err != nil {
 		log.Printf("ERROR: t.Execute, data: %+v, err: %v", data, err)
 	}
+}
+
+// ------------------------------------------------
+
+func CodeTemplateExecute(code string, codeData map[string]string) string {
+	if codeData == nil {
+		codeData = map[string]string{}
+	}
+
+	if codeData["cbUser"] == "" {
+		codeData["cbUser"] = "Administrator"
+	}
+
+	if codeData["cbPswd"] == "" {
+		codeData["cbPswd"] = "password"
+	}
+
+	var b bytes.Buffer
+
+	err := textTemplate.Must(textTemplate.New("code").Parse(code)).
+		Execute(&b, codeData)
+	if err != nil {
+		log.Printf("ERROR: textTemplate.Execute, codeData: %+v, err: %v", codeData, err)
+
+		return code
+	}
+
+	return b.String()
 }
 
 // ------------------------------------------------
