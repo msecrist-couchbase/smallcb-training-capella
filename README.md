@@ -1,3 +1,9 @@
+Dependencies...
+
+* golang
+* docker
+* make
+
 Instructions for use...
 
 One time setup/init/build steps...
