@@ -143,6 +143,8 @@ func HttpMuxInit(mux *http.ServeMux) {
 
 	mux.HandleFunc("/session-form", HttpHandleSessionForm)
 
+	mux.HandleFunc("/session-start", HttpHandleSessionStart)
+
 	mux.HandleFunc("/run", HttpHandleRun)
 
 	mux.HandleFunc("/", HttpHandleMain)
@@ -178,6 +180,16 @@ func HttpHandleMain(w http.ResponseWriter, r *http.Request) {
 func HttpHandleSessionForm(w http.ResponseWriter, r *http.Request) {
 	template.Must(template.ParseFiles(
 		*staticDir+"/session-form.html.template")).Execute(w, nil)
+}
+
+// ------------------------------------------------
+
+func HttpHandleSessionStart(w http.ResponseWriter, r *http.Request) {
+	template.Must(template.ParseFiles(
+		*staticDir+"/session-form.html.template")).Execute(w, map[string]string{
+		"errFullName": "full name required",
+		"errEmail":    "email required",
+	})
 }
 
 // ------------------------------------------------
