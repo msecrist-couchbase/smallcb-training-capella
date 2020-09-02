@@ -35,10 +35,20 @@
 
     .main input[type=text] {
       width: 20rem;
+      margin: 5px 0 10px 0;
+      padding: 3px 5px 3px 5px;
     }
 
     .main input[type=submit] {
       margin-top: 30px;
+      border: 2px solid #999;
+      padding: 5px 20px 5px 20px;
+      background-color: #d8d8d8;
+      cursor: pointer;
+    }
+
+    .main input[type=submit]:hover {
+      background-color: #eee;
     }
   </style>
 </head>
