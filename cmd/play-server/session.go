@@ -1,6 +1,7 @@
 package main
 
 import "fmt"
+import "strings"
 import "sync"
 
 type Sessions struct {
@@ -46,6 +47,16 @@ func (sessions *Sessions) SessionExit(sessionId string) error {
 }
 
 func (s *Sessions) SessionCreate(fullName, email string) (sessionId string, err error) {
+	fullName = strings.TrimSpace(fullName)
+	if fullName == "" {
+		return "", fmt.Errorf("ErrNeedFullName")
+	}
+
+	email = strings.TrimSpace(email)
+	if email == "" {
+		return "", fmt.Errorf("ErrNeedEmail")
+	}
+
 	fullNameEmail := FullNameEmail(fullName, email)
 
 	sessions.m.Lock()
@@ -58,11 +69,17 @@ func (s *Sessions) SessionCreate(fullName, email string) (sessionId string, err 
 
 	session, exists := sessions.mapBySessionId[sessionId]
 	if exists || session != nil {
-		return "", fmt.Errorf("ErrSessionIdExists")
+		return "", fmt.Errorf("ErrSessionIdUsed")
 	}
 
 	// TODO: Better sessionId generator / UUID.
 	sessionId = fmt.Sprintf("%d-%s", len(sessions.mapBySessionId), fullNameEmail)
+	sessionId = strings.ReplaceAll(sessionId, " ", "")
+	sessionId = strings.ReplaceAll(sessionId, "\t", "")
+	sessionId = strings.ReplaceAll(sessionId, "&", "")
+	sessionId = strings.ReplaceAll(sessionId, "=", "")
+	sessionId = strings.ReplaceAll(sessionId, "?", "")
+	sessionId = strings.ReplaceAll(sessionId, "+", "")
 
 	session = &Session{
 		SessionIdent: SessionIdent{
@@ -78,19 +95,21 @@ func (s *Sessions) SessionCreate(fullName, email string) (sessionId string, err 
 	return sessionId, nil
 }
 
-// ------------------------------------------------
+func (sessions *Sessions) SessionGet(sessionId string) *Session {
+	sessions.m.Lock()
+	defer sessions.m.Unlock()
 
-func SessionExit(sessionId string) error {
-	return sessions.SessionExit(sessionId)
-}
-
-func SessionCreate(fullName, email string) (sessionId string, err error) {
-	if fullName == "test-bad" {
-		return "", fmt.Errorf("ErrTestBad")
+	session, exists := sessions.mapBySessionId[sessionId]
+	if !exists || session == nil {
+		return nil
 	}
 
-	return sessions.SessionCreate(fullName, email)
+	rv := *session // Copy.
+
+	return &rv
 }
+
+// ------------------------------------------------
 
 func FullNameEmail(fullName, email string) string {
 	return fullName + "-" + email

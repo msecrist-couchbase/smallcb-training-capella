@@ -13,7 +13,7 @@ import (
 type MainTemplateData struct {
 	Msg string
 
-	SessionId string // The sessionId can be "".
+	Session *Session // May be nil.
 
 	ExamplesDir string
 	Examples    []ExampleNameTitle
@@ -26,8 +26,8 @@ type MainTemplateData struct {
 	InfoAfter  template.HTML
 }
 
-func MainTemplateEmit(w http.ResponseWriter,
-	staticDir, msg, sessionId, examplesDir string,
+func MainTemplateEmit(w http.ResponseWriter, staticDir, msg string,
+	session *Session, examplesDir string,
 	name, lang, code string, codeData map[string]string) {
 	examples, exampleNameTitles, err :=
 		ReadExamples(staticDir + "/" + examplesDir)
@@ -64,7 +64,7 @@ func MainTemplateEmit(w http.ResponseWriter,
 	data := &MainTemplateData{
 		Msg: msg,
 
-		SessionId: sessionId,
+		Session: session,
 
 		ExamplesDir: examplesDir,
 		Examples:    exampleNameTitles,

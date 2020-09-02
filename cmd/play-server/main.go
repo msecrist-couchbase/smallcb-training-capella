@@ -124,7 +124,7 @@ func HttpHandleMain(w http.ResponseWriter, r *http.Request) {
 		msg = Msgs[msg]
 	}
 
-	sessionId := r.FormValue("s")
+	session := sessions.SessionGet(r.FormValue("s"))
 
 	examplesDir := "examples"
 
@@ -140,14 +140,14 @@ func HttpHandleMain(w http.ResponseWriter, r *http.Request) {
 	lang := r.FormValue("lang")
 	code := r.FormValue("code")
 
-	MainTemplateEmit(w, *staticDir, msg, sessionId, examplesDir,
-		name, lang, code, nil)
+	MainTemplateEmit(w, *staticDir, msg, session,
+		examplesDir, name, lang, code, nil)
 }
 
 // ------------------------------------------------
 
 func HttpHandleSessionExit(w http.ResponseWriter, r *http.Request) {
-	SessionExit(r.FormValue("s"))
+	sessions.SessionExit(r.FormValue("s"))
 
 	http.Redirect(w, r, "/?m=session-exit", http.StatusSeeOther)
 }
@@ -175,7 +175,7 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 		data["email"] = email
 
 		if errs <= 0 {
-			sessionId, err := SessionCreate(fullName, email)
+			sessionId, err := sessions.SessionCreate(fullName, email)
 			if err == nil {
 				http.Redirect(w, r, "/?s="+sessionId, http.StatusSeeOther)
 				return

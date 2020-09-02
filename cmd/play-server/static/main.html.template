@@ -31,13 +31,13 @@
 <body>
   <div class="header flex-row">
     <div class="header-title">
-      <a href="/{{if .SessionId}}?s={{.SessionId}}{{end}}">
+      <a href="/{{if .Session}}?s={{.Session.SessionId}}{{end}}">
         <h1>Couchbase API / SDK Playground</h1>
       </a>
     </div>
 
     <div class="header-links">
-      {{if not .SessionId}}
+      {{if not .Session}}
         <a href="/session">start a test-drive</a>
       {{end}}
       <a href="https://docs.couchbase.com">docs</a>
@@ -49,11 +49,14 @@
     <div class="msg">{{.Msg}}</div>
   {{end}}
 
-  {{if .SessionId}}
+  {{if .Session}}
     <div class="session-info">
       <h2>Couchbase Server Test-Drive Session</h2>
       <div>
-        Your test-drive session id is {{.SessionId}}.
+        Hello, {{.Session.FullName}}.
+      </div>
+      <div>
+        Your test-drive session id is {{.Session.SessionId}}.
       </div>
       <div>
         To connect to your test-drive Couchbase Server, use...
@@ -63,7 +66,7 @@
       </div>
       <div class="stop-test-drive">
         <a class="button"
-           href="/session-exit?s={{.SessionId}}">
+           href="/session-exit?s={{.Session.SessionId}}">
           stop test-drive
         </a>
       </div>
@@ -77,7 +80,7 @@
       <ul class="langs">
       {{range .Examples}}
         <li>
-          <a href="/{{$.ExamplesDir}}/{{.Name}}{{if $.SessionId}}?s={{$.SessionId}}{{end}}">
+          <a href="/{{$.ExamplesDir}}/{{.Name}}{{if $.Session}}?s={{$.Session.SessionId}}{{end}}">
             {{.Title}}
           </a>
         </li>
@@ -97,8 +100,10 @@
           {{end}}
 
           <form action="/run" method="post" target="output">
-            <input name="s"
-                   type="hidden" value="{{.SessionId}}"/>
+            {{if .Session}}
+              <input name="s"
+                     type="hidden" value="{{.Session.SessionId}}"/>
+            {{end}}
 
             <input name="lang"
                    type="hidden" value="{{.Lang}}"/>
