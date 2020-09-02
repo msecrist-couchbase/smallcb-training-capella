@@ -2,31 +2,30 @@
 <html>
 <head>
   <title>Couchbase API / SDK Playground</title>
-  <link rel="stylesheet" type="text/css"
-        href="/static/style.css">
+  <link rel="stylesheet" type="text/css" href="/static/style.css">
   <script>
-  function onRunSubmit() {
-    var b = document.getElementById('run');
-    b.disabled = true;
-    b.className = "run waiting";
+    function onRunSubmit() {
+      var b = document.getElementById('run');
+      b.disabled = true;
+      b.className = "run waiting";
 
-    var o = document.getElementById('output');
-    o.contentDocument.body.innerHTML = 'waiting...';
+      var o = document.getElementById('output');
+      o.contentDocument.body.innerHTML = 'waiting...';
 
-    function checkDone() {
-      var odoc = o.contentDocument || o.contentWindow.document;
-      if (odoc.readyState == "complete" &&
-          odoc.contentType == "text/plain") {
-        b.disabled = false;
-        b.className = "run";
-	return;
+      function checkDone() {
+        var odoc = o.contentDocument || o.contentWindow.document;
+        if (odoc.readyState == "complete" &&
+            odoc.contentType == "text/plain") {
+          b.disabled = false;
+          b.className = "run";
+        return;
+        }
+
+        setTimeout(checkDone, 500);
       }
 
-      setTimeout(checkDone, 500);
+      setTimeout(checkDone, 1000);
     }
-
-    setTimeout(checkDone, 1000);
-  }
   </script>
 </head>
 <body>
@@ -48,14 +47,20 @@
     </div>
   </div>
 
+  {{if .Msg}}
+    <div class="msg">{{.Msg}}</div>
+  {{end}}
+
   <div class="main flex-row">
     <div class="main-left">
       <h2>Examples</h2>
 
       <ul class="langs">
-      {{range .NameTitles}}
+      {{range .Examples}}
         <li>
-          <a href="/{{$.Examples}}/{{.Name}}{{if $.SessionId}}?s={{$.SessionId}}{{end}}">{{.Title}}</a>
+          <a href="/{{$.ExamplesDir}}/{{.Name}}{{if $.SessionId}}?s={{$.SessionId}}{{end}}">
+            {{.Title}}
+          </a>
         </li>
       {{end}}
       </ul>

@@ -10,26 +10,27 @@ import (
 	textTemplate "text/template"
 )
 
-type NameTitle struct {
-	Name, Title string
-}
-
 type MainTemplateData struct {
-	SessionId  string      // The sessionId can be "".
-	Examples   string      // The examplesDir, like "examples".
-	NameTitles []NameTitle // The example names & titles from the examplesDir.
-	Name       string      // Current example name or "".
-	Title      string      // Current example title or "".
-	Lang       string      // Ex: 'py'.
+	Msg string
+
+	SessionId string // The sessionId can be "".
+
+	ExamplesDir string
+	Examples    []ExampleNameTitle
+
+	Name       string // Current example name or "".
+	Title      string // Current example title or "".
+	Lang       string // Ex: 'py'.
 	Code       string
 	InfoBefore template.HTML
 	InfoAfter  template.HTML
 }
 
 func MainTemplateEmit(w http.ResponseWriter,
-	staticDir, sessionId, examplesDir string,
+	staticDir, msg, sessionId, examplesDir string,
 	name, lang, code string, codeData map[string]string) {
-	examples, exampleNames, err := ReadExamples(staticDir + "/" + examplesDir)
+	examples, exampleNameTitles, err :=
+		ReadExamples(staticDir + "/" + examplesDir)
 	if err != nil {
 		http.Error(w,
 			http.StatusText(http.StatusInternalServerError)+
@@ -37,19 +38,6 @@ func MainTemplateEmit(w http.ResponseWriter,
 			http.StatusInternalServerError)
 		log.Printf("ERROR: ReadExamples, err: %v", err)
 		return
-	}
-
-	nameTitles := make([]NameTitle, 0, len(exampleNames))
-	for _, name := range exampleNames {
-		title := MapGetString(examples[name], "title")
-		if title == "" {
-			title = name
-		}
-
-		nameTitles = append(nameTitles, NameTitle{
-			Name:  name,
-			Title: title,
-		})
 	}
 
 	var title, infoBefore, infoAfter string
@@ -74,9 +62,13 @@ func MainTemplateEmit(w http.ResponseWriter,
 	}
 
 	data := &MainTemplateData{
-		SessionId:  sessionId,
-		Examples:   examplesDir,
-		NameTitles: nameTitles,
+		Msg: msg,
+
+		SessionId: sessionId,
+
+		ExamplesDir: examplesDir,
+		Examples:    exampleNameTitles,
+
 		Name:       name,
 		Title:      title,
 		Lang:       lang,
@@ -99,7 +91,7 @@ func MainTemplateEmit(w http.ResponseWriter,
 
 	err = t.Execute(w, data)
 	if err != nil {
-		log.Printf("ERROR: t.Execute, data: %+v, err: %v", data, err)
+		log.Printf("ERROR: t.Execute, err: %v", err)
 	}
 }
 
@@ -123,7 +115,7 @@ func CodeTemplateExecute(code string, codeData map[string]string) string {
 	err := textTemplate.Must(textTemplate.New("code").Parse(code)).
 		Execute(&b, codeData)
 	if err != nil {
-		log.Printf("ERROR: textTemplate.Execute, codeData: %+v, err: %v", codeData, err)
+		log.Printf("ERROR: CodeTemplateExecute, err: %v", err)
 
 		return code
 	}
@@ -133,6 +125,10 @@ func CodeTemplateExecute(code string, codeData map[string]string) string {
 
 // ------------------------------------------------
 
+type ExampleNameTitle struct {
+	Name, Title string
+}
+
 // ReadExamples will return...
 //   examples:
 //     { "basic-py": { "title": "...", "lang": "py", "code": "..." }, ... }.
@@ -140,21 +136,28 @@ func CodeTemplateExecute(code string, codeData map[string]string) string {
 //     [ "basic-py", ... ].
 func ReadExamples(dir string) (
 	examples map[string]map[string]interface{},
-	exampleNames []string,
-	err error) {
+	exampleNameTitles []ExampleNameTitle, err error) {
 	examples, err = ReadYamls(dir, ".yaml")
 	if err != nil {
 		return nil, nil, err
 	}
 
+	names := make([]string, 0, len(examples))
 	for name, example := range examples {
 		// Only yaml's with a title are considered examples.
 		if _, hasTitle := example["title"]; hasTitle {
-			exampleNames = append(exampleNames, name)
+			names = append(names, name)
 		}
 	}
 
-	sort.Strings(exampleNames)
+	sort.Strings(names)
 
-	return examples, exampleNames, nil
+	for _, name := range names {
+		exampleNameTitles = append(exampleNameTitles, ExampleNameTitle{
+			Name:  name,
+			Title: MapGetString(examples[name], "title"),
+		})
+	}
+
+	return examples, exampleNameTitles, nil
 }

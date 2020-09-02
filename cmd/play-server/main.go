@@ -48,6 +48,12 @@ var (
 		[]int{11210, 30}, // 11210 is exposed on port 10000 + 30.
 		[]int{11211, 31}, // 11211 is exposed on port 10000 + 31.
 	}
+
+	// -----------------------------------
+
+	Msgs = map[string]string{
+		"session-exit": "Thanks for test-driving Couchbase!",
+	}
 )
 
 // ------------------------------------------------
@@ -113,6 +119,11 @@ func HttpMuxInit(mux *http.ServeMux) {
 // ------------------------------------------------
 
 func HttpHandleMain(w http.ResponseWriter, r *http.Request) {
+	msg := r.FormValue("m")
+	if Msgs[msg] != "" {
+		msg = Msgs[msg]
+	}
+
 	sessionId := r.FormValue("s")
 
 	examplesDir := "examples"
@@ -129,7 +140,8 @@ func HttpHandleMain(w http.ResponseWriter, r *http.Request) {
 	lang := r.FormValue("lang")
 	code := r.FormValue("code")
 
-	MainTemplateEmit(w, *staticDir, sessionId, examplesDir, name, lang, code, nil)
+	MainTemplateEmit(w, *staticDir, msg, sessionId, examplesDir,
+		name, lang, code, nil)
 }
 
 // ------------------------------------------------
@@ -137,7 +149,7 @@ func HttpHandleMain(w http.ResponseWriter, r *http.Request) {
 func HttpHandleSessionExit(w http.ResponseWriter, r *http.Request) {
 	// TODO.
 
-	http.Redirect(w, r, "/", http.StatusSeeOther)
+	http.Redirect(w, r, "/?m=session-exit", http.StatusSeeOther)
 }
 
 // ------------------------------------------------
