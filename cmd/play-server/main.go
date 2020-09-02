@@ -160,14 +160,14 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 		errs := 0
 
-		fullName := r.FormValue("fullName")
+		fullName := strings.TrimSpace(r.FormValue("fullName"))
 		if fullName == "" {
 			data["errFullName"] = "full name required"
 			errs += 1
 		}
 		data["fullName"] = fullName
 
-		email := r.FormValue("email")
+		email := strings.TrimSpace(r.FormValue("email"))
 		if email == "" {
 			data["errEmail"] = "email required"
 			errs += 1

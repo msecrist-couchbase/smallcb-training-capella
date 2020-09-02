@@ -26,8 +26,8 @@ type MainTemplateData struct {
 	InfoAfter  template.HTML
 }
 
-func MainTemplateEmit(w http.ResponseWriter, staticDir, msg string,
-	session *Session, examplesDir string,
+func MainTemplateEmit(w http.ResponseWriter,
+	staticDir, msg string, session *Session, examplesDir string,
 	name, lang, code string, codeData map[string]string) {
 	examples, exampleNameTitles, err :=
 		ReadExamples(staticDir + "/" + examplesDir)
