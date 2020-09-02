@@ -147,7 +147,7 @@ func HttpHandleMain(w http.ResponseWriter, r *http.Request) {
 // ------------------------------------------------
 
 func HttpHandleSessionExit(w http.ResponseWriter, r *http.Request) {
-	// TODO.
+	SessionExit(r.FormValue("s"))
 
 	http.Redirect(w, r, "/?m=session-exit", http.StatusSeeOther)
 }
@@ -175,10 +175,14 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 		data["email"] = email
 
 		if errs <= 0 {
-			sessionId := "1234567" // TODO.
+			sessionId, err := SessionCreate(fullName, email)
+			if err == nil {
+				http.Redirect(w, r, "/?s="+sessionId, http.StatusSeeOther)
+				return
+			}
 
-			http.Redirect(w, r, "/?s="+sessionId, http.StatusSeeOther)
-			return
+			data["err"] = fmt.Sprintf("Could not create session - "+
+				"please try again later. (%v)", err)
 		}
 	}
 

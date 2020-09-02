@@ -70,7 +70,8 @@ play-server-src = \
         cmd/play-server/main_flags.go \
         cmd/play-server/main_template.go \
         cmd/play-server/misc.go \
-        cmd/play-server/run.go
+        cmd/play-server/run.go \
+        cmd/play-server/session.go
 
 play-server: $(play-server-src)
 	go build ./...
