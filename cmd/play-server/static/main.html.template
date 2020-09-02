@@ -18,7 +18,7 @@
             odoc.contentType == "text/plain") {
           b.disabled = false;
           b.className = "run";
-        return;
+          return;
         }
 
         setTimeout(checkDone, 500);
@@ -67,7 +67,7 @@
     </div>
 
     <div class="main-center">
-      {{if .Name}}
+      {{if or .Name .Lang .Code}}
         <h2>
           {{if .Title}}{{.Title}}{{else}}API / SDK Playground{{end}}
         </h2>
@@ -103,7 +103,7 @@
     </div>
 
     <div class="main-output">
-      {{if .Name}}
+      {{if or .Name .Lang .Code}}
         <h2>Output</h2>
 
         <iframe name="output" id="output"></iframe>
