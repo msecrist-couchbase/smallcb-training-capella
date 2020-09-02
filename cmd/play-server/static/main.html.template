@@ -37,10 +37,8 @@
     </div>
 
     <div class="header-links">
-      {{if .SessionId}}
-        <a href="/session-exit?s={{.SessionId}}">exit session</a>
-      {{else}}
-        <a href="/session">start a session</a>
+      {{if not .SessionId}}
+        <a href="/session">start a test-drive</a>
       {{end}}
       <a href="https://docs.couchbase.com">docs</a>
       <a href="https://www.couchbase.com">couchbase.com</a>
@@ -49,6 +47,25 @@
 
   {{if .Msg}}
     <div class="msg">{{.Msg}}</div>
+  {{end}}
+
+  {{if .SessionId}}
+    <div class="session-info">
+      <h2>Couchbase Server Test-Drive Session</h2>
+      <div>Your test-drive session id is {{.SessionId}}.
+      </div>
+      <div>To connect to your test-drive Couchbase Server,
+         use...
+      </div>
+      <div>TBD...
+      </div>
+      <div class="stop-test-drive">
+         <a class="button"
+            href="/session-exit?s={{.SessionId}}">
+            stop test-drive
+         </a>
+      </div>
+    </div>
   {{end}}
 
   <div class="main flex-row">

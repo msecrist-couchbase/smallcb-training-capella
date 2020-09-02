@@ -167,6 +167,8 @@ SECURITY: RBAC to limit access?
 
 SECURITY: need a CAPTCHA?
 
+SECURITY: need spam/flood throttling?
+
 copy/pastable connection snippets for popular languages
   and SDK's?
   for >= zipcar mode?

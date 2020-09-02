@@ -62,7 +62,7 @@
 
       <p>
         A test-drive session means that a Couchbase Server instance
-        is allocated to you until your session times out from
+        will be allocated to you until your session times out from
         inactivity (~5 minutes)
         &mdash;
         or is deleted for other reasons like a system reboot.
