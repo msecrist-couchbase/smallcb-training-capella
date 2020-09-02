@@ -52,18 +52,20 @@
   {{if .SessionId}}
     <div class="session-info">
       <h2>Couchbase Server Test-Drive Session</h2>
-      <div>Your test-drive session id is {{.SessionId}}.
+      <div>
+        Your test-drive session id is {{.SessionId}}.
       </div>
-      <div>To connect to your test-drive Couchbase Server,
-         use...
+      <div>
+        To connect to your test-drive Couchbase Server, use...
       </div>
-      <div>TBD...
+      <div>
+        <i>TBD... [host / user / pswd and connect string examples here]</i>
       </div>
       <div class="stop-test-drive">
-         <a class="button"
-            href="/session-exit?s={{.SessionId}}">
-            stop test-drive
-         </a>
+        <a class="button"
+           href="/session-exit?s={{.SessionId}}">
+          stop test-drive
+        </a>
       </div>
     </div>
   {{end}}
