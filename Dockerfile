@@ -37,7 +37,7 @@ RUN mkdir -p /init-couchbase
 COPY init-couchbase /init-couchbase
 RUN chmod +x /init-couchbase/*.sh
 
-# Copy play-server related files into image.
+# Copy play-server's run-*.sh files into image.
 
-COPY cmd/play-server/run-java.sh /run-java.sh
-RUN chmod +x /run-java.sh
+COPY cmd/play-server/run-*.sh /
+RUN chmod +x /run-*.sh
