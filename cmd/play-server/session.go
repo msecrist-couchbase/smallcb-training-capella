@@ -4,6 +4,8 @@ import "fmt"
 import "strings"
 import "sync"
 
+import "github.com/google/uuid"
+
 type Sessions struct {
 	m sync.Mutex
 
@@ -73,13 +75,12 @@ func (s *Sessions) SessionCreate(fullName, email string) (sessionId string, err 
 	}
 
 	// TODO: Better sessionId generator / UUID.
-	sessionId = fmt.Sprintf("%d-%s", len(sessions.mapBySessionId), fullNameEmail)
-	sessionId = strings.ReplaceAll(sessionId, " ", "")
-	sessionId = strings.ReplaceAll(sessionId, "\t", "")
-	sessionId = strings.ReplaceAll(sessionId, "&", "")
-	sessionId = strings.ReplaceAll(sessionId, "=", "")
-	sessionId = strings.ReplaceAll(sessionId, "?", "")
-	sessionId = strings.ReplaceAll(sessionId, "+", "")
+	sessionUUID, err := uuid.NewRandom()
+	if err != nil {
+		return "", err
+	}
+
+	sessionId = strings.ReplaceAll(sessionUUID.String(), "-", "")
 
 	session = &Session{
 		SessionIdent: SessionIdent{
