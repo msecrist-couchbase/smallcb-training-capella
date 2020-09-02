@@ -18,6 +18,7 @@ RUN apt-get install -y python3-dev python3-pip python3-setuptools && \
     pip3 install couchbase
 
 # TODO: Need couchbase java SDK, but seems like have to drag in maven?
+# TODO: Maybe have to use adoptopenjdk instead?
 
 RUN apt-get install -y openjdk-8-jdk
 
