@@ -7,7 +7,7 @@ import "sync"
 import "github.com/google/uuid"
 
 type Sessions struct {
-	m sync.Mutex
+	m sync.Mutex // Protects the fields that follow.
 
 	mapBySessionId     map[string]*Session
 	mapByFullNameEmail map[string]string // Value is sessionId.
@@ -35,6 +35,20 @@ var sessions = Sessions{
 
 // ------------------------------------------------
 
+func (sessions *Sessions) SessionGet(sessionId string) *Session {
+	sessions.m.Lock()
+	defer sessions.m.Unlock()
+
+	session, exists := sessions.mapBySessionId[sessionId]
+	if !exists || session == nil {
+		return nil
+	}
+
+	rv := *session // Copy.
+
+	return &rv
+}
+
 func (sessions *Sessions) SessionExit(sessionId string) error {
 	sessions.m.Lock()
 	defer sessions.m.Unlock()
@@ -42,7 +56,8 @@ func (sessions *Sessions) SessionExit(sessionId string) error {
 	session, exists := sessions.mapBySessionId[sessionId]
 	if exists && session != nil {
 		delete(sessions.mapBySessionId, sessionId)
-		delete(sessions.mapByFullNameEmail, FullNameEmail(session.FullName, session.Email))
+		delete(sessions.mapByFullNameEmail,
+			FullNameEmail(session.FullName, session.Email))
 	}
 
 	return nil
@@ -74,7 +89,6 @@ func (s *Sessions) SessionCreate(fullName, email string) (sessionId string, err 
 		return "", fmt.Errorf("ErrSessionIdUsed")
 	}
 
-	// TODO: Better sessionId generator / UUID.
 	sessionUUID, err := uuid.NewRandom()
 	if err != nil {
 		return "", err
@@ -94,20 +108,6 @@ func (s *Sessions) SessionCreate(fullName, email string) (sessionId string, err 
 	sessions.mapByFullNameEmail[fullNameEmail] = sessionId
 
 	return sessionId, nil
-}
-
-func (sessions *Sessions) SessionGet(sessionId string) *Session {
-	sessions.m.Lock()
-	defer sessions.m.Unlock()
-
-	session, exists := sessions.mapBySessionId[sessionId]
-	if !exists || session == nil {
-		return nil
-	}
-
-	rv := *session // Copy.
-
-	return &rv
 }
 
 // ------------------------------------------------
