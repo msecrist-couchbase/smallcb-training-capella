@@ -62,6 +62,13 @@ first end-to-end demo on cloud (staging)?
 
 first examples from not-steve?
 
+lots of examples are auto-scraped from docs and
+  put into: https://github.com/couchbaselabs/sdk-examples
+    every once in awhile.
+  see also: https://github.com/couchbaselabs/devguide-examples
+    which are older.
+  ask Matt I. for more details
+
 need to golang proxy to use the remapped port #'s?
   in the REST responses, to rewrite REST json maps
   to list server hostnames/addrs correctly?
