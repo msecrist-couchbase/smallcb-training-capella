@@ -71,7 +71,7 @@ create couchbase user better than Administrator:password,
 
 client-side JS to prevent over-clicking on Run/Submit button,
   where the current attempt of onRunSubmit()
-  doesn't work very well.
+  doesn't work very well for the 2nd click on 'run'.
 
 client-side JS to prevent Back Button or navigating away
   from losing work in the code textarea?
@@ -91,6 +91,12 @@ when there are enough examples, use a tree-control
   on the left-hand-side with a scrollable panel,
   perhaps with mouseovers with longer explanations?
 
+when the page is scrolled down, and you click on another
+  example link, there's a disconcerting jump back to
+  top of the page rather than having the page stay
+  mostly stable -- similar to docs behavior?
+  maybe use an iframe?
+
 favorites / recommendeds for examples?
 
 some examples that only make sense with a longer-running
@@ -99,7 +105,7 @@ some examples that only make sense with a longer-running
 allow InfoBefore / InfoAfter to have links?
   like, link to relevant docs page?
 
-allow examples to be collected into separate "books"?
+feedback comments or votes on examples?
 
 capture email to get a longer-running
   dev tire-kicking instance?
@@ -232,6 +238,9 @@ e.g.,
     with attached pool of hotel chauffeurs and
     mechanic/maintenance services...
     then use Couchbase Cloud.
+
+allow examples to be collected into separate "books"?
+  multiple 'examples' directories are now supported.
 
 -------------------------
 On new CB version release...
