@@ -123,18 +123,18 @@
       <h2>Couchbase Server Test-Drive Session</h2>
       <div>
         Hello, {{.Session.FullName}}.
-        Your test-drive session is active until there's 5 minutes of inactivity.
+        Your test-drive session is active until there's ~5 minutes of inactivity.
       </div>
       <div>
         To connect to your test-drive Couchbase Server
-        over the internet using a Couchbase SDK client...
+        over the internet...
       </div>
       <div class="connection">
-        REST   ... http://{{.Session.CBUser}}:{{.Session.CBPswd}}@try.couchbase.dev:8091
-        Java   ... [host / user / pswd and connect string examples here]
-        NodeJS ... [host / user / pswd and connect string examples here]
-        Python ... PasswordAuthenticator('{{.Session.CBUser}}', '{{.Session.CBPswd}}')
-        C#     ... [host / user / pswd and connect string examples here]
+        REST / web admin UI  : http://{{.Session.CBUser}}:{{.Session.CBPswd}}@try.couchbase.dev:8091
+        Couchbase Java SDK   : [host / user / pswd and connect string examples here]
+        Couchbase NodeJS SDK : [host / user / pswd and connect string examples here]
+        Couchbase Python SDK : PasswordAuthenticator('{{.Session.CBUser}}', '{{.Session.CBPswd}}')
+        Couchbase C# SDK     : [host / user / pswd and connect string examples here]
       </div>
       <div>
         The following online examples will also run
