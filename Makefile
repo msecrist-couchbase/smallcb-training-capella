@@ -8,6 +8,8 @@ CONTAINER_PORTS = -p 8091-8096:8091-8096 -p 11210:11210
 
 CONTAINER_EXTRAS = --cap-add=SYS_PTRACE
 
+SERVICE_HOST = try.couchbase.dev
+
 # -------------------------------------------------
 
 # Build the docker image.
@@ -62,6 +64,7 @@ restart-snapshot:
 	docker run --name=$(IMAGE_NAME)-$(CONTAINER_NUM) \
                    $(CONTAINER_PORTS) $(CONTAINER_EXTRAS) \
                    -v $(shell pwd)/vol-instances/vol-$(CONTAINER_NUM):/opt/couchbase/var \
+                   --add-host="$(SERVICE_HOST):127.0.0.1" \
                    -d $(IMAGE_NAME)
 
 # -------------------------------------------------

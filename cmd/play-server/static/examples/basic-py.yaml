@@ -8,7 +8,7 @@ code: |
   
   pa = PasswordAuthenticator('{{.CBUser}}', '{{.CBPswd}}')
   
-  cluster = Cluster('couchbase://127.0.0.1', ClusterOptions(pa))
+  cluster = Cluster('couchbase://try.couchbase.dev', ClusterOptions(pa))
   
   bucket = cluster.bucket('beer-sample')
   
