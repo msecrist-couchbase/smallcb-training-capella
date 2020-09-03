@@ -155,7 +155,7 @@ func HttpHandleSessionExit(w http.ResponseWriter, r *http.Request) {
 // ------------------------------------------------
 
 func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
-	data := map[string]string{}
+	data := map[string]interface{}{}
 
 	if r.Method == "POST" {
 		errs := 0
@@ -185,6 +185,18 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 				"please try again later. (%v)", err)
 		}
 	}
+
+	captchaURL, err := CaptchaGenerateBase64ImageDataURL(240, 80, *maxCaptchas)
+	if err != nil {
+		http.Error(w,
+			http.StatusText(http.StatusInternalServerError)+
+				fmt.Sprintf(", CaptchaGenerate, err: %v", err),
+			http.StatusInternalServerError)
+		log.Printf("ERROR: CaptchaGenerate, err: %v", err)
+		return
+	}
+
+	data["captchaSrc"] = template.HTMLAttr("src=\"" + captchaURL + "\"")
 
 	template.Must(template.ParseFiles(
 		*staticDir+"/session.html.template")).Execute(w, data)

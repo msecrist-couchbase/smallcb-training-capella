@@ -47,6 +47,10 @@
       background-color: #eee;
     }
 
+    .main img.captcha {
+      display: block;
+    }
+
     .err {
       color: red;
     }
@@ -109,6 +113,14 @@
           Email:
           <span class="err">{{.errEmail}}</span>
           <input type="text" name="email" value="{{.email}}"/>
+        </label>
+
+	<img class="captcha" {{.captchaSrc}}/>
+
+        <label>
+          Enter the above #'s:
+          <span class="err">{{.errCaptcha}}</span>
+          <input type="text" name="captcha"/>
         </label>
 
         <input type="submit" name="session-start"

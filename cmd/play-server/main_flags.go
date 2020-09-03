@@ -38,6 +38,9 @@ var (
 	restarters = flag.Int("restarters", 1,
 		"# of restarters of the container instances")
 
+	maxCaptchas = flag.Int("maxCaptchas", 50,
+		"# of captcha guesses to keep")
+
 	staticDir = flag.String("staticDir", "cmd/play-server/static",
 		"path to the 'static' directory")
 
