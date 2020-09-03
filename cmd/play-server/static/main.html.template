@@ -127,9 +127,10 @@
       </div>
       <div>
         To connect to your test-drive Couchbase Server
-        over the internet from the SDK, use...
+        over the internet using a Couchbase SDK client...
       </div>
       <div class="connection">
+        REST   ... http://{{.Session.CBUser}}:{{.Session.CBPswd}}@try.couchbase.dev:8091
         Java   ... [host / user / pswd and connect string examples here]
         NodeJS ... [host / user / pswd and connect string examples here]
         Python ... PasswordAuthenticator('{{.Session.CBUser}}', '{{.Session.CBPswd}}')
