@@ -22,8 +22,12 @@ type Session struct {
 
 type SessionIdent struct {
 	SessionId string
-	FullName  string
-	Email     string
+
+	FullName string
+	Email    string
+
+	CBUser string
+	CBPswd string
 }
 
 // ------------------------------------------------
@@ -101,6 +105,8 @@ func (s *Sessions) SessionCreate(fullName, email string) (sessionId string, err 
 			SessionId: sessionId,
 			FullName:  fullName,
 			Email:     email,
+			CBUser:    sessionId[:16],
+			CBPswd:    sessionId[16:],
 		},
 	}
 

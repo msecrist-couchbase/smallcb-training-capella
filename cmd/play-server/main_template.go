@@ -28,7 +28,7 @@ type MainTemplateData struct {
 
 func MainTemplateEmit(w http.ResponseWriter,
 	staticDir, msg string, session *Session, examplesDir string,
-	name, lang, code string, codeData map[string]string) {
+	name, lang, code string) {
 	examples, exampleNameTitles, err :=
 		ReadExamples(staticDir + "/" + examplesDir)
 	if err != nil {
@@ -53,7 +53,7 @@ func MainTemplateEmit(w http.ResponseWriter,
 		if code == "" {
 			code = MapGetString(example, "code")
 
-			code = CodeTemplateExecute(code, codeData)
+			code = CodeTemplateExecute(code, session)
 		}
 
 		infoBefore = MapGetString(example, "infoBefore")
@@ -97,23 +97,20 @@ func MainTemplateEmit(w http.ResponseWriter,
 
 // ------------------------------------------------
 
-func CodeTemplateExecute(code string, codeData map[string]string) string {
-	if codeData == nil {
-		codeData = map[string]string{}
-	}
-
-	if codeData["cbUser"] == "" {
-		codeData["cbUser"] = "Administrator"
-	}
-
-	if codeData["cbPswd"] == "" {
-		codeData["cbPswd"] = "password"
+func CodeTemplateExecute(code string, session *Session) string {
+	if session == nil {
+		session = &Session{
+			SessionIdent: SessionIdent{
+				CBUser: "Administrator",
+				CBPswd: "password",
+			},
+		}
 	}
 
 	var b bytes.Buffer
 
 	err := textTemplate.Must(textTemplate.New("code").Parse(code)).
-		Execute(&b, codeData)
+		Execute(&b, session)
 	if err != nil {
 		log.Printf("ERROR: CodeTemplateExecute, err: %v", err)
 

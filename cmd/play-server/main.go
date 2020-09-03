@@ -141,7 +141,7 @@ func HttpHandleMain(w http.ResponseWriter, r *http.Request) {
 	code := r.FormValue("code")
 
 	MainTemplateEmit(w, *staticDir, msg, session,
-		examplesDir, name, lang, code, nil)
+		examplesDir, name, lang, code)
 }
 
 // ------------------------------------------------

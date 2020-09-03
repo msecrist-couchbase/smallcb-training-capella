@@ -132,7 +132,7 @@
       <div class="connection">
         Java   ... [host / user / pswd and connect string examples here]
         NodeJS ... [host / user / pswd and connect string examples here]
-        Python ... [host / user / pswd and connect string examples here]
+        Python ... PasswordAuthenticator('{{.Session.CBUser}}', '{{.Session.CBPswd}}')
         C#     ... [host / user / pswd and connect string examples here]
       </div>
       <div>

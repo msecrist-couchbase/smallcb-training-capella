@@ -6,7 +6,7 @@ code: |
   from couchbase.cluster import Cluster, ClusterOptions, QueryOptions
   from couchbase_core.cluster import PasswordAuthenticator
   
-  pa = PasswordAuthenticator('{{.cbUser}}', '{{.cbPswd}}')
+  pa = PasswordAuthenticator('{{.CBUser}}', '{{.CBPswd}}')
   
   cluster = Cluster('couchbase://127.0.0.1', ClusterOptions(pa))
   
