@@ -95,15 +95,12 @@ when the page is scrolled down, and you click on another
   example link, there's a disconcerting jump back to
   top of the page rather than having the page stay
   mostly stable -- similar to docs behavior?
-  maybe use an iframe?
+  maybe use an iframe, but then URL won't be bookmarkable?
 
-favorites / recommendeds for examples?
+favorites / recommended examples?
 
-some examples that only make sense with a longer-running
-  dev tire-kicking instance?
-
-allow InfoBefore / InfoAfter to have links?
-  like, link to relevant docs page?
+some examples that only make sense when there's
+  a longer-running session >= zipcar mode?
 
 feedback comments or votes on examples?
 
@@ -114,7 +111,8 @@ capture email to get a longer-running
 
 can i have >1 longer running instance per email?
 
-what if my email is already used?
+what if my email and/or name are already used?
+  if so, can i get another zipcar for me?
 
 where do we store email to instance UUID info?
 
@@ -143,6 +141,10 @@ should we use docker build env vars?
 
 use docker on docker?
 
+use docker networking features?
+  use docker network overlay --internal mode?
+  perhaps too complex.
+
 use tmpfs for faster restarts and less real i/o,
   at the cost of RAM?
   docker run --tmpfs flag?
@@ -159,15 +161,16 @@ SECURITY: turn off egress networking?
   or new outbound connections from the host
   via Security Rules on the private network?
 
-use docker network overlay --internal mode?
-
 SECURITY: remove ability to strace in production?
 
 SECURITY: docker build can set ulimits
   and optional security-opts?
   See:
     https://docs.couchbase.com/server/current/install/best-practices-vm.html
-    docker run -d --ulimit nofile=40960:40960 --ulimit core=100000000:100000000 --ulimit memlock=100000000:100000000 --name db -p 8091-8096:8091-8096 -p 11210-11211:11210-11211 couchbase
+    docker run -d --ulimit nofile=40960:40960 \
+      --ulimit core=100000000:100000000 \
+      --ulimit memlock=100000000:100000000 \
+      --name db -p 8091-8096:8091-8096 -p 11210-11211:11210-11211 couchbase
 
 SECURITY: only allow host to connect (or proxy)?
 
@@ -239,9 +242,6 @@ e.g.,
     mechanic/maintenance services...
     then use Couchbase Cloud.
 
-allow examples to be collected into separate "books"?
-  multiple 'examples' directories are now supported.
-
 -------------------------
 On new CB version release...
 
@@ -256,6 +256,13 @@ How about on data that is super old?
 GDPR with emails and PII?
 
 -------------------------
+examples can now be collected into separate "books"?
+  multiple 'examples' directories are now supported.
+
+InfoBefore / InfoAfter can now have HTML markup,
+  like links to relevant docs page or "next" step links.
+
+-------------------------
 # Security
 
 - timeouts for long-running programs, see:
@@ -267,7 +274,9 @@ GDPR with emails and PII?
 use cases
   try it now
     open-ended tire kicking?
-    buttons in the docs & tutorials?
+    of SDK / API testing?
+       and/or N1QL?
+    try-it-now buttons in the docs & tutorials?
 
 more use cases with persistent data?
   CI/CD tests?
