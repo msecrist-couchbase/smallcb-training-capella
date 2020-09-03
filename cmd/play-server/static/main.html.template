@@ -3,6 +3,14 @@
 <head>
   <title>Couchbase API / SDK Playground</title>
   <link rel="stylesheet" type="text/css" href="/static/style.css">
+  <style>
+    .main ul.examples li {
+      list-style: none;
+    }
+    .main ul.examples li.current {
+      list-style: square;
+    }
+  </style>
   <script>
     function onRunSubmit() {
       var b = document.getElementById('run');
@@ -77,9 +85,9 @@
     <div class="main-left">
       <h2>Examples</h2>
 
-      <ul class="langs">
+      <ul class="examples">
       {{range .Examples}}
-        <li>
+        <li {{if eq .Name $.Name}}class="current"{{end}}>
           <a href="/{{$.ExamplesDir}}/{{.Name}}{{if $.Session}}?s={{$.Session.SessionId}}{{end}}">
             {{.Title}}
           </a>
