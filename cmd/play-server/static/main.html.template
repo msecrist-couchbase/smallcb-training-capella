@@ -18,6 +18,13 @@
       margin-bottom: 10px;
       margin-left: 20px;
     }
+    .session-info div.connection {
+      margin: 0 0 20px 20px;
+      padding: 0 0 0 0;
+      white-space: pre;
+      font-size: 9pt;
+      font-family: monospace;
+    }
     .main ul.examples {
       padding-left: 20px;
     }
@@ -115,16 +122,22 @@
     <div class="session-info">
       <h2>Couchbase Server Test-Drive Session</h2>
       <div>
-        Hello, {{.Session.FullName}}.  Your test-drive session is active.
+        Hello, {{.Session.FullName}}.
+        Your test-drive session is active until there's 5 minutes of inactivity.
       </div>
       <div>
-        To connect to your test-drive Couchbase Server from the SDK, use...
+        To connect to your test-drive Couchbase Server
+        over the internet from the SDK, use...
+      </div>
+      <div class="connection">
+        Java   ... [host / user / pswd and connect string examples here]
+        NodeJS ... [host / user / pswd and connect string examples here]
+        Python ... [host / user / pswd and connect string examples here]
+        C#     ... [host / user / pswd and connect string examples here]
       </div>
       <div>
-        <i>TBD... [host / user / pswd and connect string examples here]</i>
-      </div>
-      <div>
-        The following examples will run on against your test-drive instance...
+        The following online examples will also run
+        against your test-drive instance...
       </div>
     </div>
   {{end}}
@@ -165,6 +178,7 @@
                    type="hidden" value="{{.Lang}}"/>
 
             <textarea name="code"
+                      class="code"
                       wrap="off"
                       autocorrect="off"
                       autocomplete="off"
