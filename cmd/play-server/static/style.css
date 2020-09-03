@@ -62,27 +62,6 @@ a.button:hover {
   color: #333;
 }
 
-.session-info {
-  margin-top: 20px;
-  margin-bottom: 20px;
-  border-bottom: 1px solid #666;
-  padding-bottom: 40px;
-}
-
-.session-info h2 {
-  font-weight: bold;
-  color: #464;
-}
-
-.session-info div {
-  margin-bottom: 10px;
-  margin-left: 20px;
-}
-
-.session-info div.stop-test-drive {
-  margin-top: 20px;
-}
-
 .main {
   margin-bottom: 80px;
 }
@@ -102,57 +81,11 @@ a.button:hover {
   width: 95%;
 }
 
-.main .main-output {
-  flex-basis: 28rem;
-  flex-grow: 8;
-}
-
-.main .main-output iframe {
-  width: 90%;
-  height: 20rem;
-}
-
-input.run {
-  border: 2px solid #888;
-  padding: 5px 40px 5px 40px;
-  background-color: #9c9;
-  font-weight: bold;
-  color: #666;
-  cursor: pointer;
-}
-
-input.run:hover {
-  background-color: #9e9;
-  color: #666;
-}
-
-input.run.waiting, input.run.waiting:hover {
-  background-color: orange;
-  cursor: wait;
-}
-
 input, textarea, pre {
   display: block;
   margin-bottom: 10px;
   border: 1px solid #888;
   font-size: 13px;
-}
-
-textarea {
-  width: 95%;
-  height: 20rem;
-  overflow-y: scroll;
-  background-color: #333;
-  color: #eee;
-  font-family: courier, monospace;
-}
-
-iframe {
-  border: 1px solid #888;
-}
-
-ul.examples {
-  padding-left: 20px;
 }
 
 .flex-row {

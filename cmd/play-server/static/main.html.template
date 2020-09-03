@@ -4,11 +4,63 @@
   <title>Couchbase API / SDK Playground</title>
   <link rel="stylesheet" type="text/css" href="/static/style.css">
   <style>
+    .session-info {
+      margin-top: 20px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #666;
+      padding-bottom: 20px;
+    }
+    .session-info h2 {
+      font-weight: bold;
+      color: #464;
+    }
+    .session-info div {
+      margin-bottom: 10px;
+      margin-left: 20px;
+    }
+    .main ul.examples {
+      padding-left: 20px;
+    }
     .main ul.examples li {
       list-style: none;
     }
     .main ul.examples li.current {
       list-style: square;
+      color: green;
+    }
+    .main textarea.code {
+      width: 95%;
+      height: 20rem;
+      overflow-y: scroll;
+      background-color: #333;
+      color: #eee;
+      font-family: courier, monospace;
+    }
+    .main input.run {
+      border: 2px solid #888;
+      padding: 5px 40px 5px 40px;
+      background-color: #9c9;
+      font-weight: bold;
+      color: #666;
+      cursor: pointer;
+    }
+    .main input.run:hover {
+      background-color: #9e9;
+      color: #666;
+    }
+    .main input.run.waiting,
+    .main input.run.waiting:hover {
+      background-color: orange;
+      cursor: wait;
+    }
+    .main .main-output {
+      flex-basis: 28rem;
+      flex-grow: 8;
+    }
+    .main .main-output iframe.output {
+      width: 90%;
+      height: 20rem;
+      border: 1px solid #888;
     }
   </style>
   <script>
@@ -45,7 +97,9 @@
     </div>
 
     <div class="header-links">
-      {{if not .Session}}
+      {{if .Session}}
+        <a href="/session-exit?s={{.Session.SessionId}}">stop test-drive</a>
+      {{else}}
         <a href="/session">start a test-drive</a>
       {{end}}
       <a href="https://docs.couchbase.com">docs</a>
@@ -61,22 +115,16 @@
     <div class="session-info">
       <h2>Couchbase Server Test-Drive Session</h2>
       <div>
-        Hello, {{.Session.FullName}}.
+        Hello, {{.Session.FullName}}.  Your test-drive session is active.
       </div>
       <div>
-        Your test-drive session id is {{.Session.SessionId}}.
-      </div>
-      <div>
-        To connect to your test-drive Couchbase Server, use...
+        To connect to your test-drive Couchbase Server from the SDK, use...
       </div>
       <div>
         <i>TBD... [host / user / pswd and connect string examples here]</i>
       </div>
-      <div class="stop-test-drive">
-        <a class="button"
-           href="/session-exit?s={{.Session.SessionId}}">
-          stop test-drive
-        </a>
+      <div>
+        The following examples will run on against your test-drive instance...
       </div>
     </div>
   {{end}}
@@ -138,7 +186,7 @@
       {{if or .Name .Lang .Code}}
         <h2>Output</h2>
 
-        <iframe name="output" id="output"></iframe>
+        <iframe name="output" id="output" class="output"></iframe>
       {{end}}
     </div>
   </div>
