@@ -1,0 +1,11 @@
+ARG IMAGE_BASE=ubuntu:16.04
+
+FROM $IMAGE_BASE
+
+# Create couchbase user with UID 1000, which is necessary to match
+# the default boot2docker UID.
+RUN groupadd -g 1000 couchbase && useradd couchbase -u 1000 -g couchbase -M
+
+RUN mkdir -p /opt/couchbase/var
+
+VOLUME /opt/couchbase/var

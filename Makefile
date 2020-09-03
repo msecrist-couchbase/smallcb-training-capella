@@ -1,5 +1,7 @@
 IMAGE_NAME = smallcb
 
+IMAGE_FROM = couchbase
+
 CONTAINER_NUM = 0
 
 CONTAINER_PORTS = -p 8091-8096:8091-8096 -p 11210:11210
@@ -11,7 +13,12 @@ CONTAINER_EXTRAS = --cap-add=SYS_PTRACE
 # Build the docker image.
 build:
 	rm -rf vol-*
+	cat Dockerfile-from-$(IMAGE_FROM) \
+            Dockerfile-include-sdk \
+            Dockerfile-suffix > \
+            Dockerfile
 	docker build -t $(IMAGE_NAME) .
+	rm Dockerfile
 
 # Create the vol-snapshot directory.
 #
