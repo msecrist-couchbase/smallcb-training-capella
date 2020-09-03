@@ -13,14 +13,14 @@
   </style>
   <script>
     function onRunSubmit() {
-      var b = document.getElementById('run');
-      b.disabled = true;
-      b.className = "run waiting";
-
-      var o = document.getElementById('output');
-      o.contentDocument.body.innerHTML = 'waiting...';
-
       function checkDone() {
+        var b = document.getElementById('run');
+
+        b.disabled = true;
+        b.className = "run waiting";
+
+        var o = document.getElementById('output');
+
         var odoc = o.contentDocument || o.contentWindow.document;
         if (odoc.readyState == "complete" &&
             odoc.contentType == "text/plain") {
@@ -32,7 +32,7 @@
         setTimeout(checkDone, 500);
       }
 
-      setTimeout(checkDone, 1000);
+      setTimeout(checkDone, 50);
     }
   </script>
 </head>
