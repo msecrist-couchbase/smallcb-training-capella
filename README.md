@@ -196,6 +196,8 @@ SECURITY: need a CAPTCHA?
 
 SECURITY: need spam/flood throttling?
 
+SECURITY: need a bad-list of emails that we don't like?
+
 copy/pastable connection snippets for popular languages
   and SDK's?
   for >= zipcar mode?
