@@ -8,16 +8,13 @@ Instructions for use...
 
 One time setup/init/build steps...
 
-    # 1) Create the docker image smallcb,
+    # 1) To create the docker image 'smallcb',
     # which includes both couchbase-server & couchbase sdks...
     make build
 
-    # 2) Create the docker image smallcb-sdks,
-    # which includes only the couchbase sdks...
-    make IMAGE_FROM=base IMAGE_NAME=smallcb-sdks build
-
-    # 2) Use the smallcb docker image from step 1 to
-    # initialize a couchbase server with sample data,
+    # 2) Temporarily launch a smallcb docker image from step 1
+    # that initializes a couchbase-server with sample data
+    # and configured with lower resource utilization, in order
     # to create the reusable vol-snapshot subdirectory...
     make create
 
@@ -28,12 +25,20 @@ And, to start the web/app server...
 
     # Listens on port 8080 for web browser requests,
     # where some warmup time is needed (as it launches
-    # container instances via 'make restart' invocations)...
+    # container instances via 'make restart' invocations
+    # that are based on the vol-snapshot)...
     ./play-server
 
 For command-line usage/help...
 
     ./play-server -h
+
+-------------------------
+Aside...
+
+    # To create the docker image 'smallcb-sdks',
+    # which includes only the couchbase sdks...
+    make IMAGE_FROM=base IMAGE_NAME=smallcb-sdks build
 
 -------------------------
 TODO's...
