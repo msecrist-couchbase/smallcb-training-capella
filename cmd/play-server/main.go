@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"time"
 )
 
 var (
@@ -173,6 +174,17 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 			errs += 1
 		}
 		data["email"] = email
+
+		captcha := strings.TrimSpace(r.FormValue("captcha"))
+		if captcha == "" {
+			data["errCaptcha"] = "guess required"
+			errs += 1
+		} else if !CaptchaCheck(captcha) {
+			time.Sleep(10 * time.Second)
+
+			data["errCaptcha"] = "please guess again"
+			errs += 1
+		}
 
 		if errs <= 0 {
 			sessionId, err := sessions.SessionCreate(fullName, email)
