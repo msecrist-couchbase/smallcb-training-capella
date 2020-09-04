@@ -80,7 +80,9 @@ play-server-src = \
         cmd/play-server/main_flags.go \
         cmd/play-server/main_template.go \
         cmd/play-server/misc.go \
+        cmd/play-server/restarter.go \
         cmd/play-server/run.go \
+        cmd/play-server/run_session.go \
         cmd/play-server/session.go \
         cmd/play-server/captcha.go
 

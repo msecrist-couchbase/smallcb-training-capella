@@ -18,7 +18,11 @@ func Restarter(restarterId int, restartCh chan Restart,
 	containerPublishPortBase,
 	containerPublishPortSpan int,
 	portMapping [][]int) {
+	StatsNumInc("tot.restarter")
+
 	for restart := range restartCh {
+		StatsNumInc("tot.restarter.restart.beg")
+
 		start := time.Now()
 
 		cmd := exec.Command("make",
@@ -43,21 +47,29 @@ func Restarter(restarterId int, restartCh chan Restart,
 
 		stdOutErr, err := cmd.CombinedOutput()
 		if err != nil {
+			StatsNumInc("tot.restarter.restart.err")
+
 			log.Printf("ERROR: Restarter, restarterId: %d,"+
 				" containerId: %d, cmd: %v, stdOutErr: %s, err: %v",
 				restarterId, restart.ContainerId, cmd, stdOutErr, err)
 
 			go func(restart Restart) {
 				restartCh <- restart // Async try to restart again.
+
+				StatsNumInc("tot.restarter.restart.retrying")
 			}(restart)
 
 			continue
 		}
+
+		StatsNumInc("tot.restarter.restart.ok")
 
 		log.Printf("INFO: Restarter, restarterId: %d,"+
 			" containerId: %d, took: %s\n",
 			restarterId, restart.ContainerId, time.Since(start))
 
 		restart.DoneCh <- restart.ContainerId
+
+		StatsNumInc("tot.restarter.restart.end")
 	}
 }
