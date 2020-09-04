@@ -64,9 +64,13 @@ func HttpHandleAdminStats(w http.ResponseWriter, r *http.Request) {
 
 func HttpHandleAdminSessionsReleaseContainers(
 	w http.ResponseWriter, r *http.Request) {
-	sessions.ReleaseContainers(-1)
+	n := sessions.ReleaseContainers(-1)
 
-	w.Header().Set("Content-Type", "text/plain")
+	w.Header().Set("Content-Type", "application/json")
 
-	w.Write([]byte("ok"))
+	j, _ := json.MarshalIndent(map[string]interface{}{
+		"status": "ok", "released": n,
+	}, "", " ")
+
+	w.Write(j)
 }

@@ -179,7 +179,7 @@ func FullNameEmail(fullName, email string) string {
 // sessions, and asynchronously restart those
 // container instances -- use -1 to release all the
 // container instances.
-func (sessions *Sessions) ReleaseContainers(n int) {
+func (sessions *Sessions) ReleaseContainers(n int) int {
 	var ss []Session
 
 	sessions.m.Lock()
@@ -207,16 +207,22 @@ func (sessions *Sessions) ReleaseContainers(n int) {
 			s.ReleaseContainer()
 		}
 	}()
+
+	return len(ss)
 }
 
 // ------------------------------------------------
 
 func (s *Session) ReleaseContainer() {
 	if s.ContainerId >= 0 {
+		StatsNumInc("session.ReleaseContainer")
+
 		s.RestartCh <- Restart{
 			ContainerId: s.ContainerId,
 			ReadyCh:     s.ReadyCh,
 		}
+
+		StatsNumInc("session.ReleaseContainer.sent")
 	}
 
 	s.ContainerId = -1
