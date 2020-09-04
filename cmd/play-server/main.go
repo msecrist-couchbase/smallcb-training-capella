@@ -133,6 +133,8 @@ func HttpMuxInit(mux *http.ServeMux) {
 // ------------------------------------------------
 
 func HttpHandleMain(w http.ResponseWriter, r *http.Request) {
+	StatsNumInc("tot.http.main")
+
 	msg := r.FormValue("m")
 	if Msgs[msg] != "" {
 		msg = Msgs[msg]
@@ -161,6 +163,8 @@ func HttpHandleMain(w http.ResponseWriter, r *http.Request) {
 // ------------------------------------------------
 
 func HttpHandleSessionExit(w http.ResponseWriter, r *http.Request) {
+	StatsNumInc("tot.http.session-exit")
+
 	sessions.SessionExit(r.FormValue("s"))
 
 	http.Redirect(w, r, "/?m=session-exit", http.StatusSeeOther)
@@ -169,9 +173,13 @@ func HttpHandleSessionExit(w http.ResponseWriter, r *http.Request) {
 // ------------------------------------------------
 
 func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
+	StatsNumInc("tot.http.session")
+
 	data := map[string]interface{}{}
 
 	if r.Method == "POST" {
+		StatsNumInc("tot.http.session.post")
+
 		errs := 0
 
 		fullName := strings.TrimSpace(r.FormValue("fullName"))
@@ -193,6 +201,8 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 			data["errCaptcha"] = "guess required"
 			errs += 1
 		} else if !CaptchaCheck(captcha) {
+			StatsNumInc("tot.http.session.post.err-captcha")
+
 			time.Sleep(10 * time.Second)
 
 			data["errCaptcha"] = "please guess again"
@@ -200,15 +210,25 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 		}
 
 		if errs <= 0 {
+			StatsNumInc("tot.http.session.post.create")
+
 			sessionId, err := sessions.SessionCreate(fullName, email)
 			if err == nil {
+				StatsNumInc("tot.http.session.post.create.ok")
+
 				http.Redirect(w, r, "/?s="+sessionId, http.StatusSeeOther)
 				return
 			}
 
+			StatsNumInc("tot.http.session.post.create.err")
+
 			data["err"] = fmt.Sprintf("Could not create session - "+
 				"please try again later. (%v)", err)
 		}
+
+		StatsNumInc("tot.http.session.post.err")
+	} else {
+		StatsNumInc("tot.http.session.get")
 	}
 
 	captchaURL, err := CaptchaGenerateBase64ImageDataURL(240, 80, *maxCaptchas)
@@ -230,6 +250,8 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 // ------------------------------------------------
 
 func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
+	StatsNumInc("tot.http.run")
+
 	session := sessions.SessionGet(r.FormValue("s"))
 
 	lang := r.FormValue("lang")
@@ -240,6 +262,8 @@ func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 	ok, err := CheckLangCode(lang, code, *codeMaxLen)
 	if ok {
 		if session != nil {
+			StatsNumInc("tot.http.run.session")
+
 			result, err = RunLangCodeSession(
 				r.Context(), session,
 				ExecUser, ExecPrefixes[lang],
@@ -248,7 +272,14 @@ func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 				*containerNamePrefix,
 				*containerVolPrefix,
 				restartCh)
+			if err != nil {
+				StatsNumInc("tot.http.run.session.err")
+			} else {
+				StatsNumInc("tot.http.run.session.ok")
+			}
 		} else {
+			StatsNumInc("tot.http.run.single")
+
 			result, err = RunLangCode(
 				r.Context(),
 				ExecUser, ExecPrefixes[lang],
@@ -257,10 +288,17 @@ func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 				*containerNamePrefix,
 				*containerVolPrefix,
 				restartCh)
+			if err != nil {
+				StatsNumInc("tot.http.run.single.err")
+			} else {
+				StatsNumInc("tot.http.run.single.ok")
+			}
 		}
 	}
 
 	if err != nil {
+		StatsNumInc("tot.http.run.err")
+
 		http.Error(w,
 			http.StatusText(http.StatusInternalServerError)+
 				fmt.Sprintf(", HttpHandleRun, err: %v", err),
@@ -268,6 +306,8 @@ func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 		log.Printf("ERROR: HttpHandleRun, err: %v", err)
 		return
 	}
+
+	StatsNumInc("tot.http.run.ok")
 
 	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
 
