@@ -217,6 +217,8 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 // ------------------------------------------------
 
 func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
+	session := sessions.SessionGet(r.FormValue("s"))
+
 	lang := r.FormValue("lang")
 	code := r.FormValue("code")
 
@@ -224,13 +226,25 @@ func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 
 	ok, err := CheckLangCode(lang, code, *codeMaxLen)
 	if ok {
-		result, err = RunLangCode(r.Context(),
-			ExecUser, ExecPrefixes[lang],
-			lang, code, *codeDuration, readyCh,
-			*containerWaitDuration,
-			*containerNamePrefix,
-			*containerVolPrefix,
-			restartCh)
+		if session != nil {
+			result, err = RunLangCodeSession(
+				r.Context(), session,
+				ExecUser, ExecPrefixes[lang],
+				lang, code, *codeDuration, readyCh,
+				*containerWaitDuration,
+				*containerNamePrefix,
+				*containerVolPrefix,
+				restartCh)
+		} else {
+			result, err = RunLangCode(
+				r.Context(),
+				ExecUser, ExecPrefixes[lang],
+				lang, code, *codeDuration, readyCh,
+				*containerWaitDuration,
+				*containerNamePrefix,
+				*containerVolPrefix,
+				restartCh)
+		}
 	}
 
 	if err != nil {
