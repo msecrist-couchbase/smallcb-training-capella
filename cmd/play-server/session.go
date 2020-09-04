@@ -16,8 +16,8 @@ type Sessions struct {
 type Session struct {
 	SessionIdent
 
-	State       string
 	ContainerId int
+	RestartCh   chan<- Restart
 }
 
 type SessionIdent struct {
@@ -115,6 +115,7 @@ func (s *Sessions) SessionCreate(fullName, email string) (sessionId string, err 
 			CBUser:    sessionId[:16],
 			CBPswd:    sessionId[16:],
 		},
+		ContainerId: -1,
 	}
 
 	sessions.mapBySessionId[sessionId] = session

@@ -13,45 +13,41 @@ func RunLangCodeSession(ctx context.Context, session *Session, user,
 	containerNamePrefix,
 	containerVolPrefix string,
 	restartCh chan<- Restart) ([]byte, error) {
-	// TODO.
+	if session != nil && session.ContainerId < 0 {
+		containerId, err := WaitForReadyContainer(ctx, readyCh, containerWaitDuration)
+		if err != nil {
+			return nil, err
+		}
 
-	// Atomically grab a containerId token, blocking
-	// until a container instance is ready or we timeout.
-	var containerId int
-
-	select {
-	case containerId = <-readyCh:
 		defer func() {
-			// If we didn't use the container and mess it up,
+			// If we didn't use the container (so it's clean),
 			// we can immediately put the containerId token
-			// back into the readyCh for the next request.
+			// back into the readyCh for the next client.
 			if containerId >= 0 {
 				readyCh <- containerId
 			}
 		}()
 
-	case <-time.After(containerWaitDuration):
-		return nil, fmt.Errorf("timeout waiting for container instance,"+
-			" duration: %v", containerWaitDuration)
+		session = sessions.SessionAccess(session.SessionId,
+			func(session *Session) *Session {
+				session.ContainerId = containerId
+				session.RestartCh = restartCh
 
-	case <-ctx.Done():
-		// Client canceled/timed-out while we were waiting.
-		return nil, ctx.Err()
+				rv := *session // Copy.
+
+				containerId = -1 // Session now owns the containerId.
+
+				return &rv
+			})
+	}
+
+	if session == nil {
+		return nil, fmt.Errorf("RunLangCodeSession, no session")
 	}
 
 	result, err := RunLangCodeContainer(ctx, user,
 		execPrefix, lang, code, codeDuration,
-		containerId, containerNamePrefix, containerVolPrefix)
-
-	go func(containerId int) {
-		restartCh <- Restart{
-			ContainerId: containerId,
-			DoneCh:      readyCh,
-		}
-	}(containerId)
-
-	// The restartCh now owns the containerId token.
-	containerId = -1
+		session.ContainerId, containerNamePrefix, containerVolPrefix)
 
 	return result, err
 }

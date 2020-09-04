@@ -32,36 +32,26 @@ func CheckLangCode(lang, code string, codeMaxLen int) (
 
 // ------------------------------------------------
 
-func RunLangCode(ctx context.Context, user,
-	execPrefix, lang, code string, codeDuration time.Duration,
+func RunLangCode(ctx context.Context, user, execPrefix,
+	lang, code string, codeDuration time.Duration,
 	readyCh chan int,
 	containerWaitDuration time.Duration,
 	containerNamePrefix,
 	containerVolPrefix string,
 	restartCh chan<- Restart) ([]byte, error) {
-	// Atomically grab a containerId token, blocking
-	// until a container instance is ready or we timeout.
-	var containerId int
-
-	select {
-	case containerId = <-readyCh:
-		defer func() {
-			// If we didn't use the container and mess it up,
-			// we can immediately put the containerId token
-			// back into the readyCh for the next request.
-			if containerId >= 0 {
-				readyCh <- containerId
-			}
-		}()
-
-	case <-time.After(containerWaitDuration):
-		return nil, fmt.Errorf("timeout waiting for container instance,"+
-			" duration: %v", containerWaitDuration)
-
-	case <-ctx.Done():
-		// Client canceled/timed-out while we were waiting.
-		return nil, ctx.Err()
+	containerId, err := WaitForReadyContainer(ctx, readyCh, containerWaitDuration)
+	if err != nil {
+		return nil, err
 	}
+
+	defer func() {
+		// If we didn't use the container (so it's clean),
+		// we can immediately put the containerId token
+		// back into the readyCh for the next client.
+		if containerId >= 0 {
+			readyCh <- containerId
+		}
+	}()
 
 	result, err := RunLangCodeContainer(ctx, user,
 		execPrefix, lang, code, codeDuration,
@@ -82,8 +72,8 @@ func RunLangCode(ctx context.Context, user,
 
 // ------------------------------------------------
 
-func RunLangCodeContainer(ctx context.Context, user,
-	execPrefix, lang, code string, codeDuration time.Duration,
+func RunLangCodeContainer(ctx context.Context, user, execPrefix,
+	lang, code string, codeDuration time.Duration,
 	containerId int,
 	containerNamePrefix,
 	containerVolPrefix string) ([]byte, error) {
@@ -131,62 +121,6 @@ func RunLangCodeContainer(ctx context.Context, user,
 
 // ------------------------------------------------
 
-type Restart struct {
-	ContainerId int
-	DoneCh      chan<- int
-}
-
-func Restarter(restarterId int, restartCh chan Restart,
-	containerPublishAddr string,
-	containerPublishPortBase,
-	containerPublishPortSpan int,
-	portMapping [][]int) {
-	for restart := range restartCh {
-		start := time.Now()
-
-		cmd := exec.Command("make",
-			fmt.Sprintf("CONTAINER_NUM=%d", restart.ContainerId))
-
-		portBase := containerPublishPortBase +
-			(containerPublishPortSpan * restart.ContainerId)
-
-		ports := make([]string, 0, len(portMapping))
-		for _, port := range portMapping {
-			ports = append(ports, fmt.Sprintf("-p %s:%d:%d/tcp",
-				containerPublishAddr, portBase+port[1], port[0]))
-		}
-
-		cmd.Args = append(cmd.Args,
-			"CONTAINER_PORTS="+strings.Join(ports, " "))
-
-		cmd.Args = append(cmd.Args, "restart")
-
-		log.Printf("INFO: Restarter, restarterId: %d, containerId: %d\n",
-			restarterId, restart.ContainerId)
-
-		stdOutErr, err := cmd.CombinedOutput()
-		if err != nil {
-			log.Printf("ERROR: Restarter, restarterId: %d,"+
-				" containerId: %d, cmd: %v, stdOutErr: %s, err: %v",
-				restarterId, restart.ContainerId, cmd, stdOutErr, err)
-
-			go func(restart Restart) {
-				restartCh <- restart // Async try to restart again.
-			}(restart)
-
-			continue
-		}
-
-		log.Printf("INFO: Restarter, restarterId: %d,"+
-			" containerId: %d, took: %s\n",
-			restarterId, restart.ContainerId, time.Since(start))
-
-		restart.DoneCh <- restart.ContainerId
-	}
-}
-
-// ------------------------------------------------
-
 // Run a cmd, waiting for it to finish or timeout,
 // returning its combined stdout and stderr result.
 func ExecCmd(ctx context.Context, cmd *exec.Cmd, duration time.Duration) (
@@ -221,4 +155,22 @@ func ExecCmd(ctx context.Context, cmd *exec.Cmd, duration time.Duration) (
 	}
 
 	return b.Bytes(), nil
+}
+
+// ------------------------------------------------
+
+func WaitForReadyContainer(ctx context.Context, readyCh chan int,
+	containerWaitDuration time.Duration) (int, error) {
+	select {
+	case containerId := <-readyCh:
+		return containerId, nil
+
+	case <-time.After(containerWaitDuration):
+		return -1, fmt.Errorf("timeout waiting for container instance,"+
+			" duration: %v", containerWaitDuration)
+
+	case <-ctx.Done():
+		// Client canceled/timed-out while we were waiting.
+		return -1, ctx.Err()
+	}
 }
