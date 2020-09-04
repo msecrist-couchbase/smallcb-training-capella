@@ -59,3 +59,14 @@ func HttpHandleAdminStats(w http.ResponseWriter, r *http.Request) {
 
 	w.Write(result)
 }
+
+// ------------------------------------------------
+
+func HttpHandleAdminSessionsReleaseContainers(
+	w http.ResponseWriter, r *http.Request) {
+	sessions.ReleaseContainers(-1)
+
+	w.Header().Set("Content-Type", "text/plain")
+
+	w.Write([]byte("ok"))
+}

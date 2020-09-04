@@ -99,7 +99,7 @@ func main() {
 	for containerId := 0; containerId < *containers; containerId++ {
 		restartCh <- Restart{
 			ContainerId: containerId,
-			DoneCh:      readyCh,
+			ReadyCh:     readyCh,
 		}
 	}
 

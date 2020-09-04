@@ -45,9 +45,9 @@ func RunRequestSingle(req RunRequest, readyCh chan int,
 	}
 
 	defer func() {
-		// If we didn't use the container (so it's clean),
-		// we can immediately put the containerId token
-		// back into the readyCh for the next client.
+		// If we didn't use the container, we
+		// put the containerId token back into
+		// the readyCh for the next client's use.
 		if containerId >= 0 {
 			readyCh <- containerId
 		}
@@ -58,7 +58,7 @@ func RunRequestSingle(req RunRequest, readyCh chan int,
 	go func(containerId int) {
 		restartCh <- Restart{
 			ContainerId: containerId,
-			DoneCh:      readyCh,
+			ReadyCh:     readyCh,
 		}
 	}(containerId)
 
@@ -103,7 +103,7 @@ func RunRequestInContainer(req RunRequest, containerId int) (
 	codeBytes := []byte(strings.ReplaceAll(
 		req.code, "\r\n", "\n"))
 
-	// File mode is 0777 executable, for scripts like 'code.py'.
+	// File mode 0777 executable, for scripts like 'code.py'.
 	err = ioutil.WriteFile(codePathHost, codeBytes, 0777)
 	if err != nil {
 		return nil, err
@@ -118,16 +118,16 @@ func RunRequestInContainer(req RunRequest, containerId int) (
 	if len(req.execPrefix) > 0 {
 		// Case of an execPrefix like "/run-java.sh".
 		cmd = exec.Command("docker", "exec",
-			"-u", req.execUser,
-			containerName, req.execPrefix, codePathInst)
+			"-u", req.execUser, containerName,
+			req.execPrefix, codePathInst)
 	} else {
 		cmd = exec.Command("docker", "exec",
-			"-u", req.execUser,
-			containerName, codePathInst)
+			"-u", req.execUser, containerName,
+			codePathInst)
 	}
 
-	log.Printf("INFO: RunRequestInContainer, containerId: %d, req.lang: %s\n",
-		containerId, req.lang)
+	log.Printf("INFO: RunRequest, containerId: %d,"+
+		" req.lang: %s\n", containerId, req.lang)
 
 	return ExecCmd(req.ctx, cmd, req.codeDuration)
 }
@@ -136,8 +136,8 @@ func RunRequestInContainer(req RunRequest, containerId int) (
 
 // Run a cmd, waiting for it to finish or timeout,
 // returning its combined stdout and stderr result.
-func ExecCmd(ctx context.Context, cmd *exec.Cmd, duration time.Duration) (
-	[]byte, error) {
+func ExecCmd(ctx context.Context, cmd *exec.Cmd,
+	duration time.Duration) ([]byte, error) {
 	var b bytes.Buffer
 
 	cmd.Stdout = &b

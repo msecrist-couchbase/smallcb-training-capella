@@ -6,8 +6,7 @@ import (
 )
 
 func RunRequestSession(session *Session, req RunRequest,
-	readyCh chan int,
-	containerWaitDuration time.Duration,
+	readyCh chan int, containerWaitDuration time.Duration,
 	restartCh chan<- Restart) ([]byte, error) {
 	if session != nil && session.ContainerId < 0 {
 		containerId, err := WaitForReadyContainer(
@@ -17,9 +16,9 @@ func RunRequestSession(session *Session, req RunRequest,
 		}
 
 		defer func() {
-			// If we didn't use the container (so it's clean),
-			// we can immediately put the containerId token
-			// back into the readyCh for the next client.
+			// If we didn't use the container, we
+			// put the containerId token back into
+			// the readyCh for the next client's use.
 			if containerId >= 0 {
 				readyCh <- containerId
 			}
@@ -29,11 +28,13 @@ func RunRequestSession(session *Session, req RunRequest,
 			func(session *Session) *Session {
 				session.ContainerId = containerId
 				session.RestartCh = restartCh
+				session.ReadyCh = readyCh
 				session.TouchedAt = time.Now()
 
 				rv := *session // Copy.
 
-				containerId = -1 // Session now owns the containerId.
+				// Session owns the containerId.
+				containerId = -1
 
 				return &rv
 			})

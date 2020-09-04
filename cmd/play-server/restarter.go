@@ -10,7 +10,7 @@ import (
 
 type Restart struct {
 	ContainerId int
-	DoneCh      chan<- int
+	ReadyCh     chan<- int
 }
 
 func Restarter(restarterId int, restartCh chan Restart,
@@ -77,7 +77,7 @@ func Restarter(restarterId int, restartCh chan Restart,
 				" containerId: %d, took: %s\n",
 				restarterId, restart.ContainerId, time.Since(start))
 
-			restart.DoneCh <- restart.ContainerId
+			restart.ReadyCh <- restart.ContainerId
 
 			StatsNumInc("Restarter.restart.ok.sent")
 		}

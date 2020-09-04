@@ -20,7 +20,9 @@ type Session struct {
 	SessionIdent
 
 	ContainerId int
-	RestartCh   chan<- Restart
+
+	RestartCh chan<- Restart
+	ReadyCh   chan int
 
 	TouchedAt time.Time
 }
@@ -167,4 +169,43 @@ func (s *Sessions) SessionCreate(fullName, email string) (sessionId string, err 
 
 func FullNameEmail(fullName, email string) string {
 	return fullName + "-" + email
+}
+
+// ------------------------------------------------
+
+// Release a given number of containers held by
+// sessions, and asynchronously restart those
+// container instances -- use -1 to release all the
+// container instances.
+func (sessions *Sessions) ReleaseContainers(n int) {
+	var ss []Session
+
+	sessions.m.Lock()
+
+	for _, session := range sessions.mapBySessionId {
+		if n == 0 {
+			break
+		}
+
+		if session.ContainerId >= 0 {
+			ss = append(ss, *session) // Copy.
+
+			session.ContainerId = -1
+			session.RestartCh = nil
+			session.ReadyCh = nil
+
+			n -= 1
+		}
+	}
+
+	sessions.m.Unlock()
+
+	go func() {
+		for _, s := range ss {
+			s.RestartCh <- Restart{
+				ContainerId: s.ContainerId,
+				ReadyCh:     s.ReadyCh,
+			}
+		}
+	}()
 }
