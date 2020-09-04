@@ -13,6 +13,8 @@ import (
 type MainTemplateData struct {
 	Msg string
 
+	Host string
+
 	Session *Session // May be nil.
 
 	ExamplesDir string
@@ -27,8 +29,8 @@ type MainTemplateData struct {
 }
 
 func MainTemplateEmit(w http.ResponseWriter,
-	staticDir, msg string, session *Session, examplesDir string,
-	name, lang, code string) {
+	staticDir, msg, host string, session *Session,
+	examplesDir string, name, lang, code string) {
 	examples, exampleNameTitles, err :=
 		ReadExamples(staticDir + "/" + examplesDir)
 	if err != nil {
@@ -53,7 +55,7 @@ func MainTemplateEmit(w http.ResponseWriter,
 		if code == "" {
 			code = MapGetString(example, "code")
 
-			code = CodeTemplateExecute(code, session)
+			code = CodeTemplateExecute(host, session, code)
 		}
 
 		infoBefore = MapGetString(example, "infoBefore")
@@ -63,6 +65,8 @@ func MainTemplateEmit(w http.ResponseWriter,
 
 	data := &MainTemplateData{
 		Msg: msg,
+
+		Host: host,
 
 		Session: session,
 
@@ -97,20 +101,22 @@ func MainTemplateEmit(w http.ResponseWriter,
 
 // ------------------------------------------------
 
-func CodeTemplateExecute(code string, session *Session) string {
-	if session == nil {
-		session = &Session{
-			SessionIdent: SessionIdent{
-				CBUser: "Administrator",
-				CBPswd: "password",
-			},
-		}
+func CodeTemplateExecute(host string, session *Session, code string) string {
+	data := map[string]interface{}{
+		"CBHost": host,
+		"CBUser": "Administrator",
+		"CBPswd": "password",
+	}
+
+	if session != nil {
+		data["CBUser"] = session.CBUser
+		data["CBPswd"] = session.CBPswd
 	}
 
 	var b bytes.Buffer
 
 	err := textTemplate.Must(textTemplate.New("code").Parse(code)).
-		Execute(&b, session)
+		Execute(&b, data)
 	if err != nil {
 		log.Printf("ERROR: CodeTemplateExecute, err: %v", err)
 

@@ -130,7 +130,7 @@
         over the internet...
       </div>
       <div class="connection">
-        REST / web admin UI  : http://{{.Session.CBUser}}:{{.Session.CBPswd}}@try.couchbase.dev:8091
+        REST / web admin UI  : http://{{.Session.CBUser}}:{{.Session.CBPswd}}@{{.Host}}:8091
         Couchbase Java SDK   : [host / user / pswd and connect string examples here]
         Couchbase NodeJS SDK : [host / user / pswd and connect string examples here]
         Couchbase Python SDK : PasswordAuthenticator('{{.Session.CBUser}}', '{{.Session.CBPswd}}')

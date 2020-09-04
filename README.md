@@ -157,9 +157,6 @@ use docker networking features?
   use docker network overlay --internal mode?
   perhaps too complex.
 
-need to edit /etc/hosts file on >= zipcar mode
-  so that couchbase://try.couchbase.dev:8091 connection string works?
-
 use tmpfs for faster restarts and less real i/o,
   at the cost of RAM?
   docker run --tmpfs flag?
@@ -305,6 +302,10 @@ more use cases with persistent data?
     serverless event processing?
 
 dev-mode config is reusable for laptops, too?
+
+--------------------------
+DONE: using docker --add-host to add to /etc/hosts file so that
+  couchbase://try.couchbase.dev:8091 connection string works.
 
 --------------------------
 handwave design ideas...

@@ -20,6 +20,9 @@ var (
 	containerVolPrefix = flag.String("containerVolPrefix", "vol-instances/vol-",
 		"prefix of the volume directories of container instances")
 
+	containerPublishHost = flag.String("containerPublishHost", "try.couchbase.dev",
+		"host to use for generating connection URL's")
+
 	containerPublishAddr = flag.String("containerPublishAddr", "127.0.0.1",
 		"addr for publishing container instance ports")
 
