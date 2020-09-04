@@ -40,6 +40,15 @@ var sessions = Sessions{
 // ------------------------------------------------
 
 func (sessions *Sessions) SessionGet(sessionId string) *Session {
+	return sessions.SessionAccess(sessionId, func(session *Session) *Session {
+		rv := *session // Returns a copy.
+
+		return &rv
+	})
+}
+
+func (sessions *Sessions) SessionAccess(sessionId string,
+	cb func(*Session) *Session) *Session {
 	sessions.m.Lock()
 	defer sessions.m.Unlock()
 
@@ -48,9 +57,7 @@ func (sessions *Sessions) SessionGet(sessionId string) *Session {
 		return nil
 	}
 
-	rv := *session // Copy.
-
-	return &rv
+	return cb(session)
 }
 
 func (sessions *Sessions) SessionExit(sessionId string) error {
