@@ -120,6 +120,10 @@ capture email to get a longer-running
   dev tire-kicking instance?
   full name?  password?
   CAPTCHA?
+  CAPTCHA random seed looks week -- seeing repeats on process start?
+  panics at rand.Intn()?
+
+change the Administrator password in 'make create'?
 
 can i have >1 longer running instance per email?
 
