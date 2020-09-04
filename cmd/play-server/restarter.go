@@ -18,14 +18,14 @@ func Restarter(restarterId int, restartCh chan Restart,
 	containerPublishPortBase,
 	containerPublishPortSpan int,
 	portMapping [][]int) {
-	StatsNumInc("Restarter tot")
+	StatsNumInc("Restarter")
 
 	for restart := range restartCh {
-		StatsNumInc("Restarter.loop.beg tot")
+		StatsNumInc("Restarter.loop.beg")
 
 		start := time.Now()
 
-		StatsNum("Restarter.containerId max",
+		StatsNum("Restarter.containerId:max",
 			func(cur uint64) uint64 {
 				if uint64(restart.ContainerId) > cur {
 					return uint64(restart.ContainerId)
@@ -33,7 +33,7 @@ func Restarter(restarterId int, restartCh chan Restart,
 				return cur
 			})
 
-		StatsNum("Restarter.containerId min",
+		StatsNum("Restarter.containerId:min",
 			func(cur uint64) uint64 {
 				if uint64(restart.ContainerId) < cur {
 					return uint64(restart.ContainerId)
@@ -61,25 +61,25 @@ func Restarter(restarterId int, restartCh chan Restart,
 		log.Printf("INFO: Restarter, restarterId: %d, containerId: %d\n",
 			restarterId, restart.ContainerId)
 
-		StatsNumInc("Restarter.restart tot")
+		StatsNumInc("Restarter.restart")
 
 		stdOutErr, err := cmd.CombinedOutput()
 		if err != nil {
-			StatsNumInc("Restarter.restart.err tot")
+			StatsNumInc("Restarter.restart.err")
 
 			log.Printf("ERROR: Restarter, restarterId: %d,"+
 				" containerId: %d, cmd: %v, stdOutErr: %s, err: %v",
 				restarterId, restart.ContainerId, cmd, stdOutErr, err)
 
 			go func(restart Restart) {
-				StatsNumInc("Restarter.restart.err.retry tot")
+				StatsNumInc("Restarter.restart.err.retry")
 
 				restartCh <- restart // Async retry to restart again.
 
-				StatsNumInc("Restarter.restart.err.retry.sent tot")
+				StatsNumInc("Restarter.restart.err.retry.sent")
 			}(restart)
 		} else {
-			StatsNumInc("Restarter.restart.ok tot")
+			StatsNumInc("Restarter.restart.ok")
 
 			log.Printf("INFO: Restarter, restarterId: %d,"+
 				" containerId: %d, took: %s\n",
@@ -87,9 +87,9 @@ func Restarter(restarterId int, restartCh chan Restart,
 
 			restart.DoneCh <- restart.ContainerId
 
-			StatsNumInc("Restarter.restart.ok.sent tot")
+			StatsNumInc("Restarter.restart.ok.sent")
 		}
 
-		StatsNumInc("Restarter.loop.end tot")
+		StatsNumInc("Restarter.loop.end")
 	}
 }

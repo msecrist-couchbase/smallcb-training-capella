@@ -133,7 +133,7 @@ func HttpMuxInit(mux *http.ServeMux) {
 // ------------------------------------------------
 
 func HttpHandleMain(w http.ResponseWriter, r *http.Request) {
-	StatsNumInc("http.Main tot")
+	StatsNumInc("http.Main")
 
 	msg := r.FormValue("m")
 	if Msgs[msg] != "" {
@@ -163,7 +163,7 @@ func HttpHandleMain(w http.ResponseWriter, r *http.Request) {
 // ------------------------------------------------
 
 func HttpHandleSessionExit(w http.ResponseWriter, r *http.Request) {
-	StatsNumInc("http.SessionExit tot")
+	StatsNumInc("http.SessionExit")
 
 	sessions.SessionExit(r.FormValue("s"))
 
@@ -173,12 +173,12 @@ func HttpHandleSessionExit(w http.ResponseWriter, r *http.Request) {
 // ------------------------------------------------
 
 func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
-	StatsNumInc("http.Session tot")
+	StatsNumInc("http.Session")
 
 	data := map[string]interface{}{}
 
 	if r.Method == "POST" {
-		StatsNumInc("http.Session.post tot")
+		StatsNumInc("http.Session.post")
 
 		errs := 0
 
@@ -201,7 +201,7 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 			data["errCaptcha"] = "guess required"
 			errs += 1
 		} else if !CaptchaCheck(captcha) {
-			StatsNumInc("http.Session.post.err-captcha tot")
+			StatsNumInc("http.Session.post.err-captcha")
 
 			time.Sleep(10 * time.Second)
 
@@ -210,25 +210,25 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 		}
 
 		if errs <= 0 {
-			StatsNumInc("http.Session.post.create tot")
+			StatsNumInc("http.Session.post.create")
 
 			sessionId, err := sessions.SessionCreate(fullName, email)
 			if err == nil {
-				StatsNumInc("http.Session.post.create.ok tot")
+				StatsNumInc("http.Session.post.create.ok")
 
 				http.Redirect(w, r, "/?s="+sessionId, http.StatusSeeOther)
 				return
 			}
 
-			StatsNumInc("http.Session.post.create.err tot")
+			StatsNumInc("http.Session.post.create.err")
 
 			data["err"] = fmt.Sprintf("Could not create session - "+
 				"please try again later. (%v)", err)
 		}
 
-		StatsNumInc("http.Session.post.err tot")
+		StatsNumInc("http.Session.post.err")
 	} else {
-		StatsNumInc("http.Session.get tot")
+		StatsNumInc("http.Session.get")
 	}
 
 	captchaURL, err := CaptchaGenerateBase64ImageDataURL(240, 80, *maxCaptchas)
@@ -250,7 +250,7 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 // ------------------------------------------------
 
 func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
-	StatsNumInc("http.Run tot")
+	StatsNumInc("http.Run")
 
 	session := sessions.SessionGet(r.FormValue("s"))
 
@@ -262,7 +262,7 @@ func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 	ok, err := CheckLangCode(lang, code, *codeMaxLen)
 	if ok {
 		if session != nil {
-			StatsNumInc("http.Run.session tot")
+			StatsNumInc("http.Run.session")
 
 			result, err = RunLangCodeSession(
 				r.Context(), session,
@@ -273,12 +273,12 @@ func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 				*containerVolPrefix,
 				restartCh)
 			if err != nil {
-				StatsNumInc("http.Run.session.err tot")
+				StatsNumInc("http.Run.session.err")
 			} else {
-				StatsNumInc("http.Run.session.ok tot")
+				StatsNumInc("http.Run.session.ok")
 			}
 		} else {
-			StatsNumInc("http.Run.single tot")
+			StatsNumInc("http.Run.single")
 
 			result, err = RunLangCode(
 				r.Context(),
@@ -289,15 +289,15 @@ func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 				*containerVolPrefix,
 				restartCh)
 			if err != nil {
-				StatsNumInc("http.Run.single.err tot")
+				StatsNumInc("http.Run.single.err")
 			} else {
-				StatsNumInc("http.Run.single.ok tot")
+				StatsNumInc("http.Run.single.ok")
 			}
 		}
 	}
 
 	if err != nil {
-		StatsNumInc("http.Run.err tot")
+		StatsNumInc("http.Run.err")
 
 		http.Error(w,
 			http.StatusText(http.StatusInternalServerError)+
@@ -307,7 +307,7 @@ func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	StatsNumInc("http.Run.ok tot")
+	StatsNumInc("http.Run.ok")
 
 	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
 
