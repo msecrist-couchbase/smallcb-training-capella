@@ -33,14 +33,6 @@ func Restarter(restarterId int, restartCh chan Restart,
 				return cur
 			})
 
-		StatsNum("Restarter.containerId:min",
-			func(cur uint64) uint64 {
-				if uint64(restart.ContainerId) < cur {
-					return uint64(restart.ContainerId)
-				}
-				return cur
-			})
-
 		cmd := exec.Command("make",
 			fmt.Sprintf("CONTAINER_NUM=%d", restart.ContainerId))
 
