@@ -1,20 +1,17 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	"time"
 )
 
-func RunLangCodeSession(ctx context.Context, session *Session, user,
-	execPrefix, lang, code string, codeDuration time.Duration,
+func RunRequestSession(session *Session, req RunRequest,
 	readyCh chan int,
 	containerWaitDuration time.Duration,
-	containerNamePrefix,
-	containerVolPrefix string,
 	restartCh chan<- Restart) ([]byte, error) {
 	if session != nil && session.ContainerId < 0 {
-		containerId, err := WaitForReadyContainer(ctx, readyCh, containerWaitDuration)
+		containerId, err := WaitForReadyContainer(
+			req.ctx, readyCh, containerWaitDuration)
 		if err != nil {
 			return nil, err
 		}
@@ -32,6 +29,7 @@ func RunLangCodeSession(ctx context.Context, session *Session, user,
 			func(session *Session) *Session {
 				session.ContainerId = containerId
 				session.RestartCh = restartCh
+				session.TouchedAt = time.Now()
 
 				rv := *session // Copy.
 
@@ -42,12 +40,8 @@ func RunLangCodeSession(ctx context.Context, session *Session, user,
 	}
 
 	if session == nil {
-		return nil, fmt.Errorf("RunLangCodeSession, no session")
+		return nil, fmt.Errorf("RunRequestSession, no session")
 	}
 
-	result, err := RunLangCodeContainer(ctx, user,
-		execPrefix, lang, code, codeDuration,
-		session.ContainerId, containerNamePrefix, containerVolPrefix)
-
-	return result, err
+	return RunRequestInContainer(req, session.ContainerId)
 }

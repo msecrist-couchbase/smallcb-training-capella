@@ -32,14 +32,14 @@ func CheckLangCode(lang, code string, codeMaxLen int) (
 
 // ------------------------------------------------
 
-func RunLangCode(ctx context.Context, user, execPrefix,
-	lang, code string, codeDuration time.Duration,
-	readyCh chan int,
+// RunRequestSingle waits for a ready container instance,
+// runs code once (just a single request, not a session),
+// then asynchronously restarts that container instance.
+func RunRequestSingle(req RunRequest, readyCh chan int,
 	containerWaitDuration time.Duration,
-	containerNamePrefix,
-	containerVolPrefix string,
 	restartCh chan<- Restart) ([]byte, error) {
-	containerId, err := WaitForReadyContainer(ctx, readyCh, containerWaitDuration)
+	containerId, err := WaitForReadyContainer(
+		req.ctx, readyCh, containerWaitDuration)
 	if err != nil {
 		return nil, err
 	}
@@ -53,9 +53,7 @@ func RunLangCode(ctx context.Context, user, execPrefix,
 		}
 	}()
 
-	result, err := RunLangCodeContainer(ctx, user,
-		execPrefix, lang, code, codeDuration,
-		containerId, containerNamePrefix, containerVolPrefix)
+	result, err := RunRequestInContainer(req, containerId)
 
 	go func(containerId int) {
 		restartCh <- Restart{
@@ -72,13 +70,24 @@ func RunLangCode(ctx context.Context, user, execPrefix,
 
 // ------------------------------------------------
 
-func RunLangCodeContainer(ctx context.Context, user, execPrefix,
-	lang, code string, codeDuration time.Duration,
-	containerId int,
-	containerNamePrefix,
-	containerVolPrefix string) ([]byte, error) {
+type RunRequest struct {
+	ctx context.Context
+
+	execUser     string
+	execPrefix   string
+	lang         string
+	code         string
+	codeDuration time.Duration
+
+	containerNamePrefix string
+	containerVolPrefix  string
+}
+
+func RunRequestInContainer(req RunRequest, containerId int) (
+	[]byte, error) {
 	// Ex: "vol-instances/vol-0".
-	dir := fmt.Sprintf("%s%d", containerVolPrefix, containerId)
+	dir := fmt.Sprintf("%s%d",
+		req.containerVolPrefix, containerId)
 
 	err := os.MkdirAll(dir+DirCode, 0777)
 	if err != nil {
@@ -86,12 +95,13 @@ func RunLangCodeContainer(ctx context.Context, user, execPrefix,
 	}
 
 	// Ex: "vol-instances/vol-0/tmp/play/code.py".
-	codePathHost := dir + DirCode + "/code." + lang
+	codePathHost := dir + DirCode + "/code." + req.lang
 
 	// Ex: "/opt/couchbase/var/tmp/play/code.py".
-	codePathInst := DirVar + DirCode + "/code." + lang
+	codePathInst := DirVar + DirCode + "/code." + req.lang
 
-	codeBytes := []byte(strings.ReplaceAll(code, "\r\n", "\n"))
+	codeBytes := []byte(strings.ReplaceAll(
+		req.code, "\r\n", "\n"))
 
 	// File mode is 0777 executable, for scripts like 'code.py'.
 	err = ioutil.WriteFile(codePathHost, codeBytes, 0777)
@@ -100,23 +110,26 @@ func RunLangCodeContainer(ctx context.Context, user, execPrefix,
 	}
 
 	// Ex: "smallcb-0".
-	containerName := fmt.Sprintf("%s%d", containerNamePrefix, containerId)
+	containerName := fmt.Sprintf("%s%d",
+		req.containerNamePrefix, containerId)
 
 	var cmd *exec.Cmd
 
-	if len(execPrefix) > 0 {
+	if len(req.execPrefix) > 0 {
 		// Case of an execPrefix like "/run-java.sh".
-		cmd = exec.Command("docker", "exec", "-u", user,
-			containerName, execPrefix, codePathInst)
+		cmd = exec.Command("docker", "exec",
+			"-u", req.execUser,
+			containerName, req.execPrefix, codePathInst)
 	} else {
-		cmd = exec.Command("docker", "exec", "-u", user,
+		cmd = exec.Command("docker", "exec",
+			"-u", req.execUser,
 			containerName, codePathInst)
 	}
 
-	log.Printf("INFO: RunLangCodeContainer, containerId: %d, lang: %s\n",
-		containerId, lang)
+	log.Printf("INFO: RunRequestInContainer, containerId: %d, req.lang: %s\n",
+		containerId, req.lang)
 
-	return ExecCmd(ctx, cmd, codeDuration)
+	return ExecCmd(req.ctx, cmd, req.codeDuration)
 }
 
 // ------------------------------------------------

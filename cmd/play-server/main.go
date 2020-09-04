@@ -261,17 +261,24 @@ func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 
 	ok, err := CheckLangCode(lang, code, *codeMaxLen)
 	if ok {
+		req := RunRequest{
+			ctx:                 r.Context(),
+			execUser:            ExecUser,
+			execPrefix:          ExecPrefixes[lang],
+			lang:                lang,
+			code:                code,
+			codeDuration:        *codeDuration,
+			containerNamePrefix: *containerNamePrefix,
+			containerVolPrefix:  *containerVolPrefix,
+		}
+
 		if session != nil {
 			StatsNumInc("http.Run.session")
 
-			result, err = RunLangCodeSession(
-				r.Context(), session,
-				ExecUser, ExecPrefixes[lang],
-				lang, code, *codeDuration, readyCh,
-				*containerWaitDuration,
-				*containerNamePrefix,
-				*containerVolPrefix,
-				restartCh)
+			result, err = RunRequestSession(
+				session,
+				req, readyCh,
+				*containerWaitDuration, restartCh)
 			if err != nil {
 				StatsNumInc("http.Run.session.err")
 			} else {
@@ -280,14 +287,9 @@ func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 		} else {
 			StatsNumInc("http.Run.single")
 
-			result, err = RunLangCode(
-				r.Context(),
-				ExecUser, ExecPrefixes[lang],
-				lang, code, *codeDuration, readyCh,
-				*containerWaitDuration,
-				*containerNamePrefix,
-				*containerVolPrefix,
-				restartCh)
+			result, err = RunRequestSingle(
+				req, readyCh,
+				*containerWaitDuration, restartCh)
 			if err != nil {
 				StatsNumInc("http.Run.single.err")
 			} else {
