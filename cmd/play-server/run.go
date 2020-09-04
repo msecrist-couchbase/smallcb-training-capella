@@ -161,16 +161,23 @@ func ExecCmd(ctx context.Context, cmd *exec.Cmd, duration time.Duration) (
 
 func WaitForReadyContainer(ctx context.Context, readyCh chan int,
 	containerWaitDuration time.Duration) (int, error) {
+	StatsNumInc("tot.WaitForReadyContainer")
+
 	select {
 	case containerId := <-readyCh:
+		StatsNumInc("tot.WaitForReadyContainer.ready")
+
 		return containerId, nil
 
 	case <-time.After(containerWaitDuration):
+		StatsNumInc("tot.WaitForReadyContainer.timeout")
+
 		return -1, fmt.Errorf("timeout waiting for container instance,"+
 			" duration: %v", containerWaitDuration)
 
 	case <-ctx.Done():
-		// Client canceled/timed-out while we were waiting.
-		return -1, ctx.Err()
+		StatsNumInc("tot.WaitForReadyContainer.done")
+
+		return -1, ctx.Err() // Client canceled/timed-out.
 	}
 }

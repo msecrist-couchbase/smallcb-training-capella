@@ -18,10 +18,10 @@ func Restarter(restarterId int, restartCh chan Restart,
 	containerPublishPortBase,
 	containerPublishPortSpan int,
 	portMapping [][]int) {
-	StatsNumInc("tot.restarter")
+	StatsNumInc("tot.Restarter")
 
 	for restart := range restartCh {
-		StatsNumInc("tot.restarter.restart.beg")
+		StatsNumInc("tot.Restarter.loop.beg")
 
 		start := time.Now()
 
@@ -45,31 +45,35 @@ func Restarter(restarterId int, restartCh chan Restart,
 		log.Printf("INFO: Restarter, restarterId: %d, containerId: %d\n",
 			restarterId, restart.ContainerId)
 
+		StatsNumInc("tot.Restarter.restart")
+
 		stdOutErr, err := cmd.CombinedOutput()
 		if err != nil {
-			StatsNumInc("tot.restarter.restart.err")
+			StatsNumInc("tot.Restarter.restart.err")
 
 			log.Printf("ERROR: Restarter, restarterId: %d,"+
 				" containerId: %d, cmd: %v, stdOutErr: %s, err: %v",
 				restarterId, restart.ContainerId, cmd, stdOutErr, err)
 
 			go func(restart Restart) {
-				restartCh <- restart // Async try to restart again.
+				StatsNumInc("tot.Restarter.restart.err.retry")
 
-				StatsNumInc("tot.restarter.restart.retrying")
+				restartCh <- restart // Async retry to restart again.
+
+				StatsNumInc("tot.Restarter.restart.err.retry.sent")
 			}(restart)
+		} else {
+			StatsNumInc("tot.Restarter.restart.ok")
 
-			continue
+			log.Printf("INFO: Restarter, restarterId: %d,"+
+				" containerId: %d, took: %s\n",
+				restarterId, restart.ContainerId, time.Since(start))
+
+			restart.DoneCh <- restart.ContainerId
+
+			StatsNumInc("tot.Restarter.restart.ok.sent")
 		}
 
-		StatsNumInc("tot.restarter.restart.ok")
-
-		log.Printf("INFO: Restarter, restarterId: %d,"+
-			" containerId: %d, took: %s\n",
-			restarterId, restart.ContainerId, time.Since(start))
-
-		restart.DoneCh <- restart.ContainerId
-
-		StatsNumInc("tot.restarter.restart.end")
+		StatsNumInc("tot.Restarter.loop.end")
 	}
 }
