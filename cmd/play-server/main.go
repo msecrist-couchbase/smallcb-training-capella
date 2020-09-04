@@ -60,12 +60,23 @@ var (
 // ------------------------------------------------
 
 func main() {
+	StatsInfo("main.startTime", time.Now().Format("2006-01-02T15:04:05.000-07:00"))
+
+	StatsInfo("main.args", strings.Join(os.Args, " "))
+
 	flag.Parse()
 
 	if *h || *help {
 		flag.Usage()
 		os.Exit(2)
 	}
+
+	var flags []string
+	flag.VisitAll(func(f *flag.Flag) {
+		flags = append(flags, fmt.Sprintf("%s=%v", f.Name, f.Value))
+	})
+
+	StatsInfo("main.flags", strings.Join(flags, " "))
 
 	// The readyCh and restartCh are created with capacity
 	// equal to the # of containers to lower the chance of
@@ -107,6 +118,8 @@ func HttpMuxInit(mux *http.ServeMux) {
 	mux.Handle("/static/",
 		http.StripPrefix("/static/",
 			http.FileServer(http.Dir(*staticDir))))
+
+	mux.HandleFunc("/admin/stats", HttpHandleAdminStats)
 
 	mux.HandleFunc("/session-exit", HttpHandleSessionExit)
 
