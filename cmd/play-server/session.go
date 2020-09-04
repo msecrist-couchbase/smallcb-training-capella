@@ -89,8 +89,10 @@ func (sessions *Sessions) SessionExit(sessionId string) error {
 	session, exists := sessions.mapBySessionId[sessionId]
 	if exists && session != nil {
 		delete(sessions.mapBySessionId, sessionId)
-		delete(sessions.mapByFullNameEmail,
-			FullNameEmail(session.FullName, session.Email))
+		delete(sessions.mapByFullNameEmail, FullNameEmail(
+			session.FullName, session.Email))
+
+		go session.ReleaseContainer()
 
 		StatsNumInc("sessions.SessionExit.ok")
 	} else {
@@ -202,10 +204,22 @@ func (sessions *Sessions) ReleaseContainers(n int) {
 
 	go func() {
 		for _, s := range ss {
-			s.RestartCh <- Restart{
-				ContainerId: s.ContainerId,
-				ReadyCh:     s.ReadyCh,
-			}
+			s.ReleaseContainer()
 		}
 	}()
+}
+
+// ------------------------------------------------
+
+func (s *Session) ReleaseContainer() {
+	if s.ContainerId >= 0 {
+		s.RestartCh <- Restart{
+			ContainerId: s.ContainerId,
+			ReadyCh:     s.ReadyCh,
+		}
+	}
+
+	s.ContainerId = -1
+	s.RestartCh = nil
+	s.ReadyCh = nil
 }
