@@ -5,7 +5,7 @@ code: |
   
   import sys
   
-  from couchbase.cluster import Cluster, ClusterOptions, QueryOptions
+  from couchbase.cluster import Cluster, ClusterOptions
   from couchbase_core.cluster import PasswordAuthenticator
   
   pa = PasswordAuthenticator('{{.CBUser}}', '{{.CBPswd}}')
