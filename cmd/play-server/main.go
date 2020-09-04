@@ -201,7 +201,7 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 			data["errCaptcha"] = "guess required"
 			errs += 1
 		} else if !CaptchaCheck(captcha) {
-			StatsNumInc("http.Session.post.err-captcha")
+			StatsNumInc("http.Session.post.err.captcha")
 
 			time.Sleep(10 * time.Second)
 
