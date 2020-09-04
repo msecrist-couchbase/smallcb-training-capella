@@ -62,6 +62,8 @@ func (sessions *Sessions) Count() (count, countWithContainer uint64) {
 	return count, countWithContainer
 }
 
+// ------------------------------------------------
+
 func (sessions *Sessions) SessionGet(sessionId string) *Session {
 	StatsNumInc("sessions.SessionGet")
 
@@ -83,6 +85,8 @@ func (sessions *Sessions) SessionGet(sessionId string) *Session {
 	return rv
 }
 
+// ------------------------------------------------
+
 func (sessions *Sessions) SessionAccess(sessionId string,
 	cb func(*Session) *Session) *Session {
 	sessions.m.Lock()
@@ -95,6 +99,8 @@ func (sessions *Sessions) SessionAccess(sessionId string,
 
 	return cb(session)
 }
+
+// ------------------------------------------------
 
 func (sessions *Sessions) SessionExit(sessionId string) error {
 	StatsNumInc("sessions.SessionExit")
@@ -117,6 +123,8 @@ func (sessions *Sessions) SessionExit(sessionId string) error {
 
 	return nil
 }
+
+// ------------------------------------------------
 
 func (s *Sessions) SessionCreate(fullName, email string) (sessionId string, err error) {
 	StatsNumInc("sessions.SessionCreate")
