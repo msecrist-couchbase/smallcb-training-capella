@@ -133,7 +133,7 @@ func HttpMuxInit(mux *http.ServeMux) {
 // ------------------------------------------------
 
 func HttpHandleMain(w http.ResponseWriter, r *http.Request) {
-	StatsNumInc("tot.http.main")
+	StatsNumInc("http.Main tot")
 
 	msg := r.FormValue("m")
 	if Msgs[msg] != "" {
@@ -163,7 +163,7 @@ func HttpHandleMain(w http.ResponseWriter, r *http.Request) {
 // ------------------------------------------------
 
 func HttpHandleSessionExit(w http.ResponseWriter, r *http.Request) {
-	StatsNumInc("tot.http.session-exit")
+	StatsNumInc("http.SessionExit tot")
 
 	sessions.SessionExit(r.FormValue("s"))
 
@@ -173,12 +173,12 @@ func HttpHandleSessionExit(w http.ResponseWriter, r *http.Request) {
 // ------------------------------------------------
 
 func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
-	StatsNumInc("tot.http.session")
+	StatsNumInc("http.Session tot")
 
 	data := map[string]interface{}{}
 
 	if r.Method == "POST" {
-		StatsNumInc("tot.http.session.post")
+		StatsNumInc("http.Session.post tot")
 
 		errs := 0
 
@@ -201,7 +201,7 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 			data["errCaptcha"] = "guess required"
 			errs += 1
 		} else if !CaptchaCheck(captcha) {
-			StatsNumInc("tot.http.session.post.err-captcha")
+			StatsNumInc("http.Session.post.err-captcha tot")
 
 			time.Sleep(10 * time.Second)
 
@@ -210,25 +210,25 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 		}
 
 		if errs <= 0 {
-			StatsNumInc("tot.http.session.post.create")
+			StatsNumInc("http.Session.post.create tot")
 
 			sessionId, err := sessions.SessionCreate(fullName, email)
 			if err == nil {
-				StatsNumInc("tot.http.session.post.create.ok")
+				StatsNumInc("http.Session.post.create.ok tot")
 
 				http.Redirect(w, r, "/?s="+sessionId, http.StatusSeeOther)
 				return
 			}
 
-			StatsNumInc("tot.http.session.post.create.err")
+			StatsNumInc("http.Session.post.create.err tot")
 
 			data["err"] = fmt.Sprintf("Could not create session - "+
 				"please try again later. (%v)", err)
 		}
 
-		StatsNumInc("tot.http.session.post.err")
+		StatsNumInc("http.Session.post.err tot")
 	} else {
-		StatsNumInc("tot.http.session.get")
+		StatsNumInc("http.Session.get tot")
 	}
 
 	captchaURL, err := CaptchaGenerateBase64ImageDataURL(240, 80, *maxCaptchas)
@@ -250,7 +250,7 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 // ------------------------------------------------
 
 func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
-	StatsNumInc("tot.http.run")
+	StatsNumInc("http.Run tot")
 
 	session := sessions.SessionGet(r.FormValue("s"))
 
@@ -262,7 +262,7 @@ func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 	ok, err := CheckLangCode(lang, code, *codeMaxLen)
 	if ok {
 		if session != nil {
-			StatsNumInc("tot.http.run.session")
+			StatsNumInc("http.Run.session tot")
 
 			result, err = RunLangCodeSession(
 				r.Context(), session,
@@ -273,12 +273,12 @@ func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 				*containerVolPrefix,
 				restartCh)
 			if err != nil {
-				StatsNumInc("tot.http.run.session.err")
+				StatsNumInc("http.Run.session.err tot")
 			} else {
-				StatsNumInc("tot.http.run.session.ok")
+				StatsNumInc("http.Run.session.ok tot")
 			}
 		} else {
-			StatsNumInc("tot.http.run.single")
+			StatsNumInc("http.Run.single tot")
 
 			result, err = RunLangCode(
 				r.Context(),
@@ -289,15 +289,15 @@ func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 				*containerVolPrefix,
 				restartCh)
 			if err != nil {
-				StatsNumInc("tot.http.run.single.err")
+				StatsNumInc("http.Run.single.err tot")
 			} else {
-				StatsNumInc("tot.http.run.single.ok")
+				StatsNumInc("http.Run.single.ok tot")
 			}
 		}
 	}
 
 	if err != nil {
-		StatsNumInc("tot.http.run.err")
+		StatsNumInc("http.Run.err tot")
 
 		http.Error(w,
 			http.StatusText(http.StatusInternalServerError)+
@@ -307,7 +307,7 @@ func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	StatsNumInc("tot.http.run.ok")
+	StatsNumInc("http.Run.ok tot")
 
 	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
 
