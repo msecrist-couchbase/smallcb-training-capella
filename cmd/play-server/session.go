@@ -1,8 +1,11 @@
 package main
 
-import "fmt"
-import "strings"
-import "sync"
+import (
+	"fmt"
+	"strings"
+	"sync"
+	"time"
+)
 
 import "github.com/google/uuid"
 
@@ -18,6 +21,8 @@ type Session struct {
 
 	ContainerId int
 	RestartCh   chan<- Restart
+
+	TouchedAt time.Time
 }
 
 type SessionIdent struct {
@@ -42,11 +47,14 @@ var sessions = Sessions{
 func (sessions *Sessions) SessionGet(sessionId string) *Session {
 	StatsNumInc("sessions.SessionGet")
 
-	rv := sessions.SessionAccess(sessionId, func(session *Session) *Session {
-		rv := *session // Returns a copy.
+	rv := sessions.SessionAccess(sessionId,
+		func(session *Session) *Session {
+			session.TouchedAt = time.Now()
 
-		return &rv
-	})
+			rv := *session // Returns a copy.
+
+			return &rv
+		})
 
 	if rv == nil {
 		StatsNumInc("sessions.SessionGet.nil")
@@ -81,6 +89,10 @@ func (sessions *Sessions) SessionExit(sessionId string) error {
 		delete(sessions.mapBySessionId, sessionId)
 		delete(sessions.mapByFullNameEmail,
 			FullNameEmail(session.FullName, session.Email))
+
+		StatsNumInc("sessions.SessionExit.ok")
+	} else {
+		StatsNumInc("sessions.SessionExit.none")
 	}
 
 	return nil
@@ -140,6 +152,7 @@ func (s *Sessions) SessionCreate(fullName, email string) (sessionId string, err 
 			CBPswd:    sessionId[16:],
 		},
 		ContainerId: -1,
+		TouchedAt:   time.Now(),
 	}
 
 	sessions.mapBySessionId[sessionId] = session
