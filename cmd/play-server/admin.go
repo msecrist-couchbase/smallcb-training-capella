@@ -35,7 +35,12 @@ func StatsInfo(name, info string) {
 // ------------------------------------------------
 
 func HttpHandleAdminStats(w http.ResponseWriter, r *http.Request) {
+	sessionsCount, sessionsCountWithContainer := sessions.Count()
+
 	statsM.Lock()
+
+	statsNums["sessions.count:cur"] = sessionsCount
+	statsNums["sessions.countWithContainer:cur"] = sessionsCountWithContainer
 
 	stats := map[string]interface{}{
 		"nums":  statsNums,

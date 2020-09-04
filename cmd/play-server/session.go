@@ -46,6 +46,22 @@ var sessions = Sessions{
 
 // ------------------------------------------------
 
+func (sessions *Sessions) Count() (count, countWithContainer uint64) {
+	sessions.m.Lock()
+
+	count = uint64(len(sessions.mapBySessionId))
+
+	for _, session := range sessions.mapBySessionId {
+		if session.ContainerId >= 0 {
+			countWithContainer += 1
+		}
+	}
+
+	sessions.m.Unlock()
+
+	return count, countWithContainer
+}
+
 func (sessions *Sessions) SessionGet(sessionId string) *Session {
 	StatsNumInc("sessions.SessionGet")
 
