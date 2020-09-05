@@ -10,6 +10,11 @@ import (
 	"time"
 )
 
+var CBAdminPassword = "" // Initialized by CB_ADMIN_PASSWORD env var.
+var CBAdminPasswordDefault = "small-house-secret"
+
+// -----------------------------------
+
 // Channel of container instance #'s that are ready.
 var readyCh chan int
 
@@ -26,6 +31,8 @@ var ExecUser = "couchbase:couchbase"
 var ExecPrefixes = map[string]string{
 	"java": "/run-java.sh",
 }
+
+// -----------------------------------
 
 // Port mapping of container port # to containerPublishPortBase + delta.
 var PortMapping = [][]int{
@@ -65,12 +72,15 @@ func main() {
 
 	var flags []string
 	flag.VisitAll(func(f *flag.Flag) {
-		if strings.Index(f.Name, "Password") < 0 {
-			flags = append(flags, fmt.Sprintf("%s=%v", f.Name, f.Value))
-		}
+		flags = append(flags, fmt.Sprintf("%s=%v", f.Name, f.Value))
 	})
 
 	StatsInfo("main.flags", strings.Join(flags, " "))
+
+	CBAdminPassword = os.Getenv("CB_ADMIN_PASSWORD")
+	if CBAdminPassword == "" {
+		CBAdminPassword = CBAdminPasswordDefault
+	}
 
 	// The readyCh and restartCh are created with capacity
 	// equal to the # of containers to lower the chance of

@@ -49,8 +49,4 @@ var (
 
 	listen = flag.String("listen", ":8080",
 		"HTTP listen [addr]:port")
-
-	cbAdminPassword = flag.String("cbAdminPassword", "small-house-secret",
-		"should match the CB_ADMIN_PASSWORD of 'make create'"+
-			" for the initial couchbase-cli reset-admin-password")
 )
