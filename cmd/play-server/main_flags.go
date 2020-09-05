@@ -49,4 +49,12 @@ var (
 
 	listen = flag.String("listen", ":8080",
 		"HTTP listen [addr]:port")
+
+	sessionsMaxAge = flag.Duration("sessionsMaxAge",
+		5*time.Minute,
+		"exit sessions older than this duration")
+
+	sessionsCheckerSleep = flag.Duration("sessionsCheckerSleep",
+		30*time.Second,
+		"check sessions after sleeping this duration")
 )

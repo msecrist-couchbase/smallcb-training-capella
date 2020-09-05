@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-var CBAdminPassword = "" // Initialized by CB_ADMIN_PASSWORD env var.
+var CBAdminPassword = "" // Initialized by CB_ADMIN_PASSWORD env.
 var CBAdminPasswordDefault = "small-house-secret"
 
 // -----------------------------------
@@ -106,6 +106,8 @@ func main() {
 			ReadyCh:     readyCh,
 		}
 	}
+
+	go SessionsChecker(*sessionsCheckerSleep, *sessionsMaxAge)
 
 	mux := http.NewServeMux()
 

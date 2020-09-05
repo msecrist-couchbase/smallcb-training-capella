@@ -256,3 +256,31 @@ func (s *Session) ReleaseContainer() {
 	s.RestartCh = nil
 	s.ReadyCh = nil
 }
+
+// ------------------------------------------------
+
+func SessionsChecker(sleepDur, maxAgeDur time.Duration) {
+	var sessionIds []string
+
+	for {
+		sessionIds = sessionIds[:0]
+
+		time.Sleep(sleepDur)
+
+		cutOffTime := time.Now().Add(-maxAgeDur)
+
+		sessions.m.Lock()
+
+		for _, session := range sessions.mapBySessionId {
+			if time.Unix(session.TouchedAt, 0).Before(cutOffTime) {
+				sessionIds = append(sessionIds, session.SessionId)
+			}
+		}
+
+		sessions.m.Unlock()
+
+		for _, sessionId := range sessionIds {
+			sessions.SessionExit(sessionId)
+		}
+	}
+}
