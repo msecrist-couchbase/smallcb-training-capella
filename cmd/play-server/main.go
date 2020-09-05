@@ -113,6 +113,8 @@ func main() {
 
 	HttpMuxInit(mux)
 
+	go HttpProxy(":8091")
+
 	log.Printf("INFO: main, listen: %s", *listen)
 
 	log.Fatal(http.ListenAndServe(*listen, mux))

@@ -5,6 +5,8 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"net/http/httputil"
+	"net/url"
 	"strings"
 	"time"
 )
@@ -230,4 +232,30 @@ func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
 
 	w.Write(result)
+}
+
+// ------------------------------------------------
+
+func HttpProxy(listenProxy string) {
+	proxyMux := http.NewServeMux()
+
+	proxyMux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		director := func(req *http.Request) {
+			origin, _ := url.Parse("http://127.0.0.1:10001/")
+
+			// req.Header.Add("X-Forwarded-Host", req.Host)
+			// req.Header.Add("X-Origin-Host", origin.Host)
+
+			req.URL.Scheme = origin.Scheme
+			req.URL.Host = origin.Host
+		}
+
+		proxy := &httputil.ReverseProxy{Director: director}
+
+		proxy.ServeHTTP(w, r)
+	})
+
+	log.Printf("INFO: HttpProxy, listenProxy: %s", listenProxy)
+
+	log.Fatal(http.ListenAndServe(listenProxy, proxyMux))
 }
