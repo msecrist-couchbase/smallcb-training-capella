@@ -13,7 +13,7 @@ import (
 import "github.com/go-macaron/captcha"
 
 var (
-	// Protects the map of captcha answers.
+	// Protects the map of active captcha answers.
 	captchasM sync.Mutex
 
 	// Key is the captcha answer, like "208823751".

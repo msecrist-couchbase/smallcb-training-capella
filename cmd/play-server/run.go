@@ -82,6 +82,10 @@ type RunRequest struct {
 
 func RunRequestInContainer(req RunRequest, containerId int) (
 	[]byte, error) {
+	if containerId < 0 {
+		return nil, fmt.Errorf("bad containerId: %d", containerId)
+	}
+
 	// Ex: "vol-instances/vol-0".
 	dir := fmt.Sprintf("%s%d",
 		req.containerVolPrefix, containerId)

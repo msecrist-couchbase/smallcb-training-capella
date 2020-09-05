@@ -5,9 +5,9 @@ import (
 	"strings"
 	"sync"
 	"time"
-)
 
-import "github.com/google/uuid"
+	"github.com/google/uuid"
+)
 
 type Sessions struct {
 	m sync.Mutex // Protects the fields that follow.
@@ -19,14 +19,15 @@ type Sessions struct {
 type Session struct {
 	SessionIdent
 
+	// The following fields are ephemeral / runtime-only.
+
 	ContainerId int
 
 	RestartCh chan<- Restart
 	ReadyCh   chan int
-
-	TouchedAt time.Time
 }
 
+// SessionIdent fields are intended to be persistable.
 type SessionIdent struct {
 	SessionId string
 
@@ -35,6 +36,8 @@ type SessionIdent struct {
 
 	CBUser string
 	CBPswd string
+
+	TouchedAt int64
 }
 
 // ------------------------------------------------
@@ -69,7 +72,7 @@ func (sessions *Sessions) SessionGet(sessionId string) *Session {
 
 	rv := sessions.SessionAccess(sessionId,
 		func(session *Session) *Session {
-			session.TouchedAt = time.Now()
+			session.TouchedAt = time.Now().Unix()
 
 			rv := *session // Returns a copy.
 
@@ -178,9 +181,9 @@ func (s *Sessions) SessionCreate(fullName, email string) (sessionId string, err 
 			Email:     email,
 			CBUser:    sessionId[:16],
 			CBPswd:    sessionId[16:],
+			TouchedAt: time.Now().Unix(),
 		},
 		ContainerId: -1,
-		TouchedAt:   time.Now(),
 	}
 
 	sessions.mapBySessionId[sessionId] = session

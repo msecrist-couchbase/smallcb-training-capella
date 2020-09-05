@@ -13,7 +13,7 @@ var Msgs = map[string]string{
 	"session-exit": "Thanks for test-driving Couchbase!",
 }
 
-var WrongCaptchaSleepTime = 10 * time.Second
+var WrongCaptchaSleepTime = 5 * time.Second // To slow down robots.
 
 // ------------------------------------------------
 
@@ -183,8 +183,7 @@ func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 			StatsNumInc("http.Run.session")
 
 			result, err = RunRequestSession(
-				session,
-				req, readyCh,
+				session, req, readyCh,
 				*containerWaitDuration, restartCh)
 			if err != nil {
 				StatsNumInc("http.Run.session.err")

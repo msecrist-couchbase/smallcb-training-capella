@@ -35,7 +35,7 @@ func RunRequestSession(session *Session, req RunRequest,
 				session.ContainerId = containerId
 				session.RestartCh = restartCh
 				session.ReadyCh = readyCh
-				session.TouchedAt = time.Now()
+				session.TouchedAt = time.Now().Unix()
 
 				// Session owns the containerId.
 				containerId = -1

@@ -14,21 +14,24 @@ var (
 	statsInfos = map[string]string{}
 )
 
+// Atomically increment a statsNums entry by 1.
 func StatsNumInc(name string) {
 	statsM.Lock()
 	statsNums[name] += 1
 	statsM.Unlock()
 }
 
+// Atomically invoke a read-update callback on a statsNums entry.
 func StatsNum(name string, cb func(uint64) uint64) {
 	statsM.Lock()
 	statsNums[name] = cb(statsNums[name])
 	statsM.Unlock()
 }
 
-func StatsInfo(name, info string) {
+// Atomically set a statsInfos entry to a given string.
+func StatsInfo(name, entry string) {
 	statsM.Lock()
-	statsInfos[name] = info
+	statsInfos[name] = entry
 	statsM.Unlock()
 }
 
