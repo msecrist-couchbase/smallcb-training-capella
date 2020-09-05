@@ -133,7 +133,7 @@
         REST / web admin UI  : http://{{.Session.CBUser}}:{{.Session.CBPswd}}@{{.Host}}:8091
         Couchbase Java SDK   : [host / user / pswd and connect string examples here]
         Couchbase NodeJS SDK : [host / user / pswd and connect string examples here]
-        Couchbase Python SDK : PasswordAuthenticator('{{.Session.CBUser}}', '{{.Session.CBPswd}}')
+        Couchbase Python SDK : Cluster('couchbase://{{.Host}}', ClusterOptions(PasswordAuthenticator('{{.Session.CBUser}}', '{{.Session.CBPswd}}')))
         Couchbase C# SDK     : [host / user / pswd and connect string examples here]
       </div>
       <div>
