@@ -158,7 +158,17 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 	StatsNumInc("http.Run")
 
-	session := sessions.SessionGet(r.FormValue("s"))
+	s := r.FormValue("s")
+
+	session := sessions.SessionGet(s)
+	if session == nil && s != "" {
+		http.Error(w,
+			http.StatusText(http.StatusNotFound)+
+				", unknown session",
+			http.StatusNotFound)
+		log.Printf("ERROR: HttpHandleRun, unknown session, s: %v", s)
+		return
+	}
 
 	lang := r.FormValue("lang")
 	code := r.FormValue("code")
