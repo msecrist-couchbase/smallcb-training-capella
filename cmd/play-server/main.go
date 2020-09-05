@@ -65,7 +65,9 @@ func main() {
 
 	var flags []string
 	flag.VisitAll(func(f *flag.Flag) {
-		flags = append(flags, fmt.Sprintf("%s=%v", f.Name, f.Value))
+		if strings.Index(f.Name, "Password") < 0 {
+			flags = append(flags, fmt.Sprintf("%s=%v", f.Name, f.Value))
+		}
 	})
 
 	StatsInfo("main.flags", strings.Join(flags, " "))

@@ -77,10 +77,6 @@ docker container needs to -p or publish/expose ports
   on 0.0.0.0 addr instead of 127.0.0.1 addr?
   See "-containerPublishAddr" cmd-line flag.
 
-create couchbase user better than Administrator:password,
-  especially dynamically with user & password that look
-  more like UUID's when we're in >= zipcar mode?
-
 client-side JS to prevent over-clicking on Run/Submit button,
   where the current attempt of onRunSubmit()
   doesn't work very well for the 2nd click on 'run'.
@@ -122,8 +118,6 @@ capture email to get a longer-running
   CAPTCHA?
   CAPTCHA random seed looks week -- seeing repeats on process start?
   panics at rand.Intn()?
-
-change the Administrator password in 'make create'?
 
 can i have >1 longer running instance per email?
 
@@ -308,6 +302,12 @@ more use cases with persistent data?
 dev-mode config is reusable for laptops, too?
 
 --------------------------
+DONE: create couchbase user better than Administrator:password,
+  especially dynamically with user & password that look
+  more like UUID's when we're in >= zipcar mode.
+
+DONE: change the Administrator password in 'make create'.
+
 DONE: using docker --add-host to add to /etc/hosts file so that
   couchbase://try.couchbase.dev:8091 connection string works.
 

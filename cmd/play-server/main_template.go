@@ -104,7 +104,7 @@ func MainTemplateEmit(w http.ResponseWriter,
 func CodeTemplateExecute(host string, session *Session, code string) string {
 	data := map[string]interface{}{
 		"CBHost": host,
-		"CBUser": "Administrator",
+		"CBUser": "username",
 		"CBPswd": "password",
 	}
 

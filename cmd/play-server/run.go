@@ -24,7 +24,8 @@ func CheckLangCode(lang, code string, codeMaxLen int) (
 	}
 
 	if len(code) > codeMaxLen {
-		return false, fmt.Errorf("code too long, codeMaxLen: %d", codeMaxLen)
+		return false, fmt.Errorf("code too long,"+
+			" codeMaxLen: %d", codeMaxLen)
 	}
 
 	return true, nil
@@ -45,27 +46,21 @@ func RunRequestSingle(req RunRequest, readyCh chan int,
 	}
 
 	defer func() {
-		// If we didn't use the container, we
-		// put the containerId token back into
-		// the readyCh for the next client's use.
-		if containerId >= 0 {
-			readyCh <- containerId
-		}
+		go func() {
+			restartCh <- Restart{
+				ContainerId: containerId,
+				ReadyCh:     readyCh,
+			}
+		}()
 	}()
 
-	result, err := RunRequestInContainer(req, containerId)
+	err = AddRBACUser(req, containerId,
+		"username", "password", "admin")
+	if err != nil {
+		return nil, err
+	}
 
-	go func(containerId int) {
-		restartCh <- Restart{
-			ContainerId: containerId,
-			ReadyCh:     readyCh,
-		}
-	}(containerId)
-
-	// The restartCh now owns the containerId token.
-	containerId = -1
-
-	return result, err
+	return RunRequestInContainer(req, containerId)
 }
 
 // ------------------------------------------------
@@ -81,6 +76,8 @@ type RunRequest struct {
 
 	containerNamePrefix string
 	containerVolPrefix  string
+
+	cbAdminPassword string
 }
 
 func RunRequestInContainer(req RunRequest, containerId int) (
@@ -193,4 +190,33 @@ func WaitForReadyContainer(ctx context.Context, readyCh chan int,
 
 		return -1, ctx.Err() // Client canceled/timed-out.
 	}
+}
+
+// ------------------------------------------------
+
+func AddRBACUser(req RunRequest, containerId int,
+	username, password, roles string) error {
+	containerName := fmt.Sprintf("%s%d",
+		req.containerNamePrefix, containerId)
+
+	cmd := exec.Command("docker", "exec", "-u", req.execUser,
+		containerName,
+		"/opt/couchbase/bin/couchbase-cli", "user-manage",
+		"--cluster", "http://127.0.0.1",
+		"--username", "Administrator",
+		"--password", req.cbAdminPassword,
+		"--set",
+		"--rbac-username", username,
+		"--rbac-password", password,
+		"--auth-domain", "local",
+		"--roles", roles)
+
+	// Example out: "SUCCESS: User abcdef set".
+	out, err := ExecCmd(req.ctx, cmd, req.codeDuration)
+	if err != nil || !strings.HasPrefix(string(out), "SUCCESS:") {
+		return fmt.Errorf("AddRBACUser,"+
+			" out: %s, err: %v", out, err)
+	}
+
+	return nil
 }

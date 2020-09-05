@@ -2,8 +2,6 @@ package main
 
 import (
 	"fmt"
-	"os/exec"
-	"strings"
 	"time"
 )
 
@@ -18,9 +16,6 @@ func RunRequestSession(session *Session, req RunRequest,
 		}
 
 		defer func() {
-			// We restart the container instance if we
-			// didn't end up using it -- just in case if
-			// we got through the rbac user creation step.
 			if containerId >= 0 {
 				restartCh <- Restart{
 					ContainerId: containerId,
@@ -29,26 +24,10 @@ func RunRequestSession(session *Session, req RunRequest,
 			}
 		}()
 
-		containerName := fmt.Sprintf("%s%d",
-			req.containerNamePrefix, containerId)
-
-		cmd := exec.Command("docker", "exec", "-u", req.execUser,
-			containerName,
-			"/opt/couchbase/bin/couchbase-cli", "user-manage",
-			"--cluster", "http://127.0.0.1",
-			"--username", "Administrator",
-			"--password", "password",
-			"--set",
-			"--rbac-username", session.CBUser,
-			"--rbac-password", session.CBPswd,
-			"--auth-domain", "local",
-			"--roles", "admin")
-
-		// Example out: "SUCCESS: User a637c2348544 set".
-		out, err := ExecCmd(req.ctx, cmd, req.codeDuration)
-		if err != nil || !strings.HasPrefix(string(out), "SUCCESS:") {
-			return nil, fmt.Errorf("RunRequestSession, user-manage,"+
-				" out: %s, err: %v", out, err)
+		err = AddRBACUser(req, containerId,
+			session.CBUser, session.CBPswd, "admin")
+		if err != nil {
+			return nil, err
 		}
 
 		session = sessions.SessionAccess(session.SessionId,
@@ -58,10 +37,10 @@ func RunRequestSession(session *Session, req RunRequest,
 				session.ReadyCh = readyCh
 				session.TouchedAt = time.Now()
 
-				rv := *session // Copy.
-
 				// Session owns the containerId.
 				containerId = -1
+
+				rv := *session // Copy.
 
 				return &rv
 			})

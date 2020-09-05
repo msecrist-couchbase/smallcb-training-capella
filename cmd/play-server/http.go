@@ -176,6 +176,7 @@ func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 			codeDuration:        *codeDuration,
 			containerNamePrefix: *containerNamePrefix,
 			containerVolPrefix:  *containerVolPrefix,
+			cbAdminPassword:     *cbAdminPassword,
 		}
 
 		if session != nil {

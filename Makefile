@@ -10,6 +10,8 @@ CONTAINER_EXTRAS = --cap-add=SYS_PTRACE
 
 SERVICE_HOST = try.couchbase.dev
 
+CB_ADMIN_PASSWORD = small-house-secret
+
 # -------------------------------------------------
 
 # Build the docker image.
@@ -41,6 +43,9 @@ create:
 	sleep 3
 	docker exec $(IMAGE_NAME)-$(CONTAINER_NUM) /init-couchbase/init-buckets.sh
 	sleep 3
+	docker exec $(IMAGE_NAME)-$(CONTAINER_NUM) /opt/couchbase/bin/couchbase-cli \
+                reset-admin-password --new-password $(CB_ADMIN_PASSWORD)
+	sleep 3
 	docker stop $(IMAGE_NAME)-$(CONTAINER_NUM)
 	sleep 3
 	docker rm $(IMAGE_NAME)-$(CONTAINER_NUM)
@@ -71,7 +76,8 @@ restart-snapshot:
 
 wait-healthy:
 	echo "Waiting until couchbase-server is healthy..."
-	time docker exec $(IMAGE_NAME)-$(CONTAINER_NUM) /init-couchbase/wait-healthy.sh
+	time docker exec -e CB_PSWD=$(CB_ADMIN_PASSWORD) \
+                    $(IMAGE_NAME)-$(CONTAINER_NUM) /init-couchbase/wait-healthy.sh
 
 # -------------------------------------------------
 
