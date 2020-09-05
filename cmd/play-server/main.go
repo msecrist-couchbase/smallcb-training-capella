@@ -113,7 +113,7 @@ func main() {
 
 	HttpMuxInit(mux)
 
-	go HttpProxy(":8091")
+	go HttpProxy(*listenProxy)
 
 	log.Printf("INFO: main, listen: %s", *listen)
 

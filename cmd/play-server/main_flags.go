@@ -48,7 +48,10 @@ var (
 		"path to the 'static' directory")
 
 	listen = flag.String("listen", ":8080",
-		"HTTP listen [addr]:port")
+		"listen [addr]:port for play-server's web UI / REST API")
+
+	listenProxy = flag.String("listenProxy", ":8091",
+		"listen [addr]:port for proxying couchbase server's web UI / REST API")
 
 	sessionsMaxAge = flag.Duration("sessionsMaxAge",
 		5*time.Minute,
