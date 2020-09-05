@@ -17,7 +17,7 @@ type Sessions struct {
 }
 
 type Session struct {
-	SessionIdent
+	SessionInfo
 
 	// The following fields are ephemeral / runtime-only.
 
@@ -27,8 +27,8 @@ type Session struct {
 	ReadyCh   chan int
 }
 
-// SessionIdent fields are intended to be persistable.
-type SessionIdent struct {
+// SessionInfo fields are intended to be persistable.
+type SessionInfo struct {
 	SessionId string
 
 	FullName string
@@ -175,7 +175,7 @@ func (s *Sessions) SessionCreate(fullName, email string) (sessionId string, err 
 	sessionId = strings.ReplaceAll(sessionUUID.String(), "-", "")
 
 	session = &Session{
-		SessionIdent: SessionIdent{
+		SessionInfo: SessionInfo{
 			SessionId: sessionId,
 			FullName:  fullName,
 			Email:     email,
