@@ -43,12 +43,22 @@ func HttpMuxInit(mux *http.ServeMux) {
 func HttpHandleMain(w http.ResponseWriter, r *http.Request) {
 	StatsNumInc("http.Main")
 
+	s := r.FormValue("s")
+
+	session := sessions.SessionGet(s)
+	if session == nil && s != "" {
+		http.Error(w,
+			http.StatusText(http.StatusNotFound)+
+				", unknown session",
+			http.StatusNotFound)
+		log.Printf("ERROR: HttpHandleMain, unknown session, s: %v", s)
+		return
+	}
+
 	msg := r.FormValue("m")
 	if Msgs[msg] != "" {
 		msg = Msgs[msg]
 	}
-
-	session := sessions.SessionGet(r.FormValue("s"))
 
 	examplesDir := "examples"
 
@@ -166,9 +176,9 @@ func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 	if session == nil && s != "" {
 		http.Error(w,
 			http.StatusText(http.StatusNotFound)+
-				", unknown session",
+				", session unknown",
 			http.StatusNotFound)
-		log.Printf("ERROR: HttpHandleRun, unknown session, s: %v", s)
+		log.Printf("ERROR: HttpHandleRun, session unknown, s: %v", s)
 		return
 	}
 
@@ -240,6 +250,14 @@ func HttpProxy(listenProxy string) {
 	proxyMux := http.NewServeMux()
 
 	proxyMux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		dumpBody := false
+		if r.URL.Path == "/uilogin" {
+			dumpBody = true
+		}
+
+		dump, _ := httputil.DumpRequest(r, dumpBody)
+		log.Printf("INFO: HttpProxy, r: %s", dump)
+
 		director := func(req *http.Request) {
 			origin, _ := url.Parse("http://127.0.0.1:10001/")
 
