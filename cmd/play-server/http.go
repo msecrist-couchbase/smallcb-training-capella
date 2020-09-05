@@ -43,21 +43,16 @@ func HttpMuxInit(mux *http.ServeMux) {
 func HttpHandleMain(w http.ResponseWriter, r *http.Request) {
 	StatsNumInc("http.Main")
 
-	s := r.FormValue("s")
-
-	session := sessions.SessionGet(s)
-	if session == nil && s != "" {
-		http.Error(w,
-			http.StatusText(http.StatusNotFound)+
-				", unknown session",
-			http.StatusNotFound)
-		log.Printf("ERROR: HttpHandleMain, unknown session, s: %v", s)
-		return
-	}
-
 	msg := r.FormValue("m")
 	if Msgs[msg] != "" {
 		msg = Msgs[msg]
+	}
+
+	s := r.FormValue("s")
+
+	session := sessions.SessionGet(s)
+	if session == nil && s != "" && msg == "" {
+		msg = "Session timed out."
 	}
 
 	examplesDir := "examples"
