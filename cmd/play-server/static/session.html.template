@@ -89,8 +89,14 @@
       </p>
 
       <p>
-        A test-drive session is not meant for production usage
+        A test-drive session is <b>NOT</b> meant for production usage
         and is intended for "tire-kicking" exploration by developers.
+      </p>
+
+      <p>
+        A test-drive session is <b>NOT</b> meant for performance testing,
+        as we might be running on cost-effective
+        (read: "low-end, slow") servers.
       </p>
 
       <p>
