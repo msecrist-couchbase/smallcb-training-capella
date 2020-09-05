@@ -54,7 +54,7 @@ var (
 		5*time.Minute,
 		"exit sessions older than this duration")
 
-	sessionsCheckerSleep = flag.Duration("sessionsCheckerSleep",
+	sessionsCheckEvery = flag.Duration("sessionsCheckEvery",
 		30*time.Second,
-		"check sessions after sleeping this duration")
+		"duration to wait before checking sessions")
 )
