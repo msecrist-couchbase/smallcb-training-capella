@@ -279,6 +279,8 @@ func HttpProxy(listenProxy string) {
 		// Default to targetPort of 10001 for serving web login UI's.
 		targetPort := *containerPublishPortBase + 1
 
+		var modifyResponse func(response *http.Response) error
+
 		if user != "" {
 			sessionId := user + pswd
 
@@ -310,6 +312,13 @@ func HttpProxy(listenProxy string) {
 			// Example targetPort: 10000 + (100 * containerId) + 1 == 10001.
 			targetPort = *containerPublishPortBase +
 				(*containerPublishPortSpan * session.ContainerId) + 1
+
+			modifyResponse = func(response *http.Response) error {
+				log.Printf("INFO: HttpProxy, response cookies: %+v",
+					response.Cookies())
+
+				return nil
+			}
 		}
 
 		director := func(req *http.Request) {
@@ -322,7 +331,10 @@ func HttpProxy(listenProxy string) {
 			req.URL.Host = origin.Host
 		}
 
-		proxy := &httputil.ReverseProxy{Director: director}
+		proxy := &httputil.ReverseProxy{
+			Director:       director,
+			ModifyResponse: modifyResponse,
+		}
 
 		proxy.ServeHTTP(w, r)
 	})
