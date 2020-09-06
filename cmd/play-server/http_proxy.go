@@ -105,6 +105,17 @@ func HttpProxy(listenProxy string, portMap map[int]int,
 				" containerId: %d", r.URL.Path, sessionId,
 				session.ContainerId)
 
+			streamingJson := false
+			if strings.HasPrefix(r.URL.Path, "/poolsStreaming/") {
+				streamingJson = true
+			} else if strings.HasPrefix(r.URL.Path, "/pools/") {
+				// Ex: "/pools/default/bs/beer-sample".
+				parts := strings.Split(r.URL.Path, "/")
+				if len(parts) > 4 && parts[3] == "bs" {
+					streamingJson = true
+				}
+			}
+
 			modifyResponse = func(resp *http.Response) (err error) {
 				for _, cookie := range resp.Cookies() {
 					c := cookie.Name + "=" + cookie.Value
@@ -112,7 +123,7 @@ func HttpProxy(listenProxy string, portMap map[int]int,
 					CookiesSet(c, sessionId)
 				}
 
-				if strings.HasPrefix(r.URL.Path, "/poolsStreaming/") {
+				if streamingJson {
 					resp.Body = &streamingJsonPortRemapper{
 						portMap:   portMap,
 						src:       resp.Body,
@@ -123,8 +134,8 @@ func HttpProxy(listenProxy string, portMap map[int]int,
 				return nil
 			}
 
-			if strings.HasPrefix(r.URL.Path, "/poolsStreaming/") {
-				flushInterval = time.Second
+			if streamingJson {
+				flushInterval = 2 * time.Second
 			}
 		}
 
