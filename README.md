@@ -208,6 +208,9 @@ need 1 or more test users / test examples / test container instances?
 
 need ping / sanity checking REST endpoints?
 
+need to also proxy n1ql 8093 port so that command-line curl works?
+  or, generate n1ql example so that it shows port 10003?
+
 iframe for access to web admin portal?
   need server-side proxy in golang?
   perhaps access to just query workbench?
