@@ -250,7 +250,7 @@ func HttpProxy(listenProxy string) {
 	proxyMux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		user, pswd, ok := r.BasicAuth()
 		if ok {
-			log.Printf("ERROR: HttpProxy, path: %s, user: %s, BasicAuth",
+			log.Printf("INFO: HttpProxy, path: %s, user: %s, BasicAuth",
 				r.URL.Path, user)
 		} else if r.URL.Path == "/uilogin" && r.Method == "POST" {
 			var err error
@@ -272,9 +272,12 @@ func HttpProxy(listenProxy string) {
 
 			r.Body = saveBody
 
-			log.Printf("ERROR: HttpProxy, path: %s, user: %s, uilogin",
+			log.Printf("INFO: HttpProxy, path: %s, user: %s, uilogin",
 				r.URL.Path, user)
 		}
+
+		// Default to targetPort of 10001 for serving web login UI's.
+		targetPort := *containerPublishPortBase + 1
 
 		if user != "" {
 			sessionId := user + pswd
@@ -285,8 +288,8 @@ func HttpProxy(listenProxy string) {
 					http.StatusText(http.StatusNotFound)+
 						fmt.Sprintf(", HttpProxy, session not found"),
 					http.StatusNotFound)
-				log.Printf("ERROR: HttpProxy, path: %s, user: %s"+
-					", session not found", r.URL.Path, user)
+				log.Printf("ERROR: HttpProxy, path: %s, user: %s,"+
+					" session not found", r.URL.Path, user)
 				return
 			}
 
@@ -295,17 +298,22 @@ func HttpProxy(listenProxy string) {
 					http.StatusText(http.StatusNotFound)+
 						fmt.Sprintf(", HttpProxy, session w/o container"),
 					http.StatusNotFound)
-				log.Printf("ERROR: HttpProxy, path: %s, user: %s"+
-					", session w/o container", r.URL.Path, user)
+				log.Printf("ERROR: HttpProxy, path: %s, user: %s,"+
+					" session w/o container", r.URL.Path, user)
 				return
 			}
 
-			log.Printf("ERROR: HttpProxy, path: %s, user: %s, session ok",
-				r.URL.Path, user)
+			log.Printf("INFO: HttpProxy, path: %s, user: %s, session ok,"+
+				" containerId: %d, targetPort: %d", r.URL.Path, user,
+				session.ContainerId, targetPort)
+
+			// Example targetPort: 10000 + (100 * containerId) + 1 == 10001.
+			targetPort = *containerPublishPortBase +
+				(*containerPublishPortSpan * session.ContainerId) + 1
 		}
 
 		director := func(req *http.Request) {
-			origin, _ := url.Parse("http://127.0.0.1:10001/")
+			origin, _ := url.Parse(fmt.Sprintf("http://127.0.0.1:%d/", targetPort))
 
 			// req.Header.Add("X-Forwarded-Host", req.Host)
 			// req.Header.Add("X-Origin-Host", origin.Host)

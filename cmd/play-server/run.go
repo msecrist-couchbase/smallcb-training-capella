@@ -127,8 +127,8 @@ func RunRequestInContainer(req RunRequest, containerId int) (
 			codePathInst)
 	}
 
-	log.Printf("INFO: RunRequest, containerId: %d,"+
-		" req.lang: %s\n", containerId, req.lang)
+	log.Printf("INFO: RunRequest, containerId: %d, lang: %s\n",
+		containerId, req.lang)
 
 	return ExecCmd(req.ctx, cmd, req.codeDuration)
 }
