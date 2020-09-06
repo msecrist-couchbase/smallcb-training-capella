@@ -1,7 +1,9 @@
 package main
 
 import (
+	"bufio"
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -10,6 +12,7 @@ import (
 	"net/http/httputil"
 	"net/url"
 	"strings"
+	"time"
 )
 
 func HttpProxy(listenProxy string, portMap map[int]int,
@@ -70,6 +73,8 @@ func HttpProxy(listenProxy string, portMap map[int]int,
 
 		var modifyResponse func(response *http.Response) error
 
+		var flushInterval time.Duration
+
 		if sessionId != "" {
 			session := sessions.SessionGet(sessionId)
 			if session == nil {
@@ -107,11 +112,19 @@ func HttpProxy(listenProxy string, portMap map[int]int,
 					CookiesSet(c, sessionId)
 				}
 
-				if strings.HasPrefix(r.URL.Path, "/pools") {
-					return HttpProxyJsonPortsRemap(r, resp, portMap)
+				if strings.HasPrefix(r.URL.Path, "/poolsStreaming/") {
+					resp.Body = &streamingJsonPortRemapper{
+						portMap:   portMap,
+						src:       resp.Body,
+						srcReader: bufio.NewReader(resp.Body),
+					}
 				}
 
 				return nil
+			}
+
+			if strings.HasPrefix(r.URL.Path, "/poolsStreaming/") {
+				flushInterval = time.Second
 			}
 		}
 
@@ -128,6 +141,7 @@ func HttpProxy(listenProxy string, portMap map[int]int,
 		proxy := &httputil.ReverseProxy{
 			Director:       director,
 			ModifyResponse: modifyResponse,
+			FlushInterval:  flushInterval,
 		}
 
 		proxy.ServeHTTP(w, r)
@@ -140,33 +154,59 @@ func HttpProxy(listenProxy string, portMap map[int]int,
 
 // ------------------------------------------------
 
-func HttpProxyJsonPortsRemap(r *http.Request, resp *http.Response,
-	portMap map[int]int) (err error) {
-	hs, ok := resp.Header["Content-Type"]
-	if !ok || hs[0] != "application/json" {
-		return nil
+// Rewrites streaming JSON, which is JSON delimited by 4 newlines,
+// with remapped port numbers.
+type streamingJsonPortRemapper struct {
+	portMap   map[int]int
+	src       io.Closer
+	srcReader *bufio.Reader
+	out       bytes.Buffer
+}
+
+func (s *streamingJsonPortRemapper) Close() error {
+	return s.src.Close()
+}
+
+func (s *streamingJsonPortRemapper) Read(p []byte) (n int, err error) {
+	if s.out.Len() <= 0 {
+		s.out.Reset()
+
+		b, err := s.srcReader.ReadBytes('\n')
+		if err != nil {
+			s.src.Close()
+			return 0, err
+		}
+
+		for i := 0; i < 3; i++ { // Read 3 newlines.
+			nl, err := s.srcReader.ReadByte()
+			if err != nil || nl != '\n' {
+				s.src.Close()
+				return 0, io.EOF
+			}
+		}
+
+		var m map[string]interface{}
+
+		err = json.Unmarshal(b, &m)
+		if err != nil {
+			s.src.Close()
+			return 0, err
+		}
+
+		// TODO: remap JSON.
+
+		b, err = json.Marshal(m)
+		if err != nil {
+			s.src.Close()
+			return 0, err
+		}
+
+		b = append(b, '\n', '\n', '\n', '\n')
+
+		s.out.Write(b)
 	}
 
-	cl := resp.ContentLength
-
-	var dup io.ReadCloser
-
-	dup, resp.Body, err = DupBody(resp.Body)
-
-	resp.ContentLength = cl
-
-	if err != nil {
-		return err
-	}
-
-	b, err := ioutil.ReadAll(dup)
-	if err != nil {
-		return err
-	}
-
-	log.Printf("INFO: json! r: %s, b: %s", r.URL.Path, b)
-
-	return nil
+	return s.out.Read(p)
 }
 
 // ------------------------------------------------
