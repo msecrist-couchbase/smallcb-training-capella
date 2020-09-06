@@ -11,6 +11,7 @@ import (
 	"net/http"
 	"net/http/httputil"
 	"net/url"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -235,6 +236,8 @@ func (s *jsonStreamer) Read(p []byte) (n int, err error) {
 
 		b = append(b, '\n', '\n', '\n', '\n')
 
+		fmt.Printf("b: %s\n", b)
+
 		s.out.Write(b)
 	}
 
@@ -248,6 +251,14 @@ func (s *jsonStreamer) RemapJson(m map[string]interface{}) {
 		if va, ok := v.([]interface{}); ok && va != nil {
 			for _, vav := range va {
 				s.RemapJsonNodeExt(vav)
+			}
+		}
+	}
+
+	if v, exists := m["vBucketServerMap"]; exists && v != nil {
+		if vm, ok := v.(map[string]interface{}); ok && vm != nil {
+			if v1, exists := vm["serverList"]; exists && v1 != nil {
+				s.RemapJsonServerList(v1)
 			}
 		}
 	}
@@ -267,6 +278,31 @@ func (s *jsonStreamer) RemapJsonServices(v2 interface{}) {
 			if port, ok := v3.(float64); ok {
 				if portDelta, exists := s.portMap[int(port)]; exists {
 					services[service] = s.portStart + portDelta
+				}
+			}
+		}
+	}
+}
+
+// Remap ["$HOST:11210"] to ["$HOST:10030"].
+func (s *jsonStreamer) RemapJsonServerList(v interface{}) {
+	if serverList, ok := v.([]interface{}); ok && serverList != nil {
+		for i, x := range serverList {
+			if str, ok := x.(string); ok {
+				parts := strings.Split(str, ":")
+				if len(parts) == 2 {
+					port, err := strconv.Atoi(parts[1])
+					if err != nil {
+						continue
+					}
+
+					portDelta, exists := s.portMap[port]
+					if !exists {
+						continue
+					}
+
+					serverList[i] = fmt.Sprintf("%s:%d",
+						parts[0], s.portStart+portDelta)
 				}
 			}
 		}
