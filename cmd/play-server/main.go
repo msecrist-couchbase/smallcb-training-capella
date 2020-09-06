@@ -55,6 +55,14 @@ var PortMapping = [][]int{
 	[]int{11211, 31}, // 11211 is exposed on port 10000 + 31.
 }
 
+var PortMap = map[int]int{}
+
+func init() {
+	for _, pair := range PortMapping {
+		PortMap[pair[0]] = pair[1]
+	}
+}
+
 // ------------------------------------------------
 
 func main() {
@@ -113,12 +121,7 @@ func main() {
 
 	HttpMuxInit(mux)
 
-	portMap := map[int]int{}
-	for _, pair := range PortMapping {
-		portMap[pair[0]] = pair[1]
-	}
-
-	go HttpProxy(*listenProxy, portMap,
+	go HttpProxy(*listenProxy, PortMap,
 		*containerPublishPortBase,
 		*containerPublishPortSpan)
 

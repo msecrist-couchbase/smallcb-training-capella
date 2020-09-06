@@ -97,11 +97,14 @@ func HttpProxy(listenProxy string, portMap map[int]int,
 				return
 			}
 
-			// Example targetPort: 10000 + (100 * containerId) + 1 == 10001.
-			targetPort = containerPublishPortBase +
-				(containerPublishPortSpan * session.ContainerId) + 1
+			// Example portStart: 10000 + (100 * containerId) == 10000.
+			portStart := containerPublishPortBase +
+				(containerPublishPortSpan * session.ContainerId)
 
-			streamingJson := IsStreamingJsonURLPath(r.URL.Path)
+			// Example targetPort: portStart + 1 == 10001.
+			targetPort = portStart + portMap[8091]
+
+			streamingJson, remap := IsStreamingJsonURLPath(r.URL.Path)
 
 			modifyResponse = func(resp *http.Response) (err error) {
 				for _, cookie := range resp.Cookies() {
@@ -111,8 +114,10 @@ func HttpProxy(listenProxy string, portMap map[int]int,
 				}
 
 				if streamingJson {
-					resp.Body = &streamingJsonPortRemapper{
+					resp.Body = &jsonStreamer{
+						remap:     remap,
 						portMap:   portMap,
+						portStart: portStart,
 						src:       resp.Body,
 						srcReader: bufio.NewReader(resp.Body),
 					}
@@ -126,8 +131,9 @@ func HttpProxy(listenProxy string, portMap map[int]int,
 			}
 
 			log.Printf("INFO: HttpProxy, path: %s, sessionId: %s,"+
-				" containerId: %d, streamingJson: %t", r.URL.Path,
-				sessionId, session.ContainerId, streamingJson)
+				" containerId: %d, streamingJson: %t, remap: %t",
+				r.URL.Path, sessionId, session.ContainerId,
+				streamingJson, remap)
 		}
 
 		// We can reach this point with a session, or reach here
@@ -156,40 +162,42 @@ func HttpProxy(listenProxy string, portMap map[int]int,
 
 // ------------------------------------------------
 
-func IsStreamingJsonURLPath(path string) bool {
+func IsStreamingJsonURLPath(path string) (bool, bool) {
 	if strings.HasPrefix(path, "/poolsStreaming/") {
-		return true
+		return true, false
 	}
 
 	if strings.HasPrefix(path, "/pools/") {
 		// Ex: "/pools/default/bs/beer-sample".
 		parts := strings.Split(path, "/")
 		if len(parts) > 4 && parts[3] == "bs" {
-			return true
+			return true, true
 		}
 	}
 
 	// TODO: More streaming JSON URL paths (used by SDK's)?
 
-	return false
+	return false, false
 }
 
 // ------------------------------------------------
 
 // Rewrites streaming JSON, which is JSON delimited by 4 newlines,
-// with remapped port numbers.
-type streamingJsonPortRemapper struct {
+// optionally remapping port numbers.
+type jsonStreamer struct {
+	remap     bool
 	portMap   map[int]int
+	portStart int
 	src       io.Closer
 	srcReader *bufio.Reader
 	out       bytes.Buffer
 }
 
-func (s *streamingJsonPortRemapper) Close() error {
+func (s *jsonStreamer) Close() error {
 	return s.src.Close()
 }
 
-func (s *streamingJsonPortRemapper) Read(p []byte) (n int, err error) {
+func (s *jsonStreamer) Read(p []byte) (n int, err error) {
 	if s.out.Len() <= 0 {
 		s.out.Reset()
 
@@ -215,7 +223,9 @@ func (s *streamingJsonPortRemapper) Read(p []byte) (n int, err error) {
 			return 0, err
 		}
 
-		// TODO: remap JSON.
+		if s.remap {
+			s.RemapJson(m)
+		}
 
 		b, err = json.Marshal(m)
 		if err != nil {
@@ -229,6 +239,38 @@ func (s *streamingJsonPortRemapper) Read(p []byte) (n int, err error) {
 	}
 
 	return s.out.Read(p)
+}
+
+// ------------------------------------------------
+
+func (s *jsonStreamer) RemapJson(m map[string]interface{}) {
+	if v, exists := m["nodesExt"]; exists && v != nil {
+		if va, ok := v.([]interface{}); ok && va != nil {
+			for _, vav := range va {
+				s.RemapJsonNodeExt(vav)
+			}
+		}
+	}
+}
+
+func (s *jsonStreamer) RemapJsonNodeExt(vav interface{}) {
+	if nodeExt, ok := vav.(map[string]interface{}); ok && nodeExt != nil {
+		if v2, exists := nodeExt["services"]; exists && v2 != nil {
+			s.RemapJsonServices(v2)
+		}
+	}
+}
+
+func (s *jsonStreamer) RemapJsonServices(v2 interface{}) {
+	if services, ok := v2.(map[string]interface{}); ok && services != nil {
+		for service, v3 := range services {
+			if port, ok := v3.(float64); ok {
+				if portDelta, exists := s.portMap[int(port)]; exists {
+					services[service] = s.portStart + portDelta
+				}
+			}
+		}
+	}
 }
 
 // ------------------------------------------------
