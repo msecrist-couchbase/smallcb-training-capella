@@ -54,14 +54,15 @@ func HttpProxy(listenProxy string) {
 				sessionId = CookiesGet(c)
 				if sessionId != "" {
 					log.Printf("INFO: HttpProxy, path: %s, sessionId: %s,"+
-						" via cookie: %s", r.URL.Path, sessionId, c)
+						" via cookie", r.URL.Path, sessionId)
 
 					break
 				}
 			}
 		}
 
-		// Default to targetPort of 10001 for serving web login UI's.
+		// Default to targetPort of 10001 so that we can
+		// serve the web login UI without any auth or session.
 		targetPort := *containerPublishPortBase + 1
 
 		var modifyResponse func(response *http.Response) error
