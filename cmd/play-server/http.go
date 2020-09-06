@@ -1,8 +1,11 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"html/template"
+	"io"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"net/http/httputil"
@@ -245,13 +248,61 @@ func HttpProxy(listenProxy string) {
 	proxyMux := http.NewServeMux()
 
 	proxyMux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		dumpBody := false
-		if r.URL.Path == "/uilogin" {
-			dumpBody = true
+		user, pswd, ok := r.BasicAuth()
+		if ok {
+			log.Printf("ERROR: HttpProxy, path: %s, user: %s, BasicAuth",
+				r.URL.Path, user)
+		} else if r.URL.Path == "/uilogin" && r.Method == "POST" {
+			var err error
+			var saveBody io.ReadCloser
+
+			// Duplicating r.Body since r.FormValue() consumes the r.Body.
+			saveBody, r.Body, err = DupBody(r.Body)
+			if err != nil {
+				http.Error(w,
+					http.StatusText(http.StatusInternalServerError)+
+						fmt.Sprintf(", HttpProxy, DupBody, err: %v", err),
+					http.StatusInternalServerError)
+				log.Printf("ERROR: HttpProxy, DupBody, err: %v", err)
+				return
+			}
+
+			user = r.FormValue("user")
+			pswd = r.FormValue("password")
+
+			r.Body = saveBody
+
+			log.Printf("ERROR: HttpProxy, path: %s, user: %s, uilogin",
+				r.URL.Path, user)
 		}
 
-		dump, _ := httputil.DumpRequest(r, dumpBody)
-		log.Printf("INFO: HttpProxy, r: %s", dump)
+		if user != "" {
+			sessionId := user + pswd
+
+			session := sessions.SessionGet(sessionId)
+			if session == nil {
+				http.Error(w,
+					http.StatusText(http.StatusNotFound)+
+						fmt.Sprintf(", HttpProxy, session not found"),
+					http.StatusNotFound)
+				log.Printf("ERROR: HttpProxy, path: %s, user: %s"+
+					", session not found", r.URL.Path, user)
+				return
+			}
+
+			if session.ContainerId < 0 {
+				http.Error(w,
+					http.StatusText(http.StatusNotFound)+
+						fmt.Sprintf(", HttpProxy, session w/o container"),
+					http.StatusNotFound)
+				log.Printf("ERROR: HttpProxy, path: %s, user: %s"+
+					", session w/o container", r.URL.Path, user)
+				return
+			}
+
+			log.Printf("ERROR: HttpProxy, path: %s, user: %s, session ok",
+				r.URL.Path, user)
+		}
 
 		director := func(req *http.Request) {
 			origin, _ := url.Parse("http://127.0.0.1:10001/")
@@ -271,4 +322,27 @@ func HttpProxy(listenProxy string) {
 	log.Printf("INFO: HttpProxy, listenProxy: %s", listenProxy)
 
 	log.Fatal(http.ListenAndServe(listenProxy, proxyMux))
+}
+
+// ------------------------------------------------
+
+// DupBody is based onhttputil.DrainBody, and reads all of b to
+// memory and then returns two ReadClosers yielding the same bytes.
+func DupBody(b io.ReadCloser) (r1, r2 io.ReadCloser, err error) {
+	if b == nil || b == http.NoBody {
+		// No copying needed. Preserve the magic sentinel meaning of NoBody.
+		return http.NoBody, http.NoBody, nil
+	}
+
+	var buf bytes.Buffer
+	if _, err = buf.ReadFrom(b); err != nil {
+		return nil, b, err
+	}
+
+	if err = b.Close(); err != nil {
+		return nil, b, err
+
+	}
+
+	return ioutil.NopCloser(&buf), ioutil.NopCloser(bytes.NewReader(buf.Bytes())), nil
 }
