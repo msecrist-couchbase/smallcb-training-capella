@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"net/http/httputil"
 	"net/url"
+	"strings"
 )
 
 func HttpProxy(listenProxy string,
@@ -99,17 +100,15 @@ func HttpProxy(listenProxy string,
 				" containerId: %d", r.URL.Path, sessionId,
 				session.ContainerId)
 
-			modifyResponse = func(response *http.Response) error {
-				for _, cookie := range response.Cookies() {
+			modifyResponse = func(resp *http.Response) (err error) {
+				for _, cookie := range resp.Cookies() {
 					c := cookie.Name + "=" + cookie.Value
 
 					CookiesSet(c, sessionId)
 				}
 
-				if hs, ok := response.Header["Content-Type"]; ok {
-					if len(hs) > 0 && hs[0] == "application/json" {
-						log.Printf("INFO: json!")
-					}
+				if strings.HasPrefix(r.URL.Path, "/pools") {
+					return FixupResponse(resp)
 				}
 
 				return nil
@@ -161,4 +160,34 @@ func DupBody(b io.ReadCloser) (r1, r2 io.ReadCloser, err error) {
 
 	return ioutil.NopCloser(&buf),
 		ioutil.NopCloser(bytes.NewReader(buf.Bytes())), nil
+}
+
+// ------------------------------------------------
+
+func FixupResponse(resp *http.Response) (err error) {
+	hs, ok := resp.Header["Content-Type"]
+	if !ok || hs[0] != "application/json" {
+		return nil
+	}
+
+	cl := resp.ContentLength
+
+	var dup io.ReadCloser
+
+	dup, resp.Body, err = DupBody(resp.Body)
+
+	resp.ContentLength = cl
+
+	if err != nil {
+		return err
+	}
+
+	b, err := ioutil.ReadAll(dup)
+	if err != nil {
+		return err
+	}
+
+	log.Printf("INFO: json! b: %s", b)
+
+	return nil
 }
