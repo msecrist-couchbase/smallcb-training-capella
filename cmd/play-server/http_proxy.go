@@ -101,10 +101,6 @@ func HttpProxy(listenProxy string, portMap map[int]int,
 			targetPort = containerPublishPortBase +
 				(containerPublishPortSpan * session.ContainerId) + 1
 
-			log.Printf("INFO: HttpProxy, path: %s, sessionId: %s,"+
-				" containerId: %d", r.URL.Path, sessionId,
-				session.ContainerId)
-
 			streamingJson := IsStreamingJsonURLPath(r.URL.Path)
 
 			modifyResponse = func(resp *http.Response) (err error) {
@@ -128,6 +124,10 @@ func HttpProxy(listenProxy string, portMap map[int]int,
 			if streamingJson {
 				flushInterval = 2 * time.Second
 			}
+
+			log.Printf("INFO: HttpProxy, path: %s, sessionId: %s,"+
+				" containerId: %d, streamingJson: %t", r.URL.Path,
+				sessionId, session.ContainerId, streamingJson)
 		}
 
 		// We can reach this point with a session, or reach here
