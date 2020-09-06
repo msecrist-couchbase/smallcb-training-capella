@@ -139,13 +139,23 @@ stats?
 
 DNS, ELB & subdomains?
 
-use nginx proxy for subdomain based routing?
-  See, the following, but which unfortunately doesn't seem to handle
+ELB and sticky load balancing?
+
+health watchers and elastic scaling -- bring up more nodes
+  when there's more people and auto-scale-down when
+  traffic goes away?
+
+DONE: examine nginx proxy for subdomain based routing -- ANS: not easy.
+  For example, the following, but which unfortunately doesn't seem to handle
   multiple virtual ports...
   https://blog.florianlopes.io/host-multiple-websites-on-single-host-docker/
 
-can docker checkpoint (experimental feature in docker)
-  help speed up slow restart times?
+inject play-server UI parts into web admin UI
+  via JS injection?
+
+DONE: use docker checkpoint to help speed up slow restart times...
+  ANS: no, checkpoints are currently only an experimental feature
+       in docker (2020/09/04).
 
 should we use docker build env vars?
 
