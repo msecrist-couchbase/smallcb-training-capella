@@ -364,5 +364,6 @@ func DupBody(b io.ReadCloser) (r1, r2 io.ReadCloser, err error) {
 
 	}
 
-	return ioutil.NopCloser(&buf), ioutil.NopCloser(bytes.NewReader(buf.Bytes())), nil
+	return ioutil.NopCloser(&buf),
+		ioutil.NopCloser(bytes.NewReader(buf.Bytes())), nil
 }

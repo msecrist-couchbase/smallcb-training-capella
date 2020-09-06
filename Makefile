@@ -83,6 +83,7 @@ wait-healthy:
 
 play-server-src = \
         cmd/play-server/admin.go \
+        cmd/play-server/cookie.go \
         cmd/play-server/http.go \
         cmd/play-server/main.go \
         cmd/play-server/main_flags.go \

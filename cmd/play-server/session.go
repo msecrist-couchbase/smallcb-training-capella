@@ -25,6 +25,8 @@ type Session struct {
 
 	RestartCh chan<- Restart
 	ReadyCh   chan int
+
+	Cookies []string
 }
 
 // SessionInfo fields are intended to be persistable.
@@ -114,10 +116,15 @@ func (sessions *Sessions) SessionExit(sessionId string) error {
 	session, exists := sessions.mapBySessionId[sessionId]
 	if exists && session != nil {
 		delete(sessions.mapBySessionId, sessionId)
-		delete(sessions.mapByFullNameEmail, FullNameEmail(
-			session.FullName, session.Email))
 
-		go session.ReleaseContainer()
+		delete(sessions.mapByFullNameEmail,
+			FullNameEmail(session.FullName, session.Email))
+
+		go func() { // Async to not hold the sessions lock.
+			session.ReleaseContainer()
+
+			CookiesRemove(session.Cookies)
+		}()
 
 		StatsNumInc("sessions.SessionExit.ok")
 	} else {
