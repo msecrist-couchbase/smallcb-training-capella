@@ -95,15 +95,21 @@ func HttpProxy(listenProxy string,
 			targetPort = containerPublishPortBase +
 				(containerPublishPortSpan * session.ContainerId) + 1
 
-			log.Printf("INFO: HttpProxy, path: %s, sessionId: %s, session ok,"+
-				" containerId: %d, targetPort: %d", r.URL.Path, sessionId,
-				session.ContainerId, targetPort)
+			log.Printf("INFO: HttpProxy, path: %s, sessionId: %s,"+
+				" containerId: %d", r.URL.Path, sessionId,
+				session.ContainerId)
 
 			modifyResponse = func(response *http.Response) error {
 				for _, cookie := range response.Cookies() {
 					c := cookie.Name + "=" + cookie.Value
 
 					CookiesSet(c, sessionId)
+				}
+
+				if hs, ok := response.Header["Content-Type"]; ok {
+					if len(hs) > 0 && hs[0] == "application/json" {
+						log.Printf("INFO: json!")
+					}
 				}
 
 				return nil
