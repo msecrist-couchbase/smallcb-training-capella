@@ -15,10 +15,14 @@ func HttpProxy(listenProxy string) {
 	proxyMux := http.NewServeMux()
 
 	proxyMux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		var sessionId string
+
 		user, pswd, ok := r.BasicAuth()
 		if ok {
-			log.Printf("INFO: HttpProxy, path: %s, user: %s, BasicAuth",
-				r.URL.Path, user)
+			sessionId = user + pswd
+
+			log.Printf("INFO: HttpProxy, path: %s, sessionId: %s,"+
+				" via BasicAuth", r.URL.Path, sessionId)
 		} else if r.URL.Path == "/uilogin" && r.Method == "POST" {
 			var err error
 			var saveBody io.ReadCloser
@@ -39,8 +43,22 @@ func HttpProxy(listenProxy string) {
 
 			r.Body = saveBody
 
-			log.Printf("INFO: HttpProxy, path: %s, user: %s, uilogin",
-				r.URL.Path, user)
+			sessionId = user + pswd
+
+			log.Printf("INFO: HttpProxy, path: %s, sessionId: %s,"+
+				" via uilogin", r.URL.Path, sessionId)
+		} else {
+			for _, cookie := range r.Cookies() {
+				c := cookie.Name + "=" + cookie.Value
+
+				sessionId = CookiesGet(c)
+				if sessionId != "" {
+					log.Printf("INFO: HttpProxy, path: %s, sessionId: %s,"+
+						" via cookie", r.URL.Path, sessionId)
+
+					break
+				}
+			}
 		}
 
 		// Default to targetPort of 10001 for serving web login UI's.
@@ -48,17 +66,15 @@ func HttpProxy(listenProxy string) {
 
 		var modifyResponse func(response *http.Response) error
 
-		if user != "" {
-			sessionId := user + pswd
-
+		if sessionId != "" {
 			session := sessions.SessionGet(sessionId)
 			if session == nil {
 				http.Error(w,
 					http.StatusText(http.StatusNotFound)+
 						fmt.Sprintf(", HttpProxy, session not found"),
 					http.StatusNotFound)
-				log.Printf("ERROR: HttpProxy, path: %s, user: %s,"+
-					" session not found", r.URL.Path, user)
+				log.Printf("ERROR: HttpProxy, path: %s, sessionId: %s,"+
+					" session not found", r.URL.Path, sessionId)
 				return
 			}
 
@@ -67,13 +83,13 @@ func HttpProxy(listenProxy string) {
 					http.StatusText(http.StatusNotFound)+
 						fmt.Sprintf(", HttpProxy, session w/o container"),
 					http.StatusNotFound)
-				log.Printf("ERROR: HttpProxy, path: %s, user: %s,"+
-					" session w/o container", r.URL.Path, user)
+				log.Printf("ERROR: HttpProxy, path: %s, sessionId: %s,"+
+					" session w/o container", r.URL.Path, sessionId)
 				return
 			}
 
-			log.Printf("INFO: HttpProxy, path: %s, user: %s, session ok,"+
-				" containerId: %d, targetPort: %d", r.URL.Path, user,
+			log.Printf("INFO: HttpProxy, path: %s, sessionId: %s, session ok,"+
+				" containerId: %d, targetPort: %d", r.URL.Path, sessionId,
 				session.ContainerId, targetPort)
 
 			// Example targetPort: 10000 + (100 * containerId) + 1 == 10001.
@@ -81,8 +97,11 @@ func HttpProxy(listenProxy string) {
 				(*containerPublishPortSpan * session.ContainerId) + 1
 
 			modifyResponse = func(response *http.Response) error {
-				log.Printf("INFO: HttpProxy, response cookies: %+v",
-					response.Cookies())
+				for _, cookie := range response.Cookies() {
+					c := cookie.Name + "=" + cookie.Value
+
+					CookiesSet(c, sessionId)
+				}
 
 				return nil
 			}
