@@ -108,7 +108,7 @@ func HttpProxy(listenProxy string, portMap map[int]int,
 				}
 
 				if strings.HasPrefix(r.URL.Path, "/pools") {
-					return HttpProxyJsonPortsRemap(resp, portMap)
+					return HttpProxyJsonPortsRemap(r, resp, portMap)
 				}
 
 				return nil
@@ -140,7 +140,7 @@ func HttpProxy(listenProxy string, portMap map[int]int,
 
 // ------------------------------------------------
 
-func HttpProxyJsonPortsRemap(resp *http.Response,
+func HttpProxyJsonPortsRemap(r *http.Request, resp *http.Response,
 	portMap map[int]int) (err error) {
 	hs, ok := resp.Header["Content-Type"]
 	if !ok || hs[0] != "application/json" {
@@ -164,14 +164,14 @@ func HttpProxyJsonPortsRemap(resp *http.Response,
 		return err
 	}
 
-	log.Printf("INFO: json! b: %s", b)
+	log.Printf("INFO: json! r: %s, b: %s", r.URL.Path, b)
 
 	return nil
 }
 
 // ------------------------------------------------
 
-// DupBody is based onhttputil.DrainBody, and reads all of b to
+// DupBody is based on httputil.DrainBody, and reads all of b to
 // memory and then returns two ReadClosers yielding the same bytes.
 func DupBody(b io.ReadCloser) (r1, r2 io.ReadCloser, err error) {
 	if b == nil || b == http.NoBody {
