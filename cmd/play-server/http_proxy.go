@@ -12,7 +12,7 @@ import (
 	"strings"
 )
 
-func HttpProxy(listenProxy string,
+func HttpProxy(listenProxy string, portMap map[int]int,
 	containerPublishPortBase int,
 	containerPublishPortSpan int) {
 	proxyMux := http.NewServeMux()
@@ -108,7 +108,7 @@ func HttpProxy(listenProxy string,
 				}
 
 				if strings.HasPrefix(r.URL.Path, "/pools") {
-					return FixupResponse(resp)
+					return HttpProxyJsonPortsRemap(resp, portMap)
 				}
 
 				return nil
@@ -140,31 +140,8 @@ func HttpProxy(listenProxy string,
 
 // ------------------------------------------------
 
-// DupBody is based onhttputil.DrainBody, and reads all of b to
-// memory and then returns two ReadClosers yielding the same bytes.
-func DupBody(b io.ReadCloser) (r1, r2 io.ReadCloser, err error) {
-	if b == nil || b == http.NoBody {
-		// No copying needed. Preserve the magic sentinel meaning of NoBody.
-		return http.NoBody, http.NoBody, nil
-	}
-
-	var buf bytes.Buffer
-	if _, err = buf.ReadFrom(b); err != nil {
-		return nil, b, err
-	}
-
-	if err = b.Close(); err != nil {
-		return nil, b, err
-
-	}
-
-	return ioutil.NopCloser(&buf),
-		ioutil.NopCloser(bytes.NewReader(buf.Bytes())), nil
-}
-
-// ------------------------------------------------
-
-func FixupResponse(resp *http.Response) (err error) {
+func HttpProxyJsonPortsRemap(resp *http.Response,
+	portMap map[int]int) (err error) {
 	hs, ok := resp.Header["Content-Type"]
 	if !ok || hs[0] != "application/json" {
 		return nil
@@ -190,4 +167,28 @@ func FixupResponse(resp *http.Response) (err error) {
 	log.Printf("INFO: json! b: %s", b)
 
 	return nil
+}
+
+// ------------------------------------------------
+
+// DupBody is based onhttputil.DrainBody, and reads all of b to
+// memory and then returns two ReadClosers yielding the same bytes.
+func DupBody(b io.ReadCloser) (r1, r2 io.ReadCloser, err error) {
+	if b == nil || b == http.NoBody {
+		// No copying needed. Preserve the magic sentinel meaning of NoBody.
+		return http.NoBody, http.NoBody, nil
+	}
+
+	var buf bytes.Buffer
+	if _, err = buf.ReadFrom(b); err != nil {
+		return nil, b, err
+	}
+
+	if err = b.Close(); err != nil {
+		return nil, b, err
+
+	}
+
+	return ioutil.NopCloser(&buf),
+		ioutil.NopCloser(bytes.NewReader(buf.Bytes())), nil
 }

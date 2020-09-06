@@ -113,7 +113,12 @@ func main() {
 
 	HttpMuxInit(mux)
 
-	go HttpProxy(*listenProxy,
+	portMap := map[int]int{}
+	for _, pair := range PortMapping {
+		portMap[pair[0]] = pair[1]
+	}
+
+	go HttpProxy(*listenProxy, portMap,
 		*containerPublishPortBase,
 		*containerPublishPortSpan)
 
