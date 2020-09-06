@@ -54,7 +54,7 @@ func HttpProxy(listenProxy string) {
 				sessionId = CookiesGet(c)
 				if sessionId != "" {
 					log.Printf("INFO: HttpProxy, path: %s, sessionId: %s,"+
-						" via cookie", r.URL.Path, sessionId)
+						" via cookie: %s", r.URL.Path, sessionId, c)
 
 					break
 				}
@@ -88,13 +88,13 @@ func HttpProxy(listenProxy string) {
 				return
 			}
 
-			log.Printf("INFO: HttpProxy, path: %s, sessionId: %s, session ok,"+
-				" containerId: %d, targetPort: %d", r.URL.Path, sessionId,
-				session.ContainerId, targetPort)
-
 			// Example targetPort: 10000 + (100 * containerId) + 1 == 10001.
 			targetPort = *containerPublishPortBase +
 				(*containerPublishPortSpan * session.ContainerId) + 1
+
+			log.Printf("INFO: HttpProxy, path: %s, sessionId: %s, session ok,"+
+				" containerId: %d, targetPort: %d", r.URL.Path, sessionId,
+				session.ContainerId, targetPort)
 
 			modifyResponse = func(response *http.Response) error {
 				for _, cookie := range response.Cookies() {
@@ -107,11 +107,11 @@ func HttpProxy(listenProxy string) {
 			}
 		}
 
+		// We can reach this point with a session, or reach here
+		// session-less in the case of the web login UI screen.
+
 		director := func(req *http.Request) {
 			origin, _ := url.Parse(fmt.Sprintf("http://127.0.0.1:%d/", targetPort))
-
-			// req.Header.Add("X-Forwarded-Host", req.Host)
-			// req.Header.Add("X-Origin-Host", origin.Host)
 
 			req.URL.Scheme = origin.Scheme
 			req.URL.Host = origin.Host
