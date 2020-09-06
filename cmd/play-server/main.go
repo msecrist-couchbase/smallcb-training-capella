@@ -113,7 +113,9 @@ func main() {
 
 	HttpMuxInit(mux)
 
-	go HttpProxy(*listenProxy)
+	go HttpProxy(*listenProxy,
+		*containerPublishPortBase,
+		*containerPublishPortSpan)
 
 	log.Printf("INFO: main, listen: %s", *listen)
 

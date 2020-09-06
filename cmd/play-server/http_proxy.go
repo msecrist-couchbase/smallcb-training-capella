@@ -11,7 +11,9 @@ import (
 	"net/url"
 )
 
-func HttpProxy(listenProxy string) {
+func HttpProxy(listenProxy string,
+	containerPublishPortBase int,
+	containerPublishPortSpan int) {
 	proxyMux := http.NewServeMux()
 
 	proxyMux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
@@ -63,7 +65,7 @@ func HttpProxy(listenProxy string) {
 
 		// Default to targetPort of 10001 so that we can
 		// serve the web login UI without any auth or session.
-		targetPort := *containerPublishPortBase + 1
+		targetPort := containerPublishPortBase + 1
 
 		var modifyResponse func(response *http.Response) error
 
@@ -90,8 +92,8 @@ func HttpProxy(listenProxy string) {
 			}
 
 			// Example targetPort: 10000 + (100 * containerId) + 1 == 10001.
-			targetPort = *containerPublishPortBase +
-				(*containerPublishPortSpan * session.ContainerId) + 1
+			targetPort = containerPublishPortBase +
+				(containerPublishPortSpan * session.ContainerId) + 1
 
 			log.Printf("INFO: HttpProxy, path: %s, sessionId: %s, session ok,"+
 				" containerId: %d, targetPort: %d", r.URL.Path, sessionId,
