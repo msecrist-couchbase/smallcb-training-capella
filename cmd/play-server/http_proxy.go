@@ -105,16 +105,7 @@ func HttpProxy(listenProxy string, portMap map[int]int,
 				" containerId: %d", r.URL.Path, sessionId,
 				session.ContainerId)
 
-			streamingJson := false
-			if strings.HasPrefix(r.URL.Path, "/poolsStreaming/") {
-				streamingJson = true
-			} else if strings.HasPrefix(r.URL.Path, "/pools/") {
-				// Ex: "/pools/default/bs/beer-sample".
-				parts := strings.Split(r.URL.Path, "/")
-				if len(parts) > 4 && parts[3] == "bs" {
-					streamingJson = true
-				}
-			}
+			streamingJson := IsStreamingJsonURLPath(r.URL.Path)
 
 			modifyResponse = func(resp *http.Response) (err error) {
 				for _, cookie := range resp.Cookies() {
@@ -161,6 +152,26 @@ func HttpProxy(listenProxy string, portMap map[int]int,
 	log.Printf("INFO: HttpProxy, listenProxy: %s", listenProxy)
 
 	log.Fatal(http.ListenAndServe(listenProxy, proxyMux))
+}
+
+// ------------------------------------------------
+
+func IsStreamingJsonURLPath(path string) bool {
+	if strings.HasPrefix(path, "/poolsStreaming/") {
+		return true
+	}
+
+	if strings.HasPrefix(path, "/pools/") {
+		// Ex: "/pools/default/bs/beer-sample".
+		parts := strings.Split(path, "/")
+		if len(parts) > 4 && parts[3] == "bs" {
+			return true
+		}
+	}
+
+	// TODO: More streaming JSON URL paths (used by SDK's)?
+
+	return false
 }
 
 // ------------------------------------------------
