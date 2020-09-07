@@ -50,8 +50,9 @@ var (
 	listen = flag.String("listen", ":8080",
 		"listen [addr]:port for play-server's web UI / REST API")
 
-	listenProxy = flag.String("listenProxy", ":8091",
-		"listen [addr]:port for proxying couchbase server's web UI / REST API")
+	listenProxy = flag.String("listenProxy", ":8091,:8093",
+		"listen [addr]:port for proxying couchbase server,"+
+			" such as the web UI / REST API and N1QL server")
 
 	sessionsMaxAge = flag.Duration("sessionsMaxAge",
 		5*time.Minute,

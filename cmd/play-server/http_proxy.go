@@ -21,6 +21,8 @@ func HttpProxy(listenProxy string, proxyFlushInterval time.Duration,
 	portMap map[int]int,
 	containerPublishPortBase int,
 	containerPublishPortSpan int) {
+	port, _ := strconv.Atoi(strings.Split(listenProxy, ":")[1])
+
 	proxyMux := http.NewServeMux()
 
 	proxyMux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
@@ -30,8 +32,8 @@ func HttpProxy(listenProxy string, proxyFlushInterval time.Duration,
 		if ok {
 			sessionId = user + pswd
 
-			log.Printf("INFO: HttpProxy, path: %s, sessionId: %s,"+
-				" via BasicAuth", r.URL.Path, sessionId)
+			log.Printf("INFO: HttpProxy, port: %d, path: %s, sessionId: %s,"+
+				" via BasicAuth", port, r.URL.Path, sessionId)
 		} else if r.URL.Path == "/uilogin" && r.Method == "POST" {
 			var err error
 			var saveBody io.ReadCloser
@@ -54,16 +56,17 @@ func HttpProxy(listenProxy string, proxyFlushInterval time.Duration,
 
 			sessionId = user + pswd
 
-			log.Printf("INFO: HttpProxy, path: %s, sessionId: %s,"+
-				" via uilogin", r.URL.Path, sessionId)
+			log.Printf("INFO: HttpProxy, port: %d, path: %s, sessionId: %s,"+
+				" via uilogin", port, r.URL.Path, sessionId)
 		} else {
 			for _, cookie := range r.Cookies() {
 				c := cookie.Name + "=" + cookie.Value
 
 				sessionId = CookiesGet(c)
 				if sessionId != "" {
-					log.Printf("INFO: HttpProxy, path: %s, sessionId: %s,"+
-						" via cookie", r.URL.Path, sessionId)
+					log.Printf("INFO: HttpProxy, port: %d,"+
+						" path: %s, sessionId: %s,"+
+						" via cookie", port, r.URL.Path, sessionId)
 
 					break
 				}
@@ -72,7 +75,7 @@ func HttpProxy(listenProxy string, proxyFlushInterval time.Duration,
 
 		// Default to targetPort of 10001 so that we can
 		// serve the web login UI without any auth or session.
-		targetPort := containerPublishPortBase + 1
+		targetPort := containerPublishPortBase + portMap[port]
 
 		var modifyResponse func(response *http.Response) error
 
@@ -105,7 +108,7 @@ func HttpProxy(listenProxy string, proxyFlushInterval time.Duration,
 				(containerPublishPortSpan * session.ContainerId)
 
 			// Example targetPort: portStart + 1 == 10001.
-			targetPort = portStart + portMap[8091]
+			targetPort = portStart + portMap[port]
 
 			remapResponse, streamResponse :=
 				ResponseKindForURLPath(r.URL.Path)
@@ -147,9 +150,9 @@ func HttpProxy(listenProxy string, proxyFlushInterval time.Duration,
 				flushInterval = proxyFlushInterval
 			}
 
-			log.Printf("INFO: HttpProxy, path: %s, sessionId: %s,"+
-				" containerId: %d, remap: %t, stream: %t",
-				r.URL.Path, sessionId, session.ContainerId,
+			log.Printf("INFO: HttpProxy, port: %d, path: %s,"+
+				" sessionId: %s, containerId: %d, remap: %t, stream: %t",
+				port, r.URL.Path, sessionId, session.ContainerId,
 				remapResponse, streamResponse)
 		}
 
@@ -157,7 +160,8 @@ func HttpProxy(listenProxy string, proxyFlushInterval time.Duration,
 		// session-less in the case of the web login UI screen.
 
 		director := func(req *http.Request) {
-			origin, _ := url.Parse(fmt.Sprintf("http://127.0.0.1:%d/", targetPort))
+			origin, _ := url.Parse(
+				fmt.Sprintf("http://127.0.0.1:%d/", targetPort))
 
 			req.URL.Scheme = origin.Scheme
 			req.URL.Host = origin.Host

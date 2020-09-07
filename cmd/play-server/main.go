@@ -121,11 +121,12 @@ func main() {
 
 	HttpMuxInit(mux)
 
-	go HttpProxy(*listenProxy, *proxyFlushInterval,
-		*containerPublishHost,
-		PortMap,
-		*containerPublishPortBase,
-		*containerPublishPortSpan)
+	for _, lp := range strings.Split(*listenProxy, ",") {
+		go HttpProxy(lp, *proxyFlushInterval,
+			*containerPublishHost, PortMap,
+			*containerPublishPortBase,
+			*containerPublishPortSpan)
+	}
 
 	log.Printf("INFO: main, listen: %s", *listen)
 
