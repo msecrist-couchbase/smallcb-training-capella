@@ -180,6 +180,10 @@ func HttpProxy(listenProxy string, proxyFlushInterval time.Duration,
 // ------------------------------------------------
 
 func ResponseKindForURLPath(path string) (needsRemap, needsStreaming bool) {
+	for len(path) > 0 && path[len(path)-1] == '/' {
+		path = path[0 : len(path)-1] // Strip trailing '/'.
+	}
+
 	if strings.HasPrefix(path, "/poolsStreaming/") {
 		return true, true
 	}
