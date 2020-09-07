@@ -16,7 +16,9 @@ import (
 	"time"
 )
 
-func HttpProxy(listenProxy string, portMap map[int]int,
+func HttpProxy(listenProxy string,
+	containerPublishHost string,
+	portMap map[int]int,
 	containerPublishPortBase int,
 	containerPublishPortSpan int) {
 	proxyMux := http.NewServeMux()
@@ -105,7 +107,8 @@ func HttpProxy(listenProxy string, portMap map[int]int,
 			// Example targetPort: portStart + 1 == 10001.
 			targetPort = portStart + portMap[8091]
 
-			streamingJson, remap := IsStreamingJsonURLPath(r.URL.Path)
+			remapResponse, streamResponse :=
+				ResponseKindForURLPath(r.URL.Path)
 
 			modifyResponse = func(resp *http.Response) (err error) {
 				for _, cookie := range resp.Cookies() {
@@ -114,27 +117,40 @@ func HttpProxy(listenProxy string, portMap map[int]int,
 					CookiesSet(c, sessionId)
 				}
 
-				if streamingJson {
-					resp.Body = &jsonStreamer{
-						remap:     remap,
-						portMap:   portMap,
-						portStart: portStart,
+				if streamResponse {
+					js := &JsonStreamer{
 						src:       resp.Body,
 						srcReader: bufio.NewReader(resp.Body),
 					}
+
+					if remapResponse {
+						js.remapper = &JsonRemapper{
+							host:      containerPublishHost,
+							portMap:   portMap,
+							portStart: portStart,
+						}
+					}
+
+					resp.Body = js
+				} else if remapResponse {
+					err = RemapResponse(resp, &JsonRemapper{
+						host:      containerPublishHost,
+						portMap:   portMap,
+						portStart: portStart,
+					})
 				}
 
-				return nil
+				return err
 			}
 
-			if streamingJson {
+			if streamResponse {
 				flushInterval = 2 * time.Second
 			}
 
 			log.Printf("INFO: HttpProxy, path: %s, sessionId: %s,"+
-				" containerId: %d, streamingJson: %t, remap: %t",
+				" containerId: %d, remap: %t, stream: %t",
 				r.URL.Path, sessionId, session.ContainerId,
-				streamingJson, remap)
+				remapResponse, streamResponse)
 		}
 
 		// We can reach this point with a session, or reach here
@@ -163,42 +179,50 @@ func HttpProxy(listenProxy string, portMap map[int]int,
 
 // ------------------------------------------------
 
-func IsStreamingJsonURLPath(path string) (bool, bool) {
+func ResponseKindForURLPath(path string) (needsRemap, needsStreaming bool) {
 	if strings.HasPrefix(path, "/poolsStreaming/") {
-		return true, false
+		return true, true
 	}
 
 	if strings.HasPrefix(path, "/pools/") {
-		// Ex: "/pools/default/bs/beer-sample".
 		parts := strings.Split(path, "/")
-		if len(parts) > 4 && parts[3] == "bs" {
-			return true, true
+		if len(parts) == 3 {
+			return true, false // Ex: "/pools/default".
+		}
+
+		// Ex: "/pools/default/buckets|bucketsStreaming|bs/beer-sample".
+		if len(parts) == 5 {
+			if parts[3] == "buckets" {
+				return true, false
+			}
+
+			if parts[3] == "bs" ||
+				parts[3] == "bucketsStreaming" {
+				return true, true
+			}
 		}
 	}
-
-	// TODO: More streaming JSON URL paths (used by SDK's)?
 
 	return false, false
 }
 
 // ------------------------------------------------
 
-// Rewrites streaming JSON, which is JSON delimited by 4 newlines,
-// optionally remapping port numbers.
-type jsonStreamer struct {
-	remap     bool
-	portMap   map[int]int
-	portStart int
-	src       io.Closer
+// Implements io.ReadCloser for streaming response JSON, which
+// is JSON that's delimited by 4 newlines, with optional
+// remapping of port numbers.
+type JsonStreamer struct {
+	remapper  *JsonRemapper
+	src       io.ReadCloser
 	srcReader *bufio.Reader
 	out       bytes.Buffer
 }
 
-func (s *jsonStreamer) Close() error {
+func (s *JsonStreamer) Close() error {
 	return s.src.Close()
 }
 
-func (s *jsonStreamer) Read(p []byte) (n int, err error) {
+func (s *JsonStreamer) Read(p []byte) (n int, err error) {
 	if s.out.Len() <= 0 {
 		s.out.Reset()
 
@@ -224,8 +248,8 @@ func (s *jsonStreamer) Read(p []byte) (n int, err error) {
 			return 0, err
 		}
 
-		if s.remap {
-			s.RemapJson(m)
+		if s.remapper != nil {
+			s.remapper.RemapJson(m)
 		}
 
 		b, err = json.Marshal(m)
@@ -234,11 +258,10 @@ func (s *jsonStreamer) Read(p []byte) (n int, err error) {
 			return 0, err
 		}
 
-		b = append(b, '\n', '\n', '\n', '\n')
-
-		fmt.Printf("b: %s\n", b)
-
 		s.out.Write(b)
+		s.out.Write([]byte("\n\n\n\n"))
+
+		fmt.Printf("b: %s\n", s.out.Bytes())
 	}
 
 	return s.out.Read(p)
@@ -246,7 +269,64 @@ func (s *jsonStreamer) Read(p []byte) (n int, err error) {
 
 // ------------------------------------------------
 
-func (s *jsonStreamer) RemapJson(m map[string]interface{}) {
+func RemapResponse(resp *http.Response, remapper *JsonRemapper) (err error) {
+	log.Printf("RemapResponse, header: %+v", resp.Header)
+
+	if resp.Body == nil || resp.Body == http.NoBody {
+		// No copying needed. Preserve the magic sentinel of NoBody.
+		return nil
+	}
+
+	var buf bytes.Buffer
+	if _, err = buf.ReadFrom(resp.Body); err != nil {
+		return err
+	}
+
+	var m map[string]interface{}
+
+	err = json.Unmarshal(buf.Bytes(), &m)
+	if err != nil {
+		return err
+	}
+
+	remapper.RemapJson(m)
+
+	b, err := json.Marshal(m)
+	if err != nil {
+		return err
+	}
+
+	resp.Body = &ReaderCloser{
+		reader: bytes.NewReader(b),
+		closer: resp.Body,
+	}
+
+	resp.ContentLength = int64(len(b))
+
+	resp.Header["Content-Length"] = []string{fmt.Sprintf("%d", len(b))}
+
+	log.Printf("remap-body: %s (%d)", b, len(b))
+
+	return nil
+}
+
+// ------------------------------------------------
+
+type JsonRemapper struct {
+	host      string
+	portMap   map[int]int
+	portStart int
+}
+
+func (s *JsonRemapper) RemapJson(m map[string]interface{}) {
+	if v, exists := m["nodes"]; exists && v != nil {
+		if va, ok := v.([]interface{}); ok && va != nil {
+			for _, vav := range va {
+				s.RemapJsonNode(vav)
+			}
+		}
+	}
+
 	if v, exists := m["nodesExt"]; exists && v != nil {
 		if va, ok := v.([]interface{}); ok && va != nil {
 			for _, vav := range va {
@@ -264,7 +344,17 @@ func (s *jsonStreamer) RemapJson(m map[string]interface{}) {
 	}
 }
 
-func (s *jsonStreamer) RemapJsonNodeExt(vav interface{}) {
+func (s *JsonRemapper) RemapJsonNode(vav interface{}) {
+	if node, ok := vav.(map[string]interface{}); ok && node != nil {
+		if v2, exists := node["hostname"]; exists && v2 != nil {
+			if str, ok := v2.(string); ok && str != "$HOST:8091" {
+				node["hostname"] = s.host + ":8091"
+			}
+		}
+	}
+}
+
+func (s *JsonRemapper) RemapJsonNodeExt(vav interface{}) {
 	if nodeExt, ok := vav.(map[string]interface{}); ok && nodeExt != nil {
 		if v2, exists := nodeExt["services"]; exists && v2 != nil {
 			s.RemapJsonServices(v2)
@@ -272,7 +362,7 @@ func (s *jsonStreamer) RemapJsonNodeExt(vav interface{}) {
 	}
 }
 
-func (s *jsonStreamer) RemapJsonServices(v2 interface{}) {
+func (s *JsonRemapper) RemapJsonServices(v2 interface{}) {
 	if services, ok := v2.(map[string]interface{}); ok && services != nil {
 		for service, v3 := range services {
 			if port, ok := v3.(float64); ok {
@@ -285,7 +375,7 @@ func (s *jsonStreamer) RemapJsonServices(v2 interface{}) {
 }
 
 // Remap ["$HOST:11210"] to ["$HOST:10030"].
-func (s *jsonStreamer) RemapJsonServerList(v interface{}) {
+func (s *JsonRemapper) RemapJsonServerList(v interface{}) {
 	if serverList, ok := v.([]interface{}); ok && serverList != nil {
 		for i, x := range serverList {
 			if str, ok := x.(string); ok {
@@ -331,4 +421,23 @@ func DupBody(b io.ReadCloser) (r1, r2 io.ReadCloser, err error) {
 
 	return ioutil.NopCloser(&buf),
 		ioutil.NopCloser(bytes.NewReader(buf.Bytes())), nil
+}
+
+// ------------------------------------------------
+
+type ReaderCloser struct {
+	reader io.Reader
+	closer io.Closer
+}
+
+func (s *ReaderCloser) Close() error {
+	err := s.closer.Close()
+	log.Printf("rc.Close, err: %v", err)
+	return err
+}
+
+func (s *ReaderCloser) Read(p []byte) (n int, err error) {
+	n, err = s.reader.Read(p)
+	log.Printf("rc.Read %d => n: %d, err: %v", len(p), n, err)
+	return n, err
 }

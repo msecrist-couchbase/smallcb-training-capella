@@ -121,7 +121,9 @@ func main() {
 
 	HttpMuxInit(mux)
 
-	go HttpProxy(*listenProxy, PortMap,
+	go HttpProxy(*listenProxy,
+		*containerPublishHost,
+		PortMap,
 		*containerPublishPortBase,
 		*containerPublishPortSpan)
 

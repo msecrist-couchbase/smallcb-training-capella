@@ -10,7 +10,7 @@ func TestRemapJson(t *testing.T) {
          {"rev":40,"name":"beer-sample","uri":"...",
           "nodes":[
            {"couchApiBase":"http://$HOST:8092/beer-sample%2B56ac22b352fb084e3bfc27114e6b343a",
-            "hostname":"$HOST:8091",
+            "hostname":"172.2.0.3:8091",
             "ports":{"direct":11210}}],
           "nodesExt":[
            {"services":
@@ -45,8 +45,8 @@ func TestRemapJson(t *testing.T) {
 		t.Fatalf("err: %v", err)
 	}
 
-	s := &jsonStreamer{
-		remap:     true,
+	s := &JsonRemapper{
+		host:      "127.0.0.1",
 		portMap:   PortMap,
 		portStart: 10000,
 	}
@@ -58,7 +58,7 @@ func TestRemapJson(t *testing.T) {
 		t.Fatalf("err: %v", err)
 	}
 
-	if string(b) != `{"bucketCapabilities":["durableWrite","tombstonedUserXAttrs","couchapi","dcp","cbhello","touch","cccp","xdcrCheckpointing","nodesExt","xattr"],"bucketCapabilitiesVer":"","clusterCapabilities":{"n1ql":["enhancedPreparedStatements"]},"clusterCapabilitiesVer":[1,0],"ddocs":{"uri":"/pools/default/buckets/beer-sample/ddocs"},"name":"beer-sample","nodeLocator":"vbucket","nodes":[{"couchApiBase":"http://$HOST:8092/beer-sample%2B56ac22b352fb084e3bfc27114e6b343a","hostname":"$HOST:8091","ports":{"direct":11210}}],"nodesExt":[{"services":{"capi":10002,"capiSSL":10012,"fts":10004,"ftsGRPC":9130,"ftsGRPCSSL":19130,"ftsSSL":10014,"indexAdmin":9100,"indexHttp":9102,"indexHttps":19102,"indexScan":9101,"indexStreamCatchup":9104,"indexStreamInit":9103,"indexStreamMaint":9105,"kv":10030,"kvSSL":10027,"mgmt":10001,"mgmtSSL":10011,"n1ql":10003,"n1qlSSL":10013,"projector":9999},"thisNode":true}],"rev":40,"uri":"...","uuid":"56ac22b352fb084e3bfc27114e6b343a","vBucketServerMap":{"hashAlgorithm":"CRC","numReplicas":0,"serverList":["$HOST:10030"],"vBucketMap":[[0],[0],[0],[0],[0],[0],[0],[0]]}}` {
+	if string(b) != `{"bucketCapabilities":["durableWrite","tombstonedUserXAttrs","couchapi","dcp","cbhello","touch","cccp","xdcrCheckpointing","nodesExt","xattr"],"bucketCapabilitiesVer":"","clusterCapabilities":{"n1ql":["enhancedPreparedStatements"]},"clusterCapabilitiesVer":[1,0],"ddocs":{"uri":"/pools/default/buckets/beer-sample/ddocs"},"name":"beer-sample","nodeLocator":"vbucket","nodes":[{"couchApiBase":"http://$HOST:8092/beer-sample%2B56ac22b352fb084e3bfc27114e6b343a","hostname":"127.0.0.1:8091","ports":{"direct":11210}}],"nodesExt":[{"services":{"capi":10002,"capiSSL":10012,"fts":10004,"ftsGRPC":9130,"ftsGRPCSSL":19130,"ftsSSL":10014,"indexAdmin":9100,"indexHttp":9102,"indexHttps":19102,"indexScan":9101,"indexStreamCatchup":9104,"indexStreamInit":9103,"indexStreamMaint":9105,"kv":10030,"kvSSL":10027,"mgmt":10001,"mgmtSSL":10011,"n1ql":10003,"n1qlSSL":10013,"projector":9999},"thisNode":true}],"rev":40,"uri":"...","uuid":"56ac22b352fb084e3bfc27114e6b343a","vBucketServerMap":{"hashAlgorithm":"CRC","numReplicas":0,"serverList":["$HOST:10030"],"vBucketMap":[[0],[0],[0],[0],[0],[0],[0],[0]]}}` {
 		t.Errorf("%s did the match expected", b)
 	}
 
