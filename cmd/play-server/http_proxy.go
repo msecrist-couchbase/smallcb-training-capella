@@ -118,8 +118,6 @@ func HttpProxy(listenProxy string,
 				}
 
 				if streamResponse {
-					log.Printf("MR SR, header: %+v", resp.Header)
-
 					js := &JsonStreamer{
 						src:       resp.Body,
 						srcReader: bufio.NewReader(resp.Body),
@@ -272,8 +270,6 @@ func (s *JsonStreamer) Read(p []byte) (n int, err error) {
 // ------------------------------------------------
 
 func RemapResponse(resp *http.Response, remapper *JsonRemapper) (err error) {
-	log.Printf("RemapResponse, header: %+v", resp.Header)
-
 	if resp.Body == nil || resp.Body == http.NoBody {
 		// No copying needed. Preserve the magic sentinel of NoBody.
 		return nil
@@ -306,8 +302,6 @@ func RemapResponse(resp *http.Response, remapper *JsonRemapper) (err error) {
 	resp.ContentLength = int64(len(b))
 
 	resp.Header["Content-Length"] = []string{fmt.Sprintf("%d", len(b))}
-
-	log.Printf("remap-body: %s (%d)", b, len(b))
 
 	return nil
 }
@@ -433,13 +427,9 @@ type ReaderCloser struct {
 }
 
 func (s *ReaderCloser) Close() error {
-	err := s.closer.Close()
-	log.Printf("rc.Close, err: %v", err)
-	return err
+	return s.closer.Close()
 }
 
 func (s *ReaderCloser) Read(p []byte) (n int, err error) {
-	n, err = s.reader.Read(p)
-	log.Printf("rc.Read %d => n: %d, err: %v", len(p), n, err)
-	return n, err
+	return s.reader.Read(p)
 }
