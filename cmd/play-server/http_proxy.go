@@ -16,7 +16,7 @@ import (
 	"time"
 )
 
-func HttpProxy(listenProxy string,
+func HttpProxy(listenProxy string, proxyFlushInterval time.Duration,
 	containerPublishHost string,
 	portMap map[int]int,
 	containerPublishPortBase int,
@@ -144,7 +144,7 @@ func HttpProxy(listenProxy string,
 			}
 
 			if streamResponse {
-				flushInterval = 200 * time.Millisecond
+				flushInterval = proxyFlushInterval
 			}
 
 			log.Printf("INFO: HttpProxy, path: %s, sessionId: %s,"+

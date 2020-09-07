@@ -60,4 +60,8 @@ var (
 	sessionsCheckEvery = flag.Duration("sessionsCheckEvery",
 		30*time.Second,
 		"duration to wait before checking sessions")
+
+	proxyFlushInterval = flag.Duration("proxyFlushInterval",
+		200*time.Millisecond,
+		"duration before flushing http proxy response streams")
 )
