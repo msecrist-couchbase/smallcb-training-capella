@@ -136,21 +136,22 @@ func (sessions *Sessions) SessionExit(sessionId string) error {
 
 // ------------------------------------------------
 
-func (s *Sessions) SessionCreate(fullName, email string) (sessionId string, err error) {
+func (s *Sessions) SessionCreate(fullName, email string) (
+	session *Session, err error) {
 	StatsNumInc("sessions.SessionCreate")
 
 	fullName = strings.TrimSpace(fullName)
 	if fullName == "" {
 		StatsNumInc("sessions.SessionCreate.err.ErrNeedFullName")
 
-		return "", fmt.Errorf("ErrNeedFullName")
+		return nil, fmt.Errorf("ErrNeedFullName")
 	}
 
 	email = strings.TrimSpace(email)
 	if email == "" {
 		StatsNumInc("sessions.SessionCreate.err.ErrNeedEmail")
 
-		return "", fmt.Errorf("ErrNeedEmail")
+		return nil, fmt.Errorf("ErrNeedEmail")
 	}
 
 	fullNameEmail := FullNameEmail(fullName, email)
@@ -162,21 +163,21 @@ func (s *Sessions) SessionCreate(fullName, email string) (sessionId string, err 
 	if exists || sessionId != "" {
 		StatsNumInc("sessions.SessionCreate.err.ErrFullNameEmailUsed")
 
-		return "", fmt.Errorf("ErrFullNameEmailUsed")
+		return nil, fmt.Errorf("ErrFullNameEmailUsed")
 	}
 
-	session, exists := sessions.mapBySessionId[sessionId]
+	session, exists = sessions.mapBySessionId[sessionId]
 	if exists || session != nil {
 		StatsNumInc("sessions.SessionCreate.err.ErrSessionIdUsed")
 
-		return "", fmt.Errorf("ErrSessionIdUsed")
+		return nil, fmt.Errorf("ErrSessionIdUsed")
 	}
 
 	sessionUUID, err := uuid.NewRandom()
 	if err != nil {
 		StatsNumInc("sessions.SessionCreate.err.NewRandom")
 
-		return "", err
+		return nil, err
 	}
 
 	sessionId = strings.ReplaceAll(sessionUUID.String(), "-", "")
@@ -198,7 +199,9 @@ func (s *Sessions) SessionCreate(fullName, email string) (sessionId string, err 
 
 	StatsNumInc("sessions.SessionCreate.ok")
 
-	return sessionId, nil
+	rv := *session // Copy
+
+	return &rv, nil
 }
 
 // ------------------------------------------------

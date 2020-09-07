@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"html/template"
 	"log"
@@ -123,11 +124,30 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 		if errs <= 0 {
 			StatsNumInc("http.Session.post.create")
 
-			sessionId, err := sessions.SessionCreate(fullName, email)
-			if err == nil {
+			session, err := sessions.SessionCreate(fullName, email)
+			if err == nil && session != nil && session.SessionId != "" {
 				StatsNumInc("http.Session.post.create.ok")
 
-				http.Redirect(w, r, "/?s="+sessionId, http.StatusSeeOther)
+				req := RunRequest{
+					ctx:                 context.Background(),
+					execUser:            ExecUser,
+					execPrefix:          "",
+					lang:                "n/a",
+					code:                "n/a",
+					codeDuration:        *codeDuration,
+					containerNamePrefix: *containerNamePrefix,
+					containerVolPrefix:  *containerVolPrefix,
+					cbAdminPassword:     CBAdminPassword,
+				}
+
+				// Async attempt to assign a container instance to
+				// the new session, so the client doesn't wait.
+				go SessionAssignContainer(session, req,
+					readyCh, *containerWaitDuration, restartCh)
+
+				http.Redirect(w, r, "/?s="+session.SessionId,
+					http.StatusSeeOther)
+
 				return
 			}
 
