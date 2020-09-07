@@ -198,6 +198,13 @@ func ResponseKindForURLPath(path string) (needsRemap, needsStreaming bool) {
 			return true, false // Ex: "/pools/default".
 		}
 
+		// Ex: "/pools/default/buckets".
+		if len(parts) == 4 {
+			if parts[3] == "buckets" {
+				return true, false
+			}
+		}
+
 		// Ex: "/pools/default/buckets|bucketsStreaming|bs/beer-sample".
 		if len(parts) == 5 {
 			if parts[3] == "buckets" {
@@ -248,7 +255,7 @@ func (s *JsonStreamer) Read(p []byte) (n int, err error) {
 			}
 		}
 
-		var m map[string]interface{}
+		var m interface{}
 
 		err = json.Unmarshal(b, &m)
 		if err != nil {
@@ -288,7 +295,7 @@ func RemapResponse(resp *http.Response, remapper *JsonRemapper) (err error) {
 		return err
 	}
 
-	var m map[string]interface{}
+	var m interface{}
 
 	err = json.Unmarshal(buf.Bytes(), &m)
 	if err != nil {
@@ -322,7 +329,19 @@ type JsonRemapper struct {
 	portStart int
 }
 
-func (s *JsonRemapper) RemapJson(m map[string]interface{}) {
+func (s *JsonRemapper) RemapJson(v interface{}) {
+	if m, ok := v.(map[string]interface{}); ok {
+		s.RemapJsonMap(m)
+	}
+
+	if a, ok := v.([]interface{}); ok {
+		for _, vv := range a {
+			s.RemapJson(vv)
+		}
+	}
+}
+
+func (s *JsonRemapper) RemapJsonMap(m map[string]interface{}) {
 	if v, exists := m["nodes"]; exists && v != nil {
 		if va, ok := v.([]interface{}); ok && va != nil {
 			for _, vav := range va {
@@ -395,8 +414,13 @@ func (s *JsonRemapper) RemapJsonServerList(v interface{}) {
 						continue
 					}
 
+					host := s.host
+					if parts[0] == "$HOST" {
+						host = "$HOST"
+					}
+
 					serverList[i] = fmt.Sprintf("%s:%d",
-						parts[0], s.portStart+portDelta)
+						host, s.portStart+portDelta)
 				}
 			}
 		}

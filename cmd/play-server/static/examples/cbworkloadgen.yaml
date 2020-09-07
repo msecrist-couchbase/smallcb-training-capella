@@ -11,7 +11,7 @@ code: |
 infoAfter: |
   The above cbworkloadgen example runs a workload
   using 4 client threads that will set 10000 docs
-  into the beer-sample bucket, with a operations
+  into the beer-sample bucket, with an operations
   ratio of 40% sets (and 60% gets).
   <br/><br/>
   Note the playground will automatically stop any long-running
