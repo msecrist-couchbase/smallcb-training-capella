@@ -1,0 +1,19 @@
+title: cbworkloadgen
+lang: sh
+code: |
+  #!/bin/sh
+  
+  /opt/couchbase/bin/cbworkloadgen \
+    -n {{.CBHost}}:8091 \
+    -u {{.CBUser}} -p {{.CBPswd}} \
+    -b beer-sample \
+    --max-items=10000 -r 0.4 -t 4
+infoAfter: |
+  The above cbworkloadgen example runs a workload
+  using 4 client threads that will set 10000 docs
+  into the beer-sample bucket, with a operations
+  ratio of 40% sets (and 60% gets).
+  <br/><br/>
+  Note the playground will automatically stop any long-running
+  user-submitted, sandboxed programs, so you can't keep run a
+  user-submitted, sandboxed cbworkloadgen running for a long time.
