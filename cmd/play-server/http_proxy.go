@@ -118,6 +118,8 @@ func HttpProxy(listenProxy string,
 				}
 
 				if streamResponse {
+					log.Printf("MR SR, header: %+v", resp.Header)
+
 					js := &JsonStreamer{
 						src:       resp.Body,
 						srcReader: bufio.NewReader(resp.Body),
@@ -144,7 +146,7 @@ func HttpProxy(listenProxy string,
 			}
 
 			if streamResponse {
-				flushInterval = 2 * time.Second
+				flushInterval = 200 * time.Millisecond
 			}
 
 			log.Printf("INFO: HttpProxy, path: %s, sessionId: %s,"+
