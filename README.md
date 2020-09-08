@@ -270,6 +270,8 @@ e.g.,
 -------------------------
 On new CB version release...
 
+UI should show the CB version?
+
 Does that mean a new EC2 instance?
 
 What about frozen data --
