@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -121,9 +122,11 @@ func main() {
 
 	HttpMuxInit(mux)
 
+	listenPort, _ := strconv.Atoi(strings.Split(*listen, ":")[1])
+
 	for _, lp := range strings.Split(*listenProxy, ",") {
 		go HttpProxy(lp, *staticDir, *proxyFlushInterval,
-			*containerPublishHost, PortMap,
+			*containerPublishHost, listenPort, PortMap,
 			*containerPublishPortBase,
 			*containerPublishPortSpan)
 	}

@@ -29,7 +29,7 @@ type MainTemplateData struct {
 }
 
 func MainTemplateEmit(w http.ResponseWriter,
-	staticDir, msg, host string, session *Session,
+	staticDir, msg, host string, portApp int, session *Session,
 	examplesDir string, name, lang, code string) {
 	examples, exampleNameTitles, err :=
 		ReadExamples(staticDir + "/" + examplesDir)
@@ -55,7 +55,7 @@ func MainTemplateEmit(w http.ResponseWriter,
 		if code == "" {
 			code = MapGetString(example, "code")
 
-			code = SessionTemplateExecute(host, session, code)
+			code = SessionTemplateExecute(host, portApp, session, code)
 		}
 
 		infoBefore = MapGetString(example, "infoBefore")
@@ -101,8 +101,8 @@ func MainTemplateEmit(w http.ResponseWriter,
 
 // ------------------------------------------------
 
-func SessionTemplateExecute(host string, session *Session, t string) string {
-	data := SessionTemplateData(host, session)
+func SessionTemplateExecute(host string, portApp int, session *Session, t string) string {
+	data := SessionTemplateData(host, portApp, session)
 
 	var b bytes.Buffer
 
@@ -117,11 +117,12 @@ func SessionTemplateExecute(host string, session *Session, t string) string {
 	return b.String()
 }
 
-func SessionTemplateData(host string, session *Session) map[string]interface{} {
+func SessionTemplateData(host string, portApp int, session *Session) map[string]interface{} {
 	data := map[string]interface{}{
-		"CBHost": host,
-		"CBUser": "username",
-		"CBPswd": "password",
+		"Host":    host,
+		"PortApp": fmt.Sprintf("%d", portApp),
+		"CBUser":  "username",
+		"CBPswd":  "password",
 	}
 
 	if session != nil {

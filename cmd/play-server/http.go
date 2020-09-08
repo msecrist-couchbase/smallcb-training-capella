@@ -6,6 +6,7 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -68,7 +69,9 @@ func HttpHandleMain(w http.ResponseWriter, r *http.Request) {
 	lang := r.FormValue("lang")
 	code := r.FormValue("code")
 
-	MainTemplateEmit(w, *staticDir, msg, *containerPublishHost,
+	portApp, _ := strconv.Atoi(strings.Split(*listen, ":")[1])
+
+	MainTemplateEmit(w, *staticDir, msg, *containerPublishHost, portApp,
 		session, examplesDir, name, lang, code)
 }
 

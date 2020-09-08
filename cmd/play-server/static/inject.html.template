@@ -10,7 +10,7 @@
     font-size: .75rem;
     white-space: nowrap;
     color: #333;
-    z-index: 10;
+    z-index: 10000;
   }
 </style>
 <script type="text/javascript">
@@ -20,7 +20,13 @@
     var el = document.createElement("div");
     el.id = "playBox";
     el.className = "playBox";
-    el.innerHTML = "Couchbase API / SDK Playground";
+    el.innerHTML =
+      {{if .SessionId}}
+	  '<a href="http://{{.Host}}:{{.PortApp}}/?s={{.SessionId}}">'+
+          'Couchbase API / SDK Playground</a>';
+      {{else}}
+          'Couchbase API / SDK Playground';
+      {{end}}
     document.body.appendChild(el);
   };
 

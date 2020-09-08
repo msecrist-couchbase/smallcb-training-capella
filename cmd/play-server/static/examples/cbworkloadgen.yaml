@@ -4,7 +4,7 @@ code: |
   #!/bin/sh
   
   /opt/couchbase/bin/cbworkloadgen \
-    -n {{.CBHost}}:8091 \
+    -n {{.Host}}:8091 \
     -u {{.CBUser}} -p {{.CBPswd}} \
     -b beer-sample \
     --max-items=10000 -r 0.4 -t 4
@@ -12,7 +12,7 @@ code: |
   {{if .SessionId}}
   # You can watch the live performance metrics
   # with Couchbase Server's web-admin UI at
-  # http://{{.CBHost}}:8091
+  # http://{{.Host}}:8091
   # Log in with username: {{.CBUser}}
   #             password: {{.CBPswd}}
   {{end}}

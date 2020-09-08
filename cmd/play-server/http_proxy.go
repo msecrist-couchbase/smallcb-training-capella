@@ -17,13 +17,15 @@ import (
 	"time"
 )
 
-func HttpProxy(listenProxy, staticDir string,
+func HttpProxy(listenProxy, // Ex: ":8091", ":8093".
+	staticDir string,
 	proxyFlushInterval time.Duration,
-	containerPublishHost string,
+	host string, // Ex: "try.couchbase.dev", "127.0.0.1".
+	portApp int, // Ex: 8080.
 	portMap map[int]int,
 	containerPublishPortBase int,
 	containerPublishPortSpan int) {
-	port, _ := strconv.Atoi(strings.Split(listenProxy, ":")[1])
+	portProxy, _ := strconv.Atoi(strings.Split(listenProxy, ":")[1]) // Ex: 8091.
 
 	proxyMux := http.NewServeMux()
 
@@ -82,7 +84,7 @@ func HttpProxy(listenProxy, staticDir string,
 
 		// Default to targetPort of 10001 so that we can
 		// serve the web login UI without any auth or session.
-		targetPort := containerPublishPortBase + portMap[port]
+		targetPort := containerPublishPortBase + portMap[portProxy]
 
 		var modifyResponse func(response *http.Response) error
 
@@ -91,7 +93,7 @@ func HttpProxy(listenProxy, staticDir string,
 		if sessionId != "" {
 			log.Printf("INFO: HttpProxy, port: %d,"+
 				" path: %s, sessionId: %s, via %s",
-				port, r.URL.Path, sessionId, sessionIdFrom)
+				portProxy, r.URL.Path, sessionId, sessionIdFrom)
 
 			session := sessions.SessionGet(sessionId)
 			if session == nil {
@@ -116,7 +118,7 @@ func HttpProxy(listenProxy, staticDir string,
 					(containerPublishPortSpan * session.ContainerId)
 
 				// Example targetPort: portStart + 1 == 10001.
-				targetPort = portStart + portMap[port]
+				targetPort = portStart + portMap[portProxy]
 
 				remapResponse, streamResponse :=
 					ResponseKindForURLPath(r.URL.Path)
@@ -136,7 +138,7 @@ func HttpProxy(listenProxy, staticDir string,
 
 						if remapResponse {
 							js.remapper = &JsonRemapper{
-								host:      containerPublishHost,
+								host:      host,
 								portMap:   portMap,
 								portStart: portStart,
 							}
@@ -145,13 +147,13 @@ func HttpProxy(listenProxy, staticDir string,
 						resp.Body = js
 					} else if remapResponse {
 						err = RemapResponse(resp, &JsonRemapper{
-							host:      containerPublishHost,
+							host:      host,
 							portMap:   portMap,
 							portStart: portStart,
 						})
 					} else if strings.HasPrefix(r.URL.Path, "/ui/index.html") {
 						err = InjectResponseUI(staticDir,
-							containerPublishHost, session, resp)
+							host, portApp, session, resp)
 					}
 
 					return err
@@ -163,7 +165,7 @@ func HttpProxy(listenProxy, staticDir string,
 
 				log.Printf("INFO: HttpProxy, port: %d, path: %s,"+
 					" sessionId: %s, containerId: %d, remap: %t, stream: %t",
-					port, r.URL.Path, sessionId, session.ContainerId,
+					portProxy, r.URL.Path, sessionId, session.ContainerId,
 					remapResponse, streamResponse)
 			}
 		}
@@ -172,7 +174,7 @@ func HttpProxy(listenProxy, staticDir string,
 			strings.HasPrefix(r.URL.Path, "/ui/index.html") {
 			modifyResponse = func(resp *http.Response) (err error) {
 				return InjectResponseUI(staticDir,
-					containerPublishHost, nil, resp)
+					host, portApp, nil, resp)
 			}
 		}
 
@@ -343,13 +345,13 @@ func RemapResponse(resp *http.Response, remapper *JsonRemapper) (err error) {
 
 // ------------------------------------------------
 
-func InjectResponseUI(staticDir string, host string,
+func InjectResponseUI(staticDir string, host string, portApp int,
 	session *Session, resp *http.Response) error {
 	t := template.Must(template.ParseFiles(staticDir + "/inject.html.template"))
 
 	var tout bytes.Buffer
 
-	err := t.Execute(&tout, SessionTemplateData(host, session))
+	err := t.Execute(&tout, SessionTemplateData(host, portApp, session))
 	if err != nil {
 		return fmt.Errorf("t.Execute, err: %v", err)
 	}

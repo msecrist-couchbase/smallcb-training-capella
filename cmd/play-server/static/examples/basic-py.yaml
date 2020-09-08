@@ -11,7 +11,7 @@ code: |
   pa = PasswordAuthenticator('{{.CBUser}}', '{{.CBPswd}}')
   
   try:
-    cluster = Cluster('couchbase://{{.CBHost}}', ClusterOptions(pa))
+    cluster = Cluster('couchbase://{{.Host}}', ClusterOptions(pa))
   
     bucket = cluster.bucket('beer-sample')
   
