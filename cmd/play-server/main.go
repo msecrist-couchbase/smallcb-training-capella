@@ -122,7 +122,7 @@ func main() {
 	HttpMuxInit(mux)
 
 	for _, lp := range strings.Split(*listenProxy, ",") {
-		go HttpProxy(lp, *proxyFlushInterval,
+		go HttpProxy(lp, *staticDir, *proxyFlushInterval,
 			*containerPublishHost, PortMap,
 			*containerPublishPortBase,
 			*containerPublishPortSpan)

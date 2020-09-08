@@ -5,6 +5,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"html/template"
 	"io"
 	"io/ioutil"
 	"log"
@@ -16,7 +17,8 @@ import (
 	"time"
 )
 
-func HttpProxy(listenProxy string, proxyFlushInterval time.Duration,
+func HttpProxy(listenProxy, staticDir string,
+	proxyFlushInterval time.Duration,
 	containerPublishHost string,
 	portMap map[int]int,
 	containerPublishPortBase int,
@@ -154,6 +156,19 @@ func HttpProxy(listenProxy string, proxyFlushInterval time.Duration,
 				" sessionId: %s, containerId: %d, remap: %t, stream: %t",
 				port, r.URL.Path, sessionId, session.ContainerId,
 				remapResponse, streamResponse)
+		} else {
+			// No session or session is not yet known.
+
+			if strings.HasPrefix(r.URL.Path, "/ui/index.html") {
+				modifyResponse = func(resp *http.Response) (err error) {
+					err = InjectResponseUI(staticDir, resp)
+
+					log.Printf("INFO: HttpProxy, port: %d, path: %s,"+
+						" InjectResponseUI, err: %v", port, r.URL.Path, err)
+
+					return err
+				}
+			}
 		}
 
 		// We can reach this point with a session, or reach here
@@ -308,6 +323,46 @@ func RemapResponse(resp *http.Response, remapper *JsonRemapper) (err error) {
 	if err != nil {
 		return err
 	}
+
+	resp.Body = &ReaderCloser{
+		reader: bytes.NewReader(b),
+		closer: resp.Body,
+	}
+
+	resp.ContentLength = int64(len(b))
+
+	resp.Header["Content-Length"] = []string{fmt.Sprintf("%d", len(b))}
+
+	return nil
+}
+
+// ------------------------------------------------
+
+func InjectResponseUI(staticDir string, resp *http.Response) error {
+	t := template.Must(template.ParseFiles(staticDir + "/inject.html.template"))
+
+	var tout bytes.Buffer
+
+	err := t.Execute(&tout, nil)
+	if err != nil {
+		return fmt.Errorf("t.Execute, err: %v", err)
+	}
+
+	tout.Write([]byte("</body>"))
+
+	if resp.Body == nil || resp.Body == http.NoBody {
+		// No copying needed. Preserve the magic sentinel of NoBody.
+		return nil
+	}
+
+	var buf bytes.Buffer
+	if _, err = buf.ReadFrom(resp.Body); err != nil {
+		return err
+	}
+
+	b := buf.Bytes()
+
+	b = bytes.Replace(b, []byte("</body>"), tout.Bytes(), 1)
 
 	resp.Body = &ReaderCloser{
 		reader: bytes.NewReader(b),
