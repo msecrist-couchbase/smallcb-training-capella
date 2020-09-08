@@ -25,6 +25,10 @@
       font-size: 9pt;
       font-family: monospace;
     }
+    .session-info div.connection a {
+      font-size: 9pt;
+      font-family: monospace;
+    }
     .main ul.examples {
       padding-left: 20px;
     }
@@ -130,11 +134,15 @@
         over the internet...
       </div>
       <div class="connection">
-        REST / web admin UI  : http://{{.Session.CBUser}}:{{.Session.CBPswd}}@{{.Host}}:8091
-        Couchbase Java SDK   : [host / user / pswd and connect string examples here]
-        Couchbase NodeJS SDK : [host / user / pswd and connect string examples here]
-        Couchbase Python SDK : Cluster('couchbase://{{.Host}}', ClusterOptions(PasswordAuthenticator('{{.Session.CBUser}}', '{{.Session.CBPswd}}')))
-        Couchbase C# SDK     : [host / user / pswd and connect string examples here]
+        Couchbase Server
+            Web-Admin UI : <a href="http://{{.Host}}:8091">http://{{.Host}}:8091</a> -- username: {{.Session.CBUser}} password: {{.Session.CBPswd}}
+            REST API     : http://{{.Session.CBUser}}:{{.Session.CBPswd}}@{{.Host}}:8091
+
+        Couchbase SDK's
+            Java SDK     : [host / user / pswd and connect string examples here]
+            NodeJS SDK   : [host / user / pswd and connect string examples here]
+            Python SDK   : Cluster('couchbase://{{.Host}}', ClusterOptions(PasswordAuthenticator('{{.Session.CBUser}}', '{{.Session.CBPswd}}')))
+            C# SDK       : [host / user / pswd and connect string examples here]
       </div>
       <div>
         The following online examples will also run
