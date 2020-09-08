@@ -25,9 +25,11 @@
       font-size: 9pt;
       font-family: monospace;
     }
-    .session-info div.connection a {
+    .session-info div.connection a,
+    .session-info div.connection b {
       font-size: 9pt;
       font-family: monospace;
+      font-weight: bold;
     }
     .main ul.examples {
       padding-left: 20px;
@@ -134,11 +136,11 @@
         over the internet...
       </div>
       <div class="connection">
-        Couchbase Server
+        <b>Couchbase Server</b>
             <a href="http://{{.Host}}:8091">Web-Admin UI</a> : <a href="http://{{.Host}}:8091">http://{{.Host}}:8091</a> -- username: {{.Session.CBUser}} password: {{.Session.CBPswd}}
             REST API     : http://{{.Session.CBUser}}:{{.Session.CBPswd}}@{{.Host}}:8091
 
-        Couchbase SDK's
+        <b>Couchbase SDK's</b>
             Java SDK     : [host / user / pswd and connect string examples here]
             NodeJS SDK   : [host / user / pswd and connect string examples here]
             Python SDK   : Cluster('couchbase://{{.Host}}', ClusterOptions(PasswordAuthenticator('{{.Session.CBUser}}', '{{.Session.CBPswd}}')))
