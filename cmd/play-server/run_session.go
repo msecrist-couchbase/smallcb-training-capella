@@ -62,7 +62,7 @@ func SessionAssignContainer(session *Session, req RunRequest,
 				session.ContainerId = containerId
 				session.RestartCh = restartCh
 				session.ReadyCh = readyCh
-				session.TouchedAt = time.Now().Unix()
+				session.TouchedAtUnix = time.Now().Unix()
 
 				// Session owns the containerId.
 				containerId = -1

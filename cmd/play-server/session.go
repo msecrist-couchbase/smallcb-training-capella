@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"strings"
 	"sync"
 	"time"
@@ -39,7 +40,8 @@ type SessionInfo struct {
 	CBUser string
 	CBPswd string
 
-	TouchedAt int64
+	CreatedAt     string
+	TouchedAtUnix int64
 }
 
 // ------------------------------------------------
@@ -74,7 +76,7 @@ func (sessions *Sessions) SessionGet(sessionId string) *Session {
 
 	rv := sessions.SessionAccess(sessionId,
 		func(session *Session) *Session {
-			session.TouchedAt = time.Now().Unix()
+			session.TouchedAtUnix = time.Now().Unix()
 
 			rv := *session // Returns a copy.
 
@@ -121,6 +123,8 @@ func (sessions *Sessions) SessionExit(sessionId string) error {
 			FullNameEmail(session.FullName, session.Email))
 
 		go func() { // Async to not hold the sessions lock.
+			log.Printf("session, SessionExit, session: %+v", session)
+
 			session.ReleaseContainer()
 
 			CookiesRemove(session.Cookies)
@@ -182,6 +186,8 @@ func (s *Sessions) SessionCreate(fullName, email string) (
 
 	sessionId = strings.ReplaceAll(sessionUUID.String(), "-", "")
 
+	now := time.Now()
+
 	session = &Session{
 		SessionInfo: SessionInfo{
 			SessionId: sessionId,
@@ -189,7 +195,9 @@ func (s *Sessions) SessionCreate(fullName, email string) (
 			Email:     email,
 			CBUser:    sessionId[:16],
 			CBPswd:    sessionId[16:],
-			TouchedAt: time.Now().Unix(),
+
+			CreatedAt:     now.Format("2006-01-02T15:04:05.000-07:00"),
+			TouchedAtUnix: now.Unix(),
 		},
 		ContainerId: -1,
 	}
@@ -198,6 +206,8 @@ func (s *Sessions) SessionCreate(fullName, email string) (
 	sessions.mapByFullNameEmail[fullNameEmail] = sessionId
 
 	StatsNumInc("sessions.SessionCreate.ok")
+
+	log.Printf("session, SessionCreate, session: %+v", session)
 
 	rv := *session // Copy
 
@@ -282,7 +292,7 @@ func SessionsChecker(sleepDur, maxAgeDur time.Duration) {
 		sessions.m.Lock()
 
 		for _, session := range sessions.mapBySessionId {
-			if time.Unix(session.TouchedAt, 0).Before(cutOffTime) {
+			if time.Unix(session.TouchedAtUnix, 0).Before(cutOffTime) {
 				sessionIds = append(sessionIds, session.SessionId)
 			}
 		}
