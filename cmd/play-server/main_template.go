@@ -109,6 +109,7 @@ func CodeTemplateExecute(host string, session *Session, code string) string {
 	}
 
 	if session != nil {
+		data["SessionId"] = session.SessionId
 		data["CBUser"] = session.CBUser
 		data["CBPswd"] = session.CBPswd
 	}

@@ -8,6 +8,14 @@ code: |
     -u {{.CBUser}} -p {{.CBPswd}} \
     -b beer-sample \
     --max-items=10000 -r 0.4 -t 4
+  
+  {{if .SessionId}}
+  # You can watch the live performance metrics
+  # with Couchbase Server's web-admin UI at
+  # http://{{.CBHost}}:8091
+  # Log in with username: {{.CBUser}}
+  #             password: {{.CBPswd}}
+  {{end}}
 infoAfter: |
   The above cbworkloadgen example runs a workload
   using 4 client threads that will set 10000 docs
