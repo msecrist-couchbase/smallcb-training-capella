@@ -443,3 +443,37 @@ Joining a tools/diagnostic container to container you're about to run...
   In docker, it's done by passing --pid=container:$TARGETCONTAINER to docker run
   See: https://docs.docker.com/engine/reference/run/#pid-settings--...
 
+--------------------------
+https://github.com/StepicOrg/epicbox
+Run untrusted code in secure Docker based sandboxes
+
+A Python library to run untrusted code in secure, isolated Docker
+based sandboxes. It is used to automatically grade programming
+assignments on Stepik.org.
+
+---------
+http://stealth.openwall.net/xSports/shocker.c
+
+---------
+https://github.com/genuinetools/bane
+Custom & better AppArmor profile generator for Docker containers.
+
+---------
+https://github.com/docker/docker-bench-security
+The Docker Bench for Security is a script that checks for dozens of common
+best-practices around deploying Docker containers in production.
+
+---------
+https://security.stackexchange.com/questions/107850/docker-as-a-sandbox-for-untrusted-code
+from 2015
+
+---------
+https://github.com/vaharoni/trusted-sandbox
+Run untrusted code in a contained sandbox, using Docker
+from 2014
+
+---------
+pgrep -u couchbase -a -n
+  and then can killall by process group
+  killall -g pgrp
+  pkill -g pgrp
