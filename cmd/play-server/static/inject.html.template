@@ -1,3 +1,40 @@
-<script>
-console.log("hi")
+<style>
+  #playBox {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: white;
+    padding: 0 1rem 0 0.5rem;
+    vertical-align: top;
+    font-size: .75rem;
+    white-space: nowrap;
+    color: #333;
+    z-index: 10;
+  }
+</style>
+<script type="text/javascript">
+(function () {
+  function createPlayBox() {
+    if (!document.body) { return; }
+    var el = document.createElement("div");
+    el.id = "playBox";
+    el.className = "playBox";
+    el.innerHTML = "Couchbase API / SDK Playground";
+    document.body.appendChild(el);
+  };
+
+  function checkPlayBox() {
+    var el = document.getElementById("playBox");
+    if (!el) {
+      createPlayBox();
+
+      setTimeout(checkPlayBox, 1000);
+    } else {
+      setTimeout(checkPlayBox, 10000);
+    }
+  };
+
+  checkPlayBox();
+})()
 </script>

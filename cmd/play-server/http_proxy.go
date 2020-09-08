@@ -28,15 +28,18 @@ func HttpProxy(listenProxy, staticDir string,
 	proxyMux := http.NewServeMux()
 
 	proxyMux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		var sessionId string
+		var sessionId, sessionIdFrom string
 
 		user, pswd, ok := r.BasicAuth()
 		if ok {
 			sessionId = user + pswd
+			if sessionId != "" {
+				sessionIdFrom = "BasicAuth"
+			}
+		}
 
-			log.Printf("INFO: HttpProxy, port: %d, path: %s, sessionId: %s,"+
-				" via BasicAuth", port, r.URL.Path, sessionId)
-		} else if r.URL.Path == "/uilogin" && r.Method == "POST" {
+		if sessionId == "" &&
+			r.URL.Path == "/uilogin" && r.Method == "POST" {
 			var err error
 			var saveBody io.ReadCloser
 
@@ -47,7 +50,9 @@ func HttpProxy(listenProxy, staticDir string,
 					http.StatusText(http.StatusInternalServerError)+
 						fmt.Sprintf(", HttpProxy, DupBody, err: %v", err),
 					http.StatusInternalServerError)
+
 				log.Printf("ERROR: HttpProxy, DupBody, err: %v", err)
+
 				return
 			}
 
@@ -57,18 +62,18 @@ func HttpProxy(listenProxy, staticDir string,
 			r.Body = saveBody
 
 			sessionId = user + pswd
+			if sessionId != "" {
+				sessionIdFrom = "cookie"
+			}
+		}
 
-			log.Printf("INFO: HttpProxy, port: %d, path: %s, sessionId: %s,"+
-				" via uilogin", port, r.URL.Path, sessionId)
-		} else {
+		if sessionId == "" {
 			for _, cookie := range r.Cookies() {
 				c := cookie.Name + "=" + cookie.Value
 
 				sessionId = CookiesGet(c)
 				if sessionId != "" {
-					log.Printf("INFO: HttpProxy, port: %d,"+
-						" path: %s, sessionId: %s,"+
-						" via cookie", port, r.URL.Path, sessionId)
+					sessionIdFrom = "cookie"
 
 					break
 				}
@@ -84,90 +89,88 @@ func HttpProxy(listenProxy, staticDir string,
 		var flushInterval time.Duration
 
 		if sessionId != "" {
+			log.Printf("INFO: HttpProxy, port: %d,"+
+				" path: %s, sessionId: %s, via %s",
+				port, r.URL.Path, sessionId, sessionIdFrom)
+
 			session := sessions.SessionGet(sessionId)
 			if session == nil {
-				http.Error(w,
-					http.StatusText(http.StatusNotFound)+
-						fmt.Sprintf(", HttpProxy, session not found"),
-					http.StatusNotFound)
-				log.Printf("ERROR: HttpProxy, path: %s, sessionId: %s,"+
-					" session not found", r.URL.Path, sessionId)
-				return
-			}
+				log.Printf("ERROR: HttpProxy, path: %s, unknown sessionId: %s",
+					r.URL.Path, sessionId)
 
-			if session.ContainerId < 0 {
+				sessionId = ""
+				sessionIdFrom = ""
+			} else if session.ContainerId < 0 {
 				http.Error(w,
 					http.StatusText(http.StatusNotFound)+
 						fmt.Sprintf(", HttpProxy, session w/o container"),
 					http.StatusNotFound)
+
 				log.Printf("ERROR: HttpProxy, path: %s, sessionId: %s,"+
-					" session w/o container", r.URL.Path, sessionId)
+					" no container", r.URL.Path, sessionId)
+
 				return
-			}
+			} else {
+				// Example portStart: 10000 + (100 * containerId) == 10000.
+				portStart := containerPublishPortBase +
+					(containerPublishPortSpan * session.ContainerId)
 
-			// Example portStart: 10000 + (100 * containerId) == 10000.
-			portStart := containerPublishPortBase +
-				(containerPublishPortSpan * session.ContainerId)
+				// Example targetPort: portStart + 1 == 10001.
+				targetPort = portStart + portMap[port]
 
-			// Example targetPort: portStart + 1 == 10001.
-			targetPort = portStart + portMap[port]
+				remapResponse, streamResponse :=
+					ResponseKindForURLPath(r.URL.Path)
 
-			remapResponse, streamResponse :=
-				ResponseKindForURLPath(r.URL.Path)
+				modifyResponse = func(resp *http.Response) (err error) {
+					for _, cookie := range resp.Cookies() {
+						c := cookie.Name + "=" + cookie.Value
 
-			modifyResponse = func(resp *http.Response) (err error) {
-				for _, cookie := range resp.Cookies() {
-					c := cookie.Name + "=" + cookie.Value
-
-					CookiesSet(c, sessionId)
-				}
-
-				if streamResponse {
-					js := &JsonStreamer{
-						src:       resp.Body,
-						srcReader: bufio.NewReader(resp.Body),
+						CookiesSet(c, sessionId)
 					}
 
-					if remapResponse {
-						js.remapper = &JsonRemapper{
+					if streamResponse {
+						js := &JsonStreamer{
+							src:       resp.Body,
+							srcReader: bufio.NewReader(resp.Body),
+						}
+
+						if remapResponse {
+							js.remapper = &JsonRemapper{
+								host:      containerPublishHost,
+								portMap:   portMap,
+								portStart: portStart,
+							}
+						}
+
+						resp.Body = js
+					} else if remapResponse {
+						err = RemapResponse(resp, &JsonRemapper{
 							host:      containerPublishHost,
 							portMap:   portMap,
 							portStart: portStart,
-						}
+						})
+					} else if strings.HasPrefix(r.URL.Path, "/ui/index.html") {
+						err = InjectResponseUI(staticDir, resp)
 					}
-
-					resp.Body = js
-				} else if remapResponse {
-					err = RemapResponse(resp, &JsonRemapper{
-						host:      containerPublishHost,
-						portMap:   portMap,
-						portStart: portStart,
-					})
-				}
-
-				return err
-			}
-
-			if streamResponse {
-				flushInterval = proxyFlushInterval
-			}
-
-			log.Printf("INFO: HttpProxy, port: %d, path: %s,"+
-				" sessionId: %s, containerId: %d, remap: %t, stream: %t",
-				port, r.URL.Path, sessionId, session.ContainerId,
-				remapResponse, streamResponse)
-		} else {
-			// No session or session is not yet known.
-
-			if strings.HasPrefix(r.URL.Path, "/ui/index.html") {
-				modifyResponse = func(resp *http.Response) (err error) {
-					err = InjectResponseUI(staticDir, resp)
-
-					log.Printf("INFO: HttpProxy, port: %d, path: %s,"+
-						" InjectResponseUI, err: %v", port, r.URL.Path, err)
 
 					return err
 				}
+
+				if streamResponse {
+					flushInterval = proxyFlushInterval
+				}
+
+				log.Printf("INFO: HttpProxy, port: %d, path: %s,"+
+					" sessionId: %s, containerId: %d, remap: %t, stream: %t",
+					port, r.URL.Path, sessionId, session.ContainerId,
+					remapResponse, streamResponse)
+			}
+		}
+
+		if modifyResponse == nil &&
+			strings.HasPrefix(r.URL.Path, "/ui/index.html") {
+			modifyResponse = func(resp *http.Response) (err error) {
+				return InjectResponseUI(staticDir, resp)
 			}
 		}
 
@@ -348,7 +351,7 @@ func InjectResponseUI(staticDir string, resp *http.Response) error {
 		return fmt.Errorf("t.Execute, err: %v", err)
 	}
 
-	tout.Write([]byte("</body>"))
+	tout.Write([]byte("</head>")) // Append head close tag.
 
 	if resp.Body == nil || resp.Body == http.NoBody {
 		// No copying needed. Preserve the magic sentinel of NoBody.
@@ -362,7 +365,7 @@ func InjectResponseUI(staticDir string, resp *http.Response) error {
 
 	b := buf.Bytes()
 
-	b = bytes.Replace(b, []byte("</body>"), tout.Bytes(), 1)
+	b = bytes.Replace(b, []byte("</head>"), tout.Bytes(), 1)
 
 	resp.Body = &ReaderCloser{
 		reader: bytes.NewReader(b),
