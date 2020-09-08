@@ -55,7 +55,7 @@ func MainTemplateEmit(w http.ResponseWriter,
 		if code == "" {
 			code = MapGetString(example, "code")
 
-			code = CodeTemplateExecute(host, session, code)
+			code = StringTemplateExecute(host, session, code, nil)
 		}
 
 		infoBefore = MapGetString(example, "infoBefore")
@@ -101,12 +101,15 @@ func MainTemplateEmit(w http.ResponseWriter,
 
 // ------------------------------------------------
 
-func CodeTemplateExecute(host string, session *Session, code string) string {
-	data := map[string]interface{}{
-		"CBHost": host,
-		"CBUser": "username",
-		"CBPswd": "password",
+func StringTemplateExecute(host string, session *Session,
+	t string, data map[string]interface{}) string {
+	if data == nil {
+		data = map[string]interface{}{}
 	}
+
+	data["CBHost"] = host
+	data["CBUser"] = "username"
+	data["CBPswd"] = "password"
 
 	if session != nil {
 		data["SessionId"] = session.SessionId
@@ -116,12 +119,12 @@ func CodeTemplateExecute(host string, session *Session, code string) string {
 
 	var b bytes.Buffer
 
-	err := textTemplate.Must(textTemplate.New("code").Parse(code)).
+	err := textTemplate.Must(textTemplate.New("t").Parse(t)).
 		Execute(&b, data)
 	if err != nil {
-		log.Printf("ERROR: CodeTemplateExecute, err: %v", err)
+		log.Printf("ERROR: StringTemplateExecute, err: %v", err)
 
-		return code
+		return t
 	}
 
 	return b.String()
