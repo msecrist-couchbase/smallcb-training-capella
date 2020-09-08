@@ -150,7 +150,8 @@ func HttpProxy(listenProxy, staticDir string,
 							portStart: portStart,
 						})
 					} else if strings.HasPrefix(r.URL.Path, "/ui/index.html") {
-						err = InjectResponseUI(staticDir, resp)
+						err = InjectResponseUI(staticDir,
+							containerPublishHost, session, resp)
 					}
 
 					return err
@@ -170,7 +171,8 @@ func HttpProxy(listenProxy, staticDir string,
 		if modifyResponse == nil &&
 			strings.HasPrefix(r.URL.Path, "/ui/index.html") {
 			modifyResponse = func(resp *http.Response) (err error) {
-				return InjectResponseUI(staticDir, resp)
+				return InjectResponseUI(staticDir,
+					containerPublishHost, nil, resp)
 			}
 		}
 
@@ -341,12 +343,13 @@ func RemapResponse(resp *http.Response, remapper *JsonRemapper) (err error) {
 
 // ------------------------------------------------
 
-func InjectResponseUI(staticDir string, resp *http.Response) error {
+func InjectResponseUI(staticDir string, host string,
+	session *Session, resp *http.Response) error {
 	t := template.Must(template.ParseFiles(staticDir + "/inject.html.template"))
 
 	var tout bytes.Buffer
 
-	err := t.Execute(&tout, nil)
+	err := t.Execute(&tout, SessionTemplateData(host, session))
 	if err != nil {
 		return fmt.Errorf("t.Execute, err: %v", err)
 	}

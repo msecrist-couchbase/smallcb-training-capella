@@ -55,7 +55,7 @@ func MainTemplateEmit(w http.ResponseWriter,
 		if code == "" {
 			code = MapGetString(example, "code")
 
-			code = StringTemplateExecute(host, session, code, nil)
+			code = SessionTemplateExecute(host, session, code)
 		}
 
 		infoBefore = MapGetString(example, "infoBefore")
@@ -101,15 +101,28 @@ func MainTemplateEmit(w http.ResponseWriter,
 
 // ------------------------------------------------
 
-func StringTemplateExecute(host string, session *Session,
-	t string, data map[string]interface{}) string {
-	if data == nil {
-		data = map[string]interface{}{}
+func SessionTemplateExecute(host string, session *Session, t string) string {
+	data := SessionTemplateData(host, session)
+
+	var b bytes.Buffer
+
+	err := textTemplate.Must(textTemplate.New("t").Parse(t)).
+		Execute(&b, data)
+	if err != nil {
+		log.Printf("ERROR: SessionTemplateExecute, err: %v", err)
+
+		return t
 	}
 
-	data["CBHost"] = host
-	data["CBUser"] = "username"
-	data["CBPswd"] = "password"
+	return b.String()
+}
+
+func SessionTemplateData(host string, session *Session) map[string]interface{} {
+	data := map[string]interface{}{
+		"CBHost": host,
+		"CBUser": "username",
+		"CBPswd": "password",
+	}
 
 	if session != nil {
 		data["SessionId"] = session.SessionId
@@ -117,17 +130,7 @@ func StringTemplateExecute(host string, session *Session,
 		data["CBPswd"] = session.CBPswd
 	}
 
-	var b bytes.Buffer
-
-	err := textTemplate.Must(textTemplate.New("t").Parse(t)).
-		Execute(&b, data)
-	if err != nil {
-		log.Printf("ERROR: StringTemplateExecute, err: %v", err)
-
-		return t
-	}
-
-	return b.String()
+	return data
 }
 
 // ------------------------------------------------
