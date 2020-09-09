@@ -74,6 +74,8 @@ func StatsHistsRun(sampleEvery time.Duration) {
 	var levelSizes = []int{samplesPerMinute, 60, 24, 10}
 
 	for t := range time.Tick(sampleEvery) {
+		StatsRefresh()
+
 		statsHists = StatsHistsSample(statsHists, levelSizes, t)
 	}
 }
