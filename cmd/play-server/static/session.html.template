@@ -83,7 +83,7 @@
         A test-drive session means that a Couchbase Server instance
         will be allocated to you
         &mdash;
-        until your session expires from inactivity (~5 minutes)
+        until your session expires from inactivity (~{{.sessionsMaxAge}})
         &mdash;
         or is deleted for other reasons like a system reboot.
       </p>

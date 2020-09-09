@@ -90,7 +90,10 @@ func HttpHandleSessionExit(w http.ResponseWriter, r *http.Request) {
 func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 	StatsNumInc("http.Session")
 
-	data := map[string]interface{}{}
+	data := map[string]interface{}{
+		"sessionsMaxAge": strings.Replace(
+			sessionsMaxAge.String(), "m0s", " min", 1),
+	}
 
 	if r.Method == "POST" {
 		StatsNumInc("http.Session.post")
