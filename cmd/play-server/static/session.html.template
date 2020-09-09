@@ -133,7 +133,7 @@
                value="start a test-drive session"/>
 
         <div class="details">
-          (we'll email session connection details to you)
+          (we won't sell your email to spammers, etc)
         </div>
 
         {{if .err}}
