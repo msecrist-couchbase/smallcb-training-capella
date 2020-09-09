@@ -1,6 +1,9 @@
 Dependencies...
 
 * golang
+  * tip: after checking out this project, run "go get ./..."
+    to download golang dependencies.
+    * tip: you might need to setup your GOPATH env variable.
 * docker
 * make
 
@@ -152,6 +155,8 @@ sizing?
 
 inject better UI into web admin UI?
 
+proper web terminal UI?
+
 should we use docker build env vars?
 
 should we use docker on docker?
@@ -219,44 +224,46 @@ iframe for access to web admin portal?
     the X-Frame-Options DENY header from the response.
 
 or pop up web admin portal in separate tab?
-  with rewrites / injection of headline messages
-  or advertisements?
 
-should have a one-click workload generator?
+popup tours in injection?
+  https://kamranahmed.info/driver.js/
+
+SECURITY: cbworkloadgen or any submitted program can run
+  longer than the play-server's timeout?
 
 how about having longer-running instances
 that hang around more than a single request,
 which are all single-node / no rebalance / no XDCR,
 all for better developer tire-kicking?
 e.g.,
-  per-request (uber)
+  DONE: per-request (uber)
     container instance reset/recycled after every request.
     similar to https://www.tutorialspoint.com/compile_jdbc_online.php
 
-  multi-request (zipcar / hourly rental)
+  DONE: multi-request (zipcar / e.g., hourly rental)
     container instance has an associated session UUID,
       and is reset/recycled only after the
-      session times out from inactivity, or
-      from a too-long session (might be a robot, not a human).
+      session reachs timeout from inactivity.
     data is deleted after session times out.
-    and, user / password has to be generated UUID?
-      and network ingres/egress that's enough,
-      intended to allow for cbbackup/restore from elsewhere?
-    similar to katacoda?
+    and, user / password is generated a'la UUID,
+    with network ingres/egress that's enough
+      to allow for cbbackup/restore from elsewhere.
+    similar to katacoda.
 
   multi-request-with-data-freezing/thawing (hertz/avid, multi-day rental)
     after a timeout from inactivity,
     the data is snapshotted and parked in quiescent garage somewhere...
-      like on local disk,
+      like on to local disk,
            or onto S3.
     when the user comes back, data is thawed,
       against a restarted container,
-      perhaps at a different assigned host:port?
+      perhaps at a different assigned port #'s?
       which takes some time (e.g., go get a coffee) while defrosting?
 
-  finally, if you want a lease of 1 or more fleet of cars (clustering),
-    with attached pool of hotel chauffeurs and
-    mechanic/maintenance services...
+  finally, if you want a lease of 1 or more fleet of cars
+    (allowing for clustering),
+    with attached pool of on-demand hotel chauffeurs and
+      mechanic/maintenance services...
     then use Couchbase Cloud.
 
 -------------------------
@@ -264,30 +271,17 @@ On new CB version release...
 
 UI should show the CB version?
 
-Does that mean a new EC2 instance?
+Does a new CB version mean a new EC2 instance
+  and then redirect the DNS / ELB,
+  a'la rolling upgrade?
 
 What about frozen data --
   do we thaw them on demand, as requested?
   eventually give up on versions that's too old?
 
-How about on data that is super old?
+How about GC'ing data that is super old?
 
-GDPR with emails and PII?
-
--------------------------
-examples can now be collected into separate "books"?
-  multiple 'examples' directories are now supported.
-
-InfoBefore / InfoAfter can now have HTML markup,
-  like links to relevant docs page or "next" step links.
-
--------------------------
-# Security
-
-- timeouts for long-running programs, see:
-  codeMaxDuration and containerWaitDuration.
-
-- docker exec as -u couchbase:couchbase (user:group), not as root.
+What about GDPR with emails and PII?
 
 -------------------------
 use cases
@@ -295,20 +289,41 @@ use cases
     open-ended tire kicking?
     of SDK / API testing?
        and/or N1QL?
+       and/or query workbench?
+       and workload generator?
+    of sync-gateway / mobile?
     try-it-now buttons in the docs & tutorials?
 
 more use cases with persistent data?
   CI/CD tests?
+
   backend jobs on-demand?
-    analytics?
-    quick slice/dice jobs against big data (covid19)?
+    on-demand analytics?
+    quick slice/dice jobs against big data (public datasets: covid19)?
     AI/ML jobs?
 
-    serverless event processing?
+  serverless event processing?
 
 dev-mode config is reusable for laptops, too?
 
+dev-mode still asking for stats too much?
+
+dev-mode, phase II, needs core product improvements?
+
 --------------------------
+DONE: UI timeouts for long-running programs, see:
+  codeMaxDuration and containerWaitDuration.
+
+DONE: docker exec as -u couchbase:couchbase (user:group), not as root.
+
+DONE: examples can now be collected into separate "books"?
+  multiple example subdirectories are now supported.
+
+DONE: InfoBefore / InfoAfter can now have HTML markup,
+  like links to relevant docs page or "next" step links.
+
+DONE: one-click workload generator, done via cbworkloadgen.
+
 DONE: create couchbase user better than Administrator:password,
   especially dynamically with user & password that look
   more like UUID's when we're in >= zipcar mode.
@@ -356,16 +371,16 @@ DONE: proxy n1ql 8093 port so that command-line copy/paste of curl example works
 --------------------------
 handwave design ideas...
 
-couchbase CB_BASE_VER docker
+start with couchbase docker image...
 
+  --------------------
   tweak & configure couchbase to lower TCO
   init couchbase
   tweak & configure couchbase to lower TCO, part 2
-  create buckets
+  create bucket(s)
   load sample data
 
   --------------------
-
   add language 1 tools
   add sdk 1 V1 stuff
   add sdk 1 V2 stuff
@@ -374,12 +389,14 @@ couchbase CB_BASE_VER docker
   add sdk N V1 stuff
   add sdk N V2 stuff
 
+  --------------------
   then, freeze or snapshot /opt/couchbase/var
     as a good restart point
 
 --------------------------
 also, put faster changing stuff into host filesystem
-  for easy github updates?
+  via docker volumes feature
+  for easier github updates?
     without having update the snapshots?
 
   e.g.,
@@ -401,23 +418,19 @@ on the host
   web/app-server
     which starts container
       (e.g., docker run -rm SAFE SAFE whatever),
-    communicates via stdin/stdout
-      perhaps using "docker attach CONTAINER"
+    communicates via stdin/stdout,
+      perhaps using "docker attach CONTAINER"?
     when done, shuts down the container instance
       and restarts it cleanly (ahead of time),
         in preparation for next request,
         to reduce cold start window?
-      starts couchbase, too,
-        depending if we're using a local couchbase
 
-perhaps can docker pause/unpause to reduce footprint?
+perhaps can use docker pause/unpause feature to reduce footprint?
 
 --------------------------
-have a pool of container instances which are ready to go...
+also have a pool of container instances which are ready to go...
 
-  db-1, db-2, db-3, db-4, etc?
-
-  perhaps write a file on whether db-X is ready to use?
+  smallcb1, smallcb2, smallcb3, smallcb4, etc.
 
 ----------------
 diagnosis links
@@ -468,20 +481,21 @@ see: https://news.ycombinator.com/item?id=24341867
 
 - docker stats (htop equivalent for docker containers)
 
-Joining a tools/diagnostic container to container you're about to run...
+Joining a tools/diagnostic container
+  to a container that you're about to run...
   In docker, it's done by passing --pid=container:$TARGETCONTAINER to docker run
   See: https://docs.docker.com/engine/reference/run/#pid-settings--...
 
 --------------------------
 https://github.com/StepicOrg/epicbox
-Run untrusted code in secure Docker based sandboxes
-
+Run untrusted code in secure Docker based sandboxes...
 A Python library to run untrusted code in secure, isolated Docker
 based sandboxes. It is used to automatically grade programming
 assignments on Stepik.org.
 
 ---------
 http://stealth.openwall.net/xSports/shocker.c
+Old - shows how to escape docker container instance.
 
 ---------
 https://github.com/genuinetools/bane
@@ -494,7 +508,7 @@ best-practices around deploying Docker containers in production.
 
 ---------
 https://security.stackexchange.com/questions/107850/docker-as-a-sandbox-for-untrusted-code
-from 2015
+From 2015.
 
 ---------
 https://github.com/vaharoni/trusted-sandbox
