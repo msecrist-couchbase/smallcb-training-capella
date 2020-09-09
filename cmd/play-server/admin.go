@@ -49,10 +49,17 @@ func StatsInfo(name, entry string) {
 
 // ------------------------------------------------
 
-func StatUpdateSessionsCountsLOCKED(
-	sessionsCount, sessionsCountWithContainer uint64) {
+func StatsRefresh() {
+	sessionsCount, sessionsCountWithContainer := sessions.Count()
+
+	statsM.Lock()
+
 	statsNums["sessions.count:cur"] = sessionsCount
 	statsNums["sessions.countWithContainer:cur"] = sessionsCountWithContainer
+
+	statsInfos["uptime"] = time.Now().Sub(StartTime).String()
+
+	statsM.Unlock()
 }
 
 // ------------------------------------------------
@@ -78,11 +85,7 @@ func StatsHistsSample(statsHists [][]*StatsHist,
 		Nums: map[string]uint64{},
 	}
 
-	sessionsCount, sessionsCountWithContainer := sessions.Count()
-
 	statsM.Lock()
-
-	StatUpdateSessionsCountsLOCKED(sessionsCount, sessionsCountWithContainer)
 
 	for k, v := range statsNums {
 		h.Nums[k] = v
@@ -148,11 +151,9 @@ func StatsHistsPromoteLOCKED(statsHists [][]*StatsHist,
 // ------------------------------------------------
 
 func HttpHandleAdminStats(w http.ResponseWriter, r *http.Request) {
-	sessionsCount, sessionsCountWithContainer := sessions.Count()
+	StatsRefresh()
 
 	statsM.Lock()
-
-	StatUpdateSessionsCountsLOCKED(sessionsCount, sessionsCountWithContainer)
 
 	stats := map[string]interface{}{
 		"nums":  statsNums,
@@ -180,6 +181,8 @@ func HttpHandleAdminStats(w http.ResponseWriter, r *http.Request) {
 // ------------------------------------------------
 
 func HttpHandleAdminDashboard(w http.ResponseWriter, r *http.Request) {
+	StatsRefresh()
+
 	keys := map[string]struct{}{}
 
 	statsM.Lock()
@@ -206,12 +209,14 @@ func HttpHandleAdminDashboard(w http.ResponseWriter, r *http.Request) {
 		keysArr = append(keysArr, key)
 	}
 
-	sort.Strings(keysArr[2:])
+	sort.Strings(keysArr)
+
+	statsInfosJ, _ := json.Marshal(statsInfos)
 
 	data := map[string]interface{}{
 		"keys":  keysArr,
 		"hists": rhists,
-		"infos": statsInfos,
+		"infos": string(statsInfosJ),
 	}
 
 	statsM.Unlock()

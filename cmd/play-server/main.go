@@ -21,6 +21,10 @@ var CBAdminPasswordDefault = "small-house-secret"
 
 // -----------------------------------
 
+var StartTime time.Time
+
+// -----------------------------------
+
 // Channel of container instance #'s that are ready.
 var readyCh chan int
 
@@ -72,8 +76,10 @@ func init() {
 // ------------------------------------------------
 
 func main() {
-	StatsInfo("main.startTime",
-		time.Now().Format("2006-01-02T15:04:05.000-07:00"))
+	StartTime = time.Now()
+
+	StatsInfo("main.startTime", StartTime.Format(
+		"2006-01-02T15:04:05.000-07:00"))
 
 	StatsInfo("main.args", strings.Join(os.Args, " "))
 
