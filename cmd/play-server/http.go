@@ -12,7 +12,8 @@ import (
 )
 
 var Msgs = map[string]string{
-	"session-exit": "Thanks for test-driving Couchbase!",
+	"session-exit":    "Thanks for test-driving Couchbase!",
+	"session-timeout": "Session timed out.",
 }
 
 var WrongCaptchaSleepTime = 5 * time.Second // To slow down robots.
@@ -54,7 +55,9 @@ func HttpHandleMain(w http.ResponseWriter, r *http.Request) {
 
 	session := sessions.SessionGet(s)
 	if session == nil && s != "" && msg == "" {
-		msg = "Session timed out."
+		http.Redirect(w, r, "/?m=session-timeout", http.StatusSeeOther)
+
+		return
 	}
 
 	examplesDir := "examples"
