@@ -198,15 +198,12 @@ func HttpHandleAdminDashboard(w http.ResponseWriter, r *http.Request) {
 		rhists = append(rhists, r)
 	}
 
-	keysArr := make([]string, 2, len(keys)+2)
+	keysArr := make([]string, 0, len(keys))
 	for key := range keys {
 		keysArr = append(keysArr, key)
 	}
 
 	sort.Strings(keysArr[2:])
-
-	keysArr[0] = "sessions.count:cur"
-	keysArr[1] = "sessions.countWithContainer:cur"
 
 	data := map[string]interface{}{
 		"keys":  keysArr,

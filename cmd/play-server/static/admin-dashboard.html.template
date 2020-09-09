@@ -6,58 +6,36 @@
         href="/static/style.css">
   <style>
     .main {
-      flex-basis: 40rem;
       padding: 20px 40px 40px 40px;
     }
 
-    .main h2 {
-      font-size: 12pt;
-      font-weight: bold;
-      margin-bottom: 30px;
+    .main table.nums {
+      margin-top: 200px;
     }
 
-    .main form {
-      margin-top: 30px;
+    .main table.nums th,
+    .main table.nums td {
+      font-size: 8pt;
+      text-align: right;
     }
 
-    .main label {
-      font-weight: bold;
+    .main table.nums th.num {
+      min-width: 1.2rem;
     }
 
-    .main .details {
-      font-weight: normal;
-      font-size: 9pt;
+    .main table.nums th.num div.num {
+      position: absolute;
+      font-size: 8pt;
+      transform-origin: 0 0; /* top-left instead of center */
+      transform: rotate(-45deg);
     }
 
-    .main input[type=text] {
-      width: 20rem;
-      margin: 5px 0 10px 0;
-      padding: 3px 5px 3px 5px;
-    }
-
-    .main input[type=submit] {
-      margin-top: 30px;
-      border: 2px solid #999;
-      padding: 5px 20px 5px 20px;
-      background-color: #d8d8d8;
-      cursor: pointer;
-    }
-
-    .main input[type=submit]:hover {
+    .main table.nums tbody tr:hover {
       background-color: #eee;
     }
 
-    .main img.captcha {
-      display: block;
-    }
-
-    .err {
-      color: red;
-    }
-
-    div.err {
-      margin-top: 10px;
-      font-weight: bold;
+    .main table.nums tbody tr td {
+      padding-left: 5px;
     }
   </style>
 </head>
@@ -81,19 +59,22 @@
 
       <p>{{.infos}}</p>
 
-      <table>
+      <table class="nums">
+       <thead>
         <tr>
           <th></th>
           <th>time</th>
           {{range .keys}}
-            <th>{{.}}</th>
+            <th class="num"><div class="num">{{.}}</div></th>
           {{end}}
         </tr>
+       </thead>
+       <tbody>
         {{range $level, $a := $.hists}}
           {{range $v := $a}}
             <tr>
               <th>{{$level}}</th>
-              <th>{{$v.At}}</th>
+              <th class="at">{{$v.At}}</th>
               {{range $k := $.keys}}
                 <td>
                   {{index $v.Nums $k}}
@@ -102,6 +83,7 @@
             </tr>
           {{end}}
         {{end}}
+       </tbody>
       </table>
     </div>
   </div>
