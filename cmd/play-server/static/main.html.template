@@ -141,11 +141,12 @@
             REST API     : http://{{.Session.CBUser}}:{{.Session.CBPswd}}@{{.Host}}:8091
 
         <b>Couchbase SDK's</b>
-            Java SDK     : [host / user / pswd and connect string examples here]
-            NodeJS SDK   : [host / user / pswd and connect string examples here]
+            Java SDK     : [TODO: host / user / pswd and connect string example here]
+            NodeJS SDK   : [TODO: host / user / pswd and connect string example here]
             Python SDK   : Cluster('couchbase://{{.Host}}', ClusterOptions(PasswordAuthenticator('{{.Session.CBUser}}', '{{.Session.CBPswd}}')))
-            C# SDK       : [host / user / pswd and connect string examples here]
+            C# SDK       : [TODO: host / user / pswd and connect string example here]
       </div>
+
       <div>
         The following online examples will also run
         against your test-drive instance...

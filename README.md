@@ -215,7 +215,8 @@ need 1 or more test users / test examples / test container instances?
 iframe for access to web admin portal?
   need server-side proxy in golang?
   perhaps access to just query workbench?
-  ns-server does not like iframes, so need header rewrites?
+  DONE: ns-server does not like iframes, so the proxy removes
+    the X-Frame-Options DENY header from the response.
 
 or pop up web admin portal in separate tab?
   with rewrites / injection of headline messages

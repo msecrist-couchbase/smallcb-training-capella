@@ -347,6 +347,8 @@ func RemapResponse(resp *http.Response, remapper *JsonRemapper) (err error) {
 
 func InjectResponseUI(staticDir string, host string, portApp int,
 	session *Session, resp *http.Response) error {
+	resp.Header.Del("X-Frame-Options")
+
 	t := template.Must(template.ParseFiles(staticDir + "/inject.html.template"))
 
 	var tout bytes.Buffer
