@@ -24,9 +24,8 @@ var (
 	containers = flag.Int("containers", 1,
 		"# of container instances")
 
-	host = flag.String("host", "try.couchbase.dev",
-		"host that the service will be visible at;"+
-			" for development (without actual DNS), use localhost or 127.0.0.1")
+	host = flag.String("host", "127.0.0.1",
+		"host that the service will be publically available as")
 
 	listen = flag.String("listen", ":8080",
 		"[addr]:port for play-server's web UI / REST API")
