@@ -71,7 +71,7 @@ func StatsHistsRun(sampleEvery time.Duration) {
 
 	samplesPerMinute := int(time.Minute / sampleEvery)
 
-	var levelSizes = []int{samplesPerMinute, 60, 24, 10}
+	var levelSizes = []int{samplesPerMinute, 60, 24, 7, 4, 10}
 
 	for t := range time.Tick(sampleEvery) {
 		StatsRefresh()
@@ -198,7 +198,7 @@ func HttpHandleAdminDashboard(w http.ResponseWriter, r *http.Request) {
 		}
 
 		if len(a) > 0 {
-			for k := range a[0].Nums {
+			for k := range a[len(a)-1].Nums {
 				keys[k] = struct{}{}
 			}
 		}
