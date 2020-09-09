@@ -83,6 +83,7 @@
 
       <table>
         <tr>
+          <th></th>
           <th>time</th>
           {{range .keys}}
             <th>{{.}}</th>
@@ -91,6 +92,7 @@
         {{range $level, $a := $.hists}}
           {{range $v := $a}}
             <tr>
+              <th>{{$level}}</th>
               <th>{{$v.At}}</th>
               {{range $k := $.keys}}
                 <td>
