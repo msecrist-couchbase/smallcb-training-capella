@@ -128,18 +128,13 @@ what if my email and/or name are already used?
   if so, can i get another zipcar for me?
   ANS: currently, sorta -- full name + email must be unique.
 
-where do we store email to instance UUID info?
-
-sizing?
-  some rough disk usage info...
-
-    % du -s -h vol-0        ==> 8.1M vol-0
-    % du -s -h vol-snapshot ==> 5.6M vol-snapshot
+store logs on S3?
 
 google analytics?
 
 stats?
   keep average time of restarts, for fake/estimated progress/ETA bars?
+  do we dump stats to logs or S3 occasionally?
 
 DNS, ELB & subdomains?
 
@@ -149,25 +144,22 @@ health watchers and elastic scaling -- bring up more nodes
   when there's more people and auto-scale-down when
   traffic goes away?
 
-DONE: examine nginx proxy for subdomain based routing -- ANS: not easy.
-  For example, the following, but which unfortunately doesn't seem to handle
-  multiple virtual ports...
-  https://blog.florianlopes.io/host-multiple-websites-on-single-host-docker/
+sizing?
+  some rough disk usage info...
 
-inject play-server UI parts into web admin UI
-  via JS injection?
+    % du -s -h vol-0        ==> 8.1M vol-0
+    % du -s -h vol-snapshot ==> 5.6M vol-snapshot
 
-DONE: use docker checkpoint to help speed up slow restart times...
-  ANS: no, checkpoints are currently only an experimental feature
-       in docker (2020/09/04).
+inject better UI into web admin UI?
 
 should we use docker build env vars?
 
-use docker on docker?
+should we use docker on docker?
 
 use docker networking features?
   use docker network overlay --internal mode?
-  perhaps too complex.
+  perhaps too complex?
+  perhaps necessary if we want a play run-only container for submitted code?
 
 use tmpfs for faster restarts and less real i/o,
   at the cost of RAM?
@@ -196,7 +188,8 @@ SECURITY: docker build can set ulimits
       --ulimit memlock=100000000:100000000 \
       --name db -p 8091-8096:8091-8096 -p 11210-11211:11210-11211 couchbase
 
-SECURITY: only allow host to connect (or proxy)?
+SECURITY: perhaps only allow host to connect (or proxy),
+  and listen on 127.0.0.1 instead of 0.0.0.0?
 
 SECURITY: cpu/memory usage limits?
 
@@ -215,15 +208,9 @@ SECURITY: need spam/flood throttling?
 SECURITY: need a bad-list of emails that we don't like?
 
 copy/pastable connection snippets for popular languages
-  and SDK's?
-  for >= zipcar mode?
+  and SDK's, for >= zipcar mode?
 
 need 1 or more test users / test examples / test container instances?
-
-need ping / sanity checking REST endpoints?
-
-need to also proxy n1ql 8093 port so that command-line curl works?
-  or, generate n1ql example so that it shows port 10003?
 
 iframe for access to web admin portal?
   need server-side proxy in golang?
@@ -344,6 +331,26 @@ DONE: capture full name and email to get a longer-running
   dev tire-kicking instance (or zipcar mode).
 
 DONE: CAPTCHA when starting test-drive session.
+
+DONE: inject play-server UI parts into web admin UI.
+
+DONE: where do we store full name & email -- ANS: log to stdout.
+
+DONE: examine nginx proxy for subdomain based routing -- ANS: not easy.
+  For example, the following, but which unfortunately doesn't seem to handle
+  multiple virtual ports...
+  https://blog.florianlopes.io/host-multiple-websites-on-single-host-docker/
+
+DONE: use docker checkpoint to help speed up slow restart times...
+  ANS: no, checkpoints are currently only an experimental feature
+       in docker (2020/09/04).
+
+DONE: need ping / sanity checking REST endpoints
+  see /static/test.txt
+  and /admin/stats
+  and /admin/dashboard
+
+DONE: proxy n1ql 8093 port so that command-line copy/paste of curl example works.
 
 --------------------------
 handwave design ideas...

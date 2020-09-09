@@ -112,7 +112,7 @@
         <label>
           Full Name:
           <span class="err">{{.errFullName}}</span>
-          <input type="text" name="fullName" value="{{.fullName}}"/>
+          <input type="text" name="fullName" value="{{.fullName}}" autofocus/>
         </label>
 
         <label>
