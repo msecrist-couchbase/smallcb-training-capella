@@ -129,7 +129,7 @@
       <h2>Couchbase Server Test-Drive Session</h2>
       <div>
         Hello, {{.Session.FullName}}.
-        Your test-drive session is active until there's ~5 minutes of inactivity.
+        Your test-drive session is active until there's ~{{.SessionsMaxAge}} of inactivity.
       </div>
       <div>
         To connect to your test-drive Couchbase Server

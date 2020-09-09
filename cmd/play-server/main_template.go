@@ -7,7 +7,9 @@ import (
 	"log"
 	"net/http"
 	"sort"
+	"strings"
 	textTemplate "text/template"
+	"time"
 )
 
 type MainTemplateData struct {
@@ -15,7 +17,8 @@ type MainTemplateData struct {
 
 	Host string
 
-	Session *Session // May be nil.
+	Session        *Session // May be nil.
+	SessionsMaxAge string
 
 	ExamplesDir string
 	Examples    []ExampleNameTitle
@@ -29,7 +32,8 @@ type MainTemplateData struct {
 }
 
 func MainTemplateEmit(w http.ResponseWriter,
-	staticDir, msg, host string, portApp int, session *Session,
+	staticDir, msg, host string, portApp int,
+	session *Session, sessionsMaxAge time.Duration,
 	examplesDir string, name, lang, code string) {
 	examples, exampleNameTitles, err :=
 		ReadExamples(staticDir + "/" + examplesDir)
@@ -69,6 +73,9 @@ func MainTemplateEmit(w http.ResponseWriter,
 		Host: host,
 
 		Session: session,
+
+		SessionsMaxAge: strings.Replace(
+			sessionsMaxAge.String(), "m0s", " min", 1),
 
 		ExamplesDir: examplesDir,
 		Examples:    exampleNameTitles,
