@@ -9,8 +9,14 @@
       padding: 20px 40px 40px 40px;
     }
 
+    .main .infos {
+      font-family: monospace;
+      font-size: 8pt;
+    }
+
     .main table.nums {
-      margin-top: 200px;
+      margin-top: 160px;
+      border-collapse: collapse;
     }
 
     .main table.nums th,
@@ -20,7 +26,7 @@
     }
 
     .main table.nums th.num {
-      min-width: 1.2rem;
+      min-width: 1.5rem;
     }
 
     .main table.nums th.num div.num {
@@ -36,6 +42,19 @@
 
     .main table.nums tbody tr td {
       padding-left: 5px;
+    }
+
+    .main table.nums tr.level-1 {
+      background-color: #e8f8ff;
+    }
+    .main table.nums tr.level-2 {
+      background-color: #a8e8ff;
+    }
+    .main table.nums tr.level-3 {
+      background-color: #68d8ff;
+    }
+    .main table.nums tr.level-4 {
+      background-color: #28c8ff;
     }
   </style>
 </head>
@@ -57,12 +76,11 @@
     <div class="main">
       <h2>Admin Dashboard</h2>
 
-      <p>{{.infos}}</p>
+      <div class="infos">{{.infos}}</div>
 
       <table class="nums">
        <thead>
         <tr>
-          <th></th>
           <th>time</th>
           {{range .keys}}
             <th class="num"><div class="num">{{.}}</div></th>
@@ -72,8 +90,7 @@
        <tbody>
         {{range $level, $a := $.hists}}
           {{range $v := $a}}
-            <tr>
-              <th>{{$level}}</th>
+            <tr class="level-{{$level}}">
               <th class="at">{{$v.At}}</th>
               {{range $k := $.keys}}
                 <td>

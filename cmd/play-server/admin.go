@@ -136,6 +136,9 @@ func StatsHistsPromoteLOCKED(statsHists [][]*StatsHist,
 			}
 
 			statsHists[level+1] = append(statsHists[level+1], h)
+		} else {
+			// We didn't add a sample to level+1, so break.
+			break
 		}
 	}
 
