@@ -20,7 +20,7 @@ var (
 )
 
 type StatsHist struct {
-	At   time.Time
+	At   string
 	Nums map[string]uint64
 }
 
@@ -74,7 +74,7 @@ func StatsHistsRun(sampleEvery time.Duration) {
 func StatsHistsSample(statsHists [][]*StatsHist,
 	levelSizes []int, t time.Time) [][]*StatsHist {
 	h := &StatsHist{
-		At:   t,
+		At:   t.Format("2006-01-02T15:04:05"),
 		Nums: map[string]uint64{},
 	}
 
