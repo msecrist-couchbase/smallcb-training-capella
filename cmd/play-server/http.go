@@ -24,6 +24,8 @@ func HttpMuxInit(mux *http.ServeMux) {
 		http.StripPrefix("/static/",
 			http.FileServer(http.Dir(*staticDir))))
 
+	mux.HandleFunc("/admin/dashboard", HttpHandleAdminDashboard)
+
 	mux.HandleFunc("/admin/stats", HttpHandleAdminStats) // Returns JSON.
 
 	mux.HandleFunc("/admin/sessions-release-containers",

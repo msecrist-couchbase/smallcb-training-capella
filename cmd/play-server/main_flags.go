@@ -55,8 +55,12 @@ var (
 
 	sessionsCheckEvery = flag.Duration("sessionsCheckEvery",
 		30*time.Second,
-		"duration to wait before checking sessions")
+		"duration or interval to wait before checking sessions")
 
 	staticDir = flag.String("staticDir", "cmd/play-server/static",
 		"path to the 'static' resources directory")
+
+	statsEvery = flag.Duration("statsEvery",
+		20*time.Second,
+		"duration or interval between grabbing another sample of stats")
 )

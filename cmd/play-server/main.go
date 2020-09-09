@@ -137,6 +137,8 @@ func main() {
 			*listenPortSpan)
 	}
 
+	go StatsHistsRun(*statsEvery)
+
 	log.Printf("INFO: main, listen: %s", *listen)
 
 	log.Fatal(http.ListenAndServe(*listen, mux))

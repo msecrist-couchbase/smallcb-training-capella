@@ -3,16 +3,26 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"html/template"
 	"log"
 	"net/http"
+	"sort"
+	"strings"
 	"sync"
+	"time"
 )
 
 var (
 	statsM     sync.Mutex // Protects the stats.
 	statsNums  = map[string]uint64{}
 	statsInfos = map[string]string{}
+	statsHists = [][]*StatsHist{[]*StatsHist{}}
 )
+
+type StatsHist struct {
+	At   time.Time
+	Nums map[string]uint64
+}
 
 // Atomically increment a statsNums entry by 1.
 func StatsNumInc(name string) {
@@ -39,13 +49,107 @@ func StatsInfo(name, entry string) {
 
 // ------------------------------------------------
 
+func StatUpdateSessionsCountsLOCKED(
+	sessionsCount, sessionsCountWithContainer uint64) {
+	statsNums["sessions.count:cur"] = sessionsCount
+	statsNums["sessions.countWithContainer:cur"] = sessionsCountWithContainer
+}
+
+// ------------------------------------------------
+
+func StatsHistsRun(sampleEvery time.Duration) {
+	if sampleEvery > time.Minute {
+		panic("sampleEvery too large")
+	}
+
+	samplesPerMinute := int(time.Minute / sampleEvery)
+
+	var levelSizes = []int{samplesPerMinute, 60, 24, 10}
+
+	for t := range time.Tick(sampleEvery) {
+		statsHists = StatsHistsSample(statsHists, levelSizes, t)
+	}
+}
+
+func StatsHistsSample(statsHists [][]*StatsHist,
+	levelSizes []int, t time.Time) [][]*StatsHist {
+	h := &StatsHist{
+		At:   t,
+		Nums: map[string]uint64{},
+	}
+
+	sessionsCount, sessionsCountWithContainer := sessions.Count()
+
+	statsM.Lock()
+
+	StatUpdateSessionsCountsLOCKED(sessionsCount, sessionsCountWithContainer)
+
+	for k, v := range statsNums {
+		h.Nums[k] = v
+	}
+
+	statsHists[0] = append(statsHists[0], h)
+
+	statsHists = StatsHistsPromoteLOCKED(statsHists, levelSizes)
+
+	statsM.Unlock()
+
+	return statsHists
+}
+
+func StatsHistsPromoteLOCKED(statsHists [][]*StatsHist,
+	levelSizes []int) [][]*StatsHist {
+	for level := 0; level < len(statsHists); level++ {
+		levelSamples := statsHists[level]
+
+		var levelSize int
+		if level < len(levelSizes) {
+			levelSize = levelSizes[level]
+		} else {
+			levelSize = levelSizes[len(levelSizes)-1]
+		}
+
+		if len(levelSamples) >= levelSize*2 {
+			copy(levelSamples[0:levelSize], levelSamples[levelSize:])
+			levelSamples = levelSamples[0:levelSize]
+			statsHists[level] = levelSamples
+		}
+
+		if len(levelSamples) > 0 && len(levelSamples) == levelSize {
+			lastSample := levelSamples[len(levelSamples)-1]
+
+			h := &StatsHist{
+				At:   lastSample.At,
+				Nums: map[string]uint64{},
+			}
+
+			for k, v := range lastSample.Nums {
+				if !strings.HasSuffix(k, ":cur") &&
+					!strings.HasSuffix(k, ":min") &&
+					!strings.HasSuffix(k, ":max") {
+					h.Nums[k] = v
+				}
+			}
+
+			for len(statsHists) <= level+1 {
+				statsHists = append(statsHists, nil)
+			}
+
+			statsHists[level+1] = append(statsHists[level+1], h)
+		}
+	}
+
+	return statsHists
+}
+
+// ------------------------------------------------
+
 func HttpHandleAdminStats(w http.ResponseWriter, r *http.Request) {
 	sessionsCount, sessionsCountWithContainer := sessions.Count()
 
 	statsM.Lock()
 
-	statsNums["sessions.count:cur"] = sessionsCount
-	statsNums["sessions.countWithContainer:cur"] = sessionsCountWithContainer
+	StatUpdateSessionsCountsLOCKED(sessionsCount, sessionsCountWithContainer)
 
 	stats := map[string]interface{}{
 		"nums":  statsNums,
@@ -68,6 +172,49 @@ func HttpHandleAdminStats(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	w.Write(result)
+}
+
+// ------------------------------------------------
+
+func HttpHandleAdminDashboard(w http.ResponseWriter, r *http.Request) {
+	keys := map[string]struct{}{}
+
+	statsM.Lock()
+
+	rhists := make([][]*StatsHist, 0, len(statsHists))
+
+	for _, a := range statsHists {
+		r := make([]*StatsHist, 0, len(a))
+		for j := len(a) - 1; j >= 0; j-- { // Reverse.
+			r = append(r, a[j])
+		}
+
+		if len(a) > 0 {
+			for k := range a[0].Nums {
+				keys[k] = struct{}{}
+			}
+		}
+
+		rhists = append(rhists, r)
+	}
+
+	keysArr := make([]string, 0, len(keys))
+	for key := range keys {
+		keysArr = append(keysArr, key)
+	}
+
+	sort.Strings(keysArr)
+
+	data := map[string]interface{}{
+		"keys":  keysArr,
+		"hists": rhists,
+		"infos": statsInfos,
+	}
+
+	statsM.Unlock()
+
+	template.Must(template.ParseFiles(
+		*staticDir+"/admin-dashboard.html.template")).Execute(w, data)
 }
 
 // ------------------------------------------------

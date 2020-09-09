@@ -1,0 +1,111 @@
+<!doctype html>
+<html>
+<head>
+  <title>Couchbase API / SDK Playground - Admin Dashboard</title>
+  <link rel="stylesheet" type="text/css"
+        href="/static/style.css">
+  <style>
+    .main {
+      flex-basis: 40rem;
+      padding: 20px 40px 40px 40px;
+    }
+
+    .main h2 {
+      font-size: 12pt;
+      font-weight: bold;
+      margin-bottom: 30px;
+    }
+
+    .main form {
+      margin-top: 30px;
+    }
+
+    .main label {
+      font-weight: bold;
+    }
+
+    .main .details {
+      font-weight: normal;
+      font-size: 9pt;
+    }
+
+    .main input[type=text] {
+      width: 20rem;
+      margin: 5px 0 10px 0;
+      padding: 3px 5px 3px 5px;
+    }
+
+    .main input[type=submit] {
+      margin-top: 30px;
+      border: 2px solid #999;
+      padding: 5px 20px 5px 20px;
+      background-color: #d8d8d8;
+      cursor: pointer;
+    }
+
+    .main input[type=submit]:hover {
+      background-color: #eee;
+    }
+
+    .main img.captcha {
+      display: block;
+    }
+
+    .err {
+      color: red;
+    }
+
+    div.err {
+      margin-top: 10px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="header flex-row">
+    <div class="header-title">
+      <a href="/">
+        <h1>Couchbase API / SDK Playground - Admin Dashboard</h1>
+      </a>
+    </div>
+
+    <div class="header-links">
+      <a href="https://docs.couchbase.com">docs</a>
+      <a href="https://www.couchbase.com">couchbase.com</a>
+    </div>
+  </div>
+
+  <div class="flex-row">
+    <div class="main">
+      <h2>Admin Dashboard</h2>
+
+      <p>{{.infos}}</p>
+
+      <table>
+        <tr>
+          <th>time</th>
+          {{range .keys}}
+            <th>{{.}}</th>
+          {{end}}
+        </tr>
+        {{range $level, $a := $.hists}}
+          {{range $v := $a}}
+            <tr>
+              <th>{{$v.At}}</th>
+              {{range $k := $.keys}}
+                <td>
+                  {{index $v.Nums $k}}
+                </td>
+              {{end}}
+            </tr>
+          {{end}}
+        {{end}}
+      </table>
+    </div>
+  </div>
+
+  <div class="footer">
+    powered by the smallcb project from Couchbase Labs
+  </div>
+</body>
+</html>
