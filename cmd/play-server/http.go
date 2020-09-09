@@ -24,7 +24,7 @@ func HttpMuxInit(mux *http.ServeMux) {
 		http.StripPrefix("/static/",
 			http.FileServer(http.Dir(*staticDir))))
 
-	mux.HandleFunc("/admin/stats", HttpHandleAdminStats)
+	mux.HandleFunc("/admin/stats", HttpHandleAdminStats) // Returns JSON.
 
 	mux.HandleFunc("/admin/sessions-release-containers",
 		HttpHandleAdminSessionsReleaseContainers)
@@ -71,7 +71,7 @@ func HttpHandleMain(w http.ResponseWriter, r *http.Request) {
 
 	portApp, _ := strconv.Atoi(strings.Split(*listen, ":")[1])
 
-	MainTemplateEmit(w, *staticDir, msg, *containerPublishHost, portApp,
+	MainTemplateEmit(w, *staticDir, msg, *host, portApp,
 		session, examplesDir, name, lang, code)
 }
 

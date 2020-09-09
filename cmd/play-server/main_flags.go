@@ -6,13 +6,11 @@ import "time"
 var (
 	h = flag.Bool("h", false, "print help/usage and exit")
 
-	help = flag.Bool("help", false, "print help/usage and exit")
-
-	codeMaxLen = flag.Int("codeMaxLen", 16000,
-		"max length of a client's request code in bytes")
-
 	codeDuration = flag.Duration("codeDuration", 10*time.Second,
 		"duration that a client's request code may run on an assigned container instance")
+
+	codeMaxLen = flag.Int("codeMaxLen", 8000,
+		"max length of a client's request code in bytes")
 
 	containerNamePrefix = flag.String("containerNamePrefix", "smallcb-",
 		"prefix of the names of container instances")
@@ -20,49 +18,46 @@ var (
 	containerVolPrefix = flag.String("containerVolPrefix", "vol-instances/vol-",
 		"prefix of the volume directories of container instances")
 
-	containerPublishHost = flag.String("containerPublishHost", "try.couchbase.dev",
-		"host to use for generating connection URL's")
-
-	containerPublishAddr = flag.String("containerPublishAddr", "127.0.0.1",
-		"addr for publishing container instance ports")
-
-	containerPublishPortBase = flag.Int("containerPublishPortBase", 10000,
-		"base or starting port # for container instances")
-
-	containerPublishPortSpan = flag.Int("containerPublishPortSpan", 100,
-		"number of port #'s allocated for each container instance")
-
 	containerWaitDuration = flag.Duration("containerWaitDuration", 20*time.Second,
 		"duration that a client's request will wait for a ready container instance")
 
 	containers = flag.Int("containers", 1,
 		"# of container instances")
 
-	restarters = flag.Int("restarters", 1,
-		"# of restarters of the container instances")
+	host = flag.String("host", "try.couchbase.dev",
+		"host that the service will be visible at;"+
+			" for development (without actual DNS), use localhost or 127.0.0.1")
+
+	listen = flag.String("listen", ":8080",
+		"[addr]:port for play-server's web UI / REST API")
+
+	listenPortBase = flag.Int("listenPortBase", 10000,
+		"base or starting port # for container instances")
+
+	listenPortSpan = flag.Int("listenPortSpan", 100,
+		"span or range of port #'s allocated to each container instance")
+
+	listenProxy = flag.String("listenProxy", ":8091,:8093",
+		"[addr]:port(s) that will be proxied to container instances")
 
 	maxCaptchas = flag.Int("maxCaptchas", 50,
 		"# of captcha guesses to keep")
 
-	staticDir = flag.String("staticDir", "cmd/play-server/static",
-		"path to the 'static' directory")
+	proxyFlushInterval = flag.Duration("proxyFlushInterval",
+		200*time.Millisecond,
+		"duration before flushing http proxy response streams")
 
-	listen = flag.String("listen", ":8080",
-		"listen [addr]:port for play-server's web UI / REST API")
-
-	listenProxy = flag.String("listenProxy", ":8091,:8093",
-		"listen [addr]:port for proxying couchbase server,"+
-			" such as the web UI / REST API and N1QL server")
+	restarters = flag.Int("restarters", 1,
+		"# of restarters of the container instances")
 
 	sessionsMaxAge = flag.Duration("sessionsMaxAge",
 		5*time.Minute,
-		"exit sessions older than this duration")
+		"duration or age for which sessions are automatically exited")
 
 	sessionsCheckEvery = flag.Duration("sessionsCheckEvery",
 		30*time.Second,
 		"duration to wait before checking sessions")
 
-	proxyFlushInterval = flag.Duration("proxyFlushInterval",
-		200*time.Millisecond,
-		"duration before flushing http proxy response streams")
+	staticDir = flag.String("staticDir", "cmd/play-server/static",
+		"path to the 'static' resources directory")
 )

@@ -38,6 +38,15 @@ For command-line usage/help...
 
     ./play-server -h
 
+Example usage during development...
+
+    ./play-server -sessionsMaxAge 20m -containers 2 -restarters=2 -host 127.0.0.1
+
+Production usage should at least set the CB_ADMIN_PASSWORD env
+variable for security and the host...
+
+    CB_ADMIN_PASSWORD=secret-here ./play-server -host try.couchbase.dev
+
 -------------------------
 Aside...
 

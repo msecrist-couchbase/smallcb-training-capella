@@ -33,6 +33,8 @@ func StatsInfo(name, entry string) {
 	statsM.Lock()
 	statsInfos[name] = entry
 	statsM.Unlock()
+
+	log.Printf("%s: %s", name, entry)
 }
 
 // ------------------------------------------------

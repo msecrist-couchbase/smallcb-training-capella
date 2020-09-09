@@ -11,7 +11,12 @@ import (
 	"time"
 )
 
-var CBAdminPassword = "" // Initialized by CB_ADMIN_PASSWORD env.
+// Initialized by CB_ADMIN_PASSWORD env.
+var CBAdminPassword = ""
+
+// Production deployments are strongly encouraged to set a
+// CB_ADMIN_PASSWORD env variable which will be used instead
+// of this default.
 var CBAdminPasswordDefault = "small-house-secret"
 
 // -----------------------------------
@@ -35,7 +40,7 @@ var ExecPrefixes = map[string]string{
 
 // -----------------------------------
 
-// Port mapping of container port # to containerPublishPortBase + delta.
+// Port mapping of container port # to listenPortBase + delta.
 var PortMapping = [][]int{
 	[]int{8091, 1}, // 8091 is exposed on port 10000 + 1.
 	[]int{8092, 2}, // 8092 is exposed on port 10000 + 2.
@@ -74,7 +79,7 @@ func main() {
 
 	flag.Parse()
 
-	if *h || *help {
+	if *h {
 		flag.Usage()
 		os.Exit(2)
 	}
@@ -91,6 +96,9 @@ func main() {
 		CBAdminPassword = CBAdminPasswordDefault
 	}
 
+	listenAddr := strings.Split(*listen, ":")[0]
+	listenPort, _ := strconv.Atoi(strings.Split(*listen, ":")[1])
+
 	// The readyCh and restartCh are created with capacity
 	// equal to the # of containers to lower the chance of
 	// client requests and restarters from having to wait.
@@ -102,9 +110,9 @@ func main() {
 	// Spawn the restarter goroutines.
 	for i := 0; i < *restarters; i++ {
 		go Restarter(i, restartCh,
-			*containerPublishAddr,
-			*containerPublishPortBase,
-			*containerPublishPortSpan,
+			listenAddr,
+			*listenPortBase,
+			*listenPortSpan,
 			PortMapping)
 	}
 
@@ -122,13 +130,11 @@ func main() {
 
 	HttpMuxInit(mux)
 
-	listenPort, _ := strconv.Atoi(strings.Split(*listen, ":")[1])
-
 	for _, lp := range strings.Split(*listenProxy, ",") {
 		go HttpProxy(lp, *staticDir, *proxyFlushInterval,
-			*containerPublishHost, listenPort, PortMap,
-			*containerPublishPortBase,
-			*containerPublishPortSpan)
+			*host, listenPort, PortMap,
+			*listenPortBase,
+			*listenPortSpan)
 	}
 
 	log.Printf("INFO: main, listen: %s", *listen)
