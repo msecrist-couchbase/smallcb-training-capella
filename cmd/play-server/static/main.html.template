@@ -138,6 +138,9 @@
       <div class="connection">
         <b>Couchbase Server</b>
             <a href="http://{{.Host}}:8091">Web-Admin UI</a> : <a href="http://{{.Host}}:8091">http://{{.Host}}:8091</a> -- username: {{.Session.CBUser}} password: {{.Session.CBPswd}}
+
+                           <a href="http://{{.Host}}:8091/ui/index.html#!/query/workbench">Query Workbench</a> | <a href="http://{{.Host}}:8091/ui/index.html#!/documents/editor">Document Editor</a> | <a href="http://{{.Host}}:8091/ui/index.html#!/documents/import">Import Documents</a>
+
             REST API     : http://{{.Session.CBUser}}:{{.Session.CBPswd}}@{{.Host}}:8091
 
         <b>Couchbase SDK's</b>
