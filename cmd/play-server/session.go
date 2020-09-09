@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"strings"
@@ -123,7 +124,10 @@ func (sessions *Sessions) SessionExit(sessionId string) error {
 			FullNameEmail(session.FullName, session.Email))
 
 		go func() { // Async to not hold the sessions lock.
-			log.Printf("session, SessionExit, session: %+v", session)
+			j, err := json.Marshal(session.SessionInfo)
+			if err == nil {
+				log.Printf("session, SessionExit, sessionInfo: %+v", string(j))
+			}
 
 			session.ReleaseContainer()
 
@@ -207,7 +211,10 @@ func (s *Sessions) SessionCreate(fullName, email string) (
 
 	StatsNumInc("sessions.SessionCreate.ok")
 
-	log.Printf("session, SessionCreate, session: %+v", session)
+	j, err := json.Marshal(session.SessionInfo)
+	if err == nil {
+		log.Printf("session, SessionCreate, sessionInfo: %+v", string(j))
+	}
 
 	rv := *session // Copy
 

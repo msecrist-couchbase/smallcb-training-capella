@@ -14,10 +14,12 @@ One time setup/init/build steps...
 
     # 2) Temporarily launch a smallcb docker image from step 1
     # that initializes a couchbase-server with sample data
-    # and configured with lower resource utilization, in order
-    # to create the reusable vol-snapshot subdirectory...
+    # and configures it for lower resource utilization.
     #
-    # TIP: Make sure you're not already running couchbase-server.
+    # This step creates and populates the vol-snapshot directory.
+    #
+    # TIP: Make sure you're not already running couchbase-server
+    # as it needs the standard couchbase-server port #'s.
     make create
 
     # 3) Compile the web/app server...
@@ -25,13 +27,10 @@ One time setup/init/build steps...
 
 And, to start the web/app server...
 
-    # Listens on port 8080 for web browser requests,
-    # where some warmup time is needed (as it launches
-    # container instances via 'make restart' invocations
-    # that are based on the vol-snapshot)...
+    # Listens on port 8080, 8091 and 8093 for web browser requests...
     #
-    # TIP: Make sure you're not already using port 8080,
-    # or use the -listen command-line flag.
+    # TIP: Make sure you're not already using those ports,
+    # or use the command-line flags to change the port #'s.
     ./play-server
 
 For command-line usage/help...
@@ -42,8 +41,8 @@ Example usage during development...
 
     ./play-server -sessionsMaxAge 20m -containers 2 -restarters=2
 
-Production usage should at least set the CB_ADMIN_PASSWORD env
-variable for security and the host...
+Production usage should set the CB_ADMIN_PASSWORD env
+variable for security and the host parameter...
 
     CB_ADMIN_PASSWORD=secret-here ./play-server -host try.couchbase.dev
 
@@ -65,6 +64,11 @@ roughly, how much will it cost?
 
 need to su to couchbase to install java SDK, nodejs SDK, etc?
 
+need a cgroup or a throwaway container to safely run
+  submitted code with hard timeouts / resource limits?
+
+show & tell?
+
 first end-to-end demo on laptop?
 
 first end-to-end demo on cloud (staging)?
@@ -78,14 +82,6 @@ lots of examples are auto-scraped from docs and
     which are older.
   ask Matt I. for more details
 
-need to golang proxy to use the remapped port #'s?
-  in the REST responses, to rewrite REST json maps
-  to list server hostnames/addrs correctly?
-
-docker container needs to -p or publish/expose ports
-  on 0.0.0.0 addr instead of 127.0.0.1 addr?
-  See "-containerPublishAddr" cmd-line flag.
-
 client-side JS to prevent over-clicking on Run/Submit button,
   where the current attempt of onRunSubmit()
   doesn't work very well for the 2nd click on 'run'.
@@ -98,7 +94,6 @@ client-side code syntax highlighting / styling via
 
 couchbase style header / footer?
   call-to-action / download couchbase?
-  link to docs?
 
 CSS styling for mobile / narrow screens?
 
@@ -112,26 +107,26 @@ when the page is scrolled down, and you click on another
   example link, there's a disconcerting jump back to
   top of the page rather than having the page stay
   mostly stable -- similar to docs behavior?
-  maybe use an iframe, but then URL won't be bookmarkable?
+  btw, using an iframe might prevent URL bookmarking ability?
 
-favorites / recommended examples?
+favorites / recommended examples?  starred?
 
 some examples that only make sense when there's
   a longer-running session >= zipcar mode?
 
 feedback comments or votes on examples?
 
-capture email to get a longer-running
-  dev tire-kicking instance?
-  full name?  password?
-  CAPTCHA?
-  CAPTCHA random seed looks week -- seeing repeats on process start?
-  panics at rand.Intn()?
+CAPTCHA random seed looks weak
+  seeing repeats on process start?
+
+CAPTCHA panics sometimes at rand.Intn()?
 
 can i have >1 longer running instance per email?
+  ANS: currently, sorta -- full name + email must be unique.
 
 what if my email and/or name are already used?
   if so, can i get another zipcar for me?
+  ANS: currently, sorta -- full name + email must be unique.
 
 where do we store email to instance UUID info?
 
@@ -334,6 +329,21 @@ DONE: change the Administrator password in 'make create'.
 
 DONE: using docker --add-host to add to /etc/hosts file so that
   couchbase://try.couchbase.dev:8091 connection string works.
+
+DONE: need to golang proxy to use the remapped port #'s?
+  in the REST responses, to rewrite REST json maps
+  to list server hostnames/addrs correctly.
+
+DONE: docker container is now -p or publish'ing or exposing ports
+  on 0.0.0.0 addr instead of 127.0.0.1 addr by default.
+  See also "-listen" cmd-line flag.
+
+DONE: in the header, added link to docs.
+
+DONE: capture full name and email to get a longer-running
+  dev tire-kicking instance (or zipcar mode).
+
+DONE: CAPTCHA when starting test-drive session.
 
 --------------------------
 handwave design ideas...
