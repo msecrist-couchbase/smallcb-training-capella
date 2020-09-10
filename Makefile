@@ -48,6 +48,9 @@ create:
                 reset-admin-password --new-password $(CB_ADMIN_PASSWORD)
 	sleep 3
 	docker cp $(IMAGE_NAME)-$(CONTAINER_NUM):/opt/couchbase/VERSION.txt ./tmp/VERSION.txt
+	docker exec $(IMAGE_NAME)-$(CONTAINER_NUM) \
+             grep vsn /opt/couchbase/lib/ns_server/erlang/lib/ns_server/ebin/ns_server.app | \
+             cut -d '"' -f 2 > ./tmp/ns_server.app.vsn
 	sleep 3
 	docker stop $(IMAGE_NAME)-$(CONTAINER_NUM)
 	sleep 3
