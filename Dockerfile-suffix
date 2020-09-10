@@ -8,3 +8,7 @@ RUN chmod +x /init-couchbase/*.sh
 
 COPY cmd/play-server/run-*.sh /
 RUN chmod +x /run-*.sh
+
+# Create user for user-submitted playground code.
+
+RUN useradd play -u 1001 -g couchbase -M

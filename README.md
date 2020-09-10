@@ -236,9 +236,8 @@ popup tours in injection?
 
 output (stdout / stderr) is not streaming?
 
-SECURITY: use another user 'play' and pkill all of play's
-  processes after timeout, where play might be in the
-  same couchbase group as couchbase user?
+after a run times out, pkill all the processes
+  owned by 'play user?
 
 SECURITY: cbworkloadgen or any submitted program can run
   longer than the play-server's timeout?
@@ -332,7 +331,9 @@ DONE: when the page is scrolled down, and you click on another
 DONE: UI timeouts for long-running programs, see:
   codeMaxDuration and containerWaitDuration.
 
-DONE: docker exec as -u couchbase:couchbase (user:group), not as root.
+DONE: use another user 'play' to run user submitted code...
+  docker exec as -u play:couchbase (user:group),
+    not as root and not as couchbase.
 
 DONE: examples can now be collected into separate "books"?
   multiple example subdirectories are now supported.
