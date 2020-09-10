@@ -36,10 +36,18 @@
     }
     .main ul.examples li {
       list-style: none;
+      margin: 0 0 15px 0;
+      border: 1px solid #888;
+      padding: 5px 5px 5px 5px;
     }
     .main ul.examples li.current {
       list-style: square;
-      color: green;
+      color: #73a1a4;
+      background-color: #84d4d8;
+    }
+    .main ul.examples li a {
+      display: block;
+      text-decoration: none;
     }
     .main textarea.code {
       width: 95%;
