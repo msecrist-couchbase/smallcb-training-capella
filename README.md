@@ -236,6 +236,10 @@ popup tours in injection?
 
 output (stdout / stderr) is not streaming?
 
+SECURITY: use another user 'play' and pkill all of play's
+  processes after timeout, where play might be in the
+  same couchbase group as couchbase user?
+
 SECURITY: cbworkloadgen or any submitted program can run
   longer than the play-server's timeout?
 
