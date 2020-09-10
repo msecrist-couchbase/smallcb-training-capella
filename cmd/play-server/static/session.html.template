@@ -144,7 +144,7 @@
   </div>
 
   <div class="footer">
-    powered by the smallcb project from Couchbase Labs
+    powered by Couchbase Labs and Couchbase Server {{.Version}}
   </div>
 </body>
 </html>
