@@ -240,6 +240,8 @@ or pop up web admin portal in separate tab?
 popup tours in injection?
   https://kamranahmed.info/driver.js/
 
+output (stdout / stderr) is not streaming?
+
 SECURITY: cbworkloadgen or any submitted program can run
   longer than the play-server's timeout?
 
