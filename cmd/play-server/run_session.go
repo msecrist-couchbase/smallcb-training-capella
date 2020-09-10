@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"time"
 )
 
@@ -63,6 +64,10 @@ func SessionAssignContainer(session *Session, req RunRequest,
 				session.RestartCh = restartCh
 				session.ReadyCh = readyCh
 				session.TouchedAtUnix = time.Now().Unix()
+
+				log.Printf("run_session, SessionAssignContainer,"+
+					" sessionId: %s, containerId: %d",
+					session.SessionId, session.ContainerId)
 
 				// Session owns the containerId.
 				containerId = -1
