@@ -34,6 +34,7 @@ build:
 create:
 	rm -rf vol-*
 	mkdir -p vol-snapshot
+	mkdir -p tmp
 	docker run --name=$(IMAGE_NAME)-$(CONTAINER_NUM) \
                    $(CONTAINER_PORTS) $(CONTAINER_EXTRAS) \
                    -v $(shell pwd)/vol-snapshot:/opt/couchbase/var \
@@ -45,6 +46,8 @@ create:
 	sleep 3
 	docker exec $(IMAGE_NAME)-$(CONTAINER_NUM) /opt/couchbase/bin/couchbase-cli \
                 reset-admin-password --new-password $(CB_ADMIN_PASSWORD)
+	sleep 3
+	docker cp $(IMAGE_NAME)-$(CONTAINER_NUM):/opt/couchbase/VERSION.txt ./tmp/VERSION.txt
 	sleep 3
 	docker stop $(IMAGE_NAME)-$(CONTAINER_NUM)
 	sleep 3
