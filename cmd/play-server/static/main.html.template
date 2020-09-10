@@ -41,6 +41,9 @@
       border: 1px solid #888;
       padding: 5px 5px 5px 5px;
     }
+    .main ul.examples li:hover {
+      background-color: #c4d4d8;
+    }
     .main ul.examples li.current {
       list-style: square;
       color: #73a1a4;
