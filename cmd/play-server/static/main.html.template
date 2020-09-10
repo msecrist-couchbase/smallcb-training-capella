@@ -132,8 +132,8 @@
         Your test-drive session is active until there's ~{{.SessionsMaxAge}} of inactivity.
       </div>
       <div>
-        To connect to your test-drive Couchbase Server
-        over the internet...
+        To connect to your test-drive Couchbase Server {{.Version}}
+        over the internet (NOTE: not secure!)...
       </div>
       <div class="connection">
         <b>Couchbase Server</b>

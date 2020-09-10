@@ -76,7 +76,7 @@ func HttpHandleMain(w http.ResponseWriter, r *http.Request) {
 
 	portApp, _ := strconv.Atoi(strings.Split(*listen, ":")[1])
 
-	MainTemplateEmit(w, *staticDir, msg, *host, portApp,
+	MainTemplateEmit(w, *staticDir, msg, *host, portApp, *version,
 		session, *sessionsMaxAge, examplesDir, name, lang, code)
 }
 

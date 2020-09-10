@@ -63,4 +63,7 @@ var (
 	statsEvery = flag.Duration("statsEvery",
 		20*time.Second,
 		"duration or interval between grabbing another sample of stats")
+
+	version = flag.String("version", "tmp/ns_server.app.vsn",
+		"version string or filename that holds version string")
 )

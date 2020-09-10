@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -88,6 +89,16 @@ func main() {
 	if *h {
 		flag.Usage()
 		os.Exit(2)
+	}
+
+	if strings.Index(*version, "/") >= 0 {
+		b, err := ioutil.ReadFile(*version)
+		if err != nil {
+			log.Fatalf("could not read version file: %s, err: %v",
+				*version, err)
+		}
+
+		*version = string(b)
 	}
 
 	var flags []string
