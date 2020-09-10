@@ -63,6 +63,8 @@ figure out where to run this in production?
 
 how about staging?
 
+need a "down for maintenance" static web page path or toggle?
+
 roughly, how much will it cost?
 
 need to su to couchbase to install java SDK, nodejs SDK, etc?
