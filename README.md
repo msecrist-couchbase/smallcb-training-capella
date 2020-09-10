@@ -225,6 +225,11 @@ iframe for access to web admin portal?
   DONE: ns-server does not like iframes, so the proxy removes
     the X-Frame-Options DENY header from the response.
 
+the proxy serving of web-admin UI login screen
+  always goes to container 0 -- but what if
+  container 0 is restarting?  Then the UI login screen
+  can't be served?  Maybe play-server's proxy should cache?
+
 or pop up web admin portal in separate tab?
 
 popup tours in injection?
