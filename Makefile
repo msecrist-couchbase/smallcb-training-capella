@@ -36,21 +36,21 @@ create:
 	mkdir -p vol-snapshot
 	mkdir -p tmp
 	docker run --name=$(IMAGE_NAME)-$(CONTAINER_NUM) \
-                   $(CONTAINER_PORTS) $(CONTAINER_EXTRAS) \
-                   -v $(shell pwd)/vol-snapshot/:/opt/couchbase/var \
-                   -d $(IMAGE_NAME)
+               $(CONTAINER_PORTS) $(CONTAINER_EXTRAS) \
+               -v $(shell pwd)/vol-snapshot/:/opt/couchbase/var \
+               -d $(IMAGE_NAME)
 	sleep 3
 	docker exec $(IMAGE_NAME)-$(CONTAINER_NUM) /init-couchbase/init.sh
 	sleep 3
 	docker exec $(IMAGE_NAME)-$(CONTAINER_NUM) /init-couchbase/init-buckets.sh
 	sleep 3
 	docker exec $(IMAGE_NAME)-$(CONTAINER_NUM) /opt/couchbase/bin/couchbase-cli \
-                reset-admin-password --new-password $(CB_ADMIN_PASSWORD)
+               reset-admin-password --new-password $(CB_ADMIN_PASSWORD)
 	sleep 3
 	docker cp $(IMAGE_NAME)-$(CONTAINER_NUM):/opt/couchbase/VERSION.txt ./tmp/VERSION.txt
 	docker exec $(IMAGE_NAME)-$(CONTAINER_NUM) \
-             grep vsn /opt/couchbase/lib/ns_server/erlang/lib/ns_server/ebin/ns_server.app | \
-             cut -d '"' -f 2 > ./tmp/ns_server.app.vsn
+               grep vsn /opt/couchbase/lib/ns_server/erlang/lib/ns_server/ebin/ns_server.app | \
+               cut -d '"' -f 2 > ./tmp/ns_server.app.vsn
 	sleep 3
 	docker stop $(IMAGE_NAME)-$(CONTAINER_NUM)
 	sleep 3
@@ -73,10 +73,10 @@ restart-snapshot:
 	mkdir -p vol-instances/vol-$(CONTAINER_NUM)
 	cp -R vol-snapshot/* vol-instances/vol-$(CONTAINER_NUM)/
 	docker run --name=$(IMAGE_NAME)-$(CONTAINER_NUM) \
-                   $(CONTAINER_PORTS) $(CONTAINER_EXTRAS) \
-                   -v $(shell pwd)/vol-instances/vol-$(CONTAINER_NUM)/:/opt/couchbase/var \
-                   --add-host="$(SERVICE_HOST):127.0.0.1" \
-                   -d $(IMAGE_NAME)
+               $(CONTAINER_PORTS) $(CONTAINER_EXTRAS) \
+               -v $(shell pwd)/vol-instances/vol-$(CONTAINER_NUM)/:/opt/couchbase/var \
+               --add-host="$(SERVICE_HOST):127.0.0.1" \
+               -d $(IMAGE_NAME)
 
 # -------------------------------------------------
 
