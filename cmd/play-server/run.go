@@ -163,7 +163,7 @@ func ExecCmd(ctx context.Context, cmd *exec.Cmd,
 
 	case err := <-doneCh:
 		if err != nil {
-			return nil, fmt.Errorf("doneCh, err: %v", err)
+			return b.Bytes(), fmt.Errorf("ExecCmd, err: %v", err)
 		}
 	}
 
