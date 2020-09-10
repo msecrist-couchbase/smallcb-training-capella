@@ -184,6 +184,9 @@ SECURITY: turn off egress networking?
   via Security Rules on the private network?
 
 SECURITY: remove ability to strace in production?
+  CVE-2014-4699: A bug in ptrace() could allow privilege
+  escalation. Docker disables ptrace() inside the container using
+  apparmor, seccomp and by dropping CAP_PTRACE.
 
 SECURITY: docker build can set ulimits
   and optional security-opts?
