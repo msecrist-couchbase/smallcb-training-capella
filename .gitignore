@@ -1,6 +1,6 @@
 *~
+*.pem
 Dockerfile
 /vol-*
 /play-server
 /tmp
-
