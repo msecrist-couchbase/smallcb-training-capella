@@ -105,8 +105,7 @@
   <div class="header flex-row">
     <div class="header-title">
       <a href="/{{if .Session}}?s={{.Session.SessionId}}{{end}}">
-        <h1>Couchbase API / SDK Playground</h1>
-      </a>
+        <h1>Couchbase API / SDK Playground</h1></a>
     </div>
 
     <div class="header-links">
@@ -132,22 +131,22 @@
         Your test-drive session is active until there's ~{{.SessionsMaxAge}} of inactivity.
       </div>
       <div>
-        To connect to your test-drive Couchbase Server {{.Version}}
-        over the internet (NOTE: not secure!)...
+        To test-drive your Couchbase Server
+        over the internet (NOTE: not encrypted / not for production!)...
       </div>
       <div class="connection">
-        <b>Couchbase Server</b>
-            <a href="http://{{.Host}}:8091">Web-Admin UI</a> : <a href="http://{{.Host}}:8091">http://{{.Host}}:8091</a> -- username: {{.Session.CBUser}} password: {{.Session.CBPswd}}
+      <b>Couchbase Server</b>
+          <a href="http://{{.Host}}:8091">Web-Admin UI</a> : <a href="http://{{.Host}}:8091">http://{{.Host}}:8091</a> -- username: {{.Session.CBUser}} password: {{.Session.CBPswd}}
 
-                           <a href="http://{{.Host}}:8091/ui/index.html#!/query/workbench">Query Workbench</a> | <a href="http://{{.Host}}:8091/ui/index.html#!/documents/editor">Document Editor</a> | <a href="http://{{.Host}}:8091/ui/index.html#!/documents/import">Import Documents</a>
+                         Favorite tools : <a href="http://{{.Host}}:8091/ui/index.html#!/query/workbench">Query Workbench</a> | <a href="http://{{.Host}}:8091/ui/index.html#!/documents/editor">Document Editor</a> | <a href="http://{{.Host}}:8091/ui/index.html#!/documents/import">Import Documents</a>
 
-            REST API     : http://{{.Session.CBUser}}:{{.Session.CBPswd}}@{{.Host}}:8091
+          REST API     : http://{{.Session.CBUser}}:{{.Session.CBPswd}}@{{.Host}}:8091
 
-        <b>Couchbase SDK's</b>
-            Java SDK     : [TODO: host / user / pswd and connect string example here]
-            NodeJS SDK   : [TODO: host / user / pswd and connect string example here]
-            Python SDK   : Cluster('couchbase://{{.Host}}', ClusterOptions(PasswordAuthenticator('{{.Session.CBUser}}', '{{.Session.CBPswd}}')))
-            C# SDK       : [TODO: host / user / pswd and connect string example here]
+      <b>Couchbase SDK's</b>
+          Java SDK     : [TODO: host / user / pswd and connect string example here]
+          NodeJS SDK   : [TODO: host / user / pswd and connect string example here]
+          Python SDK   : Cluster('couchbase://{{.Host}}', ClusterOptions(PasswordAuthenticator('{{.Session.CBUser}}', '{{.Session.CBPswd}}')))
+          C# SDK       : [TODO: host / user / pswd and connect string example here]
       </div>
 
       <div>
@@ -221,7 +220,7 @@
   </div>
 
   <div class="footer">
-    powered by the smallcb project from Couchbase Labs
+    powered by the smallcb project from Couchbase Labs and Couchbase Server {{.Version}}
   </div>
 </body>
 </html>
