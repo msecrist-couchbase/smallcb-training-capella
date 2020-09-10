@@ -37,7 +37,7 @@ create:
 	mkdir -p tmp
 	docker run --name=$(IMAGE_NAME)-$(CONTAINER_NUM) \
                    $(CONTAINER_PORTS) $(CONTAINER_EXTRAS) \
-                   -v $(shell pwd)/vol-snapshot:/opt/couchbase/var \
+                   -v $(shell pwd)/vol-snapshot/:/opt/couchbase/var \
                    -d $(IMAGE_NAME)
 	sleep 3
 	docker exec $(IMAGE_NAME)-$(CONTAINER_NUM) /init-couchbase/init.sh
@@ -74,7 +74,7 @@ restart-snapshot:
 	cp -R vol-snapshot/ vol-instances/vol-$(CONTAINER_NUM)/
 	docker run --name=$(IMAGE_NAME)-$(CONTAINER_NUM) \
                    $(CONTAINER_PORTS) $(CONTAINER_EXTRAS) \
-                   -v $(shell pwd)/vol-instances/vol-$(CONTAINER_NUM):/opt/couchbase/var \
+                   -v $(shell pwd)/vol-instances/vol-$(CONTAINER_NUM)/:/opt/couchbase/var \
                    --add-host="$(SERVICE_HOST):127.0.0.1" \
                    -d $(IMAGE_NAME)
 

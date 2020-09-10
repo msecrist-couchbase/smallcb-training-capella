@@ -1,4 +1,6 @@
 *~
+*.log
+*.out
 *.pem
 Dockerfile
 /vol-*
