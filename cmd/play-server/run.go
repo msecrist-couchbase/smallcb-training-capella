@@ -68,7 +68,6 @@ func RunRequestSingle(req RunRequest, readyCh chan int,
 type RunRequest struct {
 	ctx context.Context
 
-	execUser     string
 	execPrefix   string
 	lang         string
 	code         string
@@ -119,12 +118,12 @@ func RunRequestInContainer(req RunRequest, containerId int) (
 	if len(req.execPrefix) > 0 {
 		// Case of an execPrefix like "/run-java.sh".
 		cmd = exec.Command("docker", "exec",
-			"-u", req.execUser, containerName,
-			req.execPrefix, codePathInst)
+			containerName,
+			"/run-play.sh", req.execPrefix, codePathInst)
 	} else {
 		cmd = exec.Command("docker", "exec",
-			"-u", req.execUser, containerName,
-			codePathInst)
+			containerName,
+			"/run-play.sh", codePathInst)
 	}
 
 	log.Printf("INFO: RunRequest, containerId: %d, lang: %s\n",
@@ -203,8 +202,7 @@ func AddRBACUser(req RunRequest, containerId int,
 	containerName := fmt.Sprintf("%s%d",
 		req.containerNamePrefix, containerId)
 
-	cmd := exec.Command("docker", "exec", "-u", req.execUser,
-		containerName,
+	cmd := exec.Command("docker", "exec", containerName,
 		"/opt/couchbase/bin/couchbase-cli", "user-manage",
 		"--cluster", "http://127.0.0.1",
 		"--username", "Administrator",

@@ -34,9 +34,6 @@ var restartCh chan Restart
 
 // -----------------------------------
 
-// The user for docker exec.
-var ExecUser = "play:couchbase"
-
 // Map from lang (or code file suffix) to execPrefix (exec command
 // prefix for executing code).
 var ExecPrefixes = map[string]string{

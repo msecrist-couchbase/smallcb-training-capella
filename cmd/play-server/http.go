@@ -141,7 +141,6 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 
 				req := RunRequest{
 					ctx:                 context.Background(),
-					execUser:            ExecUser,
 					execPrefix:          "",
 					lang:                "n/a",
 					code:                "n/a",
@@ -215,7 +214,6 @@ func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 	if ok {
 		req := RunRequest{
 			ctx:                 r.Context(),
-			execUser:            ExecUser,
 			execPrefix:          ExecPrefixes[lang],
 			lang:                lang,
 			code:                code,
