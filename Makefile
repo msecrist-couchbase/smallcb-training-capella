@@ -71,7 +71,7 @@ restart-snapshot:
 	docker rm $(IMAGE_NAME)-$(CONTAINER_NUM) || true
 	rm -rf vol-instances/vol-$(CONTAINER_NUM)/*
 	mkdir -p vol-instances/vol-$(CONTAINER_NUM)
-	cp -R vol-snapshot/ vol-instances/vol-$(CONTAINER_NUM)/
+	cp -R vol-snapshot/* vol-instances/vol-$(CONTAINER_NUM)/
 	docker run --name=$(IMAGE_NAME)-$(CONTAINER_NUM) \
                    $(CONTAINER_PORTS) $(CONTAINER_EXTRAS) \
                    -v $(shell pwd)/vol-instances/vol-$(CONTAINER_NUM)/:/opt/couchbase/var \
