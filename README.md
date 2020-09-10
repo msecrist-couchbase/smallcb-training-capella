@@ -159,6 +159,11 @@ inject better UI into web admin UI?
 
 proper web terminal UI?
 
+docker on mac OSX sometimes gets 'stuck' -- container
+  instances aren't restartable sometimes?  Will this be the
+  case also on linux?  If so, perhaps need a "kill the
+  entire server/machine and replace it" button?
+
 should we use docker build env vars?
 
 should we use docker on docker?
