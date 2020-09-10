@@ -108,12 +108,6 @@ when there are enough examples, use a tree-control
   on the left-hand-side with a scrollable panel,
   perhaps with mouseovers with longer explanations?
 
-when the page is scrolled down, and you click on another
-  example link, there's a disconcerting jump back to
-  top of the page rather than having the page stay
-  mostly stable -- similar to docs behavior?
-  btw, using an iframe might prevent URL bookmarking ability?
-
 favorites / recommended examples?  starred?
 
 some examples that only make sense when there's
@@ -325,6 +319,12 @@ dev-mode still asking for stats too much?
 dev-mode, phase II, needs core product improvements?
 
 --------------------------
+DONE: when the page is scrolled down, and you click on another
+  example link, there's a disconcerting jump back to
+  top of the page rather than having the page stay
+  mostly stable -- similar to docs behavior,
+  which is now improved by using anchor links.
+
 DONE: UI timeouts for long-running programs, see:
   codeMaxDuration and containerWaitDuration.
 
