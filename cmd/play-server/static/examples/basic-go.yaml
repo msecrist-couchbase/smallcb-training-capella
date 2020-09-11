@@ -3,48 +3,8 @@ lang: go
 code: |
   package main
   
-  import (
-  	"fmt"
-  	"time"
-  
-  	"github.com/couchbase/gocb"
-  )
+  import "fmt"
   
   func main() {
-  	cluster, err := gocb.Connect("{{.Host}}",
-  		gocb.ClusterOptions{
-  			Authenticator: gocb.PasswordAuthenticator{
-  				"{{.CBUser}}",
-  				"{{.CBPswd}}",
-  			},
-  		})
-  	if err != nil {
-  		panic(err)
-  	}
-  
-  	bucket := cluster.Bucket("default")
-
-  	err = bucket.WaitUntilReady(5*time.Second, nil)
-  	if err != nil {
-  		panic(err)
-  	}
-  
-  	collection := bucket.DefaultCollection()
-  
-  	rv, err := collection.Get("21st_amendment_brewery_cafe", nil)
-  	if err != nil {
-  		panic(err)
-  	}
-  
-  	var doc map[string]interface{}
-  	err = rv.Content(&doc)
-  	if err != nil {
-  		panic(err)
-  	}
-  
-  	fmt.Println(doc)
-  
-  	if err := cluster.Close(nil); err != nil {
-  		panic(err)
-  	}
+  	fmt.Printf("hello, world\n")
   }
