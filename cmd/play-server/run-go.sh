@@ -1,0 +1,9 @@
+#!/bin/bash
+
+export GOPATH=/go
+
+export PATH=$PATH:$GOPATH/bin
+
+cd $(dirname ${1})/..
+
+go run ./code
