@@ -45,6 +45,9 @@
       flex-basis: 10rem;
       flex-grow: 100;
     }
+    .main .main-output.hidden {
+      visibility: hidden;
+    }
     .main .main-output iframe.output {
       width: 95%;
       height: 20rem;
@@ -58,7 +61,6 @@
       list-style: none;
       margin: 0 0 15px 0;
       border: 1px solid #888;
-      padding: 5px 5px 5px 5px;
     }
     .main ul.examples li:hover {
       background-color: #c4d4d8;
@@ -70,6 +72,7 @@
     }
     .main ul.examples li a {
       display: block;
+      padding: 5px 5px 5px 5px;
       text-decoration: none;
     }
     .main textarea.code {
@@ -102,6 +105,9 @@
   </style>
   <script>
     function onRunSubmit() {
+      document.getElementById("output").contentDocument.body.innerHTML = "running...";
+      document.getElementById("main-output").className = "main-output";
+
       function checkDone() {
         var b = document.getElementById('run');
 
@@ -235,7 +241,7 @@
       {{end}}
     </div>
 
-    <div class="main-output">
+    <div class="main-output hidden" id="main-output">
       {{if or .Name .Lang .Code}}
         <h2>Output</h2>
 
