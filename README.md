@@ -47,13 +47,17 @@ Example usage during development...
 Production usage should set the CB_ADMIN_PASSWORD env
 variable for security and the host parameter...
 
-    CB_ADMIN_PASSWORD=secret-here ./play-server -host couchbase.live
+    CB_ADMIN_PASSWORD=no-longer-the-small-house-secret \
+      ./play-server \
+        -containers 5 -restarters=5 \
+        -host couchbase.live
 
 -------------------------
 Aside...
 
     # To create the docker image 'smallcb-sdks',
-    # which includes only the couchbase sdks...
+    # which includes only the couchbase sdks and
+    # which does not include couchbase server...
     make IMAGE_FROM=base IMAGE_NAME=smallcb-sdks build
 
 -------------------------
