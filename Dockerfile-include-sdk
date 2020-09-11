@@ -3,29 +3,47 @@ RUN apt-get update && \
 	git curl wget jq \
 	build-essential cmake \
 	atop htop psmisc strace \
-	emacs golang-go
+	emacs
+
+# ------------------------------------------------------
+
+RUN apt-get install -y python3-dev python3-pip python3-setuptools
+
+COPY --from=golang /usr/local/go /usr/local/go
+COPY --from=golang /go /go
+
+ENV GOPATH /go
+ENV PATH "$PATH:$GOPATH/bin"
+ENV PATH="$PATH:/usr/local/go/bin"
+
+COPY --from=adoptopenjdk /opt/java /opt/java
+
+ENV JAVA_HOME=/opt/java/openjdk
+ENV PATH="$PATH:/opt/java/openjdk/bin"
+
+COPY --from=node /usr/local/bin/node /usr/local/bin/node
+COPY --from=node /usr/local/bin/npm /usr/local/bin/npm
+COPY --from=node /usr/local/bin/npx /usr/local/bin/npx
+COPY --from=node /usr/local/include/node /usr/local/include/node
+COPY --from=node /usr/local/lib/node_modules /usr/local/lib/node_modules
+
+# ------------------------------------------------------
 
 # Install python SDK, see:
 # https://docs.couchbase.com/tutorials/quick-start/quickstart-python3-native-firstquery-cb65.html
 
-RUN apt-get install -y python3-dev python3-pip python3-setuptools && \
-    pip3 install couchbase
+RUN pip3 install six couchbase
+
+# TODO: On EC2/AWS, python couchbase sdk is complaining about missing 'six' module.
+# TODO: On EC2/AWS, python couchbase sdk is complaining about python 3.5 deprecation.
 
 # TODO: Need couchbase java SDK, but seems like have to drag in maven?
-# TODO: Maybe have to use adoptopenjdk instead?
-
-RUN apt-get install -y openjdk-8-jdk
-
-# TODO: Install nodejs problem -- need a non-root user so npm install -g works?
 
 # Install nodejs SDK, see:
 # https://docs.couchbase.com/tutorials/getting-started-ce/dev-nodejs/tutorial_en.html
 # https://github.com/nodesource/distributions/blob/master/README.md
 
-# RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - && \
-#     apt-get install -y nodejs npm && \
-#     npm install -g couchbase ottoman
+# TODO: Install nodejs problem -- need a non-root user so npm install -g works?
+# RUN su -c "npm install -g couchbase ottoman" couchbase
 
-COPY --from=golang /usr/local/go /usr/local/go
-
-COPY --from=golang /go /go
+RUN go get github.com/couchbase/gocb
