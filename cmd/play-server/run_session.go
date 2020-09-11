@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"time"
@@ -20,7 +21,13 @@ func RunRequestSession(session *Session, req RunRequest,
 		return nil, fmt.Errorf("RunRequestSession, no session")
 	}
 
-	return RunRequestInContainer(req, session.ContainerId)
+	out, err = RunRequestInContainer(req, session.ContainerId)
+
+	go KillUserProcesses(context.Background(),
+		req.containerNamePrefix, session.ContainerId,
+		"play", 5*time.Second)
+
+	return out, err
 }
 
 // ------------------------------------------------

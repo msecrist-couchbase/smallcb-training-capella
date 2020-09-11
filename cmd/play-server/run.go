@@ -246,3 +246,22 @@ func AddRBACUser(req RunRequest, containerId int,
 
 	return nil
 }
+
+// ------------------------------------------------
+
+func KillUserProcesses(ctx context.Context,
+	containerNamePrefix string, containerId int,
+	user string, duration time.Duration) ([]byte, error) {
+	containerName := fmt.Sprintf("%s%d",
+		containerNamePrefix, containerId)
+
+	cmd := exec.Command("docker", "exec", containerName,
+		"pkill", "-u", user)
+
+	out, err := ExecCmd(ctx, cmd, duration)
+	if err != nil {
+		log.Printf("INFO: KillUserProcesses, err: %v", err)
+	}
+
+	return out, err
+}
