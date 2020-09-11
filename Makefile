@@ -6,9 +6,11 @@ CONTAINER_NUM = 0
 
 CONTAINER_PORTS = -p 8091-8096:8091-8096 -p 11210:11210
 
-CONTAINER_EXTRAS = --cap-add=SYS_PTRACE
+# To enable strace diagnosis, use...
+# CONTAINER_EXTRAS = --cap-add=SYS_PTRACE
+CONTAINER_EXTRAS =
 
-SERVICE_HOST = try.couchbase.dev
+SERVICE_HOST = couchbase.live
 
 CB_ADMIN_PASSWORD = small-house-secret
 

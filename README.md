@@ -47,7 +47,7 @@ Example usage during development...
 Production usage should set the CB_ADMIN_PASSWORD env
 variable for security and the host parameter...
 
-    CB_ADMIN_PASSWORD=secret-here ./play-server -host try.couchbase.dev
+    CB_ADMIN_PASSWORD=secret-here ./play-server -host couchbase.live
 
 -------------------------
 Aside...
@@ -183,11 +183,6 @@ SECURITY: turn off egress networking?
   or new outbound connections from the host
   via Security Rules on the private network?
 
-SECURITY: remove ability to strace in production?
-  CVE-2014-4699: A bug in ptrace() could allow privilege
-  escalation. Docker disables ptrace() inside the container using
-  apparmor, seccomp and by dropping CAP_PTRACE.
-
 SECURITY: docker build can set ulimits
   and optional security-opts?
   See:
@@ -319,6 +314,12 @@ dev-mode still asking for stats too much?
 dev-mode, phase II, needs core product improvements?
 
 --------------------------
+DONE: SECURITY: remove ability to strace in production,
+  via default of CONTAINER_EXTRAS in Makefile.
+  CVE-2014-4699: A bug in ptrace() could allow privilege
+  escalation. Docker disables ptrace() inside the container using
+  apparmor, seccomp and by dropping CAP_PTRACE.
+
 DONE: when the page is scrolled down, and you click on another
   example link, there's a disconcerting jump back to
   top of the page rather than having the page stay
@@ -353,7 +354,7 @@ DONE: create couchbase user better than Administrator:password,
 DONE: change the Administrator password in 'make create'.
 
 DONE: using docker --add-host to add to /etc/hosts file so that
-  couchbase://try.couchbase.dev:8091 connection string works.
+  couchbase://couchbase.live:8091 connection string works.
 
 DONE: need to golang proxy to use the remapped port #'s?
   in the REST responses, to rewrite REST json maps

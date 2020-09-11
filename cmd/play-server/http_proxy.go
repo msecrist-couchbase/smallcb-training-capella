@@ -20,7 +20,7 @@ import (
 func HttpProxy(listenProxy, // Ex: ":8091", ":8093".
 	staticDir string,
 	proxyFlushInterval time.Duration,
-	host string, // Ex: "try.couchbase.dev", "127.0.0.1".
+	host string, // Ex: "couchbase.live", "127.0.0.1".
 	portApp int, // Ex: 8080.
 	portMap map[int]int,
 	containerPublishPortBase int,
