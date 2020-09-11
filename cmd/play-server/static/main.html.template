@@ -31,6 +31,25 @@
       font-family: monospace;
       font-weight: bold;
     }
+    .main .main-left {
+      flex-basis: 15rem;
+      flex-grow: 1;
+      margin-right: 20px;
+    }
+    .main .main-center {
+      flex-basis: 15rem;
+      flex-grow: 100;
+      margin-right: 20px;
+    }
+    .main .main-output {
+      flex-basis: 15rem;
+      flex-grow: 100;
+    }
+    .main .main-output iframe.output {
+      width: 95%;
+      height: 20rem;
+      border: 1px solid #888;
+    }
     .main ul.examples {
       margin-right: 5px;
       padding-left: 20px;
@@ -77,15 +96,6 @@
     .main input.run.waiting:hover {
       background-color: orange;
       cursor: wait;
-    }
-    .main .main-output {
-      flex-basis: 28rem;
-      flex-grow: 8;
-    }
-    .main .main-output iframe.output {
-      width: 90%;
-      height: 20rem;
-      border: 1px solid #888;
     }
   </style>
   <script>
