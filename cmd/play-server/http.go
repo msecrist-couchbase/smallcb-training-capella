@@ -253,7 +253,9 @@ func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 
 		http.Error(w,
 			http.StatusText(http.StatusInternalServerError)+
-				fmt.Sprintf(", HttpHandleRun, err: %v", err),
+				fmt.Sprintf(", HttpHandleRun, err: %v\n"+
+					"------------------------\n%s\n",
+					err, result),
 			http.StatusInternalServerError)
 		log.Printf("ERROR: HttpHandleRun, err: %v", err)
 		return

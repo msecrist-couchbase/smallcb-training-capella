@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bytes"
 	"context"
 	"fmt"
 	"io/ioutil"
@@ -9,6 +8,7 @@ import (
 	"os"
 	"os/exec"
 	"strings"
+	"sync"
 	"time"
 )
 
@@ -138,17 +138,41 @@ func RunRequestInContainer(req RunRequest, containerId int) (
 // returning its combined stdout and stderr result.
 func ExecCmd(ctx context.Context, cmd *exec.Cmd,
 	duration time.Duration) ([]byte, error) {
-	var b bytes.Buffer
+	var bout, berr []byte
 
-	cmd.Stdout = &b
-	cmd.Stderr = &b
+	sout, err := cmd.StdoutPipe()
+	if err != nil {
+		return nil, fmt.Errorf("cmd.StdoutPipe, err: %v", err)
+	}
 
-	if err := cmd.Start(); err != nil {
+	serr, err := cmd.StderrPipe()
+	if err != nil {
+		return nil, fmt.Errorf("cmd.StderrPipe, err: %v", err)
+	}
+
+	err = cmd.Start()
+	if err != nil {
 		return nil, fmt.Errorf("cmd.Start, err: %v", err)
 	}
 
+	var wg sync.WaitGroup
+
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		bout, _ = ioutil.ReadAll(sout)
+	}()
+
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		berr, _ = ioutil.ReadAll(serr)
+	}()
+
 	doneCh := make(chan error, 1)
 	go func() {
+		wg.Wait()
+
 		doneCh <- cmd.Wait()
 	}()
 
@@ -161,13 +185,13 @@ func ExecCmd(ctx context.Context, cmd *exec.Cmd,
 		cmd.Process.Kill()
 		return nil, fmt.Errorf("timeout, duration: %v", duration)
 
-	case err := <-doneCh:
+	case err = <-doneCh:
 		if err != nil {
-			return b.Bytes(), fmt.Errorf("ExecCmd, err: %v", err)
+			err = fmt.Errorf("ExecCmd, err: %v", err)
 		}
 	}
 
-	return b.Bytes(), nil
+	return append(bout, berr...), err
 }
 
 // ------------------------------------------------
