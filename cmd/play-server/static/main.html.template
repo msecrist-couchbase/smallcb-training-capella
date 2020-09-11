@@ -37,12 +37,12 @@
       margin-right: 20px;
     }
     .main .main-center {
-      flex-basis: 15rem;
+      flex-basis: 10rem;
       flex-grow: 100;
       margin-right: 20px;
     }
     .main .main-output {
-      flex-basis: 15rem;
+      flex-basis: 10rem;
       flex-grow: 100;
     }
     .main .main-output iframe.output {
@@ -73,6 +73,7 @@
       text-decoration: none;
     }
     .main textarea.code {
+      margin-bottom: 15px;
       width: 95%;
       height: 20rem;
       overflow-y: scroll;
