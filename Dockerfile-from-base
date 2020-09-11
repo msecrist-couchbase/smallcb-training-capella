@@ -1,6 +1,4 @@
-ARG IMAGE_BASE=ubuntu:16.04
-
-FROM $IMAGE_BASE
+FROM $BASE_IMAGE
 
 # Create couchbase user with UID 1000, which is necessary to match
 # the default boot2docker UID.
