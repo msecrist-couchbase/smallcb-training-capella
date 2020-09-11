@@ -37,6 +37,7 @@ var restartCh chan Restart
 // Map from lang (or code file suffix) to execPrefix (exec command
 // prefix for executing code).
 var ExecPrefixes = map[string]string{
+	"go":   "/run-go.sh",
 	"java": "/run-java.sh",
 }
 
