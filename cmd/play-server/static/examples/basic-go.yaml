@@ -7,7 +7,7 @@ code: |
   	"fmt"
   	"time"
   
-  	"github.com/couchbase/gocb/v2"
+  	"github.com/couchbase/gocb"
   )
   
   func main() {

@@ -4,6 +4,6 @@ export GOPATH=/go
 
 export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin
 
-cd $(dirname ${1})/..
+cd $(dirname ${1})
 
-go run ./code
+go run code.go
