@@ -13,7 +13,7 @@ type Restart struct {
 	ReadyCh     chan<- int
 }
 
-func Restarter(restarterId int, restartCh chan Restart,
+func Restarter(restarterId int, restartCh chan Restart, host string,
 	containerPublishAddr string,
 	containerPublishPortBase,
 	containerPublishPortSpan int,
@@ -44,6 +44,8 @@ func Restarter(restarterId int, restartCh chan Restart,
 			ports = append(ports, fmt.Sprintf("-p %s:%d:%d/tcp",
 				containerPublishAddr, portBase+port[1], port[0]))
 		}
+
+		cmd.Args = append(cmd.Args, "SERVICE_HOST="+host)
 
 		cmd.Args = append(cmd.Args,
 			"CONTAINER_PORTS="+strings.Join(ports, " "))

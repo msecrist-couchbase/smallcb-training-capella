@@ -123,7 +123,7 @@ func main() {
 
 	// Spawn the restarter goroutines.
 	for i := 0; i < *restarters; i++ {
-		go Restarter(i, restartCh,
+		go Restarter(i, restartCh, *host,
 			listenAddr,
 			*listenPortBase,
 			*listenPortSpan,
