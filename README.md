@@ -239,12 +239,6 @@ popup tours in injection?
 
 output (stdout / stderr) is not streaming?
 
-after a run times out, pkill all the processes
-  owned by 'play user?
-
-SECURITY: cbworkloadgen or any submitted program can run
-  longer than the play-server's timeout?
-
 how about having longer-running instances
 that hang around more than a single request,
 which are all single-node / no rebalance / no XDCR,
@@ -333,6 +327,12 @@ DONE: when the page is scrolled down, and you click on another
 
 DONE: UI timeouts for long-running programs, see:
   codeMaxDuration and containerWaitDuration.
+
+DONE: SECURITY: after a run times out in a session,
+  pkill all the processes owned by 'play' user.
+  Use case: cbworkloadgen or any submitted program
+    is thus prevented from running longer than the
+    play-server's codeDuration timeout.
 
 DONE: use another user 'play' to run user submitted code...
   docker exec as -u play:couchbase (user:group),
