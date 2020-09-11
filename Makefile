@@ -19,7 +19,7 @@ CB_ADMIN_PASSWORD = small-house-secret
 # Build the docker image.
 build:
 	rm -rf vol-*
-	cat Dockerfile-before \
+	cat Dockerfile-args \
             Dockerfile-from-$(IMAGE_FROM) \
             Dockerfile-include-sdk \
             Dockerfile-suffix > \
