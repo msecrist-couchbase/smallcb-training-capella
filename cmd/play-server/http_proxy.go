@@ -34,6 +34,19 @@ func HttpProxy(listenProxy, // Ex: ":8091", ":8093".
 
 		user, pswd, ok := r.BasicAuth()
 		if ok {
+			if user == "username" && pswd == "password" {
+				http.Error(w,
+					http.StatusText(http.StatusUnauthorized)+
+						fmt.Sprintf(", HttpProxy, username/password rejected,"+
+							" try using a test-drive session"),
+					http.StatusUnauthorized)
+
+				log.Printf("ERROR: HttpProxy, path: %s,"+
+					" err: username/password rejected", r.URL.Path)
+
+				return
+			}
+
 			sessionId = user + pswd
 			if sessionId != "" {
 				sessionIdFrom = "BasicAuth"
