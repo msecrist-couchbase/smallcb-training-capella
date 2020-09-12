@@ -23,6 +23,8 @@ func RunRequestSession(session *Session, req RunRequest,
 
 	out, err = RunRequestInContainer(req, session.ContainerId)
 
+	// Ignore error from the async pkill, as fast running
+	// code will have no leftover processes to kill.
 	go KillUserProcesses(context.Background(),
 		req.containerNamePrefix, session.ContainerId,
 		"play", 5*time.Second)

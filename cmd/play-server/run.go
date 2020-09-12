@@ -258,10 +258,5 @@ func KillUserProcesses(ctx context.Context,
 	cmd := exec.Command("docker", "exec", containerName,
 		"pkill", "-u", user)
 
-	out, err := ExecCmd(ctx, cmd, duration)
-	if err != nil {
-		log.Printf("INFO: KillUserProcesses, err: %v", err)
-	}
-
-	return out, err
+	return ExecCmd(ctx, cmd, duration)
 }
