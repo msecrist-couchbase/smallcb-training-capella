@@ -135,6 +135,9 @@ store logs on S3?
 
 google analytics?
 
+iframe for run output also needs google analytics,
+  so html instead of text/plain?
+
 stats?
   keep average time of restarts, for fake/estimated progress/ETA bars?
   do we dump stats to logs or S3 occasionally?
