@@ -80,7 +80,7 @@
       <h2>Start a Couchbase Server Test-Drive Session</h2>
 
       <p>
-        A test-drive session means that a Couchbase Server instance
+        A test-drive session means that a Couchbase&nbsp;Server instance
         will be allocated to you
         &mdash;
         until your session expires from inactivity (~{{.sessionsMaxAge}})
@@ -96,12 +96,12 @@
       <p>
         A test-drive session is <b>NOT</b> meant for performance testing,
         as we might be running on cost-effective
-        (read: "low-end, slow") servers.
+        (read: "low-end, slow, highly-shared") servers.
       </p>
 
       <p>
-        Don't keep important or private data on a test-drive
-        Couchbase Server instance!
+        Especially, don't keep important or private data on a test-drive
+        Couchbase&nbsp;Server instance!
       </p>
 
       <p>
