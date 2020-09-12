@@ -40,6 +40,7 @@ var ExecPrefixes = map[string]string{
 	"go":     "/run-go.sh",
 	"java":   "/run-java.sh",
 	"nodejs": "/run-nodejs.sh",
+	"py":     "/run-py.sh",
 }
 
 // -----------------------------------
