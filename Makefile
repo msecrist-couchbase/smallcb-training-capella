@@ -24,7 +24,7 @@ build:
             Dockerfile-include-sdk \
             Dockerfile-suffix > \
             Dockerfile
-	docker build -t $(IMAGE_NAME) .
+	docker build --network host -t $(IMAGE_NAME) .
 	rm Dockerfile
 
 # Create the vol-snapshot directory.
