@@ -33,16 +33,6 @@ RUN ln -s ../lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm
 
 RUN pip3 install six couchbase
 
-# TODO: On EC2/AWS, python couchbase sdk is complaining about missing 'six' module.
-# TODO: On EC2/AWS, python couchbase sdk is complaining about python 3.5 deprecation.
+RUN go get github.com/couchbase/gocb
 
 # TODO: Need couchbase java SDK, but seems like have to drag in maven?
-
-# Install nodejs SDK, see:
-# https://docs.couchbase.com/tutorials/getting-started-ce/dev-nodejs/tutorial_en.html
-# https://github.com/nodesource/distributions/blob/master/README.md
-
-# TODO: Install nodejs problem -- need a non-root user so npm install -g works?
-# RUN su -c "npm install -g couchbase ottoman" couchbase
-
-RUN go get github.com/couchbase/gocb

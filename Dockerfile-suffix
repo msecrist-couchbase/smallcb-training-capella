@@ -9,6 +9,18 @@ RUN chmod +x /init-couchbase/*.sh
 COPY cmd/play-server/run-*.sh /
 RUN chmod +x /run-*.sh
 
-# Create user for user-submitted playground code.
+# Create the play user for user-submitted playground code.
 
-RUN useradd play -u 1001 -g couchbase -M
+RUN useradd -u 1001 -g couchbase -m play
+
+# The npm install seems to need a non-root user, so use the play user.
+
+USER play
+
+RUN echo "prefix = /home/play/npm_packages" >> ~/.npmrc && \
+    PATH=/home/play/npm-packages/bin:$PATH \
+    NODE_PATH=/home/play/npm-packages/lib/node_modules:$NODE_PATH \
+    NPM_PACKAGES=/home/play/npm-packages \
+    npm install -g couchbase ottoman
+
+USER root
