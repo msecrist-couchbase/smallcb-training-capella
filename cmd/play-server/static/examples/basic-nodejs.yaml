@@ -1,0 +1,4 @@
+title: Basic NodeJS example
+lang: nodejs
+code: |
+  console.log("hello, world")
