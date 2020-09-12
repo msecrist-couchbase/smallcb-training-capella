@@ -108,7 +108,7 @@
         To get started...
       </p>
 
-      <form action="/session" method="post">
+      <form action="/session" method="post" autocomplete="off">
         <label>
           Full Name:
           <span class="err">{{.errFullName}}</span>
