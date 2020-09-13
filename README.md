@@ -165,6 +165,8 @@ docker on mac OSX sometimes gets 'stuck' -- container
   case also on linux?  If so, perhaps need a "kill the
   entire server/machine and replace it" button?
 
+pkill -u play might not be using a strong enough kill signal?
+
 should we use docker build env vars?
 
 should we use docker on docker?
