@@ -117,6 +117,8 @@ favorites / recommended examples?  starred?
 some examples that only make sense when there's
   a longer-running session >= zipcar mode?
 
+should there be a max session time?  e.g., 20 minutes?
+
 feedback comments or votes on examples?
 
 CAPTCHA random seed looks weak
