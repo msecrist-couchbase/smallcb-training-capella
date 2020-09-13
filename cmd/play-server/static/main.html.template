@@ -174,7 +174,7 @@
 
       <b>Couchbase SDK's</b>
           Java SDK     : [TODO: host / user / pswd and connect string example here]
-          NodeJS SDK   : [TODO: host / user / pswd and connect string example here]
+          NodeJS SDK   : new couchbase.Cluster("couchbase://{{.Host}}", {username: "{{.Session.CBUser}}", password: "{{.Session.CBPswd}}",})
           Python SDK   : Cluster('couchbase://{{.Host}}', ClusterOptions(PasswordAuthenticator('{{.Session.CBUser}}', '{{.Session.CBPswd}}')))
           C# SDK       : [TODO: host / user / pswd and connect string example here]
       </div>
