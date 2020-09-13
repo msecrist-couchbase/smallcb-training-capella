@@ -8,4 +8,6 @@ export NPM_PACKAGES=/home/play/npm-packages
 
 cd $(dirname ${1})
 
+[ ! -d node_modules ] && ln -s /home/play/npm_packages/lib/node_modules
+
 node code.nodejs
