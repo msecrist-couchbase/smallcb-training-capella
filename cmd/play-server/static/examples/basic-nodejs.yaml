@@ -4,8 +4,7 @@ code: |
   const couchbase = require("couchbase");
   
   const cluster = new couchbase.Cluster("couchbase://{{.Host}}", {
-    username: "{{.CBUser}}",
-    password: "{{.CBPswd}}",
+    username: "{{.CBUser}}", password: "{{.CBPswd}}"
   });
   
   b = cluster.bucket("beer-sample");
