@@ -6,6 +6,6 @@ export PATH=$PATH:/opt/java/openjdk/bin
 
 cd $(dirname ${1})
 
-javac code.java
+javac -cp .:`cat /home/play/hello/classpath.txt` code.java
 
-java Program
+java -cp .:`cat /home/play/hello/classpath.txt` Program

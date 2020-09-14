@@ -13,7 +13,7 @@ RUN chmod +x /run-*.sh
 
 RUN useradd -u 1001 -g couchbase -m play
 
-# The npm install seems to need a non-root user, so use the play user.
+# SDK installs that need a non-root user will use the play user.
 
 USER play
 
@@ -22,5 +22,26 @@ RUN echo "prefix = /home/play/npm_packages" >> ~/.npmrc && \
     NODE_PATH=/home/play/npm-packages/lib/node_modules:$NODE_PATH \
     NPM_PACKAGES=/home/play/npm-packages \
     npm install -g couchbase ottoman
+
+USER root
+
+# Copy maven shared files and build hello.java to warm up mvn caches.
+
+COPY --from=maven /usr/share/maven /usr/share/maven
+
+RUN ln -s /usr/share/maven/bin/mvn /usr/bin/mvn
+
+COPY cmd/play-server/run-java-pom.xml /run-java-pom.xml
+
+COPY cmd/play-server/static/examples/hello.java /home/play/hello/src/main/java
+
+RUN chown -R play:couchbase /home/play
+
+USER play
+
+RUN cp /run-java-pom.xml /home/play/hello/pom.xml && \
+    cd /home/play/hello && \
+    mvn package && \
+    mvn dependency:build-classpath -Dmdep.outputFile=classpath.txt
 
 USER root

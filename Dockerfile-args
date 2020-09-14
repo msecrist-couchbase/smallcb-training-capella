@@ -4,6 +4,12 @@ ARG CB_IMAGE=couchbase:$CB_EDITION-$CB_VERSION
 
 ARG BASE_IMAGE=ubuntu:16.04
 
+# SDK related images...
+
 FROM adoptopenjdk AS adoptopenjdk
+
+FROM maven AS maven
+
 FROM golang AS golang
+
 FROM node AS node

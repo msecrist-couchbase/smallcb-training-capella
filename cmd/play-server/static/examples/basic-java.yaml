@@ -1,8 +1,22 @@
 title: Basic Java example
 lang: java
 code: |
+  import com.couchbase.client.java.*;
+  import com.couchbase.client.java.kv.*;
+  
   class Program {
-      public static void main(String[] args) {
-          System.out.println("hello, world!");
-      }
+    public static void main(String[] args) {
+      Cluster cluster =
+        Cluster.connect("couchbase://{{.Host}}",
+                        "{{.CBUser}}",
+                        "{{.CBPswd}}");
+      
+      Bucket b = cluster.bucket("beer-sample");
+      
+      Collection coll = b.defaultCollection();
+      
+      GetResult res = coll.get("21st_amendment_brewery_cafe");
+
+      System.out.println(res.toString());
+    }
   }

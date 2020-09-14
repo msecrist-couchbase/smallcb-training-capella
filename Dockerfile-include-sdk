@@ -28,11 +28,13 @@ RUN ln -s ../lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm
 
 # ------------------------------------------------------
 
-# Install python SDK, see:
+# Install python couchbase SDK, see:
 # https://docs.couchbase.com/tutorials/quick-start/quickstart-python3-native-firstquery-cb65.html
 
 RUN pip3 install six couchbase
 
-RUN go get github.com/couchbase/gocb
+# ------------------------------------------------------
 
-# TODO: Need couchbase java SDK, but seems like have to drag in maven?
+# Install golang couchbase SDK:
+
+RUN go get github.com/couchbase/gocb
