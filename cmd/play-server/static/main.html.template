@@ -80,7 +80,6 @@
       border: 2px solid #888;
     }
     .main ul.examples li.session a.session {
-      background-color: #9c9;
       font-weight: bold;
       font-size: 13px;
       color: #666;
