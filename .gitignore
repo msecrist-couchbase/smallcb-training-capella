@@ -3,6 +3,8 @@
 *.out
 *.pem
 Dockerfile
-/vol-*
+/cmd/play-server/static/examples/gen_*
 /play-server
+/gen-examples
+/vol-*
 /tmp
