@@ -42,6 +42,8 @@
       margin-right: 10px;
     }
     .main .main-output {
+      position: sticky;
+      top: 0;
       flex-basis: 10rem;
       flex-grow: 100;
     }
@@ -52,6 +54,10 @@
       width: 95%;
       height: 20rem;
       border: 1px solid #888;
+    }
+    .main .sticky {
+      position: sticky;
+      top: 0;
     }
     .main ul.examples {
       margin-right: 15px;
@@ -222,6 +228,7 @@
     </div>
 
     <div class="main-center">
+      <div class="sticky">
       {{if or .Name .Lang .Code}}
         <h2>
           {{if .Title}}{{.Title}}{{else}}API / SDK Playground{{end}}
@@ -262,14 +269,17 @@
           Please select an example{{if not .Session}}... or <a href="/session" class="nowrap">start a test-drive</a>&nbsp;session{{end}}.
         </div>
       {{end}}
+      </div>
     </div>
 
     <div class="main-output hidden" id="main-output">
+      <div class="sticky">
       {{if or .Name .Lang .Code}}
         <h2>Output</h2>
 
         <iframe name="output" id="output" class="output"></iframe>
       {{end}}
+      </div>
     </div>
   </div>
 
