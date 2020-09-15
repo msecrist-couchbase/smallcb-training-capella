@@ -148,6 +148,13 @@ DNS, ELB & subdomains?
 
 ELB and sticky load balancing?
 
+ELB / ALB probably won't work due to kv/2i/fts/services ports
+  and non-HTTP protocols?
+  Might need to use explicit domain names?
+  c01.couchbase.live?
+  c02.couchbase.live?
+  c03.couchbase.live?
+
 health watchers and elastic scaling -- bring up more nodes
   when there's more people and auto-scale-down when
   traffic goes away?
@@ -193,6 +200,8 @@ SECURITY: turn off egress networking?
   etc, you'll want to restrict Egress (outgoing) traffic
   or new outbound connections from the host
   via Security Rules on the private network?
+
+can admin URL's be put behind an ELB password?
 
 SECURITY: docker build can set ulimits
   and optional security-opts?
