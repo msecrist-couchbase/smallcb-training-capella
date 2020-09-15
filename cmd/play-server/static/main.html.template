@@ -190,7 +190,7 @@
       <ul class="examples">
       {{range .Examples}}
         <li {{if eq .Name $.Name}}class="current"{{end}}>
-          <a href="/{{$.ExamplesDir}}/{{.Name}}{{if $.Session}}?s={{$.Session.SessionId}}{{end}}#ex-{{.Name}}"
+          <a href="/{{$.ExamplesPath}}/{{.Name}}{{if $.Session}}?s={{$.Session.SessionId}}{{end}}#ex-{{.Name}}"
              id="ex-{{.Name}}">
             {{.Title}}
           </a>

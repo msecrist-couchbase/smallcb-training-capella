@@ -22,8 +22,8 @@ type MainTemplateData struct {
 	Session        *Session // May be nil.
 	SessionsMaxAge string
 
-	ExamplesDir string
-	Examples    []ExampleNameTitle
+	ExamplesPath string
+	Examples     []ExampleNameTitle
 
 	Name       string // Current example name or "".
 	Title      string // Current example title or "".
@@ -36,9 +36,9 @@ type MainTemplateData struct {
 func MainTemplateEmit(w http.ResponseWriter,
 	staticDir, msg, host string, portApp int, version string,
 	session *Session, sessionsMaxAge time.Duration,
-	examplesDir string, name, lang, code string) {
+	examplesPath string, name, lang, code string) {
 	examples, exampleNameTitles, err :=
-		ReadExamples(staticDir + "/" + examplesDir)
+		ReadExamples(staticDir + "/" + examplesPath)
 	if err != nil {
 		http.Error(w,
 			http.StatusText(http.StatusInternalServerError)+
@@ -81,8 +81,8 @@ func MainTemplateEmit(w http.ResponseWriter,
 		SessionsMaxAge: strings.Replace(
 			sessionsMaxAge.String(), "m0s", " min", 1),
 
-		ExamplesDir: examplesDir,
-		Examples:    exampleNameTitles,
+		ExamplesPath: examplesPath,
+		Examples:     exampleNameTitles,
 
 		Name:       name,
 		Title:      title,

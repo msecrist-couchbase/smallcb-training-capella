@@ -60,15 +60,32 @@ func HttpHandleMain(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	examplesDir := "examples"
+	examplesPath := "examples"
 
 	name := r.FormValue("name")
 
 	// Example URL.Path == "/examples/basic-py"
-	parts := strings.Split(r.URL.Path, "/")
+	path := r.URL.Path
+
+	if strings.Index(path, "..") >= 0 {
+		http.Error(w,
+			http.StatusText(http.StatusBadRequest),
+			http.StatusBadRequest)
+		log.Printf("ERROR: HttpHandleMain, err: path has '..'")
+		return
+	}
+
+	for len(path) > 0 && strings.HasSuffix(path, "/") {
+		path = path[0 : len(path)-1]
+	}
+
+	parts := strings.Split(path, "/")
 	if len(parts) >= 3 {
-		examplesDir = parts[1] // Ex: "examples".
-		name = parts[2]        // Ex: "basic-py".
+		// Ex: "examples" or "examples-more/foo/bar".
+		examplesPath = strings.Join(parts[1:len(parts)-1], "/")
+
+		// Ex: "basic-py".
+		name = parts[len(parts)-1]
 	}
 
 	lang := r.FormValue("lang")
@@ -77,7 +94,7 @@ func HttpHandleMain(w http.ResponseWriter, r *http.Request) {
 	portApp, _ := strconv.Atoi(strings.Split(*listen, ":")[1])
 
 	MainTemplateEmit(w, *staticDir, msg, *host, portApp, *version,
-		session, *sessionsMaxAge, examplesDir, name, lang, code)
+		session, *sessionsMaxAge, examplesPath, name, lang, code)
 }
 
 // ------------------------------------------------
