@@ -119,11 +119,11 @@ func RunRequestInContainer(req RunRequest, containerId int) (
 		// Case of an execPrefix like "/run-java.sh".
 		cmd = exec.Command("docker", "exec",
 			containerName,
-			"/run-play.sh", req.execPrefix, codePathInst)
+			"/run-code.sh", req.execPrefix, codePathInst)
 	} else {
 		cmd = exec.Command("docker", "exec",
 			containerName,
-			"/run-play.sh", codePathInst)
+			"/run-code.sh", codePathInst)
 	}
 
 	log.Printf("INFO: RunRequest, containerId: %d, lang: %s\n",
