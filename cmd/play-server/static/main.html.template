@@ -235,6 +235,8 @@
             <div class="info infoAfter">{{.InfoAfter}}</div>
           {{end}}
         </div>
+      {{else}}
+        <div><span style="font-size: 20pt;">&#11019;</span> Please select an example.</div>
       {{end}}
     </div>
 
