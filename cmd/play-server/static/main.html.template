@@ -236,9 +236,8 @@
           {{end}}
         </div>
       {{else}}
-        <div>
-          <span style="font-size: 20pt; color: green;">&#11019;</span>
-          Please select an example.
+        <div style="margin-top: .8rem;">
+          Please select an example{{if not .Session}}... or <a href="/session" class="nowrap">start a test-drive</a>&nbsp;session{{end}}.
         </div>
       {{end}}
     </div>

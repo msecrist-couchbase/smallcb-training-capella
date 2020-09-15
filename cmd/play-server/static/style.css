@@ -78,6 +78,10 @@ input, textarea, pre {
   flex-direction: row;
 }
 
+.nowrap {
+  white-space: nowrap;
+}
+
 .footer {
   border-top: 1px solid #666;
   padding: 10px 0 15px 0;
