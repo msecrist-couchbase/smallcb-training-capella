@@ -172,7 +172,29 @@ func ReadExamples(dir string) (
 		}
 	}
 
-	sort.Strings(names)
+	sort.Slice(names, func(i, j int) bool {
+		iname, jname := names[i], names[j]
+
+		iex, jex := examples[iname], examples[jname]
+
+		for _, k := range []string{"chapter", "page", "title"} {
+			iv, jv := MapGetString(iex, k), MapGetString(jex, k)
+			if iv < jv {
+				return true
+			}
+			if iv > jv {
+				return false
+			}
+		}
+
+		if iname < jname {
+			return true
+		}
+
+		return false
+	})
+
+	log.Printf("names: %+v", names)
 
 	for _, name := range names {
 		exampleNameTitles = append(exampleNameTitles, ExampleNameTitle{
