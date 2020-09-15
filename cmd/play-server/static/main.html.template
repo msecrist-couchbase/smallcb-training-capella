@@ -42,8 +42,6 @@
       margin-right: 10px;
     }
     .main .main-output {
-      position: sticky;
-      top: 0;
       flex-basis: 10rem;
       flex-grow: 100;
     }
