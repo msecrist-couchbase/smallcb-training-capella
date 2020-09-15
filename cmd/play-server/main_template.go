@@ -167,7 +167,8 @@ func ReadExamples(dir string) (
 	names := make([]string, 0, len(examples))
 	for name, example := range examples {
 		// Only yaml's with a title are considered examples.
-		if _, hasTitle := example["title"]; hasTitle {
+		if MapGetString(example, "title") != "" &&
+			MapGetString(example, "display") != "none" {
 			names = append(names, name)
 		}
 	}
@@ -193,8 +194,6 @@ func ReadExamples(dir string) (
 
 		return false
 	})
-
-	log.Printf("names: %+v", names)
 
 	for _, name := range names {
 		exampleNameTitles = append(exampleNameTitles, ExampleNameTitle{
