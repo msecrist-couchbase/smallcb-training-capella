@@ -106,4 +106,4 @@ play-server-src = \
         cmd/play-server/captcha.go
 
 play-server: $(play-server-src)
-	go build ./cmd/...
+	go build ./cmd/play-server
