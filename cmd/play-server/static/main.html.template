@@ -75,6 +75,20 @@
       padding: 5px 5px 5px 5px;
       text-decoration: none;
     }
+    .main ul.examples li.session {
+      margin-top: 45px;
+      border: 2px solid #888;
+    }
+    .main ul.examples li.session a.session {
+      background-color: #9c9;
+      font-weight: bold;
+      font-size: 13px;
+      color: #666;
+      cursor: pointer;
+    }
+    .main ul.examples li.session a.session:hover {
+      background-color: #9e9;
+    }
     .main textarea.code {
       margin-bottom: 15px;
       margin-right: 10px;
@@ -140,9 +154,11 @@
 
     <div class="header-links">
       {{if .Session}}
-        <a href="/session-exit?s={{.Session.SessionId}}">stop test-drive</a>
+        <a href="/session-exit?s={{.Session.SessionId}}"
+           class="session session-exit">stop test-drive</a>
       {{else}}
-        <a href="/session">start a test-drive</a>
+        <a href="/session"
+           class="session">start a test-drive</a>
       {{end}}
       <a href="https://docs.couchbase.com">docs</a>
       <a href="https://www.couchbase.com">couchbase.com</a>
@@ -194,6 +210,13 @@
              id="ex-{{.Name}}">
             {{.Title}}
           </a>
+        </li>
+      {{end}}
+
+      {{if not .Session}}
+        <li class="session">
+          <a href="/session"
+             class="session">start a test-drive</a>
         </li>
       {{end}}
       </ul>
