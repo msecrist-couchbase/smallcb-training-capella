@@ -33,7 +33,7 @@ RUN ln -s /usr/share/maven/bin/mvn /usr/bin/mvn
 
 COPY cmd/play-server/run-java-pom.xml /run-java-pom.xml
 
-COPY cmd/play-server/static/examples/hello.java /home/play/hello/src/main/java
+COPY cmd/play-server/run-java-hello.java /home/play/hello/src/main/java/hello.java
 
 RUN chown -R play:couchbase /home/play
 
