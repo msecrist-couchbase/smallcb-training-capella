@@ -44,9 +44,6 @@
       flex-basis: 10rem;
       flex-grow: 100;
     }
-    .main .main-output.hidden {
-      visibility: hidden;
-    }
     .main .main-output iframe.output {
       width: 95%;
       height: 20rem;
@@ -117,6 +114,12 @@
     .main input.run.waiting:hover {
       background-color: orange;
       cursor: wait;
+    }
+    .display-none {
+      display: none;
+    }
+    .hidden {
+      visibility: hidden;
     }
   </style>
   <script>
@@ -207,7 +210,7 @@
 
       <ul class="examples">
       {{range $i, $v := .Examples}}
-        <li {{if eq .Name $.Name}}class="current"{{end}}>
+        <li class="{{.ClassName}} {{if eq .Name $.Name}}current{{end}}">
           <a href="/{{$.ExamplesPath}}/{{.Name}}{{if $.Session}}?s={{$.Session.SessionId}}{{end}}{{if gt $i 5}}#ex-{{.Name}}{{end}}"
              id="ex-{{.Name}}">
             {{.Title}}

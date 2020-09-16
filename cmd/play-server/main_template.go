@@ -23,7 +23,7 @@ type MainTemplateData struct {
 	SessionsMaxAge string
 
 	ExamplesPath string
-	Examples     []ExampleNameTitle
+	Examples     []ExampleItem
 
 	Name       string // Current example name or "".
 	Title      string // Current example title or "".
@@ -37,7 +37,7 @@ func MainTemplateEmit(w http.ResponseWriter,
 	staticDir, msg, host string, portApp int, version string,
 	session *Session, sessionsMaxAge time.Duration,
 	examplesPath string, name, lang, code string) {
-	examples, exampleNameTitles, err :=
+	examples, examplesArr, err :=
 		ReadExamples(staticDir + "/" + examplesPath)
 	if err != nil {
 		http.Error(w,
@@ -82,7 +82,7 @@ func MainTemplateEmit(w http.ResponseWriter,
 			sessionsMaxAge.String(), "m0s", " min", 1),
 
 		ExamplesPath: examplesPath,
-		Examples:     exampleNameTitles,
+		Examples:     examplesArr,
 
 		Name:       name,
 		Title:      title,
@@ -147,8 +147,8 @@ func SessionTemplateData(host string, portApp int, session *Session) map[string]
 
 // ------------------------------------------------
 
-type ExampleNameTitle struct {
-	Name, Title string
+type ExampleItem struct {
+	Name, Title, ClassName string
 }
 
 // ReadExamples will return...
@@ -158,7 +158,7 @@ type ExampleNameTitle struct {
 //     [ "basic-py", ... ].
 func ReadExamples(dir string) (
 	examples map[string]map[string]interface{},
-	exampleNameTitles []ExampleNameTitle, err error) {
+	examplesArr []ExampleItem, err error) {
 	examples, err = ReadYamls(dir, ".yaml")
 	if err != nil {
 		return nil, nil, err
@@ -167,8 +167,7 @@ func ReadExamples(dir string) (
 	names := make([]string, 0, len(examples))
 	for name, example := range examples {
 		// Only yaml's with a title are considered examples.
-		if MapGetString(example, "title") != "" &&
-			MapGetString(example, "display") != "none" {
+		if MapGetString(example, "title") != "" {
 			names = append(names, name)
 		}
 	}
@@ -196,11 +195,12 @@ func ReadExamples(dir string) (
 	})
 
 	for _, name := range names {
-		exampleNameTitles = append(exampleNameTitles, ExampleNameTitle{
-			Name:  name,
-			Title: MapGetString(examples[name], "title"),
+		examplesArr = append(examplesArr, ExampleItem{
+			Name:      name,
+			Title:     MapGetString(examples[name], "title"),
+			ClassName: MapGetString(examples[name], "className"),
 		})
 	}
 
-	return examples, exampleNameTitles, nil
+	return examples, examplesArr, nil
 }
