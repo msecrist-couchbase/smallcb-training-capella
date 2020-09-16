@@ -5,8 +5,7 @@
   <link rel="stylesheet" type="text/css" href="/static/style.css">
   <style>
     .session-info {
-      margin-top: 20px;
-      margin-bottom: 20px;
+      margin: 20px 30px 20px 30px;
       border-bottom: 1px solid #666;
       padding-bottom: 20px;
     }

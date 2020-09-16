@@ -1,17 +1,27 @@
 * {
-  font-family: Verdana, Geneva, sans-serif;
+  font-family: Montserrat,Arial,Helvetica,sans-serif;
   font-size: 11pt;
 }
 
+body {
+  margin: 0 0;
+}
+
 .header {
-  margin-bottom: 10px;
+  margin: 0 0 30px 0;
   border-bottom: 1px solid #666;
+  background-color: #000;
   padding-bottom: 10px;
 }
 
 .header-title {
   flex-basis: 20rem;
   flex-grow: 10;
+}
+
+.header-title h1 {
+  margin: 25px 10px 10px 30px;
+  color: #eee;
 }
 
 .header-links {
@@ -22,6 +32,7 @@
 .header-links a {
   margin-left: 10px;
   white-space: nowrap;
+  color: #eee;
 }
 
 h1 {
@@ -54,8 +65,7 @@ a.button:hover {
 }
 
 .msg {
-  margin-top: 40px;
-  margin-bottom: 40px;
+  margin: 40px 30px 40px 30px;
   border-bottom: 1px solid #666;
   padding-bottom: 40px;
   font-weight: bold;
@@ -63,7 +73,7 @@ a.button:hover {
 }
 
 .main {
-  margin-bottom: 80px;
+  margin: 0 30px 80px 30px;
 }
 
 input, textarea, pre {
@@ -84,7 +94,7 @@ input, textarea, pre {
 
 .footer {
   border-top: 1px solid #666;
-  padding: 10px 0 15px 0;
+  padding: 20px 20px 25px 20px;
   font-size: 8pt;
   color: #666;
 }
