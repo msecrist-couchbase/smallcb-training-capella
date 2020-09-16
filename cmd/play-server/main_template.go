@@ -23,7 +23,7 @@ type MainTemplateData struct {
 	SessionsMaxAge string
 
 	ExamplesPath string
-	Examples     []ExampleItem
+	Examples     []map[string]interface{} // Sorted.
 
 	Name       string // Current example name or "".
 	Title      string // Current example title or "".
@@ -147,10 +147,6 @@ func SessionTemplateData(host string, portApp int, session *Session) map[string]
 
 // ------------------------------------------------
 
-type ExampleItem struct {
-	Name, Title, ClassName string
-}
-
 // ReadExamples will return...
 //   examples:
 //     { "basic-py": { "title": "...", "lang": "py", "code": "..." }, ... }.
@@ -158,7 +154,7 @@ type ExampleItem struct {
 //     [ "basic-py", ... ].
 func ReadExamples(dir string) (
 	examples map[string]map[string]interface{},
-	examplesArr []ExampleItem, err error) {
+	examplesArr []map[string]interface{}, err error) {
 	examples, err = ReadYamls(dir, ".yaml")
 	if err != nil {
 		return nil, nil, err
@@ -195,11 +191,8 @@ func ReadExamples(dir string) (
 	})
 
 	for _, name := range names {
-		examplesArr = append(examplesArr, ExampleItem{
-			Name:      name,
-			Title:     MapGetString(examples[name], "title"),
-			ClassName: MapGetString(examples[name], "className"),
-		})
+		examples[name]["name"] = name
+		examplesArr = append(examplesArr, examples[name])
 	}
 
 	return examples, examplesArr, nil
