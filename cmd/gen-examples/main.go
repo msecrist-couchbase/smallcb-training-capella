@@ -9,21 +9,40 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-func main() {
-	m, err := ReadFiles("../sdk-examples/go",
-		map[string]bool{
-			"go": true,
-		}, nil)
-	if err != nil {
-		log.Fatal(err)
-	}
+var exampleTypeDirs = [][]string{
+	[]string{"go", "../sdk-examples/go"},
 
-	m, err = ReadFiles("../docs-sdk-java/modules/howtos/examples",
-		map[string]bool{
-			"java": true,
-		}, m)
-	if err != nil {
-		log.Fatal(err)
+	[]string{"java", "../docs-sdk-java/modules/howtos/examples"},
+
+	[]string{"js", "../docs-sdk-nodejs/modules/hello-world/examples/getting-started"},
+	[]string{"js", "../docs-sdk-nodejs/modules/devguide/examples/nodejs"},
+	[]string{"js", "../docs-sdk-nodejs/modules/howtos/examples"},
+
+	[]string{"py", "../docs-sdk-python/modules/hello-world/examples"},
+	[]string{"py", "../docs-sdk-python/modules/devguide/examples/python"},
+	[]string{"py", "../docs-sdk-python/modules/howtos/examples"},
+}
+
+var suffixToLang = map[string]string{
+	"go":   "go",
+	"java": "java",
+	"js":   "nodejs",
+	"py":   "python",
+}
+
+func main() {
+	var err error
+
+	m := map[string]map[string]string{}
+
+	for _, exampleTypeDir := range exampleTypeDirs {
+		m, err = ReadFiles(exampleTypeDir[1],
+			map[string]bool{
+				exampleTypeDir[0]: true,
+			}, m)
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 
 	for suffix, m2 := range m {
@@ -31,10 +50,10 @@ func main() {
 			log.Printf("suffix: %s, name: %s", suffix, name)
 
 			d := map[string]string{
-				"chapter": "go",
+				"chapter": suffixToLang[suffix],
 				"page":    "",
 				"title":   suffix + ": " + strings.ReplaceAll(name, "-", " "),
-				"lang":    "go",
+				"lang":    suffix,
 				"code":    code,
 			}
 
