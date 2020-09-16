@@ -10,9 +10,18 @@ import (
 )
 
 func main() {
-	m, err := ReadFiles("../sdk-examples/go", map[string]bool{
-		"go": true,
-	}, nil)
+	m, err := ReadFiles("../sdk-examples/go",
+		map[string]bool{
+			"go": true,
+		}, nil)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	m, err = ReadFiles("../docs-sdk-java/modules/howtos/examples",
+		map[string]bool{
+			"java": true,
+		}, m)
 	if err != nil {
 		log.Fatal(err)
 	}
