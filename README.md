@@ -3,7 +3,8 @@ Dependencies...
 * golang
   * tip: after checking out this project, run "go get ./..."
     to download golang dependencies.
-    * tip: you might need to setup your GOPATH env variable.
+    * tip: you might need to setup your GOPATH and GOROOT env variables.
+      * example: GOPATH=/Users/steve.yen/go
 * docker
 * make
 
