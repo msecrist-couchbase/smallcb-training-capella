@@ -107,3 +107,23 @@ play-server-src = \
 
 play-server: $(play-server-src)
 	go build ./cmd/play-server
+
+# Running the gen-examples program depends on other projects,
+# which need to be checked out as sibling directories
+# to this smallcb directory...
+#
+# - github.com/couchbaselabs/sdk-examples
+# - github.com/couchbase/docs-sdk-dotnet
+# - github.com/couchbase/docs-sdk-java
+# - github.com/couchbase/docs-sdk-nodejs
+# - github.com/couchbase/docs-sdk-php
+# - github.com/couchbase/docs-sdk-python
+# - github.com/couchbase/docs-server
+#
+gen-examples-run:
+	go fmt ./cmd/gen-examples
+	rm ./gen-examples
+	go build ./cmd/gen-examples
+	rm ./cmd/play-server/static/examples/gen_*
+	./gen-examples
+
