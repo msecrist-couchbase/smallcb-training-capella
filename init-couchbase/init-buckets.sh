@@ -29,11 +29,13 @@ echo "cbdocloader beer-sample..."
  -v \
  -d /opt/couchbase/samples/beer-sample.zip
 
-# echo "cbdocloader travel-sample..."
-# /opt/couchbase/bin/cbdocloader \
-#         -c localhost -u ${CB_USER} -p ${CB_PSWD} \
-#         -b travel-sample -m ${CB_BUCKET_RAMSIZE} -v \
-#         -d /opt/couchbase/samples/travel-sample.zip
+echo "cbdocloader travel-sample..."
+/opt/couchbase/bin/cbdocloader \
+ -c localhost -u ${CB_USER} -p ${CB_PSWD} \
+ -b travel-sample \
+ -m ${CB_BUCKET_RAMSIZE} \
+ -v \
+ -d /opt/couchbase/samples/travel-sample.zip
 
 # echo "couchbase bucket-create test..."
 # couchbase-cli bucket-create \
