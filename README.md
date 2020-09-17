@@ -3,8 +3,16 @@ Dependencies...
 * golang
   * tip: after checking out this project, run "go get ./..."
     to download golang dependencies.
-    * tip: you might need to setup your GOPATH and GOROOT env variables.
+    * tip: you might need to setup your GOPATH env variables.
       * example: GOPATH=/Users/steve.yen/go
+
+tip: Denis Rosa offers this as what worked for him
+for his golang setup on mac OSX (using brew)...
+
+    export GOPATH="${HOME}/.go"
+    export GOROOT="$(brew --prefix golang)/libexec"
+    export PATH="$PATH:$GOPATH/bin:$GOROOT/bin"
+
 * docker
 * make
 
