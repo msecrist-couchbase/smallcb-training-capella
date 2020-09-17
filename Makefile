@@ -122,8 +122,8 @@ play-server: $(play-server-src)
 #
 gen-examples-run:
 	go fmt ./cmd/gen-examples
-	rm ./gen-examples
+	rm -f ./gen-examples
 	go build ./cmd/gen-examples
-	rm ./cmd/play-server/static/examples/gen_*
+	rm -f ./cmd/play-server/static/examples/gen_*
 	./gen-examples
 
