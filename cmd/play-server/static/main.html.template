@@ -194,7 +194,7 @@
 
                    <a href="http://{{.Host}}:8091/ui/index.html#!/query/workbench">Query Workbench</a> | <a href="http://{{.Host}}:8091/ui/index.html#!/documents/editor">Document Editor</a> | <a href="http://{{.Host}}:8091/ui/index.html#!/documents/import">Import Documents</a> | REST API: http://{{.Session.CBUser}}:{{.Session.CBPswd}}@{{.Host}}:8091
 
-  <b>Couchbase SDK's</b>               : connection snippets
+  <b>Couchbase SDK's</b>             : connection snippets
     Java   <a href="https://docs.couchbase.com/java-sdk/current/hello-world/start-using-sdk.html">SDK docs</a>, <a href="https://docs.couchbase.com/sdk-api/couchbase-java-client/">API docs</a> : - Cluster.connect("couchbase://{{.Host}}", "{{.Session.CBUser}}", "{{.Session.CBPswd}}")
     NodeJS <a href="https://docs.couchbase.com/nodejs-sdk/current/hello-world/start-using-sdk.html">SDK docs</a>, <a href="https://docs.couchbase.com/sdk-api/couchbase-node-client/">API docs</a> : - new couchbase.Cluster("couchbase://{{.Host}}", {username: "{{.Session.CBUser}}", password: "{{.Session.CBPswd}}"})
     Python <a href="https://docs.couchbase.com/python-sdk/current/hello-world/start-using-sdk.html">SDK docs</a>, <a href="https://docs.couchbase.com/sdk-api/couchbase-python-client/">API docs</a> : - Cluster('couchbase://{{.Host}}', ClusterOptions(PasswordAuthenticator('{{.Session.CBUser}}', '{{.Session.CBPswd}}')))
