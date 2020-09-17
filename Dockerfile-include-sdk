@@ -9,22 +9,40 @@ RUN apt-get update && \
 
 RUN apt-get install -y python3-dev python3-pip python3-setuptools
 
+RUN python3 --version && \
+    pip3 --version
+
 COPY --from=golang /usr/local/go /usr/local/go
 COPY --from=golang /go /go
 
 ENV GOPATH /go
 ENV PATH="$PATH:/usr/local/go/bin:$GOPATH/bin"
 
+RUN go version
+
 COPY --from=adoptopenjdk /opt/java /opt/java
 
 ENV JAVA_HOME=/opt/java/openjdk
 ENV PATH="$PATH:/opt/java/openjdk/bin"
 
+RUN javac --version && \
+    java --version
+
 COPY --from=node /usr/local/bin/node /usr/local/bin/node
 COPY --from=node /usr/local/include/node /usr/local/include/node
 COPY --from=node /usr/local/lib/node_modules /usr/local/lib/node_modules
 
-RUN ln -s ../lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm
+RUN ln -s ../lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm && \
+    node --version && \
+    npm --version
+
+COPY --from=dotnet_core_sdk /usr/share/dotnet /usr/share/dotnet
+COPY --from=dotnet_core_sdk /usr/share/powershell /usr/share/powershell
+
+RUN ln -s /usr/share/dotnet/dotnet /usr/bin/dotnet && \
+    ln -s /usr/share/powershell/pwsh /usr/bin/pwsh && \
+    dotnet --version && \
+    pwsh -Version
 
 # ------------------------------------------------------
 
@@ -38,3 +56,4 @@ RUN pip3 install six couchbase
 # Install golang couchbase SDK:
 
 RUN go get github.com/couchbase/gocb
+
