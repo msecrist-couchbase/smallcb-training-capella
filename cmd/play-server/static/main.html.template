@@ -125,6 +125,11 @@
     .hidden {
       visibility: hidden;
     }
+
+    /* TODO: Re-enable lang-go once we figure out couchbase golang SDK v2. */
+    .lang-go {
+      display: none;
+    }
   </style>
   <script>
     function onRunSubmit() {
@@ -213,7 +218,7 @@
 
       <ul class="examples">
       {{range $i, $v := .Examples}}
-        <li class="{{.className}} {{if eq .name $.Name}}current{{end}}">
+        <li class="{{.className}} lang-{{.lang}} {{if eq .name $.Name}}current{{end}}">
           <a href="/{{$.ExamplesPath}}/{{.name}}{{if $.Session}}?s={{$.Session.SessionId}}{{end}}{{if gt $i 5}}#ex-{{.name}}{{end}}"
              id="ex-{{.name}}">
             {{.title}}
