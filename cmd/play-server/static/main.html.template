@@ -49,8 +49,9 @@
     }
     .main .main-output iframe.output {
       width: 95%;
-      height: 20rem;
+      height: 60vh;
       border: 1px solid #888;
+      margin-bottom: 40px;
     }
     .main .sticky {
       position: sticky;
@@ -95,7 +96,7 @@
       margin-bottom: 15px;
       margin-right: 10px;
       width: 95%;
-      height: 20rem;
+      height: 60vh;
       overflow-y: scroll;
       background-color: #333;
       color: #eee;
