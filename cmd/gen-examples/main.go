@@ -10,6 +10,15 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
+var codeMaxLen = 8000
+
+var notYetSupported = []string{
+	"nalytics", // For Analytics/analytics.
+	"rxjava",
+	"select ...",
+	"ssl",
+}
+
 // Sibling directories to scan for examples.
 var exampleTypeDirs = [][]string{
 	[]string{"go", "../sdk-examples/go"},
@@ -96,6 +105,17 @@ func main() {
 }
 
 func CodeCleanse(suffix, code string) (codeNew, rejectReason string) {
+	if len(code) > codeMaxLen {
+		return "", fmt.Sprintf("code too long, %d > %d",
+			len(code), codeMaxLen)
+	}
+
+	for _, s := range notYetSupported {
+		if strings.Index(code, s) >= 0 {
+			return "", "not yet supported: " + s
+		}
+	}
+
 	if strings.Index(code, "beer-sample") < 0 &&
 		strings.Index(code, "travel-sample") < 0 {
 		return "", "no bs/ts bucket"
