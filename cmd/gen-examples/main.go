@@ -152,8 +152,12 @@ func CodeCleanse(suffix, code string) (codeNew, rejectReason string) {
 		code = reTag.ReplaceAllString(code, "")
 	}
 
+	code = reNewlines.ReplaceAllString(code, "\n\n")
+
 	return code, ""
 }
+
+var reNewlines = regexp.MustCompile(`\n\n\n+`)
 
 var rePublicClass = regexp.MustCompile(`(public )?class ([A-Z][a-zA-Z]+) {`)
 
