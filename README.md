@@ -342,6 +342,11 @@ dev-mode still asking for stats too much?
 
 dev-mode, phase II, needs core product improvements?
 
+race / raciness in N1QL server where the running of user code
+  is faster than N1QL server's ability -- where N1QL
+  server sometimes (incorrectly!) returns an empty result
+  instead of a not-yet-ready kind of error.
+
 --------------------------
 DONE: SECURITY: remove ability to strace in production,
   via default of CONTAINER_EXTRAS in Makefile.
