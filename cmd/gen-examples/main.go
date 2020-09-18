@@ -9,6 +9,7 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
+// Sibling directories to scan for examples.
 var exampleTypeDirs = [][]string{
 	[]string{"go", "../sdk-examples/go"},
 
@@ -23,6 +24,7 @@ var exampleTypeDirs = [][]string{
 	[]string{"py", "../docs-sdk-python/modules/howtos/examples"},
 }
 
+// Mapping from a file suffix to longer names.
 var suffixToLang = map[string]string{
 	"go":   "go",
 	"java": "java",
@@ -47,7 +49,14 @@ func main() {
 
 	for suffix, m2 := range m {
 		for name, code := range m2 {
-			log.Printf("suffix: %s, name: %s", suffix, name)
+			log.Printf("suffix: %s, name: %s, ...", suffix, name)
+
+			code, rejectReason := CodeAllowed(code)
+			if rejectReason != "" {
+				log.Printf("suffix: %s, name: %s, ...SKIPPED: %s",
+					suffix, name, rejectReason)
+				continue
+			}
 
 			d := map[string]string{
 				"chapter": suffixToLang[suffix],
@@ -62,14 +71,48 @@ func main() {
 				log.Fatal(err)
 			}
 
-			err = ioutil.WriteFile(fmt.Sprintf(
+			outName := fmt.Sprintf(
 				"./cmd/play-server/static/examples/gen_%s_%s.yaml",
-				suffix, name), b, 0644)
+				suffix, name)
+
+			err = ioutil.WriteFile(outName, b, 0644)
 			if err != nil {
 				log.Fatal(err)
 			}
+
+			log.Printf("suffix: %s, name: %s, ...OK: %s",
+				suffix, name, outName)
 		}
 	}
+}
+
+func CodeAllowed(code string) (codeNew, rejectReason string) {
+	if strings.Index(code, "beer-sample") < 0 &&
+		strings.Index(code, "travel-sample") < 0 {
+		return "", "no bs/ts bucket"
+	}
+
+	codeNew = strings.ReplaceAll(code, "'Administrator'", "'{{.CBUser}}'")
+	codeNew = strings.ReplaceAll(codeNew, "\"Administrator\"", "\"{{.CBUser}}\"")
+	if codeNew == code {
+		return "", "no user"
+	}
+	code = codeNew
+
+	codeNew = strings.ReplaceAll(code, "'password'", "'{{.CBPswd}}'")
+	codeNew = strings.ReplaceAll(codeNew, "\"password\"", "\"{{.CBPswd}}\"")
+	if codeNew == code {
+		return "", "no pswd"
+	}
+	code = codeNew
+
+	codeNew = strings.ReplaceAll(code, "127.0.0.1", "{{.Host}}")
+	codeNew = strings.ReplaceAll(codeNew, "localhost", "{{.Host}}")
+	if codeNew == code {
+		return "", "no host"
+	}
+
+	return codeNew, ""
 }
 
 func ReadFiles(dir string, suffixes map[string]bool,
