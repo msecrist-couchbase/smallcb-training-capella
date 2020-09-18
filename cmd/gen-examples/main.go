@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"regexp"
 	"strings"
 
 	"gopkg.in/yaml.v2"
@@ -59,7 +60,7 @@ func main() {
 		for name, code := range m2 {
 			log.Printf("suffix: %s, name: %s, ...", suffix, name)
 
-			code, rejectReason := CodeAllowed(code)
+			code, rejectReason := CodeCleanse(suffix, code)
 			if rejectReason != "" {
 				log.Printf("suffix: %s, name: %s, ...SKIPPED: %s",
 					suffix, name, rejectReason)
@@ -94,7 +95,7 @@ func main() {
 	}
 }
 
-func CodeAllowed(code string) (codeNew, rejectReason string) {
+func CodeCleanse(suffix, code string) (codeNew, rejectReason string) {
 	if strings.Index(code, "beer-sample") < 0 &&
 		strings.Index(code, "travel-sample") < 0 {
 		return "", "no bs/ts bucket"
@@ -119,9 +120,16 @@ func CodeAllowed(code string) (codeNew, rejectReason string) {
 	if codeNew == code {
 		return "", "no host"
 	}
+	code = codeNew
 
-	return codeNew, ""
+	if suffix == "java" {
+		code = rePublicClass.ReplaceAllString(code, "class Program {")
+	}
+
+	return code, ""
 }
+
+var rePublicClass = regexp.MustCompile(`(public )?class ([A-Z][a-zA-Z]+) {`)
 
 func ReadFiles(dir string, suffixes map[string]bool,
 	// Keyed by suffix (i.e., "go"), then by basename, and value is contents.
