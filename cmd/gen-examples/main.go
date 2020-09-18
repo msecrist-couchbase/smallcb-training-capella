@@ -25,11 +25,19 @@ var exampleTypeDirs = [][]string{
 }
 
 // Mapping from a file suffix to longer names.
-var suffixToLang = map[string]string{
+var suffixToName = map[string]string{
 	"go":   "go",
 	"java": "java",
 	"js":   "nodejs",
 	"py":   "python",
+}
+
+// Mapping from a file suffix to lang.
+var suffixToLang = map[string]string{
+	"go":   "go",
+	"java": "java",
+	"js":   "nodejs",
+	"py":   "py",
 }
 
 func main() {
@@ -59,10 +67,10 @@ func main() {
 			}
 
 			d := map[string]string{
-				"chapter": suffixToLang[suffix],
+				"chapter": suffixToName[suffix],
 				"page":    "",
 				"title":   suffix + ": " + strings.ReplaceAll(name, "-", " "),
-				"lang":    suffix,
+				"lang":    suffixToLang[suffix],
 				"code":    code,
 			}
 
