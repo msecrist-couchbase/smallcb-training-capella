@@ -345,7 +345,22 @@ dev-mode, phase II, needs core product improvements?
 race / raciness in N1QL server where the running of user code
   is faster than N1QL server's ability -- where N1QL
   server sometimes (incorrectly!) returns an empty result
-  instead of a not-yet-ready kind of error.
+  instead of a not-yet-ready kind of error.  Example curl N1QL
+  output with empty results...
+
+  {
+  "requestID": "6aabfdf7-7700-4f1c-8c8b-a29ed29f036f",
+  "signature": {"*":"*"},
+  "results": [
+  ],
+  "status": "success",
+  "metrics": {"elapsedTime": "171.8859ms","executionTime": "171.5529ms","resultCount": 0,"resultSize": 0}
+  }
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+  100   329  100   222  100   107   1190    573 --:--:-- --:--:-- --:--:--  1193
 
 --------------------------
 DONE: SECURITY: remove ability to strace in production,

@@ -170,7 +170,8 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 				// Async attempt to assign a container instance to
 				// the new session, so the client doesn't wait.
 				go SessionAssignContainer(session, req,
-					readyCh, *containerWaitDuration, restartCh)
+					readyCh, *containerWaitDuration, restartCh,
+					*containers, *containersSingleUse)
 
 				http.Redirect(w, r, "/?s="+session.SessionId,
 					http.StatusSeeOther)
@@ -245,7 +246,8 @@ func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 
 			result, err = RunRequestSession(
 				session, req, readyCh,
-				*containerWaitDuration, restartCh)
+				*containerWaitDuration, restartCh,
+				*containers, *containersSingleUse)
 			if err != nil {
 				StatsNumInc("http.Run.session.err")
 			} else {

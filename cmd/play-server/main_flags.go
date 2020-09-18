@@ -24,6 +24,9 @@ var (
 	containers = flag.Int("containers", 1,
 		"# of container instances")
 
+	containersSingleUse = flag.Int("containersSingleUse", 0,
+		"# of container instances to keep as single use or session-less")
+
 	host = flag.String("host", "127.0.0.1",
 		"host that the service will be publically available as")
 

@@ -57,6 +57,14 @@ var sessions = Sessions{
 func (sessions *Sessions) Count() (count, countWithContainer uint64) {
 	sessions.m.Lock()
 
+	count, countWithContainer = sessions.CountLOCKED()
+
+	sessions.m.Unlock()
+
+	return count, countWithContainer
+}
+
+func (sessions *Sessions) CountLOCKED() (count, countWithContainer uint64) {
 	count = uint64(len(sessions.mapBySessionId))
 
 	for _, session := range sessions.mapBySessionId {
@@ -64,8 +72,6 @@ func (sessions *Sessions) Count() (count, countWithContainer uint64) {
 			countWithContainer += 1
 		}
 	}
-
-	sessions.m.Unlock()
 
 	return count, countWithContainer
 }

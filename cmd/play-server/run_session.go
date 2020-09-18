@@ -9,9 +9,11 @@ import (
 
 func RunRequestSession(session *Session, req RunRequest,
 	readyCh chan int, containerWaitDuration time.Duration,
-	restartCh chan<- Restart) (out []byte, err error) {
+	restartCh chan<- Restart,
+	containers, containersSingleUse int) (out []byte, err error) {
 	session, err = SessionAssignContainer(session, req,
-		readyCh, containerWaitDuration, restartCh)
+		readyCh, containerWaitDuration, restartCh,
+		containers, containersSingleUse)
 	if err != nil {
 		return nil, fmt.Errorf("RunRequestSession,"+
 			" could not assign container, err: %v", err)
@@ -36,7 +38,8 @@ func RunRequestSession(session *Session, req RunRequest,
 
 func SessionAssignContainer(session *Session, req RunRequest,
 	readyCh chan int, containerWaitDuration time.Duration,
-	restartCh chan<- Restart) (*Session, error) {
+	restartCh chan<- Restart,
+	containers, containersSingleUse int) (*Session, error) {
 	if session == nil {
 		return nil, fmt.Errorf("SessionAssignContainer, no session")
 	}
@@ -49,6 +52,20 @@ func SessionAssignContainer(session *Session, req RunRequest,
 		req.ctx, readyCh, containerWaitDuration)
 	if err != nil {
 		return session, err
+	}
+
+	// Race-y check here to see if we're already below containersSingleUse,
+	// with another real check later in the protected SessionsAccess() call,
+	// where this early check is cheaper as a full container instance
+	// restart isn't needed at this point.
+	_, sessionsCountWithContainer := sessions.Count()
+	if containers-int(sessionsCountWithContainer)-1 < containersSingleUse {
+		readyCh <- containerId
+
+		containerId = -1
+
+		return session, fmt.Errorf("SessionAssignContainer," +
+			" no container available for your session")
 	}
 
 	defer func() {
@@ -69,17 +86,24 @@ func SessionAssignContainer(session *Session, req RunRequest,
 	session = sessions.SessionAccess(session.SessionId,
 		func(session *Session) *Session {
 			if session.ContainerId < 0 {
-				session.ContainerId = containerId
-				session.RestartCh = restartCh
-				session.ReadyCh = readyCh
-				session.TouchedAtUnix = time.Now().Unix()
+				_, sessionsCountWithContainer := sessions.CountLOCKED()
+				if containers-int(sessionsCountWithContainer)-1 <
+					containersSingleUse {
+					err = fmt.Errorf("SessionAssignContainer," +
+						" no container left for your session")
+				} else {
+					session.ContainerId = containerId
+					session.RestartCh = restartCh
+					session.ReadyCh = readyCh
+					session.TouchedAtUnix = time.Now().Unix()
 
-				log.Printf("run_session, SessionAssignContainer,"+
-					" sessionId: %s, containerId: %d",
-					session.SessionId, session.ContainerId)
+					log.Printf("run_session, SessionAssignContainer,"+
+						" sessionId: %s, containerId: %d",
+						session.SessionId, session.ContainerId)
 
-				// Session owns the containerId.
-				containerId = -1
+					// Session owns the containerId.
+					containerId = -1
+				}
 			}
 
 			rv := *session // Copy.
@@ -87,5 +111,5 @@ func SessionAssignContainer(session *Session, req RunRequest,
 			return &rv
 		})
 
-	return session, nil
+	return session, err
 }
