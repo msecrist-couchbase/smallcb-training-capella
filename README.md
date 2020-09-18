@@ -58,8 +58,8 @@ variable for security and the host parameter...
 
     CB_ADMIN_PASSWORD=no-longer-the-small-house-secret \
       ./play-server \
-        -containers 5 -restarters=5 \
-        -host couchbase.live
+        -host couchbase.live \
+        -containers=5 -containersSingleUse=2 -restarters=5
 
 -------------------------
 Aside...
@@ -87,9 +87,7 @@ need a cgroup or a throwaway container to safely run
 
 show & tell?
 
-first end-to-end demo on laptop?
-
-first end-to-end demo on cloud (staging)?
+first "real" staging setup on cloud?
 
 first examples from not-steve?
 
@@ -98,11 +96,15 @@ lots of examples are auto-scraped from docs and
     every once in awhile.
   see also: https://github.com/couchbaselabs/devguide-examples
     which are older.
-  ask Matt I. for more details
+  see the ./cmd/gen-examples program.
+    many samples aren't passing gen-example's filters.
 
 client-side JS to prevent over-clicking on Run/Submit button,
-  where the current attempt of onRunSubmit()
-  doesn't work very well for the 2nd click on 'run'.
+  where the current approach has the browser
+  correctly handling over-clicking automatically
+  w.r.t. requests, but does not have the right UX,
+  where the second click doesn't turn the 'run' button orange
+  and disabled.
 
 client-side JS to prevent Back Button or navigating away
   from losing work in the code textarea?
@@ -126,14 +128,16 @@ favorites / recommended examples?  starred?
 some examples that only make sense when there's
   a longer-running session >= zipcar mode?
 
-should there be a max session time?  e.g., 20 minutes?
+should there be an absolute max session time?  e.g., 20 minutes?
+  currently, there's a timeout after last request,
+  as opposed to an absolute session time.
 
 feedback comments or votes on examples?
 
 CAPTCHA random seed looks weak
   seeing repeats on process start?
 
-CAPTCHA panics sometimes at rand.Intn()?
+CAPTCHA panics sometimes in its rand.Intn() code?
 
 can i have >1 longer running instance per email?
   ANS: currently, sorta -- full name + email must be unique.
@@ -149,9 +153,10 @@ google analytics?
 iframe for run output also needs google analytics,
   so html instead of text/plain?
 
-stats?
-  keep average time of restarts, for fake/estimated progress/ETA bars?
-  do we dump stats to logs or S3 occasionally?
+should we also dump stats to S3 occasionally?
+
+keep average time of restarts, for fake/estimated progress/ETA bars?
+  or, "we are under heavy load" messages?
 
 DNS, ELB & subdomains?
 
@@ -169,17 +174,24 @@ health watchers and elastic scaling -- bring up more nodes
   traffic goes away?
 
 sizing?
-  some rough disk usage info...
+  some rough disk usage info -- beer-sample + travel-sample
 
-    % du -s -h vol-0        ==> 8.1M vol-0
-    % du -s -h vol-snapshot ==> 5.6M vol-snapshot
+    % du -s -h vol-instances/vol-*
+    50M	vol-instances/vol-0
+    51M	vol-instances/vol-1
+
+    % du -s -h vol-snapshot
+    40M	vol-snapshot
 
 inject better UI into web admin UI?
 
 proper web terminal UI?
 
+output (stdout / stderr) is not streaming?
+
 docker on mac OSX sometimes gets 'stuck' -- container
-  instances aren't restartable sometimes?  Will this be the
+  instances aren't restartable sometimes?  Need to sometimes
+  restart entire docker system / hypervisor... will this be the
   case also on linux?  If so, perhaps need a "kill the
   entire server/machine and replace it" button?
 
@@ -192,18 +204,20 @@ should we use docker on docker?
 use docker networking features?
   use docker network overlay --internal mode?
   perhaps too complex?
-  perhaps necessary if we want a play run-only container for submitted code?
+  perhaps necessary if we want a play run-only
+    container for submitted code?
 
 use tmpfs for faster restarts and less real i/o,
   at the cost of RAM?
   docker run --tmpfs flag?
 
 docker run has interesting tweakable runtime resource limits
-  to look at?
+  to look at and perhaps use?
 
 docker run --read-only flag?
 
 SECURITY: turn off egress networking?
+  turn off ability to initiate outbound connections?
   https://www.reddit.com/r/docker/comments/hvs7n9/how_do_i_prevent_a_container_from_making_outgoing/
   If your container is hosted on a VM in Azure, AWS, GCP, OpenStack
   etc, you'll want to restrict Egress (outgoing) traffic
@@ -228,20 +242,23 @@ SECURITY: cpu/memory usage limits?
 
 SECURITY: restart the host system every day?
   just in case that unsafe code escapes
-  the container sandbox via kernel hack?
+  the container sandbox via kernel hacks and such?
+
+SECURITY: bad actor can start a webserver and host porn, etc?
+
+configure AWS to limit network bandwidth ingress / egress?
 
 SECURITY: hosting IAM rules?
 
-SECURITY: RBAC to limit access?
-
-SECURITY: need a CAPTCHA?
-
-SECURITY: need spam/flood throttling?
+SECURITY: need email spam/flood prevention throttling?
+  e.g., swatting prevention?
 
 SECURITY: need a bad-list of emails that we don't like?
 
+influitive hookups?
+
 copy/pastable connection snippets for popular languages
-  and SDK's, for >= zipcar mode?
+  and SDK's, for >= zipcar mode when there's a session?
 
 need 1 or more test users / test examples / test container instances?
 
@@ -252,22 +269,21 @@ iframe for access to web admin portal?
     the X-Frame-Options DENY header from the response.
 
 the proxy serving of web-admin UI login screen
-  always goes to container 0 -- but what if
-  container 0 is restarting?  Then the UI login screen
-  can't be served?  Maybe play-server's proxy should cache?
+  when not logged in always goes to container 0,
+  but what if container 0 is restarting?
+  Then the UI login screen can't be served?
+  Maybe play-server's proxy should cache?
 
-or pop up web admin portal in separate tab?
+pop up web admin portal in separate tab or browser target?
 
-popup tours in injection?
+popup tours in UI injection?
   https://kamranahmed.info/driver.js/
-
-output (stdout / stderr) is not streaming?
 
 how about having longer-running instances
 that hang around more than a single request,
 which are all single-node / no rebalance / no XDCR,
-all for better developer tire-kicking?
-e.g.,
+all for better developer tire-kicking? e.g.,
+
   DONE: per-request (uber)
     container instance reset/recycled after every request.
     similar to https://www.tutorialspoint.com/compile_jdbc_online.php
@@ -282,11 +298,12 @@ e.g.,
       to allow for cbbackup/restore from elsewhere.
     similar to katacoda.
 
-  multi-request-with-data-freezing/thawing (hertz/avid, multi-day rental)
+  multi-request-with-data-freezing/thawing
+    (hertz/avid, multi-day rental)
     after a timeout from inactivity,
     the data is snapshotted and parked in quiescent garage somewhere...
       like on to local disk,
-           or onto S3.
+        or onto S3.
     when the user comes back, data is thawed,
       against a restarted container,
       perhaps at a different assigned port #'s?
@@ -300,8 +317,6 @@ e.g.,
 
 -------------------------
 On new CB version release...
-
-UI should show the CB version?
 
 Does a new CB version mean a new EC2 instance
   and then redirect the DNS / ELB,
@@ -336,6 +351,8 @@ more use cases with persistent data?
 
   serverless event processing?
 
+poor man's sizing estimator / guesstimator?
+
 dev-mode config is reusable for laptops, too?
 
 dev-mode still asking for stats too much?
@@ -363,6 +380,20 @@ race / raciness in N1QL server where the running of user code
   100   329  100   222  100   107   1190    573 --:--:-- --:--:-- --:--:--  1193
 
 --------------------------
+DONE: some containers are dedicated to be session-less
+  like 10-items-or-less quick checkout lanes...
+  see: -containersSingleUse cmd-line param, defaults to 0.
+
+DONE: first end-to-end demo on laptop?
+
+DONE: first end-to-end demo on cloud?  Thanks Denis Rosa!
+
+DONE: UI should show the CB version -- in the footer.
+
+DONE: RBAC to limit access?
+
+DONE: need a CAPTCHA?
+
 DONE: SECURITY: remove ability to strace in production,
   via default of CONTAINER_EXTRAS in Makefile.
   CVE-2014-4699: A bug in ptrace() could allow privilege
