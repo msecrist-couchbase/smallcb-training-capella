@@ -156,8 +156,8 @@ func CodeCleanse(suffix, code string) (codeNew, rejectReason string) {
 var rePublicClass = regexp.MustCompile(`(public )?class ([A-Z][a-zA-Z]+) {`)
 
 var reTags = []*regexp.Regexp{
-	regexp.MustCompile(`\/\/ tag::([a-z]+)\[\]\n`),
-	regexp.MustCompile(`\/\/ end::([a-z]+)\[\]\n`),
+	regexp.MustCompile(`\/\/ tag::([a-z\-]+)\[\]\n`),
+	regexp.MustCompile(`\/\/ end::([a-z\-]+)\[\]\n`),
 }
 
 func ReadFiles(dir string, suffixes map[string]bool,
