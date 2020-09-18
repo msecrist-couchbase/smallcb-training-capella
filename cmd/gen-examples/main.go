@@ -146,10 +146,19 @@ func CodeCleanse(suffix, code string) (codeNew, rejectReason string) {
 		code = rePublicClass.ReplaceAllString(code, "class Program {")
 	}
 
+	for _, reTag := range reTags {
+		code = reTag.ReplaceAllString(code, "")
+	}
+
 	return code, ""
 }
 
 var rePublicClass = regexp.MustCompile(`(public )?class ([A-Z][a-zA-Z]+) {`)
+
+var reTags = []*regexp.Regexp{
+	regexp.MustCompile(`\/\/ tag::([a-z]+)\[\]\n`),
+	regexp.MustCompile(`\/\/ end::([a-z]+)\[\]\n`),
+}
 
 func ReadFiles(dir string, suffixes map[string]bool,
 	// Keyed by suffix (i.e., "go"), then by basename, and value is contents.
