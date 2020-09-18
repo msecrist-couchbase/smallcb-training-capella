@@ -15,8 +15,10 @@ var codeMaxLen = 8000
 var notYetSupported = []string{
 	"nalytics", // For Analytics/analytics.
 	"rxjava",
+	"searchQuery",
 	"select ...",
 	"ssl",
+	"viewQuery",
 }
 
 // Sibling directories to scan for examples.
@@ -156,8 +158,13 @@ func CodeCleanse(suffix, code string) (codeNew, rejectReason string) {
 var rePublicClass = regexp.MustCompile(`(public )?class ([A-Z][a-zA-Z]+) {`)
 
 var reTags = []*regexp.Regexp{
-	regexp.MustCompile(`\/\/ tag::([a-z\-]+)\[\]\n`),
-	regexp.MustCompile(`\/\/ end::([a-z\-]+)\[\]\n`),
+	regexp.MustCompile(`\/\/ #?tag::([a-z\-]+)\[\]\n`),
+	regexp.MustCompile(`\/\/ #?end::([a-z\-]+)\[\]\n`),
+
+	regexp.MustCompile(`#\s?tag::([a-z\-]+)\[\]\n`),
+	regexp.MustCompile(`#\s?end::([a-z\-]+)\[\]\n`),
+
+	regexp.MustCompile(`"""\n\[source,([a-z]+)\]\n----\n"""\n`),
 }
 
 func ReadFiles(dir string, suffixes map[string]bool,
