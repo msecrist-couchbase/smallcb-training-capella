@@ -12,6 +12,17 @@ import (
 	"time"
 )
 
+// Map from lang suffix to name that ACE editor recognizes.
+var LangAce = map[string]string{
+	"go":     "golang",
+	"java":   "java",
+	"nodejs": "javascript",
+	"php":    "php",
+	"py":     "python",
+	"ruby":   "ruby",
+	"sh":     "sh",
+}
+
 type MainTemplateData struct {
 	Msg string
 
@@ -28,6 +39,7 @@ type MainTemplateData struct {
 	Name       string // Current example name or "".
 	Title      string // Current example title or "".
 	Lang       string // Ex: 'py'.
+	LangAce    string // Ex: 'python'.
 	Code       string
 	InfoBefore template.HTML
 	InfoAfter  template.HTML
@@ -87,6 +99,7 @@ func MainTemplateEmit(w http.ResponseWriter,
 		Name:       name,
 		Title:      title,
 		Lang:       lang,
+		LangAce:    LangAce[lang],
 		Code:       code,
 		InfoBefore: template.HTML(infoBefore),
 		InfoAfter:  template.HTML(infoAfter),
