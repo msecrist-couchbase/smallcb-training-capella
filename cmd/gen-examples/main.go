@@ -20,6 +20,7 @@ var notYetSupported = []string{
 	"ssl",
 	"viewQuery",
 	" = async ",
+	"Not implemented",
 }
 
 // Sibling directories to scan for examples.
