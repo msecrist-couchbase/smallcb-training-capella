@@ -141,7 +141,7 @@ func main() {
 		}
 	}
 
-	go SessionsChecker(*sessionsCheckEvery, *sessionsMaxAge)
+	go SessionsChecker(*sessionsCheckEvery, *sessionsMaxAge, *sessionsMaxIdle)
 
 	mux := http.NewServeMux()
 

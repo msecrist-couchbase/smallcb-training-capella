@@ -53,8 +53,12 @@ var (
 		"# of restarters of the container instances")
 
 	sessionsMaxAge = flag.Duration("sessionsMaxAge",
+		10*time.Minute,
+		"duration by age for which sessions are automatically exited")
+
+	sessionsMaxIdle = flag.Duration("sessionsMaxIdle",
 		5*time.Minute,
-		"duration or age for which sessions are automatically exited")
+		"duration by inactivity for which sessions are automatically exited")
 
 	sessionsCheckEvery = flag.Duration("sessionsCheckEvery",
 		30*time.Second,

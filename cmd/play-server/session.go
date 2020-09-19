@@ -42,6 +42,7 @@ type SessionInfo struct {
 	CBPswd string
 
 	CreatedAt     string
+	CreatedAtUnix int64
 	TouchedAtUnix int64
 }
 
@@ -207,6 +208,7 @@ func (s *Sessions) SessionCreate(fullName, email string) (
 			CBPswd:    sessionId[16:],
 
 			CreatedAt:     now.Format("2006-01-02T15:04:05.000-07:00"),
+			CreatedAtUnix: now.Unix(),
 			TouchedAtUnix: now.Unix(),
 		},
 		ContainerId: -1,
@@ -292,7 +294,7 @@ func (s *Session) ReleaseContainer() {
 
 // ------------------------------------------------
 
-func SessionsChecker(sleepDur, maxAgeDur time.Duration) {
+func SessionsChecker(sleepDur, maxAge, maxIdle time.Duration) {
 	var sessionIds []string
 
 	for {
@@ -300,14 +302,19 @@ func SessionsChecker(sleepDur, maxAgeDur time.Duration) {
 
 		time.Sleep(sleepDur)
 
-		cutOffTime := time.Now().Add(-maxAgeDur)
+		now := time.Now()
+
+		limitCreatedAt := now.Add(-maxAge)
+		limitTouchedAt := now.Add(-maxIdle)
 
 		sessions.m.Lock()
 
 		for _, session := range sessions.mapBySessionId {
-			if time.Unix(session.TouchedAtUnix, 0).Before(cutOffTime) {
+			if time.Unix(session.CreatedAtUnix, 0).Before(limitCreatedAt) ||
+				time.Unix(session.TouchedAtUnix, 0).Before(limitTouchedAt) {
 				sessionIds = append(sessionIds, session.SessionId)
 			}
+
 		}
 
 		sessions.m.Unlock()

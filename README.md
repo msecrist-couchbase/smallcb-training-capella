@@ -95,10 +95,6 @@ first examples from not-steve?
 
 line numbers for code textarea?
 
-should there be an absolute max session time?  e.g., 20 minutes?
-  currently, there's a timeout after last request,
-  as opposed to an absolute session time.
-
 client-side code syntax highlighting / styling via
   codemirror, ACE code editor?
 
@@ -382,6 +378,9 @@ race / raciness in N1QL server where the running of user code
   100   329  100   222  100   107   1190    573 --:--:-- --:--:-- --:--:--  1193
 
 --------------------------
+DONE: max session duration (-sessionsMaxAge) and
+  max session idle/inactivity duration (-sessionsMaxIdle).
+
 DONE: some examples only make sense when there's
   a session (>= zipcar mode), so the example's YAML
   should define a property of...
