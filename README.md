@@ -125,15 +125,6 @@ when there are enough examples, use a tree-control
 
 favorites / recommended examples?  starred?
 
-DONE: some examples only make sense when there's
-  a session (>= zipcar mode), so the example's YAML
-  should define a property of...
-
-    className: needs-session
-
-  ...so that the example will only appear when
-  the user has a session.
-
 should there be an absolute max session time?  e.g., 20 minutes?
   currently, there's a timeout after last request,
   as opposed to an absolute session time.
@@ -297,11 +288,13 @@ all for better developer tire-kicking? e.g.,
   DONE: multi-request (zipcar / e.g., hourly rental)
     container instance has an associated session UUID,
       and is reset/recycled only after the
-      session reachs timeout from inactivity.
-    data is deleted after session times out.
-    and, user / password is generated a'la UUID,
+      session reaches timeout from inactivity.
+      data is deleted after session times out,
+        and container instance is wiped / restarted.
+    with user / password / sessionId generated a'la UUID,
     with network ingres/egress that's enough
-      to allow for cbbackup/restore from elsewhere.
+      to allow for web-UI and client SDK access
+      over the internet, including cbbackup/restore.
     similar to katacoda.
 
   multi-request-with-data-freezing/thawing
@@ -386,6 +379,15 @@ race / raciness in N1QL server where the running of user code
   100   329  100   222  100   107   1190    573 --:--:-- --:--:-- --:--:--  1193
 
 --------------------------
+DONE: some examples only make sense when there's
+  a session (>= zipcar mode), so the example's YAML
+  should define a property of...
+
+    className: needs-session
+
+  ...so that the example will only appear when
+  the user has a session.
+
 DONE: some containers are dedicated to be session-less
   like 10-items-or-less quick checkout lanes...
   see: -containersSingleUse cmd-line param, defaults to 0.
