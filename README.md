@@ -72,6 +72,10 @@ Aside...
 -------------------------
 TODO's...
 
+store logs on S3?
+
+google analytics?
+
 figure out where to run this in production?
 
 how about staging?
@@ -79,8 +83,6 @@ how about staging?
 need a "down for maintenance" static web page path or toggle?
 
 roughly, how much will it cost?
-
-need to su to couchbase to install java SDK, nodejs SDK, etc?
 
 need a cgroup or a throwaway container to safely run
   submitted code with hard timeouts / resource limits?
@@ -91,6 +93,15 @@ first "real" staging setup on cloud?
 
 first examples from not-steve?
 
+line numbers for code textarea?
+
+should there be an absolute max session time?  e.g., 20 minutes?
+  currently, there's a timeout after last request,
+  as opposed to an absolute session time.
+
+client-side code syntax highlighting / styling via
+  codemirror, ACE code editor?
+
 lots of examples are auto-scraped from docs and
   put into: https://github.com/couchbaselabs/sdk-examples
     every once in awhile.
@@ -98,6 +109,13 @@ lots of examples are auto-scraped from docs and
     which are older.
   see the ./cmd/gen-examples program.
     many samples aren't passing gen-example's filters.
+
+couchbase style header / footer?
+  call-to-action / download couchbase?
+
+CSS styling for mobile / narrow screens?
+
+better 404 error screen?
 
 client-side JS to prevent over-clicking on Run/Submit button,
   where the current approach has the browser
@@ -109,25 +127,11 @@ client-side JS to prevent over-clicking on Run/Submit button,
 client-side JS to prevent Back Button or navigating away
   from losing work in the code textarea?
 
-client-side code syntax highlighting / styling via
-  codemirror, ACE code editor?
-
-couchbase style header / footer?
-  call-to-action / download couchbase?
-
-CSS styling for mobile / narrow screens?
-
-better 404 error screen?
-
 when there are enough examples, use a tree-control
   on the left-hand-side with a scrollable panel,
   perhaps with mouseovers with longer explanations?
 
-favorites / recommended examples?  starred?
-
-should there be an absolute max session time?  e.g., 20 minutes?
-  currently, there's a timeout after last request,
-  as opposed to an absolute session time.
+favorites / recommended / starred examples?
 
 feedback comments or votes on examples?
 
@@ -143,16 +147,13 @@ what if my email and/or name are already used?
   if so, can i get another zipcar for me?
   ANS: currently, sorta -- full name + email must be unique.
 
-store logs on S3?
-
-google analytics?
-
 iframe for run output also needs google analytics,
   so html instead of text/plain?
 
 should we also dump stats to S3 occasionally?
 
-keep average time of restarts, for fake/estimated progress/ETA bars?
+keep average time of restarts,
+  for fake/estimated progress/ETA bars?
   or, "we are under heavy load" messages?
 
 DNS, ELB & subdomains?
@@ -180,9 +181,11 @@ sizing?
     % du -s -h vol-snapshot
     40M	vol-snapshot
 
+cpu sizing?
+
 inject better UI into web admin UI?
 
-proper web terminal UI?
+proper web terminal output UI?
 
 output (stdout / stderr) is not streaming?
 
@@ -401,6 +404,8 @@ DONE: UI should show the CB version -- in the footer.
 DONE: RBAC to limit access?
 
 DONE: need a CAPTCHA?
+
+DONE: su to play user to install java SDK, nodejs SDK.
 
 DONE: SECURITY: remove ability to strace in production,
   via default of CONTAINER_EXTRAS in Makefile.
