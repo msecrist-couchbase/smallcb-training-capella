@@ -1,10 +1,7 @@
-* {
-  font-family: Montserrat,Arial,Helvetica,sans-serif;
-  font-size: 11pt;
-}
-
 body {
   margin: 0 0;
+  font-family: Montserrat,Arial,Helvetica,sans-serif;
+  font-size: 11pt;
 }
 
 .header {
@@ -44,6 +41,7 @@ h2 {
   margin-right: 20px;
   white-space: nowrap;
   font-weight: normal;
+  font-size: 11pt;
 }
 
 a {
@@ -76,7 +74,7 @@ a.button:hover {
   margin: 0 30px 80px 30px;
 }
 
-input, textarea, pre {
+input, pre {
   display: block;
   margin-bottom: 10px;
   border: 1px solid #888;

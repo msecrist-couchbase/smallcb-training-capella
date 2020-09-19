@@ -38,10 +38,71 @@
       flex-grow: 1;
       margin-right: 20px;
     }
+    .main .main-left ul.examples {
+      margin-right: 15px;
+      padding-left: 20px;
+    }
+    .main .main-left ul.examples li {
+      list-style: none;
+      margin: 0 0 15px 0;
+      border: 1px solid #888;
+    }
+    .main .main-left ul.examples li:hover {
+      background-color: #c4d4d8;
+    }
+    .main .main-left ul.examples li.current {
+      list-style: square;
+      color: #73a1a4;
+      background-color: #84d4d8;
+    }
+    .main .main-left ul.examples li a {
+      display: block;
+      padding: 5px 5px 5px 5px;
+      text-decoration: none;
+    }
+    .main .main-left ul.examples li.session {
+      margin-top: 45px;
+      border: 2px solid #888;
+    }
+    .main .main-left ul.examples li.session a.session {
+      font-weight: bold;
+      font-size: 13px;
+      color: #666;
+      cursor: pointer;
+    }
+    .main .main-left ul.examples li.session a.session:hover {
+      background-color: #9e9;
+    }
     .main .main-center {
       flex-basis: 10rem;
       flex-grow: 100;
       margin-right: 10px;
+    }
+    .main .main-center textarea.code {
+      display: none;
+    }
+    .main .main-center div.code-ace {
+      margin-bottom: 15px;
+      margin-right: 10px;
+      width: 95%;
+      height: 60vh;
+    }
+    .main .main-center input.run {
+      border: 2px solid #888;
+      padding: 5px 40px 5px 40px;
+      background-color: #9c9;
+      font-weight: bold;
+      color: #666;
+      cursor: pointer;
+    }
+    .main .main-center input.run:hover {
+      background-color: #9e9;
+      color: #666;
+    }
+    .main .main-center input.run.waiting,
+    .main .main-center input.run.waiting:hover {
+      background-color: orange;
+      cursor: wait;
     }
     .main .main-output {
       flex-basis: 10rem;
@@ -53,72 +114,12 @@
       border: 1px solid #888;
       margin-bottom: 40px;
     }
-    .main .sticky {
+
+    .sticky {
       position: sticky;
       top: 0;
     }
-    .main ul.examples {
-      margin-right: 15px;
-      padding-left: 20px;
-    }
-    .main ul.examples li {
-      list-style: none;
-      margin: 0 0 15px 0;
-      border: 1px solid #888;
-    }
-    .main ul.examples li:hover {
-      background-color: #c4d4d8;
-    }
-    .main ul.examples li.current {
-      list-style: square;
-      color: #73a1a4;
-      background-color: #84d4d8;
-    }
-    .main ul.examples li a {
-      display: block;
-      padding: 5px 5px 5px 5px;
-      text-decoration: none;
-    }
-    .main ul.examples li.session {
-      margin-top: 45px;
-      border: 2px solid #888;
-    }
-    .main ul.examples li.session a.session {
-      font-weight: bold;
-      font-size: 13px;
-      color: #666;
-      cursor: pointer;
-    }
-    .main ul.examples li.session a.session:hover {
-      background-color: #9e9;
-    }
-    .main textarea.code {
-      margin-bottom: 15px;
-      margin-right: 10px;
-      width: 95%;
-      height: 60vh;
-      overflow-y: scroll;
-      background-color: #333;
-      color: #eee;
-      font-family: courier, monospace;
-    }
-    .main input.run {
-      border: 2px solid #888;
-      padding: 5px 40px 5px 40px;
-      background-color: #9c9;
-      font-weight: bold;
-      color: #666;
-      cursor: pointer;
-    }
-    .main input.run:hover {
-      background-color: #9e9;
-      color: #666;
-    }
-    .main input.run.waiting,
-    .main input.run.waiting:hover {
-      background-color: orange;
-      cursor: wait;
-    }
+
     .display-none {
       display: none;
     }
@@ -137,8 +138,10 @@
     }
     {{end}}
   </style>
+  <script src="/static/ace/src-min/ace.js"></script>
   <script>
     function onRunSubmit() {
+      document.getElementById("code").value = codeAce.getSession().getValue();
       document.getElementById("output").contentDocument.body.innerHTML = "running...";
       document.getElementById("main-output").className = "main-output";
 
@@ -155,6 +158,7 @@
             odoc.contentType == "text/plain") {
           b.disabled = false;
           b.className = "run";
+
           return;
         }
 
@@ -262,7 +266,10 @@
             <input name="lang"
                    type="hidden" value="{{.Lang}}"/>
 
-            <textarea name="code"
+	    <div id="code-ace" class="code-ace"></div>
+
+            <textarea id="code"
+                      name="code"
                       class="code"
                       wrap="off"
                       autocorrect="off"
@@ -300,5 +307,13 @@
   <div class="footer">
     powered by Couchbase Labs and Couchbase Server {{.Version}}
   </div>
+
+  <script>
+    var codeAce = ace.edit("code-ace");
+
+    codeAce.getSession().setValue(document.getElementById("code").value);
+
+    codeAce.setTheme("ace/theme/tomorrow_night");
+  </script>
 </body>
 </html>
