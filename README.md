@@ -93,10 +93,8 @@ first "real" staging setup on cloud?
 
 first examples from not-steve?
 
-line numbers for code textarea?
-
 client-side code syntax highlighting / styling via
-  codemirror, ACE code editor?
+  ACE code editor?
 
 lots of examples are auto-scraped from docs and
   put into: https://github.com/couchbaselabs/sdk-examples
@@ -405,6 +403,8 @@ DONE: RBAC to limit access?
 DONE: need a CAPTCHA?
 
 DONE: su to play user to install java SDK, nodejs SDK.
+
+DONE: line numbers for code textarea via ACE code editor.
 
 DONE: SECURITY: remove ability to strace in production,
   via default of CONTAINER_EXTRAS in Makefile.
