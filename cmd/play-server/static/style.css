@@ -18,6 +18,8 @@ body {
 
 .header-title h1 {
   margin: 25px 10px 10px 30px;
+  white-space: nowrap;
+  font-size: 13pt;
   color: #eee;
 }
 
@@ -30,11 +32,6 @@ body {
   margin-left: 10px;
   white-space: nowrap;
   color: #eee;
-}
-
-h1 {
-  white-space: nowrap;
-  font-size: 13pt;
 }
 
 h2 {
