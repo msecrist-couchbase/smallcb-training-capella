@@ -125,8 +125,14 @@ when there are enough examples, use a tree-control
 
 favorites / recommended examples?  starred?
 
-some examples that only make sense when there's
-  a longer-running session >= zipcar mode?
+DONE: some examples only make sense when there's
+  a session (>= zipcar mode), so the example's YAML
+  should define a property of...
+
+    className: needs-session
+
+  ...so that the example will only appear when
+  the user has a session.
 
 should there be an absolute max session time?  e.g., 20 minutes?
   currently, there's a timeout after last request,

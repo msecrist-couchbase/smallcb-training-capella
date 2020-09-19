@@ -130,6 +130,12 @@
     .lang-go {
       display: none;
     }
+
+    {{if not .Session}}
+    .needs-session {
+      display: none;
+    }
+    {{end}}
   </style>
   <script>
     function onRunSubmit() {
