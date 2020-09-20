@@ -100,11 +100,6 @@
       background-color: #9e9;
       color: #666;
     }
-    .main .main-center input.run.waiting,
-    .main .main-center input.run.waiting:hover {
-      background-color: orange;
-      cursor: wait;
-    }
     .main .main-output {
       flex-basis: 10rem;
       flex-grow: 100;
@@ -145,28 +140,7 @@
       document.getElementById("code").value = codeAce.getSession().getValue();
       document.getElementById("output").contentDocument.body.innerHTML = "running...";
       document.getElementById("main-output").className = "main-output";
-
-      function checkDone() {
-        var b = document.getElementById('run');
-
-        b.disabled = true;
-        b.className = "run waiting";
-
-        var o = document.getElementById('output');
-
-        var odoc = o.contentDocument || o.contentWindow.document;
-        if (odoc.readyState == "complete" &&
-            odoc.contentType == "text/plain") {
-          b.disabled = false;
-          b.className = "run";
-
-          return;
-        }
-
-        setTimeout(checkDone, 500);
-      }
-
-      setTimeout(checkDone, 50);
+      return true;
     }
   </script>
 

@@ -139,9 +139,6 @@ what if my email and/or name are already used?
   if so, can i get another zipcar for me?
   ANS: currently, sorta -- full name + email must be unique.
 
-iframe for run output also needs google analytics,
-  so html instead of text/plain?
-
 should we also dump stats to S3 occasionally?
 
 keep average time of restarts,
@@ -377,6 +374,9 @@ race / raciness in N1QL server where the running of user code
 
 --------------------------
 DONE: google analytics using same script JS as from developer.couchbase.com
+
+DONE: iframe for run output emits HTML instead of text/plain
+  so that we have google analytics for run output.
 
 DONE: max session duration (-sessionsMaxAge) and
   max session idle/inactivity duration (-sessionsMaxIdle).

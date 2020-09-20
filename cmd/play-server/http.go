@@ -304,9 +304,15 @@ func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 
 	StatsNumInc("http.Run.ok")
 
-	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
+	data := map[string]interface{}{
+		"AnalyticsHTML": template.HTML(AnalyticsHTML(*host)),
+		"Output":        string(result),
+	}
 
-	w.Write(result)
+	w.Header().Set("Content-Type", "text/html")
+
+	template.Must(template.ParseFiles(
+		*staticDir+"/output.html.template")).Execute(w, data)
 }
 
 // ------------------------------------------------

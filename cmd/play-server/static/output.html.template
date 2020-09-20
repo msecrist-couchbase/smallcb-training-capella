@@ -1,0 +1,10 @@
+<!doctype html>
+<html>
+<head>
+  <title>Couchbase API / SDK Playground</title>
+  {{.AnalyticsHTML}}
+<head>
+<body>
+  <pre>{{.Output}}</pre>
+</body>
+</html>
