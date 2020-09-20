@@ -6,6 +6,7 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"regexp"
 	"strconv"
 	"strings"
 	"time"
@@ -109,12 +110,24 @@ func HttpHandleSessionExit(w http.ResponseWriter, r *http.Request) {
 
 // ------------------------------------------------
 
+var regexpE = regexp.MustCompile(`^[a-zA-Z0-9\-_#/]*$`)
+
 func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 	StatsNumInc("http.Session")
+
+	e := r.FormValue("e") // Optional example name target.
+	if !regexpE.MatchString(e) {
+		http.Error(w,
+			http.StatusText(http.StatusBadRequest),
+			http.StatusBadRequest)
+		log.Printf("ERROR: HttpHandleMain, err: e unmatched")
+		return
+	}
 
 	data := map[string]interface{}{
 		"sessionsMaxAge": strings.Replace(
 			sessionsMaxAge.String(), "m0s", " min", 1),
+		"e": e,
 	}
 
 	if r.Method == "POST" {
@@ -173,7 +186,15 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 					readyCh, *containerWaitDuration, restartCh,
 					*containers, *containersSingleUse)
 
-				http.Redirect(w, r, "/?s="+session.SessionId,
+				url := "/"
+
+				if e != "" {
+					url = url + e
+				}
+
+				url += "?s=" + session.SessionId
+
+				http.Redirect(w, r, url,
 					http.StatusSeeOther)
 
 				return

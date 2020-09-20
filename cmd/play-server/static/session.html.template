@@ -128,6 +128,10 @@
         {{if .err}}
           <div class="err">{{.err}}</div>
         {{end}}
+
+	{{if .e}}
+          <input type="hidden" name="e" value="{{.e}}"/>
+	{{end}}
       </form>
     </div>
   </div>

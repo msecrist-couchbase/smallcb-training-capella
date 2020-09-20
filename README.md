@@ -398,9 +398,13 @@ DONE: first end-to-end demo on cloud?  Thanks Denis Rosa!
 
 DONE: UI should show the CB version -- in the footer.
 
-DONE: RBAC to limit access?
+DONE: RBAC to limit access, using generated UUID for username and password.
 
-DONE: need a CAPTCHA?
+DONE: CAPTCHA with 5 second sleep on bad guess.
+
+DONE: session URL takes optional example 'e' target param,
+  which is used as the target page on successful session start,
+  like... http://couchbase.live/session?e=examples/basic-n1ql
 
 DONE: su to play user to install java SDK, nodejs SDK.
 
