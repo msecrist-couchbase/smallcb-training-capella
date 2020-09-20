@@ -125,7 +125,8 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 	}
 
 	data := map[string]interface{}{
-		"sessionsMaxAge": strings.Replace(
+		"AnalyticsHTML": template.HTML(AnalyticsHTML(*host)),
+		"SessionsMaxAge": strings.Replace(
 			sessionsMaxAge.String(), "m0s", " min", 1),
 		"e": e,
 	}
@@ -306,4 +307,18 @@ func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
 
 	w.Write(result)
+}
+
+// ------------------------------------------------
+
+func AnalyticsHTML(host string) string {
+	if host == "127.0.0.1" || host == "localhost" {
+		return ""
+	}
+
+	return `<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-MVPNN2');</script>`
 }

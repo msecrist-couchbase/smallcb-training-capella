@@ -49,6 +49,8 @@
       font-weight: bold;
     }
   </style>
+
+  {{.AnalyticsHTML}}
 </head>
 <body>
   <div class="header flex-row">
@@ -72,7 +74,7 @@
         A test-drive session means that a Couchbase&nbsp;Server instance
         will be allocated to you
         &mdash;
-        until your session expires after ~{{.sessionsMaxAge}} or from inactivity
+        until your session expires after ~{{.SessionsMaxAge}} or from inactivity
         &mdash;
         or is deleted for other reasons like from a system reboot.
       </p>

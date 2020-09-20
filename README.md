@@ -74,8 +74,6 @@ TODO's...
 
 store logs on S3?
 
-google analytics?
-
 figure out where to run this in production?
 
 how about staging?
@@ -378,6 +376,8 @@ race / raciness in N1QL server where the running of user code
   100   329  100   222  100   107   1190    573 --:--:-- --:--:-- --:--:--  1193
 
 --------------------------
+DONE: google analytics using same script JS as from developer.couchbase.com
+
 DONE: max session duration (-sessionsMaxAge) and
   max session idle/inactivity duration (-sessionsMaxIdle).
 

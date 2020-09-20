@@ -169,6 +169,8 @@
       setTimeout(checkDone, 50);
     }
   </script>
+
+  {{.AnalyticsHTML}}
 </head>
 <body>
   <div class="header flex-row">
