@@ -273,6 +273,8 @@ pop up web admin portal in separate tab or browser target?
 popup tours in UI injection?
   https://kamranahmed.info/driver.js/
 
+/static URL should not have directory listing
+
 how about having longer-running instances
 that hang around more than a single request,
 which are all single-node / no rebalance / no XDCR,
@@ -392,9 +394,9 @@ DONE: some containers are dedicated to be session-less
   like 10-items-or-less quick checkout lanes...
   see: -containersSingleUse cmd-line param, defaults to 0.
 
-DONE: first end-to-end demo on laptop?
+DONE: first end-to-end demo on laptop.
 
-DONE: first end-to-end demo on cloud?  Thanks Denis Rosa!
+DONE: first end-to-end demo on cloud -- thanks Denis Rosa for ec2 setup!
 
 DONE: UI should show the CB version -- in the footer.
 
@@ -435,7 +437,7 @@ DONE: use another user 'play' to run user submitted code...
   docker exec as -u play:couchbase (user:group),
     not as root and not as couchbase.
 
-DONE: examples can now be collected into separate "books"?
+DONE: examples can now be collected into separate "books" --
   multiple example subdirectories are now supported.
 
 DONE: InfoBefore / InfoAfter can now have HTML markup,
@@ -452,7 +454,7 @@ DONE: change the Administrator password in 'make create'.
 DONE: using docker --add-host to add to /etc/hosts file so that
   couchbase://couchbase.live:8091 connection string works.
 
-DONE: need to golang proxy to use the remapped port #'s?
+DONE: need to golang proxy to use the remapped port #'s
   in the REST responses, to rewrite REST json maps
   to list server hostnames/addrs correctly.
 
