@@ -113,8 +113,8 @@ client-side JS to prevent over-clicking on Run/Submit button,
   where the current approach has the browser
   correctly handling over-clicking automatically
   w.r.t. requests, but does not have the right UX,
-  where the second click doesn't turn the 'run' button orange
-  and disabled.
+  where the second click doesn't disable the 'run' button
+  or make it look different.
 
 client-side JS to prevent Back Button or navigating away
   from losing work in the code textarea?
