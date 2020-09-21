@@ -29,9 +29,22 @@
     }
     .session-info div.connection a,
     .session-info div.connection b {
+      position: relative;
       font-size: 9pt;
       font-family: monospace;
       font-weight: bold;
+    }
+    .session-info div.connection a.ui img {
+      display: none;
+      position: absolute;
+      top: 30px;
+      left: 20px;
+      width: 300px;
+      border: 1px solid #888;
+      z-index: 1;
+    }
+    .session-info div.connection a.ui:hover img {
+      display: block;
     }
     .main .main-left {
       flex-basis: 15rem;
@@ -182,9 +195,9 @@
       </div>
       <div class="connection">
   <b>Couchbase Server</b>
-    <a href="http://{{.Host}}:8091">Web-Admin UI</a> : <a href="http://{{.Host}}:8091">http://{{.Host}}:8091</a> -- username: <em>{{.Session.CBUser}}</em> password: <em>{{.Session.CBPswd}}</em>
+    <a href="http://{{.Host}}:8091" class="ui">Web-Admin UI<img src="/static/shots/shot-dashboard.png"/></a> : <a href="http://{{.Host}}:8091">http://{{.Host}}:8091</a> -- username: <em>{{.Session.CBUser}}</em> password: <em>{{.Session.CBPswd}}</em>
 
-                   <a href="http://{{.Host}}:8091/ui/index.html#!/query/workbench">Query Workbench</a> | <a href="http://{{.Host}}:8091/ui/index.html#!/documents/editor">Document Editor</a> | <a href="http://{{.Host}}:8091/ui/index.html#!/documents/import">Import Documents</a> | REST API: http://{{.Session.CBUser}}:{{.Session.CBPswd}}@{{.Host}}:8091
+                   <a href="http://{{.Host}}:8091/ui/index.html#!/query/workbench" class="ui"><img src="/static/shots/shot-query-workbench.png"/>Query Workbench</a> | <a href="http://{{.Host}}:8091/ui/index.html#!/documents/editor" class="ui"><img src="/static/shots/shot-documents.png"/>Document Editor</a> | <a href="http://{{.Host}}:8091/ui/index.html#!/documents/import" class="ui"><img src="/static/shots/shot-import-documents.png"/>Import Documents</a> | REST API: http://{{.Session.CBUser}}:{{.Session.CBPswd}}@{{.Host}}:8091
 
   <b>Couchbase SDK's</b>             : connection snippets
     Java   <a href="https://docs.couchbase.com/java-sdk/current/hello-world/start-using-sdk.html">SDK docs</a>, <a href="https://docs.couchbase.com/sdk-api/couchbase-java-client/">API docs</a> : - Cluster.connect("couchbase://{{.Host}}", "{{.Session.CBUser}}", "{{.Session.CBPswd}}")
