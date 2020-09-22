@@ -29,6 +29,19 @@ echo "cbdocloader beer-sample..."
  -v \
  -d /opt/couchbase/samples/beer-sample.zip
 
+echo "couchbase-cli bucket-create travel-sample..."
+/opt/couchbase/bin/couchbase-cli bucket-create \
+ -c localhost -u ${CB_USER} -p ${CB_PSWD} \
+ --bucket travel-sample \
+ --bucket-type couchbase \
+ --bucket-ramsize ${CB_BUCKET_RAMSIZE} \
+ --bucket-replica 0 \
+ --bucket-priority low \
+ --bucket-eviction-policy fullEviction \
+ --enable-flush 1 \
+ --enable-index-replica 0 \
+ --wait
+
 echo "cbdocloader travel-sample..."
 /opt/couchbase/bin/cbdocloader \
  -c localhost -u ${CB_USER} -p ${CB_PSWD} \
