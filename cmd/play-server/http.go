@@ -56,7 +56,10 @@ func HttpHandleMain(w http.ResponseWriter, r *http.Request) {
 
 	session := sessions.SessionGet(s)
 	if session == nil && s != "" && msg == "" {
-		http.Redirect(w, r, "/?m=session-timeout", http.StatusSeeOther)
+		StatsNumInc("http.Main.err", "http.Main.err.session-timeout")
+
+		http.Redirect(w, r, "/?m=session-timeout",
+			http.StatusSeeOther)
 
 		return
 	}
@@ -69,10 +72,14 @@ func HttpHandleMain(w http.ResponseWriter, r *http.Request) {
 	path := r.URL.Path
 
 	if strings.Index(path, "..") >= 0 {
+		StatsNumInc("http.Main.err", "http.Main.err.path")
+
 		http.Error(w,
 			http.StatusText(http.StatusBadRequest),
 			http.StatusBadRequest)
+
 		log.Printf("ERROR: HttpHandleMain, err: path has '..'")
+
 		return
 	}
 
@@ -94,8 +101,16 @@ func HttpHandleMain(w http.ResponseWriter, r *http.Request) {
 
 	portApp, _ := strconv.Atoi(strings.Split(*listen, ":")[1])
 
-	MainTemplateEmit(w, *staticDir, msg, *host, portApp, *version,
-		session, *sessionsMaxAge, examplesPath, name, lang, code)
+	err := MainTemplateEmit(w, *staticDir, msg, *host, portApp,
+		*version, session, *sessionsMaxAge, examplesPath,
+		name, lang, code)
+	if err != nil {
+		StatsNumInc("http.Main.err", "http.Main.err.template")
+
+		return
+	}
+
+	StatsNumInc("http.Main.ok")
 }
 
 // ------------------------------------------------
@@ -117,10 +132,14 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 
 	e := r.FormValue("e") // Optional example name target.
 	if !regexpE.MatchString(e) {
+		StatsNumInc("http.Session.err", "http.Session.err.bad-e")
+
 		http.Error(w,
 			http.StatusText(http.StatusBadRequest),
 			http.StatusBadRequest)
+
 		log.Printf("ERROR: HttpHandleMain, err: e unmatched")
+
 		return
 	}
 
@@ -138,6 +157,8 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 
 		fullName := strings.TrimSpace(r.FormValue("fullName"))
 		if fullName == "" {
+			StatsNumInc("http.Session.post.err.fullName")
+
 			data["errFullName"] = "full name required"
 			errs += 1
 		}
@@ -145,6 +166,8 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 
 		email := strings.TrimSpace(r.FormValue("email"))
 		if email == "" {
+			StatsNumInc("http.Session.post.err.email")
+
 			data["errEmail"] = "email required"
 			errs += 1
 		}
@@ -168,7 +191,7 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 
 			session, err := sessions.SessionCreate(fullName, email)
 			if err == nil && session != nil && session.SessionId != "" {
-				StatsNumInc("http.Session.post.create.ok")
+				StatsNumInc("http.Session.post.ok", "http.Session.post.create.ok")
 
 				req := RunRequest{
 					ctx:                 context.Background(),
@@ -237,11 +260,14 @@ func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 
 	session := sessions.SessionGet(s)
 	if session == nil && s != "" {
+		StatsNumInc("http.Run.err")
+
 		http.Error(w,
 			http.StatusText(http.StatusNotFound)+
 				", session unknown",
 			http.StatusNotFound)
 		log.Printf("ERROR: HttpHandleRun, session unknown, s: %v", s)
+
 		return
 	}
 
@@ -299,6 +325,7 @@ func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 					err, result),
 			http.StatusInternalServerError)
 		log.Printf("ERROR: HttpHandleRun, err: %v", err)
+
 		return
 	}
 

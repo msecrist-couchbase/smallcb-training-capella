@@ -143,7 +143,7 @@ func (sessions *Sessions) SessionExit(sessionId string) error {
 
 		StatsNumInc("sessions.SessionExit.ok")
 	} else {
-		StatsNumInc("sessions.SessionExit.none")
+		StatsNumInc("sessions.SessionExit.nil")
 	}
 
 	return nil
@@ -157,14 +157,16 @@ func (s *Sessions) SessionCreate(fullName, email string) (
 
 	fullName = strings.TrimSpace(fullName)
 	if fullName == "" {
-		StatsNumInc("sessions.SessionCreate.err.ErrNeedFullName")
+		StatsNumInc("sessions.SessionCreate.err",
+			"sessions.SessionCreate.err.ErrNeedFullName")
 
 		return nil, fmt.Errorf("ErrNeedFullName")
 	}
 
 	email = strings.TrimSpace(email)
 	if email == "" {
-		StatsNumInc("sessions.SessionCreate.err.ErrNeedEmail")
+		StatsNumInc("sessions.SessionCreate.err",
+			"sessions.SessionCreate.err.ErrNeedEmail")
 
 		return nil, fmt.Errorf("ErrNeedEmail")
 	}
@@ -176,21 +178,24 @@ func (s *Sessions) SessionCreate(fullName, email string) (
 
 	sessionId, exists := sessions.mapByFullNameEmail[fullNameEmail]
 	if exists || sessionId != "" {
-		StatsNumInc("sessions.SessionCreate.err.ErrFullNameEmailUsed")
+		StatsNumInc("sessions.SessionCreate.err",
+			"sessions.SessionCreate.err.ErrFullNameEmailUsed")
 
 		return nil, fmt.Errorf("ErrFullNameEmailUsed")
 	}
 
 	session, exists = sessions.mapBySessionId[sessionId]
 	if exists || session != nil {
-		StatsNumInc("sessions.SessionCreate.err.ErrSessionIdUsed")
+		StatsNumInc("sessions.SessionCreate.err",
+			"sessions.SessionCreate.err.ErrSessionIdUsed")
 
 		return nil, fmt.Errorf("ErrSessionIdUsed")
 	}
 
 	sessionUUID, err := uuid.NewRandom()
 	if err != nil {
-		StatsNumInc("sessions.SessionCreate.err.NewRandom")
+		StatsNumInc("sessions.SessionCreate.err",
+			"sessions.SessionCreate.err.NewRandom")
 
 		return nil, err
 	}

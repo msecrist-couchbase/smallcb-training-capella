@@ -50,7 +50,7 @@ type MainTemplateData struct {
 func MainTemplateEmit(w http.ResponseWriter,
 	staticDir, msg, host string, portApp int, version string,
 	session *Session, sessionsMaxAge time.Duration,
-	examplesPath string, name, lang, code string) {
+	examplesPath string, name, lang, code string) error {
 	examples, examplesArr, err :=
 		ReadExamples(staticDir + "/" + examplesPath)
 	if err != nil {
@@ -59,7 +59,7 @@ func MainTemplateEmit(w http.ResponseWriter,
 				fmt.Sprintf(", ReadExamples, err: %v", err),
 			http.StatusInternalServerError)
 		log.Printf("ERROR: ReadExamples, err: %v", err)
-		return
+		return err
 	}
 
 	var title, infoBefore, infoAfter string
@@ -116,7 +116,7 @@ func MainTemplateEmit(w http.ResponseWriter,
 				fmt.Sprintf(", template.ParseFiles, err: %v", err),
 			http.StatusInternalServerError)
 		log.Printf("ERROR: template.ParseFiles, err: %v", err)
-		return
+		return err
 	}
 
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
@@ -125,11 +125,14 @@ func MainTemplateEmit(w http.ResponseWriter,
 	if err != nil {
 		log.Printf("ERROR: t.Execute, err: %v", err)
 	}
+
+	return err
 }
 
 // ------------------------------------------------
 
-func SessionTemplateExecute(host string, portApp int, session *Session, t string) string {
+func SessionTemplateExecute(host string, portApp int,
+	session *Session, t string) string {
 	data := SessionTemplateData(host, portApp, session)
 
 	var b bytes.Buffer
@@ -145,7 +148,8 @@ func SessionTemplateExecute(host string, portApp int, session *Session, t string
 	return b.String()
 }
 
-func SessionTemplateData(host string, portApp int, session *Session) map[string]interface{} {
+func SessionTemplateData(host string, portApp int,
+	session *Session) map[string]interface{} {
 	data := map[string]interface{}{
 		"Host":    host,
 		"PortApp": fmt.Sprintf("%d", portApp),
@@ -191,10 +195,13 @@ func ReadExamples(dir string) (
 		iex, jex := examples[iname], examples[jname]
 
 		for _, k := range []string{"chapter", "page", "title"} {
-			iv, jv := MapGetString(iex, k), MapGetString(jex, k)
+			iv := MapGetString(iex, k)
+			jv := MapGetString(jex, k)
+
 			if iv < jv {
 				return true
 			}
+
 			if iv > jv {
 				return false
 			}

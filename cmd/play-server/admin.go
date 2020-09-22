@@ -25,9 +25,11 @@ type StatsHist struct {
 }
 
 // Atomically increment a statsNums entry by 1.
-func StatsNumInc(name string) {
+func StatsNumInc(names ...string) {
 	statsM.Lock()
-	statsNums[name] += 1
+	for _, name := range names {
+		statsNums[name] += 1
+	}
 	statsM.Unlock()
 }
 
