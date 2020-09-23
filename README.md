@@ -156,6 +156,8 @@ ELB / ALB probably won't work due to kv/2i/fts/services ports
   c02.couchbase.live?
   c03.couchbase.live?
 
+look into HOSTALIASES env var for mapping hosts to ip addresses?
+
 health watchers and elastic scaling -- bring up more nodes
   when there's more people and auto-scale-down when
   traffic goes away?
