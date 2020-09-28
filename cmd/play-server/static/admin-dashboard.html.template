@@ -2,64 +2,8 @@
 <html>
 <head>
   <title>Couchbase API / SDK Playground - Admin Dashboard</title>
-  <link rel="stylesheet" type="text/css"
-        href="/static/style.css">
-  <style>
-    .main {
-      padding: 20px 40px 40px 40px;
-    }
-
-    .main .infos {
-      font-family: monospace;
-      font-size: 8pt;
-    }
-
-    .main table.nums {
-      margin-top: 160px;
-      border-collapse: collapse;
-    }
-
-    .main table.nums th,
-    .main table.nums td {
-      font-size: 8pt;
-      text-align: right;
-    }
-
-    .main table.nums th.num {
-      min-width: 1.5rem;
-    }
-
-    .main table.nums th.num div.num {
-      position: absolute;
-      font-size: 8pt;
-      transform-origin: 0 0; /* top-left instead of center */
-      transform: rotate(-45deg);
-    }
-
-    .main table.nums tbody tr:hover {
-      background-color: #eee;
-    }
-
-    .main table.nums tbody tr td {
-      padding-left: 5px;
-    }
-
-    .main table.nums tr.level-1 {
-      background-color: #e8f8ff;
-    }
-    .main table.nums tr.level-2 {
-      background-color: #a8e8ff;
-    }
-    .main table.nums tr.level-3 {
-      background-color: #68d8ff;
-    }
-    .main table.nums tr.level-4 {
-      background-color: #28c8ff;
-    }
-    .main table.nums tr.level-5 {
-      background-color: #08b8ff;
-    }
-  </style>
+  <link rel="stylesheet" type="text/css" href="/static/styles/site.css">
+  <link rel="stylesheet" type="text/css" href="/static/styles/admin-dashboard.css">
 </head>
 <body>
   <div class="header flex-row">
