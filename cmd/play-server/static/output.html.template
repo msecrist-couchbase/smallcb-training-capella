@@ -2,6 +2,7 @@
 <html>
 <head>
   <title>Couchbase API / SDK Playground</title>
+  <link rel="stylesheet" type="text/css" href="/static/styles/output.css">
   {{.AnalyticsHTML}}
 <head>
 <body>

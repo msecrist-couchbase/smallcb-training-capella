@@ -1,0 +1,44 @@
+.main {
+  flex-basis: 40rem;
+  padding: 20px 40px 40px 40px;
+}
+.main h2 {
+  font-size: 12pt;
+  font-weight: bold;
+  margin-bottom: 30px;
+}
+.main form {
+  margin-top: 30px;
+}
+.main label {
+  font-weight: bold;
+}
+.main .details {
+  font-weight: normal;
+  font-size: 9pt;
+}
+.main input[type=text] {
+  width: 20rem;
+  margin: 5px 0 10px 0;
+  padding: 3px 5px 3px 5px;
+}
+.main input[type=submit] {
+  margin-top: 30px;
+  border: 2px solid #999;
+  padding: 5px 20px 5px 20px;
+  background-color: #d8d8d8;
+  cursor: pointer;
+}
+.main input[type=submit]:hover {
+  background-color: #eee;
+}
+.main img.captcha {
+  display: block;
+}
+.err {
+  color: red;
+}
+div.err {
+  margin-top: 10px;
+  font-weight: bold;
+}
