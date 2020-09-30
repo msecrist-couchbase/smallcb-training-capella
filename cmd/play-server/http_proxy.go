@@ -362,7 +362,7 @@ func InjectResponseUI(staticDir string, host string, portApp int,
 	session *Session, resp *http.Response) error {
 	resp.Header.Del("X-Frame-Options")
 
-	t := template.Must(template.ParseFiles(staticDir + "/inject.html.template"))
+	t := template.Must(template.ParseFiles(staticDir + "/inject.html.tmpl"))
 
 	var tout bytes.Buffer
 

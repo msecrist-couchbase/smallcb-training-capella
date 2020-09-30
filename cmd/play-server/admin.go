@@ -226,7 +226,7 @@ func HttpHandleAdminDashboard(w http.ResponseWriter, r *http.Request) {
 	statsM.Unlock()
 
 	template.Must(template.ParseFiles(
-		*staticDir+"/admin-dashboard.html.template")).Execute(w, data)
+		*staticDir+"/admin-dashboard.html.tmpl")).Execute(w, data)
 }
 
 // ------------------------------------------------

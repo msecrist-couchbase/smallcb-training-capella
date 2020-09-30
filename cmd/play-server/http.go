@@ -248,7 +248,7 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 	data["captchaSrc"] = template.HTMLAttr("src=\"" + captchaURL + "\"")
 
 	template.Must(template.ParseFiles(
-		*staticDir+"/session.html.template")).Execute(w, data)
+		*staticDir+"/session.html.tmpl")).Execute(w, data)
 }
 
 // ------------------------------------------------
@@ -339,7 +339,7 @@ func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
 
 	template.Must(template.ParseFiles(
-		*staticDir+"/output.html.template")).Execute(w, data)
+		*staticDir+"/output.html.tmpl")).Execute(w, data)
 }
 
 // ------------------------------------------------
