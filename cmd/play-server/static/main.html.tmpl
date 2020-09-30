@@ -22,7 +22,7 @@
     function onRunSubmit() {
       document.getElementById("code").value = codeAce.getSession().getValue();
       document.getElementById("output").contentDocument.body.innerHTML = "running...";
-      document.getElementById("main-output").className = "main-output";
+      document.getElementById("code-output").className = "code-output";
       return true;
     }
   </script>
@@ -92,8 +92,8 @@
     </div>
   {{end}}
 
-  <div class="main flex-row">
-    <div class="main-left">
+  <div class="workspace">
+    <div class="code-examples">
       <h2>Examples</h2>
 
       <ul class="examples">
@@ -115,7 +115,7 @@
       </ul>
     </div>
 
-    <div class="main-center">
+    <div class="code-editor">
       <div class="sticky">
       {{if or .Name .Lang .Code}}
         <h2>
@@ -163,7 +163,7 @@
       </div>
     </div>
 
-    <div class="main-output hidden" id="main-output">
+    <div class="code-output hidden" id="code-output">
       <div class="sticky">
       {{if or .Name .Lang .Code}}
         <h2>Output</h2>
@@ -174,9 +174,10 @@
     </div>
   </div>
 
-  <div class="footer">
-    powered by Couchbase Labs and Couchbase Server {{.Version}}
-  </div>
+  <footer>
+    <div>© 2020 Couchbase Labs</div>
+    <div>Couchbase Server {{.Version}}</div>
+  </footer>
 
   <script>
     var codeAce = ace.edit("code-ace");

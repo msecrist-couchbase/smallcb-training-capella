@@ -1,4 +1,5 @@
 body {
+  background-color: #FFF;
   margin: 0 0;
   font-family: Montserrat, Arial, Helvetica, sans-serif;
   font-size: 11pt;
@@ -97,7 +98,7 @@ a.button:hover {
   color: #333;
 }
 
-.main {
+.workspace {
   margin: 0 30px 80px 30px;
 }
 
@@ -117,9 +118,12 @@ input, pre {
   white-space: nowrap;
 }
 
-.footer {
-  border-top: 1px solid #666;
-  padding: 20px 20px 25px 20px;
+footer {
+  height: 31px;
+  background-color: #222;
+  border-top: 1px solid #000; 
   font-size: 8pt;
-  color: #666;
+  padding: 14px 14px;
+  color: #EFEFEF;
 }
+footer div{ margin: 0.25em 0 0.25em 0;}
