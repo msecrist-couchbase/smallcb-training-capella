@@ -109,7 +109,7 @@ func MainTemplateEmit(w http.ResponseWriter,
 		AnalyticsHTML: template.HTML(AnalyticsHTML(host)),
 	}
 
-	t, err := template.ParseFiles(staticDir + "/main.html.template")
+	t, err := template.ParseFiles(staticDir + "/main.html.tmpl")
 	if err != nil {
 		http.Error(w,
 			http.StatusText(http.StatusInternalServerError)+

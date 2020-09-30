@@ -2,6 +2,7 @@
 <html>
 <head>
   <title>Couchbase API / SDK Playground</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;1,300&display=swap" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="/static/styles/site.css">
   <link rel="stylesheet" type="text/css" href="/static/styles/main.css">
   <style>
@@ -29,24 +30,34 @@
   {{.AnalyticsHTML}}
 </head>
 <body>
-  <div class="header flex-row">
-    <div class="header-title">
+  <header>
+    <div class="logo">
       <a href="/{{if .Session}}?s={{.Session.SessionId}}{{end}}">
-        <h1>Couchbase API / SDK Playground</h1></a>
+        <h1>Couchbase API / SDK Playground</h1>
+      </a>
     </div>
-
-    <div class="header-links">
-      {{if .Session}}
-        <a href="/session-exit?s={{.Session.SessionId}}"
-           class="session session-exit">stop test-drive</a>
-      {{else}}
-        <a href="/session"
-           class="session">start a test-drive</a>
-      {{end}}
-      <a href="https://docs.couchbase.com">docs</a>
-      <a href="https://www.couchbase.com">couchbase.com</a>
-    </div>
-  </div>
+    <nav>
+      <ul>
+        <li>
+          {{if .Session}}
+          <a href="/session-exit?s={{.Session.SessionId}}" class="session">
+            stop test-drive
+          </a>
+          {{else}}
+          <a href="/session">
+            start a test-drive
+          </a>
+          {{end}}
+        </li>
+        <li>
+          <a href="https://docs.couchbase.com">docs</a>
+        </li>
+        <li>
+          <a href="https://www.couchbase.com">couchbase.com</a>
+        </li>
+      </ul>
+    </nav>
+  </header>
 
   {{if .Msg}}
     <div class="msg">{{.Msg}}</div>
