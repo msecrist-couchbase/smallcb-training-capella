@@ -59,11 +59,12 @@
     </nav>
   </header>
 
-  {{if .Msg}}
-    <div class="msg">{{.Msg}}</div>
-  {{end}}
+  <div class="info-panel">
+    {{if .Msg}}
+    <div class="message-info">{{.Msg}}</div>
+    {{end}}
 
-  {{if .Session}}
+    {{if .Session}}
     <div class="session-info">
       <h2>Couchbase Server Test-Drive Session &mdash; for <em>{{.Session.FullName}}</em></h2>
       <div>
@@ -74,15 +75,15 @@
         over the internet (NOTE: not encrypted, not for production!)...
       </div>
       <div class="connection">
-  <b>Couchbase Server</b>
-    <a href="http://{{.Host}}:8091" class="ui">Web-Admin UI<img src="/static/shots/shot-dashboard.png"/></a> : <a href="http://{{.Host}}:8091">http://{{.Host}}:8091</a> -- username: <em>{{.Session.CBUser}}</em> password: <em>{{.Session.CBPswd}}</em>
+    <b>Couchbase Server</b>
+      <a href="http://{{.Host}}:8091" class="ui">Web-Admin UI<img src="/static/shots/shot-dashboard.png"/></a> : <a href="http://{{.Host}}:8091">http://{{.Host}}:8091</a> -- username: <em>{{.Session.CBUser}}</em> password: <em>{{.Session.CBPswd}}</em>
 
-                   <a href="http://{{.Host}}:8091/ui/index.html#!/query/workbench" class="ui"><img src="/static/shots/shot-query-workbench.png"/>Query Workbench</a> | <a href="http://{{.Host}}:8091/ui/index.html#!/documents/editor" class="ui"><img src="/static/shots/shot-documents.png"/>Document Editor</a> | <a href="http://{{.Host}}:8091/ui/index.html#!/documents/import" class="ui"><img src="/static/shots/shot-import-documents.png"/>Import Documents</a> | REST API: http://{{.Session.CBUser}}:{{.Session.CBPswd}}@{{.Host}}:8091
+                    <a href="http://{{.Host}}:8091/ui/index.html#!/query/workbench" class="ui"><img src="/static/shots/shot-query-workbench.png"/>Query Workbench</a> | <a href="http://{{.Host}}:8091/ui/index.html#!/documents/editor" class="ui"><img src="/static/shots/shot-documents.png"/>Document Editor</a> | <a href="http://{{.Host}}:8091/ui/index.html#!/documents/import" class="ui"><img src="/static/shots/shot-import-documents.png"/>Import Documents</a> | REST API: http://{{.Session.CBUser}}:{{.Session.CBPswd}}@{{.Host}}:8091
 
-  <b>Couchbase SDK's</b>             : connection snippets
-    Java   <a href="https://docs.couchbase.com/java-sdk/current/hello-world/start-using-sdk.html">SDK docs</a>, <a href="https://docs.couchbase.com/sdk-api/couchbase-java-client/">API docs</a> : - Cluster.connect("couchbase://{{.Host}}", "{{.Session.CBUser}}", "{{.Session.CBPswd}}")
-    NodeJS <a href="https://docs.couchbase.com/nodejs-sdk/current/hello-world/start-using-sdk.html">SDK docs</a>, <a href="https://docs.couchbase.com/sdk-api/couchbase-node-client/">API docs</a> : - new couchbase.Cluster("couchbase://{{.Host}}", {username: "{{.Session.CBUser}}", password: "{{.Session.CBPswd}}"})
-    Python <a href="https://docs.couchbase.com/python-sdk/current/hello-world/start-using-sdk.html">SDK docs</a>, <a href="https://docs.couchbase.com/sdk-api/couchbase-python-client/">API docs</a> : - Cluster('couchbase://{{.Host}}', ClusterOptions(PasswordAuthenticator('{{.Session.CBUser}}', '{{.Session.CBPswd}}')))
+    <b>Couchbase SDK's</b>             : connection snippets
+      Java   <a href="https://docs.couchbase.com/java-sdk/current/hello-world/start-using-sdk.html">SDK docs</a>, <a href="https://docs.couchbase.com/sdk-api/couchbase-java-client/">API docs</a> : - Cluster.connect("couchbase://{{.Host}}", "{{.Session.CBUser}}", "{{.Session.CBPswd}}")
+      NodeJS <a href="https://docs.couchbase.com/nodejs-sdk/current/hello-world/start-using-sdk.html">SDK docs</a>, <a href="https://docs.couchbase.com/sdk-api/couchbase-node-client/">API docs</a> : - new couchbase.Cluster("couchbase://{{.Host}}", {username: "{{.Session.CBUser}}", password: "{{.Session.CBPswd}}"})
+      Python <a href="https://docs.couchbase.com/python-sdk/current/hello-world/start-using-sdk.html">SDK docs</a>, <a href="https://docs.couchbase.com/sdk-api/couchbase-python-client/">API docs</a> : - Cluster('couchbase://{{.Host}}', ClusterOptions(PasswordAuthenticator('{{.Session.CBUser}}', '{{.Session.CBPswd}}')))
       </div>
 
       <div>
@@ -90,7 +91,8 @@
         against your test-drive instance...
       </div>
     </div>
-  {{end}}
+    {{end}}
+  </div>
 
   <div class="workspace">
     <div class="code-examples">
