@@ -27,8 +27,8 @@
     </nav>
   </header>
 
-  <div class="flex-row">
-    <div class="main">
+  <main class="flex-row">
+    <article>
       <h2>Start a Couchbase Server Test-Drive Session</h2>
 
       <p>
@@ -73,7 +73,7 @@
           <input type="text" name="email" value="{{.email}}"/>
         </label>
 
-	<img class="captcha" {{.captchaSrc}}/>
+	      <img class="captcha" {{.captchaSrc}}/>
 
         <label>
           Enter the above #'s:
@@ -89,15 +89,16 @@
         </div>
 
         {{if .err}}
-          <div class="err">{{.err}}</div>
+        <div class="err">{{.err}}</div>
         {{end}}
 
-	{{if .e}}
-          <input type="hidden" name="e" value="{{.e}}"/>
-	{{end}}
+        {{if .e}}
+        <input type="hidden" name="e" value="{{.e}}"/>
+        {{end}}
       </form>
-    </div>
-  </div>
+    </article>
+
+  </main>
 
   <div class="footer">
     powered by Couchbase Labs and Couchbase Server {{.Version}}

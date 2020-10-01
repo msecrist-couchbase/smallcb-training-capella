@@ -1,9 +1,18 @@
 body {
-  background-color: #FFF;
+  background-color: #000;
   margin: 0 0;
   font-family: Montserrat, Arial, Helvetica, sans-serif;
   font-size: 11pt;
 }
+
+/* Vertical Layout */
+body {
+  width: 100%;
+  display: grid;
+  grid-template-rows: 60px    auto   50px;
+  /*                  header  main   footer */
+}
+
 /* Header Styles */
 header {
   display: flex;
@@ -116,6 +125,10 @@ input, pre {
 
 .nowrap {
   white-space: nowrap;
+}
+main {
+  background-color: #FFF;
+  height: calc(100vh - 120px);
 }
 
 footer {
