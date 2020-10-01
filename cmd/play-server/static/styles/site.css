@@ -1,8 +1,18 @@
 body {
+  background-color: #000;
   margin: 0 0;
   font-family: Montserrat, Arial, Helvetica, sans-serif;
   font-size: 11pt;
 }
+
+/* Vertical Layout */
+body {
+  width: 100%;
+  display: grid;
+  grid-template-rows: 60px    auto   50px;
+  /*                  header  main   footer */
+}
+
 /* Header Styles */
 header {
   display: flex;
@@ -89,7 +99,7 @@ a.button:hover {
   background-color: #eee;
 }
 
-.msg {
+.message-info {
   margin: 40px 30px 40px 30px;
   border-bottom: 1px solid #666;
   padding-bottom: 40px;
@@ -97,7 +107,7 @@ a.button:hover {
   color: #333;
 }
 
-.main {
+.workspace {
   margin: 0 30px 80px 30px;
 }
 
@@ -116,10 +126,17 @@ input, pre {
 .nowrap {
   white-space: nowrap;
 }
-
-.footer {
-  border-top: 1px solid #666;
-  padding: 20px 20px 25px 20px;
-  font-size: 8pt;
-  color: #666;
+main {
+  background-color: #FFF;
+  height: calc(100vh - 120px);
 }
+
+footer {
+  height: 31px;
+  background-color: #222;
+  border-top: 1px solid #000; 
+  font-size: 8pt;
+  padding: 14px 14px;
+  color: #EFEFEF;
+}
+footer div{ margin: 0.25em 0 0.25em 0;}

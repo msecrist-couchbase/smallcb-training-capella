@@ -40,62 +40,68 @@
 .session-info div.connection a.ui:hover img {
   display: block;
 }
-.main .main-left {
+
+.workspace {
+  display: flex;
+  flex-direction: row;
+}
+
+.workspace .code-examples {
   flex-basis: 15rem;
   flex-grow: 1;
   margin-right: 20px;
 }
-.main .main-left ul.examples {
+.workspace .code-examples ul.examples {
   margin-right: 15px;
   padding-left: 20px;
 }
-.main .main-left ul.examples li {
+.workspace .code-examples ul.examples li {
   list-style: none;
   margin: 0 0 15px 0;
   border: 1px solid #888;
 }
-.main .main-left ul.examples li:hover {
+.workspace .code-examples ul.examples li:hover {
   background-color: #c4d4d8;
 }
-.main .main-left ul.examples li.current {
+.workspace .code-examples ul.examples li.current {
   list-style: square;
   color: #73a1a4;
   background-color: #84d4d8;
 }
-.main .main-left ul.examples li a {
+.workspace .code-examples ul.examples li a {
   display: block;
   padding: 5px 5px 5px 5px;
   text-decoration: none;
 }
-.main .main-left ul.examples li.session {
+.workspace .code-examples ul.examples li.session {
   margin-top: 45px;
   border: 2px solid #888;
 }
-.main .main-left ul.examples li.session a.session {
+.workspace .code-examples ul.examples li.session a.session {
   font-weight: bold;
   font-size: 13px;
   color: #666;
   cursor: pointer;
 }
-.main .main-left ul.examples li.session a.session:hover {
+.workspace .code-examples ul.examples li.session a.session:hover {
   background-color: #9e9;
 }
-.main .main-center {
+.workspace .code-editor {
   flex-basis: 10rem;
   flex-grow: 100;
   margin-right: 10px;
 }
-.main .main-center textarea.code {
+.workspace .code-editor textarea.code {
   display: none;
 }
-.main .main-center div.code-ace {
+.workspace .code-editor div.code-ace {
   margin-bottom: 15px;
   margin-right: 10px;
   width: 95%;
   height: 60vh;
   border: 1px solid #888;
 }
-.main .main-center input.run {
+.workspace .code-editor input.run {
   border: 2px solid #888;
   padding: 5px 40px 5px 40px;
   background-color: #9c9;
@@ -103,15 +109,15 @@
   color: #666;
   cursor: pointer;
 }
-.main .main-center input.run:hover {
+.workspace .code-editor input.run:hover {
   background-color: #9e9;
   color: #666;
 }
-.main .main-output {
+.workspace .code-output {
   flex-basis: 10rem;
   flex-grow: 100;
 }
-.main .main-output iframe.output {
+.workspace .code-output iframe.output {
   width: 95%;
   height: 60vh;
   border: 1px solid #888;
