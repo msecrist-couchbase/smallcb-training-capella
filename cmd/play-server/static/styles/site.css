@@ -128,7 +128,8 @@ input, pre {
 }
 main {
   background-color: #FFF;
-  height: calc(100vh - 120px);
+  min-height: calc(100vh - 120px);
+  height: 100%;
 }
 
 footer {
