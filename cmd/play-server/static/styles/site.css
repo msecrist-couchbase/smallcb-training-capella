@@ -24,7 +24,7 @@ header .logo {
 }
 
 header h1 {
-  margin: 1.265em 1.265em 1.265em 8px;
+  margin: 1.265em 1.265em 1.265em 17px;
   white-space: nowrap;
   font-size: 16px;
 }
@@ -72,7 +72,7 @@ header nav ul > li a:visited {
 }
 
 h2 {
-  margin-left: 8px;
+  margin-left: 17px;
   white-space: nowrap;
   font-size: 15px;
 }
@@ -95,7 +95,7 @@ main > .info-panel > .message-info {
 }
 
 main > .workspace {
-  margin: 0;
+  margin: 0 0 2em 0;
 }
 
 footer {
@@ -110,11 +110,11 @@ footer div {
 
 /* Dark Mode */
 body.dark {
-  background-color: #2e3440;
+  background-color: #232831;
 }
 
 body.dark > header {
-  background-color: #2e3440;
+  background-color: #232831;
 }
 
 body.dark > header h1 {
@@ -138,7 +138,7 @@ body.dark > main > .info-panel > .message-info {
 }
 
 body.dark > footer {
-  background-color: #2e3440;
+  background-color: #232831;
   border-top: 1px solid #414a5a; 
   color: #EFEFEF;
 }
@@ -158,9 +158,12 @@ a.button:hover {
 }
 
 /* Dark Mode Links */
-body.dark a { color: #FFF; }
+body.dark a { 
+  color: #FFF;
+  text-decoration: underline;
+}
 
-body.dark a.button {
+/* body.dark a.button {
   border: 2px solid #888;
   background-color: #d8d8d8;
   color: #666;
@@ -168,7 +171,7 @@ body.dark a.button {
 
 body.dark a.button:hover {
   background-color: #eee;
-}
+} */
 
 /* Utility Classes */
 input, pre {
