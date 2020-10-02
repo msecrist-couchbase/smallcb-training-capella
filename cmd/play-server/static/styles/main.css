@@ -47,26 +47,26 @@
 }
 
 .workspace .code-examples {
+  height: 100%;
   flex-basis: 15rem;
   flex-grow: 1;
-  margin-right: 20px;
 }
 .workspace .code-examples ul.examples {
   margin-right: 15px;
-  padding-left: 20px;
+  padding-left: 8px;
 }
 .workspace .code-examples ul.examples li {
   list-style: none;
-  margin: 0 0 15px 0;
-  border: 1px solid #888;
+  margin: 0 0 1px 0;
+  border-radius: 4px;
 }
 .workspace .code-examples ul.examples li:hover {
-  background-color: #c4d4d8;
+  background-color: #3a424b;
 }
 .workspace .code-examples ul.examples li.current {
   list-style: square;
-  color: #73a1a4;
-  background-color: #84d4d8;
+  color: #4c5863;
+  background-color: #516374;
 }
 .workspace .code-examples ul.examples li a {
   display: block;
@@ -75,9 +75,9 @@
 }
 .workspace .code-examples ul.examples li.session {
   margin-top: 45px;
-  border: 2px solid #888;
+  /* border: 2px solid #888; */
 }
-.workspace .code-examples ul.examples li.session a.session {
+/* .workspace .code-examples ul.examples li.session a.session {
   font-weight: bold;
   font-size: 13px;
   color: #666;
@@ -85,33 +85,42 @@
 }
 .workspace .code-examples ul.examples li.session a.session:hover {
   background-color: #9e9;
-}
+} */
 .workspace .code-editor {
   flex-basis: 10rem;
   flex-grow: 100;
-  margin-right: 10px;
+  margin: 0;
 }
 .workspace .code-editor textarea.code {
   display: none;
 }
 .workspace .code-editor div.code-ace {
   margin-bottom: 15px;
-  margin-right: 10px;
+  margin-right: 0;
   width: 95%;
   height: 60vh;
   border: 1px solid #888;
 }
 .workspace .code-editor input.run {
-  border: 2px solid #888;
+  border: 0;
   padding: 5px 40px 5px 40px;
-  background-color: #9c9;
+  border: 1px solid #526373;
+  background-color: #526373;
   font-weight: bold;
-  color: #666;
+  color: #FFFFFF;
   cursor: pointer;
 }
 .workspace .code-editor input.run:hover {
-  background-color: #9e9;
-  color: #666;
+  border: 1px solid #526373;
+  background-color: #2E3540;
+  color: #EFEFEF;
+}
+
+.workspace .code-editor input.run:focus {
+  outline: #778fa7 auto 0px;
+  border: 1px solid #778fa7;
+  background-color: #2E3540;
+  color: #EFEFEF;
 }
 .workspace .code-output {
   flex-basis: 10rem;

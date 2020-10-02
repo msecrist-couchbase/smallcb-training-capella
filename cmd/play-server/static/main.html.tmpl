@@ -28,7 +28,7 @@
   </script>
   {{.AnalyticsHTML}}
 </head>
-<body>
+<body class="dark">
   <header>
     <div class="logo">
       <a href="/{{if .Session}}?s={{.Session.SessionId}}{{end}}">
@@ -97,7 +97,9 @@
     <div class="workspace">
       <div class="code-examples">
         <h2>Examples</h2>
-
+        <div class="examples-hr">
+          <hr />
+        </div>
         <ul class="examples">
           {{range $i, $v := .Examples}}
           <li class="{{.className}} lang-{{.lang}} {{if eq .name $.Name}}current{{end}}">
@@ -177,7 +179,7 @@
   <script>
     var codeAce = ace.edit("code-ace");
     codeAce.getSession().setValue(document.getElementById("code").value);
-    codeAce.setTheme("ace/theme/github");
+    codeAce.setTheme("ace/theme/nord_dark");
     codeAce.setOption("useWorker", false); // No syntax checking.
 
     {{if .LangAce}}

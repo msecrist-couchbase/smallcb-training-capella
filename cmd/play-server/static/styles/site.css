@@ -1,5 +1,4 @@
 body {
-  background-color: #24292e;
   margin: 0 0;
   font-family: Montserrat, Arial, Helvetica, sans-serif;
   font-size: 11pt;
@@ -18,7 +17,6 @@ header {
   display: flex;
   flex-direction: row;
   height: 60px;
-  background-color: #24292e;
 }
 
 header .logo {
@@ -26,17 +24,16 @@ header .logo {
 }
 
 header h1 {
-  margin: 1em;
+  margin: 1.265em 1.265em 1.265em 8px;
   white-space: nowrap;
-  font-size: 13pt;
-  color: #eee;
+  font-size: 16px;
 }
 
 header nav {
   width: 50%;
   display: flex;
   justify-content: flex-end;
-  margin: 1.265em;
+  margin: 17px;
 }
 
 header nav ul { padding: 0; }
@@ -75,46 +72,108 @@ header nav ul > li a:visited {
 }
 
 h2 {
-  margin-right: 20px;
+  margin-left: 8px;
   white-space: nowrap;
-  font-weight: normal;
-  font-size: 11pt;
+  font-size: 15px;
 }
 
-a {
-  color: #333;
+.sticky h2 {
+  margin-left: 0;
+  white-space: nowrap;
+  font-size: 15px;
 }
+
+main {
+  min-height: calc(100vh - 120px);
+  height: 100%;
+}
+
+main > .info-panel > .message-info {
+  margin: 40px 30px 40px 30px;
+  padding-bottom: 40px;
+  font-weight: 600;
+}
+
+main > .workspace {
+  margin: 0;
+}
+
+footer {
+  height: 31px;
+  font-size: 8pt;
+  padding: 14px 14px;
+}
+
+footer div { 
+  margin: 0.25em 0 0.25em 0;
+}
+
+/* Dark Mode */
+body.dark {
+  background-color: #2e3440;
+}
+
+body.dark > header {
+  background-color: #2e3440;
+}
+
+body.dark > header h1 {
+  color: #eee;
+}
+
+body > header > nav > ul > li > a {
+  color: #FFF;
+  background-image: linear-gradient(currentColor, currentColor);
+}
+
+body.dark > main {
+  background-color: #2e3440;
+  border-top: 1px solid #414a5a; 
+  color: #EFEFEF;
+}
+
+body.dark > main > .info-panel > .message-info {
+  border-bottom: 1px solid #000;
+  color: #EFEFEF;
+}
+
+body.dark > footer {
+  background-color: #2e3440;
+  border-top: 1px solid #414a5a; 
+  color: #EFEFEF;
+}
+
+/* links */
+a { text-decoration: none; }
 
 a.button {
-  border: 2px solid #888;
-  padding: 3px 30px 3px 30px;
-  background-color: #d8d8d8;
-  font-weight: bold;
-  color: #666;
   text-decoration: none;
   cursor: pointer;
+  padding: 3px 30px 3px 30px;
+  font-weight: bold;
 }
 
 a.button:hover {
+  text-decoration: underline;
+}
+
+/* Dark Mode Links */
+body.dark a { color: #FFF; }
+
+body.dark a.button {
+  border: 2px solid #888;
+  background-color: #d8d8d8;
+  color: #666;
+}
+
+body.dark a.button:hover {
   background-color: #eee;
 }
 
-.message-info {
-  margin: 40px 30px 40px 30px;
-  border-bottom: 1px solid #666;
-  padding-bottom: 40px;
-  font-weight: bold;
-  color: #333;
-}
-
-.workspace {
-  margin: 0 30px 80px 30px;
-}
-
+/* Utility Classes */
 input, pre {
   display: block;
   margin-bottom: 10px;
-  border: 1px solid #888;
   font-size: 13px;
 }
 
@@ -126,18 +185,21 @@ input, pre {
 .nowrap {
   white-space: nowrap;
 }
-main {
-  background-color: #FFF;
-  min-height: calc(100vh - 120px);
-  height: 100%;
+
+.examples-hr {
+  margin-top: 1px;
+  padding: 0 8px;
+}
+.examples-hr hr {
+  background-color: #4c5863!important;
+  background: #4c5863;
+  width: 100%;
+  border: 0;
+  height: 1px;
 }
 
-footer {
-  height: 31px;
-  background-color: #24292e;
-  border-top: 1px solid #000; 
-  font-size: 8pt;
-  padding: 14px 14px;
-  color: #EFEFEF;
+/* Dark Mode Utility Classes */
+input, pre {
+  border: 1px solid #888;
+  color: #FFF;
 }
-footer div{ margin: 0.25em 0 0.25em 0;}
