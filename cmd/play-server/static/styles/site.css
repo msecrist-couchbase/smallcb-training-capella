@@ -50,7 +50,7 @@ header nav ul > li a {
   background-repeat: no-repeat;
   background-size: 0% 0px;
   background-position-y: 1.1em;
-  transition: background-size cubic-bezier(0, 0.5, 0, 1) 0.08s;
+  transition: background-size cubic-bezier(0, 0.5, 0, 1) 0.5s;
 }
 header nav ul > li a:hover,
 header nav ul > li a:visited:hover,

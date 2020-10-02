@@ -61,12 +61,12 @@
   border-radius: 4px;
 }
 .workspace .code-examples ul.examples li:hover {
-  background-color: #3a424b;
+  background-color: #526373;
 }
 .workspace .code-examples ul.examples li.current {
   list-style: square;
   color: #4c5863;
-  background-color: #516374;
+  background-color: #3F4858;
 }
 .workspace .code-examples ul.examples li a {
   display: block;
@@ -104,14 +104,14 @@
 .workspace .code-editor input.run {
   border: 0;
   padding: 5px 40px 5px 40px;
-  border: 1px solid #526373;
-  background-color: #526373;
+  border: 1px solid #516374;
+  background-color: #516374;
   font-weight: bold;
   color: #FFFFFF;
   cursor: pointer;
 }
 .workspace .code-editor input.run:hover {
-  border: 1px solid #526373;
+  border: 1px solid #516374;
   background-color: #2E3540;
   color: #EFEFEF;
 }
