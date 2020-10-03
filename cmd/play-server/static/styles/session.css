@@ -18,8 +18,11 @@ article input[type=text] {
   padding: 3px 5px 3px 5px;
 }
 article input[type=submit] {
+  border: 0;
+  padding: 5px 40px 5px 40px;
   margin-top: 15px;
   padding: 5px 20px 5px 20px;
+  font-weight: bold;
   cursor: pointer;
 }
 article img.captcha {
@@ -39,19 +42,21 @@ header {
   flex-direction: column;
 }
 
+form .captcha-bg {
+  width: 20.625rem;
+  border-radius: 3px;
+  margin-bottom: 1em;
+}
+
 /* Dark Mode */
 body.dark article input {
   color: #222;
   border-radius: 3px;
 }
 body.dark article input[type=submit] {
-  border: 0;
-  padding: 5px 40px 5px 40px;
   border: 1px solid #516374;
   background-color: #516374;
-  font-weight: bold;
   color: #FFFFFF;
-  cursor: pointer;
 }
 body.dark article input[type=submit]:hover {
   border: 1px solid #516374;
@@ -70,8 +75,5 @@ body.dark form .error {
 }
 
 body.dark form .captcha-bg {
-  width: 20.625rem;
-  border-radius: 3px;
   background-color: #bfd4e7;
-  margin-bottom: 1em;
 }

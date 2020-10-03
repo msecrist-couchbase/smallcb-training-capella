@@ -32,28 +32,28 @@
       <div class="infos">{{.infos}}</div>
 
       <table class="nums">
-       <thead>
-        <tr>
-          <th>time</th>
-          {{range .keys}}
+        <thead>
+          <tr>
+            <th>time</th>
+            {{range .keys}}
             <th class="num"><div class="num">{{.}}</div></th>
-          {{end}}
-        </tr>
-       </thead>
-       <tbody>
-        {{range $level, $a := $.hists}}
-          {{range $v := $a}}
+            {{end}}
+          </tr>
+        </thead>
+        <tbody>
+          {{range $level, $a := $.hists}}
+            {{range $v := $a}}
             <tr class="level-{{$level}}">
               <th class="at">{{$v.At}}</th>
               {{range $k := $.keys}}
-                <td>
-                  {{index $v.Nums $k}}
-                </td>
+              <td>
+                {{index $v.Nums $k}}
+              </td>
               {{end}}
             </tr>
+            {{end}}
           {{end}}
-        {{end}}
-       </tbody>
+        </tbody>
       </table>
     </div>
   </div>

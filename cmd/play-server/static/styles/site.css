@@ -43,9 +43,6 @@ header nav ul > li:not(:last-child) { margin-right: 1em; }
 
 header nav ul > li a {
   text-decoration: none;
-  color: #FFF;
-
-  background-image: linear-gradient(currentColor, currentColor);
   background-position: 50% 50%;
   background-repeat: no-repeat;
   background-size: 0% 0px;
@@ -63,7 +60,6 @@ header nav ul > li a.session:hover {
   text-decoration: none;
   background-position: 0% 100%;
   background-size: 29% 1px;
-  color: red;
 }
 header nav ul > li a:focus,
 header nav ul > li a:visited {
@@ -173,6 +169,15 @@ body.dark a.button:hover {
   background-color: #eee;
 } */
 
+/* Darm Mode Menu Links */
+body.dark header nav ul > li a {
+  color: #FFF;
+  background-image: linear-gradient(currentColor, currentColor);
+}
+body.dark header nav ul > li a.session:hover {
+  color: red;
+}
+
 /* Utility Classes */
 input, pre {
   display: block;
@@ -194,11 +199,15 @@ input, pre {
   padding: 0 8px;
 }
 .examples-hr hr {
-  background-color: #4c5863!important;
-  background: #4c5863;
   width: 100%;
   border: 0;
   height: 1px;
+}
+
+/* Dark Mode hr */
+.examples-hr hr {
+  background-color: #4c5863!important;
+  background: #4c5863;
 }
 
 /* Dark Mode Utility Classes */
