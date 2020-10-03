@@ -24,6 +24,20 @@ article input[type=submit] {
   padding: 5px 20px 5px 20px;
   font-weight: bold;
   cursor: pointer;
+
+  border-width: 1px;
+  border-style: solid;
+}
+article input[type=submit]:hover {
+  border-width: 1px;
+  border-style: solid;
+}
+article input[type=submit]:focus {
+  outline-style: auto;
+  outline-width: 0px;
+
+  border-width: 1px;
+  border-style: solid;
 }
 article img.captcha {
   display: block;
@@ -54,18 +68,18 @@ body.dark article input {
   border-radius: 3px;
 }
 body.dark article input[type=submit] {
-  border: 1px solid #516374;
+  border-color: #516374;
   background-color: #516374;
   color: #FFFFFF;
 }
 body.dark article input[type=submit]:hover {
-  border: 1px solid #516374;
+  border-color: #516374;
   background-color: #2E3540;
   color: #EFEFEF;
 }
 body.dark article input[type=submit]:focus {
-  outline: #778fa7 auto 0px;
-  border: 1px solid #778fa7;
+  outline-color: #778fa7;
+  border-color: #778fa7;
   background-color: #2E3540;
   color: #EFEFEF;
 }
