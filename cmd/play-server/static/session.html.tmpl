@@ -5,10 +5,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;1,300&display=swap" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="/static/styles/site.css">
   <link rel="stylesheet" type="text/css" href="/static/styles/session.css">
-
   {{.AnalyticsHTML}}
 </head>
-<body>
+<body class="dark">
   <header>
     <div class="logo">
       <a href="/">
@@ -27,81 +26,77 @@
     </nav>
   </header>
 
-  <main class="flex-row">
+  <main>
     <article>
-      <h2>Start a Couchbase Server Test-Drive Session</h2>
-
-      <p>
-        A test-drive session means that a Couchbase&nbsp;Server instance
-        will be allocated to you
-        &mdash;
-        until your session expires after ~{{.SessionsMaxAge}} or from inactivity
-        &mdash;
-        or is deleted for other reasons like from a system reboot.
-      </p>
-
-      <p>
-        A test-drive session is <b>NOT</b> meant for production usage
-        and is intended for "tire-kicking" exploration by developers.
-      </p>
-
-      <p>
-        A test-drive session is <b>NOT</b> meant for performance testing,
-        as we might be running on cost-effective
-        (read: "low-end, slow, highly-shared") servers.
-      </p>
-
-      <p>
-        Especially, don't keep important or private data on a test-drive
-        Couchbase&nbsp;Server instance!
-      </p>
-
-      <p>
-        To get started...
-      </p>
-
-      <form action="/session" method="post" autocomplete="off">
-        <label>
-          Full Name:
-          <span class="err">{{.errFullName}}</span>
-          <input type="text" name="fullName" value="{{.fullName}}" autofocus/>
-        </label>
-
-        <label>
-          Email:
-          <span class="err">{{.errEmail}}</span>
-          <input type="text" name="email" value="{{.email}}"/>
-        </label>
-
-	      <img class="captcha" {{.captchaSrc}}/>
-
-        <label>
-          Enter the above #'s:
-          <span class="err">{{.errCaptcha}}</span>
-          <input type="text" name="captcha"/>
-        </label>
-
-        <input type="submit" name="session-start"
-               value="start a test-drive session"/>
-
-        <div class="details">
-          (we won't sell your email to spammers, etc)
+      <header>
+        <h2>Start a Test-Drive Session</h2>
+        <div class="examples-hr">
+          <hr />
         </div>
+      </header>
+      <section>
+        <p>
+          Starting a test-drive session allocates a Couchbase Server instance.
+        </p>
+        <p>
+          Your session expires after ~{{.SessionsMaxAge}}, prolonged inactivity. 
+        </p>
+        <p>
+          Your instance can also be deleted in case of a system reboot.
+        </p>
+        <p>
+          A test-drive session is intended for "tire-kicking" and exploration by developers, <b>NOT</b> for production use.
+        </p>
+        <p>
+          A test-drive session is <b>NOT</b> meant for performance testing, as it may run on cost-effective (read: "low-end, slow, highly-shared") servers.
+        </p>
+        <p>
+          <b>NEVER</b> keep important or private data on this test-drive instance.
+        </p>
+        <p>
+          Let's get started...
+        </p>
 
-        {{if .err}}
-        <div class="err">{{.err}}</div>
-        {{end}}
+        <form action="/session" method="post" autocomplete="off">
+          <label> Full Name:
+            <span class="error">{{.errFullName}}</span>
+            <input type="text" name="fullName" value="{{.fullName}}" autofocus/>
+          </label>
+          <label> Email:
+            <span class="error">{{.errEmail}}</span>
+            <input type="text" name="email" value="{{.email}}"/>
+          </label>
 
-        {{if .e}}
-        <input type="hidden" name="e" value="{{.e}}"/>
-        {{end}}
-      </form>
+          <div class="captcha-bg">
+            <img class="captcha" {{.captchaSrc}}/>
+          </div>
+
+          <label>Enter Captcha:
+            <span class="error">{{.errCaptcha}}</span>
+            <input type="text" name="captcha"/>
+          </label>
+
+          <input type="submit" name="session-start" value="start a test-drive session"/>
+
+          <div class="details">
+            (we won't sell your email to spammers, etc)
+          </div>
+
+          {{if .err}}
+          <div class="error">{{.err}}</div>
+          {{end}}
+
+          {{if .e}}
+          <input type="hidden" name="e" value="{{.e}}"/>
+          {{end}}
+        </form>
+      </section>
     </article>
-
   </main>
 
-  <div class="footer">
-    powered by Couchbase Labs and Couchbase Server {{.Version}}
-  </div>
+  <footer>
+    <div>© 2020 Couchbase Labs</div>
+    <div>Couchbase Server {{.Version}}</div>
+  </footer>
 </body>
 </html>

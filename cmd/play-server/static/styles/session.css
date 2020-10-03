@@ -1,11 +1,6 @@
 article {
   flex-basis: 40rem;
-  padding: 20px 40px 40px 40px;
-}
-article h2 {
-  font-size: 12pt;
-  font-weight: bold;
-  margin-bottom: 30px;
+  margin-bottom: 2em;
 }
 article form {
   margin-top: 30px;
@@ -23,22 +18,60 @@ article input[type=text] {
   padding: 3px 5px 3px 5px;
 }
 article input[type=submit] {
-  margin-top: 30px;
-  border: 2px solid #999;
+  margin-top: 15px;
   padding: 5px 20px 5px 20px;
-  background-color: #d8d8d8;
   cursor: pointer;
-}
-article input[type=submit]:hover {
-  background-color: #eee;
 }
 article img.captcha {
   display: block;
 }
-.err {
-  color: red;
-}
-div.err {
+form span.err {
   margin-top: 10px;
   font-weight: bold;
+}
+
+article > section {
+  padding-left: 17px;
+}
+
+header {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Dark Mode */
+body.dark article input {
+  color: #222;
+  border-radius: 3px;
+}
+body.dark article input[type=submit] {
+  border: 0;
+  padding: 5px 40px 5px 40px;
+  border: 1px solid #516374;
+  background-color: #516374;
+  font-weight: bold;
+  color: #FFFFFF;
+  cursor: pointer;
+}
+body.dark article input[type=submit]:hover {
+  border: 1px solid #516374;
+  background-color: #2E3540;
+  color: #EFEFEF;
+}
+body.dark article input[type=submit]:focus {
+  outline: #778fa7 auto 0px;
+  border: 1px solid #778fa7;
+  background-color: #2E3540;
+  color: #EFEFEF;
+}
+
+body.dark form .error {
+  color: red;
+}
+
+body.dark form .captcha-bg {
+  width: 20.625rem;
+  border-radius: 3px;
+  background-color: #bfd4e7;
+  margin-bottom: 1em;
 }
