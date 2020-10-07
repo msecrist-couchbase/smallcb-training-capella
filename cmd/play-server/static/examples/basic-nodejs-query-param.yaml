@@ -30,5 +30,5 @@ code: |
     }
   }
   
-  getAirlineByCallsign('San Jose')
+  getAirlineByCallsign('UNITED')
     .then(() => { process.exit(0) })
