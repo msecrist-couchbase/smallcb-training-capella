@@ -2,11 +2,11 @@ title: Basic NodeJS Query
 page: page-03
 lang: nodejs
 code: |
-  const couchbase = require('couchbase');
+  const couchbase = require('couchbase')
   
   const cluster = new couchbase.Cluster('couchbase://{{.Host}}', {
     username: '{{.CBUser}}', password: '{{.CBPswd}}'
-  });
+  })
   
   cluster.bucket('travel-sample')
 

@@ -2,11 +2,11 @@ title: Basic NodeJS KV Get
 page: page-03
 lang: nodejs
 code: |
-  const couchbase = require("couchbase");
+  const couchbase = require('couchbase')
   
-  const cluster = new couchbase.Cluster("couchbase://{{.Host}}", {
-    username: "{{.CBUser}}", password: "{{.CBPswd}}"
-  });
+  const cluster = new couchbase.Cluster('couchbase://{{.Host}}', {
+    username: '{{.CBUser}}', password: '{{.CBPswd}}'
+  })
   
   const bucket = cluster.bucket('travel-sample')
   const collection = bucket.defaultCollection()
@@ -19,7 +19,7 @@ code: |
     } catch (err) {
       console.error(err)
     }
-  };
+  }
 
   getDocument('airline_5209')
     .then(() => { process.exit(0) })

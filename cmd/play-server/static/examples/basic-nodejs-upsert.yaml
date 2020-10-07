@@ -2,11 +2,11 @@ title: Basic NodeJS Upsert
 page: page-03
 lang: nodejs
 code: |
-  const couchbase = require("couchbase");
+  const couchbase = require('couchbase')
   
-  const cluster = new couchbase.Cluster("couchbase://{{.Host}}", {
-    username: "{{.CBUser}}", password: "{{.CBPswd}}"
-  });
+  const cluster = new couchbase.Cluster('couchbase://{{.Host}}', {
+    username: '{{.CBUser}}', password: '{{.CBPswd}}'
+  })
   
   const bucket = cluster.bucket('travel-sample')
   const collection = bucket.defaultCollection()
@@ -19,7 +19,7 @@ code: |
   
   const upsertDocument = async (type, id, doc) => {
     try {
-      const res = await collection.upsert(`${type}_${id}`, doc);
+      const res = await collection.upsert(`${type}_${id}`, doc)
       console.log('Upsert Result: ')
       console.log(res)
     } catch (err) {
