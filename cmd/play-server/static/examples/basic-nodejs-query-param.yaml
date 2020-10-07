@@ -19,7 +19,7 @@ code: |
       `
       const options = {
         parameters: {
-          TYPE: 'airport', CALLSIGN: callsign
+          TYPE: 'airline', CALLSIGN: callsign
         }
       }
       const result = await cluster.query(query, options)
