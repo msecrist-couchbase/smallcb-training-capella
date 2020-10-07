@@ -1,5 +1,5 @@
 title: Basic NodeJS KV Get
-page: page-3
+page: page-03
 lang: nodejs
 code: |
   const couchbase = require("couchbase");
