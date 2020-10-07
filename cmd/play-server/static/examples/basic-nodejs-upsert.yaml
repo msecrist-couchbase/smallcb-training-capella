@@ -20,7 +20,8 @@ code: |
   const upsertDocument = async (type, id, doc) => {
     try {
       const res = await collection.upsert(`${type}_${id}`, doc);
-      console.log(`Upsert Result: ${JSON.stringify(res)}`)
+      console.log('Upsert Result: ')
+      console.log(res)
     } catch (err) {
       console.error(err)
     }
