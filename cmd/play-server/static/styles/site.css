@@ -43,9 +43,6 @@ header nav ul > li:not(:last-child) { margin-right: 1em; }
 
 header nav ul > li a {
   text-decoration: none;
-  color: #FFF;
-
-  background-image: linear-gradient(currentColor, currentColor);
   background-position: 50% 50%;
   background-repeat: no-repeat;
   background-size: 0% 0px;
@@ -63,7 +60,6 @@ header nav ul > li a.session:hover {
   text-decoration: none;
   background-position: 0% 100%;
   background-size: 29% 1px;
-  color: red;
 }
 header nav ul > li a:focus,
 header nav ul > li a:visited {
@@ -108,6 +104,54 @@ footer div {
   margin: 0.25em 0 0.25em 0;
 }
 
+/* links */
+a { text-decoration: none; }
+
+a.button {
+  text-decoration: none;
+  cursor: pointer;
+  padding: 3px 30px 3px 30px;
+  font-weight: bold;
+
+  /* border-width: 2px;
+  border-style: solid; */
+}
+
+a.button:hover {
+  text-decoration: underline;
+}
+
+/* Utility Classes */
+input, pre {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 13px;
+}
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+
+.examples-hr {
+  margin-top: 1px;
+  padding: 0 8px;
+}
+.examples-hr hr {
+  width: 100%;
+  border: 0;
+  height: 1px;
+}
+
+input, pre {
+  border-width: 1px;
+  border-style: solid;
+}
+
 /* Dark Mode */
 body.dark {
   background-color: #232831;
@@ -143,20 +187,6 @@ body.dark > footer {
   color: #EFEFEF;
 }
 
-/* links */
-a { text-decoration: none; }
-
-a.button {
-  text-decoration: none;
-  cursor: pointer;
-  padding: 3px 30px 3px 30px;
-  font-weight: bold;
-}
-
-a.button:hover {
-  text-decoration: underline;
-}
-
 /* Dark Mode Links */
 body.dark a { 
   color: #FFF;
@@ -164,7 +194,7 @@ body.dark a {
 }
 
 /* body.dark a.button {
-  border: 2px solid #888;
+  border-color: #888;
   background-color: #d8d8d8;
   color: #666;
 }
@@ -173,36 +203,23 @@ body.dark a.button:hover {
   background-color: #eee;
 } */
 
-/* Utility Classes */
-input, pre {
-  display: block;
-  margin-bottom: 10px;
-  font-size: 13px;
+/* Darm Mode Menu Links */
+body.dark header nav ul > li a {
+  color: #FFF;
+  background-image: linear-gradient(currentColor, currentColor);
+}
+body.dark header nav ul > li a.session:hover {
+  color: red;
 }
 
-.flex-row {
-  display: flex;
-  flex-direction: row;
-}
-
-.nowrap {
-  white-space: nowrap;
-}
-
-.examples-hr {
-  margin-top: 1px;
-  padding: 0 8px;
-}
+/* Dark Mode hr */
 .examples-hr hr {
   background-color: #4c5863!important;
   background: #4c5863;
-  width: 100%;
-  border: 0;
-  height: 1px;
 }
 
 /* Dark Mode Utility Classes */
-input, pre {
-  border: 1px solid #888;
+body.dark input, body.dark pre {
+  border-color: #888;
   color: #FFF;
 }

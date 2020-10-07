@@ -1,11 +1,12 @@
 .session-info {
   margin: 20px 30px 20px 30px;
-  border-bottom: 1px solid #666;
   padding-bottom: 20px;
+
+  border-width: 1px;
+  border-style: solid;
 }
 .session-info h2 {
   font-weight: bold;
-  color: #A3BE8B;
 }
 .session-info h2 em {
   font-weight: normal;
@@ -34,8 +35,10 @@
   top: 30px;
   left: 20px;
   width: 300px;
-  border: 1px solid #888;
   z-index: 1;
+
+  border-width: 1px;
+  border-style: solid;
 }
 .session-info div.connection a.ui:hover img {
   display: block;
@@ -60,13 +63,8 @@
   margin: 0 0 1px 0;
   border-radius: 4px;
 }
-.workspace .code-examples ul.examples li:hover {
-  background-color: #526373;
-}
 .workspace .code-examples ul.examples li.current {
   list-style: none;
-  color: #4c5863;
-  background-color: #3F4858;
 }
 .workspace .code-examples ul.examples li a {
   display: block;
@@ -75,7 +73,9 @@
 }
 .workspace .code-examples ul.examples li.session {
   margin-top: 45px;
-  /* border: 2px solid #888; */
+  /* border-width: 1px;
+  border-style: solid;
+  border-color: #888888; */
 }
 /* .workspace .code-examples ul.examples li.session a.session {
   font-weight: bold;
@@ -99,28 +99,29 @@
   margin-right: 0;
   width: 95%;
   height: 60vh;
-  border: 1px solid #516374;
+
+  border-width: 1px;
+  border-style: solid;
 }
 .workspace .code-editor input.run {
   border: 0;
   padding: 5px 40px 5px 40px;
-  border: 1px solid #516374;
-  background-color: #516374;
   font-weight: bold;
-  color: #FFFFFF;
   cursor: pointer;
+
+  border-width: 1px;
+  border-style: solid;
 }
 .workspace .code-editor input.run:hover {
-  border: 1px solid #516374;
-  background-color: #2E3540;
-  color: #EFEFEF;
+  border-width: 1px;
+  border-style: solid;
 }
-
 .workspace .code-editor input.run:focus {
-  outline: #778fa7 auto 0px;
-  border: 1px solid #778fa7;
-  background-color: #2E3540;
-  color: #EFEFEF;
+  outline-style: auto;
+  outline-width: 0px;
+
+  border-width: 1px;
+  border-style: solid;
 }
 .workspace .code-output {
   flex-basis: 10rem;
@@ -129,8 +130,10 @@
 .workspace .code-output iframe.output {
   width: 95%;
   height: 60vh;
-  border: 1px solid #516374;
   margin-bottom: 15px;
+
+  border-width: 1px;
+  border-style: solid;
 }
 
 .sticky {
@@ -143,4 +146,47 @@
 }
 .hidden {
   visibility: hidden;
+}
+
+/* Dark Mode session-info */
+body.dark .session-info {
+  border-color: #666666;
+}
+body.dark .session-info h2 {
+  color: #A3BE8B;
+}
+body.dark .session-info div.connection a.ui img {
+  border-color: #888888;
+}
+
+/* Dark Mode workspace */
+body.dark .workspace .code-examples ul.examples li:hover {
+  background-color: #526373;
+}
+body.dark .workspace .code-examples ul.examples li.current {
+  color: #4c5863;
+  background-color: #3F4858;
+}
+body.dark .workspace .code-editor div.code-ace {
+  border-color: #516374;
+}
+body.dark .workspace .code-editor input.run {
+  border-color: #516374;
+  background-color: #516374;
+  color: #FFFFFF;
+}
+body.dark .workspace .code-editor input.run:hover {
+  border-color: #516374;
+  background-color: #2E3540;
+  color: #EFEFEF;
+}
+
+body.dark .workspace .code-editor input.run:focus {
+  outline-color: #778fa7;
+  border-color: #516374;
+  background-color: #778fa7;
+  color: #EFEFEF;
+}
+body.dark .workspace .code-output iframe.output {
+  border-color: #516374;
 }

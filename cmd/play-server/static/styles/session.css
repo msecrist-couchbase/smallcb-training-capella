@@ -18,9 +18,26 @@ article input[type=text] {
   padding: 3px 5px 3px 5px;
 }
 article input[type=submit] {
+  border: 0;
+  padding: 5px 40px 5px 40px;
   margin-top: 15px;
   padding: 5px 20px 5px 20px;
+  font-weight: bold;
   cursor: pointer;
+
+  border-width: 1px;
+  border-style: solid;
+}
+article input[type=submit]:hover {
+  border-width: 1px;
+  border-style: solid;
+}
+article input[type=submit]:focus {
+  outline-style: auto;
+  outline-width: 0px;
+
+  border-width: 1px;
+  border-style: solid;
 }
 article img.captcha {
   display: block;
@@ -39,28 +56,30 @@ header {
   flex-direction: column;
 }
 
+form .captcha-bg {
+  width: 20.625rem;
+  border-radius: 3px;
+  margin-bottom: 1em;
+}
+
 /* Dark Mode */
 body.dark article input {
   color: #222;
   border-radius: 3px;
 }
 body.dark article input[type=submit] {
-  border: 0;
-  padding: 5px 40px 5px 40px;
-  border: 1px solid #516374;
+  border-color: #516374;
   background-color: #516374;
-  font-weight: bold;
   color: #FFFFFF;
-  cursor: pointer;
 }
 body.dark article input[type=submit]:hover {
-  border: 1px solid #516374;
+  border-color: #516374;
   background-color: #2E3540;
   color: #EFEFEF;
 }
 body.dark article input[type=submit]:focus {
-  outline: #778fa7 auto 0px;
-  border: 1px solid #778fa7;
+  outline-color: #778fa7;
+  border-color: #778fa7;
   background-color: #2E3540;
   color: #EFEFEF;
 }
@@ -70,8 +89,5 @@ body.dark form .error {
 }
 
 body.dark form .captcha-bg {
-  width: 20.625rem;
-  border-radius: 3px;
   background-color: #bfd4e7;
-  margin-bottom: 1em;
 }
