@@ -1,4 +1,5 @@
 title: Basic N1QL curl example
+page: page-02
 lang: sh
 code: |
   #!/bin/sh

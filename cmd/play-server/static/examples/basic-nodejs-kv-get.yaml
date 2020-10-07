@@ -1,0 +1,25 @@
+title: Basic NodeJS KV Get
+page: page-03
+lang: nodejs
+code: |
+  const couchbase = require('couchbase')
+  
+  const cluster = new couchbase.Cluster('couchbase://{{.Host}}', {
+    username: '{{.CBUser}}', password: '{{.CBPswd}}'
+  })
+  
+  const bucket = cluster.bucket('travel-sample')
+  const collection = bucket.defaultCollection()
+
+  const getDocument = async (key) => {
+    try {
+      const res = await collection.get(key)
+      console.log('Result: ')
+      console.log(res)
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
+  getDocument('airline_5209')
+    .then(() => { process.exit(0) })
