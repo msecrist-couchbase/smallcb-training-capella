@@ -1,4 +1,5 @@
 title: Basic Java example
+page: page-01
 lang: java
 code: |
   import com.couchbase.client.java.*;

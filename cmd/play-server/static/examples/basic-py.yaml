@@ -1,4 +1,5 @@
 title: Basic Python example
+page: page-6
 lang: py
 code: |
   #!/usr/bin/python3
