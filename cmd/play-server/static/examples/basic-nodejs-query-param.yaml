@@ -13,7 +13,8 @@ code: |
   const getAirlineByCallsign = async (callsign) => {
     try {
       const query = `
-        SELECT airportname, callsign FROM \`travel-sample\`
+        SELECT * 
+        FROM \`travel-sample\` 
         WHERE type=$TYPE
           AND callsign=$CALLSIGN;
       `
@@ -24,7 +25,7 @@ code: |
       }
       const result = await cluster.query(query, options)
       console.log('Query Result: ')
-      console.log(result)
+      console.log(result.rows)
     } catch (error) {
       console.error(error)
     }
