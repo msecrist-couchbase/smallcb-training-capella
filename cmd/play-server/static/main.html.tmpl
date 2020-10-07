@@ -21,8 +21,9 @@
   <script>
     function onRunSubmit() {
       document.getElementById("code").value = codeAce.getSession().getValue();
-      document.getElementsByTagName('body')[0].style.color = '#fff';
-      document.getElementById("output").contentDocument.body.innerHTML = "<span style='color:white'>running...</span>";;
+      document.getElementsByTagName("body")[0].style.color = "#fff";
+      document.getElementById("output").contentDocument.body.innerHTML = 
+        "<span style='color:white'>running...</span>";
       document.getElementById("code-output").className = "code-output";
       return true;
     }
