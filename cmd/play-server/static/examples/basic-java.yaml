@@ -24,4 +24,4 @@ code: |
 infoAfter: |
   If we know a document's key value, we can use the collection.get() method
   passing a key. This returns one document. 
-  Visit our docs to learn more about Visit our docs to learn more about <a target="_blank" href="https://docs.couchbase.com/java-sdk/current/howtos/kv-operations.html#retrieving-documents">Retrieving Full Documents in Java</a>.
+  Visit our docs to learn more about <a target="_blank" href="https://docs.couchbase.com/java-sdk/current/howtos/kv-operations.html#retrieving-documents">Retrieving Full Documents in Java</a>.

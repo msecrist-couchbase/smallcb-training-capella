@@ -8,8 +8,8 @@ code: |
     -d 'statement=
         SELECT *
           FROM `travel-sample`
-         WHERE meta().id = "airline_10"'
+          WHERE meta().id = "airline_10"'
 infoAfter: |
   The above example shows a primary key lookup using N1QL
   through the query service's REST API via curl.
-  Visit our docs to learn more about Visit our docs to learn more about <a target="_blank" href="https://docs.couchbase.com/server/current/eventing/eventing-examples-rest-via-curl-get.html">REST via cURL GET</a>.
+  Visit our docs to learn more about <a target="_blank" href="https://docs.couchbase.com/server/current/n1ql/n1ql-rest-api/index.html">N1QL REST API</a>.
