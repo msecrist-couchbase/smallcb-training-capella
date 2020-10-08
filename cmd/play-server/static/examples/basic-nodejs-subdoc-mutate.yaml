@@ -22,15 +22,15 @@ code: |
     }
   }
   
-  const getSubDocument = async (key) => {
+  const getSubDocument = async (key, field) => {
     try {
       var result = await collection.lookupIn(key, [
-        couchbase.LookupInSpec.get('country'),
+        couchbase.LookupInSpec.get(field),
       ])
-      var country = result.content[0].value
+      var fieldValue = result.content[0].value
   
-      console.log('New Value for Country: ')
-      console.log(country)
+      console.log(`New Field Value: `)
+      console.log(fieldValue)
     } catch (error) {
       console.error(error)
     }
@@ -38,7 +38,7 @@ code: |
   
   mutateSubDocument('airline_10', 'country', 'Canada')
     .then(
-      getSubDocument('airline_10')
+      getSubDocument('airline_10', 'country')
         .then(() => process.exit(0))
     )
 infoAfter: |
