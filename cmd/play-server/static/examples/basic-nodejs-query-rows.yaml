@@ -10,13 +10,13 @@ code: |
   
   cluster.bucket('travel-sample')
 
-  const queryDocument = async (key) => {
+  const queryDocument = async (city) => {
     try {
       const query = `
         SELECT airportname, city 
         FROM \`travel-sample\`
         WHERE type='airport'
-          AND tz LIKE '%Los_Angeles'
+          AND tz LIKE '%${city}'
           AND airportname LIKE '%Intl';
     `
       let results = await cluster.query(query)
@@ -30,5 +30,5 @@ code: |
   }
   
   
-  queryDocument('ICEAIR')
+  queryDocument('Los Angeles')
     .then(() => process.exit(0))
