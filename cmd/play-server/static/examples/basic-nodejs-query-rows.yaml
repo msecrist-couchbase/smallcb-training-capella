@@ -38,4 +38,4 @@ code: |
 infoAfter: |
   Basic N1QL query, expected to return many rows, we loop 
   through them and console.log() each one. 
-  Visit our docs to learn more about<a target="_blank" href="https://docs.couchbase.com/nodejs-sdk/current/howtos/n1ql-queries-with-sdk.html#handling-results">Handling Query Results in Node</a>.
+  Visit our docs to learn more about <a target="_blank" href="https://docs.couchbase.com/nodejs-sdk/current/howtos/n1ql-queries-with-sdk.html#handling-results">Handling Query Results in Node</a>.
