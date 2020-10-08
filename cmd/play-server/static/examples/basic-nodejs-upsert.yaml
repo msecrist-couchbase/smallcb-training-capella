@@ -31,3 +31,4 @@ code: |
     .then(() => process.exit(0))
 infoAfter: |
   We upsert and then retrieve our document using a basic query.
+  Visit our docs to learn more about <a target="_blank" href="https://docs.couchbase.com/nodejs-sdk/current/howtos/kv-operations.html#crud-operations">Key Value CRUD Operations</a>.

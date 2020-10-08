@@ -25,4 +25,5 @@ code: |
     .then(() => process.exit(0))
 infoAfter: |
   If we know a document's key value, we can use the collection.get() method
-  passing a key. This returns one document.
+  passing a key. This returns one document. 
+  Visit our docs to learn more about Visit our docs to learn more about <a target="_blank" href="https://docs.couchbase.com/nodejs-sdk/current/howtos/kv-operations.html#retrieving-full-documents">Retrieving full documents</a>.

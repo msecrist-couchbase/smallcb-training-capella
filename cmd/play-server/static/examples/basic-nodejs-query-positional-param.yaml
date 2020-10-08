@@ -32,4 +32,5 @@ code: |
 infoAfter: |
   Placeholders allow you to specify variable constraints for a query. 
   This method allows you to use positional parameters, pass them to 
-  cluster.query() method by query and options.
+  cluster.query() method by query and options. 
+  Visit our docs to learn more about <a target="_blank" href="https://docs.couchbase.com/nodejs-sdk/current/howtos/n1ql-queries-with-sdk.html#queries-placeholders">Queries & Placeholders</a>.
