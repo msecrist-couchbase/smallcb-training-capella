@@ -7,10 +7,9 @@ code: |
   curl http://{{.CBUser}}:{{.CBPswd}}@{{.Host}}:8093/query/service \
     -d 'statement=
         SELECT *
-          FROM `beer-sample`
-         WHERE meta().id = "21st_amendment_brewery_cafe"'
+          FROM `travel-sample`
+         WHERE meta().id = "airline_10"'
 infoAfter: |
   The above example shows a primary key lookup using N1QL
   through the query service's REST API via curl.
-  See <a href="https://docs.couchbase.com">Couchbase docs</a>
-  for more information.
+  Visit our docs to learn more about Visit our docs to learn more about <a target="_blank" href="https://docs.couchbase.com/server/current/eventing/eventing-examples-rest-via-curl-get.html">REST via cURL GET</a>.

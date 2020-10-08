@@ -12,12 +12,16 @@ code: |
                         "{{.CBUser}}",
                         "{{.CBPswd}}");
       
-      Bucket b = cluster.bucket("beer-sample");
+      Bucket b = cluster.bucket("travel-sample");
       
       Collection coll = b.defaultCollection();
       
-      GetResult res = coll.get("21st_amendment_brewery_cafe");
+      GetResult res = coll.get("airline_10");
 
       System.out.println(res.toString());
     }
   }
+infoAfter: |
+  If we know a document's key value, we can use the collection.get() method
+  passing a key. This returns one document. 
+  Visit our docs to learn more about Visit our docs to learn more about <a target="_blank" href="https://docs.couchbase.com/java-sdk/current/howtos/kv-operations.html#retrieving-documents">Retrieving Full Documents in Java</a>.
