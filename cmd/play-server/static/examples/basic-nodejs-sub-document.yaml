@@ -1,0 +1,32 @@
+title: Basic NodeJS Upsert
+page: page-03
+lang: nodejs
+code: |
+  const couchbase = require('couchbase')
+  
+  const cluster = new couchbase.Cluster('couchbase://{{.Host}}', {
+    username: '{{.CBUser}}', password: '{{.CBPswd}}'
+  })
+  
+  const bucket = cluster.bucket('travel-sample')
+  const collection = bucket.defaultCollection()
+  
+  const getSubDocument = async (key) => {
+    try {
+      var result = await collection.lookupIn(key, [
+        couchbase.LookupInSpec.get('country'),
+      ])
+      var country = result.content[0].value 
+
+      console.log('LookupIn Result: ')
+      console.log(result)
+
+      console.log('Country: ')
+      console.log(country) //'United Kingdom'
+    } catch (error) {
+      console.error(error)
+    }
+  }
+  
+  getSubDocument('airline_123')
+    .then(() => { process.exit(0) })
