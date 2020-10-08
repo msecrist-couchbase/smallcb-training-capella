@@ -32,4 +32,4 @@ code: |
   }
   
   getAirlineByCallsign('UNITED')
-    .then(() => { process.exit(0) })
+    .then(() => process.exit(0))

@@ -22,4 +22,4 @@ code: |
   }
 
   getDocument('airline_5209')
-    .then(() => { process.exit(0) })
+    .then(() => process.exit(0))

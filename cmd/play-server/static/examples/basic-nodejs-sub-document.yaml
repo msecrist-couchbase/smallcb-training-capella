@@ -29,4 +29,4 @@ code: |
   }
   
   getSubDocument('airline_123')
-    .then(() => { process.exit(0) })
+    .then(() => process.exit(0))

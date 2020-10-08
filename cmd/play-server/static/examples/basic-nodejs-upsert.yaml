@@ -28,4 +28,4 @@ code: |
   }
   
   upsertDocument(airline.type, airline.id, airline)
-    .then(() => { process.exit(0) })
+    .then(() => process.exit(0))
