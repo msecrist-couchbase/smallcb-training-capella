@@ -48,4 +48,4 @@ code: |
         .then(() => process.exit(0))
       , 2100))
 infoAfter: |
-  We upsert and then retrieve our document.
+  We upsert and then retrieve our document using a basic query.

@@ -24,6 +24,5 @@ code: |
   getDocument('airline_5209')
     .then(() => process.exit(0))
 infoAfter: |
-  If we know a document's kay value, we can use the collection.get() 
-  which takes an argument of key. Returns one document. Access the 
-  entire object and metadata with `result` or just the document with `result.value`
+  If we know a document's key value, we can use the collection.get() method
+  passing a key. This returns one document.
