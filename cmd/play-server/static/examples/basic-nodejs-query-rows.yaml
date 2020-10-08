@@ -13,12 +13,17 @@ code: |
   const getAirportsByCity = async (city) => {
     try {
       const query = `
-        SELECT airportname, city 
+        SELECT name, city, state
         FROM \`travel-sample\`
-        WHERE type='airport'
-          AND city LIKE '%${city}'
-    `
-      let results = await cluster.query(query)
+        WHERE type = 'hotel'
+          AND city = $CITY LIMIT 5
+      `
+      const options = {
+        parameters: {
+          TYPE: 'airline', CITY: city
+        }
+      }
+      let results = await cluster.query(query, options)
       results.rows.forEach((row) => {
         console.log('Query row: ', row)
       })
@@ -28,9 +33,9 @@ code: |
     }
   }
   
-  
-  getAirportsByCity('Los Angeles')
+  getAirportsByCity('Malibu')
     .then(() => process.exit(0))
 infoAfter: |
   Basic N1QL query, expected to return many rows, we loop 
-  through them and console.log() each one.
+  through them and console.log() each one. 
+  Visit our docs to learn more about <a target="_blank" href="https://docs.couchbase.com/nodejs-sdk/current/howtos/n1ql-queries-with-sdk.html#handling-results">Handling Query Results in Node</a>.

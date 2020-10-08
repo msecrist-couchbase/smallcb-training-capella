@@ -1,4 +1,4 @@
-title: NodeJS Sub-doc Lookup
+title: NodeJS Sub-doc Mutate
 page: page-03
 lang: nodejs
 code: |
@@ -11,25 +11,36 @@ code: |
   const bucket = cluster.bucket('travel-sample')
   const collection = bucket.defaultCollection()
   
+  const mutateSubDocument = async (key, field, value) => {
+    try {
+      var result = await collection.mutateIn(key, [
+        couchbase.MutateInSpec.upsert(field, value),
+      ]);
+      console.log(result)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+  
   const getSubDocument = async (key, field) => {
     try {
       var result = await collection.lookupIn(key, [
         couchbase.LookupInSpec.get(field),
       ])
-      var fieldValue = result.content[0].value 
+      var fieldValue = result.content[0].value
   
-      console.log('LookupIn Result: ')
-      console.log(result)
-  
-      console.log(`Field Value: `)
+      console.log(`New Field Value: `)
       console.log(fieldValue)
     } catch (error) {
       console.error(error)
     }
   }
   
-  getSubDocument('airline_10', 'country')
-    .then(() => process.exit(0))
+  mutateSubDocument('airline_10', 'country', 'Canada')
+    .then(
+      getSubDocument('airline_10', 'country')
+        .then(() => process.exit(0))
+    )
 infoAfter: |
   Our Sub-document API allows for only retrieving or mutating a portion of 
   a larger document. For operations where you just need to update one field 

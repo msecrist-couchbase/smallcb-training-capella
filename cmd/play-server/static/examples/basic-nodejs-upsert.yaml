@@ -1,4 +1,4 @@
-title: NodeJS Upsert & Query
+title: NodeJS Upsert 
 page: page-03
 lang: nodejs
 code: |
@@ -13,7 +13,7 @@ code: |
   
   const airline = {
     country: 'Iceland', callsign: 'ICEAIR',
-    iata: 'FI', icao: 'ICE', id: 123, 
+    iata: 'FI', icao: 'ICE', id: 123,
     name: 'Icelandair', type: 'airline',
   }
   
@@ -27,25 +27,25 @@ code: |
     }
   }
   
-  const queryDocument = async (key) => {
+  const getSubDocument = async (key, field) => {
     try {
-      let query = `
-        SELECT * FROM \`travel-sample\` WHERE type='airline' 
-        AND callsign='${key}';
-      `
-      let queryResult = await cluster.query(query)
+      var result = await collection.lookupIn(key, [
+        couchbase.LookupInSpec.get(field),
+      ])
+      var country = result.content[0].value
   
-      console.log('Query Result: ')
-      console.log(queryResult.rows)
-    } catch (err) {
-      console.error(err)
+      console.log('Airline Added: ')
+      console.log(country)
+    } catch (error) {
+      console.error(error)
     }
   }
   
   upsertDocument(airline.type, airline.id, airline)
-    .then(()=> setTimeout(()=> 
-      queryDocument('ICEAIR')
+    .then(
+      getSubDocument('airline_123', 'name')
         .then(() => process.exit(0))
-      , 2100))
+    )
 infoAfter: |
   We upsert and then retrieve our document using a basic query.
+  Visit our docs to learn more about <a target="_blank" href="https://docs.couchbase.com/nodejs-sdk/current/howtos/kv-operations.html#crud-operations">Key Value CRUD Operations in Node</a>.

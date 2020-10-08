@@ -14,13 +14,17 @@ code: |
   try:
     cluster = Cluster('couchbase://{{.Host}}', ClusterOptions(pa))
   
-    bucket = cluster.bucket('beer-sample')
+    bucket = cluster.bucket('travel-sample')
   
     coll = bucket.default_collection()
   
-    rv = coll.get('21st_amendment_brewery_cafe')
+    rv = coll.get('airline_10')
   
     print(rv.content)
   
   except:
     print("exception:", sys.exc_info()[0])
+infoAfter: |
+  If we know a document's key value, we can use the collection.get() method
+  passing a key. This returns one document. 
+  Visit our docs to learn more about <a target="_blank" href="https://docs.couchbase.com/python-sdk/current/howtos/kv-operations.html#retrieving-full-documents">Retrieving Full Documents in Python</a>.
