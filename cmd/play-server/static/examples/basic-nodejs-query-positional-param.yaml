@@ -1,0 +1,31 @@
+title: Basic NodeJS Positional Query
+page: page-03
+lang: nodejs
+code: |
+  const couchbase = require('couchbase')
+  
+  const cluster = new couchbase.Cluster('couchbase://{{.Host}}', {
+    username: '{{.CBUser}}', password: '{{.CBPswd}}'
+  })
+  
+  cluster.bucket('travel-sample')
+
+  const getAirlineByCallsign = async (callsign) => {
+    try {
+      const query = `
+        SELECT * 
+        FROM \`travel-sample\` 
+        WHERE type=$1
+          AND callsign=$2;
+      `
+      const options = { parameters: ['airline', callsign] }
+      const result = await cluster.query(query, options)
+      console.log('Query Result: ')
+      console.log(result.rows)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+  
+  getAirlineByCallsign('UNITED')
+    .then(() => { process.exit(0) })
