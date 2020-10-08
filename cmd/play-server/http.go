@@ -262,10 +262,13 @@ func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 	if session == nil && s != "" {
 		StatsNumInc("http.Run.err")
 
-		http.Error(w,
-			http.StatusText(http.StatusNotFound)+
-				", session unknown",
-			http.StatusNotFound)
+		t := http.StatusText(http.StatusNotFound)+
+			", err: session unknown"
+
+		// http.Error(w, t, http.StatusNotFound)
+
+		EmitOutput(w, t)
+
 		log.Printf("ERROR: HttpHandleRun, session unknown, s: %v", s)
 
 		return
@@ -318,12 +321,15 @@ func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		StatsNumInc("http.Run.err")
 
-		http.Error(w,
-			http.StatusText(http.StatusInternalServerError)+
-				fmt.Sprintf(", HttpHandleRun, err: %v\n"+
-					"------------------------\n%s\n",
-					err, result),
-			http.StatusInternalServerError)
+		t := http.StatusText(http.StatusInternalServerError)+
+			fmt.Sprintf(", HttpHandleRun, err: %v\n"+
+				"------------------------\n%s\n",
+				err, result)
+
+		// http.Error(w, t, http.StatusInternalServerError)
+
+		EmitOutput(w, t)
+
 		log.Printf("ERROR: HttpHandleRun, err: %v", err)
 
 		return
@@ -331,6 +337,10 @@ func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 
 	StatsNumInc("http.Run.ok")
 
+	EmitOutput(w, string(result))
+}
+
+func EmitOutput(w http.ResponseWriter, result string) {
 	data := map[string]interface{}{
 		"AnalyticsHTML": template.HTML(AnalyticsHTML(*host)),
 		"Output":        string(result),
