@@ -22,11 +22,11 @@ code: |
       console.log(result)
 
       console.log('Country: ')
-      console.log(country) //'United Kingdom'
+      console.log(country) //'United States'
     } catch (error) {
       console.error(error)
     }
   }
   
-  getSubDocument('airline_123')
+  getSubDocument('airline_5209')
     .then(() => process.exit(0))
