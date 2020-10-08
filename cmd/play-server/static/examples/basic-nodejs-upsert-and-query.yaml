@@ -30,7 +30,8 @@ code: |
   const queryDocument = async (key) => {
     try {
       let query = `
-        SELECT * FROM \`travel-sample\` WHERE type='airline' AND callsign='${key}';
+        SELECT * FROM \`travel-sample\` WHERE type='airline' 
+        AND callsign='${key}';
       `
       let queryResult = await cluster.query(query)
   
