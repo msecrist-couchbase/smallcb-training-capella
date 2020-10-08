@@ -1,0 +1,51 @@
+title: NodeJS Upsert & Query
+page: page-03
+lang: nodejs
+code: |
+  const couchbase = require('couchbase')
+  
+  const cluster = new couchbase.Cluster('couchbase://{{.Host}}', {
+    username: '{{.CBUser}}', password: '{{.CBPswd}}'
+  })
+  
+  const bucket = cluster.bucket('travel-sample')
+  const collection = bucket.defaultCollection()
+  
+  const airline = {
+    country: 'Iceland', callsign: 'ICEAIR',
+    iata: 'FI', icao: 'ICE', id: 123, 
+    name: 'Icelandair', type: 'airline',
+  }
+  
+  const upsertDocument = async (type, id, doc) => {
+    try {
+      const upsertResult = await collection.upsert(`${type}_${id}`, doc);
+      console.log('Upsert Result: ')
+      console.log(upsertResult)
+    } catch (err) {
+      console.error(err)
+    }
+  }
+  
+  const queryDocument = async (key) => {
+    try {
+      let query = `
+        SELECT * FROM \`travel-sample\` WHERE type='airline' 
+        AND callsign='${key}';
+      `
+      let queryResult = await cluster.query(query)
+  
+      console.log('Query Result: ')
+      console.log(queryResult.rows)
+    } catch (err) {
+      console.error(err)
+    }
+  }
+  
+  upsertDocument(airline.type, airline.id, airline)
+    .then(()=> setTimeout(()=> 
+      queryDocument('ICEAIR')
+        .then(() => process.exit(0))
+      , 2100))
+infoAfter: |
+  We upsert and then retrieve our document using a basic query.

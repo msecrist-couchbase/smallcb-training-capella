@@ -1,0 +1,36 @@
+title: NodeJS Query Rows
+page: page-03
+lang: nodejs
+code: |
+  const couchbase = require('couchbase')
+  
+  const cluster = new couchbase.Cluster('couchbase://{{.Host}}', {
+    username: '{{.CBUser}}', password: '{{.CBPswd}}'
+  })
+  
+  cluster.bucket('travel-sample')
+
+  const getAirportsByCity = async (city) => {
+    try {
+      const query = `
+        SELECT airportname, city 
+        FROM \`travel-sample\`
+        WHERE type='airport'
+          AND city LIKE '%${city}'
+    `
+      let results = await cluster.query(query)
+      results.rows.forEach((row) => {
+        console.log('Query row: ', row)
+      })
+      return results
+    } catch (err) {
+      console.error(err)
+    }
+  }
+  
+  
+  getAirportsByCity('Los Angeles')
+    .then(() => process.exit(0))
+infoAfter: |
+  Basic N1QL query, expected to return many rows, we loop 
+  through them and console.log() each one.

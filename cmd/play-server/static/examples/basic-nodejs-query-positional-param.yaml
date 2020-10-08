@@ -1,4 +1,4 @@
-title: Basic NodeJS Query
+title: NodeJS Query Positional
 page: page-03
 lang: nodejs
 code: |
@@ -15,14 +15,10 @@ code: |
       const query = `
         SELECT * 
         FROM \`travel-sample\` 
-        WHERE type=$TYPE
-          AND callsign=$CALLSIGN;
+        WHERE type=$1
+          AND callsign=$2;
       `
-      const options = {
-        parameters: {
-          TYPE: 'airline', CALLSIGN: callsign
-        }
-      }
+      const options = { parameters: ['airline', callsign] }
       const result = await cluster.query(query, options)
       console.log('Query Result: ')
       console.log(result.rows)
@@ -32,4 +28,8 @@ code: |
   }
   
   getAirlineByCallsign('UNITED')
-    .then(() => { process.exit(0) })
+    .then(() => process.exit(0))
+infoAfter: |
+  Placeholders allow you to specify variable constraints for a query. 
+  This method allows you to use positional parameters, pass them to 
+  cluster.query() method by query and options.

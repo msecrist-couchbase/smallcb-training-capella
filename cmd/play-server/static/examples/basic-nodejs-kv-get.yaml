@@ -1,4 +1,4 @@
-title: Basic NodeJS KV Get
+title: NodeJS KV Get
 page: page-03
 lang: nodejs
 code: |
@@ -13,13 +13,16 @@ code: |
 
   const getDocument = async (key) => {
     try {
-      const res = await collection.get(key)
+      const result = await collection.get(key)
       console.log('Result: ')
-      console.log(res)
+      console.log(result)
     } catch (err) {
       console.error(err)
     }
   }
 
   getDocument('airline_5209')
-    .then(() => { process.exit(0) })
+    .then(() => process.exit(0))
+infoAfter: |
+  If we know a document's key value, we can use the collection.get() method
+  passing a key. This returns one document.

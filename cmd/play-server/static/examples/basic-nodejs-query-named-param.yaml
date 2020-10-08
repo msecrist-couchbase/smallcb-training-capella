@@ -1,0 +1,39 @@
+title: NodeJS Query Named
+page: page-03
+lang: nodejs
+code: |
+  const couchbase = require('couchbase')
+  
+  const cluster = new couchbase.Cluster('couchbase://{{.Host}}', {
+    username: '{{.CBUser}}', password: '{{.CBPswd}}'
+  })
+  
+  cluster.bucket('travel-sample')
+
+  const getAirlineByCallsign = async (callsign) => {
+    try {
+      const query = `
+        SELECT * 
+        FROM \`travel-sample\` 
+        WHERE type=$TYPE
+          AND callsign=$CALLSIGN;
+      `
+      const options = {
+        parameters: {
+          TYPE: 'airline', CALLSIGN: callsign
+        }
+      }
+      const result = await cluster.query(query, options)
+      console.log('Query Result: ')
+      console.log(result.rows)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+  
+  getAirlineByCallsign('UNITED')
+    .then(() => process.exit(0))
+infoAfter: |
+  Placeholders allow you to specify variable constraints for a query. 
+  This method allows you to use named parameters, passed to the 
+  cluster.query() method first with a query and then the options.
