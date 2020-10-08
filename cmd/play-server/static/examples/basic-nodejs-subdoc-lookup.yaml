@@ -30,3 +30,8 @@ code: |
   
   getSubDocument('airline_5209')
     .then(() => process.exit(0))
+infoAfter: |
+  Our Sub-document API allows for only retrieving or mutating a portion of 
+  a larger document. For operations where you just need to update one field 
+  in a document, this keeps you from having to query, change and send back and
+  updated document and is more performant getting or setting in one operation.

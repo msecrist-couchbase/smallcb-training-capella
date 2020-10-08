@@ -46,5 +46,6 @@ code: |
     .then(()=> setTimeout(()=> 
       queryDocument('ICEAIR')
         .then(() => process.exit(0))
-      , 1000))
-    
+      , 2100))
+infoAfter: |
+  We upsert and then retrieve our document.

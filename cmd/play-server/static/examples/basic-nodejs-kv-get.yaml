@@ -13,9 +13,9 @@ code: |
 
   const getDocument = async (key) => {
     try {
-      const res = await collection.get(key)
+      const result = await collection.get(key)
       console.log('Result: ')
-      console.log(res)
+      console.log(result)
     } catch (err) {
       console.error(err)
     }
@@ -23,3 +23,7 @@ code: |
 
   getDocument('airline_5209')
     .then(() => process.exit(0))
+infoAfter: |
+  If we know a document's kay value, we can use the collection.get() 
+  which takes an argument of key. Returns one document. Access the 
+  entire object and metadata with `result` or just the document with `result.value`

@@ -10,14 +10,13 @@ code: |
   
   cluster.bucket('travel-sample')
 
-  const queryDocument = async (city) => {
+  const getAirportsByCity = async (city) => {
     try {
       const query = `
         SELECT airportname, city 
         FROM \`travel-sample\`
         WHERE type='airport'
-          AND tz LIKE '%${city}'
-          AND airportname LIKE '%Intl';
+          AND city LIKE '%${city}'
     `
       let results = await cluster.query(query)
       results.rows.forEach((row) => {
@@ -30,5 +29,8 @@ code: |
   }
   
   
-  queryDocument('Los Angeles')
+  getAirportsByCity('Los Angeles')
     .then(() => process.exit(0))
+infoAfter: |
+    Just a basic N1QL query, no parameters and our query is expected to 
+    return many rows, we loop through them and do something for each one.

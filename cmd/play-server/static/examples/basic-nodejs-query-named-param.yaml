@@ -33,3 +33,7 @@ code: |
   
   getAirlineByCallsign('UNITED')
     .then(() => process.exit(0))
+infoAfter: |
+  Placeholders allow you to specify variable constraints for a query. 
+  This method allows you to use named parameters, passed to the 
+  cluster.query() method first with a query and then the options.
