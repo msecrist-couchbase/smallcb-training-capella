@@ -1,4 +1,4 @@
-title: NodeJS Upsert & Query
+title: NodeJS Upsert 
 page: page-03
 lang: nodejs
 code: |
@@ -27,25 +27,7 @@ code: |
     }
   }
   
-  const queryDocument = async (key) => {
-    try {
-      let query = `
-        SELECT * FROM \`travel-sample\` WHERE type='airline' 
-        AND callsign='${key}';
-      `
-      let queryResult = await cluster.query(query)
-  
-      console.log('Query Result: ')
-      console.log(queryResult.rows)
-    } catch (err) {
-      console.error(err)
-    }
-  }
-  
   upsertDocument(airline.type, airline.id, airline)
-    .then(()=> setTimeout(()=> 
-      queryDocument('ICEAIR')
-        .then(() => process.exit(0))
-      , 2100))
+    .then(() => process.exit(0))
 infoAfter: |
   We upsert and then retrieve our document using a basic query.
