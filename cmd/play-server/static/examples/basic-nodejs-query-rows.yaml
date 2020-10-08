@@ -1,0 +1,34 @@
+title: NodeJS Query Rows
+page: page-03
+lang: nodejs
+code: |
+  const couchbase = require('couchbase')
+  
+  const cluster = new couchbase.Cluster('couchbase://{{.Host}}', {
+    username: '{{.CBUser}}', password: '{{.CBPswd}}'
+  })
+  
+  cluster.bucket('travel-sample')
+
+  const queryDocument = async (key) => {
+    try {
+      const query = `
+        SELECT airportname, city 
+        FROM \`travel-sample\`
+        WHERE type='airport'
+          AND tz LIKE '%Los_Angeles'
+          AND airportname LIKE '%Intl';
+    `
+      let results = await cluster.query(query)
+      results.rows.forEach((row) => {
+        console.log('Query row: ', row)
+      })
+      return results
+    } catch (err) {
+      console.error(err)
+    }
+  }
+  
+  
+  queryDocument('ICEAIR')
+    .then(() => process.exit(0))
