@@ -262,7 +262,7 @@ func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 	if session == nil && s != "" {
 		StatsNumInc("http.Run.err")
 
-		t := http.StatusText(http.StatusNotFound)+
+		t := http.StatusText(http.StatusNotFound) +
 			", err: session unknown"
 
 		// http.Error(w, t, http.StatusNotFound)
@@ -321,7 +321,7 @@ func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		StatsNumInc("http.Run.err")
 
-		t := http.StatusText(http.StatusInternalServerError)+
+		t := http.StatusText(http.StatusInternalServerError) +
 			fmt.Sprintf(", HttpHandleRun, err: %v\n"+
 				"------------------------\n%s\n",
 				err, result)

@@ -34,7 +34,7 @@ func CheckLangCode(lang, code string, codeMaxLen int) (
 // ------------------------------------------------
 
 // RunRequestSingle waits for a ready container instance,
-// runs code once (just a single request, not a session),
+// runs code once (just a single request, not in a session),
 // then asynchronously restarts that container instance.
 func RunRequestSingle(req RunRequest, readyCh chan int,
 	containerWaitDuration time.Duration,
@@ -243,6 +243,8 @@ func AddRBACUser(req RunRequest, containerId int,
 		return fmt.Errorf("AddRBACUser,"+
 			" out: %s, err: %v", out, err)
 	}
+
+	time.Sleep(*containerPrepDuration)
 
 	return nil
 }

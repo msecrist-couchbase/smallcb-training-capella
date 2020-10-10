@@ -18,6 +18,9 @@ var (
 	containerVolPrefix = flag.String("containerVolPrefix", "vol-instances/vol-",
 		"prefix of the volume directories of container instances")
 
+	containerPrepDuration = flag.Duration("containerPrepDuration", 250*time.Millisecond,
+		"duration to sleep to allow container setup or preparation to finish")
+
 	containerWaitDuration = flag.Duration("containerWaitDuration", 20*time.Second,
 		"duration that a client's request will wait for a ready container instance")
 
