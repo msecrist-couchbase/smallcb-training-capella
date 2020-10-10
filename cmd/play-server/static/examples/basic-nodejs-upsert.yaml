@@ -32,10 +32,13 @@ code: |
       var result = await collection.lookupIn(key, [
         couchbase.LookupInSpec.get(field),
       ])
-      var country = result.content[0].value
+      var fieldValue = result.content[0].value
   
-      console.log('Airline Added: ')
-      console.log(country)
+      console.log('LookupIn Result: ')
+      console.log(result)
+  
+      console.log('Field Value: ')
+      console.log(fieldValue)
     } catch (error) {
       console.error(error)
     }

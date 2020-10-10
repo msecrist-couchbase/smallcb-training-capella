@@ -29,7 +29,10 @@ code: |
       ])
       var fieldValue = result.content[0].value
   
-      console.log(`New Field Value: `)
+      console.log('LookupIn Result: ')
+      console.log(result)
+  
+      console.log(`Field Value: `)
       console.log(fieldValue)
     } catch (error) {
       console.error(error)
