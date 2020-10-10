@@ -10,7 +10,7 @@ code: |
   
   cluster.bucket('travel-sample')
 
-  const getAirportsByCity = async (city) => {
+  const getHotelsByCity = async (city) => {
     try {
       const query = `
         SELECT name, city, state
@@ -20,12 +20,12 @@ code: |
       `
       const options = {
         parameters: {
-          TYPE: 'airline', CITY: city
+          CITY: city
         }
       }
       let results = await cluster.query(query, options)
       results.rows.forEach((row) => {
-        console.log('Query row: ', row)
+        console.log('Result row: ', row)
       })
       return results
     } catch (err) {
@@ -33,7 +33,7 @@ code: |
     }
   }
   
-  getAirportsByCity('Malibu')
+  getHotelsByCity('Malibu')
     .then(() => process.exit(0))
 infoAfter: |
   Basic N1QL query, expected to return many rows, we loop 
