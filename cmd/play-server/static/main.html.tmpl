@@ -27,6 +27,13 @@
       document.getElementById("code-output").className = "code-output";
       return true;
     }
+    function toggleElemId(elemId) {
+      let elem = document.getElementById(elemId);
+      elem.style.display = 
+        (window.getComputedStyle(elem).display === 'block')
+          ? 'none'
+          : 'block'
+    }
   </script>
   {{.AnalyticsHTML}}
 </head>
@@ -61,7 +68,7 @@
   </header>
 
   <main>
-    <div class="info-panel">
+    <div class="info-panel" id="infoPanel">
       {{if .Msg}}
       <div class="message-info">{{.Msg}}</div>
       {{end}}
@@ -95,79 +102,88 @@
       </div>
       {{end}}
     </div>
-
     <div class="workspace">
-      <div class="code-examples">
-        <h2>Examples</h2>
-        <div class="examples-hr">
-          <hr />
+      <div class="workspace-header">
+        <div class="header-left">
+          <button onClick="toggleElemId('infoPanel');">Info Panel</button>
         </div>
-        <ul class="examples">
-          {{range $i, $v := .Examples}}
-          <li class="{{.className}} lang-{{.lang}} {{if eq .name $.Name}}current{{end}}">
-            <a href="/{{$.ExamplesPath}}/{{.name}}{{if $.Session}}?s={{$.Session.SessionId}}{{end}}{{if gt $i 5}}#ex-{{.name}}{{end}}"
-              id="ex-{{.name}}">
-              {{.title}}
-            </a>
-          </li>
-          {{end}}
-
-          {{if not .Session}}
-          <li class="session">
-            <a href="/session"
-              class="session">Start Test-drive</a>
-          </li>
-          {{end}}
-        </ul>
+        <div class="header-right">
+          &nbsp;
+        </div>
       </div>
-
-      <div class="code-editor">
-        <div class="sticky">
-          {{if or .Name .Lang .Code}}
-          <h2>
-            {{if .Title}}{{.Title}}{{else}}API / SDK Playground{{end}}
-          </h2>
-
-          <div>
-            {{if .InfoBefore}}
-            <div class="info infoBefore">{{.InfoBefore}}</div>
+      <div class="workspace-body">
+        <div class="code-examples">
+          <h2>Examples</h2>
+          <div class="examples-hr">
+            <hr />
+          </div>
+          <ul class="examples">
+            {{range $i, $v := .Examples}}
+            <li class="{{.className}} lang-{{.lang}} {{if eq .name $.Name}}current{{end}}">
+              <a href="/{{$.ExamplesPath}}/{{.name}}{{if $.Session}}?s={{$.Session.SessionId}}{{end}}{{if gt $i 5}}#ex-{{.name}}{{end}}"
+                id="ex-{{.name}}">
+                {{.title}}
+              </a>
+            </li>
             {{end}}
 
-            <form action="/run" method="post" target="output">
-              {{if .Session}}
-              <input name="s" type="hidden" value="{{.Session.SessionId}}"/>
+            {{if not .Session}}
+            <li class="session">
+              <a href="/session"
+                class="session">Start Test-drive</a>
+            </li>
+            {{end}}
+          </ul>
+        </div>
+
+        <div class="code-editor">
+          <div class="sticky">
+            {{if or .Name .Lang .Code}}
+            <h2>
+              {{if .Title}}{{.Title}}{{else}}API / SDK Playground{{end}}
+            </h2>
+
+            <div>
+              {{if .InfoBefore}}
+              <div class="info infoBefore">{{.InfoBefore}}</div>
               {{end}}
-              <input name="lang" type="hidden" value="{{.Lang}}"/>
 
-              <div id="code-ace" class="code-ace"></div>
+              <form action="/run" method="post" target="output">
+                {{if .Session}}
+                <input name="s" type="hidden" value="{{.Session.SessionId}}"/>
+                {{end}}
+                <input name="lang" type="hidden" value="{{.Lang}}"/>
 
-              <textarea id="code" name="code" class="code" wrap="off" autocorrect="off" 
-                autocomplete="off" autocapitalize="off"
-                spellcheck="false"
-              >{{.Code}}</textarea>
+                <div id="code-ace" class="code-ace"></div>
 
-              <input type="submit" value="run" class="run" id="run"
-                onclick="return onRunSubmit()" />
-            </form>
+                <textarea id="code" name="code" class="code" wrap="off" autocorrect="off" 
+                  autocomplete="off" autocapitalize="off"
+                  spellcheck="false"
+                >{{.Code}}</textarea>
 
-            {{if .InfoAfter}}
-            <div class="info infoAfter">{{.InfoAfter}}</div>
+                <input type="submit" value="run" class="run" id="run"
+                  onclick="return onRunSubmit()" />
+              </form>
+
+              {{if .InfoAfter}}
+              <div class="info infoAfter">{{.InfoAfter}}</div>
+              {{end}}
+            </div>
+            {{else}}
+            <div style="margin-top: .8rem;">
+              Please select an example{{if not .Session}}... or <a href="/session" class="nowrap">start a test-drive</a>&nbsp;session{{end}}.
+            </div>
             {{end}}
           </div>
-          {{else}}
-          <div style="margin-top: .8rem;">
-            Please select an example{{if not .Session}}... or <a href="/session" class="nowrap">start a test-drive</a>&nbsp;session{{end}}.
-          </div>
-          {{end}}
         </div>
-      </div>
 
-      <div class="code-output hidden" id="code-output">
-        <div class="sticky">
-          {{if or .Name .Lang .Code}}
-          <h2>Output</h2>
-          <iframe name="output" id="output" class="output"></iframe>
-          {{end}}
+        <div class="code-output hidden" id="code-output">
+          <div class="sticky">
+            {{if or .Name .Lang .Code}}
+            <h2>Output</h2>
+            <iframe name="output" id="output" class="output"></iframe>
+            {{end}}
+          </div>
         </div>
       </div>
     </div>
