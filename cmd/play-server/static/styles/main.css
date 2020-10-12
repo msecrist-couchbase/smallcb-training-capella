@@ -54,7 +54,7 @@
 .workspace .workspace-header {
   display: flex;
   flex-direction: rows;
-  background: #2E3440;
+  background: #1b1e25;
 }
 
 .workspace .workspace-header .header-left {
@@ -66,8 +66,8 @@
   border: 0;
   width: 100px;
   min-height: 40px;
-  border-color: #516374;
-  background-color: #516374;
+  border-color: #1b1e25;
+  background-color: #1b1e25;
   color: #FFFFFF;
 }
 .workspace .workspace-header button:hover {

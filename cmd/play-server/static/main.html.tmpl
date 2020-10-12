@@ -103,14 +103,18 @@
       {{end}}
     </div>
     <div class="workspace">
+      {{if .Session}}
       <div class="workspace-header">
+        
         <div class="header-left">
-          <button onClick="toggleElemId('infoPanel');">Info Panel</button>
+          <button onClick="toggleElemId('infoPanel');">Toggle Info</button>
         </div>
         <div class="header-right">
           &nbsp;
         </div>
+        
       </div>
+      {{end}}
       <div class="workspace-body">
         <div class="code-examples">
           <h2>Examples</h2>
