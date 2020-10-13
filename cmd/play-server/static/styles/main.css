@@ -30,7 +30,7 @@
 .session-info div.connection a.ui img {
   display: none;
   position: absolute;
-  top: 30px;
+  top: 27px;
   left: 20px;
   width: 300px;
   z-index: 1;
@@ -45,7 +45,7 @@
 .workspace {
   width: 100%;
   display: grid;
-  grid-template-rows: 40px    auto;
+  grid-template-rows: 27px    auto;
   /*              ws-header  ws-body */
 }
 
@@ -56,7 +56,7 @@
 
 .workspace .workspace-header .header-left {
   width: 50%;
-  height: 40px;
+  height: 27px;
 }
 
 .workspace .workspace-header a {
@@ -64,7 +64,7 @@
   align-items: center;
   justify-content: center;
   width: 110px;
-  min-height: 40px;
+  min-height: 27px;
   cursor: pointer;
   cursor: hand;
 
@@ -74,7 +74,7 @@
 
 .workspace .workspace-header .header-right {
   width: 50%;
-  height: 40px;
+  height: 27px;
 }
 
 .workspace .workspace-body {
@@ -196,22 +196,15 @@ body.dark .session-info div.connection a.ui img {
 
 /* Dark Mode workspace */
 body.dark .workspace .workspace-header {
-  background: #1b1e25;
+  background: #262a35;
 }
 
 body.dark .workspace .workspace-header a {
-  border-color: #1b1e25;
-  background-color: #1b1e25;
+  background-color: #262a35;
   color: #FFFFFF;
 }
-body.dark .workspace .workspace-header a:hover {
-  border-color: #516374;
-  background-color: #2E3540;
-  color: #EFEFEF;
-}
+body.dark .workspace .workspace-header a:hover,
 body.dark .workspace .workspace-header a:focus {
-  outline-color: #778fa7;
-  border-color: #778fa7;
   background-color: #2E3540;
   color: #EFEFEF;
 }

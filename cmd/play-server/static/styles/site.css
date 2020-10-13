@@ -181,7 +181,6 @@ body > header > nav > ul > li > a {
 
 body.dark > main {
   background-color: #2e3440;
-  border-top: 1px solid #414a5a; 
   color: #EFEFEF;
 }
 
