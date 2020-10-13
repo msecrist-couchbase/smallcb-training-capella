@@ -27,13 +27,6 @@
       document.getElementById("code-output").className = "code-output";
       return true;
     }
-    function toggleElemId(elemId) {
-      let elem = document.getElementById(elemId);
-      elem.style.display = 
-        (window.getComputedStyle(elem).display === 'block')
-          ? 'none'
-          : 'block'
-    }
   </script>
   {{.AnalyticsHTML}}
 </head>
@@ -107,7 +100,7 @@
       <div class="workspace-header">
         
         <div class="header-left">
-          <button onClick="toggleElemId('infoPanel');">Toggle Info</button>
+          <button onClick="toggleInfoPanel();">Toggle Info</button>
         </div>
         <div class="header-right">
           &nbsp;
@@ -199,13 +192,41 @@
   </footer>
 
   <script>
+    function setElemDisplay(elemId, displayValue) {
+      let elem = document.getElementById(elemId);
+      elem.style.display = displayValue
+    }
+
+    function toggleInfoPanel() {
+      const ls = localStorage.getItem('infoPanel')
+      if (ls === 'show') {
+        localStorage.setItem('infoPanel', 'hide')
+        setElemDisplay('infoPanel', 'none')
+      } else if (ls === 'hide') {
+        localStorage.setItem('infoPanel', 'show')
+        setElemDisplay('infoPanel', 'block')
+      }
+    }
+
+    function infoPanelInitPageLoad() {
+      const ls = localStorage.getItem('infoPanel')
+      if(ls == 'hide') {
+        setElemDisplay('infoPanel', 'none')
+      } else if(ls == 'show') {
+        setElemDisplay('infoPanel', 'block')
+      } else if(ls === null) {
+        localStorage.setItem('infoPanel', 'show')
+      }
+    }
+    infoPanelInitPageLoad()
+
     var codeAce = ace.edit("code-ace");
     codeAce.getSession().setValue(document.getElementById("code").value);
     codeAce.setTheme("ace/theme/nord_dark");
     codeAce.setOption("useWorker", false); // No syntax checking.
 
     {{if .LangAce}}
-      codeAce.setOption("mode", "ace/mode/{{.LangAce}}");
+    codeAce.setOption("mode", "ace/mode/{{.LangAce}}");
     {{end}}
   </script>
 </body>
