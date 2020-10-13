@@ -100,7 +100,7 @@
       <div class="workspace-header">
         
         <div class="header-left">
-          <button onClick="toggleInfoPanel();">Toggle Info</button>
+          <a onClick="toggleInfoPanel();">Toggle Info</a>
         </div>
         <div class="header-right">
           &nbsp;
@@ -167,7 +167,7 @@
               {{end}}
             </div>
             {{else}}
-            <div style="margin-top: .8rem;">
+            <div>
               Please select an example{{if not .Session}}... or <a href="/session" class="nowrap">start a test-drive</a>&nbsp;session{{end}}.
             </div>
             {{end}}

@@ -1,9 +1,7 @@
 .session-info {
-  margin: 20px 30px 20px 30px;
+  padding-top: 1em;
   padding-bottom: 20px;
-
   border-width: 1px;
-  border-style: solid;
 }
 .session-info h2 {
   font-weight: bold;
@@ -48,13 +46,12 @@
   width: 100%;
   display: grid;
   grid-template-rows: 40px    auto;
-  /*                  header  body */
+  /*              ws-header  ws-body */
 }
 
 .workspace .workspace-header {
   display: flex;
   flex-direction: rows;
-  background: #1b1e25;
 }
 
 .workspace .workspace-header .header-left {
@@ -62,30 +59,19 @@
   height: 40px;
 }
 
-.workspace .workspace-header button {
-  border: 0;
-  width: 100px;
+.workspace .workspace-header a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 110px;
   min-height: 40px;
-  border-color: #1b1e25;
-  background-color: #1b1e25;
-  color: #FFFFFF;
-}
-.workspace .workspace-header button:hover {
-  border-color: #516374;
-  background-color: #2E3540;
-  color: #EFEFEF;
-}
-.workspace .workspace-header button:focus {
-  outline-color: #778fa7;
-  border-color: #778fa7;
-  background-color: #2E3540;
-  color: #EFEFEF;
+  cursor: pointer;
+  cursor: hand;
+
+  text-decoration: none;
+  font-size: 13px;
 }
 
-.workspace .workspace-header .header-left button:focus {
-  outline: none;
-  box-shadow: none;
-}
 .workspace .workspace-header .header-right {
   width: 50%;
   height: 40px;
@@ -198,16 +184,38 @@
 
 /* Dark Mode session-info */
 body.dark .session-info {
+  background-color: #1B1F26;
   border-color: #666666;
 }
 body.dark .session-info h2 {
-  color: #A3BE8B;
+  color: #9fe264;
 }
 body.dark .session-info div.connection a.ui img {
   border-color: #888888;
 }
 
 /* Dark Mode workspace */
+body.dark .workspace .workspace-header {
+  background: #1b1e25;
+}
+
+body.dark .workspace .workspace-header a {
+  border-color: #1b1e25;
+  background-color: #1b1e25;
+  color: #FFFFFF;
+}
+body.dark .workspace .workspace-header a:hover {
+  border-color: #516374;
+  background-color: #2E3540;
+  color: #EFEFEF;
+}
+body.dark .workspace .workspace-header a:focus {
+  outline-color: #778fa7;
+  border-color: #778fa7;
+  background-color: #2E3540;
+  color: #EFEFEF;
+}
+
 body.dark .workspace .workspace-body .code-examples ul.examples li:hover {
   background-color: #526373;
 }

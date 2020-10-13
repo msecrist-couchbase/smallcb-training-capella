@@ -1,5 +1,5 @@
 body {
-  margin: 0 0;
+  margin: 0;
   font-family: Montserrat, Arial, Helvetica, sans-serif;
   font-size: 11pt;
 }
@@ -68,6 +68,7 @@ header nav ul > li a:visited {
 }
 
 h2 {
+  margin-top: 0;
   margin-left: 17px;
   white-space: nowrap;
   font-size: 15px;
@@ -84,6 +85,10 @@ main {
   height: 100%;
 }
 
+body.dark > main > .info-panel           {
+  padding: 0;
+}
+
 main > .info-panel > .message-info {
   padding: 40px 30px 40px 30px;
   /* padding-bottom: 40px; */
@@ -92,6 +97,10 @@ main > .info-panel > .message-info {
 
 main > .workspace {
   margin: 0 0 2em 0;
+}
+
+main > .workspace > .workspace-body {
+  margin-top: 1em;
 }
 
 footer {
@@ -176,11 +185,8 @@ body.dark > main {
   color: #EFEFEF;
 }
 
-body.dark > main > .info-panel           {
-  padding: 0;
-}
-
 body.dark > main > .info-panel > .message-info {
+  padding: 17px;
   border-bottom: 1px solid #000;
   color: #EFEFEF;
 }
