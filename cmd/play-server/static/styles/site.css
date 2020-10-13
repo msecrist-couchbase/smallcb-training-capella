@@ -146,11 +146,11 @@ input, pre {
   white-space: nowrap;
 }
 
-.examples-hr {
+.div-hr {
   margin-top: 1px;
   padding: 0 8px;
 }
-.examples-hr hr {
+.div-hr hr {
   width: 100%;
   border: 0;
   height: 1px;
@@ -222,7 +222,7 @@ body.dark header nav ul > li a.session:hover {
 }
 
 /* Dark Mode hr */
-.examples-hr hr {
+.div-hr hr {
   background-color: #4c5863!important;
   background: #4c5863;
 }
