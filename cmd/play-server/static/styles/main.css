@@ -78,26 +78,37 @@
 }
 .workspace .workspace-header .header-right {
   height: 27px;
-  padding-top: 4px;
+  padding-top: 3px;
   font-family: 'Ubuntu Mono', monospace;
   font-size: 12px;
   white-space: nowrap;
 
 }
+.workspace .workspace-header code {
+  padding: 3px 6px;
+  font-family: 'Ubuntu Mono', monospace;
+  font-size: 11px;
+  background-color: rgba(18, 22, 26, 0.75);
+  border-radius: 4px;
+  -webkit-user-select: all;  /* Chrome all / Safari all */
+  -moz-user-select: all;     /* Firefox all */
+  -ms-user-select: all;      /* IE 10+ */
+  user-select: all;          /* Likely future */  
+}
 
 .workspace .workspace-header .header-right .head-server {
   font-size: 14px;
-  color: #74ca29;
+  color: rgba(116, 202, 41, 0.85);
 }
 .workspace .workspace-header .header-right .head-user {
   margin-left: 2em;
   font-size: 14px;
-  color: #74ca29;
+  color: rgba(116, 202, 41, 0.85);
 }
 .workspace .workspace-header .header-right .head-pass {
   margin-left: 2em;
   font-size: 14px;
-  color: #74ca29;
+  color: rgba(116, 202, 41, 0.85);
 }
 
 .workspace .workspace-body {
