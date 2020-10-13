@@ -59,27 +59,45 @@
   border-bottom-style: solid;
 }
 
-.workspace .workspace-header .header-left {
-  width: 50%;
-  height: 27px;
-}
-
 .workspace .workspace-header a {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 110px;
+  width: 100px;
   min-height: 25px;
   cursor: pointer;
   cursor: hand;
 
   text-decoration: none;
-  font-size: 13px;
+  font-size: 12px;
 }
 
-.workspace .workspace-header .header-right {
-  width: 50%;
+.workspace .workspace-header .header-left {
+  width: 240px;
   height: 27px;
+}
+.workspace .workspace-header .header-right {
+  height: 27px;
+  padding-top: 4px;
+  font-family: 'Ubuntu Mono', monospace;
+  font-size: 12px;
+  white-space: nowrap;
+
+}
+
+.workspace .workspace-header .header-right .head-server {
+  font-size: 14px;
+  color: #74ca29;
+}
+.workspace .workspace-header .header-right .head-user {
+  margin-left: 2em;
+  font-size: 14px;
+  color: #74ca29;
+}
+.workspace .workspace-header .header-right .head-pass {
+  margin-left: 2em;
+  font-size: 14px;
+  color: #74ca29;
 }
 
 .workspace .workspace-body {
@@ -89,8 +107,7 @@
 
 .workspace .workspace-body .code-examples {
   height: 100%;
-  flex-basis: 15rem;
-  flex-grow: 1;
+  width: 240px;
 }
 .workspace .workspace-body .code-examples ul.examples {
   margin-right: 15px;
