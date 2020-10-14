@@ -83,6 +83,10 @@ func MainTemplateEmit(w http.ResponseWriter,
 		infoAfter = MapGetString(example, "infoAfter")
 	}
 
+	if session == nil {
+		host = "127.0.0.1"
+	}
+
 	data := &MainTemplateData{
 		Msg: msg,
 
