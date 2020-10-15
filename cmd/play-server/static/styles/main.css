@@ -1,9 +1,7 @@
 .session-info {
-  margin: 20px 30px 20px 30px;
+  padding-top: 1em;
   padding-bottom: 20px;
-
   border-width: 1px;
-  border-style: solid;
 }
 .session-info h2 {
   font-weight: bold;
@@ -32,7 +30,7 @@
 .session-info div.connection a.ui img {
   display: none;
   position: absolute;
-  top: 30px;
+  top: 27px;
   left: 20px;
   width: 300px;
   z-index: 1;
@@ -45,56 +43,131 @@
 }
 
 .workspace {
+  width: 100%;
+  display: grid;
+  grid-template-rows: 27px    auto;
+  /*              ws-header  ws-body */
+}
+
+.workspace .workspace-header {
+  display: flex;
+  flex-direction: rows;
+
+  border-top-width: 1px;
+  border-top-style: solid;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+}
+
+.workspace .workspace-header a {
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  padding-left: 17px;
+  width: 215px;
+  min-height: 25px;
+  cursor: pointer;
+  cursor: hand;
+
+  -webkit-user-select: none;  /* Chrome all / Safari all */
+  -moz-user-select: none;     /* Firefox all */
+  -ms-user-select: none;      /* IE 10+ */
+  user-select: none;          /* Likely future */      
+
+  text-decoration: none;
+  font-size: 12px;
+}
+
+.workspace .workspace-header .header-left {
+  width: 240px;
+  height: 27px;
+}
+.workspace .workspace-header .header-right {
+  height: 27px;
+  padding-top: 3px;
+  font-family: 'Ubuntu Mono', monospace;
+  font-size: 12px;
+  white-space: nowrap;
+
+}
+.workspace .workspace-header code {
+  padding: 3px 6px;
+  font-family: 'Ubuntu Mono', monospace;
+  font-size: 11px;
+  background-color: rgba(18, 22, 26, 0.75);
+  border-radius: 4px;
+  -webkit-user-select: all;  /* Chrome all / Safari all */
+  -moz-user-select: all;     /* Firefox all */
+  -ms-user-select: all;      /* IE 10+ */
+  user-select: all;          /* Likely future */  
+}
+
+.workspace .workspace-header .header-right .head-server {
+  font-size: 14px;
+  color: rgba(116, 202, 41, 0.85);
+}
+.workspace .workspace-header .header-right .head-user {
+  margin-left: 2em;
+  font-size: 14px;
+  color: rgba(116, 202, 41, 0.85);
+}
+.workspace .workspace-header .header-right .head-pass {
+  margin-left: 2em;
+  font-size: 14px;
+  color: rgba(116, 202, 41, 0.85);
+}
+
+.workspace .workspace-body {
   display: flex;
   flex-direction: row;
 }
 
-.workspace .code-examples {
+.workspace .workspace-body .code-examples {
   height: 100%;
-  flex-basis: 15rem;
-  flex-grow: 1;
+  width: 240px;
 }
-.workspace .code-examples ul.examples {
+.workspace .workspace-body .code-examples ul.examples {
   margin-right: 15px;
   padding-left: 11px;
 }
-.workspace .code-examples ul.examples li {
+.workspace .workspace-body .code-examples ul.examples li {
   list-style: none;
   margin: 0 0 1px 0;
   border-radius: 4px;
 }
-.workspace .code-examples ul.examples li.current {
+.workspace .workspace-body .code-examples ul.examples li.current {
   list-style: none;
 }
-.workspace .code-examples ul.examples li a {
+.workspace .workspace-body .code-examples ul.examples li a {
   display: block;
   padding: 5px 5px 5px 5px;
   text-decoration: none;
 }
-.workspace .code-examples ul.examples li.session {
+.workspace .workspace-body .code-examples ul.examples li.session {
   margin-top: 45px;
   /* border-width: 1px;
   border-style: solid;
   border-color: #888888; */
 }
-/* .workspace .code-examples ul.examples li.session a.session {
+/* .workspace .workspace-body .code-examples ul.examples li.session a.session {
   font-weight: bold;
   font-size: 13px;
   color: #666;
   cursor: pointer;
 }
-.workspace .code-examples ul.examples li.session a.session:hover {
+.workspace .workspace-body .code-examples ul.examples li.session a.session:hover {
   background-color: #9e9;
 } */
-.workspace .code-editor {
+
+.workspace .workspace-body .code-editor {
   flex-basis: 10rem;
   flex-grow: 100;
   margin: 0;
 }
-.workspace .code-editor textarea.code {
+.workspace .workspace-body .code-editor textarea.code {
   display: none;
 }
-.workspace .code-editor div.code-ace {
+.workspace .workspace-body .code-editor div.code-ace {
   margin-bottom: 15px;
   margin-right: 0;
   width: 95%;
@@ -103,7 +176,7 @@
   border-width: 1px;
   border-style: solid;
 }
-.workspace .code-editor input.run {
+.workspace .workspace-body .code-editor input.run {
   border: 0;
   padding: 5px 40px 5px 40px;
   font-weight: bold;
@@ -112,22 +185,22 @@
   border-width: 1px;
   border-style: solid;
 }
-.workspace .code-editor input.run:hover {
+.workspace .workspace-body .code-editor input.run:hover {
   border-width: 1px;
   border-style: solid;
 }
-.workspace .code-editor input.run:focus {
+.workspace .workspace-body .code-editor input.run:focus {
   outline-style: auto;
   outline-width: 0px;
 
   border-width: 1px;
   border-style: solid;
 }
-.workspace .code-output {
+.workspace .workspace-body .code-output {
   flex-basis: 10rem;
   flex-grow: 100;
 }
-.workspace .code-output iframe.output {
+.workspace .workspace-body .code-output iframe.output {
   width: 95%;
   height: 60vh;
   margin-bottom: 15px;
@@ -150,43 +223,63 @@
 
 /* Dark Mode session-info */
 body.dark .session-info {
-  border-color: #666666;
+  background-color: #1f242c;
+  border-top-color: #35414d;
+  border-top-width: 1px;
+  border-top-style: solid;
 }
 body.dark .session-info h2 {
-  color: #A3BE8B;
+  color: #9fe264;
 }
 body.dark .session-info div.connection a.ui img {
   border-color: #888888;
 }
 
 /* Dark Mode workspace */
-body.dark .workspace .code-examples ul.examples li:hover {
+body.dark .workspace .workspace-header {
+  background: #262a35;
+
+  border-top-color: #35414d;
+  border-bottom-color: #394652;
+}
+
+body.dark .workspace .workspace-header a {
+  background-color: #262a35;
+  color: #FFFFFF;
+}
+body.dark .workspace .workspace-header a:hover,
+body.dark .workspace .workspace-header a:focus {
+  background-color: #526373;
+  color: #EFEFEF;
+}
+
+body.dark .workspace .workspace-body .code-examples ul.examples li:hover {
   background-color: #526373;
 }
-body.dark .workspace .code-examples ul.examples li.current {
+body.dark .workspace .workspace-body .code-examples ul.examples li.current {
   color: #4c5863;
   background-color: #3F4858;
 }
-body.dark .workspace .code-editor div.code-ace {
+body.dark .workspace .workspace-body .code-editor div.code-ace {
   border-color: #516374;
 }
-body.dark .workspace .code-editor input.run {
+body.dark .workspace .workspace-body .code-editor input.run {
   border-color: #516374;
   background-color: #516374;
   color: #FFFFFF;
 }
-body.dark .workspace .code-editor input.run:hover {
+body.dark .workspace .workspace-body .code-editor input.run:hover {
   border-color: #516374;
   background-color: #2E3540;
   color: #EFEFEF;
 }
 
-body.dark .workspace .code-editor input.run:focus {
+body.dark .workspace .workspace-body .code-editor input.run:focus {
   outline-color: #778fa7;
   border-color: #516374;
   background-color: #778fa7;
   color: #EFEFEF;
 }
-body.dark .workspace .code-output iframe.output {
+body.dark .workspace .workspace-body .code-output iframe.output {
   border-color: #516374;
 }

@@ -51,7 +51,11 @@ article > section {
   padding-left: 17px;
 }
 
-header {
+article > header {
+  margin-top: 1em;
+}
+
+body > header {
   display: flex;
   flex-direction: column;
 }

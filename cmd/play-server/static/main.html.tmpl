@@ -2,9 +2,10 @@
 <html>
 <head>
   <title>Couchbase API / SDK Playground</title>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;1,300&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;1,300&Ubuntu+Mono&display=swap" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="/static/styles/site.css">
   <link rel="stylesheet" type="text/css" href="/static/styles/main.css">
+  <link rel="stylesheet" type="text/css" href="/static/styles/icons.css">
   <style>
     /* TODO: Re-enable lang-go once we figure out couchbase golang SDK v2. */
     .lang-go {
@@ -61,7 +62,7 @@
   </header>
 
   <main>
-    <div class="info-panel">
+    <div class="info-panel" id="infoPanel">
       {{if .Msg}}
       <div class="message-info">{{.Msg}}</div>
       {{end}}
@@ -78,9 +79,8 @@
         </div>
         <div class="connection">
       <b>Couchbase Server</b>
-        <a href="http://{{.Host}}:8091" class="ui">Web-Admin UI<img src="/static/shots/shot-dashboard.png"/></a> : <a href="http://{{.Host}}:8091">http://{{.Host}}:8091</a> -- username: <em>{{.Session.CBUser}}</em> password: <em>{{.Session.CBPswd}}</em>
+        <a href="http://{{.Host}}:8091" class="ui">Web-Admin UI<img src="/static/shots/shot-dashboard.png"/></a> : <a href="http://{{.Host}}:8091/ui/index.html#!/query/workbench" class="ui"><img src="/static/shots/shot-query-workbench.png"/>Query Workbench</a> | <a href="http://{{.Host}}:8091/ui/index.html#!/documents/editor" class="ui"><img src="/static/shots/shot-documents.png"/>Document Editor</a> | <a href="http://{{.Host}}:8091/ui/index.html#!/documents/import" class="ui"><img src="/static/shots/shot-import-documents.png"/>Import Documents</a> | REST API: http://{{.Session.CBUser}}:{{.Session.CBPswd}}@{{.Host}}:8091
 
-                      <a href="http://{{.Host}}:8091/ui/index.html#!/query/workbench" class="ui"><img src="/static/shots/shot-query-workbench.png"/>Query Workbench</a> | <a href="http://{{.Host}}:8091/ui/index.html#!/documents/editor" class="ui"><img src="/static/shots/shot-documents.png"/>Document Editor</a> | <a href="http://{{.Host}}:8091/ui/index.html#!/documents/import" class="ui"><img src="/static/shots/shot-import-documents.png"/>Import Documents</a> | REST API: http://{{.Session.CBUser}}:{{.Session.CBPswd}}@{{.Host}}:8091
 
       <b>Couchbase SDK's</b>             : connection snippets
         Java   <a href="https://docs.couchbase.com/java-sdk/current/hello-world/start-using-sdk.html">SDK docs</a>, <a href="https://docs.couchbase.com/sdk-api/couchbase-java-client/">API docs</a> : - Cluster.connect("couchbase://{{.Host}}", "{{.Session.CBUser}}", "{{.Session.CBPswd}}")
@@ -95,79 +95,94 @@
       </div>
       {{end}}
     </div>
-
     <div class="workspace">
-      <div class="code-examples">
-        <h2>Examples</h2>
-        <div class="examples-hr">
-          <hr />
+      {{if .Session}}
+      <div class="workspace-header">
+        
+        <div class="header-left">
+          <a onClick="toggleInfoPanel();"><span id="toggleIcon" class="chevron top"></span> Toggle Info</a>
         </div>
-        <ul class="examples">
-          {{range $i, $v := .Examples}}
-          <li class="{{.className}} lang-{{.lang}} {{if eq .name $.Name}}current{{end}}">
-            <a href="/{{$.ExamplesPath}}/{{.name}}{{if $.Session}}?s={{$.Session.SessionId}}{{end}}{{if gt $i 5}}#ex-{{.name}}{{end}}"
-              id="ex-{{.name}}">
-              {{.title}}
-            </a>
-          </li>
-          {{end}}
-
-          {{if not .Session}}
-          <li class="session">
-            <a href="/session"
-              class="session">Start Test-drive</a>
-          </li>
-          {{end}}
-        </ul>
+        <div class="header-right">
+          <span class="head-server">cb server:</span> <code>http://{{.Host}}:8091</code>
+          <span class="head-user">username:</span> <code>{{.Session.CBUser}} </code>
+          <span class="head-pass">password:</span> <code>{{.Session.CBPswd}}</code>
+        </div>
+        
       </div>
-
-      <div class="code-editor">
-        <div class="sticky">
-          {{if or .Name .Lang .Code}}
-          <h2>
-            {{if .Title}}{{.Title}}{{else}}API / SDK Playground{{end}}
-          </h2>
-
-          <div>
-            {{if .InfoBefore}}
-            <div class="info infoBefore">{{.InfoBefore}}</div>
+      {{end}}
+      <div class="workspace-body">
+        <div class="code-examples">
+          <h2>Examples</h2>
+          <div class="div-hr">
+            <hr />
+          </div>
+          <ul class="examples">
+            {{range $i, $v := .Examples}}
+            <li class="{{.className}} lang-{{.lang}} {{if eq .name $.Name}}current{{end}}">
+              <a href="/{{$.ExamplesPath}}/{{.name}}{{if $.Session}}?s={{$.Session.SessionId}}{{end}}{{if gt $i 5}}#ex-{{.name}}{{end}}"
+                id="ex-{{.name}}">
+                {{.title}}
+              </a>
+            </li>
             {{end}}
 
-            <form action="/run" method="post" target="output">
-              {{if .Session}}
-              <input name="s" type="hidden" value="{{.Session.SessionId}}"/>
+            {{if not .Session}}
+            <li class="session">
+              <a href="/session"
+                class="session">Start Test-drive</a>
+            </li>
+            {{end}}
+          </ul>
+        </div>
+
+        <div class="code-editor">
+          <div class="sticky">
+            {{if or .Name .Lang .Code}}
+            <h2>
+              {{if .Title}}{{.Title}}{{else}}API / SDK Playground{{end}}
+            </h2>
+
+            <div>
+              {{if .InfoBefore}}
+              <div class="info infoBefore">{{.InfoBefore}}</div>
               {{end}}
-              <input name="lang" type="hidden" value="{{.Lang}}"/>
 
-              <div id="code-ace" class="code-ace"></div>
+              <form action="/run" method="post" target="output">
+                {{if .Session}}
+                <input name="s" type="hidden" value="{{.Session.SessionId}}"/>
+                {{end}}
+                <input name="lang" type="hidden" value="{{.Lang}}"/>
 
-              <textarea id="code" name="code" class="code" wrap="off" autocorrect="off" 
-                autocomplete="off" autocapitalize="off"
-                spellcheck="false"
-              >{{.Code}}</textarea>
+                <div id="code-ace" class="code-ace"></div>
 
-              <input type="submit" value="run" class="run" id="run"
-                onclick="return onRunSubmit()" />
-            </form>
+                <textarea id="code" name="code" class="code" wrap="off" autocorrect="off" 
+                  autocomplete="off" autocapitalize="off"
+                  spellcheck="false"
+                >{{.Code}}</textarea>
 
-            {{if .InfoAfter}}
-            <div class="info infoAfter">{{.InfoAfter}}</div>
+                <input type="submit" value="run" class="run" id="run"
+                  onclick="return onRunSubmit()" />
+              </form>
+
+              {{if .InfoAfter}}
+              <div class="info infoAfter">{{.InfoAfter}}</div>
+              {{end}}
+            </div>
+            {{else}}
+            <div>
+              Please select an example{{if not .Session}}... or <a href="/session" class="nowrap">start a test-drive</a>&nbsp;session{{end}}.
+            </div>
             {{end}}
           </div>
-          {{else}}
-          <div style="margin-top: .8rem;">
-            Please select an example{{if not .Session}}... or <a href="/session" class="nowrap">start a test-drive</a>&nbsp;session{{end}}.
-          </div>
-          {{end}}
         </div>
-      </div>
 
-      <div class="code-output hidden" id="code-output">
-        <div class="sticky">
-          {{if or .Name .Lang .Code}}
-          <h2>Output</h2>
-          <iframe name="output" id="output" class="output"></iframe>
-          {{end}}
+        <div class="code-output hidden" id="code-output">
+          <div class="sticky">
+            {{if or .Name .Lang .Code}}
+            <h2>Output</h2>
+            <iframe name="output" id="output" class="output"></iframe>
+            {{end}}
+          </div>
         </div>
       </div>
     </div>
@@ -177,7 +192,7 @@
     <div>© 2020 Couchbase Labs</div>
     <div>Couchbase Server {{.Version}}</div>
   </footer>
-
+  <script src="/static/scripts/infoPanel.js"></script>
   <script>
     var codeAce = ace.edit("code-ace");
     codeAce.getSession().setValue(document.getElementById("code").value);
@@ -185,7 +200,7 @@
     codeAce.setOption("useWorker", false); // No syntax checking.
 
     {{if .LangAce}}
-      codeAce.setOption("mode", "ace/mode/{{.LangAce}}");
+    codeAce.setOption("mode", "ace/mode/{{.LangAce}}");
     {{end}}
   </script>
 </body>
