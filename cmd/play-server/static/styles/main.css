@@ -62,11 +62,17 @@
 .workspace .workspace-header a {
   display: flex;
   align-items: center;
-  justify-content: center;
-  width: 100px;
+  justify-content: left;
+  padding-left: 17px;
+  width: 215px;
   min-height: 25px;
   cursor: pointer;
   cursor: hand;
+
+  -webkit-user-select: none;  /* Chrome all / Safari all */
+  -moz-user-select: none;     /* Firefox all */
+  -ms-user-select: none;      /* IE 10+ */
+  user-select: none;          /* Likely future */      
 
   text-decoration: none;
   font-size: 12px;
@@ -243,7 +249,7 @@ body.dark .workspace .workspace-header a {
 }
 body.dark .workspace .workspace-header a:hover,
 body.dark .workspace .workspace-header a:focus {
-  background-color: #2E3540;
+  background-color: #526373;
   color: #EFEFEF;
 }
 

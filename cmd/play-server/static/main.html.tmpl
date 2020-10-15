@@ -5,6 +5,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;1,300&Ubuntu+Mono&display=swap" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="/static/styles/site.css">
   <link rel="stylesheet" type="text/css" href="/static/styles/main.css">
+  <link rel="stylesheet" type="text/css" href="/static/styles/icons.css">
   <style>
     /* TODO: Re-enable lang-go once we figure out couchbase golang SDK v2. */
     .lang-go {
@@ -99,7 +100,7 @@
       <div class="workspace-header">
         
         <div class="header-left">
-          <a onClick="toggleInfoPanel();">Toggle Info</a>
+          <a onClick="toggleInfoPanel();"><span id="toggleIcon" class="chevron top"></span> Toggle Info</a>
         </div>
         <div class="header-right">
           <span class="head-server">cb server:</span> <code>http://{{.Host}}:8091</code>

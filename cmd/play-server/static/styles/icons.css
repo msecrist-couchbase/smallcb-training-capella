@@ -1,0 +1,34 @@
+.chevron::before {
+	border-style: solid;
+	border-width: 0.25em 0.25em 0 0;
+	content: '';
+	display: inline-block;
+	height: 8px;
+	position: relative;
+	transform: rotate(-45deg);
+	vertical-align: top;
+  width: 8px;
+  margin-right: 1em;
+}
+
+.chevron.up:before {
+  top: 5px;
+  left: 4px;
+}
+
+.chevron.right:before {
+  top: 1px;
+	left: 3px;
+	transform: rotate(45deg);
+}
+
+.chevron.down:before {
+	top: -1px;
+	transform: rotate(135deg);
+}
+
+.chevron.left:before {
+  top: 1px;
+	left: 3px;
+	transform: rotate(-135deg);
+}
