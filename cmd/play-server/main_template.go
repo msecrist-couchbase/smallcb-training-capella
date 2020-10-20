@@ -51,6 +51,10 @@ func MainTemplateEmit(w http.ResponseWriter,
 	staticDir, msg, host string, portApp int, version string,
 	session *Session, sessionsMaxAge time.Duration,
 	examplesPath string, name, lang, code string) error {
+	if session == nil {
+		host = "127.0.0.1"
+	}
+
 	examples, examplesArr, err :=
 		ReadExamples(staticDir + "/" + examplesPath)
 	if err != nil {
@@ -81,10 +85,6 @@ func MainTemplateEmit(w http.ResponseWriter,
 		infoBefore = MapGetString(example, "infoBefore")
 
 		infoAfter = MapGetString(example, "infoAfter")
-	}
-
-	if session == nil {
-		host = "127.0.0.1"
 	}
 
 	data := &MainTemplateData{
