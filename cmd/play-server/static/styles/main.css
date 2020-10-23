@@ -75,17 +75,17 @@ main .toggle-session .header-left {
   height: 35px;
 }
 main .toggle-session .header-right {
-  padding-top: 10px;
+  padding-top: 9px;
   height: 25px;
   font-family: 'Ubuntu Mono', monospace;
-  font-size: 12px;
+  font-size: 14px;
   white-space: nowrap;
 
 }
 main .toggle-session code {
   padding: 3px 6px;
   font-family: 'Ubuntu Mono', monospace;
-  font-size: 11px;
+  font-size: 14px;
   background-color: rgba(18, 22, 26, 0.75);
   border-radius: 4px;
   -webkit-user-select: all;  /* Chrome all / Safari all */
@@ -95,17 +95,17 @@ main .toggle-session code {
 }
 
 main .toggle-session .header-right .head-server {
-  font-size: 14px;
+  font-size: 16px;
   color: rgba(116, 202, 41, 0.85);
 }
 main .toggle-session .header-right .head-user {
   margin-left: 2em;
-  font-size: 14px;
+  font-size: 16px;
   color: rgba(116, 202, 41, 0.85);
 }
 main .toggle-session .header-right .head-pass {
   margin-left: 2em;
-  font-size: 14px;
+  font-size: 16px;
   color: rgba(116, 202, 41, 0.85);
 }
 
