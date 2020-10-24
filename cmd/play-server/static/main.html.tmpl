@@ -62,6 +62,20 @@
   </header>
 
   <main>
+    {{if .Session}}
+    <div class="toggle-session">
+      
+      <div class="header-left">
+        <a onClick="toggleInfoPanel();"><span id="toggleIcon" class="chevron top"></span> Toggle Info</a>
+      </div>
+      <div class="header-right">
+        <span class="head-server">cb server:</span> <code>http://{{.Host}}:8091</code>
+        <span class="head-user">username:</span> <code>{{.Session.CBUser}} </code>
+        <span class="head-pass">password:</span> <code>{{.Session.CBPswd}}</code>
+      </div>
+      
+    </div>
+    {{end}}
     <div class="info-panel" id="infoPanel">
       {{if .Msg}}
       <div class="message-info">{{.Msg}}</div>
@@ -96,20 +110,6 @@
       {{end}}
     </div>
     <div class="workspace">
-      {{if .Session}}
-      <div class="workspace-header">
-        
-        <div class="header-left">
-          <a onClick="toggleInfoPanel();"><span id="toggleIcon" class="chevron top"></span> Toggle Info</a>
-        </div>
-        <div class="header-right">
-          <span class="head-server">cb server:</span> <code>http://{{.Host}}:8091</code>
-          <span class="head-user">username:</span> <code>{{.Session.CBUser}} </code>
-          <span class="head-pass">password:</span> <code>{{.Session.CBPswd}}</code>
-        </div>
-        
-      </div>
-      {{end}}
       <div class="workspace-body">
         <div class="code-examples">
           <h2>Examples</h2>

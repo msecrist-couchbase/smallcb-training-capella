@@ -44,28 +44,20 @@
 
 .workspace {
   width: 100%;
-  display: grid;
-  grid-template-rows: 27px    auto;
-  /*              ws-header  ws-body */
 }
 
-.workspace .workspace-header {
+main .toggle-session {
   display: flex;
   flex-direction: rows;
-
-  border-top-width: 1px;
-  border-top-style: solid;
-  border-bottom-width: 1px;
-  border-bottom-style: solid;
 }
 
-.workspace .workspace-header a {
+main .toggle-session a {
   display: flex;
   align-items: center;
   justify-content: left;
   padding-left: 17px;
   width: 215px;
-  min-height: 25px;
+  min-height: 35px;
   cursor: pointer;
   cursor: hand;
 
@@ -78,22 +70,22 @@
   font-size: 12px;
 }
 
-.workspace .workspace-header .header-left {
+main .toggle-session .header-left {
   width: 240px;
-  height: 27px;
+  height: 35px;
 }
-.workspace .workspace-header .header-right {
-  height: 27px;
-  padding-top: 3px;
+main .toggle-session .header-right {
+  padding-top: 9px;
+  height: 25px;
   font-family: 'Ubuntu Mono', monospace;
-  font-size: 12px;
+  font-size: 14px;
   white-space: nowrap;
 
 }
-.workspace .workspace-header code {
+main .toggle-session code {
   padding: 3px 6px;
   font-family: 'Ubuntu Mono', monospace;
-  font-size: 11px;
+  font-size: 14px;
   background-color: rgba(18, 22, 26, 0.75);
   border-radius: 4px;
   -webkit-user-select: all;  /* Chrome all / Safari all */
@@ -102,18 +94,18 @@
   user-select: all;          /* Likely future */  
 }
 
-.workspace .workspace-header .header-right .head-server {
-  font-size: 14px;
+main .toggle-session .header-right .head-server {
+  font-size: 16px;
   color: rgba(116, 202, 41, 0.85);
 }
-.workspace .workspace-header .header-right .head-user {
+main .toggle-session .header-right .head-user {
   margin-left: 2em;
-  font-size: 14px;
+  font-size: 16px;
   color: rgba(116, 202, 41, 0.85);
 }
-.workspace .workspace-header .header-right .head-pass {
+main .toggle-session .header-right .head-pass {
   margin-left: 2em;
-  font-size: 14px;
+  font-size: 16px;
   color: rgba(116, 202, 41, 0.85);
 }
 
@@ -224,9 +216,9 @@
 /* Dark Mode session-info */
 body.dark .session-info {
   background-color: #1f242c;
-  border-top-color: #35414d;
-  border-top-width: 1px;
-  border-top-style: solid;
+  border-bottom-color: #35414d;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
 }
 body.dark .session-info h2 {
   color: #9fe264;
@@ -236,19 +228,19 @@ body.dark .session-info div.connection a.ui img {
 }
 
 /* Dark Mode workspace */
-body.dark .workspace .workspace-header {
+body.dark main .toggle-session {
   background: #262a35;
 
   border-top-color: #35414d;
   border-bottom-color: #394652;
 }
 
-body.dark .workspace .workspace-header a {
+body.dark main .toggle-session a {
   background-color: #262a35;
   color: #FFFFFF;
 }
-body.dark .workspace .workspace-header a:hover,
-body.dark .workspace .workspace-header a:focus {
+body.dark main .toggle-session a:hover,
+body.dark main .toggle-session a:focus {
   background-color: #526373;
   color: #EFEFEF;
 }
