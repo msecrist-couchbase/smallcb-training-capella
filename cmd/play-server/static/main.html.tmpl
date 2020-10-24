@@ -69,7 +69,7 @@
         <a onClick="toggleInfoPanel();"><span id="toggleIcon" class="chevron top"></span> Toggle Info</a>
       </div>
       <div class="header-right">
-        <span class="head-server">cb server:</span> <code>http://{{.Host}}:8091</code>
+        <span class="head-server">couchbase server:</span> <code>http://{{.Host}}:8091</code>
         <span class="head-user">username:</span> <code>{{.Session.CBUser}} </code>
         <span class="head-pass">password:</span> <code>{{.Session.CBPswd}}</code>
       </div>
@@ -142,7 +142,7 @@
               {{if .Title}}{{.Title}}{{else}}API / SDK Playground{{end}}
             </h2>
 
-            <div>
+            <div class="example-frame">
               {{if .InfoBefore}}
               <div class="info infoBefore">{{.InfoBefore}}</div>
               {{end}}
@@ -169,8 +169,17 @@
               {{end}}
             </div>
             {{else}}
-            <div>
-              Please select an example{{if not .Session}}... or <a href="/session" class="nowrap">start a test-drive</a>&nbsp;session{{end}}.
+            <div class="no-session">
+              Please select an example.
+            </div>
+            <div class="empty-example-frame">
+              
+              <div class="info-frame">
+                {{if not .Session}}
+                  Or Start Test-Drive to persist data between examples.<br/><a href="/session" class="nowrap">Start Session</a>
+                {{end}}
+              </div>
+              
             </div>
             {{end}}
           </div>
