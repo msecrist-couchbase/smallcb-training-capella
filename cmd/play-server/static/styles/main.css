@@ -242,9 +242,18 @@ main .toggle-session .header-right .head-pass {
   padding: 0.5em;
   text-decoration: none;
   background-color: #526373;
-  border-radius: 8px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #526373;
+  border-radius: 4px;
   width: 100px;
   margin-top: 1em;
+}
+
+.workspace .workspace-body .code-editor .sticky .empty-example-frame .info-frame a:hover,
+.workspace .workspace-body .code-editor .sticky .empty-example-frame .info-frame a:focus {
+  background-color: transparent;
+  color: #EFEFEF;
 }
 
 @media screen and (max-width: 750px) {
