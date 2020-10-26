@@ -48,9 +48,10 @@ type MainTemplateData struct {
 }
 
 func MainTemplateEmit(w http.ResponseWriter,
-	staticDir, msg, host string, portApp int, version string,
+	staticDir, msg, hostIn string, portApp int, version string,
 	session *Session, sessionsMaxAge time.Duration,
 	examplesPath string, name, lang, code string) error {
+	host := hostIn
 	if session == nil {
 		host = "127.0.0.1"
 	}
@@ -110,7 +111,7 @@ func MainTemplateEmit(w http.ResponseWriter,
 		InfoBefore: template.HTML(infoBefore),
 		InfoAfter:  template.HTML(infoAfter),
 
-		AnalyticsHTML: template.HTML(AnalyticsHTML(host)),
+		AnalyticsHTML: template.HTML(AnalyticsHTML(hostIn)),
 	}
 
 	t, err := template.ParseFiles(staticDir + "/main.html.tmpl")
