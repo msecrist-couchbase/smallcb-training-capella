@@ -82,7 +82,7 @@ main .toggle-session .header-right {
   white-space: nowrap;
 
 }
-main .toggle-session code {
+main .toggle-session code, main .instance-info code {
   padding: 3px 6px;
   font-family: 'Ubuntu Mono', monospace;
   font-size: 14px;
@@ -94,19 +94,22 @@ main .toggle-session code {
   user-select: all;          /* Likely future */  
 }
 
-main .toggle-session .header-right .head-server {
+main .toggle-session .header-right .head-server,
+main .info-panel .session-info .instance-info .head-server { 
   font-size: 16px;
-  color: rgba(116, 202, 41, 0.85);
+  color: rgba(159, 226, 100, 0.95);
 }
-main .toggle-session .header-right .head-user {
-  margin-left: 2em;
+main .toggle-session .header-right .head-user,
+main .info-panel .session-info .instance-info .head-user {
+  margin-left: 1em;
   font-size: 16px;
-  color: rgba(116, 202, 41, 0.85);
+  font-weight: 500;
 }
-main .toggle-session .header-right .head-pass {
-  margin-left: 2em;
+main .toggle-session .header-right .head-pass,
+main .info-panel .session-info .instance-info .head-pass {
+  margin-left: 1em;
   font-size: 16px;
-  color: rgba(116, 202, 41, 0.85);
+  font-weight: 500;
 }
 
 .workspace .workspace-body {
@@ -214,7 +217,7 @@ main .toggle-session .header-right .head-pass {
 }
 
 .workspace .workspace-body .code-editor .sticky .no-session {
-  margin-bottom: 1em;
+  margin-bottom: 13px;
 }
 
 .workspace .workspace-body .code-editor .sticky .empty-example-frame {
