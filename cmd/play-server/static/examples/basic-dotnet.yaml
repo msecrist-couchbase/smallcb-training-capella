@@ -1,0 +1,34 @@
+title: .NET example
+page: page-01
+lang: dotnet
+code: |
+  using System;
+  using System.Threading.Tasks;
+  using Couchbase;
+
+  namespace CouchbaseDotNetExample
+  {
+      class Program
+      {
+          static async Task Main(string[] args)
+          {
+              var cluster = await Cluster.ConnectAsync(
+                  "couchbase://{{.Host}}",
+                  "{{.CBUser}}",
+                  "{{.CBPswd}}");
+              var bucket = await cluster.BucketAsync("travel-sample");
+              var coll = bucket.DefaultCollection();
+
+              var result = await coll.GetAsync("airline_10");
+              var airline = result.ContentAs<dynamic>();
+
+              Console.WriteLine(airline);
+
+              await cluster.DisposeAsync();
+          }
+      }
+  }
+infoAfter: |
+  If we know a document's key value, we can use the collection.GetAsync(...) method
+  passing a key. This returns a JSON result, which can be mapped to any type (including dynamic).
+  Visit our docs to learn more about <a target="_blank" href="https://docs.couchbase.com/dotnet-sdk/current/howtos/kv-operations.html">.NET Key Value Operations</a>.
