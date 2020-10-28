@@ -12,6 +12,6 @@ FROM maven AS maven
 
 FROM golang AS golang
 
-FROM node AS node
+FROM node:14 AS node
 
 FROM mcr.microsoft.com/dotnet/core/sdk AS dotnet_core_sdk
