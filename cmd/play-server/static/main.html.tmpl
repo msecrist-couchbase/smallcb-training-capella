@@ -69,9 +69,11 @@
         <a onClick="toggleInfoPanel();"><span id="toggleIcon" class="chevron top"></span> Toggle Info</a>
       </div>
       <div class="header-right">
-        <span class="head-server">couchbase server:</span> <code>http://{{.Host}}:8091</code>
-        <span class="head-user">username:</span> <code>{{.Session.CBUser}} </code>
-        <span class="head-pass">password:</span> <code>{{.Session.CBPswd}}</code>
+        <div id="instanceInfo">
+          <span class="head-server">Your Couchbase Instance:</span> <code>http://{{.Host}}:8091</code>
+          <span class="head-user">username:</span> <code>{{.Session.CBUser}} </code>
+          <span class="head-pass">password:</span> <code>{{.Session.CBPswd}}</code>
+        </div>
       </div>
       
     </div>
@@ -85,26 +87,26 @@
       <div class="session-info">
         <h2>Couchbase Server Test-Drive Session &mdash; for <em>{{.Session.FullName}}</em></h2>
         <div>
-          Your test-drive session is active until there's ~{{.SessionsMaxAge}} of inactivity.
+          This test-drive session is active until there's ~{{.SessionsMaxAge}} of inactivity.
         </div>
-        <div>
-          To test-drive your Couchbase Server
-          over the internet (NOTE: not encrypted, not for production!)...
+        <div class="instance-info">
+          <span class="head-server">Your Couchbase Instance:</span> <code>http://{{.Host}}:8091</code>
+          <span class="head-user">username:</span> <code>{{.Session.CBUser}} </code>
+          <span class="head-pass">password:</span> <code>{{.Session.CBPswd}}</code>
         </div>
         <div class="connection">
-      <b>Couchbase Server</b>
-        <a href="http://{{.Host}}:8091" class="ui">Web-Admin UI<img src="/static/shots/shot-dashboard.png"/></a> : <a href="http://{{.Host}}:8091/ui/index.html#!/query/workbench" class="ui"><img src="/static/shots/shot-query-workbench.png"/>Query Workbench</a> | <a href="http://{{.Host}}:8091/ui/index.html#!/documents/editor" class="ui"><img src="/static/shots/shot-documents.png"/>Document Editor</a> | <a href="http://{{.Host}}:8091/ui/index.html#!/documents/import" class="ui"><img src="/static/shots/shot-import-documents.png"/>Import Documents</a> | REST API: http://{{.Session.CBUser}}:{{.Session.CBPswd}}@{{.Host}}:8091
+  <b>Couchbase Server</b>
+    <a href="http://{{.Host}}:8091" class="ui">Web-Admin UI<img src="/static/shots/shot-dashboard.png"/></a> : <a href="http://{{.Host}}:8091/ui/index.html#!/query/workbench" class="ui"><img src="/static/shots/shot-query-workbench.png"/>Query Workbench</a> | <a href="http://{{.Host}}:8091/ui/index.html#!/documents/editor" class="ui"><img src="/static/shots/shot-documents.png"/>Document Editor</a> | <a href="http://{{.Host}}:8091/ui/index.html#!/documents/import" class="ui"><img src="/static/shots/shot-import-documents.png"/>Import Documents</a> | REST API: http://{{.Session.CBUser}}:{{.Session.CBPswd}}@{{.Host}}:8091
 
 
-      <b>Couchbase SDK's</b>             : connection snippets
-        Java   <a href="https://docs.couchbase.com/java-sdk/current/hello-world/start-using-sdk.html">SDK docs</a>, <a href="https://docs.couchbase.com/sdk-api/couchbase-java-client/">API docs</a> : - Cluster.connect("couchbase://{{.Host}}", "{{.Session.CBUser}}", "{{.Session.CBPswd}}")
-        NodeJS <a href="https://docs.couchbase.com/nodejs-sdk/current/hello-world/start-using-sdk.html">SDK docs</a>, <a href="https://docs.couchbase.com/sdk-api/couchbase-node-client/">API docs</a> : - new couchbase.Cluster("couchbase://{{.Host}}", {username: "{{.Session.CBUser}}", password: "{{.Session.CBPswd}}"})
-        Python <a href="https://docs.couchbase.com/python-sdk/current/hello-world/start-using-sdk.html">SDK docs</a>, <a href="https://docs.couchbase.com/sdk-api/couchbase-python-client/">API docs</a> : - Cluster('couchbase://{{.Host}}', ClusterOptions(PasswordAuthenticator('{{.Session.CBUser}}', '{{.Session.CBPswd}}')))
-        </div>
+  <b>Couchbase SDK's</b>             : connection snippets
+    Java   <a href="https://docs.couchbase.com/java-sdk/current/hello-world/start-using-sdk.html">SDK docs</a>, <a href="https://docs.couchbase.com/sdk-api/couchbase-java-client/">API docs</a> : - Cluster.connect("couchbase://{{.Host}}", "{{.Session.CBUser}}", "{{.Session.CBPswd}}")
+    NodeJS <a href="https://docs.couchbase.com/nodejs-sdk/current/hello-world/start-using-sdk.html">SDK docs</a>, <a href="https://docs.couchbase.com/sdk-api/couchbase-node-client/">API docs</a> : - new couchbase.Cluster("couchbase://{{.Host}}", {username: "{{.Session.CBUser}}", password: "{{.Session.CBPswd}}"})
+    Python <a href="https://docs.couchbase.com/python-sdk/current/hello-world/start-using-sdk.html">SDK docs</a>, <a href="https://docs.couchbase.com/sdk-api/couchbase-python-client/">API docs</a> : - Cluster('couchbase://{{.Host}}', ClusterOptions(PasswordAuthenticator('{{.Session.CBUser}}', '{{.Session.CBPswd}}')))
+    </div>
 
         <div>
-          The following online examples will also run
-          against your test-drive instance...
+          All code executed will run against this Couchbase Server instance.
         </div>
       </div>
       {{end}}
@@ -118,11 +120,15 @@
           </div>
           <ul class="examples">
             {{range $i, $v := .Examples}}
-            <li class="{{.className}} lang-{{.lang}} {{if eq .name $.Name}}current{{end}}">
-              <a href="/{{$.ExamplesPath}}/{{.name}}{{if $.Session}}?s={{$.Session.SessionId}}{{end}}{{if gt $i 5}}#ex-{{.name}}{{end}}"
-                id="ex-{{.name}}">
+            <li class="{{.className}} lang-{{.lang}} {{.page}} {{if eq .name $.Name}}current{{end}}">
+              {{if .code}}
+                <a href="/{{$.ExamplesPath}}/{{.name}}{{if $.Session}}?s={{$.Session.SessionId}}{{end}}{{if gt $i 5}}#ex-{{.name}}{{end}}"
+                  id="ex-{{.name}}">
+                  {{.title}}
+                </a>
+              {{else}}
                 {{.title}}
-              </a>
+              {{end}}
             </li>
             {{end}}
 
@@ -176,7 +182,8 @@
               
               <div class="info-frame">
                 {{if not .Session}}
-                or start a test-drive session to persist data between examples.<br/><a href="/session" class="nowrap">Start Session</a>
+                Or start a test-drive session to persist data between examples.
+                <div><a href="/session" class="nowrap">Start Test-Drive</a></div>
                 {{end}}
               </div>
               

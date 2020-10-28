@@ -21,6 +21,7 @@ var LangAce = map[string]string{
 	"py":     "python",
 	"ruby":   "ruby",
 	"sh":     "sh",
+	"dotnet": "csharp",
 }
 
 type MainTemplateData struct {

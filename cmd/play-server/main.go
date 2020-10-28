@@ -41,6 +41,7 @@ var ExecPrefixes = map[string]string{
 	"java":   "/run-java.sh",
 	"nodejs": "/run-nodejs.sh",
 	"py":     "/run-py.sh",
+	"dotnet": "/run-dotnet.sh",
 }
 
 // -----------------------------------

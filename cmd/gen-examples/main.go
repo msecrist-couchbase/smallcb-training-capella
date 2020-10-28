@@ -44,6 +44,7 @@ var suffixToName = map[string]string{
 	"java": "java",
 	"js":   "nodejs",
 	"py":   "python",
+	"cs":   "cs",
 }
 
 // Mapping from a file suffix to lang.
@@ -52,6 +53,7 @@ var suffixToLang = map[string]string{
 	"java": "java",
 	"js":   "nodejs",
 	"py":   "py",
+	"cs":   "cs",
 }
 
 func main() {
