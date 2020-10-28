@@ -35,6 +35,10 @@ COPY cmd/play-server/run-java-pom.xml /run-java-pom.xml
 
 COPY cmd/play-server/run-java-hello.java /home/play/hello/src/main/java/hello.java
 
+COPY cmd/play-server/run-csharp-hello.csproj /home/play/hellodotnet/run-csharp-hello.csproj
+
+COPY cmd/play-server/run-csharp-hello.cs /home/play/hellodotnet/run-csharp-hello.cs
+
 RUN chown -R play:couchbase /home/play
 
 USER play
@@ -43,5 +47,8 @@ RUN cp /run-java-pom.xml /home/play/hello/pom.xml && \
     cd /home/play/hello && \
     mvn package && \
     mvn dependency:build-classpath -Dmdep.outputFile=classpath.txt
+
+RUN cd /home/play/hellodotnet && \
+    dotnet build
 
 USER root
