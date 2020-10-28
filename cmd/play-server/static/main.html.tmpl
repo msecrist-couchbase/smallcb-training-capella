@@ -120,11 +120,15 @@
           </div>
           <ul class="examples">
             {{range $i, $v := .Examples}}
-            <li class="{{.className}} lang-{{.lang}} {{if eq .name $.Name}}current{{end}}">
-              <a href="/{{$.ExamplesPath}}/{{.name}}{{if $.Session}}?s={{$.Session.SessionId}}{{end}}{{if gt $i 5}}#ex-{{.name}}{{end}}"
-                id="ex-{{.name}}">
+            <li class="{{.className}} lang-{{.lang}} {{.page}} {{if eq .name $.Name}}current{{end}}">
+              {{if .code}}
+                <a href="/{{$.ExamplesPath}}/{{.name}}{{if $.Session}}?s={{$.Session.SessionId}}{{end}}{{if gt $i 5}}#ex-{{.name}}{{end}}"
+                  id="ex-{{.name}}">
+                  {{.title}}
+                </a>
+              {{else}}
                 {{.title}}
-              </a>
+              {{end}}
             </li>
             {{end}}
 
