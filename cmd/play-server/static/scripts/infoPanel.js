@@ -14,10 +14,12 @@ function toggleInfoPanel() {
   if (ls === 'show') {
     localStorage.setItem('infoPanel', 'hide')
     setElemDisplay('infoPanel', 'none')
+    setElemDisplay('instanceInfo', 'block')
     setChevronDirection('toggleIcon','down')
   } else if (ls === 'hide') {
     localStorage.setItem('infoPanel', 'show')
     setElemDisplay('infoPanel', 'block')
+    setElemDisplay('instanceInfo', 'none')
     setChevronDirection('toggleIcon','up')
   }
 }
@@ -26,9 +28,11 @@ function infoPanelInitPageLoad() {
   const ls = localStorage.getItem('infoPanel')
   if(ls == 'hide') {
     setElemDisplay('infoPanel', 'none')
+    setElemDisplay('instanceInfo', 'block')
     setChevronDirection('toggleIcon','down')
   } else if(ls == 'show') {
     setElemDisplay('infoPanel', 'block')
+    setElemDisplay('instanceInfo', 'none')
     setChevronDirection('toggleIcon','up')
   } else if(ls === null) {
     localStorage.setItem('infoPanel', 'show')
