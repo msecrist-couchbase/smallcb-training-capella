@@ -182,7 +182,7 @@ func SessionTemplateData(host string, portApp int,
 func ReadExamples(dir string) (
 	examples map[string]map[string]interface{},
 	examplesArr []map[string]interface{}, err error) {
-	examples, err = ReadYamls(dir, ".yaml")
+	examples, err = ReadYamls(dir, ".yaml", nil)
 	if err != nil {
 		return nil, nil, err
 	}

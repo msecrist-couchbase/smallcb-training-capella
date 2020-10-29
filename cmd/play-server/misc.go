@@ -8,9 +8,11 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-func ReadYamls(dir, suffix string) (
+func ReadYamls(dir, suffix string, rv map[string]map[string]interface{}) (
 	map[string]map[string]interface{}, error) {
-	rv := map[string]map[string]interface{}{}
+	if rv == nil {
+		rv = map[string]map[string]interface{}{}
+	}
 
 	files, err := ioutil.ReadDir(dir)
 	if err != nil {
@@ -18,6 +20,15 @@ func ReadYamls(dir, suffix string) (
 	}
 
 	for _, f := range files {
+		if f.IsDir() {
+			rv, err = ReadYamls(dir+"/"+f.Name(), suffix, rv)
+			if err != nil {
+				return nil, err
+			}
+
+			continue
+		}
+
 		if strings.HasSuffix(f.Name(), suffix) {
 			m, err := ReadYaml(dir + "/" + f.Name())
 			if err != nil {
