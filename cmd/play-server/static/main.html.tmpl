@@ -118,27 +118,28 @@
           <div class="div-hr">
             <hr />
           </div>
-          <ul class="examples">
-            {{range $i, $v := .Examples}}
-            <li class="{{.className}} lang-{{.lang}} {{.page}} {{if eq .name $.Name}}current{{end}}">
-              {{if .code}}
+          <div class="example-nav">
+            <ul class="examples">
+              {{range $i, $v := .Examples}}
+              <li class="{{if .className}}{{.className}} {{end}}{{if .lang}}lang {{.lang}} {{.page}}{{else}}category{{end}}{{if eq .name $.Name}} current{{end}}">
+                {{if .code}}
                 <a href="/{{$.ExamplesPath}}/{{.name}}{{if $.Session}}?s={{$.Session.SessionId}}{{end}}{{if gt $i 5}}#ex-{{.name}}{{end}}"
                   id="ex-{{.name}}">
                   {{.title}}
                 </a>
-              {{else}}
+                {{else}}
                 {{.title}}
+                {{end}}
+              </li>
               {{end}}
-            </li>
-            {{end}}
-
-            {{if not .Session}}
-            <li class="session">
-              <a href="/session"
-                class="session">Start Test-Drive</a>
-            </li>
-            {{end}}
-          </ul>
+              {{/* {{if not .Session}}
+              <li class="session">
+                <a href="/session"
+                  class="session">Start Test-drive</a>
+              </li>
+              {{end}} */}}
+            </ul>
+          </div>
         </div>
 
         <div class="code-editor">

@@ -86,7 +86,6 @@ main .toggle-session code, main .instance-info code {
   padding: 3px 6px;
   font-family: 'Ubuntu Mono', monospace;
   font-size: 14px;
-  background-color: rgba(18, 22, 26, 0.75);
   border-radius: 4px;
   -webkit-user-select: all;  /* Chrome all / Safari all */
   -moz-user-select: all;     /* Firefox all */
@@ -97,7 +96,6 @@ main .toggle-session code, main .instance-info code {
 main .toggle-session .header-right .head-server,
 main .info-panel .session-info .instance-info .head-server { 
   font-size: 16px;
-  color: rgba(159, 226, 100, 0.95);
 }
 main .toggle-session .header-right .head-user,
 main .info-panel .session-info .instance-info .head-user {
@@ -117,41 +115,47 @@ main .info-panel .session-info .instance-info .head-pass {
   flex-direction: row;
 }
 
-.workspace .workspace-body .code-examples {
+.workspace .workspace-body .code-examples .example-nav {
   height: 100%;
   width: 240px;
 }
-.workspace .workspace-body .code-examples ul.examples {
-  margin-right: 15px;
-  padding-left: 11px;
+.workspace .workspace-body .code-examples .example-nav  {
+  padding: 0 8px 0 9px;
 }
-.workspace .workspace-body .code-examples ul.examples li {
-  list-style: none;
-  margin: 0 0 1px 0;
-  border-radius: 4px;
-}
-.workspace .workspace-body .code-examples ul.examples li.current {
-  list-style: none;
-}
-.workspace .workspace-body .code-examples ul.examples li a {
+.workspace .workspace-body .code-examples .example-nav ul.examples {
   display: block;
-  padding: 5px 5px 5px 5px;
+  list-style-type: none;
+  margin-block-start: 0;
+  margin-block-end: 0;
+  margin-inline-start: 0;
+  margin-inline-end: 0;
+  padding-inline-start: 0;
+}
+.workspace .workspace-body .code-examples .example-nav ul.examples li {
+  list-style: none;
+  /* border-radius: 4px; */
+  padding: 4px;
+}
+.workspace .workspace-body .code-examples .example-nav ul.examples li.category {
+  list-style: none;
+  padding: 0.25em;
+  /* border-radius: 0px; */
+  font-size: large;
+  /* margin: 0.5em 0; */
+}
+.workspace .workspace-body .code-examples .example-nav ul.examples li.category:not(:first-child) {
+  margin-top: 4px;
+}
+.workspace .workspace-body .code-examples .example-nav ul.examples li.lang {
+  margin: 0;
+}
+.workspace .workspace-body .code-examples .example-nav ul.examples li a {
+  display: block;
+  padding: 5px 5px 5px 8px;
   text-decoration: none;
 }
-.workspace .workspace-body .code-examples ul.examples li.session {
+/* .workspace .workspace-body .code-examples .example-nav ul.examples li.session {
   margin-top: 45px;
-  /* border-width: 1px;
-  border-style: solid;
-  border-color: #888888; */
-}
-/* .workspace .workspace-body .code-examples ul.examples li.session a.session {
-  font-weight: bold;
-  font-size: 13px;
-  color: #666;
-  cursor: pointer;
-}
-.workspace .workspace-body .code-examples ul.examples li.session a.session:hover {
-  background-color: #9e9;
 } */
 
 .workspace .workspace-body .code-editor {
@@ -221,41 +225,31 @@ main .info-panel .session-info .instance-info .head-pass {
 }
 
 .workspace .workspace-body .code-editor .sticky .empty-example-frame {
-  width: 95%;
-  height: 60vh;
-  border: 1px solid #4B5963;
-
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 95%;
+  height: 60vh;
 }
 
 .workspace .workspace-body .code-editor .sticky .empty-example-frame .info-frame {
-  width: 80%;
-  margin-top: -2.5em;
-  line-height: 1.5em;
-  height: 20%;
-
   justify-content: center;
   align-items: center;
+
+  width: 80%;
+  height: 20%;
+  line-height: 1.5em;
+  margin-top: -2.5em;
 }
 
 .workspace .workspace-body .code-editor .sticky .empty-example-frame .info-frame a {
   display: inline-block;
-  padding: 0.5em;
   text-decoration: none;
-  background-color: #526373;
+  padding: 0.5em;
   border-width: 1px;
   border-style: solid;
-  border-color: #526373;
   border-radius: 4px;
   margin-top: 1em;
-}
-
-.workspace .workspace-body .code-editor .sticky .empty-example-frame .info-frame a:hover,
-.workspace .workspace-body .code-editor .sticky .empty-example-frame .info-frame a:focus {
-  background-color: transparent;
-  color: #EFEFEF;
 }
 
 @media screen and (max-width: 750px) {
@@ -270,6 +264,7 @@ main .info-panel .session-info .instance-info .head-pass {
 /* Dark Mode session-info */
 body.dark .session-info {
   background-color: #1f242c;
+
   border-bottom-color: #35414d;
   border-bottom-width: 1px;
   border-bottom-style: solid;
@@ -299,13 +294,53 @@ body.dark main .toggle-session a:focus {
   color: #EFEFEF;
 }
 
-body.dark .workspace .workspace-body .code-examples ul.examples li:hover {
+body.dark main .toggle-session code, main .instance-info code {
+  background-color: rgba(18, 22, 26, 0.75);
+}
+
+body.dark main .toggle-session .header-right .head-server,
+body.dark main .info-panel .session-info .instance-info .head-server { 
+  color: rgba(159, 226, 100, 0.95);
+}
+
+body.dark .workspace .workspace-body .code-examples .example-nav ul.examples {
+  border-color: #262935;
+  border-width: 1px;
+  border-style: solid;
+}
+body.dark .workspace .workspace-body .code-examples .example-nav ul.examples li.category {
+  background-color: #262a35;
+  color: rgba(159, 226, 100, 0.95);
+  border-bottom: 4px solid #3a4052;
+}
+
+body.dark .workspace .workspace-body .code-examples .example-nav ul.examples li.lang:hover, 
+body.dark .workspace .workspace-body .code-examples .example-nav ul.examples li.session:hover {
   background-color: #526373;
 }
-body.dark .workspace .workspace-body .code-examples ul.examples li.current {
+body.dark .workspace .workspace-body .code-examples .example-nav ul.examples li.current {
   color: #4c5863;
   background-color: #3F4858;
 }
+
+body.dark .workspace .workspace-body .code-editor .sticky .empty-example-frame {
+  border-color: #4B5963;
+  border-width: 1px;
+  border-style: solid;
+}
+
+body.dark .workspace .workspace-body .code-editor .sticky .empty-example-frame .info-frame a {
+  background-color: #526373;
+  border-color: #526373;
+}
+
+body.dark .workspace .workspace-body .code-editor .sticky .empty-example-frame .info-frame a:hover,
+body.dark .workspace .workspace-body .code-editor .sticky .empty-example-frame .info-frame a:focus {
+  background-color: transparent;
+  color: #EFEFEF;
+}
+
+
 body.dark .workspace .workspace-body .code-editor div.code-ace {
   border-color: #516374;
 }
