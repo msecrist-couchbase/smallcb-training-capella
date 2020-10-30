@@ -81,7 +81,13 @@ func MainTemplateEmit(w http.ResponseWriter,
 		if code == "" {
 			code = MapGetString(example, "code")
 
-			code = SessionTemplateExecute(host, portApp, session, code)
+			// TODO: NOTE: Java & .NET SDK's can't seem to
+			// use a proper host, so for now all code
+			// samples will use 127.0.0.1 no matter if
+			// there's a session or not.
+			codeHost := "127.0.0.1" // host.
+
+			code = SessionTemplateExecute(codeHost, portApp, session, code)
 		}
 
 		infoBefore = MapGetString(example, "infoBefore")

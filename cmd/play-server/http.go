@@ -130,6 +130,17 @@ var regexpE = regexp.MustCompile(`^[a-zA-Z0-9\-_#/]*$`)
 func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 	StatsNumInc("http.Session")
 
+	if *host != "127.0.0.1" && *host != "localhost" &&
+		strings.Split(r.Host, ":")[0] != *host {
+		StatsNumInc("http.Session.redirect.host")
+
+		http.Redirect(w, r, "http://"+*host+"/session", http.StatusSeeOther)
+
+		log.Printf("INFO: Session redirect, from host: %v, to host: %s", r.Host, *host)
+
+		return
+	}
+
 	e := r.FormValue("e") // Optional example name target.
 	if !regexpE.MatchString(e) {
 		StatsNumInc("http.Session.err", "http.Session.err.bad-e")
