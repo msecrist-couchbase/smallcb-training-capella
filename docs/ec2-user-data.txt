@@ -1,0 +1,26 @@
+#!/bin/bash -x
+exec > /tmp/part-001.log 2>&1
+su - ubuntu
+
+export GOROOT=/usr/local/go
+export GOPATH=/home/ubuntu/go
+export GOBIN=$GOPATH/bin
+export GOCACHE="/home/ubuntu/.cache/go-build"
+export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
+source ~/.profile
+sleep 2m
+sudo docker stop smallcb-0
+sudo docker rm smallcb-0
+sudo docker system prune -a -f
+sudo iptables -t nat -I PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 8080
+cd /home/ubuntu/smallcb
+ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
+sudo -u ubuntu git pull
+sudo -u ubuntu git checkout production
+sudo make build
+sudo make create
+go get ./...
+make play-server
+IP=$(curl -s http://169.254.169.254/latest/meta-data/public-ipv4 )
+echo "$IP"
+sudo nohup ./play-server -host "$IP"  -containers=10 -containersSingleUse=2 -restarters=5 &
