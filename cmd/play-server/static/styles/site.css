@@ -161,6 +161,11 @@ input, pre {
   border-style: solid;
 }
 
+.ace-nord-dark .ace_print-margin {
+  width: 1px;
+  background:#38404e;
+}
+
 /* Dark Mode */
 body.dark {
   background-color: #232831;

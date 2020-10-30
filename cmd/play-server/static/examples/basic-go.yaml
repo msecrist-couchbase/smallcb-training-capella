@@ -1,5 +1,5 @@
 page: page-06
-title: Basic Go example
+title: Hello World
 lang: go
 code: |
   package main
