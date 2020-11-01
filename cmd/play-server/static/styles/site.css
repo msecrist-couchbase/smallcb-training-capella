@@ -8,7 +8,7 @@ body {
 body {
   width: 100%;
   display: grid;
-  grid-template-rows: 60px    auto   60px;
+  grid-template-rows: 60px    auto   40px;
   /*                  header  main   footer */
 }
 
@@ -85,13 +85,12 @@ main {
   height: 100%;
 }
 
-body.dark > main > .info-panel           {
+body.dark > main > .info-panel {
   padding: 0;
 }
 
 main > .info-panel > .message-info {
   padding: 40px 30px 40px 30px;
-  /* padding-bottom: 40px; */
   font-weight: 600;
 }
 
@@ -104,7 +103,7 @@ main > .workspace > .workspace-body {
 }
 
 footer {
-  height: 31px;
+  height: 21px;
   font-size: 8pt;
   padding: 14px 14px;
 }
@@ -121,9 +120,6 @@ a.button {
   cursor: pointer;
   padding: 3px 30px 3px 30px;
   font-weight: bold;
-
-  /* border-width: 2px;
-  border-style: solid; */
 }
 
 a.button:hover {
@@ -207,17 +203,7 @@ body.dark a {
   text-decoration: underline;
 }
 
-/* body.dark a.button {
-  border-color: #888;
-  background-color: #d8d8d8;
-  color: #666;
-}
-
-body.dark a.button:hover {
-  background-color: #eee;
-} */
-
-/* Darm Mode Menu Links */
+/* Dark Mode Menu Links */
 body.dark header nav ul > li a {
   color: #FFF;
   background-image: linear-gradient(currentColor, currentColor);

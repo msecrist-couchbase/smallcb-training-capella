@@ -133,18 +133,15 @@ main .info-panel .session-info .instance-info .head-pass {
 }
 .workspace .workspace-body .code-examples .example-nav ul.examples li {
   list-style: none;
-  /* border-radius: 4px; */
   padding: 4px;
 }
 .workspace .workspace-body .code-examples .example-nav ul.examples li.category {
   list-style: none;
   padding: 0.25em;
-  /* border-radius: 0px; */
   font-size: large;
-  /* margin: 0.5em 0; */
 }
 .workspace .workspace-body .code-examples .example-nav ul.examples li.category:not(:first-child) {
-  margin-top: 4px;
+  margin-top: 20px;
 }
 .workspace .workspace-body .code-examples .example-nav ul.examples li.lang {
   margin: 0;
@@ -154,9 +151,6 @@ main .info-panel .session-info .instance-info .head-pass {
   padding: 5px 5px 5px 8px;
   text-decoration: none;
 }
-/* .workspace .workspace-body .code-examples .example-nav ul.examples li.session {
-  margin-top: 45px;
-} */
 
 .workspace .workspace-body .code-editor {
   flex-basis: 10rem;
@@ -339,7 +333,6 @@ body.dark .workspace .workspace-body .code-editor .sticky .empty-example-frame .
   background-color: transparent;
   color: #EFEFEF;
 }
-
 
 body.dark .workspace .workspace-body .code-editor div.code-ace {
   border-color: #516374;

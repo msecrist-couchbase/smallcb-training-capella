@@ -180,14 +180,14 @@
               Please select an example.
             </div>
             <div class="empty-example-frame">
-              
               <div class="info-frame">
                 {{if not .Session}}
-                Or start a test-drive session to persist data between examples.
+                Or start a test-drive session to play
+                with Couchbase Server's Web-Admin UI
+                and to persist data between examples.
                 <div><a href="/session" class="nowrap">Start Test-Drive</a></div>
                 {{end}}
               </div>
-              
             </div>
             {{end}}
           </div>
@@ -206,8 +206,8 @@
   </main>
 
   <footer>
-    <div>© 2020 Couchbase Labs</div>
-    <div>Couchbase Server {{.Version}}</div>
+    <div>© 2020 Couchbase Labs -
+         Couchbase Server {{.Version}}</div>
   </footer>
   <script src="/static/scripts/infoPanel.js"></script>
   <script>
