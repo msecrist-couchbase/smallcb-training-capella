@@ -1,5 +1,5 @@
 page: page-06
-title: Hello World
+title_DISABLED: Hello World (steve -- go SDK not working yet)
 lang: go
 code: |
   package main
