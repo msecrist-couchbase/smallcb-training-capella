@@ -28,6 +28,9 @@
       document.getElementById("code-output").className = "code-output";
       return true;
     }
+    function updateInfoPanelLS(value) {
+      localStorage.setItem('infoPanel', value);
+    }
   </script>
   {{.AnalyticsHTML}}
 </head>
@@ -46,7 +49,7 @@
             stop test-drive
           </a>
           {{else}}
-          <a href="/session" onClick="localStorage.setItem('infoPanel', 'show');">
+          <a href="/session" onClick="updateInfoPanelLS('show');">
             start test-drive
           </a>
           {{end}}
@@ -186,7 +189,7 @@
                 Or start a test-drive session to play
                 with Couchbase Server's Web-Admin UI
                 and to persist data between examples.
-                <div><a href="/session" class="nowrap">Start Test-Drive</a></div>
+                <div><a href="/session" onClick="updateInfoPanelLS('show');" class="nowrap">Start Test-Drive</a></div>
                 {{end}}
               </div>
             </div>
