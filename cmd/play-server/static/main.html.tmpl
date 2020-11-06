@@ -209,7 +209,9 @@
     <div>© 2020 Couchbase Labs -
          Couchbase Server {{.Version}}</div>
   </footer>
+  {{if .Session}}
   <script src="/static/scripts/infoPanel.js"></script>
+  {{end}}
   <script>
     var codeAce = ace.edit("code-ace");
     codeAce.getSession().setValue(document.getElementById("code").value);
