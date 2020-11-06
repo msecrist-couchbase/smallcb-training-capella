@@ -46,12 +46,12 @@
   width: 100%;
 }
 
-main .toggle-session {
+main .info-header {
   display: flex;
   flex-direction: rows;
 }
 
-main .toggle-session a {
+main .info-header a {
   display: flex;
   align-items: center;
   justify-content: left;
@@ -70,11 +70,11 @@ main .toggle-session a {
   font-size: 12px;
 }
 
-main .toggle-session .header-left {
+main .info-header .header-left {
   width: 240px;
   height: 35px;
 }
-main .toggle-session .header-right {
+main .info-header .header-right {
   padding-top: 9px;
   height: 25px;
   font-family: 'Ubuntu Mono', monospace;
@@ -82,7 +82,7 @@ main .toggle-session .header-right {
   white-space: nowrap;
 
 }
-main .toggle-session code, main .instance-info code {
+main .info-header code, main .instance-info code {
   padding: 3px 6px;
   font-family: 'Ubuntu Mono', monospace;
   font-size: 14px;
@@ -93,17 +93,17 @@ main .toggle-session code, main .instance-info code {
   user-select: all;          /* Likely future */  
 }
 
-main .toggle-session .header-right .head-server,
+main .info-header .header-right .head-server,
 main .info-panel .session-info .instance-info .head-server { 
   font-size: 16px;
 }
-main .toggle-session .header-right .head-user,
+main .info-header .header-right .head-user,
 main .info-panel .session-info .instance-info .head-user {
   margin-left: 1em;
   font-size: 16px;
   font-weight: 500;
 }
-main .toggle-session .header-right .head-pass,
+main .info-header .header-right .head-pass,
 main .info-panel .session-info .instance-info .head-pass {
   margin-left: 1em;
   font-size: 16px;
@@ -271,28 +271,28 @@ body.dark .session-info div.connection a.ui img {
 }
 
 /* Dark Mode workspace */
-body.dark main .toggle-session {
+body.dark main .info-header {
   background: #262a35;
 
   border-top-color: #35414d;
   border-bottom-color: #394652;
 }
 
-body.dark main .toggle-session a {
+body.dark main .info-header a {
   background-color: #262a35;
   color: #FFFFFF;
 }
-body.dark main .toggle-session a:hover,
-body.dark main .toggle-session a:focus {
+body.dark main .info-header a:hover,
+body.dark main .info-header a:focus {
   background-color: #526373;
   color: #EFEFEF;
 }
 
-body.dark main .toggle-session code, main .instance-info code {
+body.dark main .info-header code, main .instance-info code {
   background-color: rgba(18, 22, 26, 0.75);
 }
 
-body.dark main .toggle-session .header-right .head-server,
+body.dark main .info-header .header-right .head-server,
 body.dark main .info-panel .session-info .instance-info .head-server { 
   color: rgba(159, 226, 100, 0.95);
 }
