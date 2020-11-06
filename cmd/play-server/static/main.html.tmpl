@@ -42,11 +42,11 @@
       <ul>
         <li>
           {{if .Session}}
-          <a href="/session-exit?s={{.Session.SessionId}}" onClick="localStorage.setItem('infoPanel', 'show');" class="session">
+          <a href="/session-exit?s={{.Session.SessionId}}" class="session">
             stop test-drive
           </a>
           {{else}}
-          <a href="/session">
+          <a href="/session" onClick="localStorage.setItem('infoPanel', 'show');">
             start test-drive
           </a>
           {{end}}
