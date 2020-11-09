@@ -42,7 +42,7 @@
       <ul>
         <li>
           {{if .Session}}
-          <a href="/session-exit?s={{.Session.SessionId}}" class="session">
+          <a href="/session-exit?s={{.Session.SessionId}}" onClick="localStorage.setItem('infoPanel', 'show');" class="session">
             stop test-drive
           </a>
           {{else}}
@@ -63,7 +63,7 @@
 
   <main>
     {{if .Session}}
-    <div class="toggle-session">
+    <div class="info-header">
       
       <div class="header-left">
         <a onClick="toggleInfoPanel();"><span id="toggleIcon" class="chevron top"></span> Toggle Info</a>
@@ -101,6 +101,7 @@
 
   <b>Couchbase SDK's</b>             : connection snippets
     Java   <a href="https://docs.couchbase.com/java-sdk/current/hello-world/start-using-sdk.html">SDK docs</a>, <a href="https://docs.couchbase.com/sdk-api/couchbase-java-client/">API docs</a> : - Cluster.connect("couchbase://{{.Host}}", "{{.Session.CBUser}}", "{{.Session.CBPswd}}")
+    .NET   <a href="https://docs.couchbase.com/dotnet-sdk/current/hello-world/start-using-sdk.html">SDK docs</a>, <a href="https://docs.couchbase.com/sdk-api/couchbase-dotnet-client/">API docs</a> : - Cluster.ConnectAsync("couchbase://{{.Host}}", "{{.Session.CBUser}}", "{{.Session.CBPswd}}");
     NodeJS <a href="https://docs.couchbase.com/nodejs-sdk/current/hello-world/start-using-sdk.html">SDK docs</a>, <a href="https://docs.couchbase.com/sdk-api/couchbase-node-client/">API docs</a> : - new couchbase.Cluster("couchbase://{{.Host}}", {username: "{{.Session.CBUser}}", password: "{{.Session.CBPswd}}"})
     Python <a href="https://docs.couchbase.com/python-sdk/current/hello-world/start-using-sdk.html">SDK docs</a>, <a href="https://docs.couchbase.com/sdk-api/couchbase-python-client/">API docs</a> : - Cluster('couchbase://{{.Host}}', ClusterOptions(PasswordAuthenticator('{{.Session.CBUser}}', '{{.Session.CBPswd}}')))
     </div>
@@ -209,7 +210,9 @@
     <div>© 2020 Couchbase Labs -
          Couchbase Server {{.Version}}</div>
   </footer>
+  {{if .Session}}
   <script src="/static/scripts/infoPanel.js"></script>
+  {{end}}
   <script>
     var codeAce = ace.edit("code-ace");
     codeAce.getSession().setValue(document.getElementById("code").value);
