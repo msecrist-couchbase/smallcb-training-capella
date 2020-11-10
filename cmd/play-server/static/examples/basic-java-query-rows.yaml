@@ -5,6 +5,7 @@ code: |
   import com.couchbase.client.core.error.DocumentNotFoundException;
   import com.couchbase.client.java.*;
   import com.couchbase.client.java.kv.*;
+  import com.couchbase.client.java.json.JsonObject;
   import com.couchbase.client.java.query.QueryResult;
   import com.couchbase.client.java.query.QueryOptions;
   import static com.couchbase.client.java.query.QueryOptions.queryOptions;
@@ -19,11 +20,17 @@ code: |
 
       try {
         var query = 
-          "SELECT * FROM `travel-sample`" +
-          "WHERE type = \"airline\"" +
-          "AND callsign = \"MILE-AIR\"";
-        QueryResult result = cluster.query(query);
-        System.out.println(result.toString());
+          "SELECT name, city, state FROM `travel-sample`" +
+          "WHERE type = \"hotel\"" +
+          "AND city = $city LIMIT 5";
+          QueryResult result = cluster.query(query,
+            queryOptions().parameters(
+              JsonObject.create().put("city", "Malibu")
+            )
+        );
+        for (JsonObject row : result.rowsAsObject()) {
+          System.out.println("Found row: " + row);
+        }
         
       } catch (DocumentNotFoundException ex) {
         System.out.println("Document not found!");
@@ -31,6 +38,6 @@ code: |
     }
   }
 infoAfter: |
-  If we know a document's key value, we can use the collection.get() method
-  passing a key. This returns one document. 
-  Visit our docs to learn more about <a target="_blank" href="https://docs.couchbase.com/java-sdk/current/howtos/kv-operations.html#retrieving-documents">Retrieving Full Documents in Java</a>.
+  Basic N1QL query, expected to return one to many rows, we loop 
+  through them and print each one. 
+  Visit our docs to learn more about <a target="_blank" href="https://docs.couchbase.com/java-sdk/current/howtos/n1ql-queries-with-sdk.html#the-query-result">Handling Query Results in Java</a>.
