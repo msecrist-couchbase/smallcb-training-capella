@@ -22,7 +22,6 @@ code: |
         var airline = result.ContentAs<dynamic>();
 
         Console.WriteLine(airline);
-
         await cluster.DisposeAsync();
       }
     }
