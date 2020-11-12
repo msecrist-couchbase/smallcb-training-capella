@@ -1,4 +1,4 @@
-title: Query w/ Named Param
+title: Query w/ Positional Param
 page: page-05
 lang: dotnet
 code: |
@@ -21,12 +21,12 @@ code: |
         var query =
           "SELECT a.name, a.city, a.state " + 
           "FROM `travel-sample` a " +
-          "WHERE a.type = $type " +
-          "AND a.city = $city";
+          "WHERE a.type = $1 " +
+          "AND a.city = $2";
         var result = await cluster.QueryAsync<dynamic>(
           query, options => options
-            .Parameter("type", "hotel")
-            .Parameter("city", "Malibu")
+            .Parameter("hotel")
+            .Parameter("Malibu")
         );
         if (result.MetaData.Status == QueryStatus.Success) {
           Console.WriteLine("Hotel Results:");
@@ -40,6 +40,6 @@ code: |
   }
 infoAfter: |
   Placeholders allow you to specify variable constraints for a query. 
-  This method allows you to use named parameters, pass them to 
+  This method allows you to use positional parameters, pass them to 
   cluster.queryAsync() method by query and options. 
   Visit our docs to learn more about <a target="_blank" href="https://docs.couchbase.com/dotnet-sdk/current/howtos/n1ql-queries-with-sdk.html#parameterized-queries">Queries & Placeholders in .NET</a>.
