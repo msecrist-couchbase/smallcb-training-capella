@@ -1,0 +1,45 @@
+title: Query w/ Named Param
+page: page-05
+lang: dotnet
+code: |
+  using System;
+  using System.Threading.Tasks;
+  using Couchbase;
+  using Couchbase.Query;
+
+  namespace CouchbaseDotNetExample
+  {
+    class Program
+    {
+      static async Task Main(string[] args) {
+        var cluster = await Cluster.ConnectAsync(
+          "couchbase://{{.Host}}","{{.CBUser}}","{{.CBPswd}}"
+        );
+        var bucket = await cluster.BucketAsync("travel-sample");
+        var coll = bucket.DefaultCollection();
+
+        var query =
+          "SELECT a.name, a.city, a.state " + 
+          "FROM `travel-sample` a " +
+          "WHERE a.type = $type " +
+          "AND a.city = $city";
+        var result = await cluster.QueryAsync<dynamic>(
+          query, options => options
+            .Parameter("type", "hotel")
+            .Parameter("city", "Malibu")
+        );
+        if (result.MetaData.Status == QueryStatus.Success) {
+          Console.WriteLine("Hotel Results:");
+          await foreach (var row in result.Rows) {
+            Console.WriteLine($"Hotel: {row.name}, {row.city}");
+          }
+        }
+        await cluster.DisposeAsync();
+      }
+    }
+  }
+infoAfter: |
+  Placeholders allow you to specify variable constraints for a query. 
+  This method allows you to use named parameters, pass them to 
+  cluster.queryAsync() method by query and options. 
+  Visit our docs to learn more about <a target="_blank" href="https://docs.couchbase.com/dotnet-sdk/current/howtos/n1ql-queries-with-sdk.html#parameterized-queries">Queries & Placeholders in .NET</a>.

@@ -10,15 +10,15 @@ code: |
   
   cluster.bucket('travel-sample')
 
-  const getAirlineByCallsign = async (callsign) => {
+  const getHotelsByCity = async (city) => {
     try {
       const query = `
-        SELECT * 
-        FROM \`travel-sample\` 
-        WHERE type=$1
-          AND callsign=$2;
+        SELECT h.name, h.city, h.state 
+        FROM \`travel-sample\` h
+        WHERE h.type = $1
+          AND h.city = $2;
       `
-      const options = { parameters: ['airline', callsign] }
+      const options = { parameters: ['hotel', city] }
       const result = await cluster.query(query, options)
       console.log('Query Result: ')
       console.log(result.rows)
@@ -27,7 +27,7 @@ code: |
     }
   }
   
-  getAirlineByCallsign('MILE-AIR')
+  getHotelsByCity('Malibu')
     .then(() => process.exit(0))
 infoAfter: |
   Placeholders allow you to specify variable constraints for a query. 

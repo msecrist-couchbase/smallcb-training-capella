@@ -1,0 +1,42 @@
+title: Query Rows
+page: page-05
+lang: dotnet
+code: |
+  using System;
+  using System.Threading.Tasks;
+  using Couchbase;
+  using Couchbase.Query;
+
+  namespace CouchbaseDotNetExample
+  {
+    class Program
+    {
+      static async Task Main(string[] args)
+      {
+        var cluster = await Cluster.ConnectAsync(
+          "couchbase://{{.Host}}","{{.CBUser}}","{{.CBPswd}}"
+        );
+        var bucket = await cluster.BucketAsync("travel-sample");
+
+        var query =
+          "SELECT a.name, a.city, a.state " +
+          "FROM `travel-sample` a " +
+          "WHERE a.type = 'hotel' " +
+          "AND a.city = 'Malibu'";
+
+        var result = await cluster.QueryAsync<dynamic>(query);
+
+        if (result.MetaData.Status == QueryStatus.Success) {
+          Console.WriteLine("Hotel Results:");
+          await foreach (var row in result.Rows) {
+            Console.WriteLine($"Hotel: {row.name}, {row.city}");
+          }
+        }
+        await cluster.DisposeAsync();
+      }
+    }
+  }
+infoAfter: |
+  Basic N1QL query, expected to return one to many rows, we loop 
+  through them and print each one. 
+  Visit our docs to learn more about <a target="_blank" href="https://docs.couchbase.com/dotnet-sdk/current/howtos/n1ql-queries-with-sdk.html#the-query-result">Handling Query Results in Java</a>.

@@ -20,13 +20,16 @@ code: |
 
       try {
         var query = 
-          "SELECT * FROM `travel-sample`" +
-          "WHERE type = \"airline\"" +
-          "AND callsign = ?";
+          "SELECT a.name, a.city, a.state " +
+          "FROM `travel-sample` a " +
+          "WHERE a.type = $1 " +
+          "AND a.city = $2";
         QueryResult result = cluster.query(query,
-          queryOptions().parameters(JsonArray.from("MILE-AIR"))
+          queryOptions().parameters(JsonArray.from("hotel","Malibu"))
         );
-        System.out.println(result.toString());
+        result.rowsAsObject().stream().forEach(
+          e-> System.out.println("Hotel: "+e.getString("name")+", "+e.getString("city"))
+        );
         
       } catch (DocumentNotFoundException ex) {
         System.out.println("Document not found!");
