@@ -658,3 +658,8 @@ pgrep -u couchbase -a -n
   and then can killall by process group
   killall -g pgrp
   pkill -g pgrp
+
+# Misc Add Ons
+
+Information about Cookie Pro (OptanonWrapper)
+https://community.cookiepro.com/s/article/UUID-730ad441-6c4d-7877-7f85-36f1e801e8ca
