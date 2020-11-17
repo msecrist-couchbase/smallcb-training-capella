@@ -6,13 +6,6 @@
   <link rel="stylesheet" type="text/css" href="/static/styles/site.css">
   <link rel="stylesheet" type="text/css" href="/static/styles/main.css">
   <link rel="stylesheet" type="text/css" href="/static/styles/icons.css">
-  <link type="text/css" rel="stylesheet" 
-    href="https://cdn.cookielaw.org/skins/4.3.3/default_flat_bottom_two_button_black/v2/css/optanon.css"
-  />
-  <script src="https://cdn.cookielaw.org/scripttemplates/otSDKStub.js" 
-    type="text/javascript" charset="UTF-8" 
-    data-domain-script="589e23c3-a7c6-4ff3-a948-b7d86b33b846"
-  ></script>
   <style>
     /* TODO: Re-enable lang-go once we figure out couchbase golang SDK v2. */
     .lang-go {
@@ -25,8 +18,15 @@
     }
     {{end}}
   </style>
-  <script src="/static/ace/src-min/ace.js"></script>
+  <link type="text/css" rel="stylesheet" 
+    href="https://cdn.cookielaw.org/skins/4.3.3/default_flat_bottom_two_button_black/v2/css/optanon.css"
+  />
+  <script src="https://cdn.cookielaw.org/scripttemplates/otSDKStub.js" 
+    type="text/javascript" charset="UTF-8" 
+    data-domain-script="589e23c3-a7c6-4ff3-a948-b7d86b33b846"
+  ></script>
   <script>function OptanonWrapper(){}</script>
+  <script src="/static/ace/src-min/ace.js"></script>
   <script>
     function onRunSubmit() {
       document.getElementById("code").value = codeAce.getSession().getValue();
