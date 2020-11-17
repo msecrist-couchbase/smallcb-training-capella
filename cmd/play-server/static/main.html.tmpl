@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-  <title>Couchbase API / SDK Playground</title>
+  <title>Couchbase SDK Playground - Beta</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;1,300&Ubuntu+Mono&display=swap" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="/static/styles/site.css">
   <link rel="stylesheet" type="text/css" href="/static/styles/main.css">
@@ -43,7 +43,7 @@
   <header>
     <div class="logo">
       <a href="/{{if .Session}}?s={{.Session.SessionId}}{{end}}">
-        <h1>Couchbase API / SDK Playground</h1>
+        <h1>Couchbase SDK Playground - Beta</h1>
       </a>
     </div>
     <nav>
@@ -141,12 +141,6 @@
                 {{end}}
               </li>
               {{end}}
-              {{/* {{if not .Session}}
-              <li class="session">
-                <a href="/session"
-                  class="session">Start Test-drive</a>
-              </li>
-              {{end}} */}}
             </ul>
           </div>
         </div>
@@ -155,7 +149,7 @@
           <div class="sticky">
             {{if or .Name .Lang .Code}}
             <h2>
-              {{if .Title}}{{.Title}}{{else}}API / SDK Playground{{end}}
+              {{if .Title}}{{.Title}}{{else}}Code Editor{{end}}
             </h2>
 
             <div class="example-frame">
