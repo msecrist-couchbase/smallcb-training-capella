@@ -18,6 +18,14 @@
     }
     {{end}}
   </style>
+  <link type="text/css" rel="stylesheet" 
+    href="https://cdn.cookielaw.org/skins/4.3.3/default_flat_bottom_two_button_black/v2/css/optanon.css"
+  />
+  <script src="https://cdn.cookielaw.org/scripttemplates/otSDKStub.js" 
+    type="text/javascript" charset="UTF-8" 
+    data-domain-script="589e23c3-a7c6-4ff3-a948-b7d86b33b846"
+  ></script>
+  <script>function OptanonWrapper(){}</script>
   <script src="/static/ace/src-min/ace.js"></script>
   <script>
     function onRunSubmit() {
@@ -71,7 +79,7 @@
       <div class="header-right">
         <div id="instanceInfo">
           <span class="head-server">Your Couchbase Instance:</span> <code>http://{{.Host}}:8091</code>
-          <span class="head-user">username:</span> <code>{{.Session.CBUser}} </code>
+          <span class="head-user">username:</span> <code>{{.Session.CBUser}}</code>
           <span class="head-pass">password:</span> <code>{{.Session.CBPswd}}</code>
         </div>
       </div>
@@ -208,7 +216,8 @@
 
   <footer>
     <div>© 2020 Couchbase Labs -
-         Couchbase Server {{.Version}}</div>
+      Couchbase Server {{.Version}}
+    </div>
   </footer>
   {{if .Session}}
   <script src="/static/scripts/infoPanel.js"></script>
