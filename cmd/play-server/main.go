@@ -113,7 +113,7 @@ func main() {
 	StatsInfo("main.flags", strings.Join(flags, " "))
 
 	gitDescribe, _ := ExecCmd(context.Background(),
-		exec.Command("git", "describe"), 10*time.Second)
+		exec.Command("git", "describe", "--always"), 10*time.Second)
 
 	StatsInfo("git.describe", string(gitDescribe))
 
