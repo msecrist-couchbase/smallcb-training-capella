@@ -1,12 +1,14 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
+	"os/exec"
 	"strconv"
 	"strings"
 	"time"
@@ -92,6 +94,7 @@ func main() {
 		os.Exit(2)
 	}
 
+	// Couchbase Server version...
 	if strings.Index(*version, "/") >= 0 {
 		b, err := ioutil.ReadFile(*version)
 		if err != nil {
@@ -108,6 +111,11 @@ func main() {
 	})
 
 	StatsInfo("main.flags", strings.Join(flags, " "))
+
+	gitDescribe, _ := ExecCmd(context.Background(),
+		exec.Command("git", "describe"), 10*time.Second)
+
+	StatsInfo("git.describe", string(gitDescribe))
 
 	CBAdminPassword = os.Getenv("CB_ADMIN_PASSWORD")
 	if CBAdminPassword == "" {
