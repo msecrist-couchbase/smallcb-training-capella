@@ -21,7 +21,7 @@ code: |
           "SELECT h.name, h.city, h.state " + 
           "FROM `travel-sample` h " +
           "WHERE h.type = $1 " +
-          "AND h.city = $2";
+            "AND h.city = $2";
           
         var result = await cluster.QueryAsync<dynamic>(
           query, options => options

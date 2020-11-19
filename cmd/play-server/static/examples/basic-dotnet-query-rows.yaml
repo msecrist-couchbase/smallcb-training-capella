@@ -22,7 +22,7 @@ code: |
           "SELECT h.name, h.city, h.state " +
           "FROM `travel-sample` h " +
           "WHERE h.type = 'hotel' " +
-          "AND h.city = 'Malibu'";
+            "AND h.city = 'Malibu'";
 
         var result = await cluster.QueryAsync<dynamic>(query);
         if (result.MetaData.Status == QueryStatus.Success) {
