@@ -7,8 +7,6 @@ code: |
   import com.couchbase.client.java.kv.*;
   import com.couchbase.client.java.json.JsonObject;
   import com.couchbase.client.java.query.QueryResult;
-  import com.couchbase.client.java.query.QueryOptions;
-  import static com.couchbase.client.java.query.QueryOptions.queryOptions;
   
   class Program {
     public static void main(String[] args) {
@@ -16,20 +14,17 @@ code: |
         "couchbase://{{.Host}}", "{{.CBUser}}", "{{.CBPswd}}"
       );
       var bucket = cluster.bucket("travel-sample");
-      var collection = bucket.defaultCollection();
 
       try {
         var query = 
-          "SELECT name, city, state FROM `travel-sample`" +
-          "WHERE type = \"hotel\"" +
-          "AND city = $city LIMIT 5";
-          QueryResult result = cluster.query(query,
-            queryOptions().parameters(
-              JsonObject.create().put("city", "Malibu")
-            )
-        );
+          "SELECT h.name, h.city, h.state " +
+          "FROM `travel-sample` h " +
+          "WHERE h.type = 'hotel' " +
+            "AND h.city = 'Malibu' LIMIT 5;";
+
+        QueryResult result = cluster.query(query);
         for (JsonObject row : result.rowsAsObject()) {
-          System.out.println("Found row: " + row);
+          System.out.println("Hotel: " + row);
         }
         
       } catch (DocumentNotFoundException ex) {

@@ -16,14 +16,14 @@ code: |
         "couchbase://{{.Host}}", "{{.CBUser}}", "{{.CBPswd}}"
       );
       var bucket = cluster.bucket("travel-sample");
-      var collection = bucket.defaultCollection();
 
       try {
         var query = 
-          "SELECT a.name, a.city, a.state " +
-          "FROM `travel-sample` a " +
-          "WHERE a.type = $type " +
-          "AND a.city = $city";
+          "SELECT h.name, h.city, h.state " +
+          "FROM `travel-sample` h " +
+          "WHERE h.type = $type " +
+            "AND h.city = $city LIMIT 5;";
+
         QueryResult result = cluster.query(query,
           queryOptions().parameters(
             JsonObject.create()
