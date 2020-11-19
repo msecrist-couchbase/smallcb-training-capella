@@ -10,17 +10,13 @@ code: |
   from couchbase_core.cluster import PasswordAuthenticator
   
   pa = PasswordAuthenticator('{{.CBUser}}', '{{.CBPswd}}')
+  cluster = Cluster('couchbase://{{.Host}}', ClusterOptions(pa))
+  bucket = cluster.bucket('travel-sample')
+  collection = bucket.default_collection()
   
   try:
-    cluster = Cluster('couchbase://{{.Host}}', ClusterOptions(pa))
-  
-    bucket = cluster.bucket('travel-sample')
-  
-    coll = bucket.default_collection()
-  
-    rv = coll.get('airline_10')
-  
-    print(rv.content)
+    result = collection.get('airline_10')
+    print(result.content)
   
   except:
     print("exception:", sys.exc_info()[0])

@@ -33,6 +33,6 @@ code: |
 infoAfter: |
   Our Sub-document API allows for only retrieving or mutating a portion of 
   a larger document. For operations where you just need to update one field 
-  in a document, this keeps you from having to query, change and send back and
+  in a document, this keeps you from having to query, change and send back an
   updated document and is more performant getting or setting in one operation. 
   Visit our docs to learn more about <a target="_blank" href="https://docs.couchbase.com/java-sdk/current/howtos/subdocument-operations.html#retrieving">Retrieving Sub-documents in Java</a>.

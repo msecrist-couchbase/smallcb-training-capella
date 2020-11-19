@@ -25,9 +25,9 @@ body.dark #playBox {
     el.innerHTML =
       {{if .SessionId}}
       '<a href="http://{{.Host}}:{{.PortApp}}/?s={{.SessionId}}">'+
-        'Couchbase API / SDK Playground</a>';
+        'Couchbase Playground - Beta</a>';
       {{else}}
-        'Couchbase API / SDK Playground';
+        'Couchbase Playground - Beta';
       {{end}}
     document.body.appendChild(el);
   };
