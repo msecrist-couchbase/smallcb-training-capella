@@ -16,7 +16,7 @@ code: |
   
   query = """
     SELECT h.name, h.city, h.state 
-    FROM `travel-sample`
+    FROM `travel-sample` h 
     WHERE h.type = $type 
       AND h.city = $city LIMIT 5
   """
