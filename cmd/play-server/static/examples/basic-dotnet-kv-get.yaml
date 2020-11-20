@@ -16,9 +16,9 @@ code: |
           "couchbase://{{.Host}}","{{.CBUser}}","{{.CBPswd}}"
         );
         var bucket = await cluster.BucketAsync("travel-sample");
-        var coll = bucket.DefaultCollection();
+        var collection = bucket.DefaultCollection();
 
-        var result = await coll.GetAsync("airline_10");
+        var result = await collection.GetAsync("airline_10");
         var airline = result.ContentAs<dynamic>();
 
         Console.WriteLine(airline);

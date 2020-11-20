@@ -19,13 +19,12 @@ code: |
         var bucket = await cluster.BucketAsync("travel-sample");
 
         var query =
-          "SELECT a.name, a.city, a.state " +
-          "FROM `travel-sample` a " +
-          "WHERE a.type = 'hotel' " +
-          "AND a.city = 'Malibu'";
+          "SELECT h.name, h.city, h.state " +
+          "FROM `travel-sample` h " +
+          "WHERE h.type = 'hotel' " +
+            "AND h.city = 'Malibu'";
 
         var result = await cluster.QueryAsync<dynamic>(query);
-
         if (result.MetaData.Status == QueryStatus.Success) {
           Console.WriteLine("Hotel Results:");
           await foreach (var row in result.Rows) {

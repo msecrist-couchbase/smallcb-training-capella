@@ -16,19 +16,21 @@ code: |
         "couchbase://{{.Host}}", "{{.CBUser}}", "{{.CBPswd}}"
       );
       var bucket = cluster.bucket("travel-sample");
-      var collection = bucket.defaultCollection();
 
       try {
         var query = 
-          "SELECT a.name, a.city, a.state " +
-          "FROM `travel-sample` a " +
-          "WHERE a.type = $1 " +
-          "AND a.city = $2";
+          "SELECT h.name, h.city, h.state " +
+          "FROM `travel-sample` h " +
+          "WHERE h.type = $1 " +
+            "AND h.city = $2 LIMIT 5;";
+            
         QueryResult result = cluster.query(query,
-          queryOptions().parameters(JsonArray.from("hotel","Malibu"))
+          queryOptions().parameters(JsonArray.from("hotel", "Malibu"))
         );
         result.rowsAsObject().stream().forEach(
-          e-> System.out.println("Hotel: "+e.getString("name")+", "+e.getString("city"))
+          e-> System.out.println(
+            "Hotel: " + e.getString("name") + ", " + e.getString("city")
+          )
         );
         
       } catch (DocumentNotFoundException ex) {

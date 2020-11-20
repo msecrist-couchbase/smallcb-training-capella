@@ -16,13 +16,13 @@ code: |
           "couchbase://{{.Host}}","{{.CBUser}}","{{.CBPswd}}"
         );
         var bucket = await cluster.BucketAsync("travel-sample");
-        var coll = bucket.DefaultCollection();
 
         var query =
-          "SELECT a.name, a.city, a.state " + 
-          "FROM `travel-sample` a " +
-          "WHERE a.type = $1 " +
-          "AND a.city = $2";
+          "SELECT h.name, h.city, h.state " + 
+          "FROM `travel-sample` h " +
+          "WHERE h.type = $1 " +
+            "AND h.city = $2";
+          
         var result = await cluster.QueryAsync<dynamic>(
           query, options => options
             .Parameter("hotel")

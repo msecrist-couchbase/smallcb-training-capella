@@ -15,7 +15,7 @@ code: |
 
   query = """
     SELECT h.name, h.city, h.state 
-    FROM `travel-sample`
+    FROM `travel-sample` h
     WHERE h.type = 'hotel'
       AND h.city = 'Malibu' LIMIT 5
   """

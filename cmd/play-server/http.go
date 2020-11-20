@@ -156,6 +156,7 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 
 	data := map[string]interface{}{
 		"AnalyticsHTML": template.HTML(AnalyticsHTML(*host)),
+		"ProdOnlyJS":        template.HTML(ProdOnlyJS(*host)),
 		"SessionsMaxAge": strings.Replace(
 			sessionsMaxAge.String(), "m0s", " min", 1),
 		"e": e,
@@ -364,6 +365,7 @@ func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 func EmitOutput(w http.ResponseWriter, result string) {
 	data := map[string]interface{}{
 		"AnalyticsHTML": template.HTML(AnalyticsHTML(*host)),
+		"ProdOnlyJS":        template.HTML(ProdOnlyJS(*host)),
 		"Output":        string(result),
 	}
 
@@ -385,4 +387,14 @@ new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
 j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','GTM-MVPNN2');</script>`
+}
+
+func ProdOnlyJS(host string) string {
+	if host == "127.0.0.1" || host == "localhost" {
+		return ""
+	}
+
+	return `<link type="text/css" rel="stylesheet" href="https://cdn.cookielaw.org/skins/4.3.3/default_flat_bottom_two_button_black/v2/css/optanon.css"/>
+<script src="https://cdn.cookielaw.org/scripttemplates/otSDKStub.js" type="text/javascript" charset="UTF-8" data-domain-script="589e23c3-a7c6-4ff3-a948-b7d86b33b846"></script>
+<script>function OptanonWrapper(){}</script>`
 }
