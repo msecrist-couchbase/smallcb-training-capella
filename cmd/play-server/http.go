@@ -156,7 +156,7 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 
 	data := map[string]interface{}{
 		"AnalyticsHTML": template.HTML(AnalyticsHTML(*host)),
-		"ProdOnlyJS":        template.HTML(ProdOnlyJS(*host)),
+		"ProdOnlyJS":    template.HTML(ProdOnlyJS(*host)),
 		"SessionsMaxAge": strings.Replace(
 			sessionsMaxAge.String(), "m0s", " min", 1),
 		"e": e,
@@ -365,7 +365,7 @@ func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 func EmitOutput(w http.ResponseWriter, result string) {
 	data := map[string]interface{}{
 		"AnalyticsHTML": template.HTML(AnalyticsHTML(*host)),
-		"ProdOnlyJS":        template.HTML(ProdOnlyJS(*host)),
+		"ProdOnlyJS":    template.HTML(ProdOnlyJS(*host)),
 		"Output":        string(result),
 	}
 

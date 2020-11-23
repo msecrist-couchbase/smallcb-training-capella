@@ -46,7 +46,7 @@ type MainTemplateData struct {
 	InfoAfter  template.HTML
 
 	AnalyticsHTML template.HTML
-	ProdOnlyJS        template.HTML
+	ProdOnlyJS    template.HTML
 }
 
 func MainTemplateEmit(w http.ResponseWriter,
@@ -120,7 +120,7 @@ func MainTemplateEmit(w http.ResponseWriter,
 		InfoAfter:  template.HTML(infoAfter),
 
 		AnalyticsHTML: template.HTML(AnalyticsHTML(hostIn)),
-		ProdOnlyJS:        template.HTML(ProdOnlyJS(hostIn)),
+		ProdOnlyJS:    template.HTML(ProdOnlyJS(hostIn)),
 	}
 
 	t, err := template.ParseFiles(staticDir + "/main.html.tmpl")
