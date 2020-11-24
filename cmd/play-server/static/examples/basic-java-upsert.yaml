@@ -1,0 +1,50 @@
+title: Upsert
+page: page-01
+lang: java
+code: |
+  import com.couchbase.client.core.error.subdoc.PathNotFoundException;
+  import com.couchbase.client.java.*;
+  import com.couchbase.client.java.kv.*;
+  import com.couchbase.client.java.kv.MutationResult;
+  import com.couchbase.client.java.json.JsonObject;
+  import com.couchbase.client.java.kv.LookupInResult;
+  import static com.couchbase.client.java.kv.LookupInSpec.get;
+  import static com.couchbase.client.java.kv.MutateInSpec.upsert;
+  import java.util.Collections;
+  
+  class Program {
+    public static void main(String[] args) {
+      var cluster = Cluster.connect(
+        "couchbase://{{.Host}}", "{{.CBUser}}", "{{.CBPswd}}"
+      );
+      var bucket = cluster.bucket("travel-sample");
+      var collection = bucket.defaultCollection();
+
+      JsonObject content = JsonObject.create()
+        .put("country", "Iceland")
+        .put("callsign", "ICEAIR")
+        .put("iata", "FI")
+        .put("icao", "ICE")
+        .put("id", 123)
+        .put("name", "Icelandair")
+        .put("type", "airline");
+
+      collection.upsert("airline_123", content);
+        
+      try {
+        LookupInResult lookupResult = collection.lookupIn(
+          "airline_123", Collections.singletonList(get("name"))
+        );
+  
+        var str = lookupResult.contentAs(0, String.class);
+        System.out.println("New Document name = " + str);
+        
+      } catch (PathNotFoundException ex) {
+        System.out.println("Document not found!");
+      }
+      
+    }
+  }
+infoAfter: |
+  We upsert and then retrieve our document using a basic upsert and query.
+  Visit our docs to learn more about <a target="_blank" href="https://docs.couchbase.com/java-sdk/current/howtos/kv-operations.html#upsert">Upsert Operation in Java</a>.
