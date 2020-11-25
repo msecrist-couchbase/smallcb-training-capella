@@ -338,7 +338,7 @@ func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 				"------------------------\n%s\n",
 				err, result)
 
-		if strings.Index(t, "err: timeout") > 0 || true {
+		if strings.Index(t, "err: timeout") > 0 {
 			t = "Whoops, timeout error.\n" +
 				" -- perhaps try again later\n" +
 				"    as the server might be overloaded." +
