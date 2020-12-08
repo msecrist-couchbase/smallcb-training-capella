@@ -1,0 +1,48 @@
+title: Sub-document Mutate
+page: page-04
+lang: py
+code: |
+  #!/usr/bin/python3
+  
+  import sys
+  import couchbase.collection
+  import couchbase.subdocument as SD
+
+  from couchbase.durability import Durability
+  from couchbase.cluster import Cluster, ClusterOptions
+  from couchbase_core.cluster import PasswordAuthenticator
+
+  pa = PasswordAuthenticator('3e1a366df1ed4d6d', '8125c6c834c508ad')
+  cluster = Cluster('couchbase://127.0.0.1', ClusterOptions(pa))
+  bucket = cluster.bucket('travel-sample')
+  collection = bucket.default_collection()
+
+  try:
+    result = collection.lookup_in('airline_10', [SD.get('country')])
+    country = result.content_as[str](0) # "United Kingdom"
+    print("Sub-doc before:")
+    print("country: ", country)
+
+  except:
+    print("exception:", sys.exc_info()[0])
+    
+  try:
+    collection.mutate_in("airline_10", [SD.upsert("country", "Canada")])
+
+  except:
+    print("exception:", sys.exc_info()[0])
+    
+  try:
+    result = collection.lookup_in('airline_10', [SD.get('country')])
+    country = result.content_as[str](0) # "United Kingdom"
+    print("Sub-doc after:")
+    print("country: ", country)
+
+  except:
+    print("exception:", sys.exc_info()[0])
+infoAfter: |
+  Our Sub-document API allows for only retrieving or mutating a portion of 
+  a larger document. For operations where you just need to update one field 
+  in a document, this keeps you from having to query, change and send back an
+  updated document and is more performant getting or setting in one operation. 
+  Visit our docs to learn more about <a target="_blank" href="https://docs.couchbase.com/python-sdk/current/howtos/subdocument-operations.html#retrieving">Retrieving Sub-documents in Python</a>.
