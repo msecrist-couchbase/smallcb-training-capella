@@ -1,0 +1,51 @@
+title: Upsert
+page: page-05
+lang: dotnet
+code: |
+  namespace CouchbaseDotNetExample
+  {
+      class Program
+      {
+          static async Task Main(string[] args)
+          {
+              var cluster = await Cluster.ConnectAsync(
+                  "couchbase://{{.Host}}", "{{.CBUser}}", "{{.CBPswd}}"
+              );
+              var bucket = await cluster.BucketAsync("travel-sample");
+              var collection = bucket.DefaultCollection();
+
+              var content = new
+              {
+                  Country = "Iceland",
+                  Callsign = "ICEAIR",
+                  Iata = "FI",
+                  Icao = "ICE",
+                  Id = 123,
+                  Name = "Icelandair",
+                  Type = "airline"
+              };
+
+              await collection.UpsertAsync("airline_123", content);
+
+              try
+              {
+                  var lookupResult = await collection.LookupInAsync("airline_123",
+                      new List<LookupInSpec>
+                      {
+                          LookupInSpec.Get("name")
+                      });
+
+                  var name = lookupResult.ContentAs<string>(0);
+                  Console.WriteLine($"New Document name = {name}");
+
+              } catch (PathNotFoundException) {
+                  Console.WriteLine("Document not found!");
+              }
+
+              await cluster.DisposeAsync();
+          }
+      }
+  }
+infoAfter: |
+  We upsert and then retrieve a portion of the document using a basic upsert and subdocument lookup.
+  Visit our docs to learn more about <a target="_blank" href="https://docs.couchbase.com/dotnet-sdk/current/howtos/kv-operations.html#crud-operations">CRUD Operations in .NET</a>.
