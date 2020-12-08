@@ -45,4 +45,4 @@ infoAfter: |
   a larger document. For operations where you just need to update one field 
   in a document, this keeps you from having to query, change and send back an
   updated document and is more performant getting or setting in one operation. 
-  Visit our docs to learn more about <a target="_blank" href="https://docs.couchbase.com/python-sdk/current/howtos/subdocument-operations.html#retrieving">Retrieving Sub-documents in Python</a>.
+  Visit our docs to learn more about <a target="_blank" href="https://docs.couchbase.com/python-sdk/current/howtos/subdocument-operations.html#mutating">Mutating Sub-documents in Python</a>.

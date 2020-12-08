@@ -39,8 +39,5 @@ code: |
   except:
     print("exception:", sys.exc_info()[0])
 infoAfter: |
-  Our Sub-document API allows for only retrieving or mutating a portion of 
-  a larger document. For operations where you just need to update one field 
-  in a document, this keeps you from having to query, change and send back an
-  updated document and is more performant getting or setting in one operation. 
-  Visit our docs to learn more about <a target="_blank" href="https://docs.couchbase.com/python-sdk/current/howtos/subdocument-operations.html#retrieving">Retrieving Sub-documents in Python</a>.
+  We upsert and then retrieve our document using a basic subdocument lookup.
+  Visit our docs to learn more about <a target="_blank" href="https://docs.couchbase.com/python-sdk/current/howtos/kv-operations.html#crud-operations">Key Value CRUD Operations in Python</a>.
