@@ -1,0 +1,49 @@
+title: Sub-document Lookup
+page: page-05
+lang: dotnet
+code: |
+  using System;
+  using System.Collections.Generic;
+  using System.Threading.Tasks;
+  using Couchbase;
+  using Couchbase.Core.Exceptions.KeyValue;
+  using Couchbase.KeyValue;
+
+  namespace CouchbaseDotNetExample
+  {
+    class Program
+    {
+        static async Task Main(string[] args)
+        {
+            var cluster = await Cluster.ConnectAsync(
+                "couchbase://{{.Host}}", "{{.CBUser}}", "{{.CBPswd}}"
+            );
+            var bucket = await cluster.BucketAsync("travel-sample");
+            var collection = bucket.DefaultCollection();
+
+            try
+            {
+                var result = await collection.LookupInAsync("airport_1254",
+                    new List<LookupInSpec>
+                    {
+                        LookupInSpec.Get("geo.alt")
+                    });
+
+                var geoAlt = result.ContentAs<string>(0);
+                Console.WriteLine("Altitude = " + geoAlt);
+            }
+            catch (DocumentNotFoundException)
+            {
+                Console.WriteLine("Document not found!");
+            }
+
+            await cluster.DisposeAsync();
+        }
+    }
+  }
+infoAfter: |
+  Our Sub-document API allows for only retrieving or mutating a portion of 
+  a larger document. For operations where you just need to update one field 
+  in a document, this keeps you from having to query, change, and send back an
+  entire updated document. It is a very performant way to get or set in one operation. 
+  Visit our docs to learn more about <a target="_blank" href="https://docs.couchbase.com/dotnet-sdk/current/howtos/subdocument-operations.html#retrieving">Retrieving Sub-documents in .NET</a>.

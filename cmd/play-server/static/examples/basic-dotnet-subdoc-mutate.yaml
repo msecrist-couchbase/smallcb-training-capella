@@ -1,0 +1,87 @@
+title: Sub-document Mutate
+page: page-05
+lang: dotnet
+code: |
+  using System;
+  using System.Collections.Generic;
+  using System.Threading.Tasks;
+  using Couchbase;
+  using Couchbase.Core.Exceptions.KeyValue;
+  using Couchbase.KeyValue;
+
+  namespace CouchbaseDotNetExample
+  {
+      class Program
+      {
+          static async Task Main(string[] args)
+          {
+              var cluster = await Cluster.ConnectAsync(
+                  "couchbase://{{.Host}}", "{{.CBUser}}", "{{.CBPswd}}"
+              );
+              var bucket = await cluster.BucketAsync("travel-sample");
+              var collection = bucket.DefaultCollection();
+
+              // get the country from airline_10 and show it
+              try
+              {
+                  var result = await collection.LookupInAsync("airline_10",
+                      new List<LookupInSpec>
+                      {
+                          LookupInSpec.Get("country")
+                      }
+                  );
+
+                  var country = result.ContentAs<string>(0);
+                  Console.WriteLine("Sub-doc before: ");
+                  Console.WriteLine(country);
+
+              } catch (PathNotFoundException) {
+                  Console.WriteLine("Sub-doc path not found!");
+              }
+
+              // change the country in airline_10
+              try
+              {
+                  await collection.MutateInAsync("airline_10",
+                      new List<MutateInSpec>
+                      {
+                          MutateInSpec.Upsert("country", "Canada")
+                      }
+                  );
+              }
+              catch (PathExistsException)
+              {
+                  Console.WriteLine("Sub-doc path not found!");
+              }
+
+              // get the country from airline_10 (should be updated)
+              // and show it
+              try
+              {
+                  var result = await collection.LookupInAsync("airline_10",
+                      new List<LookupInSpec>
+                      {
+                          LookupInSpec.Get("country")
+                      }
+                  );
+
+                  var country = result.ContentAs<string>(0);
+                  Console.WriteLine("Sub-doc before: ");
+                  Console.WriteLine(country);
+
+              }
+              catch (PathNotFoundException)
+              {
+                  Console.WriteLine("Sub-doc path not found!");
+              }
+
+              await cluster.DisposeAsync();
+          }
+      }
+  }
+infoAfter: |
+  Our Sub-document API allows for only retrieving or mutating a portion of 
+  a larger document. For operations where you just need to update one field 
+  in a document, this keeps you from having to query, change, and send back an
+  entire updated document. It is a very performant way to get or set in one operation.
+  Visit our docs to learn more about <a target="_blank" href="https://docs.couchbase.com/dotnet-sdk/current/howtos/subdocument-operations.html#mutating">Mutating Sub-documents in .NET</a>.
