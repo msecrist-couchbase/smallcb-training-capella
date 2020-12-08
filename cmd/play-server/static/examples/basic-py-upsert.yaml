@@ -1,0 +1,43 @@
+title: Upsert
+page: page-04
+lang: py
+code: |
+  #!/usr/bin/python3
+  import sys
+  import couchbase.collection
+  import couchbase.subdocument as SD
+  from couchbase.cluster import Cluster, ClusterOptions
+  from couchbase_core.cluster import PasswordAuthenticator
+  from couchbase.durability import ServerDurability, Durability
+  from datetime import timedelta
+
+  pa = PasswordAuthenticator('{{.CBUser}}', '{{.CBPswd}}')
+  cluster = Cluster('couchbase://{{.Host}}', ClusterOptions(pa))
+  bucket = cluster.bucket('travel-sample')
+  collection = bucket.default_collection()
+  try:
+    document = dict(
+      country="Iceland", callsign="ICEAIR", iata="FI", icao="ICE", 
+      id=123, name="Icelandair", type="airline"
+    )
+    result = collection.upsert(
+      'airline_123', 
+      document, 
+      expiry=timedelta(minutes=1),
+      durability=ServerDurability(Durability.MAJORITY)
+    )
+    print("UPSERT SUCCESS")
+    print("cas result: ", result.cas)
+  except:
+    print("exception:", sys.exc_info())
+    
+  try:
+    result = collection.lookup_in('airline_123', [SD.get('name')])
+    name = result.content_as[str](0) # "United Kingdom"
+    print("name: ", name)
+
+  except:
+    print("exception:", sys.exc_info()[0])
+infoAfter: |
+  We upsert and then retrieve our document using a basic subdocument lookup.
+  Visit our docs to learn more about <a target="_blank" href="https://docs.couchbase.com/python-sdk/current/howtos/kv-operations.html#crud-operations">Key Value CRUD Operations in Python</a>.
