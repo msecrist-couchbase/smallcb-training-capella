@@ -2,6 +2,13 @@ title: Upsert
 page: page-05
 lang: dotnet
 code: |
+  using System;
+  using System.Collections.Generic;
+  using System.Threading.Tasks;
+  using Couchbase;
+  using Couchbase.Core.Exceptions.KeyValue;
+  using Couchbase.KeyValue;
+
   namespace CouchbaseDotNetExample
   {
       class Program
