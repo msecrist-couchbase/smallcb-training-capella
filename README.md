@@ -21,6 +21,13 @@ for his golang setup on mac OSX (using brew)...
     export GOROOT="$(brew --prefix golang)/libexec"
     export PATH="$PATH:$GOPATH/bin:$GOROOT/bin"
 
+Tip: Matthew Groves offers these extra steps that
+he used to have golang work properly for him...
+
+    go get github.com/go-macaron/captcha
+    go get github.com/google/uuid
+    go get gopkg.in/yaml.v2
+
 -------------------------
 Instructions to build and run...
 
