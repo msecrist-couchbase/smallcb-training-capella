@@ -217,7 +217,7 @@ main .info-panel .session-info .instance-info .head-pass {
 .workspace .workspace-body .code-editor .sticky .empty-example-frame {
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: top;
   width: 95%;
   height: 60vh;
 }
@@ -225,11 +225,10 @@ main .info-panel .session-info .instance-info .head-pass {
 .workspace .workspace-body .code-editor .sticky .empty-example-frame .info-frame {
   justify-content: center;
   align-items: center;
-
   width: 80%;
   height: 20%;
   line-height: 1.5em;
-  margin-top: -2.5em;
+  margin-top: 1.5em;
 }
 
 .workspace .workspace-body .code-editor .sticky .empty-example-frame .info-frame a {
@@ -242,10 +241,18 @@ main .info-panel .session-info .instance-info .head-pass {
   margin-top: 1em;
 }
 
+.workspace .workspace-body .code-editor .sticky .empty-example-frame .info-frame a.shot {
+  border: none;
+}
+
+.workspace .workspace-body .code-editor .sticky .empty-example-frame .info-frame a.shot img {
+  width: 250px;
+}
+
 @media screen and (max-width: 750px) {
   .workspace .workspace-body .code-editor .sticky .empty-example-frame .info-frame {
     width: 70%;
-    margin-top: -2em;
+    margin-top: 1em;
     line-height: 1.5em;
     height: 40%;
   }
@@ -326,8 +333,7 @@ body.dark .workspace .workspace-body .code-editor .sticky .empty-example-frame .
 
 body.dark .workspace .workspace-body .code-editor .sticky .empty-example-frame .info-frame a:hover,
 body.dark .workspace .workspace-body .code-editor .sticky .empty-example-frame .info-frame a:focus {
-  background-color: transparent;
-  color: #EFEFEF;
+  background-color: #778fa7;
 }
 
 body.dark .workspace .workspace-body .code-editor div.code-ace {
