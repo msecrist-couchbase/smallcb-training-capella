@@ -130,7 +130,10 @@
                   {{.title}}
                 </a>
                 {{else}}
-                {{.title}}
+                  {{.title}}
+                  {{if .docs}}
+                    <a href="{{.docs}}" target="_blank" class="docs">docs</a>
+                  {{end}}
                 {{end}}
               </li>
               {{end}}

@@ -139,6 +139,11 @@ main .info-panel .session-info .instance-info .head-pass {
 .workspace .workspace-body .code-examples .example-nav ul.examples li.category:not(:first-child) {
   margin-top: 20px;
 }
+.workspace .workspace-body .code-examples .example-nav ul.examples li.category a {
+  display: inline-block;
+  float: right;
+  font-size: 10pt;
+}
 .workspace .workspace-body .code-examples .example-nav ul.examples li.lang {
   margin: 0;
 }
