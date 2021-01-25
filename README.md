@@ -1,50 +1,60 @@
+README for couchbase playground
+
+* aka, "smallcb" / "small house couchbase"
+* aka, "couchbase.live"
+
+-------------------------
 Dependencies...
 
+* make
+* docker
 * golang
   * tip: after checking out this project, run "go get ./..."
     to download golang dependencies.
     * tip: you might need to setup your GOPATH env variables.
       * example: GOPATH=/Users/steve.yen/go
 
-tip: Denis Rosa offers this as what worked for him
+Tip: Denis Rosa offers this as what worked for him
 for his golang setup on mac OSX (using brew)...
 
     export GOPATH="${HOME}/.go"
     export GOROOT="$(brew --prefix golang)/libexec"
     export PATH="$PATH:$GOPATH/bin:$GOROOT/bin"
 
-* docker
-* make
-
-Instructions for use...
+-------------------------
+Instructions to build and run...
 
 One time setup/init/build steps...
 
     # 1) To create the docker image 'smallcb',
     # which includes both couchbase-server & couchbase sdks...
+    
     make build
 
-    # 2) Temporarily launch a smallcb docker image from step 1
-    # that initializes a couchbase-server with sample data
-    # and configures it for lower resource utilization.
+    # 2) To create the vol-snapshot directory...
     #
-    # This step creates and populates the vol-snapshot directory.
+    # This step launches a smallcb docker image from step 1
+    # in order to initialize a couchbase-server with sample data
+    # and configures it for lower resource utilization.
     #
     # TIP: Make sure you're not already running couchbase-server
     # as it needs the standard couchbase-server port #'s.
+    
     make create
 
-    # 3) Compile the web/app server...
+    # 3) Compile the playground web/app server...
+    
     make play-server
 
 And, to start the web/app server...
 
-    # Listens on port 8080, 8091 and 8093 for web browser requests...
-    #
-    # TIP: Make sure you're not already using those ports,
-    # or use the command-line flags to change the port #'s.
     ./play-server
 
+The ./play-server command starts a web/app server that listens on port
+8080, 8091 and 8093 for web browser requests.  TIP: Make sure you're
+not already using those ports, or use the command-line flags to change
+the port #'s.
+    
 For command-line usage/help...
 
     ./play-server -h
@@ -54,7 +64,8 @@ Example usage during development...
     ./play-server -sessionsMaxAge 20m -containers 2 -restarters=2
 
 Production usage should set the CB_ADMIN_PASSWORD env
-variable for security and the host parameter...
+variable for security and the host parameter that
+represents the publically visible DNS hostname...
 
     CB_ADMIN_PASSWORD=no-longer-the-small-house-secret \
       ./play-server \
@@ -67,14 +78,11 @@ Aside...
     # To create the docker image 'smallcb-sdks',
     # which includes only the couchbase sdks and
     # which does not include couchbase server...
+    
     make IMAGE_FROM=base IMAGE_NAME=smallcb-sdks build
 
 -------------------------
 TODO's...
-
-store logs on S3?
-
-figure out where to run this in production?
 
 how about staging?
 
@@ -375,6 +383,10 @@ race / raciness in N1QL server where the running of user code
   100   329  100   222  100   107   1190    573 --:--:-- --:--:-- --:--:--  1193
 
 --------------------------
+DONE: store logs on S3? - DONE: by Denis.
+
+DONE: figure out where to run this in production? - DONE: by Denis.
+
 DONE: google analytics using same script JS as from developer.couchbase.com
 
 DONE: iframe for run output emits HTML instead of text/plain
