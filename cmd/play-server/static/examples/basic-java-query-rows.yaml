@@ -33,6 +33,7 @@ code: |
     }
   }
 infoAfter: |
-  Basic N1QL query, expected to return one to many rows, we loop 
-  through them and print each one. 
-  Visit our docs to learn more about <a target="_blank" href="https://docs.couchbase.com/java-sdk/current/howtos/n1ql-queries-with-sdk.html#the-query-result">Handling Query Results in Java</a>.
+  Basic N1QL query,
+  with looping through each returned row.
+  Visit the docs to learn more about
+  <a target="_blank" href="https://docs.couchbase.com/java-sdk/current/howtos/n1ql-queries-with-sdk.html#the-query-result">Handling Query Results in Java</a>.
