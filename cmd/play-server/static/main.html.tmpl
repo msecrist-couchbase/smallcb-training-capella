@@ -43,7 +43,8 @@
       <ul>
         <li>
           {{if .Session}}
-          <a href="/session-exit?s={{.Session.SessionId}}" onClick="localStorage.setItem('infoPanel', 'show');" class="session">
+          <a href="/session-exit?s={{.Session.SessionId}}"
+	     onclick="localStorage.setItem('infoPanel', 'show');" class="session">
             stop test-drive
           </a>
           {{else}}
@@ -88,7 +89,8 @@
       <div class="session-info">
         <h2>Couchbase Server Test-Drive Session &mdash; for <em>{{.Session.FullName}}</em></h2>
         <div>
-          This test-drive session is active until there's ~{{.SessionsMaxAge}} of inactivity.
+          This test-drive session will be available for a max of {{.SessionsMaxAge}}
+          or until there's {{.SessionsMaxIdle}} of inactivity.
         </div>
         <div class="instance-info">
           <span class="head-server">Your Couchbase Instance:</span> <code>http://{{.Host}}:8091</code>
@@ -105,11 +107,10 @@
     .NET   <a href="https://docs.couchbase.com/dotnet-sdk/current/hello-world/start-using-sdk.html">SDK docs</a>, <a href="https://docs.couchbase.com/sdk-api/couchbase-dotnet-client/">API docs</a> : - Cluster.ConnectAsync("couchbase://{{.Host}}", "{{.Session.CBUser}}", "{{.Session.CBPswd}}");
     NodeJS <a href="https://docs.couchbase.com/nodejs-sdk/current/hello-world/start-using-sdk.html">SDK docs</a>, <a href="https://docs.couchbase.com/sdk-api/couchbase-node-client/">API docs</a> : - new couchbase.Cluster("couchbase://{{.Host}}", {username: "{{.Session.CBUser}}", password: "{{.Session.CBPswd}}"})
     Python <a href="https://docs.couchbase.com/python-sdk/current/hello-world/start-using-sdk.html">SDK docs</a>, <a href="https://docs.couchbase.com/sdk-api/couchbase-python-client/">API docs</a> : - Cluster('couchbase://{{.Host}}', ClusterOptions(PasswordAuthenticator('{{.Session.CBUser}}', '{{.Session.CBPswd}}')))
-    </div>
 
-        <div>
-          All code executed will run against this Couchbase Server instance.
-        </div>
+
+  <b>Terminal</b>: <a target="_blank" href="http://{{.Host}}:{{.SessionData.port_1337}}">Web-based Shell</a></b>
+    </div>
       </div>
       {{end}}
     </div>

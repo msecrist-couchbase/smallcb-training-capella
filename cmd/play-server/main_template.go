@@ -32,8 +32,10 @@ type MainTemplateData struct {
 	Version     string
 	VersionSDKs []map[string]string
 
-	Session        *Session // May be nil.
-	SessionsMaxAge string
+	Session         *Session // May be nil.
+	SessionData     map[string]interface{}
+	SessionsMaxAge  string
+	SessionsMaxIdle string
 
 	ExamplesPath string
 	Examples     []map[string]interface{} // Sorted.
@@ -53,7 +55,9 @@ type MainTemplateData struct {
 func MainTemplateEmit(w http.ResponseWriter,
 	staticDir, msg, hostIn string, portApp int,
 	version string, versionSDKs []map[string]string,
-	session *Session, sessionsMaxAge time.Duration,
+	session *Session, sessionsMaxAge, sessionsMaxIdle time.Duration,
+	containerPublishPortBase, containerPublishPortSpan int,
+	portMapping [][]int,
 	examplesPath string, name, lang, code string) error {
 	host := hostIn
 	if session == nil {
@@ -90,7 +94,9 @@ func MainTemplateEmit(w http.ResponseWriter,
 			// there's a session or not.
 			codeHost := "127.0.0.1" // host.
 
-			code = SessionTemplateExecute(codeHost, portApp, session, code)
+			code = SessionTemplateExecute(codeHost, portApp, session,
+				containerPublishPortBase, containerPublishPortSpan,
+				portMapping, code)
 		}
 
 		infoBefore = MapGetString(example, "infoBefore")
@@ -108,8 +114,14 @@ func MainTemplateEmit(w http.ResponseWriter,
 
 		Session: session,
 
+		SessionData: SessionTemplateData(host, portApp, session,
+			containerPublishPortBase, containerPublishPortSpan, portMapping),
+
 		SessionsMaxAge: strings.Replace(
 			sessionsMaxAge.String(), "m0s", " min", 1),
+
+		SessionsMaxIdle: strings.Replace(
+			sessionsMaxIdle.String(), "m0s", " min", 1),
 
 		ExamplesPath: examplesPath,
 		Examples:     examplesArr,
@@ -149,8 +161,12 @@ func MainTemplateEmit(w http.ResponseWriter,
 // ------------------------------------------------
 
 func SessionTemplateExecute(host string, portApp int,
-	session *Session, t string) string {
-	data := SessionTemplateData(host, portApp, session)
+	session *Session,
+	containerPublishPortBase, containerPublishPortSpan int,
+	portMapping [][]int,
+	t string) string {
+	data := SessionTemplateData(host, portApp, session,
+		containerPublishPortBase, containerPublishPortSpan, portMapping)
 
 	var b bytes.Buffer
 
@@ -166,7 +182,9 @@ func SessionTemplateExecute(host string, portApp int,
 }
 
 func SessionTemplateData(host string, portApp int,
-	session *Session) map[string]interface{} {
+	session *Session,
+	containerPublishPortBase, containerPublishPortSpan int,
+	portMapping [][]int) map[string]interface{} {
 	data := map[string]interface{}{
 		"Host":    host,
 		"PortApp": fmt.Sprintf("%d", portApp),
@@ -178,6 +196,13 @@ func SessionTemplateData(host string, portApp int,
 		data["SessionId"] = session.SessionId
 		data["CBUser"] = session.CBUser
 		data["CBPswd"] = session.CBPswd
+
+		portBase := containerPublishPortBase +
+			(containerPublishPortSpan * session.ContainerId)
+
+		for _, port := range portMapping {
+			data[fmt.Sprintf("port_%d", port[0])] = fmt.Sprintf("%d", portBase+port[1])
+		}
 	}
 
 	return data

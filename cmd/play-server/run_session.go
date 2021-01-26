@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"os/exec"
 	"time"
 )
 
@@ -83,6 +84,11 @@ func SessionAssignContainer(session *Session, req RunRequest,
 		return nil, err
 	}
 
+	err = StartGritty(req, containerId)
+	if err != nil {
+		return nil, err
+	}
+
 	session = sessions.SessionAccess(session.SessionId,
 		func(session *Session) *Session {
 			if session.ContainerId < 0 {
@@ -112,4 +118,23 @@ func SessionAssignContainer(session *Session, req RunRequest,
 		})
 
 	return session, err
+}
+
+// ------------------------------------------------
+
+func StartGritty(req RunRequest, containerId int) error {
+	containerName := fmt.Sprintf("%s%d",
+		req.containerNamePrefix, containerId)
+
+	cmd := exec.Command("docker", "exec",
+		"-detach", "-it", "-u", "play", "-w", "/home/play", containerName,
+		"/home/play/npm_packages/bin/gritty")
+
+	out, err := ExecCmd(req.ctx, cmd, req.codeDuration)
+	if err != nil {
+		return fmt.Errorf("StartGritty,"+
+			" out: %s, err: %v", out, err)
+	}
+
+	return nil
 }

@@ -366,7 +366,8 @@ func InjectResponseUI(staticDir string, host string, portApp int,
 
 	var tout bytes.Buffer
 
-	err := t.Execute(&tout, SessionTemplateData(host, portApp, session))
+	err := t.Execute(&tout, SessionTemplateData(host, portApp, session,
+		*listenPortBase, *listenPortSpan, PortMapping))
 	if err != nil {
 		return fmt.Errorf("t.Execute, err: %v", err)
 	}

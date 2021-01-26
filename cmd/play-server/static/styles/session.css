@@ -77,14 +77,8 @@ body.dark article input[type=submit] {
   color: #FFFFFF;
 }
 body.dark article input[type=submit]:hover {
-  border-color: #516374;
-  background-color: #2E3540;
-  color: #EFEFEF;
-}
-body.dark article input[type=submit]:focus {
-  outline-color: #778fa7;
   border-color: #778fa7;
-  background-color: #2E3540;
+  background-color: #778fa7;
   color: #EFEFEF;
 }
 

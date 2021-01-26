@@ -24,7 +24,7 @@ RUN echo "prefix = /home/play/npm_packages" >> ~/.npmrc && \
     PATH=/home/play/npm-packages/bin:$PATH \
     NODE_PATH=/home/play/npm-packages/lib/node_modules:$NODE_PATH \
     NPM_PACKAGES=/home/play/npm-packages \
-    npm install -g couchbase ottoman
+    npm install -g couchbase ottoman gritty
 
 USER root
 

@@ -19,8 +19,8 @@ CB_INDEXER_PORT="${CB_INDEXER_PORT:-9102}"
 # exit immediately if a command fails or if there are unset vars
 set -euo pipefail
 
-# turn on bash's job control, used to bring couchbase-server back to
-# the forground after the node is configured
+# turn on bash's job control, used to bring couchbase-server
+# back to the foreground after the node is configured
 set -m
 
 # prepend script to /etc/service/couchbase-server/run script...
