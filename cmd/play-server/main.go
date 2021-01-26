@@ -111,7 +111,7 @@ func main() {
 		if err == nil {
 			for _, file := range files {
 				ver, err := ioutil.ReadFile(file)
-				if err == nil {
+				if err == nil && len(ver) > 0 {
 					name := filepath.Base(file)
 					name = name[:len(name)-4]
 					name = name[len("VERSION-sdk-"):]
