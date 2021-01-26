@@ -217,9 +217,7 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 					cbAdminPassword:     CBAdminPassword,
 				}
 
-				// Async attempt to assign a container instance to
-				// the new session, so the client doesn't wait.
-				go SessionAssignContainer(session, req,
+				SessionAssignContainer(session, req,
 					readyCh, *containerWaitDuration, restartCh,
 					*containers, *containersSingleUse)
 
