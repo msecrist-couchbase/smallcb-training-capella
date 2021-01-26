@@ -186,10 +186,11 @@ func SessionTemplateData(host string, portApp int,
 	containerPublishPortBase, containerPublishPortSpan int,
 	portMapping [][]int) map[string]interface{} {
 	data := map[string]interface{}{
-		"Host":    host,
-		"PortApp": fmt.Sprintf("%d", portApp),
-		"CBUser":  "username",
-		"CBPswd":  "password",
+		"Host":        host,
+		"PortApp":     fmt.Sprintf("%d", portApp),
+		"CBUser":      "username",
+		"CBPswd":      "password",
+		"ContainerId": -1,
 	}
 
 	if session != nil {
@@ -197,11 +198,15 @@ func SessionTemplateData(host string, portApp int,
 		data["CBUser"] = session.CBUser
 		data["CBPswd"] = session.CBPswd
 
-		portBase := containerPublishPortBase +
-			(containerPublishPortSpan * session.ContainerId)
+		if session.ContainerId >= 0 {
+			portBase := containerPublishPortBase +
+				(containerPublishPortSpan * session.ContainerId)
 
-		for _, port := range portMapping {
-			data[fmt.Sprintf("port_%d", port[0])] = fmt.Sprintf("%d", portBase+port[1])
+			for _, port := range portMapping {
+				data[fmt.Sprintf("port_%d", port[0])] = fmt.Sprintf("%d", portBase+port[1])
+			}
+
+			data["ContainerId"] = session.ContainerId
 		}
 	}
 

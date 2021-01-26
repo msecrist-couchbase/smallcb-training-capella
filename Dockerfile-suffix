@@ -73,3 +73,19 @@ RUN cd /home/play/hellodotnet && \
 USER root
 
 RUN tr ' ' '\n' < /home/play/hellodotnet/run-csharp-hello.csproj | grep Version | cut -f 2 -d '"' > /opt/couchbase/VERSION-sdk-dotnet.ver
+
+# ------------------------------------------------
+# couchbase shell
+
+RUN apt-get install -y libxcb-composite0-dev
+
+USER play
+
+ENV CBSH_VERSION 0.4.0
+
+RUN cd /home/play && \
+    wget https://github.com/couchbaselabs/couchbase-shell/releases/download/v${CBSH_VERSION}/cbsh-${CBSH_VERSION}-linux.zip && \
+    unzip cbsh-*-linux.zip && \
+    tar -xzvf cbsh-linux-x86_64.tar.gz
+
+USER root

@@ -217,9 +217,13 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 					cbAdminPassword:     CBAdminPassword,
 				}
 
-				SessionAssignContainer(session, req,
+				go SessionAssignContainer(session, req,
 					readyCh, *containerWaitDuration, restartCh,
 					*containers, *containersSingleUse)
+
+				// In case a container is ready, give it a chance
+				// to be immediately assigned to the new session.
+				time.Sleep(2 * time.Second)
 
 				url := "/"
 

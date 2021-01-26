@@ -41,6 +41,9 @@
 .session-info div.connection a.ui:hover img {
   display: block;
 }
+.session-info div.connection .preparing {
+  color: #777;
+}
 
 .workspace {
   width: 100%;

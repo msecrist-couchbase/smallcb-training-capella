@@ -43,15 +43,15 @@ create:
                -v $(shell pwd)/vol-snapshot/:/opt/couchbase/var \
                -d $(IMAGE_NAME)
 	sleep 3
-	docker exec $(IMAGE_NAME)-$(CONTAINER_NUM) /init-couchbase/init.sh
+	docker exec -u root $(IMAGE_NAME)-$(CONTAINER_NUM) /init-couchbase/init.sh
 	sleep 3
-	docker exec $(IMAGE_NAME)-$(CONTAINER_NUM) /init-couchbase/init-buckets.sh
+	docker exec -u root $(IMAGE_NAME)-$(CONTAINER_NUM) /init-couchbase/init-buckets.sh
 	sleep 3
-	docker exec $(IMAGE_NAME)-$(CONTAINER_NUM) /opt/couchbase/bin/couchbase-cli \
+	docker exec -u root $(IMAGE_NAME)-$(CONTAINER_NUM) /opt/couchbase/bin/couchbase-cli \
                reset-admin-password --new-password $(CB_ADMIN_PASSWORD)
 	sleep 3
 	docker cp $(IMAGE_NAME)-$(CONTAINER_NUM):/opt/couchbase/VERSION.txt ./tmp/VERSION.txt
-	docker exec $(IMAGE_NAME)-$(CONTAINER_NUM) \
+	docker exec -u root $(IMAGE_NAME)-$(CONTAINER_NUM) \
                grep vsn /opt/couchbase/lib/ns_server/erlang/lib/ns_server/ebin/ns_server.app | \
                cut -d '"' -f 2 > ./tmp/ns_server.app.vsn
 	for f in `docker exec $(IMAGE_NAME)-$(CONTAINER_NUM) /bin/sh -c 'ls /opt/couchbase/VERSION-sdk*.ver'`; \

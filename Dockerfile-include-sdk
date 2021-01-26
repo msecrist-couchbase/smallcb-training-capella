@@ -1,9 +1,9 @@
 RUN apt-get update && \
     apt-get install -y \
-	git curl wget jq \
-	build-essential cmake \
+	git curl wget jq unzip \
+	build-essential cmake libssl-dev \
 	atop htop psmisc strace \
-	emacs
+	emacs vim
 
 # ------------------------------------------------------
 
