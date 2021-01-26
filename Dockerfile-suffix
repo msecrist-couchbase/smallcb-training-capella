@@ -83,9 +83,11 @@ USER play
 
 ENV CBSH_VERSION 0.4.0
 
-RUN cd /home/play && \
+RUN mkdir -p /home/play/cbsh && \
+    cd /home/play/cbsh && \
     wget https://github.com/couchbaselabs/couchbase-shell/releases/download/v${CBSH_VERSION}/cbsh-${CBSH_VERSION}-linux.zip && \
     unzip cbsh-*-linux.zip && \
-    tar -xzvf cbsh-linux-x86_64.tar.gz
+    tar -xzvf cbsh-linux-x86_64.tar.gz && \
+    rm *.zip && rm *.gz
 
 USER root
