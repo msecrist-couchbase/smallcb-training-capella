@@ -15,6 +15,9 @@ RUN useradd -u 1001 -g couchbase -m play
 
 # SDK installs that need a non-root user will use the play user.
 
+# ------------------------------------------------
+# SDK nodejs
+
 USER play
 
 RUN echo "prefix = /home/play/npm_packages" >> ~/.npmrc && \
@@ -24,6 +27,11 @@ RUN echo "prefix = /home/play/npm_packages" >> ~/.npmrc && \
     npm install -g couchbase ottoman
 
 USER root
+
+RUN npm show couchbase | grep latest | cut -f 2 -d ' ' > /opt/couchbase/VERSION-sdk-nodejs.ver
+
+# ------------------------------------------------
+# SDK java
 
 # Copy maven shared files and build hello.java to warm up mvn caches.
 
@@ -35,10 +43,6 @@ COPY cmd/play-server/run-java-pom.xml /run-java-pom.xml
 
 COPY cmd/play-server/run-java-hello.java /home/play/hello/src/main/java/hello.java
 
-COPY cmd/play-server/run-csharp-hello.csproj /home/play/hellodotnet/run-csharp-hello.csproj
-
-COPY cmd/play-server/run-csharp-hello.cs /home/play/hellodotnet/run-csharp-hello.cs
-
 RUN chown -R play:couchbase /home/play
 
 USER play
@@ -48,7 +52,24 @@ RUN cp /run-java-pom.xml /home/play/hello/pom.xml && \
     mvn package && \
     mvn dependency:build-classpath -Dmdep.outputFile=classpath.txt
 
+USER root
+
+RUN cat /run-java-pom.xml | grep 'version>3' | cut -f 2 -d '>' | cut -f 1 -d '<' > /opt/couchbase/VERSION-sdk-java.ver
+
+# ------------------------------------------------
+# SDK .NET
+
+COPY cmd/play-server/run-csharp-hello.csproj /home/play/hellodotnet/run-csharp-hello.csproj
+
+COPY cmd/play-server/run-csharp-hello.cs /home/play/hellodotnet/run-csharp-hello.cs
+
+RUN chown -R play:couchbase /home/play
+
+USER play
+
 RUN cd /home/play/hellodotnet && \
     dotnet build
 
 USER root
+
+RUN tr ' ' '\n' < /home/play/hellodotnet/run-csharp-hello.csproj | grep Version | cut -f 2 -d '"' > /opt/couchbase/VERSION-sdk-dotnet.ver

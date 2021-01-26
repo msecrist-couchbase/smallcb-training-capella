@@ -50,6 +50,7 @@ RUN ln -s /usr/share/dotnet/dotnet /usr/bin/dotnet && \
 # https://docs.couchbase.com/tutorials/quick-start/quickstart-python3-native-firstquery-cb65.html
 
 RUN pip3 install six couchbase
+RUN pip3 show couchbase | grep Version | cut -f 2 -d ' ' > /opt/couchbase/VERSION-sdk-python.ver
 
 # ------------------------------------------------------
 

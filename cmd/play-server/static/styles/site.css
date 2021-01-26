@@ -112,6 +112,10 @@ footer div {
   margin: 0.25em 0 0.25em 0;
 }
 
+footer span.ver-sdk {
+  margin-left: 1em;
+}
+
 /* links */
 a { text-decoration: none; }
 

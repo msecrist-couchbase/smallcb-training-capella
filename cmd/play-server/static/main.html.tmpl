@@ -207,7 +207,10 @@
 
   <footer>
     <div>© 2021 Couchbase Labs -
-      Couchbase Server {{.Version}}
+      <span class="ver">Couchbase Server {{.Version}}</span>
+      {{range $v := .VersionSDKs}}
+         <span class="ver-sdk">{{$v.name}} SDK: {{$v.ver}}</span>
+      {{end}}
     </div>
   </footer>
   {{if .Session}}

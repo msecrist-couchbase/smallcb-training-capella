@@ -29,7 +29,8 @@ type MainTemplateData struct {
 
 	Host string
 
-	Version string
+	Version     string
+	VersionSDKs []map[string]string
 
 	Session        *Session // May be nil.
 	SessionsMaxAge string
@@ -50,7 +51,8 @@ type MainTemplateData struct {
 }
 
 func MainTemplateEmit(w http.ResponseWriter,
-	staticDir, msg, hostIn string, portApp int, version string,
+	staticDir, msg, hostIn string, portApp int,
+	version string, versionSDKs []map[string]string,
 	session *Session, sessionsMaxAge time.Duration,
 	examplesPath string, name, lang, code string) error {
 	host := hostIn
@@ -101,7 +103,8 @@ func MainTemplateEmit(w http.ResponseWriter,
 
 		Host: host,
 
-		Version: version,
+		Version:     version,
+		VersionSDKs: versionSDKs,
 
 		Session: session,
 

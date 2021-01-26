@@ -54,6 +54,8 @@ create:
 	docker exec $(IMAGE_NAME)-$(CONTAINER_NUM) \
                grep vsn /opt/couchbase/lib/ns_server/erlang/lib/ns_server/ebin/ns_server.app | \
                cut -d '"' -f 2 > ./tmp/ns_server.app.vsn
+	for f in `docker exec $(IMAGE_NAME)-$(CONTAINER_NUM) /bin/sh -c 'ls /opt/couchbase/VERSION-sdk*.ver'`; \
+               do docker cp $(IMAGE_NAME)-$(CONTAINER_NUM):$${f} ./tmp/; done
 	sleep 3
 	docker stop $(IMAGE_NAME)-$(CONTAINER_NUM)
 	sleep 3

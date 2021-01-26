@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"strconv"
 	"strings"
 	"time"
@@ -79,6 +80,10 @@ func init() {
 
 // ------------------------------------------------
 
+var VersionSDKs = []map[string]string{}
+
+// ------------------------------------------------
+
 func main() {
 	StartTime = time.Now()
 
@@ -100,6 +105,23 @@ func main() {
 		if err != nil {
 			log.Fatalf("could not read version file: %s, err: %v",
 				*version, err)
+		}
+
+		files, err := filepath.Glob(filepath.Dir(*version) + "/VERSION-sdk-*.ver")
+		if err == nil {
+			for _, file := range files {
+				ver, err := ioutil.ReadFile(file)
+				if err == nil {
+					name := filepath.Base(file)
+					name = name[:len(name)-4]
+					name = name[len("VERSION-sdk-"):]
+
+					VersionSDKs = append(VersionSDKs, map[string]string{
+						"name": name,
+						"ver":  string(ver),
+					})
+				}
+			}
 		}
 
 		*version = string(b)
