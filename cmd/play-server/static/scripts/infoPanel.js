@@ -26,15 +26,15 @@ function toggleInfoPanel() {
 
 function infoPanelInitPageLoad() {
   const ls = localStorage.getItem('infoPanel')
-  if(ls == 'hide') {
+  if (ls == 'hide') {
     setElemDisplay('infoPanel', 'none')
     setElemDisplay('instanceInfo', 'block')
     setChevronDirection('toggleIcon','down')
-  } else if(ls == 'show') {
+  } else if (ls == 'show') {
     setElemDisplay('infoPanel', 'block')
     setElemDisplay('instanceInfo', 'none')
     setChevronDirection('toggleIcon','up')
-  } else if(ls === null) {
+  } else if (ls === null) {
     localStorage.setItem('infoPanel', 'show')
   }
 }

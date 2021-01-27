@@ -126,8 +126,8 @@
               {{range $i, $v := .Examples}}
               <li class="{{if .className}}{{.className}} {{end}}{{if .lang}}lang {{.lang}} {{.page}}{{else}}category{{end}}{{if eq .name $.Name}} current{{end}}">
                 {{if .code}}
-                <a href="/{{$.ExamplesPath}}/{{.name}}{{if $.Session}}?s={{$.Session.SessionId}}{{end}}{{if gt $i 5}}#ex-{{.name}}{{end}}"
-                  id="ex-{{.name}}">
+                <a href="/{{$.ExamplesPath}}/{{.name}}{{if $.Session}}?s={{$.Session.SessionId}}{{end}}"
+                   id="ex-{{.name}}">
                   {{.title}}
                 </a>
                 {{else}}
@@ -210,12 +210,12 @@
     <div>© 2021 Couchbase Labs -
       <span class="ver">Couchbase Server {{.Version}}</span>
       {{range $v := .VersionSDKs}}
-         <span class="ver-sdk">{{$v.name}} SDK: {{$v.ver}}</span>
+        <span class="ver-sdk">{{$v.name}} SDK: {{$v.ver}}</span>
       {{end}}
     </div>
   </footer>
   {{if .Session}}
-  <script src="/static/scripts/infoPanel.js"></script>
+    <script src="/static/scripts/infoPanel.js"></script>
   {{end}}
   <script>
     var codeAce = ace.edit("code-ace");
@@ -226,6 +226,16 @@
     {{if .LangAce}}
     codeAce.setOption("mode", "ace/mode/{{.LangAce}}");
     {{end}}
+  </script>
+  <script>
+    var scrollTop = parseInt(localStorage.getItem('scrollTop')) || 0;
+    if (scrollTop > 0) {
+      document.scrollingElement.scrollTo(0, scrollTop);
+    }
+
+    window.addEventListener("scroll", function () {
+      localStorage.setItem('scrollTop', document.scrollingElement.scrollTop || 0);
+    });
   </script>
 </body>
 </html>
