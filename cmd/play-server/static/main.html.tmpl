@@ -233,7 +233,7 @@
       document.scrollingElement.scrollTo(0, scrollTop);
     }
 
-    window.addEventListener("scroll", function () {
+    window.addEventListener('unload', function() {
       localStorage.setItem('scrollTop', document.scrollingElement.scrollTop || 0);
     });
   </script>
