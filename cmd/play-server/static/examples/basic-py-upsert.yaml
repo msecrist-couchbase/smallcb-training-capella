@@ -15,6 +15,7 @@ code: |
   cluster = Cluster('couchbase://{{.Host}}', ClusterOptions(pa))
   bucket = cluster.bucket('travel-sample')
   collection = bucket.default_collection()
+
   try:
     document = dict(
       country="Iceland", callsign="ICEAIR", iata="FI", icao="ICE", 
@@ -27,17 +28,18 @@ code: |
       durability=ServerDurability(Durability.MAJORITY)
     )
     print("UPSERT SUCCESS")
-    print("cas result: ", result.cas)
+    print("cas result:", result.cas)
   except:
     print("exception:", sys.exc_info())
     
   try:
     result = collection.lookup_in('airline_123', [SD.get('name')])
     name = result.content_as[str](0) # "United Kingdom"
-    print("name: ", name)
+    print("name:", name)
 
   except:
     print("exception:", sys.exc_info()[0])
 infoAfter: |
-  We upsert and then retrieve our document using a basic subdocument lookup.
-  Visit our docs to learn more about <a target="_blank" href="https://docs.couchbase.com/python-sdk/current/howtos/kv-operations.html#crud-operations">Key Value CRUD Operations in Python</a>.
+  This example shows an upsert of a document and then a retrieval of a portion of that document via the subdocument API.
+  Visit the docs to learn more about
+  <a target="_blank" href="https://docs.couchbase.com/python-sdk/current/howtos/kv-operations.html">Key Value Operations in .Python</a>.

@@ -31,7 +31,8 @@ code: |
               .put("city", "Malibu")
           ));
         result.rowsAsObject().stream().forEach(
-          e-> System.out.println("Hotel: "+e.getString("name")+", "+e.getString("city"))
+          e-> System.out.println(
+            "Hotel: "+e.getString("name")+", "+e.getString("city"))
         );
 
       } catch (CouchbaseException ex) {

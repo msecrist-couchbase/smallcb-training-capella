@@ -27,7 +27,7 @@ code: |
     for row in result:
       name = row['name']
       city = row['city']
-      print("Hotel: ", name + city)
+      print("Hotel: " + name + ", " + city)
   
   except:
     print("exception:", sys.exc_info()[0])

@@ -34,7 +34,6 @@ code: |
                   var country = result.ContentAs<string>(0);
                   Console.WriteLine("Sub-doc before: ");
                   Console.WriteLine(country);
-
               } catch (PathNotFoundException) {
                   Console.WriteLine("Sub-doc path not found!");
               }
@@ -51,7 +50,7 @@ code: |
               }
               catch (PathExistsException)
               {
-                  Console.WriteLine("Sub-doc path not found!");
+                  Console.WriteLine("Sub-doc path exists!");
               }
 
               // get the country from airline_10 (should be updated)
@@ -66,9 +65,8 @@ code: |
                   );
 
                   var country = result.ContentAs<string>(0);
-                  Console.WriteLine("Sub-doc before: ");
+                  Console.WriteLine("Sub-doc after: ");
                   Console.WriteLine(country);
-
               }
               catch (PathNotFoundException)
               {
@@ -80,8 +78,8 @@ code: |
       }
   }
 infoAfter: |
-  Our Sub-document API allows for only retrieving or mutating a portion of 
-  a larger document. For operations where you just need to update one field 
-  in a document, this keeps you from having to query, change, and send back an
-  entire updated document. It is a very performant way to get or set in one operation.
-  Visit our docs to learn more about <a target="_blank" href="https://docs.couchbase.com/dotnet-sdk/current/howtos/subdocument-operations.html#mutating">Mutating Sub-documents in .NET</a>.
+  The Sub-document API allows for retrieving or mutating a portion of
+  a larger document, without having to first retrieve the entire document,
+  which can provide for higher performance.
+  Visit the docs to learn more about
+  <a target="_blank" href="https://docs.couchbase.com/dotnet-sdk/current/howtos/subdocument-operations.html">Sub-document Operations in .NET</a>.

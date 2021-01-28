@@ -6,8 +6,7 @@ code: |
   
   const cluster = new couchbase.Cluster('couchbase://{{.Host}}', {
     username: '{{.CBUser}}', password: '{{.CBPswd}}'
-  })
-  
+  }) 
   const bucket = cluster.bucket('travel-sample')
   const collection = bucket.defaultCollection()
   
@@ -45,8 +44,8 @@ code: |
         .then(() => process.exit(0))
     )
 infoAfter: |
-  Our Sub-document API allows for only retrieving or mutating a portion of 
-  a larger document. For operations where you just need to update one field 
-  in a document, this keeps you from having to query, change and send back an
-  updated document and is more performant getting or setting in one operation. 
-  Visit our docs to learn more about <a target="_blank" href="https://docs.couchbase.com/nodejs-sdk/current/howtos/subdocument-operations.html#mutating">Mutating Sub-documents in Node</a>.
+  The Sub-document API allows for retrieving or mutating a portion of
+  a larger document, without having to first retrieve the entire document,
+  which can provide for higher performance.
+  Visit the docs to learn more about
+  <a target="_blank" href="https://docs.couchbase.com/nodejs-sdk/current/howtos/subdocument-operations.html">Sub-document Operations in Node.js</a>.

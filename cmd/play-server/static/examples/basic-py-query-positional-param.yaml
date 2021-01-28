@@ -10,6 +10,7 @@ code: |
   from couchbase_core.cluster import PasswordAuthenticator
   
   pa = PasswordAuthenticator('{{.CBUser}}', '{{.CBPswd}}')
+
   cluster = Cluster('couchbase://{{.Host}}', ClusterOptions(pa))
   bucket = cluster.bucket('travel-sample')
 
@@ -26,12 +27,12 @@ code: |
     for row in result:
       # each row is an instance of the query call
       name = row['name']
-      age = row['city']
-      print("hotel: ", name + age)
+      city = row['city']
+      print("Hotel: " + name + ", " + city)
   
   except:
     print("exception:", sys.exc_info()[0])
 infoAfter: |
-  Basic N1QL query, expected to return one to many rows, we loop 
-  through them and print each one. 
-  Visit our docs to learn more about <a target="_blank" href="https://docs.couchbase.com/python-sdk/current/howtos/n1ql-queries-with-sdk.html#queries-placeholders">Queries & Placeholders in Python</a>.
+  This example shows how to use positional parameters with the cluster.query() method.
+  Visit the docs to learn more about
+  <a target="_blank" href="https://docs.couchbase.com/python-sdk/current/howtos/n1ql-queries-with-sdk.html">N1QL Queries with Python</a>.
