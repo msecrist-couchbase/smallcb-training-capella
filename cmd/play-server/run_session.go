@@ -128,7 +128,8 @@ func StartGritty(req RunRequest, containerId int) error {
 
 	cmd := exec.Command("docker", "exec",
 		"-detach", "-it", "-u", "play", "-w", "/home/play", containerName,
-		"/home/play/npm_packages/bin/gritty")
+		"/bin/sh", "-c",
+		"while true; do /home/play/npm_packages/bin/gritty; sleep 3; done")
 
 	out, err := ExecCmd(req.ctx, cmd, req.codeDuration)
 	if err != nil {
