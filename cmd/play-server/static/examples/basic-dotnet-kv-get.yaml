@@ -15,6 +15,7 @@ code: |
         var cluster = await Cluster.ConnectAsync(
           "couchbase://{{.Host}}","{{.CBUser}}","{{.CBPswd}}"
         );
+
         var bucket = await cluster.BucketAsync("travel-sample");
         var collection = bucket.DefaultCollection();
 
@@ -22,11 +23,12 @@ code: |
         var airline = result.ContentAs<dynamic>();
 
         Console.WriteLine(airline);
+
         await cluster.DisposeAsync();
       }
     }
   }
 infoAfter: |
-  If we know a document's key value, we can use the collection.GetAsync(...) method
-  passing a key. This returns a JSON result, which can be mapped to any type (including dynamic).
-  Visit our docs to learn more about <a target="_blank" href="https://docs.couchbase.com/dotnet-sdk/current/howtos/kv-operations.html">.NET Key Value Operations</a>.
+  Given a document's key, you can use the collection.GetAsync() method to retrieve a document from a collection.
+  See more at the SDK documentation on
+  <a target="_blank" href="https://docs.couchbase.com/dotnet-sdk/current/howtos/kv-operations.html">.NET Key Value Operations</a>.

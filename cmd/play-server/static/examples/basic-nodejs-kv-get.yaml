@@ -14,7 +14,6 @@ code: |
   const getDocument = async (key) => {
     try {
       const result = await collection.get(key)
-      console.log('Result: ')
       console.log(result)
     } catch (err) {
       console.error(err)
@@ -24,5 +23,6 @@ code: |
   getDocument('airline_10')
     .then(() => process.exit(0))
 infoAfter: |
-  If we know a document's key value, we can use the collection.get() method passing a key. This returns one document. 
-  Visit our docs to learn more about <a target="_blank" href="https://docs.couchbase.com/nodejs-sdk/current/howtos/kv-operations.html#retrieving-full-documents">Retrieving  Full Documents in Node</a>.
+  Given a document's key, you can use the collection.get() method to retrieve a document from a collection.
+  See more at the SDK documentation on
+  <a target="_blank" href="https://docs.couchbase.com/nodejs-sdk/current/howtos/kv-operations.html">Node.js Key Value Operations</a>.

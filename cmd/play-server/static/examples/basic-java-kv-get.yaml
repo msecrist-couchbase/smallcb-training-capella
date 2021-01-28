@@ -11,6 +11,7 @@ code: |
       var cluster = Cluster.connect(
         "couchbase://{{.Host}}", "{{.CBUser}}", "{{.CBPswd}}"
       );
+
       var bucket = cluster.bucket("travel-sample");
       var collection = bucket.defaultCollection();
 
@@ -24,6 +25,6 @@ code: |
     }
   }
 infoAfter: |
-  If we know a document's key value, we can use the collection.get() method
-  passing a key. This returns one document. 
-  Visit our docs to learn more about <a target="_blank" href="https://docs.couchbase.com/java-sdk/current/howtos/kv-operations.html#retrieving-documents">Retrieving Full Documents in Java</a>.
+  Given a document's key, you can use the collection.get() method to retrieve a document from a collection.
+  See more at the SDK documentation on
+  <a target="_blank" href="https://docs.couchbase.com/java-sdk/current/howtos/kv-operations.html">Java Key Value Operations</a>.

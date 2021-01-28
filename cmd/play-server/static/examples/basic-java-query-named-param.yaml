@@ -2,7 +2,7 @@ title: Query w/ Named Param
 page: page-01
 lang: java
 code: |
-  import com.couchbase.client.core.error.DocumentNotFoundException;
+  import com.couchbase.client.core.error.CouchbaseException;
   import com.couchbase.client.java.*;
   import com.couchbase.client.java.kv.*;
   import com.couchbase.client.java.json.JsonObject;
@@ -29,19 +29,17 @@ code: |
             JsonObject.create()
               .put("type", "hotel")
               .put("city", "Malibu")
-          )
-        );
+          ));
         result.rowsAsObject().stream().forEach(
           e-> System.out.println("Hotel: "+e.getString("name")+", "+e.getString("city"))
         );
-        
-      } catch (DocumentNotFoundException ex) {
-        System.out.println("Document not found!");
+
+      } catch (CouchbaseException ex) {
+        System.out.println("Exception: " + ex.toString());
       }
     }
   }
 infoAfter: |
-  Placeholders allow you to specify variable constraints for a query. 
-  This method allows you to use named parameters, pass them to 
-  cluster.query() method by query and options. 
-  Visit our docs to learn more about <a target="_blank" href="https://docs.couchbase.com/java-sdk/current/howtos/n1ql-queries-with-sdk.html#paramerterized-queries">Queries & Placeholders in Java</a>.
+  This example shows how to use named parameters with the cluster.query() method.
+  Visit the docs to learn more about
+  <a target="_blank" href="https://docs.couchbase.com/java-sdk/current/howtos/n1ql-queries-with-sdk.html">N1QL Queries with Java</a>.

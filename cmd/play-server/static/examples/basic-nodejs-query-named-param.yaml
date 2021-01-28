@@ -7,7 +7,6 @@ code: |
   const cluster = new couchbase.Cluster('couchbase://{{.Host}}', {
     username: '{{.CBUser}}', password: '{{.CBPswd}}'
   })
-  
   cluster.bucket('travel-sample')
 
   const getHotelsByCity = async (city) => {
@@ -16,13 +15,14 @@ code: |
         SELECT h.name, h.city, h.state 
         FROM \`travel-sample\` h
         WHERE h.type = $TYPE
-          AND h.city = $CITY;
+          AND h.city = $CITY LIMIT 5;
       `
       const options = {
         parameters: {
           TYPE: 'hotel', CITY: city
         }
       }
+
       const result = await cluster.query(query, options)
       console.log('Query Result: ')
       console.log(result.rows)
@@ -34,7 +34,6 @@ code: |
   getHotelsByCity('Malibu')
     .then(() => process.exit(0))
 infoAfter: |
-  Placeholders allow you to specify variable constraints for a query. 
-  This method allows you to use named parameters, pass them to 
-  cluster.query() method by query and options. 
-  Visit our docs to learn more about <a target="_blank" href="https://docs.couchbase.com/nodejs-sdk/current/howtos/n1ql-queries-with-sdk.html#queries-placeholders">Queries & Placeholders in Node</a>.
+  This example shows how to use named parameters with the cluster.query() method.
+  Visit the docs to learn more about
+  <a target="_blank" href="https://docs.couchbase.com/nodejs-sdk/current/howtos/n1ql-queries-with-sdk.html">N1QL Queries with Node.js</a>.

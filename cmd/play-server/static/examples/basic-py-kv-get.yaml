@@ -11,6 +11,7 @@ code: |
   
   pa = PasswordAuthenticator('{{.CBUser}}', '{{.CBPswd}}')
   cluster = Cluster('couchbase://{{.Host}}', ClusterOptions(pa))
+
   bucket = cluster.bucket('travel-sample')
   collection = bucket.default_collection()
   
@@ -21,6 +22,6 @@ code: |
   except:
     print("exception:", sys.exc_info()[0])
 infoAfter: |
-  If we know a document's key value, we can use the collection.get() method
-  passing a key. This returns one document. 
-  Visit our docs to learn more about <a target="_blank" href="https://docs.couchbase.com/python-sdk/current/howtos/kv-operations.html#retrieving-full-documents">Retrieving Full Documents in Python</a>.
+  Given a document's key, you can use the collection.get() method to retrieve a document from a collection.
+  See more at the SDK documentation on
+  <a target="_blank" href="https://docs.couchbase.com/python-sdk/current/howtos/kv-operations.html">Python Key Value Operations</a>.
