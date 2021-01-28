@@ -54,10 +54,10 @@
           {{end}}
         </li>
         <li>
-          <a href="https://docs.couchbase.com">docs</a>
+          <a target="_blank" href="https://docs.couchbase.com">docs</a>
         </li>
         <li>
-          <a href="https://www.couchbase.com">couchbase.com</a>
+          <a target="_blank" href="https://www.couchbase.com">couchbase.com</a>
         </li>
       </ul>
     </nav>
@@ -99,14 +99,14 @@
         </div>
         <div class="connection">
   <b>Couchbase Server</b>
-    <a href="http://{{.Host}}:8091" class="ui">Web-Admin UI<img src="/static/shots/shot-dashboard.png"/></a> : <a href="http://{{.Host}}:8091/ui/index.html#!/query/workbench" class="ui"><img src="/static/shots/shot-query-workbench.png"/>Query Workbench</a> | <a href="http://{{.Host}}:8091/ui/index.html#!/documents/editor" class="ui"><img src="/static/shots/shot-documents.png"/>Document Editor</a> | <a href="http://{{.Host}}:8091/ui/index.html#!/documents/import" class="ui"><img src="/static/shots/shot-import-documents.png"/>Import Documents</a> | REST API: http://{{.Session.CBUser}}:{{.Session.CBPswd}}@{{.Host}}:8091
+    <a target="_blank" href="http://{{.Host}}:8091" class="ui">Web-Admin UI<img src="/static/shots/shot-dashboard.png"/></a> : <a target="_blank" href="http://{{.Host}}:8091/ui/index.html#!/query/workbench" class="ui"><img src="/static/shots/shot-query-workbench.png"/>Query Workbench</a> | <a target="_blank" href="http://{{.Host}}:8091/ui/index.html#!/documents/editor" class="ui"><img src="/static/shots/shot-documents.png"/>Document Editor</a> | <a target="_blank" href="http://{{.Host}}:8091/ui/index.html#!/documents/import" class="ui"><img src="/static/shots/shot-import-documents.png"/>Import Documents</a> | REST API: http://{{.Session.CBUser}}:{{.Session.CBPswd}}@{{.Host}}:8091
 
 
   <b>Couchbase SDK's</b>             : connection snippets
-    Java   <a href="https://docs.couchbase.com/java-sdk/current/hello-world/start-using-sdk.html">SDK docs</a>, <a href="https://docs.couchbase.com/sdk-api/couchbase-java-client/">API docs</a> : - Cluster.connect("couchbase://{{.Host}}", "{{.Session.CBUser}}", "{{.Session.CBPswd}}")
-    .NET   <a href="https://docs.couchbase.com/dotnet-sdk/current/hello-world/start-using-sdk.html">SDK docs</a>, <a href="https://docs.couchbase.com/sdk-api/couchbase-dotnet-client/">API docs</a> : - Cluster.ConnectAsync("couchbase://{{.Host}}", "{{.Session.CBUser}}", "{{.Session.CBPswd}}");
-    NodeJS <a href="https://docs.couchbase.com/nodejs-sdk/current/hello-world/start-using-sdk.html">SDK docs</a>, <a href="https://docs.couchbase.com/sdk-api/couchbase-node-client/">API docs</a> : - new couchbase.Cluster("couchbase://{{.Host}}", {username: "{{.Session.CBUser}}", password: "{{.Session.CBPswd}}"})
-    Python <a href="https://docs.couchbase.com/python-sdk/current/hello-world/start-using-sdk.html">SDK docs</a>, <a href="https://docs.couchbase.com/sdk-api/couchbase-python-client/">API docs</a> : - Cluster('couchbase://{{.Host}}', ClusterOptions(PasswordAuthenticator('{{.Session.CBUser}}', '{{.Session.CBPswd}}')))
+    Java   <a target="_blank" href="https://docs.couchbase.com/java-sdk/current/hello-world/start-using-sdk.html">SDK docs</a>, <a target="_blank" href="https://docs.couchbase.com/sdk-api/couchbase-java-client/">API docs</a> : - Cluster.connect("couchbase://{{.Host}}", "{{.Session.CBUser}}", "{{.Session.CBPswd}}")
+    .NET   <a target="_blank" href="https://docs.couchbase.com/dotnet-sdk/current/hello-world/start-using-sdk.html">SDK docs</a>, <a target="_blank" href="https://docs.couchbase.com/sdk-api/couchbase-dotnet-client/">API docs</a> : - Cluster.ConnectAsync("couchbase://{{.Host}}", "{{.Session.CBUser}}", "{{.Session.CBPswd}}");
+    NodeJS <a target="_blank" href="https://docs.couchbase.com/nodejs-sdk/current/hello-world/start-using-sdk.html">SDK docs</a>, <a target="_blank" href="https://docs.couchbase.com/sdk-api/couchbase-node-client/">API docs</a> : - new couchbase.Cluster("couchbase://{{.Host}}", {username: "{{.Session.CBUser}}", password: "{{.Session.CBPswd}}"})
+    Python <a target="_blank" href="https://docs.couchbase.com/python-sdk/current/hello-world/start-using-sdk.html">SDK docs</a>, <a target="_blank" href="https://docs.couchbase.com/sdk-api/couchbase-python-client/">API docs</a> : - Cluster('couchbase://{{.Host}}', ClusterOptions(PasswordAuthenticator('{{.Session.CBUser}}', '{{.Session.CBPswd}}')))
 
 
   <b>Terminal</b>: {{if ge .SessionData.ContainerId 0}}<a target="_blank" href="http://{{.Host}}:{{.SessionData.port_1337}}">Web-based Shell</a>{{else}}<span class="preparing">preparing Web-based Shell session, please reload in a bit.</span>{{end}}</b>
