@@ -39,17 +39,10 @@
           Starting a test-drive session allocates a Couchbase Server instance for you.
         </p>
         <p>
-          Your session expires after ~{{.SessionsMaxAge}}, after which your instance and its data will be deleted.
+          Your session will expire after {{.SessionsMaxAge}} total or after {{.SessionsMaxIdle}} of inactivity.
         </p>
         <p>
-          Your instance can also be deleted in case of a system reboot.
-        </p>
-        <p>
-          A test-drive session is intended for "tire-kicking" and exploration by developers, <b>NOT</b> for production use.
-        </p>
-        <p>
-          A test-drive session is <b>NOT</b> meant for performance testing,
-	  as it may run on cost-effective (read: "low-end, slow, highly-shared") servers.
+          A test-drive session is intended for "tire-kicking" and exploration by developers, <b>NOT</b> for production usage and performance testing.
         </p>
         <p>
           <b>NEVER</b> keep important or private data on this test-drive instance.
@@ -77,7 +70,12 @@
             <input type="text" name="captcha"/>
           </label>
 
-          <input type="submit" name="session-start" value="start a test-drive session"/>
+          <div class="actions">
+            <input type="submit" name="session-start" value="Start Test-Drive"/>
+            <div class="cancel">
+              or <a href="/">cancel</a>
+            </div>
+          </div>
 
           <div class="details">
             (we won't sell your email to spammers, etc)

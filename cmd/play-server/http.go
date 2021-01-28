@@ -160,6 +160,8 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 		"ProdOnlyJS":    template.HTML(ProdOnlyJS(*host)),
 		"SessionsMaxAge": strings.Replace(
 			sessionsMaxAge.String(), "m0s", " min", 1),
+		"SessionsMaxIdle": strings.Replace(
+			sessionsMaxIdle.String(), "m0s", " min", 1),
 		"e": e,
 	}
 
