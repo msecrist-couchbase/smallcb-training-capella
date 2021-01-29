@@ -2,21 +2,22 @@
 
 RUN mkdir -p /init-couchbase
 COPY init-couchbase /init-couchbase
-RUN chmod +x /init-couchbase/*.sh
+RUN chmod +x /init-couchbase/*.sh && \
+    /init-couchbase/prep.sh
 
+# ------------------------------------------------
 # Copy play-server's run-*.sh files into image.
 
 COPY cmd/play-server/run-*.sh /
 RUN chmod +x /run-*.sh
 
-# Create the play user for user-submitted playground code.
+# ------------------------------------------------
+# Create the play user for SDK installs & user-submitted code.
 
 RUN useradd -u 1001 -g couchbase -m play
 
-# SDK installs that need a non-root user will use the play user.
-
 # ------------------------------------------------
-# SDK nodejs
+# SDK nodejs.
 
 USER play
 
@@ -31,7 +32,7 @@ USER root
 RUN npm show couchbase | grep latest | cut -f 2 -d ' ' > /opt/couchbase/VERSION-sdk-nodejs.ver
 
 # ------------------------------------------------
-# SDK java
+# SDK java.
 
 # Copy maven shared files and build hello.java to warm up mvn caches.
 
@@ -57,7 +58,7 @@ USER root
 RUN cat /run-java-pom.xml | grep 'version>3' | cut -f 2 -d '>' | cut -f 1 -d '<' > /opt/couchbase/VERSION-sdk-java.ver
 
 # ------------------------------------------------
-# SDK .NET
+# SDK .NET.
 
 COPY cmd/play-server/run-csharp-hello.csproj /home/play/hellodotnet/run-csharp-hello.csproj
 
@@ -75,7 +76,7 @@ USER root
 RUN tr ' ' '\n' < /home/play/hellodotnet/run-csharp-hello.csproj | grep Version | cut -f 2 -d '"' > /opt/couchbase/VERSION-sdk-dotnet.ver
 
 # ------------------------------------------------
-# couchbase shell
+# couchbase shell, via a cbsh user.
 
 RUN apt-get install -y libxcb-composite0-dev
 

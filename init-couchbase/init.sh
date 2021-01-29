@@ -23,18 +23,6 @@ set -euo pipefail
 # back to the foreground after the node is configured
 set -m
 
-# prepend script to /etc/service/couchbase-server/run script...
-cp /init-couchbase/init-service-run.txt \
-   /etc/service/couchbase-server/run.tmp
-
-cat /etc/service/couchbase-server/run | tail -n +3 >> \
-    /etc/service/couchbase-server/run.tmp
-
-mv /etc/service/couchbase-server/run.tmp \
-   /etc/service/couchbase-server/run
-
-chmod +x /etc/service/couchbase-server/run
-
 # append to /opt/couchbase/etc/couchbase/static_config...
 cat /init-couchbase/init-static-config.txt >> \
     /opt/couchbase/etc/couchbase/static_config
