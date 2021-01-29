@@ -77,6 +77,15 @@ func MainTemplateEmit(w http.ResponseWriter,
 
 	var title, infoBefore, infoAfter string
 
+	if session != nil && name == "" && lang == "" && code == "" {
+		for _, example := range examplesArr {
+			if code, exists := example["code"]; exists && code != "" {
+				name = example["name"].(string)
+				break
+			}
+		}
+	}
+
 	example, exists := examples[name]
 	if exists && example != nil {
 		title = MapGetString(example, "title")
