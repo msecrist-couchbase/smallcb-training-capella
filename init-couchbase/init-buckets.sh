@@ -22,12 +22,10 @@ echo "couchbase-cli bucket-create beer-sample..."
  --wait
 
 echo "cbdocloader beer-sample..."
-/opt/couchbase/bin/cbdocloader \
+/opt/couchbase/bin/cbimport json --format sample --verbose \
  -c localhost -u ${CB_USER} -p ${CB_PSWD} \
  -b beer-sample \
- -m ${CB_BUCKET_RAMSIZE} \
- -v \
- -d /opt/couchbase/samples/beer-sample.zip
+ -d file:///opt/couchbase/samples/beer-sample.zip
 
 echo "couchbase-cli bucket-create travel-sample..."
 /opt/couchbase/bin/couchbase-cli bucket-create \
@@ -43,20 +41,10 @@ echo "couchbase-cli bucket-create travel-sample..."
  --wait
 
 echo "cbdocloader travel-sample..."
-/opt/couchbase/bin/cbdocloader \
+/opt/couchbase/bin/cbimport json --format sample --verbose \
  -c localhost -u ${CB_USER} -p ${CB_PSWD} \
  -b travel-sample \
- -m ${CB_BUCKET_RAMSIZE} \
- -v \
- -d /opt/couchbase/samples/travel-sample.zip
+ -d file:///opt/couchbase/samples/travel-sample.zip
 
-# echo "couchbase bucket-create test..."
-# couchbase-cli bucket-create \
-#         --cluster localhost \
-#         --username ${CB_USER} \
-#         --password ${CB_PSWD} \
-#         --bucket test \
-#         --bucket-type couchbase \
-#         --bucket-ramsize ${CB_BUCKET_RAMSIZE} \
-#         --wait
-
+echo "sleep 40 to allow stabilization"
+sleep 40

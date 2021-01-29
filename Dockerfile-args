@@ -1,8 +1,8 @@
 ARG CB_EDITION=enterprise
-ARG CB_VERSION=6.6.0
+ARG CB_VERSION=7.0.0-beta
 ARG CB_IMAGE=couchbase:$CB_EDITION-$CB_VERSION
 
-ARG BASE_IMAGE=ubuntu:16.04
+ARG BASE_IMAGE=ubuntu:20.04
 
 # SDK related images...
 
