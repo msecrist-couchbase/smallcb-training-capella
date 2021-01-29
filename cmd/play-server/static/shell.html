@@ -1,0 +1,119 @@
+<!doctype html>
+<html>
+<head>
+  <title>Couchbase Playground</title>
+  <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;1,300&Ubuntu+Mono&display=swap">
+</head>
+<body>
+  <h1>
+    Couchbase Playground -
+    <about>
+      <a href="https://couchbase.sh">Couchbase Shell</a> Test-Drive
+    </about>
+  </h1>
+  <main>
+    <div class="col docs">
+      <div>
+        <about>
+          <a href="https://couchbase.sh/docs">Couchbase Shell documentation</a>:
+          <button class="hide" onclick="showHide()">hide docs</button>
+          <button class="show" onclick="showHide()">show docs</button>
+        </about>
+      </div>
+      <iframe src="https://couchbase.sh/docs/#_introduction" height="200">loading...</iframe>
+    </div>
+    <div class="col shell">
+      <div>
+        <about>
+          <a href="https://couchbase.sh">Couchbase Shell</a> session:
+        </about>
+      </div>
+      <iframe id="shell">loading...</iframe>
+    </div>
+  </main>
+</body>
+<style>
+body {
+  height: 100%;
+  margin: 0 0;
+  padding: 10px 10px;
+  background-color: #232831;
+  font-family: Montserrat, Arial, Helvetica, sans-serif;
+  font-size: 11pt;
+  color: #ddd;
+}
+a, a:visited {
+  color: #ddd;
+}
+h1 {
+  font-size: 12pt;
+  color: #ddd;
+}
+about {
+  font-size: 9pt;
+}
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+.col {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+
+  margin-top: 5px;
+}
+.col.docs {
+  flex-grow: 10;
+  flex-basis: 50vh;
+}
+.col.shell {
+  flex-grow: 5;
+  flex-basis: 40vh;
+}
+.col iframe {
+  flex-grow: 10;
+  flex-basis: 100%;
+}
+
+body button.show {
+  display: none;
+}
+body.hide button.show {
+  display: inline;
+}
+body.hide button.hide {
+  display: none;
+}
+body.hide .col.docs {
+  flex-grow: 1;
+  flex-basis: 1em;
+}
+body.hide .col.docs iframe {
+  display: none;
+  flex-grow: 1;
+  flex-basis: 1px;
+}
+body.hide .col.shell {
+  flex-grow: 1;
+  flex-basis: 80vh;
+}
+</style>
+<script>
+  function showHide() {
+    if (document.body.className == "") {
+      document.body.className = "hide";
+    } else {
+      document.body.className = "";
+    }
+  }
+
+  let params = new URLSearchParams(document.location.search.substring(1));
+  let t = params.get("t");
+  if (t) {
+    document.getElementById("shell").src = t;
+  }
+</script>
+</html>
