@@ -3,7 +3,9 @@ package main
 import (
 	"context"
 	"fmt"
+	"io/ioutil"
 	"log"
+	"os"
 	"os/exec"
 	"time"
 )
@@ -84,7 +86,7 @@ func SessionAssignContainer(session *Session, req RunRequest,
 		return nil, err
 	}
 
-	err = StartGritty(req, containerId)
+	err = StartCbsh(session, req, containerId)
 	if err != nil {
 		return nil, err
 	}
@@ -122,14 +124,45 @@ func SessionAssignContainer(session *Session, req RunRequest,
 
 // ------------------------------------------------
 
-func StartGritty(req RunRequest, containerId int) error {
+func StartCbsh(session *Session, req RunRequest, containerId int) error {
 	containerName := fmt.Sprintf("%s%d",
 		req.containerNamePrefix, containerId)
+
+	// Ex: "vol-instances/vol-0".
+	dir := fmt.Sprintf("%s%d",
+		req.containerVolPrefix, containerId)
+
+	err := os.MkdirAll(dir+DirCode, 0777)
+	if err != nil {
+		return err
+	}
+
+	// Ex: "vol-instances/vol-0/tmp/cbsh-config".
+	cbshConfigHost := dir + "/tmp/cbsh-config"
+
+	// Ex: "/opt/couchbase/var/tmp/cbsh-config".
+	cbshConfigInst := DirVar + "/tmp/cbsh-config"
+
+	cbshConfigBytes := []byte(
+		"version = 1\n\n" +
+			"[clusters.default]\n" +
+			"hostnames = [\"127.0.0.1\"]\n" +
+			"default-bucket = \"travel-sample\"\n" +
+			"username = \"" + session.CBUser + "\"\n" +
+			"password = \"" + session.CBPswd + "\"\n")
+
+	// File mode 0777 executable, for scripts like 'code.py'.
+	err = ioutil.WriteFile(cbshConfigHost, cbshConfigBytes, 0777)
+	if err != nil {
+		return err
+	}
 
 	cmd := exec.Command("docker", "exec",
 		"-detach", "-it", "-u", "cbsh", "-w", "/home/cbsh", containerName,
 		"/bin/sh", "-c",
-		"while true; do /home/play/npm_packages/bin/gritty; sleep 3; done")
+		"mkdir -p /home/cbsh/.cbsh;"+
+			" cp "+cbshConfigInst+" /home/cbsh/.cbsh/config;"+
+			" while true; do /home/play/npm_packages/bin/gritty --command ./cbsh; sleep 3; done")
 
 	out, err := ExecCmd(req.ctx, cmd, req.codeDuration)
 	if err != nil {

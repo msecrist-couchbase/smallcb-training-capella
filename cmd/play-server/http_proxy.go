@@ -104,9 +104,11 @@ func HttpProxy(listenProxy, // Ex: ":8091", ":8093".
 		var flushInterval time.Duration
 
 		if sessionId != "" {
-			log.Printf("INFO: HttpProxy, port: %d,"+
-				" path: %s, sessionId: %s, via %s",
-				portProxy, r.URL.Path, sessionId, sessionIdFrom)
+			// log.Printf("INFO: HttpProxy, port: %d,"+
+			//	" path: %s, sessionId: %s, via %s",
+			//	portProxy, r.URL.Path, sessionId, sessionIdFrom)
+
+			_ = sessionIdFrom // Normally used by above log.Printf().
 
 			session := sessions.SessionGet(sessionId)
 			if session == nil {
@@ -176,10 +178,10 @@ func HttpProxy(listenProxy, // Ex: ":8091", ":8093".
 					flushInterval = proxyFlushInterval
 				}
 
-				log.Printf("INFO: HttpProxy, port: %d, path: %s,"+
-					" sessionId: %s, containerId: %d, remap: %t, stream: %t",
-					portProxy, r.URL.Path, sessionId, session.ContainerId,
-					remapResponse, streamResponse)
+				// log.Printf("INFO: HttpProxy, port: %d, path: %s,"+
+				//	" sessionId: %s, containerId: %d, remap: %t, stream: %t",
+				//	portProxy, r.URL.Path, sessionId, session.ContainerId,
+				//	remapResponse, streamResponse)
 			}
 		}
 
