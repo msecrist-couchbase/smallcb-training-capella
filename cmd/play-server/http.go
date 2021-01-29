@@ -394,6 +394,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-MVPNN2');</script>`
 }
 
+// ------------------------------------------------
+
 func ProdOnlyJS(host string) string {
 	if host == "127.0.0.1" || host == "localhost" {
 		return ""
