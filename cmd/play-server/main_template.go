@@ -24,6 +24,14 @@ var LangAce = map[string]string{
 	"dotnet": "csharp",
 }
 
+var LangPretty = map[string]string{
+	"dotnet": ".NET",
+	"java": "Java",
+	"nodejs": "NodeJS",
+	"py": "Python",
+	"sh": "shell",
+}
+
 type MainTemplateData struct {
 	Msg string
 
@@ -44,6 +52,7 @@ type MainTemplateData struct {
 	Title      string // Current example title or "".
 	Lang       string // Ex: 'py'.
 	LangAce    string // Ex: 'python'.
+	LangPretty string // Ex: 'Python'.
 	Code       string
 	InfoBefore template.HTML
 	InfoAfter  template.HTML
@@ -58,7 +67,7 @@ func MainTemplateEmit(w http.ResponseWriter,
 	session *Session, sessionsMaxAge, sessionsMaxIdle time.Duration,
 	containerPublishPortBase, containerPublishPortSpan int,
 	portMapping [][]int,
-	examplesPath string, name, lang, code string) error {
+	examplesPath string, name, lang, code, view string) error {
 	host := hostIn
 	if session == nil {
 		host = "127.0.0.1"
@@ -139,6 +148,7 @@ func MainTemplateEmit(w http.ResponseWriter,
 		Title:      title,
 		Lang:       lang,
 		LangAce:    LangAce[lang],
+		LangPretty: LangPretty[lang],
 		Code:       code,
 		InfoBefore: template.HTML(infoBefore),
 		InfoAfter:  template.HTML(infoAfter),
@@ -147,7 +157,11 @@ func MainTemplateEmit(w http.ResponseWriter,
 		ProdOnlyJS:    template.HTML(ProdOnlyJS(hostIn)),
 	}
 
-	t, err := template.ParseFiles(staticDir + "/main.html.tmpl")
+	if view != "" {
+		view = "-" + view
+	}
+
+	t, err := template.ParseFiles(staticDir + "/main" + view + ".html.tmpl")
 	if err != nil {
 		http.Error(w,
 			http.StatusText(http.StatusInternalServerError)+

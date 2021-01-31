@@ -114,6 +114,10 @@ main .info-panel .session-info .instance-info .head-pass {
   flex-direction: row;
 }
 
+.workspace .workspace-body h2 .lang {
+  font-weight: normal;
+}
+
 .workspace .workspace-body .code-examples .example-nav {
   height: 100%;
   width: 240px;
@@ -214,6 +218,7 @@ main .info-panel .session-info .instance-info .head-pass {
 .display-none {
   display: none;
 }
+
 .hidden {
   visibility: hidden;
 }

@@ -98,13 +98,14 @@ func HttpHandleMain(w http.ResponseWriter, r *http.Request) {
 
 	lang := r.FormValue("lang")
 	code := r.FormValue("code")
+	view := r.FormValue("view")
 
 	portApp, _ := strconv.Atoi(strings.Split(*listen, ":")[1])
 
 	err := MainTemplateEmit(w, *staticDir, msg, *host, portApp,
 		*version, VersionSDKs, session, *sessionsMaxAge, *sessionsMaxIdle,
 		*listenPortBase, *listenPortSpan, PortMapping,
-		examplesPath, name, lang, code)
+		examplesPath, name, lang, code, view)
 	if err != nil {
 		StatsNumInc("http.Main.err", "http.Main.err.template")
 

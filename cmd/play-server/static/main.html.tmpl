@@ -146,6 +146,7 @@
           <div class="sticky">
             {{if or .Name .Lang .Code}}
             <h2>
+              {{if .Lang}}<span class="lang">{{or .LangPretty .Lang}} - </span>{{end}}
               {{if .Title}}{{.Title}}{{else}}Code Editor{{end}}
             </h2>
 
