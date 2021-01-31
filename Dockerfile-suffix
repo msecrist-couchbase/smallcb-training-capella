@@ -93,4 +93,10 @@ RUN mkdir -p /home/cbsh && \
     tar -xzvf cbsh-linux-x86_64.tar.gz && \
     rm *.zip && rm *.gz
 
+COPY tutorials-cbsh /home/cbsh/tutorials-cbsh/
+
+ENV PATH="$PATH:/home/cbsh/tutorials-cbsh"
+
 USER root
+
+RUN chown -R cbsh:couchbase /home/cbsh

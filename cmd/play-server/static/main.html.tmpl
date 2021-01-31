@@ -109,7 +109,7 @@
     Python <a target="_blank" href="https://docs.couchbase.com/python-sdk/current/hello-world/start-using-sdk.html">SDK docs</a>, <a target="_blank" href="https://docs.couchbase.com/sdk-api/couchbase-python-client/">API docs</a> : - Cluster('couchbase://{{.Host}}', ClusterOptions(PasswordAuthenticator('{{.Session.CBUser}}', '{{.Session.CBPswd}}')))
 
 
-  <b>Terminal</b>: {{if ge .SessionData.ContainerId 0}}<a target="_blank" href="/static/shell.html?t=http://{{.Host}}:{{.SessionData.port_1337}}" class="ui">Couchbase Shell<img src="/static/shots/shot-cbsh.png"/></a>{{else}}<span class="preparing">preparing session... please reload page in a bit.</span>{{end}}</b>
+  <b>Terminal</b>: {{if ge .SessionData.ContainerId 0}}<a target="_blank" href="/static/shell.html?t=http://{{.Host}}:{{.SessionData.port_1337}}" class="ui">Couchbase Shell<img src="/static/shots/shot-cbsh.png"/></a>{{else}}<span class="preparing">preparing session... please reload the page in a bit.</span>{{end}}
     </div>
       </div>
       {{end}}
