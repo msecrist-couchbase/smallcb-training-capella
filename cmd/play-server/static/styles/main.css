@@ -1,3 +1,16 @@
+.sticky {
+  position: sticky;
+  top: 0;
+}
+
+.display-none {
+  display: none;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
 .session-info {
   padding-top: 1em;
   padding-bottom: 10px;
@@ -114,6 +127,9 @@ main .info-panel .session-info .instance-info .head-pass {
   flex-direction: row;
 }
 
+.workspace .workspace-body h2 {
+  height: 23px;
+}
 .workspace .workspace-body h2 .lang {
   font-weight: normal;
 }
@@ -178,8 +194,12 @@ main .info-panel .session-info .instance-info .head-pass {
   border-style: solid;
 }
 .workspace .workspace-body .code-editor input.run {
+  display: inline-block;
+  float: right;
+
+  margin-right: 25px;
   border: 0;
-  padding: 5px 40px 5px 40px;
+  padding: 3px 40px 3px 40px;
   font-weight: bold;
   cursor: pointer;
 
@@ -210,17 +230,8 @@ main .info-panel .session-info .instance-info .head-pass {
   border-style: solid;
 }
 
-.sticky {
-  position: sticky;
-  top: 0;
-}
-
-.display-none {
-  display: none;
-}
-
-.hidden {
-  visibility: hidden;
+.workspace .workspace-body .code-editor .example-frame .info {
+  margin-right: 30px;
 }
 
 .workspace .workspace-body .code-editor .sticky .no-session {
@@ -359,16 +370,10 @@ body.dark .workspace .workspace-body .code-editor input.run {
 }
 body.dark .workspace .workspace-body .code-editor input.run:hover {
   border-color: #516374;
-  background-color: #2E3540;
-  color: #EFEFEF;
-}
-
-body.dark .workspace .workspace-body .code-editor input.run:focus {
-  outline-color: #778fa7;
-  border-color: #516374;
   background-color: #778fa7;
   color: #EFEFEF;
 }
+
 body.dark .workspace .workspace-body .code-output iframe.output {
   border-color: #516374;
 }

@@ -144,38 +144,40 @@
 
         <div class="code-editor">
           <div class="sticky">
-            {{if or .Name .Lang .Code}}
-            <h2>
-              {{if .Lang}}<span class="lang">{{or .LangPretty .Lang}} - </span>{{end}}
-              {{if .Title}}{{.Title}}{{else}}Code Editor{{end}}
-            </h2>
-
-            <div class="example-frame">
-              {{if .InfoBefore}}
-              <div class="info infoBefore">{{.InfoBefore}}</div>
-              {{end}}
-
-              <form action="/run" method="post" target="output">
-                {{if .Session}}
-                <input name="s" type="hidden" value="{{.Session.SessionId}}"/>
+            <form action="/run" method="post" target="output">
+              {{if or .Name .Lang .Code}}
+              <h2>
+                {{if .Lang}}
+                  <span class="lang">{{or .LangPretty .Lang}} - </span>
                 {{end}}
+                {{if .Title}}{{.Title}}{{else}}Code Editor{{end}}
+
+                <input type="submit" value="run &gt;&gt;" class="run" id="run"
+                       onclick="return onRunSubmit()"/>
+              </h2>
+
+              <div class="example-frame">
+                {{if .InfoBefore}}
+                  <div class="info infoBefore">{{.InfoBefore}}</div>
+                {{end}}
+
+                {{if .Session}}
+                  <input name="s" type="hidden" value="{{.Session.SessionId}}"/>
+                {{end}}
+
                 <input name="lang" type="hidden" value="{{.Lang}}"/>
 
                 <div id="code-ace" class="code-ace"></div>
 
                 <textarea id="code" name="code" class="code" wrap="off" autocorrect="off" 
                   autocomplete="off" autocapitalize="off"
-                  spellcheck="false"
-                >{{.Code}}</textarea>
+                  spellcheck="false">{{.Code}}</textarea>
 
-                <input type="submit" value="run" class="run" id="run"
-                  onclick="return onRunSubmit()" />
-              </form>
-
-              {{if .InfoAfter}}
-              <div class="info infoAfter">{{.InfoAfter}}</div>
-              {{end}}
-            </div>
+                {{if .InfoAfter}}
+                  <div class="info infoAfter">{{.InfoAfter}}</div>
+                {{end}}
+              </div>
+            </form>
             {{else}}
             <div class="no-session">
               Please select an example.
