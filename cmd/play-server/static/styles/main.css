@@ -35,13 +35,22 @@
   min-width: 140px;
   font-size: 9pt;
 }
-.session-info .shots a img {
-  display: block;
+.session-info .shots a div {
   width: 120px;
+  height: 70px;
   margin-top: 4px;
   margin-left: 4px;
   border-width: 1px;
   border-style: solid;
+  border-color: #777;
+}
+.session-info .shots a:hover div {
+  border-color: #ccc;
+}
+.session-info .shots a div img {
+  position: absolute;
+  clip: rect(0px,120px,70px,0px);
+  width: 120px;
 }
 .session-info div.connection .preparing {
   color: #777;

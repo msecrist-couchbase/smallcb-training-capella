@@ -95,24 +95,24 @@
         <div class="shots">
           <a target="_blank" href="http://{{.Host}}:8091">
             Dashboard
-            <img src="/static/shots/shot-dashboard.png"/>
+            <div><img src="/static/shots/shot-dashboard.png"/></div>
           </a>
           <a target="_blank" href="http://{{.Host}}:8091/ui/index.html#/query/workbench">
             Query Workbench
-            <img src="/static/shots/shot-query-workbench.png"/>
+            <div><img src="/static/shots/shot-query-workbench.png"/></div>
           </a>
           <a target="_blank" href="http://{{.Host}}:8091/ui/index.html#/docs/editor">
             Documents Edit
-            <img src="/static/shots/shot-documents.png"/>
+            <div><img src="/static/shots/shot-documents.png"/></div>
           </a>
           <a target="_blank" href="http://{{.Host}}:8091/ui/index.html#/docs/import">
             Documents Import
-            <img src="/static/shots/shot-import-documents.png"/>
+            <div><img src="/static/shots/shot-import-documents.png"/></div>
           </a>
           {{if ge .SessionData.ContainerId 0}}
             <a target="_blank" href="/static/shell.html?t=http://{{.Host}}:{{.SessionData.port_1337}}">
               Couchbase Shell
-              <img src="/static/shots/shot-cbsh.png"/>
+              <div><img src="/static/shots/shot-cbsh.png"/></div>
             </a>
           {{end}}
         </div>
