@@ -5,22 +5,19 @@ function setElemDisplay(elemId, displayValue) {
 
 function setChevronDirection(elemId, direction) {
   let elem = document.getElementById(elemId);
-  elem.className = 'chevron'
-  elem.className += ` ${direction}`
+  elem.className = `chevron ${direction}`
 }
 
 function toggleInfoPanel() {
   const ls = localStorage.getItem('infoPanel')
-  if (ls === 'show') {
+  if (ls == 'show') {
     localStorage.setItem('infoPanel', 'hide')
     setElemDisplay('infoPanel', 'none')
-    setElemDisplay('instanceInfo', 'block')
-    setChevronDirection('toggleIcon','down')
-  } else if (ls === 'hide') {
+    setChevronDirection('toggleIcon', 'right')
+  } else {
     localStorage.setItem('infoPanel', 'show')
     setElemDisplay('infoPanel', 'block')
-    setElemDisplay('instanceInfo', 'none')
-    setChevronDirection('toggleIcon','up')
+    setChevronDirection('toggleIcon', 'down')
   }
 }
 
@@ -28,13 +25,10 @@ function infoPanelInitPageLoad() {
   const ls = localStorage.getItem('infoPanel')
   if (ls == 'hide') {
     setElemDisplay('infoPanel', 'none')
-    setElemDisplay('instanceInfo', 'block')
-    setChevronDirection('toggleIcon','down')
-  } else if (ls == 'show') {
+    setChevronDirection('toggleIcon', 'right')
+  } else {
     setElemDisplay('infoPanel', 'block')
-    setElemDisplay('instanceInfo', 'none')
-    setChevronDirection('toggleIcon','up')
-  } else if (ls === null) {
+    setChevronDirection('toggleIcon', 'down')
     localStorage.setItem('infoPanel', 'show')
   }
 }

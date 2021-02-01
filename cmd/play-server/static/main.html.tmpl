@@ -68,10 +68,10 @@
     <div class="info-header">
       
       <div class="header-left">
-        <a onClick="toggleInfoPanel();"><span id="toggleIcon" class="chevron top"></span> Toggle Info</a>
+        <a onclick="toggleInfoPanel();"><span id="toggleIcon" class="chevron down"></span></a>
       </div>
       <div class="header-right">
-        <div id="instanceInfo">
+        <div>
           <span class="head-server">Your Couchbase Instance:</span> <code>http://{{.Host}}:8091</code>
           <span class="head-user">username:</span> <code>{{.Session.CBUser}}</code>
           <span class="head-pass">password:</span> <code>{{.Session.CBPswd}}</code>
@@ -91,11 +91,6 @@
         <div>
           This test-drive session will be available for a max of {{.SessionsMaxAge}}
           or until there's {{.SessionsMaxIdle}} of inactivity.
-        </div>
-        <div class="instance-info">
-          <span class="head-server">Your Couchbase Instance:</span> <code>http://{{.Host}}:8091</code>
-          <span class="head-user">username:</span> <code>{{.Session.CBUser}} </code>
-          <span class="head-pass">password:</span> <code>{{.Session.CBPswd}}</code>
         </div>
         <div class="connection">
   <b>Couchbase Server</b>

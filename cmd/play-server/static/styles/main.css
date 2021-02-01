@@ -71,8 +71,9 @@ main .info-header a {
   display: flex;
   align-items: center;
   justify-content: left;
+  margin-right: 10px;
   padding-left: 17px;
-  width: 215px;
+  padding-right: 7px;
   min-height: 35px;
   cursor: pointer;
   cursor: hand;
@@ -87,7 +88,6 @@ main .info-header a {
 }
 
 main .info-header .header-left {
-  width: 240px;
   height: 35px;
 }
 main .info-header .header-right {
@@ -98,28 +98,21 @@ main .info-header .header-right {
   white-space: nowrap;
 
 }
-main .info-header code, main .instance-info code {
-  padding: 3px 6px;
-  font-family: 'Ubuntu Mono', monospace;
-  font-size: 14px;
-  border-radius: 4px;
-}
-
-main .info-header .header-right .head-server,
-main .info-panel .session-info .instance-info .head-server { 
+main .info-header .header-right .head-server {
   font-size: 16px;
 }
-main .info-header .header-right .head-user,
-main .info-panel .session-info .instance-info .head-user {
+main .info-header .header-right .head-user {
   margin-left: 1em;
   font-size: 16px;
   font-weight: 500;
 }
-main .info-header .header-right .head-pass,
-main .info-panel .session-info .instance-info .head-pass {
+main .info-header .header-right .head-pass {
   margin-left: 1em;
   font-size: 16px;
   font-weight: 500;
+}
+main .info-header .header-right code {
+  font-style: italic;
 }
 
 .workspace .workspace-body {
@@ -315,12 +308,7 @@ body.dark main .info-header a:focus {
   color: #EFEFEF;
 }
 
-body.dark main .info-header code, main .instance-info code {
-  background-color: rgba(18, 22, 26, 0.75);
-}
-
-body.dark main .info-header .header-right .head-server,
-body.dark main .info-panel .session-info .instance-info .head-server { 
+body.dark main .info-header .header-right .head-server {
   color: rgba(159, 226, 100, 0.95);
 }
 
