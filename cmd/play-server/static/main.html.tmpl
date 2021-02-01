@@ -92,13 +92,30 @@
           This test-drive session will be available for a max of {{.SessionsMaxAge}}
           or until there's {{.SessionsMaxIdle}} of inactivity.
         </div>
-        <div class="connection">
-  <b>Couchbase Server</b>
-    <a target="_blank" href="http://{{.Host}}:8091" class="ui">Web-Admin UI<img src="/static/shots/shot-dashboard.png"/></a> : <a target="_blank" href="http://{{.Host}}:8091/ui/index.html#!/query/workbench" class="ui"><img src="/static/shots/shot-query-workbench.png"/>Query Workbench</a> | <a target="_blank" href="http://{{.Host}}:8091/ui/index.html#!/documents/editor" class="ui"><img src="/static/shots/shot-documents.png"/>Document Editor</a> | <a target="_blank" href="http://{{.Host}}:8091/ui/index.html#!/documents/import" class="ui"><img src="/static/shots/shot-import-documents.png"/>Import Documents</a> | REST API: http://{{.Session.CBUser}}:{{.Session.CBPswd}}@{{.Host}}:8091
-
-
-  <b>Terminal</b>: {{if ge .SessionData.ContainerId 0}}<a target="_blank" href="/static/shell.html?t=http://{{.Host}}:{{.SessionData.port_1337}}" class="ui">Couchbase Shell<img src="/static/shots/shot-cbsh.png"/></a>{{else}}<span class="preparing">preparing session... please reload the page in a bit.</span>{{end}}
-    </div>
+        <div class="shots">
+          <a target="_blank" href="http://{{.Host}}:8091" class="ui">
+            Web-Admin UI
+            <img src="/static/shots/shot-dashboard.png"/>
+          </a>
+          <a target="_blank" href="http://{{.Host}}:8091/ui/index.html#!/query/workbench" class="ui">
+            Query Workbench
+            <img src="/static/shots/shot-query-workbench.png"/>
+          </a>
+          <a target="_blank" href="http://{{.Host}}:8091/ui/index.html#!/documents/editor" class="ui">
+            Document Editor
+            <img src="/static/shots/shot-documents.png"/>
+          </a>
+          <a target="_blank" href="http://{{.Host}}:8091/ui/index.html#!/documents/import" class="ui">
+            Import Documents
+            <img src="/static/shots/shot-import-documents.png"/>
+          </a>
+          {{if ge .SessionData.ContainerId 0}}
+            <a target="_blank" href="/static/shell.html?t=http://{{.Host}}:{{.SessionData.port_1337}}" class="ui">
+              Couchbase Shell
+              <img src="/static/shots/shot-cbsh.png"/>
+            </a>
+          {{end}}
+        </div>
       </div>
       {{end}}
     </div>

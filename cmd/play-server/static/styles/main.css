@@ -24,35 +24,24 @@
 }
 .session-info div {
   margin-bottom: 10px;
-  margin-left: 20px;
+  margin-left: 30px;
 }
-.session-info div.connection {
-  margin: 0 0 20px 20px;
+.session-info .shots {
+  margin: 0 0 20px 50px;
   padding: 0 0 0 0;
-  white-space: pre;
-  font-size: 9pt;
-  font-family: monospace;
 }
-.session-info div.connection a,
-.session-info div.connection b {
-  position: relative;
+.session-info .shots a {
+  display: inline-block;
+  min-width: 140px;
   font-size: 9pt;
-  font-family: monospace;
-  font-weight: bold;
 }
-.session-info div.connection a.ui img {
-  display: none;
-  position: absolute;
-  top: 27px;
-  left: 20px;
-  width: 300px;
-  z-index: 1;
-
+.session-info .shots a.ui img {
+  display: block;
+  width: 120px;
+  margin-top: 4px;
+  margin-left: 4px;
   border-width: 1px;
   border-style: solid;
-}
-.session-info div.connection a.ui:hover img {
-  display: block;
 }
 .session-info div.connection .preparing {
   color: #777;
@@ -290,7 +279,7 @@ body.dark .session-info {
 body.dark .session-info h2 {
   color: #9fe264;
 }
-body.dark .session-info div.connection a.ui img {
+body.dark .session-info .shots a.ui img {
   border-color: #888888;
 }
 
