@@ -97,13 +97,6 @@
     <a target="_blank" href="http://{{.Host}}:8091" class="ui">Web-Admin UI<img src="/static/shots/shot-dashboard.png"/></a> : <a target="_blank" href="http://{{.Host}}:8091/ui/index.html#!/query/workbench" class="ui"><img src="/static/shots/shot-query-workbench.png"/>Query Workbench</a> | <a target="_blank" href="http://{{.Host}}:8091/ui/index.html#!/documents/editor" class="ui"><img src="/static/shots/shot-documents.png"/>Document Editor</a> | <a target="_blank" href="http://{{.Host}}:8091/ui/index.html#!/documents/import" class="ui"><img src="/static/shots/shot-import-documents.png"/>Import Documents</a> | REST API: http://{{.Session.CBUser}}:{{.Session.CBPswd}}@{{.Host}}:8091
 
 
-  <b>Couchbase SDK's</b>             : connection snippets
-    Java   <a target="_blank" href="https://docs.couchbase.com/java-sdk/current/hello-world/start-using-sdk.html">SDK docs</a>, <a target="_blank" href="https://docs.couchbase.com/sdk-api/couchbase-java-client/">API docs</a> : - Cluster.connect("couchbase://{{.Host}}", "{{.Session.CBUser}}", "{{.Session.CBPswd}}")
-    .NET   <a target="_blank" href="https://docs.couchbase.com/dotnet-sdk/current/hello-world/start-using-sdk.html">SDK docs</a>, <a target="_blank" href="https://docs.couchbase.com/sdk-api/couchbase-dotnet-client/">API docs</a> : - Cluster.ConnectAsync("couchbase://{{.Host}}", "{{.Session.CBUser}}", "{{.Session.CBPswd}}");
-    NodeJS <a target="_blank" href="https://docs.couchbase.com/nodejs-sdk/current/hello-world/start-using-sdk.html">SDK docs</a>, <a target="_blank" href="https://docs.couchbase.com/sdk-api/couchbase-node-client/">API docs</a> : - new couchbase.Cluster("couchbase://{{.Host}}", {username: "{{.Session.CBUser}}", password: "{{.Session.CBPswd}}"})
-    Python <a target="_blank" href="https://docs.couchbase.com/python-sdk/current/hello-world/start-using-sdk.html">SDK docs</a>, <a target="_blank" href="https://docs.couchbase.com/sdk-api/couchbase-python-client/">API docs</a> : - Cluster('couchbase://{{.Host}}', ClusterOptions(PasswordAuthenticator('{{.Session.CBUser}}', '{{.Session.CBPswd}}')))
-
-
   <b>Terminal</b>: {{if ge .SessionData.ContainerId 0}}<a target="_blank" href="/static/shell.html?t=http://{{.Host}}:{{.SessionData.port_1337}}" class="ui">Couchbase Shell<img src="/static/shots/shot-cbsh.png"/></a>{{else}}<span class="preparing">preparing session... please reload the page in a bit.</span>{{end}}
     </div>
       </div>
@@ -127,8 +120,12 @@
                   </a>
                 {{else}}
                   {{.title}}
-                  {{if .docs}}
-                    <a href="{{.docs}}" target="_blank" class="docs">docs</a>
+                  {{if .links}}
+                    <span class="links">
+                      {{range .links}}
+                        <a href="{{.url}}" target="_blank" class="{{.class}}">{{.title}}</a>
+                      {{end}}
+                    </span>
                   {{end}}
                 {{end}}
               </li>

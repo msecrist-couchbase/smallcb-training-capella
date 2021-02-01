@@ -168,6 +168,10 @@ main .info-header .header-right code {
   padding: 5px 5px 5px 8px;
   text-decoration: none;
 }
+.workspace .workspace-body .code-examples .example-nav ul.examples li .links a {
+  color: #bbb;
+  text-decoration: underline;
+}
 
 .workspace .workspace-body .code-editor {
   flex-basis: 10rem;

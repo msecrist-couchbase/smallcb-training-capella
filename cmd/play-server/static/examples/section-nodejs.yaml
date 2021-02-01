@@ -1,3 +1,7 @@
 title: ' NodeJS'
 page: page-03
-docs: https://docs.couchbase.com/nodejs-sdk/current/hello-world/overview.html
+links:
+  - url: https://docs.couchbase.com/sdk-api/couchbase-node-client/
+    title: API
+  - url: https://docs.couchbase.com/nodejs-sdk/current/hello-world/overview.html
+    title: docs
