@@ -93,24 +93,24 @@
           or until there's {{.SessionsMaxIdle}} of inactivity.
         </div>
         <div class="shots">
-          <a target="_blank" href="http://{{.Host}}:8091" class="ui">
-            Web-Admin UI
+          <a target="_blank" href="http://{{.Host}}:8091">
+            Dashboard
             <img src="/static/shots/shot-dashboard.png"/>
           </a>
-          <a target="_blank" href="http://{{.Host}}:8091/ui/index.html#!/query/workbench" class="ui">
+          <a target="_blank" href="http://{{.Host}}:8091/ui/index.html#/query/workbench">
             Query Workbench
             <img src="/static/shots/shot-query-workbench.png"/>
           </a>
-          <a target="_blank" href="http://{{.Host}}:8091/ui/index.html#!/documents/editor" class="ui">
-            Document Editor
+          <a target="_blank" href="http://{{.Host}}:8091/ui/index.html#/docs/editor">
+            Documents Edit
             <img src="/static/shots/shot-documents.png"/>
           </a>
-          <a target="_blank" href="http://{{.Host}}:8091/ui/index.html#!/documents/import" class="ui">
-            Import Documents
+          <a target="_blank" href="http://{{.Host}}:8091/ui/index.html#/docs/import">
+            Documents Import
             <img src="/static/shots/shot-import-documents.png"/>
           </a>
           {{if ge .SessionData.ContainerId 0}}
-            <a target="_blank" href="/static/shell.html?t=http://{{.Host}}:{{.SessionData.port_1337}}" class="ui">
+            <a target="_blank" href="/static/shell.html?t=http://{{.Host}}:{{.SessionData.port_1337}}">
               Couchbase Shell
               <img src="/static/shots/shot-cbsh.png"/>
             </a>

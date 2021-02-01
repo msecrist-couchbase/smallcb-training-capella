@@ -35,7 +35,7 @@
   min-width: 140px;
   font-size: 9pt;
 }
-.session-info .shots a.ui img {
+.session-info .shots a img {
   display: block;
   width: 120px;
   margin-top: 4px;
@@ -279,7 +279,7 @@ body.dark .session-info {
 body.dark .session-info h2 {
   color: #9fe264;
 }
-body.dark .session-info .shots a.ui img {
+body.dark .session-info .shots a img {
   border-color: #888888;
 }
 
