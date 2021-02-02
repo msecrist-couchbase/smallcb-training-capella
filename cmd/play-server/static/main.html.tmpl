@@ -93,19 +93,19 @@
           or until there's {{.SessionsMaxIdle}} of inactivity.
         </div>
         <div class="shots">
-          <a target="_blank" href="http://{{.Host}}:8091">
+          <a target="_blank" href="http://{{.Host}}:8091/ui/index.html?lu={{.Session.CBUser}}&lp={{.Session.CBPswd}}">
             Dashboard
             <div><img src="/static/shots/shot-dashboard.png"/></div>
           </a>
-          <a target="_blank" href="http://{{.Host}}:8091/ui/index.html#/query/workbench">
+          <a target="_blank" href="http://{{.Host}}:8091/ui/index.html?lu={{.Session.CBUser}}&lp={{.Session.CBPswd}}#/query/workbench">
             Query Workbench
             <div><img src="/static/shots/shot-query-workbench.png"/></div>
           </a>
-          <a target="_blank" href="http://{{.Host}}:8091/ui/index.html#/docs/editor">
+          <a target="_blank" href="http://{{.Host}}:8091/ui/index.html?lu={{.Session.CBUser}}&lp={{.Session.CBPswd}}#/docs/editor">
             Documents Edit
             <div><img src="/static/shots/shot-documents.png"/></div>
           </a>
-          <a target="_blank" href="http://{{.Host}}:8091/ui/index.html#/docs/import">
+          <a target="_blank" href="http://{{.Host}}:8091/ui/index.html?lu={{.Session.CBUser}}&lp={{.Session.CBPswd}}#/docs/import">
             Documents Import
             <div><img src="/static/shots/shot-import-documents.png"/></div>
           </a>

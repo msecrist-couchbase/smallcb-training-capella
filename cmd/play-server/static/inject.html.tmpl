@@ -16,8 +16,31 @@
 </style>
 <script type="text/javascript">
 (function () {
+  function checkPlayLogin() {
+    var eu = document.getElementById("auth-username-input");
+    if (eu && eu.value == "") {
+      var ep = document.getElementById("auth-password-input");
+      if (ep && ep.value == "") {
+        var params = new URLSearchParams(document.location.search.substring(1));
+
+        var lu = params.get("lu");
+        var lp = params.get("lp");
+
+        if (lu != "" && lp != "") {
+          eu.value = lu;
+          ep.value = lp;
+
+          // Poke angularJS event handlers.
+          eu.dispatchEvent(new InputEvent("input"));
+          ep.dispatchEvent(new InputEvent("input"));
+        }
+      }
+    }
+  }
+
   function createPlayBox() {
     if (!document.body) { return; }
+
     var el = document.createElement("div");
     el.id = "playBox";
     el.className = "playBox";
@@ -29,7 +52,9 @@
         'Couchbase Playground - Beta';
       {{end}}
     document.body.appendChild(el);
-  };
+
+    setTimeout(checkPlayLogin, 1500);
+  }
 
   function checkPlayBox() {
     var el = document.getElementById("playBox");
@@ -40,7 +65,7 @@
     } else {
       setTimeout(checkPlayBox, 10000);
     }
-  };
+  }
 
   checkPlayBox();
 })()
