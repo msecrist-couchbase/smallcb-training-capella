@@ -43,14 +43,14 @@
       <ul>
         <li>
           {{if .Session}}
-          <a href="/session-exit?s={{.Session.SessionId}}"
-	     onclick="localStorage.setItem('infoPanel', 'show');" class="session">
-            stop test-drive
-          </a>
+            <a href="/session-exit?s={{.Session.SessionId}}"
+               onclick="localStorage.setItem('infoPanel', 'show');" class="session">
+              stop test-drive
+            </a>
           {{else}}
-          <a href="/session">
-            start test-drive
-          </a>
+            <a href="/session">
+              start test-drive
+            </a>
           {{end}}
         </li>
         <li>
@@ -65,24 +65,23 @@
 
   <main>
     {{if .Session}}
-    <div class="info-header">
-      
-      <div class="header-left">
-        <a onclick="toggleInfoPanel();"><span id="toggleIcon" class="chevron down"></span></a>
-      </div>
-      <div class="header-right">
-        <div>
-          <span class="head-server">Your Couchbase Instance:</span> <code>http://{{.Host}}:8091</code>
-          <span class="head-user">username:</span> <code>{{.Session.CBUser}}</code>
-          <span class="head-pass">password:</span> <code>{{.Session.CBPswd}}</code>
+      <div class="info-header">
+        <div class="header-left">
+          <a onclick="toggleInfoPanel();"><span id="toggleIcon" class="chevron down"></span></a>
+        </div>
+        <div class="header-right">
+          <div>
+            <span class="head-server">Your Couchbase Instance:</span> <code>http://{{.Host}}:8091</code>
+            <span class="head-user">username:</span> <code>{{.Session.CBUser}}</code>
+            <span class="head-pass">password:</span> <code>{{.Session.CBPswd}}</code>
+          </div>
         </div>
       </div>
-      
-    </div>
     {{end}}
+
     <div class="info-panel" id="infoPanel">
       {{if .Msg}}
-      <div class="message-info">{{.Msg}}</div>
+        <div class="message-info">{{.Msg}}</div>
       {{end}}
 
       {{if .Session}}
@@ -119,6 +118,7 @@
       </div>
       {{end}}
     </div>
+
     <div class="workspace">
       <div class="workspace-body">
         <div class="code-examples">
@@ -194,11 +194,15 @@
             <div class="empty-example-frame">
               <div class="info-frame">
                 {{if not .Session}}
-                Or start a test-drive session to play
-                with Couchbase Server's Web-Admin UI
-                and to persist data between examples.
-                <div><a href="/session" class="nowrap">Start Test-Drive</a></div>
-                <a href="/session" class="shot"><img src="/static/shots/shot-documents.png"/></a>
+                  Or start a test-drive session to play
+                  with Couchbase Server's Web-Admin UI
+                  and to persist data between examples.
+                  <div>
+                    <a href="/session" class="nowrap">Start Test-Drive</a>
+                  </div>
+                  <a href="/session" class="shot">
+                    <img src="/static/shots/shot-documents.png"/>
+                  </a>
                 {{end}}
               </div>
             </div>
@@ -209,8 +213,8 @@
         <div class="code-output hidden" id="code-output">
           <div class="sticky">
             {{if or .Name .Lang .Code}}
-            <h2>Output</h2>
-            <iframe name="output" id="output" class="output"></iframe>
+              <h2>Output</h2>
+              <iframe name="output" id="output" class="output"></iframe>
             {{end}}
           </div>
         </div>
@@ -236,7 +240,7 @@
     codeAce.setOption("useWorker", false); // No syntax checking.
 
     {{if .LangAce}}
-    codeAce.setOption("mode", "ace/mode/{{.LangAce}}");
+      codeAce.setOption("mode", "ace/mode/{{.LangAce}}");
     {{end}}
   </script>
   <script>
