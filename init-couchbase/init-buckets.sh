@@ -65,9 +65,17 @@ curl http://${CB_USER}:${CB_PSWD}@localhost:8093/query/service \
 curl http://${CB_USER}:${CB_PSWD}@localhost:8093/query/service \
     -d 'statement=DROP INDEX def_inventory_airport_city ON `travel-sample`.`inventory`.`airport`'
 curl http://${CB_USER}:${CB_PSWD}@localhost:8093/query/service \
+    -d 'statement=DROP INDEX def_inventory_airport_primary ON `travel-sample`.`inventory`.`airport`'
+curl http://${CB_USER}:${CB_PSWD}@localhost:8093/query/service \
     -d 'statement=DROP INDEX def_inventory_airport_faa ON `travel-sample`.`inventory`.`airport`'
 curl http://${CB_USER}:${CB_PSWD}@localhost:8093/query/service \
+    -d 'statement=DROP INDEX def_inventory_hotel_city ON `travel-sample`.`inventory`.`hotel`'
+curl http://${CB_USER}:${CB_PSWD}@localhost:8093/query/service \
+    -d 'statement=DROP INDEX def_inventory_hotel_primary ON `travel-sample`.`inventory`.`hotel`'
+curl http://${CB_USER}:${CB_PSWD}@localhost:8093/query/service \
     -d 'statement=DROP INDEX def_inventory_landmark_city ON `travel-sample`.`inventory`.`landmark`'
+curl http://${CB_USER}:${CB_PSWD}@localhost:8093/query/service \
+    -d 'statement=DROP INDEX def_inventory_landmark_primary ON `travel-sample`.`inventory`.`landmark`'
 curl http://${CB_USER}:${CB_PSWD}@localhost:8093/query/service \
     -d 'statement=DROP INDEX def_inventory_route_primary ON `travel-sample`.`inventory`.`route`'
 curl http://${CB_USER}:${CB_PSWD}@localhost:8093/query/service \
