@@ -25,11 +25,13 @@
     </nav>
   </header>
 
-  <div class="flex-row">
+  <div>
     <div class="main">
-      <h2>Admin Dashboard</h2>
+      <h2>Infos</h2>
 
       <div class="infos">{{.infos}}</div>
+
+      <h2>Counters</h2>
 
       <table class="nums">
         <thead>
@@ -55,6 +57,15 @@
           {{end}}
         </tbody>
       </table>
+    </div>
+
+    <div class="errs">
+      <h2>Recent Errors</h2>
+      <ul>
+        {{range .errs}}
+          <li>{{.}}</li>
+        {{end}}
+      </ul>
     </div>
   </div>
 

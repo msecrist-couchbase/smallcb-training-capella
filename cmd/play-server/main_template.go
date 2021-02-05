@@ -26,10 +26,10 @@ var LangAce = map[string]string{
 
 var LangPretty = map[string]string{
 	"dotnet": ".NET",
-	"java": "Java",
+	"java":   "Java",
 	"nodejs": "NodeJS",
-	"py": "Python",
-	"sh": "shell",
+	"py":     "Python",
+	"sh":     "shell",
 }
 
 type MainTemplateData struct {

@@ -283,8 +283,6 @@ func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 		t := http.StatusText(http.StatusNotFound) +
 			", err: session unknown"
 
-		// http.Error(w, t, http.StatusNotFound)
-
 		EmitOutput(w, t)
 
 		log.Printf("ERROR: HttpHandleRun, session unknown, s: %v", s)
@@ -359,6 +357,8 @@ func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 		EmitOutput(w, t)
 
 		log.Printf("ERROR: HttpHandleRun, err: %v", err)
+
+		StatsErr(err)
 
 		return
 	}

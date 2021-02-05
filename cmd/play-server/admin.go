@@ -17,6 +17,7 @@ var (
 	statsNums  = map[string]uint64{}
 	statsInfos = map[string]string{}
 	statsHists = [][]*StatsHist{[]*StatsHist{}}
+	statsErrs  = []string{}
 )
 
 type StatsHist struct {
@@ -37,6 +38,20 @@ func StatsNumInc(names ...string) {
 func StatsNum(name string, cb func(uint64) uint64) {
 	statsM.Lock()
 	statsNums[name] = cb(statsNums[name])
+	statsM.Unlock()
+}
+
+func StatsErr(err error) {
+	statsM.Lock()
+
+	statsErrs = append(statsErrs, fmt.Sprintf("%s: %v",
+		time.Now().Format("2006-01-02T15:04:05.000-07:00"),
+		err))
+
+	if len(statsErrs) > 100 {
+		statsErrs = append(make([]string, 0, len(statsErrs)), statsErrs[len(statsErrs)/2:]...)
+	}
+
 	statsM.Unlock()
 }
 
@@ -162,6 +177,7 @@ func HttpHandleAdminStats(w http.ResponseWriter, r *http.Request) {
 	stats := map[string]interface{}{
 		"nums":  statsNums,
 		"infos": statsInfos,
+		"errs":  statsErrs,
 	}
 
 	result, err := json.MarshalIndent(stats, "", " ")
@@ -221,6 +237,7 @@ func HttpHandleAdminDashboard(w http.ResponseWriter, r *http.Request) {
 		"keys":  keysArr,
 		"hists": rhists,
 		"infos": string(statsInfosJ),
+		"errs":  append([]string(nil), statsErrs...),
 	}
 
 	statsM.Unlock()

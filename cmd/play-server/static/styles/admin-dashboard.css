@@ -1,8 +1,15 @@
 .main {
+  display: block;
   padding: 20px 40px 40px 40px;
 }
 
+.main h2 {
+  margin-left: 0;
+}
+
 .main .infos {
+  margin-bottom: 40px;
+
   font-family: monospace;
   font-size: 8pt;
 }
@@ -52,4 +59,17 @@
 }
 .main table.nums tr.level-5 {
   background-color: #08b8ff;
+}
+
+.errs {
+  margin: 20px 0 20px 25px;
+  padding: 20px 0 20px 0;
+}
+.errs li {
+  font-family: monospace;
+  font-size: 8pt;
+}
+
+.footer {
+  margin-left: 45px;
 }
