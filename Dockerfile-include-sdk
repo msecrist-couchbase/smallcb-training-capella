@@ -2,7 +2,7 @@ ENV TZ=America/Los_Angeles
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 RUN apt-get update && \
     apt-get install -y \
-	git curl wget jq unzip \
+	git curl wget jq unzip zip \
 	build-essential cmake libssl-dev \
 	atop htop psmisc strace \
 	emacs vim

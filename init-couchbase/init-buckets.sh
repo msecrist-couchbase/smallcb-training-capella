@@ -24,7 +24,7 @@ echo "couchbase-cli bucket-create beer-sample..."
  --enable-index-replica 0 \
  --wait
 
-echo "cbdocloader beer-sample..."
+echo "cbimport beer-sample..."
 /opt/couchbase/bin/cbimport json --format sample --verbose \
  -c localhost -u ${CB_USER} -p ${CB_PSWD} \
  -b beer-sample \
@@ -43,16 +43,13 @@ echo "couchbase-cli bucket-create travel-sample..."
  --enable-index-replica 0 \
  --wait
 
-echo "cbdocloader travel-sample..."
+echo "cbimport travel-sample..."
 /opt/couchbase/bin/cbimport json --format sample --verbose \
  -c localhost -u ${CB_USER} -p ${CB_PSWD} \
  -b travel-sample \
  -d file:///opt/couchbase/samples/travel-sample.zip
 
-echo "sleep 20 to allow stabilization"
-sleep 20
-
-echo "drop extra indexes..."
+echo "drop travel-sample indexes..."
 curl http://${CB_USER}:${CB_PSWD}@localhost:8093/query/service \
     -d 'statement=DROP INDEX def_airportname ON `travel-sample`'
 curl http://${CB_USER}:${CB_PSWD}@localhost:8093/query/service \
@@ -82,6 +79,8 @@ curl http://${CB_USER}:${CB_PSWD}@localhost:8093/query/service \
 curl http://${CB_USER}:${CB_PSWD}@localhost:8093/query/service \
     -d 'statement=DROP INDEX def_name_type ON `travel-sample`'
 curl http://${CB_USER}:${CB_PSWD}@localhost:8093/query/service \
+    -d 'statement=DROP INDEX def_primary ON `travel-sample`'
+curl http://${CB_USER}:${CB_PSWD}@localhost:8093/query/service \
     -d 'statement=DROP INDEX def_route_src_dst_day ON `travel-sample`'
 curl http://${CB_USER}:${CB_PSWD}@localhost:8093/query/service \
     -d 'statement=DROP INDEX def_schedule_utc ON `travel-sample`'
@@ -90,5 +89,12 @@ curl http://${CB_USER}:${CB_PSWD}@localhost:8093/query/service \
 curl http://${CB_USER}:${CB_PSWD}@localhost:8093/query/service \
     -d 'statement=DROP INDEX def_type ON `travel-sample`'
 
-echo "sleep 40 to allow stabilization"
+echo "sleep 10 to allow stabilization..."
+sleep 10
+
+echo "create travel-sample primary index..."
+curl http://${CB_USER}:${CB_PSWD}@localhost:8093/query/service \
+    -d 'statement=CREATE PRIMARY INDEX idx_primary ON `travel-sample`'
+
+echo "sleep 40 to allow stabilization..."
 sleep 40
