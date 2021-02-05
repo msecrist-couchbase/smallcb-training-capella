@@ -6,7 +6,7 @@ import "time"
 var (
 	h = flag.Bool("h", false, "print help/usage and exit")
 
-	codeDuration = flag.Duration("codeDuration", 10*time.Second,
+	codeDuration = flag.Duration("codeDuration", 20*time.Second,
 		"duration that a client's request code may run on an assigned container instance")
 
 	codeMaxLen = flag.Int("codeMaxLen", 8000,
@@ -18,7 +18,7 @@ var (
 	containerVolPrefix = flag.String("containerVolPrefix", "vol-instances/vol-",
 		"prefix of the volume directories of container instances")
 
-	containerPrepDuration = flag.Duration("containerPrepDuration", 250*time.Millisecond,
+	containerPrepDuration = flag.Duration("containerPrepDuration", 400*time.Millisecond,
 		"duration to sleep to allow container setup or preparation to finish")
 
 	containerWaitDuration = flag.Duration("containerWaitDuration", 20*time.Second,
