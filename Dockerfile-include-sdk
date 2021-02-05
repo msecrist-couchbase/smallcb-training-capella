@@ -1,3 +1,5 @@
+ENV TZ=America/Los_Angeles
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 RUN apt-get update && \
     apt-get install -y \
 	git curl wget jq unzip \
@@ -57,4 +59,31 @@ RUN pip3 show couchbase | grep Version | cut -f 2 -d ' ' > /opt/couchbase/VERSIO
 # Install golang couchbase SDK:
 
 RUN go get github.com/couchbase/gocb
+
+
+# -------------------------------------------------------
+#   PHP
+# -------------------------------------------------------
+RUN apt-get update && \
+    apt -y install software-properties-common apt-transport-https vim && \
+    LC_ALL=C.UTF-8 add-apt-repository ppa:ondrej/php   
+RUN apt-get update && \
+    apt-get -y install php${PHP_VERSION} php${PHP_VERSION}-cli php${PHP_VERSION}-common php${PHP_VERSION}-fpm php${PHP_VERSION}-dev php${PHP_VERSION}-xml 
+RUN php -v
+
+# Get the Couchbase Repository Key
+ADD https://packages.couchbase.com/clients/c/repos/deb/couchbase.key .
+
+RUN apt-get update \
+    && apt-get install -y lsb-release software-properties-common gnupg2 \
+    && apt-key add ./couchbase.key \
+    && rm ./couchbase.key \
+    && apt-add-repository "deb http://packages.couchbase.com/clients/c/repos/deb/${CB_CLIENT_OS} ${CB_CLIENT_OS_TYPE} ${CB_CLIENT_OS_TYPE}/main" \
+    && apt-get update \
+    && apt-get install -y --allow-unauthenticated libcouchbase3 libcouchbase-dev libcouchbase3-tools libcouchbase-dbg libcouchbase3-libev libcouchbase3-libevent
+
+# Install ext-couchbase
+RUN pecl install https://packages.couchbase.com/clients/php/couchbase-${COUCHBASE_SDK_PHP_VERSION}.tgz && \
+    cp /usr/lib/php/${PHP_VERSION}/php.ini-development /usr/lib/php/${PHP_VERSION}/php.ini && \
+    printf 'extension=json.so\nextension=couchbase.so' >> /etc/php/${PHP_VERSION}/cli/php.ini
 
