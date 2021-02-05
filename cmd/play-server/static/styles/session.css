@@ -36,10 +36,6 @@ article input[type=submit]:hover {
 article img.captcha {
   display: block;
 }
-form span.err {
-  margin-top: 10px;
-  font-weight: bold;
-}
 
 article > section {
   padding-left: 17px;
@@ -49,9 +45,9 @@ article > header {
   height: 1.8em;
 }
 
-body > header {
-  display: flex;
-  flex-direction: column;
+form span.err {
+  margin-top: 10px;
+  font-weight: bold;
 }
 
 form .captcha-bg {
