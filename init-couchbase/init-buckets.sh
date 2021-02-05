@@ -1,12 +1,15 @@
 #!/bin/bash
 
+# expand variables and print commands
+set -o xtrace
+
+# exit immediately if a command fails or if there are unset vars
+set -euo pipefail
+
 CB_USER="${CB_USER:-Administrator}"
 CB_PSWD="${CB_PSWD:-password}"
 
 CB_BUCKET_RAMSIZE="${CB_BUCKET_RAMSIZE:-128}"
-
-# exit immediately if a command fails or if there are unset vars
-set -euo pipefail
 
 echo "couchbase-cli bucket-create beer-sample..."
 /opt/couchbase/bin/couchbase-cli bucket-create \
@@ -45,6 +48,47 @@ echo "cbdocloader travel-sample..."
  -c localhost -u ${CB_USER} -p ${CB_PSWD} \
  -b travel-sample \
  -d file:///opt/couchbase/samples/travel-sample.zip
+
+echo "sleep 20 to allow stabilization"
+sleep 20
+
+echo "drop extra indexes..."
+curl http://${CB_USER}:${CB_PSWD}@localhost:8093/query/service \
+    -d 'statement=DROP INDEX def_airportname ON `travel-sample`'
+curl http://${CB_USER}:${CB_PSWD}@localhost:8093/query/service \
+    -d 'statement=DROP INDEX def_city ON `travel-sample`'
+curl http://${CB_USER}:${CB_PSWD}@localhost:8093/query/service \
+    -d 'statement=DROP INDEX def_faa ON `travel-sample`'
+curl http://${CB_USER}:${CB_PSWD}@localhost:8093/query/service \
+    -d 'statement=DROP INDEX def_icao ON `travel-sample`'
+curl http://${CB_USER}:${CB_PSWD}@localhost:8093/query/service \
+    -d 'statement=DROP INDEX def_inventory_airline_primary ON `travel-sample`.`inventory`.`airline`'
+curl http://${CB_USER}:${CB_PSWD}@localhost:8093/query/service \
+    -d 'statement=DROP INDEX def_inventory_airport_airportname ON `travel-sample`.`inventory`.`airport`'
+curl http://${CB_USER}:${CB_PSWD}@localhost:8093/query/service \
+    -d 'statement=DROP INDEX def_inventory_airport_city ON `travel-sample`.`inventory`.`airport`'
+curl http://${CB_USER}:${CB_PSWD}@localhost:8093/query/service \
+    -d 'statement=DROP INDEX def_inventory_airport_faa ON `travel-sample`.`inventory`.`airport`'
+curl http://${CB_USER}:${CB_PSWD}@localhost:8093/query/service \
+    -d 'statement=DROP INDEX def_inventory_landmark_city ON `travel-sample`.`inventory`.`landmark`'
+curl http://${CB_USER}:${CB_PSWD}@localhost:8093/query/service \
+    -d 'statement=DROP INDEX def_inventory_route_primary ON `travel-sample`.`inventory`.`route`'
+curl http://${CB_USER}:${CB_PSWD}@localhost:8093/query/service \
+    -d 'statement=DROP INDEX def_inventory_route_route_src_dst_day ON `travel-sample`.`inventory`.`route`'
+curl http://${CB_USER}:${CB_PSWD}@localhost:8093/query/service \
+    -d 'statement=DROP INDEX def_inventory_route_schedule_utc ON `travel-sample`.`inventory`.`route`'
+curl http://${CB_USER}:${CB_PSWD}@localhost:8093/query/service \
+    -d 'statement=DROP INDEX def_inventory_route_sourceairport ON `travel-sample`.`inventory`.`route`'
+curl http://${CB_USER}:${CB_PSWD}@localhost:8093/query/service \
+    -d 'statement=DROP INDEX def_name_type ON `travel-sample`'
+curl http://${CB_USER}:${CB_PSWD}@localhost:8093/query/service \
+    -d 'statement=DROP INDEX def_route_src_dst_day ON `travel-sample`'
+curl http://${CB_USER}:${CB_PSWD}@localhost:8093/query/service \
+    -d 'statement=DROP INDEX def_schedule_utc ON `travel-sample`'
+curl http://${CB_USER}:${CB_PSWD}@localhost:8093/query/service \
+    -d 'statement=DROP INDEX def_sourceairport ON `travel-sample`'
+curl http://${CB_USER}:${CB_PSWD}@localhost:8093/query/service \
+    -d 'statement=DROP INDEX def_type ON `travel-sample`'
 
 echo "sleep 40 to allow stabilization"
 sleep 40
