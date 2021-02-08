@@ -92,6 +92,8 @@ Aside...
 TODO's...
 
 how about staging?
+  first "real" staging setup on cloud?
+
 
 need a "down for maintenance" static web page path or toggle?
 
@@ -99,15 +101,6 @@ roughly, how much will it cost?
 
 need a cgroup or a throwaway container to safely run
   submitted code with hard timeouts / resource limits?
-
-show & tell?
-
-first "real" staging setup on cloud?
-
-first examples from not-steve?
-
-client-side code syntax highlighting / styling via
-  ACE code editor?
 
 lots of examples are auto-scraped from docs and
   put into: https://github.com/couchbaselabs/sdk-examples
@@ -117,8 +110,7 @@ lots of examples are auto-scraped from docs and
   see the ./cmd/gen-examples program.
     many samples aren't passing gen-example's filters.
 
-couchbase style header / footer?
-  call-to-action / download couchbase?
+call-to-action / download couchbase?
 
 CSS styling for mobile / narrow screens?
 
@@ -137,6 +129,7 @@ client-side JS to prevent Back Button or navigating away
 when there are enough examples, use a tree-control
   on the left-hand-side with a scrollable panel,
   perhaps with mouseovers with longer explanations?
+  and/or a tags based filter?
 
 favorites / recommended / starred examples?
 
@@ -154,24 +147,11 @@ what if my email and/or name are already used?
   if so, can i get another zipcar for me?
   ANS: currently, sorta -- full name + email must be unique.
 
-should we also dump stats to S3 occasionally?
+should we also dump stats to S3 occasionally, not only logs?
 
 keep average time of restarts,
   for fake/estimated progress/ETA bars?
   or, "we are under heavy load" messages?
-
-DNS, ELB & subdomains?
-
-ELB and sticky load balancing?
-
-ELB / ALB probably won't work due to kv/2i/fts/services ports
-  and non-HTTP protocols?
-  Might need to use explicit domain names?
-  c01.couchbase.live?
-  c02.couchbase.live?
-  c03.couchbase.live?
-
-look into HOSTALIASES env var for mapping hosts to ip addresses?
 
 health watchers and elastic scaling -- bring up more nodes
   when there's more people and auto-scale-down when
@@ -191,14 +171,13 @@ cpu sizing?
 
 inject better UI into web admin UI?
 
-proper web terminal output UI?
-
 output (stdout / stderr) is not streaming?
 
 docker on mac OSX sometimes gets 'stuck' -- container
   instances aren't restartable sometimes?  Need to sometimes
   restart entire docker system / hypervisor... will this be the
-  case also on linux?  If so, perhaps need a "kill the
+  case also on linux (where we haven't seen this on linux so far)?
+  If so, perhaps need a "kill the
   entire server/machine and replace it" button?
 
 pkill -u play might not be using a strong enough kill signal?
@@ -221,6 +200,8 @@ docker run has interesting tweakable runtime resource limits
   to look at and perhaps use?
 
 docker run --read-only flag?
+
+PHP code examples?
 
 SECURITY: turn off egress networking?
   turn off ability to initiate outbound connections?
@@ -252,6 +233,8 @@ SECURITY: restart the host system every day?
 
 SECURITY: bad actor can start a webserver and host porn, etc?
 
+SECURITY: bad actor can DDoS other systems (need egress control)?
+
 configure AWS to limit network bandwidth ingress / egress?
 
 SECURITY: hosting IAM rules?
@@ -266,64 +249,33 @@ influitive hookups?
 copy/pastable connection snippets for popular languages
   and SDK's, for >= zipcar mode when there's a session?
 
-need 1 or more test users / test examples / test container instances?
-
-iframe for access to web admin portal?
-  need server-side proxy in golang?
-  perhaps access to just query workbench?
-  DONE: ns-server does not like iframes, so the proxy removes
-    the X-Frame-Options DENY header from the response.
-
 the proxy serving of web-admin UI login screen
   when not logged in always goes to container 0,
   but what if container 0 is restarting?
   Then the UI login screen can't be served?
   Maybe play-server's proxy should cache?
 
-pop up web admin portal in separate tab or browser target?
-
 popup tours in UI injection?
   https://kamranahmed.info/driver.js/
 
 /static URL should not have directory listing
 
-how about having longer-running instances
-that hang around more than a single request,
-which are all single-node / no rebalance / no XDCR,
-all for better developer tire-kicking? e.g.,
+multi-request-with-data-freezing/thawing
+  (hertz/avid, multi-day rental)
+  after a timeout from inactivity,
+  the data is snapshotted and parked in quiescent garage somewhere...
+    like on to local disk,
+      or onto S3.
+  when the user comes back, data is thawed,
+    against a restarted container,
+    perhaps at a different assigned port #'s?
+    which takes some time (e.g., go get a coffee) while defrosting?
 
-  DONE: per-request (uber)
-    container instance reset/recycled after every request.
-    similar to https://www.tutorialspoint.com/compile_jdbc_online.php
-
-  DONE: multi-request (zipcar / e.g., hourly rental)
-    container instance has an associated session UUID,
-      and is reset/recycled only after the
-      session reaches timeout from inactivity.
-      data is deleted after session times out,
-        and container instance is wiped / restarted.
-    with user / password / sessionId generated a'la UUID,
-    with network ingres/egress that's enough
-      to allow for web-UI and client SDK access
-      over the internet, including cbbackup/restore.
-    similar to katacoda.
-
-  multi-request-with-data-freezing/thawing
-    (hertz/avid, multi-day rental)
-    after a timeout from inactivity,
-    the data is snapshotted and parked in quiescent garage somewhere...
-      like on to local disk,
-        or onto S3.
-    when the user comes back, data is thawed,
-      against a restarted container,
-      perhaps at a different assigned port #'s?
-      which takes some time (e.g., go get a coffee) while defrosting?
-
-  finally, if you want a lease of 1 or more fleet of cars
-    (allowing for clustering),
-    with attached pool of on-demand hotel chauffeurs and
-      mechanic/maintenance services...
-    then use Couchbase Cloud.
+finally, if you want a lease of 1 or more fleet of cars
+  (allowing for clustering),
+  with attached pool of on-demand hotel chauffeurs and
+    mechanic/maintenance services...
+  then use Couchbase Cloud.
 
 -------------------------
 On new CB version release...
@@ -331,6 +283,7 @@ On new CB version release...
 Does a new CB version mean a new EC2 instance
   and then redirect the DNS / ELB,
   a'la rolling upgrade?
+  For now, just run latest version only.
 
 What about frozen data --
   do we thaw them on demand, as requested?
@@ -362,6 +315,8 @@ more use cases with persistent data?
   serverless event processing?
 
 poor man's sizing estimator / guesstimator?
+
+perhaps can use docker pause/unpause feature to reduce footprint?
 
 dev-mode config is reusable for laptops, too?
 
@@ -510,8 +465,41 @@ DONE: need ping / sanity checking REST endpoints
 
 DONE: proxy n1ql 8093 port so that command-line copy/paste of curl example works.
 
+DONE: couchbase style header / footer (logo added).
+
+DONE: first internal show & tell.
+DONE: first examples from not-steve.
+
+DONE: client-side code syntax highlighting / styling via
+      ACE code editor?
+
+DONE: DNS, ELB & subdomains.
+
+DONE: ELB and sticky load balancing.
+  ELB / ALB probably won't work due to kv/2i/fts/services ports
+  and non-HTTP protocols.
+  Might need to use explicit domain names.
+    c01.couchbase.live.
+    c02.couchbase.live.
+    c03.couchbase.live.
+
+DONE: look into HOSTALIASES env var for mapping hosts to ip addresses -- not needed.
+
+DONE: proper web terminal output UI.
+
+DONE: PHP SDK (by jagadesh m).
+
+DONE: iframe for access to web admin portal --
+  ANS: nope, because...
+    ns-server does not like iframes, so the proxy removes
+      the X-Frame-Options DENY header from the response.
+    need server-side proxy in golang?
+    perhaps access to just query workbench?
+
+DONE: pop up web admin portal in separate tab or browser target.
+
 --------------------------
-handwave design ideas...
+DONE: handwave design ideas...
 
 start with couchbase docker image...
 
@@ -536,7 +524,7 @@ start with couchbase docker image...
     as a good restart point
 
 --------------------------
-also, put faster changing stuff into host filesystem
+DONE: also, put faster changing stuff into host filesystem
   via docker volumes feature
   for easier github updates?
     without having update the snapshots?
@@ -551,12 +539,11 @@ also, put faster changing stuff into host filesystem
     as we don't have access to host system?
 
 --------------------------
-it might connect to localhost couchbase,
+DONE: it might connect to localhost couchbase,
  or might connect to remotehost couchbase,
    for longer persistence?
 
---------------------------
-on the host
+DONE: on the host
   web/app-server
     which starts container
       (e.g., docker run -rm SAFE SAFE whatever),
@@ -567,12 +554,30 @@ on the host
         in preparation for next request,
         to reduce cold start window?
 
-perhaps can use docker pause/unpause feature to reduce footprint?
-
---------------------------
-also have a pool of container instances which are ready to go...
+DONE: have a pool of container instances which are ready to go...
 
   smallcb1, smallcb2, smallcb3, smallcb4, etc.
+
+DONE: how about having longer-running instances
+that hang around more than a single request,
+which are all single-node / no rebalance / no XDCR,
+all for better developer tire-kicking? e.g.,
+
+  DONE: per-request (uber)
+    container instance reset/recycled after every request.
+    similar to https://www.tutorialspoint.com/compile_jdbc_online.php
+
+  DONE: multi-request (zipcar / e.g., hourly rental)
+    container instance has an associated session UUID,
+      and is reset/recycled only after the
+      session reaches timeout from inactivity.
+      data is deleted after session times out,
+        and container instance is wiped / restarted.
+    with user / password / sessionId generated a'la UUID,
+    with network ingres/egress that's enough
+      to allow for web-UI and client SDK access
+      over the internet, including cbbackup/restore.
+    similar to katacoda.
 
 ----------------
 diagnosis links
@@ -678,7 +683,6 @@ pgrep -u couchbase -a -n
   killall -g pgrp
   pkill -g pgrp
 
-# Misc Add Ons
-
+---------
 Information about Cookie Pro (OptanonWrapper)
-https://community.cookiepro.com/s/article/UUID-730ad441-6c4d-7877-7f85-36f1e801e8ca
+  https://community.cookiepro.com/s/article/UUID-730ad441-6c4d-7877-7f85-36f1e801e8ca
