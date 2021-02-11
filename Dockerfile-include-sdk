@@ -4,7 +4,7 @@ RUN apt-get update && \
     apt-get install -y \
 	git curl wget jq unzip zip \
 	build-essential cmake libssl-dev \
-	atop htop psmisc strace \
+	atop htop psmisc strace time \
 	emacs vim
 
 # ------------------------------------------------------
