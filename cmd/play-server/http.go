@@ -295,9 +295,11 @@ func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 
 	var result []byte
 
+	var req RunRequest
+
 	ok, err := CheckLangCode(lang, code, *codeMaxLen)
 	if ok {
-		req := RunRequest{
+		req = RunRequest{
 			ctx:                 r.Context(),
 			execPrefix:          ExecPrefixes[lang],
 			lang:                lang,
@@ -355,6 +357,10 @@ func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 		// http.Error(w, t, http.StatusInternalServerError)
 
 		EmitOutput(w, t)
+
+		req.cbAdminPassword = "" // To avoid log.
+
+		err = fmt.Errorf("HttpHandleRun, req: %+v, err: %v", req, err)
 
 		log.Printf("ERROR: HttpHandleRun, err: %v", err)
 
