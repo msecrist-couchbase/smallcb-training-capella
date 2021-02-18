@@ -24,7 +24,7 @@
     function onRunSubmit() {
       document.getElementById("code").value = codeAce.getSession().getValue();
       document.getElementsByTagName("body")[0].style.color = "#fff";
-      document.getElementById("output").contentDocument.body.innerHTML = 
+      document.getElementById("output").contentDocument.body.innerHTML =
         "<span style='color:white'>running...</span>";
       document.getElementById("code-output").className = "code-output";
       return true;
@@ -157,12 +157,16 @@
               {{if or .Name .Lang .Code}}
               <h2>
                 {{if .Lang}}
-                  <span class="lang">{{or .LangPretty .Lang}} - </span>
+                  {{if ne .Lang "NONE"}}
+                    <span class="lang">{{or .LangPretty .Lang}} - </span>
+                  {{end}}
                 {{end}}
                 {{if .Title}}{{.Title}}{{else}}Code Editor{{end}}
 
-                <input type="submit" value="run &gt;&gt;" class="run" id="run"
+                {{if ne .Code "NONE"}}
+                  <input type="submit" value="run &gt;&gt;" class="run" id="run"
                        onclick="return onRunSubmit()"/>
+                {{end}}
               </h2>
 
               <div class="example-frame">
@@ -176,11 +180,13 @@
 
                 <input name="lang" type="hidden" value="{{.Lang}}"/>
 
-                <div id="code-ace" class="code-ace"></div>
+                {{if ne .Code "NONE"}}
+                  <div id="code-ace" class="code-ace"></div>
 
-                <textarea id="code" name="code" class="code" wrap="off" autocorrect="off" 
-                  autocomplete="off" autocapitalize="off"
-                  spellcheck="false">{{.Code}}</textarea>
+                  <textarea id="code" name="code" class="code" wrap="off" autocorrect="off"
+                    autocomplete="off" autocapitalize="off"
+                    spellcheck="false">{{.Code}}</textarea>
+                {{end}}
 
                 {{if .InfoAfter}}
                   <div class="info infoAfter">{{.InfoAfter}}</div>
