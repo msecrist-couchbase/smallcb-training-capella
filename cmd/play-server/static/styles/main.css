@@ -94,7 +94,6 @@ main .info-header .header-right {
   font-family: 'Ubuntu Mono', monospace;
   font-size: 14px;
   white-space: nowrap;
-
 }
 main .info-header .header-right .head-server {
   font-size: 16px;
@@ -174,7 +173,7 @@ main .info-header .header-right code {
 .workspace .workspace-body .code-editor {
   flex-basis: 10rem;
   flex-grow: 100;
-  margin: 0;
+  margin: 0 0 0 15px;
 }
 .workspace .workspace-body .code-editor textarea.code {
   display: none;
