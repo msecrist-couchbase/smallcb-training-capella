@@ -158,7 +158,7 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 
 	data := map[string]interface{}{
 		"AnalyticsHTML": template.HTML(AnalyticsHTML(*host)),
-		"ProdOnlyJS":    template.HTML(ProdOnlyJS(*host)),
+		"OptanonHTML":   template.HTML(OptanonHTML(*host)),
 		"SessionsMaxAge": strings.Replace(
 			sessionsMaxAge.String(), "m0s", " min", 1),
 		"SessionsMaxIdle": strings.Replace(
@@ -377,7 +377,7 @@ func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 func EmitOutput(w http.ResponseWriter, result string) {
 	data := map[string]interface{}{
 		"AnalyticsHTML": template.HTML(AnalyticsHTML(*host)),
-		"ProdOnlyJS":    template.HTML(ProdOnlyJS(*host)),
+		"OptanonHTML":   template.HTML(OptanonHTML(*host)),
 		"Output":        string(result),
 	}
 
@@ -390,7 +390,9 @@ func EmitOutput(w http.ResponseWriter, result string) {
 // ------------------------------------------------
 
 func AnalyticsHTML(host string) string {
-	if host == "127.0.0.1" || host == "localhost" {
+	if host == "127.0.0.1" || host == "localhost" ||
+		strings.Index(*jsFlags, "allOff") >= 0 ||
+		strings.Index(*jsFlags, "analyticsOff") >= 0 {
 		return ""
 	}
 
@@ -403,8 +405,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 // ------------------------------------------------
 
-func ProdOnlyJS(host string) string {
-	if host == "127.0.0.1" || host == "localhost" {
+func OptanonHTML(host string) string {
+	if host == "127.0.0.1" || host == "localhost" ||
+		strings.Index(*jsFlags, "allOff") >= 0 ||
+		strings.Index(*jsFlags, "optanonOff") >= 0 {
 		return ""
 	}
 

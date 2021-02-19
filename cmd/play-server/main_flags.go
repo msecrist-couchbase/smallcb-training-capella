@@ -33,6 +33,9 @@ var (
 	host = flag.String("host", "127.0.0.1",
 		"host that the service will be publically available as")
 
+	jsFlags = flag.String("jsFlags", "",
+		"optionally disable JS script inclusion (values: allOff, analyticsOff, optanonOff)")
+
 	listen = flag.String("listen", ":8080",
 		"[addr]:port for play-server's web UI / REST API")
 

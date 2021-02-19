@@ -58,7 +58,7 @@ type MainTemplateData struct {
 	InfoAfter  template.HTML
 
 	AnalyticsHTML template.HTML
-	ProdOnlyJS    template.HTML
+	OptanonHTML   template.HTML
 }
 
 func MainTemplateEmit(w http.ResponseWriter,
@@ -154,7 +154,7 @@ func MainTemplateEmit(w http.ResponseWriter,
 		InfoAfter:  template.HTML(infoAfter),
 
 		AnalyticsHTML: template.HTML(AnalyticsHTML(hostIn)),
-		ProdOnlyJS:    template.HTML(ProdOnlyJS(hostIn)),
+		OptanonHTML:   template.HTML(OptanonHTML(hostIn)),
 	}
 
 	if view != "" {
