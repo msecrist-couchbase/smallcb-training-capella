@@ -76,6 +76,27 @@ USER root
 RUN tr ' ' '\n' < /home/play/hellodotnet/run-csharp-hello.csproj | grep Version | cut -f 2 -d '"' > /opt/couchbase/VERSION-sdk-dotnet.ver
 
 # ------------------------------------------------
+# Scala
+COPY cmd/play-server/run-scala-build.sbt /home/play/helloscala/build.sbt
+COPY cmd/play-server/run-scala-build.sbt /run-scala-build.sbt
+COPY cmd/play-server/run-scala-pom.xml /home/play/helloscala/run-scala-pom.xml
+RUN mkdir /scala && \
+    sed -i -e "s/1.1.2/${COUCHBASE_SDK_SCALA_VERSION}/g" -e "s/2.12.12/${SCALA_VERSION}/g" /home/play/helloscala/build.sbt && \
+    sed -i -e "s/1.1.2/${COUCHBASE_SDK_SCALA_VERSION}/g" -e "s/2.12/`echo ${SCALA_VERSION}|cut -f1-2 -d'.'`/g" /home/play/helloscala/run-scala-pom.xml
+COPY cmd/play-server/run-scala-hello.scala /home/play/helloscala/run-scala-hello.scala
+COPY cmd/play-server/run-scala-hello.scala /tmp/helloscala/run-scala-hello.scala
+RUN /run-scala-sbt.sh /tmp/helloscala && \
+    rm -rf /tmp/helloscala
+RUN chown -R play:couchbase /home/play
+USER play
+RUN cd /home/play/helloscala && \
+    sbt run
+USER root
+RUN echo ${COUCHBASE_SDK_SCALA_VERSION} > /opt/couchbase/VERSION-sdk-scala.ver
+
+
+
+# ------------------------------------------------
 # couchbase shell, via a cbsh user.
 
 RUN apt-get install -y libxcb-composite0-dev

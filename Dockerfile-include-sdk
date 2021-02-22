@@ -87,3 +87,24 @@ RUN pecl install https://packages.couchbase.com/clients/php/couchbase-${COUCHBAS
     cp /usr/lib/php/${PHP_VERSION}/php.ini-development /usr/lib/php/${PHP_VERSION}/php.ini && \
     printf 'extension=json.so\nextension=couchbase.so' >> /etc/php/${PHP_VERSION}/cli/php.ini
 
+
+# -------------------------------------------------------
+#   Scala and SBT
+# -------------------------------------------------------
+RUN wget -q -O scala-${SCALA_VERSION}.tgz https://downloads.lightbend.com/scala/${SCALA_VERSION}/scala-${SCALA_VERSION}.tgz \
+    && tar -xzf scala-${SCALA_VERSION}.tgz -C /opt \
+    && ln -s /opt/scala-${SCALA_VERSION}/bin/scala /usr/bin/scala \
+    && ln -s /opt/scala-${SCALA_VERSION}/bin/scalac /usr/bin/scalac \
+    && rm scala-${SCALA_VERSION}.tgz \
+    && scala -version
+
+RUN wget -q -O sbt-${SBT_VERSION}.tgz https://github.com/sbt/sbt/releases/download/v${SBT_VERSION}/sbt-${SBT_VERSION}.tgz \
+    && tar -xzf sbt-${SBT_VERSION}.tgz -C /opt \
+    && ln -s /opt/sbt/bin/sbt /usr/bin/sbt \
+    && rm sbt-${SBT_VERSION}.tgz \
+    && sbt -version
+
+
+
+
+

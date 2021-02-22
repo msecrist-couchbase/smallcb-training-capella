@@ -9,7 +9,7 @@ CONTAINER_PORTS = -p 8091-8096:8091-8096 -p 11210:11210
 # To enable strace diagnosis, use...
 # CONTAINER_EXTRAS = --cap-add=SYS_PTRACE
 CONTAINER_EXTRAS =
-
+BUILD_EXTRAS = 
 SERVICE_HOST = couchbase.live
 
 CB_ADMIN_PASSWORD = small-house-secret
@@ -24,7 +24,7 @@ build:
             Dockerfile-include-sdk \
             Dockerfile-suffix > \
             Dockerfile
-	docker build --network host -t $(IMAGE_NAME) .
+	docker build --network host -t $(IMAGE_NAME) ${BUILD_EXTRAS} .
 	rm Dockerfile
 
 # Create the vol-snapshot directory.
