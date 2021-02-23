@@ -65,23 +65,20 @@ RUN go get github.com/couchbase/gocb
 # -------------------------------------------------------
 #   PHP
 # -------------------------------------------------------
-RUN apt-get update && \
-    apt -y install software-properties-common apt-transport-https && \
-    LC_ALL=C.UTF-8 add-apt-repository ppa:ondrej/php
-RUN apt-get update && \
-    apt-get -y install php${PHP_VERSION} php${PHP_VERSION}-cli php${PHP_VERSION}-common php${PHP_VERSION}-fpm php${PHP_VERSION}-dev php${PHP_VERSION}-xml
-RUN php -v
 
 # Get the Couchbase Repository Key
 ADD https://packages.couchbase.com/clients/c/repos/deb/couchbase.key .
 
-RUN apt-get update \
-    && apt-get install -y lsb-release software-properties-common gnupg2 \
-    && apt-key add ./couchbase.key \
+RUN apt-key add ./couchbase.key \
     && rm ./couchbase.key \
+    && apt -y install lsb-release software-properties-common apt-transport-https gnupg2 \
+    && LC_ALL=C.UTF-8 add-apt-repository ppa:ondrej/php \
     && apt-add-repository "deb http://packages.couchbase.com/clients/c/repos/deb/${CB_CLIENT_OS} ${CB_CLIENT_OS_TYPE} ${CB_CLIENT_OS_TYPE}/main" \
     && apt-get update \
-    && apt-get install -y --allow-unauthenticated libcouchbase3 libcouchbase-dev libcouchbase3-tools libcouchbase-dbg libcouchbase3-libev libcouchbase3-libevent
+    && apt-get -y install php${PHP_VERSION} php${PHP_VERSION}-cli php${PHP_VERSION}-common php${PHP_VERSION}-fpm php${PHP_VERSION}-dev php${PHP_VERSION}-xml \
+    && apt-get -y install --allow-unauthenticated libcouchbase3 libcouchbase-dev libcouchbase3-tools libcouchbase-dbg libcouchbase3-libev libcouchbase3-libevent
+
+RUN php -v
 
 # Install ext-couchbase
 RUN pecl install https://packages.couchbase.com/clients/php/couchbase-${COUCHBASE_SDK_PHP_VERSION}.tgz && \
@@ -92,6 +89,7 @@ RUN pecl install https://packages.couchbase.com/clients/php/couchbase-${COUCHBAS
 # -------------------------------------------------------
 #   Scala and SBT
 # -------------------------------------------------------
+
 RUN wget -q -O scala-${SCALA_VERSION}.tgz https://downloads.lightbend.com/scala/${SCALA_VERSION}/scala-${SCALA_VERSION}.tgz \
     && tar -xzf scala-${SCALA_VERSION}.tgz -C /opt \
     && ln -s /opt/scala-${SCALA_VERSION}/bin/scala /usr/bin/scala \
