@@ -5,6 +5,11 @@ COPY init-couchbase /init-couchbase
 RUN chmod +x /init-couchbase/*.sh && \
     /init-couchbase/prep.sh
 
+# Append to /opt/couchbase/etc/couchbase/static_config...
+
+RUN cat /init-couchbase/init-static-config.txt >> \
+        /opt/couchbase/etc/couchbase/static_config
+
 # ------------------------------------------------
 # Copy play-server's run-*.sh files into image.
 
@@ -76,7 +81,8 @@ USER root
 RUN tr ' ' '\n' < /home/play/hellodotnet/run-csharp-hello.csproj | grep Version | cut -f 2 -d '"' > /opt/couchbase/VERSION-sdk-dotnet.ver
 
 # ------------------------------------------------
-# Scala
+# SDK scala.
+
 COPY cmd/play-server/run-scala-build.sbt /home/play/helloscala/build.sbt
 COPY cmd/play-server/run-scala-build.sbt /run-scala-build.sbt
 COPY cmd/play-server/run-scala-pom.xml /home/play/helloscala/run-scala-pom.xml
@@ -93,8 +99,6 @@ RUN cd /home/play/helloscala && \
     sbt run
 USER root
 RUN echo ${COUCHBASE_SDK_SCALA_VERSION} > /opt/couchbase/VERSION-sdk-scala.ver
-
-
 
 # ------------------------------------------------
 # couchbase shell, via a cbsh user.

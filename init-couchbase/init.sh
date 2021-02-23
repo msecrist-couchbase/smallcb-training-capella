@@ -23,10 +23,6 @@ set -euo pipefail
 # back to the foreground after the node is configured
 set -m
 
-# append to /opt/couchbase/etc/couchbase/static_config...
-cat /init-couchbase/init-static-config.txt >> \
-    /opt/couchbase/etc/couchbase/static_config
-
 echo "Starting couchbase-server..."
 /entrypoint.sh couchbase-server &
 
