@@ -15,8 +15,19 @@
 }
 
 .main table.nums {
-  margin-top: 160px;
   border-collapse: collapse;
+}
+
+.main table.nums thead {
+  position: sticky;
+  top: 0px;
+  height: 160px;
+  background: white;
+  border-bottom: 1px solid #aaa;
+}
+
+.main table.nums thead th {
+  vertical-align: bottom;
 }
 
 .main table.nums th,
@@ -27,6 +38,7 @@
 }
 
 .main table.nums th.num {
+  vertical-align: top;
   min-width: 1.5rem;
 }
 
@@ -34,7 +46,7 @@
   position: absolute;
   font-size: 8pt;
   transform-origin: 0 0; /* top-left instead of center */
-  transform: rotate(-45deg);
+  transform: translate(0, 150px) rotate(-45deg);
 }
 
 .main table.nums tbody tr:hover {
