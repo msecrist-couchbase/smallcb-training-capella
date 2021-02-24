@@ -21,4 +21,3 @@ infoAfter: |
   using 4 client threads and will set 10,000 docs
   into the beer-sample bucket, with an operations
   ratio of 30% sets (and 70% gets).
-

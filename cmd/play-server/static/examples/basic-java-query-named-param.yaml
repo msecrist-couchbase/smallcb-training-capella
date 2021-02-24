@@ -42,5 +42,6 @@ code: |
   }
 infoAfter: |
   This example shows how to use named parameters with the cluster.query() method.
+  <br/><br/>
   Visit the docs to learn more about
   <a target="_blank" href="https://docs.couchbase.com/java-sdk/current/howtos/n1ql-queries-with-sdk.html">N1QL Queries with Java</a>.

@@ -40,5 +40,6 @@ code: |
   }
 infoAfter: |
   This example shows how to use positional parameters with the cluster.QueryAsync() method.
+  <br/><br/>
   Visit the docs to learn more about
   <a target="_blank" href="https://docs.couchbase.com/dotnet-sdk/current/howtos/n1ql-queries-with-sdk.html">N1QL Queries with .NET</a>.

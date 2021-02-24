@@ -30,5 +30,6 @@ code: |
   }
 infoAfter: |
   Given a document's key, you can use the collection.GetAsync() method to retrieve a document from a collection.
+  <br/><br/>
   See more at the SDK documentation on
   <a target="_blank" href="https://docs.couchbase.com/dotnet-sdk/current/howtos/kv-operations.html">.NET Key Value Operations</a>.

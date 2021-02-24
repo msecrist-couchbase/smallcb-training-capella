@@ -31,5 +31,6 @@ code: |
     .then(() => process.exit(0))
 infoAfter: |
   This example shows how to use positional parameters with the cluster.query() method.
+  <br/><br/>
   Visit the docs to learn more about
   <a target="_blank" href="https://docs.couchbase.com/nodejs-sdk/current/howtos/n1ql-queries-with-sdk.html">N1QL Queries with Node.js</a>.

@@ -35,5 +35,6 @@ code: |
 infoAfter: |
   Basic N1QL query,
   with looping through each returned row.
+  <br/><br/>
   Visit the docs to learn more about
   <a target="_blank" href="https://docs.couchbase.com/java-sdk/current/howtos/n1ql-queries-with-sdk.html#the-query-result">Handling Query Results in Java</a>.

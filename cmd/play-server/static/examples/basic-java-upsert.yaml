@@ -47,5 +47,6 @@ code: |
   }
 infoAfter: |
   This example shows an upsert of a document and then a retrieval of a portion of that document via the subdocument API.
+  <br/><br/>
   Visit the docs to learn more about
   <a target="_blank" href="https://docs.couchbase.com/java-sdk/current/howtos/kv-operations.html">Key Value Operations in .Java</a>.
