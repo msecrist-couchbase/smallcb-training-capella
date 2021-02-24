@@ -7,7 +7,8 @@ RUN chmod +x /init-couchbase/*.sh && \
 
 # Append to /opt/couchbase/etc/couchbase/static_config...
 
-RUN cat /init-couchbase/init-static-config.txt >> \
+RUN if [ ! -d /opt/couchbase/etc/couchbase ]; then mkdir -p /opt/couchbase/etc/couchbase; fi \
+    && cat /init-couchbase/init-static-config.txt >> \
         /opt/couchbase/etc/couchbase/static_config
 
 # ------------------------------------------------
@@ -99,6 +100,12 @@ RUN cd /home/play/helloscala && \
     sbt run
 USER root
 RUN echo ${COUCHBASE_SDK_SCALA_VERSION} > /opt/couchbase/VERSION-sdk-scala.ver
+
+# ------------------------------------------------
+# SDK ruby.
+USER root
+RUN echo ${COUCHBASE_SDK_RUBY_VERSION} > /opt/couchbase/VERSION-sdk-ruby.ver
+
 
 # ------------------------------------------------
 # couchbase shell, via a cbsh user.
