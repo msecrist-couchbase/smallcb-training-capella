@@ -47,9 +47,9 @@
     el.innerHTML =
       {{if .SessionId}}
       '<a href="http://{{.Host}}:{{.PortApp}}/?s={{.SessionId}}">'+
-        'Couchbase Playground - Beta</a>';
+        'Couchbase Playground</a>';
       {{else}}
-        'Couchbase Playground - Beta';
+        'Couchbase Playground';
       {{end}}
     document.body.appendChild(el);
 

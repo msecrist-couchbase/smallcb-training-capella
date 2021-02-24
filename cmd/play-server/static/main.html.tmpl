@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-  <title>Couchbase Playground - Beta</title>
+  <title>Couchbase Playground</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;1,300&Ubuntu+Mono&display=swap" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="/static/styles/site.css">
   <link rel="stylesheet" type="text/css" href="/static/styles/main.css">
@@ -36,7 +36,7 @@
   <header>
     <div class="logo">
       <a href="/{{if .Session}}?s={{.Session.SessionId}}{{end}}">
-        <h1><img src="/static/cb.png"/>Couchbase Playground - Beta</h1>
+        <h1><img src="/static/cb.png"/>Couchbase Playground</h1>
       </a>
     </div>
     <nav>
@@ -91,6 +91,9 @@
           This test-drive session will be available for a max of {{.SessionsMaxAge}}
           or until there's {{.SessionsMaxIdle}} of inactivity.
         </div>
+        <div>
+          Some places to start...
+        </div>
         <div class="shots">
           <a target="_blank" href="http://{{.Host}}:8091/ui/index.html?lu={{.Session.CBUser}}&lp={{.Session.CBPswd}}">
             Dashboard
@@ -101,7 +104,7 @@
             <div><img src="/static/shots/shot-query-workbench.png"/></div>
           </a>
           <a target="_blank" href="http://{{.Host}}:8091/ui/index.html?lu={{.Session.CBUser}}&lp={{.Session.CBPswd}}#/docs/editor">
-            Documents Edit
+            Documents Editor
             <div><img src="/static/shots/shot-documents.png"/></div>
           </a>
           <a target="_blank" href="http://{{.Host}}:8091/ui/index.html?lu={{.Session.CBUser}}&lp={{.Session.CBPswd}}#/docs/import">
@@ -195,14 +198,13 @@
             </form>
             {{else}}
             <div class="no-session">
-              Please select an example.
+              Try Couchbase in a playground &mdash; please select an example.
             </div>
             <div class="empty-example-frame">
               <div class="info-frame">
                 {{if not .Session}}
-                  Or start a test-drive session to play
-                  with Couchbase Server's Web-Admin UI
-                  and to persist data between examples.
+                  Or start a test-drive session to log
+                  into Couchbase Server's web-based admin UI...
                   <div>
                     <a href="/session" class="nowrap">Start Test-Drive</a>
                   </div>
