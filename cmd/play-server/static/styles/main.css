@@ -120,7 +120,8 @@ main .info-header .header-right code {
 .workspace .workspace-body h2 {
   height: 23px;
 }
-.workspace .workspace-body h2 .lang {
+.workspace .workspace-body h2 .lang,
+.workspace .workspace-body h2 .prompt {
   font-weight: normal;
 }
 
