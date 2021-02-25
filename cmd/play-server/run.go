@@ -193,10 +193,12 @@ func ExecCmd(ctx context.Context, cmd *exec.Cmd,
 
 	// Captures of stdout and stderr are not correctly time-interleaved,
 	// leaving users arguably confused, where Java SDK emits stderr
-	// messages, so ignore stderr for now...
-	// return append(bout, berr...), err
+	// messages, so ignore stderr if there's any stdout.
+	if len(bout) > 0 {
+		return bout, err
+	}
 
-	return bout, err
+	return berr, err
 }
 
 // ------------------------------------------------
