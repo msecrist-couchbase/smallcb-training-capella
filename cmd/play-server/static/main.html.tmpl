@@ -46,6 +46,10 @@
       var outputBody = document.getElementById("output").contentDocument.body;
 
       function stepNext(x) {
+        if (x >= steps.length) {
+          return;
+        }
+
         outputBody.innerHTML = stepHTML(x);
 
         setTimeout(function() {
