@@ -23,10 +23,42 @@
   <script>
     function onRunSubmit() {
       document.getElementById("code").value = codeAce.getSession().getValue();
+
       document.getElementsByTagName("body")[0].style.color = "#fff";
-      document.getElementById("output").contentDocument.body.innerHTML =
-        "<span style='color:white'>running...</span>";
+
+      var steps = ["waiting for container", "preparing container"];
+
+      var lang = document.getElementById("lang").value;
+      if (lang == "java" || lang == "dotnet") {
+        steps.push("compiling code");
+      }
+
+      steps.push("running");
+
+      function stepHTML(x) {
+        var s = "";
+        for (var i = 0; i <= x; i++) {
+          s = s + '<div style="color:white">' + steps[i] + '...</div>';
+        }
+        return s;
+      }
+
+      var outputBody = document.getElementById("output").contentDocument.body;
+
+      function stepNext(x) {
+        outputBody.innerHTML = stepHTML(x);
+
+        setTimeout(function() {
+          if (outputBody.innerHTML == stepHTML(x)) {
+            stepNext(x + 1);
+          }
+        }, (x + 1) * 2000);
+      }
+
+      stepNext(0);
+
       document.getElementById("code-output").className = "code-output";
+
       return true;
     }
   </script>
@@ -181,7 +213,7 @@
                   <input name="s" type="hidden" value="{{.Session.SessionId}}"/>
                 {{end}}
 
-                <input name="lang" type="hidden" value="{{.Lang}}"/>
+                <input name="lang" type="hidden" value="{{.Lang}}" id="lang"/>
 
                 {{if ne .Code "NONE"}}
                   <div id="code-ace" class="code-ace"></div>
