@@ -75,17 +75,27 @@ create:
 restart: restart-snapshot wait-healthy
 
 # Restart the docker container instance from the vol-snapshot.
-restart-snapshot:
+restart-snapshot: instance-stop snapshot-reset instance-start
+
+# -------------------------------------------------
+
+instance-stop:
 	docker stop $(IMAGE_NAME)-$(CONTAINER_NUM) || true
 	docker rm $(IMAGE_NAME)-$(CONTAINER_NUM) || true
-	rm -rf vol-instances/vol-$(CONTAINER_NUM)/*
-	mkdir -p vol-instances/vol-$(CONTAINER_NUM)
-	cp -R vol-snapshot$(SNAPSHOT_SUFFIX)/* vol-instances/vol-$(CONTAINER_NUM)/
+
+instance-start:
 	docker run --name=$(IMAGE_NAME)-$(CONTAINER_NUM) \
                $(CONTAINER_PORTS) $(CONTAINER_EXTRAS) \
                -v $(shell pwd)/vol-instances/vol-$(CONTAINER_NUM)/:/opt/couchbase/var \
                --add-host="$(SERVICE_HOST):127.0.0.1" \
                -d $(IMAGE_NAME)
+
+# -------------------------------------------------
+
+snapshot-reset:
+	rm -rf vol-instances/vol-$(CONTAINER_NUM)/*
+	mkdir -p vol-instances/vol-$(CONTAINER_NUM)
+	cp -R vol-snapshot$(SNAPSHOT_SUFFIX)/* vol-instances/vol-$(CONTAINER_NUM)/
 
 # -------------------------------------------------
 
