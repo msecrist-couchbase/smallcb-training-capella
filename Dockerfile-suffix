@@ -82,6 +82,11 @@ USER root
 RUN tr ' ' '\n' < /home/play/hellodotnet/run-csharp-hello.csproj | grep Version | cut -f 2 -d '"' > /opt/couchbase/VERSION-sdk-dotnet.ver
 
 # ------------------------------------------------
+# SDK PHP.
+USER root
+RUN echo ${COUCHBASE_SDK_PHP_VERSION} > /opt/couchbase/VERSION-sdk-php.ver
+
+# ------------------------------------------------
 # SDK scala.
 
 COPY cmd/play-server/run-scala-build.sbt /home/play/helloscala/build.sbt

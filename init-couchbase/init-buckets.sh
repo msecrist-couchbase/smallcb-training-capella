@@ -24,6 +24,8 @@ echo "couchbase-cli bucket-create beer-sample..."
  --enable-index-replica 0 \
  --wait
 
+# TBD: Sometimes failing to load the sample without sleep
+sleep 10
 echo "cbimport beer-sample..."
 /opt/couchbase/bin/cbimport json --format sample --verbose \
  -c localhost -u ${CB_USER} -p ${CB_PSWD} \
@@ -43,6 +45,8 @@ echo "couchbase-cli bucket-create travel-sample..."
  --enable-index-replica 0 \
  --wait
 
+# TBD: Sometimes failing to load the sample without sleep
+sleep 10
 echo "cbimport travel-sample..."
 /opt/couchbase/bin/cbimport json --format sample --verbose \
  -c localhost -u ${CB_USER} -p ${CB_PSWD} \
