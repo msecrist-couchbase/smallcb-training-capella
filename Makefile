@@ -9,8 +9,12 @@ CONTAINER_PORTS = -p 8091-8096:8091-8096 -p 11210:11210
 # To enable strace diagnosis, use...
 # CONTAINER_EXTRAS = --cap-add=SYS_PTRACE
 CONTAINER_EXTRAS =
-BUILD_EXTRAS = 
+
+BUILD_EXTRAS =
+
 SERVICE_HOST = couchbase.live
+
+SNAPSHOT_SUFFIX =
 
 CB_ADMIN_PASSWORD = small-house-secret
 
@@ -36,11 +40,11 @@ build:
 # vol-snapshot directory (for later reuse/restart'ing).
 create:
 	rm -rf vol-*
-	mkdir -p vol-snapshot
+	mkdir -p vol-snapshot$(SNAPSHOT_SUFFIX)
 	mkdir -p tmp
 	docker run --name=$(IMAGE_NAME)-$(CONTAINER_NUM) \
                $(CONTAINER_PORTS) $(CONTAINER_EXTRAS) \
-               -v $(shell pwd)/vol-snapshot/:/opt/couchbase/var \
+               -v $(shell pwd)/vol-snapshot$(SNAPSHOT_SUFFIX)/:/opt/couchbase/var \
                -d $(IMAGE_NAME)
 	sleep 3
 	docker exec -u root $(IMAGE_NAME)-$(CONTAINER_NUM) /init-couchbase/init.sh
@@ -61,8 +65,8 @@ create:
 	sleep 3
 	docker rm $(IMAGE_NAME)-$(CONTAINER_NUM)
 	sleep 3
-	rm -rf vol-snapshot/lib/couchbase/logs/*
-	rm -rf vol-snapshot/lib/couchbase/stats/*
+	rm -rf vol-snapshot$(SNAPSHOT_SUFFIX)/lib/couchbase/logs/*
+	rm -rf vol-snapshot$(SNAPSHOT_SUFFIX)/lib/couchbase/stats/*
 
 # -------------------------------------------------
 
@@ -76,7 +80,7 @@ restart-snapshot:
 	docker rm $(IMAGE_NAME)-$(CONTAINER_NUM) || true
 	rm -rf vol-instances/vol-$(CONTAINER_NUM)/*
 	mkdir -p vol-instances/vol-$(CONTAINER_NUM)
-	cp -R vol-snapshot/* vol-instances/vol-$(CONTAINER_NUM)/
+	cp -R vol-snapshot$(SNAPSHOT_SUFFIX)/* vol-instances/vol-$(CONTAINER_NUM)/
 	docker run --name=$(IMAGE_NAME)-$(CONTAINER_NUM) \
                $(CONTAINER_PORTS) $(CONTAINER_EXTRAS) \
                -v $(shell pwd)/vol-instances/vol-$(CONTAINER_NUM)/:/opt/couchbase/var \
