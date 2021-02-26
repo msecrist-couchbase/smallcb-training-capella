@@ -1,0 +1,26 @@
+title: Key Value Get
+page: page-06
+lang: php
+code: |
+  <?php
+    $connectionString = "couchbase://{{.Host}}";
+    $options = new \Couchbase\ClusterOptions();
+    $options->credentials("{{.CBUser}}", "{{.CBPswd}}");
+    $cluster = new \Couchbase\Cluster($connectionString, $options);
+
+    $bucket = $cluster->bucket("travel-sample");
+    $collection = $bucket->defaultCollection();
+
+    try {
+      $result = $collection->get("airline_10");
+      print_r($result->content());
+    } catch (\Couchbase\DocumentNotFoundException $ex) {
+        print("Document does not exist\n");
+    }
+  ?>
+
+infoAfter: |
+  Given a document's key, you can use the collection.get() method to retrieve a document from a collection.
+  <br/><br/>
+  See more at the SDK documentation on
+  <a target="_blank" href="https://docs.couchbase.com/php-sdk/current/howtos/kv-operations.html">PHP Key Value Operations</a>.
