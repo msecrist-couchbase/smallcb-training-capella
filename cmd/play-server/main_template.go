@@ -19,7 +19,7 @@ var LangAce = map[string]string{
 	"nodejs": "javascript",
 	"php":    "php",
 	"py":     "python",
-	"ruby":   "ruby",
+	"rb":     "ruby",
 	"sh":     "sh",
 	"dotnet": "csharp",
 }
@@ -28,7 +28,9 @@ var LangPretty = map[string]string{
 	"dotnet": ".NET",
 	"java":   "Java",
 	"nodejs": "NodeJS",
+	"php":    "PHP",
 	"py":     "Python",
+	"rb":     "Ruby",
 	"sh":     "shell",
 }
 
