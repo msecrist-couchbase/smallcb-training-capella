@@ -230,6 +230,13 @@
                 {{if .InfoAfter}}
                   <div class="info infoAfter">{{.InfoAfter}}</div>
                 {{end}}
+
+                {{if not .Session}}
+                  <div class="session-cta">
+                    Also try Couchbase Server's web admin UI:
+                    <a href="/session" class="nowrap">Start Test-Drive</a>
+                  </div>
+                {{end}}
               </div>
             </form>
             {{else}}
@@ -239,10 +246,10 @@
               </h2>
             </div>
             <div class="empty-example-frame">
-              <div class="info-frame">
+              <div class="info-frame session-cta">
                 {{if not .Session}}
-                  Or start a test-drive session to log
-                  into Couchbase Server's web-based admin UI...
+                  Or start a test-drive and try<br/>
+                  Couchbase Server's web admin UI...
                   <div>
                     <a href="/session" class="nowrap">Start Test-Drive</a>
                   </div>

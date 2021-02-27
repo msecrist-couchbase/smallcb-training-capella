@@ -229,6 +229,28 @@ main .info-header .header-right code {
   margin-right: 30px;
 }
 
+.workspace .workspace-body .code-editor .example-frame .session-cta {
+  margin-top: 30px;
+}
+
+.workspace .workspace-body .code-editor .example-frame .session-cta a {
+  margin-left: 5px;
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 4px;
+  border-color: #516374;
+  background-color: #516374;
+  padding: 0.5em;
+  text-decoration: none;
+  color: #FFFFFF;
+}
+
+.workspace .workspace-body .code-editor .example-frame .session-cta a:hover {
+  border-color: #516374;
+  background-color: #778fa7;
+  color: #EFEFEF;
+}
+
 .workspace .workspace-body .code-editor .sticky .no-session {
   margin-bottom: 13px;
 }
