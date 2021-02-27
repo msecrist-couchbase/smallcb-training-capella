@@ -376,6 +376,9 @@ body.dark .workspace .workspace-body .code-editor div.code-ace {
   border-color: #516374;
 }
 body.dark .workspace .workspace-body .code-editor input.run {
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 4px;
   border-color: #516374;
   background-color: #516374;
   color: #FFFFFF;
