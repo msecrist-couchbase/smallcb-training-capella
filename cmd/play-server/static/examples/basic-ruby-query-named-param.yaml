@@ -7,9 +7,9 @@ code: |
   include Couchbase
 
   options = Cluster::ClusterOptions.new
-  options.authenticate("username", "password")
-  cluster = Cluster.connect("couchbase://127.0.0.1", options)
-  
+  options.authenticate("{{.CBUser}}", "{{.CBPswd}}")
+  cluster = Cluster.connect("couchbase://{{.Host}}", options)
+
   bucket = cluster.bucket("travel-sample")
   
   begin
