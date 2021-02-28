@@ -1,0 +1,75 @@
+title: Upsert
+page: page-09
+lang: go
+code: |
+
+  package main
+
+  import (
+    "fmt"
+    "time"
+    "github.com/couchbase/gocb/v2"
+  )
+
+  func main() {
+    cluster, err := gocb.Connect("couchbase://{{.Host}}", gocb.ClusterOptions{
+      Authenticator: gocb.PasswordAuthenticator{
+        Username: "{{.CBUser}}",
+        Password: "{{.CBPswd}}",
+      },
+    })
+    if err != nil {
+      panic(err)
+    }
+
+    bucket := cluster.Bucket("travel-sample")
+    err = bucket.WaitUntilReady(5*time.Second, nil)
+    if err != nil {
+      panic(err)
+    }
+    collection := bucket.DefaultCollection()
+    type Doc struct {
+      Id int `json:"id"`
+      Type string `json:"type"`
+      Name string `json:"name"`
+      Iata string `json:"iata"`
+      Icao string `json:"icao"`
+      Callsign string `json:"callsign"`
+      Country string `json:"country"`
+    }
+
+    document := Doc {   
+                        Country : "Iceland", 
+                        Callsign : "ICEAIR", 
+                        Iata : "FI",
+                        Icao : "ICE",
+                        Id : 123,
+                        Name : "Icelandair",
+                        Type : "airline",
+                    }
+    
+    _, err = collection.Upsert("airline_123", &document, nil)
+    if err != nil {
+      panic(err)
+    }
+
+    options := []gocb.LookupInSpec{
+      gocb.GetSpec("name", &gocb.GetSpecOptions{}),
+    }
+    results, err := collection.LookupIn("airline_123", options, &gocb.LookupInOptions{})
+    if err != nil {
+      panic(err)
+    }
+
+    var country string
+    err = results.ContentAt(0, &country)
+    if err != nil {
+      panic(err)
+    }
+    fmt.Printf("New document name: %s\n", country)
+  }
+infoAfter: |
+  This example shows an upsert of a document and then a retrieval of a portion of that document via the subdocument API.
+  <br/><br/>
+  Visit the docs to learn more about
+  <a target="_blank" href="https://docs.couchbase.com/go-sdk/current/howtos/kv-operations.html">Key Value Operations in Go</a>.

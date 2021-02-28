@@ -1,0 +1,64 @@
+title: Query w/ Named Param
+page: page-09
+lang: go
+code: |
+
+  package main
+
+  import (
+    "fmt"
+    "time"
+    "log"
+    "encoding/json"
+    "github.com/couchbase/gocb/v2"
+  )
+
+  func main() {
+    cluster, err := gocb.Connect("couchbase://{{.Host}}", gocb.ClusterOptions{
+      Authenticator: gocb.PasswordAuthenticator{
+        Username: "{{.CBUser}}",
+        Password: "{{.CBPswd}}",
+      },
+    })
+    if err != nil {
+      panic(err)
+    }
+
+    bucket := cluster.Bucket("travel-sample")
+    err = bucket.WaitUntilReady(5*time.Second, nil)
+    if err != nil {
+      panic(err)
+    }
+    
+    
+    params := make(map[string]interface{}, 1)
+    params["type"] = "hotel"
+    results, err := cluster.Query("SELECT x.* FROM `travel-sample` x WHERE x.`type`=$type LIMIT 10;", 
+                                      &gocb.QueryOptions{NamedParameters: params})
+    if err != nil {
+      panic(err)
+    }
+
+    var content interface{}
+    for results.Next() {
+      err := results.Row(&content)
+      if err != nil {
+        panic(err)
+      }
+      prettyJSON, err := json.MarshalIndent(content, "", "    ")
+      if err != nil {
+          log.Fatal("Failed to generate json", err)
+      }
+      fmt.Printf("%s\n", string(prettyJSON))
+    }
+
+    err = results.Err()
+    if err != nil {
+      panic(err)
+    }
+  }
+infoAfter: |
+  This example shows how to use named parameters with the cluster.query() method.
+  <br/><br/>
+  Visit the docs to learn more about
+  <a target="_blank" href="https://docs.couchbase.com/go-sdk/current/howtos/n1ql-queries-with-sdk.html">N1QL Queries with Go</a>.

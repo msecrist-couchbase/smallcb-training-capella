@@ -111,6 +111,10 @@ RUN echo ${COUCHBASE_SDK_SCALA_VERSION} > /opt/couchbase/VERSION-sdk-scala.ver
 USER root
 RUN echo ${COUCHBASE_SDK_RUBY_VERSION} > /opt/couchbase/VERSION-sdk-ruby.ver
 
+# ------------------------------------------------
+# SDK go.
+USER root
+RUN go list -m github.com/couchbase/gocb/v2 |cut -f2 -d' '|sed 's/v//g' >/opt/couchbase/VERSION-sdk-go.ver
 
 # ------------------------------------------------
 # couchbase shell, via a cbsh user.
