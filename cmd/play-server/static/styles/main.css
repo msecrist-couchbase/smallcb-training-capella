@@ -140,10 +140,11 @@ main .info-header .header-right code {
 .workspace .workspace-body .code-examples .pages button {
   flex-basis: 73px;
   margin: 3px 3px;
-  border: 1px solid #262a35;
+  border: 1px solid #3a5552;
   background-color: #262a35;
   padding: 3px 5px 3px 5px;
   color: rgba(159, 226, 100, 0.95);
+  cursor: pointer;
 }
 
 .workspace .workspace-body .code-examples .pages button:focus {
@@ -376,7 +377,7 @@ body.dark .workspace .workspace-body .code-examples .example-nav ul.examples {
 body.dark .workspace .workspace-body .code-examples .example-nav ul.examples li.category {
   background-color: #262a35;
   color: rgba(159, 226, 100, 0.95);
-  border-top: 1px solid #3a4052;
+  border-top: 1px solid #3a5552;
   border-bottom: 1px solid #3a4052;
 }
 
