@@ -29,7 +29,7 @@
       var steps = ["waiting for container", "preparing container"];
 
       var lang = document.getElementById("lang").value;
-      if (lang == "java" || lang == "dotnet") {
+      if (lang == "java" || lang == "dotnet" || lang == "scala") {
         steps.push("compiling code");
       }
 
@@ -56,7 +56,7 @@
           if (outputBody.innerHTML == stepHTML(x)) {
             stepNext(x + 1);
           }
-        }, (x + 1) * 2000);
+        }, (x + 1) * 3000);
       }
 
       stepNext(0);
