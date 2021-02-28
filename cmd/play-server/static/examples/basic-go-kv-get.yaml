@@ -1,0 +1,64 @@
+title: Key Value Get
+page: page-09
+lang: go
+code: |
+
+  package main
+
+  import (
+    "fmt"
+    "time"
+    "log"
+    "encoding/json"
+    "github.com/couchbase/gocb/v2"
+  )
+
+  func main() {
+    cluster, err := gocb.Connect("couchbase://{{.Host}}", gocb.ClusterOptions{
+      Authenticator: gocb.PasswordAuthenticator{
+        Username: "{{.CBUser}}",
+        Password: "{{.CBPswd}}",
+      },
+    })
+    if err != nil {
+      panic(err)
+    }
+
+    bucket := cluster.Bucket("travel-sample")
+    err = bucket.WaitUntilReady(5*time.Second, nil)
+    if err != nil {
+      panic(err)
+    }
+    collection := bucket.DefaultCollection()
+    result, err := collection.Get("airline_10", nil)
+    if err != nil {
+      panic(err)
+    }
+
+    type Doc struct {
+      Id int `json:"id"`
+      Type string `json:"type"`
+      Name string `json:"name"`
+      Iata string `json:"iata"`
+      Icao string `json:"icao"`
+      Callsign string `json:"callsign"`
+      Country string `json:"country"`
+    }
+
+    var document Doc
+    err = result.Content(&document)
+    if err != nil {
+      panic(err)
+    }
+    prettyJSON, err := json.MarshalIndent(document, "", "    ")
+    if err != nil {
+        log.Fatal("Failed to generate json", err)
+    }
+    fmt.Printf("%s\n", string(prettyJSON))
+
+  }
+infoAfter: |
+  Given a document's key, you can use the collection.get() method to retrieve a document from a collection.
+  <br/><br/>
+  See more at the SDK documentation on
+  <a target="_blank" href="https://docs.couchbase.com/go-sdk/current/howtos/kv-operations.html">Go Key Value Operations</a>.

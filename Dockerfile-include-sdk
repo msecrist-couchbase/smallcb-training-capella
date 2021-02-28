@@ -20,8 +20,10 @@ COPY --from=golang /go /go
 
 ENV GOPATH /go
 ENV PATH="$PATH:/usr/local/go/bin:$GOPATH/bin"
-
-RUN go version
+RUN go version && \
+    go mod init test && \
+    go get github.com/couchbase/gocb/v2
+    
 
 COPY --from=adoptopenjdk /opt/java /opt/java
 
