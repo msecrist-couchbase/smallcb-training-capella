@@ -125,6 +125,31 @@ main .info-header .header-right code {
   font-weight: normal;
 }
 
+.workspace .workspace-body .code-examples h2 {
+  margin-left: 15px;
+}
+
+.workspace .workspace-body .code-examples .pages {
+  width: 240px;
+  display: flex;
+  margin: 0 0 30px 0;
+  padding: 0 5px 5px 6px;
+  flex-wrap: wrap;
+}
+
+.workspace .workspace-body .code-examples .pages button {
+  flex-basis: 73px;
+  margin: 3px 3px;
+  border: 1px solid #262a35;
+  background-color: #262a35;
+  padding: 3px 5px 3px 5px;
+  color: rgba(159, 226, 100, 0.95);
+}
+
+.workspace .workspace-body .code-examples .pages button:focus {
+  outline: none;
+}
+
 .workspace .workspace-body .code-examples .example-nav {
   height: 100%;
   width: 240px;
@@ -147,11 +172,15 @@ main .info-header .header-right code {
 }
 .workspace .workspace-body .code-examples .example-nav ul.examples li.category {
   list-style: none;
-  padding: 0.25em;
+  padding-top: 0.25em;
+  padding-left: 8px;
   font-size: large;
 }
 .workspace .workspace-body .code-examples .example-nav ul.examples li.category:not(:first-child) {
   margin-top: 20px;
+}
+main.page-focus .workspace .workspace-body .code-examples .example-nav ul.examples li.category:not(:first-child) {
+  margin-top: 0;
 }
 .workspace .workspace-body .code-examples .example-nav ul.examples li.category a {
   display: inline-block;
@@ -234,7 +263,9 @@ main .info-header .header-right code {
 }
 
 .workspace .workspace-body .code-editor .example-frame .session-cta a {
-  margin-left: 5px;
+  display: block;
+  width: 8em;
+  margin-top: 7px;
   border-width: 1px;
   border-style: solid;
   border-radius: 4px;
@@ -242,6 +273,7 @@ main .info-header .header-right code {
   background-color: #516374;
   padding: 0.5em;
   text-decoration: none;
+  text-align: center;
   color: #FFFFFF;
 }
 
@@ -344,7 +376,8 @@ body.dark .workspace .workspace-body .code-examples .example-nav ul.examples {
 body.dark .workspace .workspace-body .code-examples .example-nav ul.examples li.category {
   background-color: #262a35;
   color: rgba(159, 226, 100, 0.95);
-  border-bottom: 4px solid #3a4052;
+  border-top: 1px solid #3a4052;
+  border-bottom: 1px solid #3a4052;
 }
 
 body.dark .workspace .workspace-body .code-examples .example-nav ul.examples li.lang:hover, 

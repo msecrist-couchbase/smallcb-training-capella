@@ -99,7 +99,7 @@
     </nav>
   </header>
 
-  <main>
+  <main id="main">
     {{if .Session}}
       <div class="info-header">
         <div class="header-left">
@@ -107,7 +107,7 @@
         </div>
         <div class="header-right">
           <div>
-            <span class="head-server">Your Couchbase Instance:</span> <code>http://{{.Host}}:8091</code>
+            <span class="head-server">Your Couchbase instance:</span> <code>http://{{.Host}}:8091</code>
             <span class="head-user">username:</span> <code>{{.Session.CBUser}}</code>
             <span class="head-pass">password:</span> <code>{{.Session.CBPswd}}</code>
           </div>
@@ -122,13 +122,12 @@
 
       {{if .Session}}
       <div class="session-info">
-        <h2>Couchbase Server Test-Drive Session &mdash; for <em>{{.Session.FullName}}</em></h2>
         <div>
-          This test-drive session will be available for a max of {{.SessionsMaxAge}}
+          Your test-drive session will be available for a max of {{.SessionsMaxAge}}
           or until there's {{.SessionsMaxIdle}} of inactivity.
         </div>
         <div>
-          Some places to start...
+          Some good starting points...
         </div>
         <div class="shots">
           <a target="_blank" href="http://{{.Host}}:8091/ui/index.html?lu={{.Session.CBUser}}&lp={{.Session.CBPswd}}">
@@ -158,17 +157,35 @@
       {{end}}
     </div>
 
-    <div class="workspace">
+    <div class="workspace" id="workspace">
       <div class="workspace-body">
         <div class="code-examples">
           <h2>Examples</h2>
+
           <div class="div-hr">
-            <hr />
+            <hr/>
           </div>
+
+          <div class="pages">
+            {{range $i, $v := .Examples}}
+              {{if not .code}}
+                <button class="{{.page}}"
+                        onclick="pageToggle('{{.page}}')">
+                  {{.title}}
+                </button>
+                <style>
+                  main.{{.page}} .workspace .workspace-body .code-examples .pages button.{{.page}} {
+                    border: 1px solid rgba(159, 226, 100, 0.95);
+                  }
+                </style>
+              {{end}}
+            {{end}}
+          </div>
+
           <div class="example-nav">
             <ul class="examples">
               {{range $i, $v := .Examples}}
-              <li class="{{if .className}}{{.className}} {{end}}{{if .lang}}lang {{.lang}} {{.page}}{{else}}category{{end}}{{if eq .name $.Name}} current{{end}}">
+              <li class="{{if .className}}{{.className}} {{end}}{{if .lang}}lang {{.lang}}{{else}}category{{end}} {{.page}}{{if eq .name $.Name}} current{{end}}">
                 {{if .code}}
                   <a href="/{{$.ExamplesPath}}/{{.name}}{{if $.Session}}?s={{$.Session.SessionId}}{{end}}"
                      id="ex-{{.name}}">
@@ -185,6 +202,16 @@
                   {{end}}
                 {{end}}
               </li>
+
+              <style>
+                main.page-focus .workspace .workspace-body .code-examples .example-nav .examples li.{{.page}} {
+                  display: none;
+                }
+                main.page-focus.{{.page}} .workspace .workspace-body .code-examples .example-nav .examples li.{{.page}} {
+                  display: block;
+                }
+              </style>
+
               {{end}}
             </ul>
           </div>
@@ -222,7 +249,8 @@
                 {{if ne .Code "NONE"}}
                   <div id="code-ace" class="code-ace"></div>
 
-                  <textarea id="code" name="code" class="code" wrap="off" autocorrect="off"
+                  <textarea id="code" name="code" class="code"
+                    wrap="off" autocorrect="off"
                     autocomplete="off" autocapitalize="off"
                     spellcheck="false">{{.Code}}</textarea>
                 {{end}}
@@ -283,9 +311,11 @@
       {{end}}
     </div>
   </footer>
+
   {{if .Session}}
     <script src="/static/scripts/infoPanel.js"></script>
   {{end}}
+
   <script>
     var codeAce = ace.edit("code-ace");
     codeAce.getSession().setValue(document.getElementById("code").value);
@@ -296,6 +326,7 @@
       codeAce.setOption("mode", "ace/mode/{{.LangAce}}");
     {{end}}
   </script>
+
   <script>
     var scrollTop = parseInt(localStorage.getItem('scrollTop')) || 0;
     if (scrollTop > 0) {
@@ -305,6 +336,24 @@
     window.addEventListener('unload', function() {
       localStorage.setItem('scrollTop', document.scrollingElement.scrollTop || 0);
     });
+  </script>
+
+  <script>
+    function pageToggle(page) {
+      var main = document.getElementById("main");
+      if (main.className != page + " page-focus") {
+        main.className = page + " page-focus";
+        localStorage.setItem('page', page);
+      } else {
+        main.className = "";
+        localStorage.setItem('page', '');
+      }
+    }
+
+    var page = localStorage.getItem('page');
+    if (page) {
+      pageToggle(page);
+    }
   </script>
 </body>
 </html>
