@@ -94,7 +94,6 @@ TODO's...
 how about staging?
   first "real" staging setup on cloud?
 
-
 need a "down for maintenance" static web page path or toggle?
 
 roughly, how much will it cost?
@@ -343,6 +342,11 @@ race / raciness in N1QL server where the running of user code
 
   0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
   100   329  100   222  100   107   1190    573 --:--:-- --:--:-- --:--:--  1193
+
+proxy inject guided tour JS?
+  https://introjs.com/
+  or equivalents
+  or copy-snippet of code
 
 --------------------------
 DONE: store logs on S3? - DONE: by Denis.
@@ -639,7 +643,7 @@ see: https://news.ycombinator.com/item?id=24341867
   sysstat counters)
 
 - glances/nmon/dstat/iptraf-ng (pretty monitoring CLI-GUI utils with
-  more colors)
+  more color)
 
 - docker stats (htop equivalent for docker containers)
 
