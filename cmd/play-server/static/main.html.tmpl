@@ -351,5 +351,22 @@
       pageToggle(page);
     }
   </script>
+
+  <script>
+    var otfixN = 0;
+
+    function otfix() {
+      var el = document.getElementsByClassName("onetrust-pc-dark-filter").item(0);
+      if (el != null) {
+        el.style = "z-index: -1;";
+      } else if (otfixN < 100) {
+        otfixN += 1;
+
+        setTimeout(otfix, 100);
+      }
+    }
+
+    otfix();
+  </script>
 </body>
 </html>
