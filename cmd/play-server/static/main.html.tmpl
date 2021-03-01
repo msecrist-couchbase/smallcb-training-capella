@@ -17,6 +17,8 @@
   <script src="/static/ace/src-min/ace.js"></script>
   <script>
     function onRunSubmit() {
+      document.getElementById("form").className = "run-submitted";
+
       document.getElementById("code").value = codeAce.getSession().getValue();
 
       document.getElementsByTagName("body")[0].style.color = "#fff";
@@ -51,6 +53,8 @@
           if (outputBody.innerHTML == stepHTML(x)) {
             stepNext(x + 1);
           }
+
+          document.getElementById("form").className = "";
         }, (x + 1) * 3000);
       }
 
@@ -215,7 +219,7 @@
 
         <div class="code-editor">
           <div class="sticky">
-            <form action="/run" method="post" target="output">
+            <form action="/run" method="post" target="output" id="form">
               {{if or .Name .Lang .Code}}
               <h2>
                 {{if .Lang}}
@@ -227,7 +231,7 @@
 
                 {{if ne .Code "NONE"}}
                   <input type="submit" value="run &gt;&gt;" class="run" id="run"
-                       onclick="return onRunSubmit()"/>
+                         onclick="return onRunSubmit()"/>
                 {{end}}
               </h2>
 

@@ -147,6 +147,10 @@ main .info-header .header-right code {
   cursor: pointer;
 }
 
+.workspace .workspace-body .code-examples .pages button:hover {
+  background-color: #333a32;
+}
+
 .workspace .workspace-body .code-examples .pages button:focus {
   outline: none;
 }
@@ -414,13 +418,16 @@ body.dark .workspace .workspace-body .code-editor input.run {
   border-style: solid;
   border-radius: 4px;
   border-color: #516374;
-  background-color: #516374;
-  color: #FFFFFF;
+  background-color: #262a35;
+  color: rgba(159, 226, 100, 0.95);
 }
 body.dark .workspace .workspace-body .code-editor input.run:hover {
-  border-color: #516374;
-  background-color: #778fa7;
-  color: #EFEFEF;
+  background-color: #333a32;
+}
+
+body.dark .workspace .workspace-body .code-editor form.run-submitted input.run {
+  border-color: rgba(159, 226, 100, 0.95);
+  background-color: #333a32;
 }
 
 body.dark .workspace .workspace-body .code-output iframe.output {
