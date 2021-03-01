@@ -10,6 +10,7 @@ code: |
 
     $bucket = $cluster->bucket("travel-sample");
     $collection = $bucket->defaultCollection();
+
     try {
       $result = $collection->lookupIn("airport_1254", [new \Couchbase\LookupGetSpec("geo.alt")]);
       $alt = $result->content(0);
@@ -19,7 +20,6 @@ code: |
     } catch (\Couchbase\BaseException $ex) {
       print("Exception $ex\n");
     }
-
   ?>
 infoAfter: |
   The Sub-document API allows for retrieving or mutating a portion of

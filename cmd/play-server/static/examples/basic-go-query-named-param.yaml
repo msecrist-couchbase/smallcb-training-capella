@@ -30,7 +30,6 @@ code: |
       panic(err)
     }
     
-    
     params := make(map[string]interface{}, 1)
     params["type"] = "hotel"
     results, err := cluster.Query("SELECT x.* FROM `travel-sample` x WHERE x.`type`=$type LIMIT 10;", 

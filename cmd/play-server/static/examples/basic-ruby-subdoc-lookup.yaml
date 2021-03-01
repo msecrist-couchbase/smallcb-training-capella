@@ -15,7 +15,7 @@ code: |
 
   begin
     result = collection.lookup_in("airport_1254", 
-              [ LookupInSpec.get("geo.alt")])
+                                  [LookupInSpec.get("geo.alt")])
     puts "Altitude = #{result.content(0)}"
   rescue Couchbase::Error::PathNotFound => pnfe
     puts "Sub-doc path not found!"

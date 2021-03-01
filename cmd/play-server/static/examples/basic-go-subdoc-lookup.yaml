@@ -31,7 +31,7 @@ code: |
 
     options := []gocb.LookupInSpec{
       gocb.GetSpec("geo.alt", &gocb.GetSpecOptions{}),
-      }
+    }
     results, err := collection.LookupIn("airport_1254", options, &gocb.LookupInOptions{})
     if err != nil {
       panic(err)
@@ -42,6 +42,7 @@ code: |
     if err != nil {
       panic(err)
     }
+
     fmt.Printf("Altitude = %g", alt)
   }
 infoAfter: |

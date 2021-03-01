@@ -28,6 +28,7 @@ code: |
       panic(err)
     }
     collection := bucket.DefaultCollection()
+
     type Doc struct {
       Id int `json:"id"`
       Type string `json:"type"`
@@ -66,6 +67,7 @@ code: |
     if err != nil {
       panic(err)
     }
+
     fmt.Printf("New document name: %s\n", country)
   }
 infoAfter: |

@@ -29,6 +29,7 @@ code: |
     if err != nil {
       panic(err)
     }
+
     collection := bucket.DefaultCollection()
     result, err := collection.Get("airline_10", nil)
     if err != nil {
@@ -50,12 +51,13 @@ code: |
     if err != nil {
       panic(err)
     }
+
     prettyJSON, err := json.MarshalIndent(document, "", "    ")
     if err != nil {
         log.Fatal("Failed to generate json", err)
     }
-    fmt.Printf("%s\n", string(prettyJSON))
 
+    fmt.Printf("%s\n", string(prettyJSON))
   }
 infoAfter: |
   Given a document's key, you can use the collection.get() method to retrieve a document from a collection.

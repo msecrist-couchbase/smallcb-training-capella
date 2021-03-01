@@ -23,7 +23,7 @@ code: |
         }
       case Failure(err: DocumentNotFoundException) => println("Document not found")
       case Failure(err: CouchbaseException) => println("Couchbase error: " + err)
-      case Failure(err)    => println("Error getting document: " + err)
+      case Failure(err) => println("Error getting document: " + err)
     }
   }
 infoAfter: |

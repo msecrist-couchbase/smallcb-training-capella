@@ -15,12 +15,12 @@ code: |
 
   begin
     content = {"country" => "Iceland", 
-                  "callsign" => "ICEAIR",
-                  "iata" => "FI",
-                  "icao" => "ICE",
-                  "id" => 123,
-                  "name" => "Icelandair",
-                  "type" => "airline"}
+               "callsign" => "ICEAIR",
+               "iata" => "FI",
+               "icao" => "ICE",
+               "id" => 123,
+               "name" => "Icelandair",
+               "type" => "airline"}
     collection.upsert("airline_123", content)
     result = collection.lookup_in("airline_123", [ LookupInSpec.get("name")])
     puts "New Document name: #{result.content(0)}"

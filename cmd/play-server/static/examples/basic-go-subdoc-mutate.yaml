@@ -30,7 +30,7 @@ code: |
     collection := bucket.DefaultCollection()
 
     options := []gocb.LookupInSpec{
-    gocb.GetSpec("country", &gocb.GetSpecOptions{}),
+      gocb.GetSpec("country", &gocb.GetSpecOptions{}),
     }
     results, err := collection.LookupIn("airline_10", options, &gocb.LookupInOptions{})
     if err != nil {
@@ -42,11 +42,12 @@ code: |
     if err != nil {
       panic(err)
     }
+
     fmt.Printf("Sub-doc before: %s\n", country)
 
     mops := []gocb.MutateInSpec{
       gocb.UpsertSpec("country", "Canada", &gocb.UpsertSpecOptions{}),
-      }
+    }
     _, merr := collection.MutateIn("airline_10", mops, &gocb.MutateInOptions{ Timeout: 10050 * time.Millisecond,})
     if merr != nil {
       panic(merr)
@@ -54,7 +55,7 @@ code: |
 
     options = []gocb.LookupInSpec{
       gocb.GetSpec("country", &gocb.GetSpecOptions{}),
-      }
+    }
     results, err = collection.LookupIn("airline_10", options, &gocb.LookupInOptions{})
     if err != nil {
       panic(err)
@@ -64,9 +65,9 @@ code: |
     if err != nil {
       panic(err)
     }
+
     fmt.Printf("Sub-doc after: %s\n", country)
-    
-    }
+  }
 infoAfter: |
   The Sub-document API allows for retrieving or mutating a portion of
   a larger document, without having to first retrieve the entire document,

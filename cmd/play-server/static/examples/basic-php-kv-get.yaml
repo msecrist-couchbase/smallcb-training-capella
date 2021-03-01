@@ -18,7 +18,6 @@ code: |
         print("Document does not exist\n");
     }
   ?>
-
 infoAfter: |
   Given a document's key, you can use the collection.get() method to retrieve a document from a collection.
   <br/><br/>

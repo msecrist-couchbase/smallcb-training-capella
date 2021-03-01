@@ -30,7 +30,6 @@ code: |
       panic(err)
     }
     
-    
     params := []interface{}{"hotel"}
     results, err := cluster.Query("SELECT x.* FROM `travel-sample` x WHERE x.`type`=$1 LIMIT 10;", 
                                       &gocb.QueryOptions{PositionalParameters: params})
