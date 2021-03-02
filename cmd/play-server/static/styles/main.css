@@ -392,6 +392,7 @@ body.dark .workspace .workspace-body .code-examples .example-nav ul.examples li.
 body.dark .workspace .workspace-body .code-examples .example-nav ul.examples li.current {
   color: #4c5863;
   background-color: #3F4858;
+  border-left: 2px solid rgba(159, 226, 100, 0.95);
 }
 
 body.dark .workspace .workspace-body .code-editor .sticky .empty-example-frame {

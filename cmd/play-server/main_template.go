@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"sort"
+	"strconv"
 	"strings"
 	textTemplate "text/template"
 	"time"
@@ -63,6 +64,8 @@ type MainTemplateData struct {
 
 	AnalyticsHTML template.HTML
 	OptanonHTML   template.HTML
+
+	PageColor func(string) string
 }
 
 func MainTemplateEmit(w http.ResponseWriter,
@@ -159,6 +162,29 @@ func MainTemplateEmit(w http.ResponseWriter,
 
 		AnalyticsHTML: template.HTML(AnalyticsHTML(hostIn)),
 		OptanonHTML:   template.HTML(OptanonHTML(hostIn)),
+
+		PageColor: func(page string) string { // Ex: {{pageColor "page-02"}}
+			n, _ := strconv.Atoi(strings.Split(page, "-")[1])
+			n = n - 1
+			if n < 0 {
+				n = 0
+			}
+
+			r := 46 + n*2
+			if r > 255 {
+				r = 255
+			}
+			g := 52 + n*2
+			if g > 255 {
+				g = 255
+			}
+			b := 64 + n*2
+			if b > 255 {
+				b = 255
+			}
+
+			return fmt.Sprintf("%2x%2x%2x", r, g, b)
+		},
 	}
 
 	if view != "" {

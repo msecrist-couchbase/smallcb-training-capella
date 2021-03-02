@@ -8,8 +8,8 @@
   <link rel="stylesheet" type="text/css" href="/static/styles/icons.css">
   <style>
     {{if not .Session}}
-    .needs-session {
-      display: none;
+    body .needs-session {
+      display: none !important;
     }
     {{end}}
   </style>
@@ -204,6 +204,9 @@
               </li>
 
               <style>
+                main .workspace .workspace-body .code-examples .example-nav .examples li.{{.page}} {
+                  background-color: #{{call $.PageColor .page}};
+                }
                 main.page-focus .workspace .workspace-body .code-examples .example-nav .examples li.{{.page}} {
                   display: none;
                 }
