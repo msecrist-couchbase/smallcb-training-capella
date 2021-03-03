@@ -16,25 +16,36 @@
 </style>
 <script type="text/javascript">
 (function () {
+  var checkPlayLoginN = 0;
+
   function checkPlayLogin() {
-    var eu = document.getElementById("auth-username-input");
-    if (eu && eu.value == "") {
-      var ep = document.getElementById("auth-password-input");
-      if (ep && ep.value == "") {
-        var params = new URLSearchParams(document.location.search.substring(1));
+    checkPlayLoginN += 1;
+    if (checkPlayLoginN > 100) {
+      return;
+    }
 
-        var lu = params.get("lu");
-        var lp = params.get("lp");
+    var params = new URLSearchParams(document.location.search.substring(1));
 
-        if (lu != "" && lp != "") {
+    var lu = params.get("lu");
+    var lp = params.get("lp");
+
+    if (lu != "" && lp != "") {
+      var eu = document.getElementById("auth-username-input");
+      if (eu && eu.value == "") {
+        var ep = document.getElementById("auth-password-input");
+        if (ep && ep.value == "") {
           eu.value = lu;
           ep.value = lp;
 
           // Poke angularJS event handlers.
           eu.dispatchEvent(new InputEvent("input"));
           ep.dispatchEvent(new InputEvent("input"));
+
+          return;
         }
       }
+
+      setTimeout(checkPlayLogin, 200);
     }
   }
 
@@ -42,29 +53,36 @@
     if (!document.body) { return; }
 
     var el = document.createElement("div");
-    el.id = "playBox";
-    el.className = "playBox";
+
+    el.id = el.className = "playBox";
+
     el.innerHTML =
       {{if .SessionId}}
-      '<a href="http://{{.Host}}:{{.PortApp}}/?s={{.SessionId}}">'+
-        'Couchbase Playground</a>';
+        '<a href="http://{{.Host}}:{{.PortApp}}/?s={{.SessionId}}">'+
+          'Couchbase Playground</a>';
       {{else}}
         'Couchbase Playground';
       {{end}}
+
     document.body.appendChild(el);
 
-    setTimeout(checkPlayLogin, 1500);
+    setTimeout(checkPlayLogin, 200);
   }
 
+  var checkPlayBoxN = 0;
+
   function checkPlayBox() {
+    checkPlayBoxN += 1;
+    if (checkPlayBoxN > 20) {
+      return;
+    }
+
     var el = document.getElementById("playBox");
     if (!el) {
       createPlayBox();
-
-      setTimeout(checkPlayBox, 1000);
-    } else {
-      setTimeout(checkPlayBox, 10000);
     }
+
+    setTimeout(checkPlayBox, 500);
   }
 
   checkPlayBox();
