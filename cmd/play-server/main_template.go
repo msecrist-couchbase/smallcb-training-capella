@@ -294,7 +294,7 @@ func ReadExamples(dir string) (
 
 		iex, jex := examples[iname], examples[jname]
 
-		for _, k := range []string{"chapter", "page", "title"} {
+		for _, k := range []string{"chapter", "page", "title-order", "title"} {
 			iv := MapGetString(iex, k)
 			jv := MapGetString(jex, k)
 

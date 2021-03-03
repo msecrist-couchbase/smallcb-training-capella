@@ -1,0 +1,19 @@
+title: More Online Tools
+title-order: zzz
+page: page-10
+lang: NONE
+code: NONE
+infoAfter: |
+  More online tools for you to try...
+  <br/><br/>
+  <a href="https://query-tutorial.couchbase.com/"
+     style="margin-left: 10px;"
+     target="_blank">
+    Online N1QL Tutorial<svg width="24px" height="16px" viewBox="0 0 24 24"><g id="external_link" class="icon_svg-stroke" stroke="#666" stroke-width="1.5" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 13.5 17 19.5 5 19.5 5 7.5 11 7.5"></polyline><path d="M14,4.5 L20,4.5 L20,10.5 M20,4.5 L11,13.5"></path></g></svg>
+  </a>
+  <br/><br/>
+  <a href="https://index-advisor.couchbase.com/indexadvisor/"
+     style="margin-left: 10px;"
+     target="_blank">
+    Online N1QL Index Advisor<svg width="24px" height="16px" viewBox="0 0 24 24"><g id="external_link" class="icon_svg-stroke" stroke="#666" stroke-width="1.5" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 13.5 17 19.5 5 19.5 5 7.5 11 7.5"></polyline><path d="M14,4.5 L20,4.5 L20,10.5 M20,4.5 L11,13.5"></path></g></svg>
+  </a>
