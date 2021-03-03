@@ -106,7 +106,10 @@
         </div>
         <div class="header-right">
           <div>
-            <span class="head-server">Your Couchbase instance:</span> <code>http://{{.Host}}:8091</code>
+            <span class="head-server">Your Couchbase instance:</span>
+            <code><a href="http://{{.Host}}:8091/ui/index.html?lu={{.Session.CBUser}}&lp={{.Session.CBPswd}}"
+                     target="_blank">http://{{.Host}}:8091</a>
+            </code>
             <span class="head-user">username:</span> <code>{{.Session.CBUser}}</code>
             <span class="head-pass">password:</span> <code>{{.Session.CBPswd}}</code>
           </div>
@@ -122,7 +125,7 @@
       {{if .Session}}
       <div class="session-info">
         <div>
-          Your test-drive session will be available for a max of {{.SessionsMaxAge}}
+          Your test-drive session will end after {{.SessionsMaxAge}}
           or until there's {{.SessionsMaxIdle}} of inactivity.
         </div>
         <div>

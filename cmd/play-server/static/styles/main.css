@@ -40,12 +40,12 @@
   height: 70px;
   margin-top: 4px;
   margin-left: 4px;
-  border-width: 1px;
+  border-width: 3px;
   border-style: solid;
   border-color: #777;
 }
 .session-info .shots a:hover div {
-  border-color: #ccc;
+  border-color: #bbb;
 }
 .session-info .shots a div img {
   position: absolute;
@@ -65,7 +65,10 @@ main .info-header {
   flex-direction: rows;
 }
 
-main .info-header a {
+main .info-header .header-left {
+  height: 35px;
+}
+main .info-header .header-left a {
   display: flex;
   align-items: center;
   justify-content: left;
@@ -85,9 +88,6 @@ main .info-header a {
   font-size: 12px;
 }
 
-main .info-header .header-left {
-  height: 35px;
-}
 main .info-header .header-right {
   padding-top: 9px;
   height: 25px;
@@ -98,11 +98,7 @@ main .info-header .header-right {
 main .info-header .header-right .head-server {
   font-size: 16px;
 }
-main .info-header .header-right .head-user {
-  margin-left: 1em;
-  font-size: 16px;
-  font-weight: 500;
-}
+main .info-header .header-right .head-user,
 main .info-header .header-right .head-pass {
   margin-left: 1em;
   font-size: 16px;
@@ -110,6 +106,7 @@ main .info-header .header-right .head-pass {
 }
 main .info-header .header-right code {
   font-style: italic;
+  color: #bbb;
 }
 
 .workspace .workspace-body {
@@ -361,16 +358,20 @@ body.dark main .info-header {
 
 body.dark main .info-header a {
   background-color: #262a35;
-  color: #FFFFFF;
+  color: #aaa;
 }
 body.dark main .info-header a:hover,
 body.dark main .info-header a:focus {
-  background-color: #526373;
   color: #EFEFEF;
 }
 
 body.dark main .info-header .header-right .head-server {
   color: rgba(159, 226, 100, 0.95);
+}
+
+body.dark main .info-header .header-right .head-user,
+body.dark main .info-header .header-right .head-pass {
+  color: #aaa;
 }
 
 body.dark .workspace .workspace-body .code-examples .example-nav ul.examples {
