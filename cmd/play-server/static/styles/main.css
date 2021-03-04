@@ -173,16 +173,11 @@ main .info-header .header-right code {
   padding: 4px;
 }
 .workspace .workspace-body .code-examples .example-nav ul.examples li.category {
+  margin-top: 20px;
   list-style: none;
   padding-top: 0.25em;
   padding-left: 8px;
   font-size: large;
-}
-.workspace .workspace-body .code-examples .example-nav ul.examples li.category:not(:first-child) {
-  margin-top: 20px;
-}
-main.page-focus .workspace .workspace-body .code-examples .example-nav ul.examples li.category:not(:first-child) {
-  margin-top: 0;
 }
 .workspace .workspace-body .code-examples .example-nav ul.examples li.category a {
   display: inline-block;
@@ -374,10 +369,11 @@ body.dark main .info-header .header-right .head-pass {
   color: #aaa;
 }
 
-body.dark .workspace .workspace-body .code-examples .example-nav ul.examples {
-  border-color: #262935;
+body.dark .workspace .workspace-body .code-examples .example-nav ul.examples li {
+  border-color: #1f282c;
   border-width: 1px;
   border-style: solid;
+  border-top: none;
 }
 body.dark .workspace .workspace-body .code-examples .example-nav ul.examples li.category {
   background-color: #262a35;

@@ -171,7 +171,7 @@
           <div class="pages">
             {{range $i, $v := .Examples}}
               {{if not .code}}
-                <button class="{{.page}}"
+                <button class="{{if .className}}{{.className}} {{end}}{{.page}}"
                         onclick="pageToggle('{{.page}}')">
                   {{.title}}
                 </button>
