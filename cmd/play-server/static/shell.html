@@ -26,8 +26,12 @@
     <div class="col shell">
       <div>
         <about>
-          <a href="https://couchbase.sh">Couchbase Shell</a> session:
-          <span class="hint">To start a quick tutorial, please type '<code>tutorial</code>'.</span>
+          <a href="https://couchbase.sh">Couchbase Shell</a>:
+          <span class="hint">
+            To start a tutorial, please type <code>tutorial</code>
+            &nbsp;
+            and, also try <code>help</code>
+          </span>
         </about>
       </div>
       <iframe id="shell">loading...</iframe>
@@ -45,7 +49,7 @@ body {
   color: #ddd;
 }
 a, a:visited {
-  color: #ddd;
+  color: #999;
 }
 h1 {
   font-size: 12pt;
@@ -75,18 +79,21 @@ main {
   flex-basis: 40vh;
 }
 .col iframe {
+  margin-top: 5px;
   flex-grow: 10;
   flex-basis: 100%;
+  padding: 5px 5px 5px 5px;
 }
 
 .hint {
   margin-left: 20px;
-  color: #777;
+  color: #fff;
 }
 .hint code {
+  margin-left: 2px;
   background-color: #111;
-  padding-left: 4px;
-  padding-right: 4px;
+  padding-left: 2px;
+  padding-right: 2px;
   font-family: Menlo, Consolas, "Liberation Mono", Monaco, "Lucida Console", monospace;
   color: #696;
 }
@@ -100,6 +107,11 @@ body.hide button.show {
 body.hide button.hide {
   display: none;
 }
+body button.show,
+body button.hide {
+  cursor: pointer;
+}
+
 body.hide .col.docs {
   flex-grow: 1;
   flex-basis: 1em;
