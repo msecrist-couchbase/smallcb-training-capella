@@ -39,21 +39,15 @@
           Your session will expire after {{.SessionsMaxAge}} total or after {{.SessionsMaxIdle}} of inactivity.
         </p>
         <p>
-          A test-drive session is intended for "tire-kicking" and learning by developers.
-        </p>
-        <p>
-          <b>NEVER</b> keep important or private data on this test-drive instance.
-        </p>
-        <p>
           Let's get started...
         </p>
 
         <form action="/session" method="post" autocomplete="off">
-          <label> Full Name:
+          <label> Your Name:
             <span class="error">{{.errFullName}}</span>
             <input type="text" name="fullName" value="{{.fullName}}" autofocus/>
           </label>
-          <label> Email:
+          <label> Your Email:
             <span class="error">{{.errEmail}}</span>
             <input type="text" name="email" value="{{.email}}"/>
           </label>
@@ -74,10 +68,6 @@
             </div>
           </div>
 
-          <div class="details">
-            (we won't sell your contact info to spammers, etc)
-          </div>
-
           {{if .err}}
             <div class="error">{{.err}}</div>
           {{end}}
@@ -86,6 +76,16 @@
             <input type="hidden" name="e" value="{{.e}}"/>
           {{end}}
         </form>
+
+        <p>
+          We won't sell your contact info to spammers, etc.
+        </p>
+        <p>
+          A test-drive session is intended for "tire-kicking" and learning by developers.
+        </p>
+        <p>
+          Do NOT put important data into a test-drive session.
+        </p>
       </section>
     </article>
   </main>

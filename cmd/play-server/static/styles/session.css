@@ -46,6 +46,10 @@ article > header {
   height: 1.8em;
 }
 
+form {
+  margin-bottom: 30px;
+}
+
 form span.err {
   margin-top: 10px;
   font-weight: bold;
