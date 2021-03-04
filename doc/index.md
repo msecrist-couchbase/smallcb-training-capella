@@ -1,15 +1,23 @@
-# Couchbase.Live - AWS Environment
+# Couchbase Playground - Production / AWS Environment
 
-The project is deployed on the Developer Advocates account in the N. California region (us-west-1) on AWS.
+The project is deployed on the Developer Advocates (cb-advocates)
+account in the N. California region (us-west-1) on AWS.
 
+## How to deploy a new version of Couchbase Playground
 
-## How to Deploy a new Version of Couchbase.Live
+After you have merged your changes to the "production" branch of
+github.com/couchbaselabs/smallcb, go to
+https://us-west-1.console.aws.amazon.com/ec2/v2/home?region=us-west-1#Instances,
+select the oldest instance called *CouchbaseLive* and choose "Instance
+State" --> "Terminate Instance".
 
-After you have merged your changes to the "Production" branch, go to https://us-west-1.console.aws.amazon.com/ec2/v2/home?region=us-west-1#Instances, select the oldest instance called *CouchbaseLive* and choose "Instance State" --> "Terminate Instance".
+The instance will be terminated and a new replacement will be soon
+launched automatically (thanks to an auto scaling group). This new
+instance will automatically pull the latest version of the production
+branch and should be live and responsive in ~30 minutes.
 
-The instance will be terminated and a new one is launched automatically (thanks to auto scaling groups ). This new instance will automatically pull the latest version of the production branch and should be live and responsive in ~20 minutes.
-
-You can check the state of the init script in the file "/tmp/couchbase-live.log". Just run the following commands:
+You can check the state of the init script in the file
+"/tmp/couchbase-live.log". Just run the following commands:
 
 ```
 ssh -i smallcbkey.pem ubuntu@PUBLIC_IP
@@ -26,11 +34,14 @@ If you don't have the pem file yet, ask one of the project maintainers.
 * Improve security: limit credentials, close ports, etc.
 * Run play-server as ubuntu instead of root.
 * Define an automatic scaling strategy for the AutoScaling Group;
-
+* Staging instances.
+* Other production variations -- such as for a conference, or for a different use case (N1QL training day).
 
 ## VPC
 
-The project has one VPC called [vpc_smallcb](https://us-west-1.console.aws.amazon.com/vpc/home?region=us-west-1#VpcDetails:VpcId=vpc-086fe1d28c168c0de) with 2 subnets:
+The project has one VPC called
+[vpc_smallcb](https://us-west-1.console.aws.amazon.com/vpc/home?region=us-west-1#VpcDetails:VpcId=vpc-086fe1d28c168c0de)
+with 2 subnets:
 
 * small-house-subnet: 
     * CIDR: 10.0.1.0/24
@@ -44,17 +55,21 @@ The project has one VPC called [vpc_smallcb](https://us-west-1.console.aws.amazo
     
 Both subnets are using the Internet Gateway *small_house_gateway*.
 
-
 ## EC2 Config
 
-Currently we are using *t2.xlarge* with 14 containers each. It seems to be the max number of containers for 16Gb, anything above that makes the machine to become unresponsive after a few requests.
+Currently we are using *t2.xlarge* with 10 containers each, where this
+number needs tuning. Cranking up the # of containers may make the
+machine unresponsive after a few requests.
 
-The project is using ec2 instances with auto-scaling groups. Each node is designed to be ephemeral, and should be killed after a few days to avoid any potential security flaws.
-
+The project is using ec2 instances with an auto-scaling group. Each
+node is designed to be ephemeral, and should be killed after a few
+days to avoid any potential security flaws or abuse.
 
 ### Launch Template
 
-The Launch Template is called [CouchbaseLiveProd](https://us-west-1.console.aws.amazon.com/ec2/v2/home?region=us-west-1#LaunchTemplateDetails:launchTemplateId=lt-0ed030296162e22eb). Here is the whole template config:
+The Launch Template is called
+[CouchbaseLiveProd](https://us-west-1.console.aws.amazon.com/ec2/v2/home?region=us-west-1#LaunchTemplateDetails:launchTemplateId=lt-0ed030296162e22eb)
+or lt-0ed030296162e22eb. Here is the whole template config:
 
 ![AWS EC2 Template](imgs/us-west-1-console-aws-amazon-ec2-v2-home-2020-11-23-15_03_13.png "AWS EC2 Template")
 
@@ -75,7 +90,7 @@ su - ubuntu
 #Adjust logrotate config to split files on 500k chunks
 sed -i 's/1k/500k/' /home/ubuntu/smallcb-logrotate.conf 
 
-#Adjust crontab to run as the ubuntu and every 30 minutes
+#Adjust crontab to run as the ubuntu user and every 30 minutes
 sudo sed -i 's/root\tlogrotate/ubuntu\tsudo logrotate/' /etc/crontab
 sudo sed -i 's/5  \*/*\/30  \*/' /etc/crontab
 
@@ -103,7 +118,7 @@ sudo -u ubuntu git pull
 
 #Install SmallCb
 sudo -u ubuntu make build
-sudo -u ubuntu  make create
+sudo -u ubuntu make create
 go get ./...
 make play-server
 chown ubuntu play-server
@@ -114,18 +129,24 @@ SUBDOMAIN="cb-${array[2]}${array[3]}.couchbase.live"
 echo "Subdomain of this node = $SUBDOMAIN"
 
 #Start SmallCb
-./play-server -host "$SUBDOMAIN"  -containers=10 -codeDuration=15s -containersSingleUse=2 -restarters=5 &> nohup.out &
+./play-server -host "$SUBDOMAIN" -containers=10 -sessionsMaxAge=35m0s -codeDuration=30s -containersSingleUse=2 -restarters=5 &> nohup.out &
 ```
 
-*IMPORTANT:* This script run as "root". For some reason when we tried to run play-server with the "ubuntu" user, we got some permission errors. This still is an issue that should be fixed in the future.
+*IMPORTANT:* This script run as "root". For some reason when we tried
+to run play-server with the "ubuntu" user, we got some permission
+errors. This still is an issue that should be fixed in the future.
 
 ### Auto Scaling Groups
 
-The AutoScaling group is called [couchbase_live](https://us-west-1.console.aws.amazon.com/ec2autoscaling/home?region=us-west-1#/details/couchbase_live?view=details). It uses the *CouchbaseLiveProd* template and deploy instances on both *small-house-subnet* and *small-house-subnet2*.
+The AutoScaling group is called
+[couchbase_live](https://us-west-1.console.aws.amazon.com/ec2autoscaling/home?region=us-west-1#/details/couchbase_live?view=details). It
+uses the *CouchbaseLiveProd* template and deploy instances on both
+*small-house-subnet* and *small-house-subnet2*.
 
 ### Load Balancer
 
-The load balancer is called [CouchbaseLiveLB](https://us-west-1.console.aws.amazon.com/ec2/v2/home?region=us-west-1#LoadBalancers:sort=loadBalancerName).
+The load balancer is called
+[CouchbaseLiveLB](https://us-west-1.console.aws.amazon.com/ec2/v2/home?region=us-west-1#LoadBalancers:sort=loadBalancerName).
 
 Here are some important details:
 
@@ -133,12 +154,13 @@ Here are some important details:
 * Port 80 on the root domain is forwarded to 443
 * SSL is not enforced on the subdomains
 * Health checks are made on "NODE_IP/static/test.txt" . This path is configured in the target Group [CouchbaseLiveTargetGroup](https://us-west-1.console.aws.amazon.com/ec2/v2/home?region=us-west-1#TargetGroup:targetGroupArn=arn:aws:elasticloadbalancing:us-west-1:598307997273:targetgroup/CouchbaseLiveTargetGroup/b64dacd393872b94)
-
  
 ### Logs
 
-We use [logrotate](https://linux.die.net/man/8/logrotate) to rotate the logs in each instance. The config is at "/home/ubuntu/smallcb-logrotate.conf" and it is executed every 30 mins via crontab.
-Here is its content:
+We use [logrotate](https://linux.die.net/man/8/logrotate) to rotate
+the logs in each instance. The config is at
+"/home/ubuntu/smallcb-logrotate.conf" and it is executed every 30 mins
+via crontab.  Here is its content:
 
 ```
 # see "man logrotate" for details
@@ -160,7 +182,6 @@ create
 
 # packages drop log rotation information into this directory
 #include /etc/logrotate.d
-
 
 # system-specific logs may be configured here
 
@@ -188,19 +209,24 @@ create
     FORMAT=`date "+%Y%m%d"`
     aws s3 sync /home/ubuntu/smallcb/rotated "s3://$BUCKET/${INSTANCE_ID}_${HOSTNAME}/$YEAR/$MONTH/$DAY/" --region $REGION --exclude "*" --include "*.out-$FORMAT*"
   endscript
-
 }
 ```
 
-Note that we are pushing the logs to a bucket called [couchbaselive](https://s3.console.aws.amazon.com/s3/buckets/couchbaselive?region=us-west-1&tab=objects)
+Note that we are pushing the logs to a bucket called
+[couchbaselive](https://s3.console.aws.amazon.com/s3/buckets/couchbaselive?region=us-west-1&tab=objects)
 
 ## Dynamic DNS
 
-Whenever a new instance is deployed inside the *vpc_smallcb* VPC, we automatically assign a new subdomain to it on Route53. Once the instance is terminated, we automatically remove the subdomain entry.
+Whenever a new instance is deployed inside the *vpc_smallcb* VPC, we
+automatically assign a new subdomain to it on Route53. Once the
+instance is terminated, we automatically remove the subdomain entry.
 
 ### Cloud Watch
 
-The Rule [CouchbaseLiveWatch](https://us-west-1.console.aws.amazon.com/cloudwatch/home?region=us-west-1#rules:name=CouchbaseLiveWatch) will listen to events of new nodes being launched or terminated on *vpc_smallcb*. 
+The Rule
+[CouchbaseLiveWatch](https://us-west-1.console.aws.amazon.com/cloudwatch/home?region=us-west-1#rules:name=CouchbaseLiveWatch)
+will listen to events of new nodes being launched or terminated on
+*vpc_smallcb*.
 
 Whenever a new event is triggered, the lambda function *cbLiveAddNewNode* is called.
 
@@ -298,4 +324,6 @@ def lambda_handler(event, context):
 
 ```
 
-Note that when a new instance is launched, we tag it with the public ip and the generated subdomain. These two items are need later on to remove the entry from Route53 when the instance is terminated.
+Note that when a new instance is launched, we tag it with the public
+ip and the generated subdomain. These two items are need later on to
+remove the entry from Route53 when the instance is terminated.
