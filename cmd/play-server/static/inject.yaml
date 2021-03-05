@@ -23,7 +23,9 @@ buckets:
           --username ${USER} \\
           --password ${PSWD} \\
           --bucket '${q('input[ng-model="bucketConf.name"]').value || 'BUCKET_NAME'}' \\
-          --bucket-type couchbase \\
+          ${q('input[type="radio"]#for-bucket-type-membase').checked ? '  --bucket-type couchbase \\' : ''}
+          ${q('input[type="radio"]#for-bucket-type-memcached').checked ? '  --bucket-type memcached \\' : ''}
+          ${q('input[type="radio"]#for-bucket-type-ephemeral').checked ? '  --bucket-type ephemeral \\' : ''}
           --bucket-ramsize ${q('input[ng-model="bucketConf.ramQuotaMB"]').value || '1024'} \\
           --durability-min-level ${q('select[ng-model="bucketConf.durabilityMinLevel"]').value}
    -
@@ -41,7 +43,6 @@ buckets:
           --username ${USER} \\
           --password ${PSWD} \\
           --bucket '${q('input[ng-model="bucketConf.name"]').value || 'BUCKET_NAME'}' \\
-          --bucket-type couchbase \\
           --bucket-ramsize ${q('input[ng-model="bucketConf.ramQuotaMB"]').value || '1024'} \\
           --durability-min-level ${q('select[ng-model="bucketConf.durabilityMinLevel"]').value}
    -
