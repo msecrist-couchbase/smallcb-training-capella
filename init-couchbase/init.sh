@@ -4,7 +4,7 @@ CB_USER="${CB_USER:-Administrator}"
 CB_PSWD="${CB_PSWD:-password}"
 CB_HOST="${CB_HOST:-127.0.0.1}"
 CB_PORT="${CB_PORT:-8091}"
-CB_NAME="${CB_NAME:-playground}"
+CB_NAME="${CB_NAME:-Playground}"
 
 CB_SERVICES="${CB_SERVICES:-data,query,index,fts}"
 
