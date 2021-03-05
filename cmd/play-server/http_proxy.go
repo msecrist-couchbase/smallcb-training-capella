@@ -364,12 +364,21 @@ func InjectResponseUI(staticDir string, host string, portApp int,
 	session *Session, resp *http.Response) error {
 	resp.Header.Del("X-Frame-Options")
 
+	d := SessionTemplateData(host, portApp, session,
+		*listenPortBase, *listenPortSpan, PortMapping)
+
+	inject_data, err := ReadYaml(staticDir + "/inject.yaml")
+	if err != nil {
+		return fmt.Errorf("ReadYaml, err: %v", err)
+	}
+
+	d["inject_data"] = CleanupInterfaceValue(inject_data)
+
 	t := template.Must(template.ParseFiles(staticDir + "/inject.html.tmpl"))
 
 	var tout bytes.Buffer
 
-	err := t.Execute(&tout, SessionTemplateData(host, portApp, session,
-		*listenPortBase, *listenPortSpan, PortMapping))
+	err = t.Execute(&tout, d)
 	if err != nil {
 		return fmt.Errorf("t.Execute, err: %v", err)
 	}

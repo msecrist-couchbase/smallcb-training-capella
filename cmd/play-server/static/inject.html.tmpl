@@ -1,14 +1,13 @@
 <style>
 #playBox {
   display: block;
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   width: 470px;
   padding: 0 1rem 0 0.5rem;
   background-color: white;
   color: #555;
-  vertical-align: top;
   font-size: .75rem;
   white-space: nowrap;
   z-index: 11000;
@@ -31,17 +30,36 @@
   top: 1.1rem;
   left: 5px;
   width: 50vw;
-  height: 90vh;
+  max-height: 90vh;
   border: 1px solid #aaa;
   background-color: white;
-  padding: 20px 20px 20px 20px;
-  overflow: scroll;
+  padding: 0 0;
+  overflow: hidden;
 }
 #playBox .playBoxExtras.playBoxShow {
   display: block;
 }
+#playBox .playBoxExtrasMain {
+  height: 100%;
+  padding: 1rem 1rem;
+  overflow: scroll;
+}
+#playBox .playBoxExtrasMain .playBoxExtrasCard h3 a {
+  margin-left: 6px;
+  font-size: 8pt;
+}
+#playBox .playBoxExtrasMain .playBoxExtrasCard h4 {
+  margin-left: 4px;
+  font-size: 10pt;
+}
+#playBox .playBoxExtrasMain .playBoxExtrasCard pre {
+  margin-left: 8px;
+  font-size: 8pt;
+}
 </style>
 <script type="text/javascript">
+var playBoxPaths;
+
 (function () {
   var checkPlayLoginN = 0;
 
@@ -92,8 +110,16 @@
       {{else}}
         'Couchbase Playground'
       {{end}}
-      + '<button id="playBoxExtrasToggle" class="playBoxExtrasToggle" onclick="playBoxExtrasToggle()">extras</button>'
-      + '<div id="playBoxExtras" class="playBoxExtras">extra stuff here</div>';
+      + `<button id="playBoxExtrasToggle" class="playBoxExtrasToggle"
+                 onclick="playBoxExtrasToggle()">API Help</button>
+         <div id="playBoxExtras" class="playBoxExtras">
+          <a class="ui-dialog-titlebar-close modal-close"
+             onclick="playBoxExtrasToggle()">X</a>
+          <div class="panel-header">
+           <h2>Couchbase Playground API Help</h2>
+          </div>
+          <div id="playBoxExtrasMain" class="playBoxExtrasMain"/>
+         </div>`;
 
     document.body.appendChild(el);
 
@@ -128,26 +154,89 @@
 
   // -------------------------------------------
 
+  var paths = {{.inject_data}}; // Keyed by location hash prefix.
+
+  playBoxPaths = paths; // Global for debugging.
+
+  // -------------------------------------------
+
   var hashListening = false;
   var hashLast = null;
 
   function hashChanged() {
-    return; // FUTURE.
+    setTimeout(hashChangedProcess, 300);
+  }
 
+  function hashChangedProcess() {
     if (hashLast == window.location.hash) {
       return;
     }
 
     hashLast = window.location.hash;
 
-    document.getElementById("playBoxExtrasToggle").className = "playBoxExtrasToggle playBoxShow";
-
-    var pbe = document.getElementById("playBoxExtras");
-
     // Ex: #/overview/stats?scenarioBucket=beer-sample&scenarioZoom=minute&statsHostname=all
     var hashParts = hashLast.slice(2).split(/[\?\&]/);
 
-    pbe.innerHTML = pbe.innerHTML + "<br/>" + hashParts.join(' ');
+    var keys = [];
+    for (let p of hashParts) {
+      keys.push(p.split('=')[0]);
+    }
+
+    var pbem = document.getElementById("playBoxExtrasMain");
+
+    for (let path of (paths[keys[0]] || [])) {
+      for (let title of (path.titles || [])) {
+        var a = [];
+
+        var matches = document.querySelectorAll(title.querySelectorAll);
+
+        for (let m of matches) {
+          for (let kind of (title.kinds || [])) {
+            var ctx = {
+              kind: kind,
+              HOST: "hostname",
+              USER: "Administrator",
+              PSWD: "password",
+              x: m,
+              o: null
+            }
+
+            with (ctx) eval('o = `' + kind.tmpl + '`');
+
+            a.push('<div>');
+            a.push('<h4>' + kind.kind + '</h4>');
+            a.push('<pre>' + ctx.o + '</pre>');
+            a.push('</div>');
+          }
+        }
+
+        if (a.length > 0) {
+          function docs(href) {
+            return href ? `<a href="${href}" target="_blank">documentation</a>` : "";
+          }
+
+          pbem.innerHTML =
+            `<div class="playBoxExtrasCard">
+               <h3>
+                 ${title.title}
+                 ${docs(title.docs)}
+               </h3>
+               ${a.join('')}
+             </div>`;
+
+          document.getElementById("playBoxExtrasToggle").className = "playBoxExtrasToggle playBoxShow";
+
+          return;
+        }
+      }
+    }
+
+    pbem.innerHTML =
+      `<div class="playBoxExtrasCard">
+        No API Help for this feature yet
+       </div>`;
+
+    document.getElementById("playBoxExtrasToggle").className = "playBoxExtrasToggle";
   }
 })()
 

@@ -60,6 +60,39 @@ func ReadYaml(path string) (map[string]interface{}, error) {
 
 // ------------------------------------------------
 
+// Converts map[interface{}]interface{} to
+// map[string]interface{}, which is friendlier for JSON
+// marshaling -- see: https://github.com/go-yaml/yaml/issues/139
+
+func CleanupInterfaceValue(v interface{}) interface{} {
+	switch v := v.(type) {
+	case []interface{}:
+		res := make([]interface{}, len(v))
+		for i, vv := range v {
+			res[i] = CleanupInterfaceValue(vv)
+		}
+		return res
+	case map[interface{}]interface{}:
+		res := make(map[string]interface{})
+		for k, vv := range v {
+			res[fmt.Sprintf("%v", k)] = CleanupInterfaceValue(vv)
+		}
+		return res
+	case map[string]interface{}:
+		res := make(map[string]interface{})
+		for k, vv := range v {
+			res[fmt.Sprintf("%v", k)] = CleanupInterfaceValue(vv)
+		}
+		return res
+	case string:
+		return v
+	default:
+		return fmt.Sprintf("%v", v)
+	}
+}
+
+// ------------------------------------------------
+
 func MapGetString(m map[string]interface{}, k string) string {
 	if v, exists := m[k]; exists {
 		if s, ok := v.(string); ok {

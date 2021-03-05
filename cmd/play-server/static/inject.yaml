@@ -1,0 +1,169 @@
+backup/repositories:
+ -
+  args: scenarioBucket scenarioZoom scenario
+  samp: scenarioBucket=beer-sample scenarioZoom=minute scenario=7xv5w6opc
+
+buckets:
+ -
+  args: scenarioBucket scenarioZoom scenario
+  samp: scenarioBucket=beer-sample scenarioZoom=minute scenario=7xv5w6opc
+ -
+  args: scenarioBucket scenarioZoom scenario openedBucket
+  samp: scenarioBucket=beer-sample scenarioZoom=minute scenario=7xv5w6opc openedBucket=beer-sample
+
+cbas/workbench:
+ -
+  args: scenarioBucket scenarioZoom scenario
+  samp: scenarioBucket=beer-sample scenarioZoom=minute scenario=7xv5w6opc
+
+collections:
+ -
+  args: scenarioBucket scenarioZoom scenario collectionsBucket scopesPage collsPage
+  samp: scenarioBucket=beer-sample scenarioZoom=minute scenario=7xv5w6opc collectionsBucket=beer-sample scopesPage=%7B%22page%22:1,%22size%22:10%7D collsPage=%7B%7D
+ -
+  args: scenarioBucket scenarioZoom scenario collectionsBucket scopeDetails scopesPage collsPage
+  samp: scenarioBucket=beer-sample scenarioZoom=minute scenario=7xv5w6opc collectionsBucket=beer-sample scopeDetails=_default scopesPage=%7B%22page%22:1,%22size%22:10%7D collsPage=%7B%22size%22:10,%22page%22:1,%22_defaults%22:10,%22_defaultp%22:1%7D
+
+docs/editor:
+ -
+  args: scenarioBucket scenarioZoom scenario
+  samp: scenarioBucket=beer-sample scenarioZoom=minute scenario=7xv5w6opc
+
+docs/import:
+ -
+  args: scenarioBucket scenarioZoom scenario
+  samp: scenarioBucket=beer-sample scenarioZoom=minute scenario=7xv5w6opc
+
+eventing/summary:
+ -
+  args: scenarioBucket scenarioZoom scenario
+  samp: scenarioBucket=beer-sample scenarioZoom=minute scenario=7xv5w6opc
+
+fts/fts_list:
+ -
+  args: scenarioBucket scenarioZoom scenario
+  samp: scenarioBucket=beer-sample scenarioZoom=minute scenario=7xv5w6opc
+
+fts/fts_new/:
+ -
+  args: scenarioBucket scenarioZoom scenario indexType sourceType
+  samp: scenarioBucket=beer-sample scenarioZoom=minute scenario=7xv5w6opc indexType=fulltext-index sourceType=couchbase
+
+fts/fts_new_alias/:
+ -
+  args: scenarioBucket scenarioZoom scenario indexType sourceType
+  samp: scenarioBucket=beer-sample scenarioZoom=minute scenario=7xv5w6opc indexType=fulltext-alias sourceType=nil
+
+fts/fts_new_easy/:
+ -
+  args: scenarioBucket scenarioZoom scenario indexType sourceType
+  samp: scenarioBucket=beer-sample scenarioZoom=minute scenario=7xv5w6opc indexType=fulltext-index sourceType=couchbase
+
+index:
+ -
+  args: scenarioBucket scenarioZoom scenario
+  samp: scenarioBucket=beer-sample scenarioZoom=minute scenario=7xv5w6opc
+ -
+  args: scenarioBucket scenarioZoom scenario openedIndex
+  samp: scenarioBucket=beer-sample scenarioZoom=minute scenario=7xv5w6opc openedIndex=1604764542166554800010467320481902103000127.0.0.1:8091
+
+logs:
+ -
+  args: scenarioBucket scenarioZoom scenario
+  samp: scenarioBucket=beer-sample scenarioZoom=minute scenario=7xv5w6opc
+
+logs/collectInfo/form:
+ -
+  args: scenarioBucket scenarioZoom scenario
+  samp: scenarioBucket=beer-sample scenarioZoom=minute scenario=7xv5w6opc
+
+query/monitoring:
+ -
+  args: scenarioBucket scenarioZoom scenario
+  samp: scenarioBucket=beer-sample scenarioZoom=minute scenario=7xv5w6opc
+
+query/workbench:
+ -
+  args: scenarioBucket scenarioZoom scenario
+  samp: scenarioBucket=beer-sample scenarioZoom=minute scenario=7xv5w6opc
+
+replications:
+ -
+  args: scenarioBucket scenarioZoom scenario
+  samp: scenarioBucket=beer-sample scenarioZoom=minute scenario=7xv5w6opc
+
+security/audit:
+ -
+  args: scenarioBucket scenarioZoom scenario
+  samp: scenarioBucket=beer-sample scenarioZoom=minute scenario=7xv5w6opc
+
+security/clientCert:
+ -
+  args: scenarioBucket scenarioZoom scenario
+  samp: scenarioBucket=beer-sample scenarioZoom=minute scenario=7xv5w6opc
+
+security/redaction:
+ -
+  args: scenarioBucket scenarioZoom scenario
+  samp: scenarioBucket=beer-sample scenarioZoom=minute scenario=7xv5w6opc
+
+security/rolesGroups:
+ -
+  args: scenarioBucket scenarioZoom scenario sortBy order substr pageSize
+  samp: scenarioBucket=beer-sample scenarioZoom=minute scenario=7xv5w6opc sortBy=id order=asc substr= pageSize=20
+
+security/rootCertificate:
+ -
+  args: scenarioBucket scenarioZoom scenario
+  samp: scenarioBucket=beer-sample scenarioZoom=minute scenario=7xv5w6opc
+
+security/session:
+ -
+  args: scenarioBucket scenarioZoom scenario
+  samp: scenarioBucket=beer-sample scenarioZoom=minute scenario=7xv5w6opc
+
+security/userRoles:
+ -
+  args: scenarioBucket scenarioZoom scenario sortBy order substr pageSize
+  samp: scenarioBucket=beer-sample scenarioZoom=minute scenario=7xv5w6opc sortBy=id order=asc substr= pageSize=20
+
+settings/alerts:
+ -
+  args: scenarioBucket scenarioZoom scenario
+  samp: scenarioBucket=beer-sample scenarioZoom=minute scenario=7xv5w6opc
+
+settings/autoCompaction:
+ -
+  args: scenarioBucket scenarioZoom scenario
+  samp: scenarioBucket=beer-sample scenarioZoom=minute scenario=7xv5w6opc
+
+settings/cluster:
+ -
+  args: scenarioBucket scenarioZoom scenario
+  samp: scenarioBucket=beer-sample scenarioZoom=minute scenario=7xv5w6opc
+
+settings/sampleBuckets:
+ -
+  args: scenarioBucket scenarioZoom scenario
+  samp: scenarioBucket=beer-sample scenarioZoom=minute scenario=7xv5w6opc
+  titles:
+   -
+    title: Sample Buckets loading
+    docs: https://docs.couchbase.com/server/current/manage/manage-settings/install-sample-buckets.html
+    querySelectorAll: |
+      form.forms div[ng-repeat="bucket in settingsSampleBucketsCtl.state.available"] label,
+      form.forms div[ng-repeat="bucket in settingsSampleBucketsCtl.state.installed"]
+    kinds:
+     -
+      kind: command-line
+      tmpl: |
+       /opt/couchbase/bin/cbimport json --format sample \\
+          -c ${HOST} -u ${USER} -p ${PSWD} -b ${x.innerText.trim()} \\
+          -d file:///opt/couchbase/samples/${x.innerText.trim()}.zip
+
+views:
+ -
+  args: scenarioBucket scenarioZoom scenario bucket type
+  samp:
+   - scenarioBucket=beer-sample scenarioZoom=minute scenario=7xv5w6opc bucket=beer-sample type=development
+   - scenarioBucket=beer-sample scenarioZoom=minute scenario=7xv5w6opc bucket=beer-sample type=production
