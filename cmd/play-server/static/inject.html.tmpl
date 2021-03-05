@@ -61,6 +61,10 @@
   margin-left: 8px;
   font-size: 8pt;
 }
+form .playBoxAPIHelp {
+  margin-left: 0.7rem;
+  line-height: 2rem;
+}
 body.modal-open .panel.dialog .panel-footer .playBoxAPIHelp {
   flex-grow: 100;
   margin-left: 0.5rem;
@@ -243,14 +247,14 @@ var playBoxPaths;
 
 	  var c = document.querySelector('body.modal-open .panel.dialog .panel-footer a[ng-click="$dismiss()"]');
 	  if (c && c.innerText.trim() == "Cancel" && !c.previousElementSibling) {
-            var h = document.createElement("span");
+            c.parentNode.insertBefore(apiHelpLink(), c);
+          }
 
-            h.className = "playBoxAPIHelp";
-            h.innerHTML =
-              `<a onclick="playBoxExtrasToggle()">
-                 API Help <span class="icon fa-question-circle-o"/></a>`;
-
-            c.parentNode.insertBefore(h, c);
+          if (title.apiHelpLinkAsLastSibling) {
+            var c = document.querySelector(title.apiHelpLinkAsLastSibling);
+            if (c && c.parentNode.lastChild.className != "playBoxAPIHelp") {
+              c.parentNode.appendChild(apiHelpLink());
+            }
           }
 
           setTimeout(checkAPIHelp, 1000);
@@ -270,6 +274,17 @@ var playBoxPaths;
     document.getElementById("playBoxExtras").className = "playBoxExtras";
 
     setTimeout(checkAPIHelp, 1000);
+  }
+
+  function apiHelpLink() {
+    var h = document.createElement("span");
+
+    h.className = "playBoxAPIHelp";
+    h.innerHTML =
+      `<a onclick="playBoxExtrasToggle()">
+         API Help <span class="icon fa-question-circle-o"/></a>`;
+
+    return h;
   }
 
   function stripEmptyLines(s) {
