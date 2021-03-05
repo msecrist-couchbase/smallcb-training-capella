@@ -175,6 +175,11 @@ var playBoxPaths;
     }
 
     var pbem = document.getElementById("playBoxExtrasMain");
+    if (!pbem) {
+      setTimeout(checkAPIHelp, 1000);
+
+      return;
+    }
 
     for (let path of (paths[keys[0]] || [])) {
       for (let title of (path.titles || [])) {
@@ -186,7 +191,7 @@ var playBoxPaths;
           if (title.check) {
             var ctx = {
               path: path, title: title, x: x, o: null,
-              q: function(s) { return document.querySelector(s); }
+              q: function(s) { return document.querySelector(s) || {}; }
             };
 
             with (ctx) eval('o = ' + title.check);
@@ -199,7 +204,7 @@ var playBoxPaths;
           for (let item of (title.items || [])) {
             var ctx = {
               path: path, title: title, x: x, o: '',
-              q: function(s) { return document.querySelector(s); },
+              q: function(s) { return document.querySelector(s) || {}; },
               item: item,
               HOST: "cluster_url", USER: "Administrator", PSWD: "password"
             }
@@ -208,13 +213,15 @@ var playBoxPaths;
               with (ctx) eval('o = `' + item.tmpl + '`');
             }
 
+            var o = stripEmptyLines(ctx.o || '').replace(/ \\$/, '');
+
             a.push(`<div>
                       <h4>
                        ${item.item}:
                        ${item.docs ? '<a href="' + item.docs + '" target="_blank">documentation</a>' : ''}
                       </h4>
                       ${item.extra || ''}
-                      <pre>${ctx.o}</pre>
+                      <pre>${o}</pre>
                     </div>`);
           }
         }
@@ -230,15 +237,7 @@ var playBoxPaths;
                ${a.join('')}
              </div>`;
 
-          var lines = [];
-          for (var line of h.split('\n')) {
-            line = line.trim();
-            if (line.length > 0) {
-              lines.push(line);
-            }
-          }
-
-          pbem.innerHTML = lines.join('\n');
+          pbem.innerHTML = stripEmptyLines(h);
 
           document.getElementById("playBoxExtrasToggle").className = "playBoxExtrasToggle playBoxShow";
 
@@ -271,6 +270,19 @@ var playBoxPaths;
     document.getElementById("playBoxExtras").className = "playBoxExtras";
 
     setTimeout(checkAPIHelp, 1000);
+  }
+
+  function stripEmptyLines(s) {
+    var lines = [];
+
+    for (var line of s.split('\n')) {
+      line = line.trimRight();
+      if (line.length > 0) {
+        lines.push(line);
+      }
+    }
+
+    return lines.join('\n');
   }
 })()
 
