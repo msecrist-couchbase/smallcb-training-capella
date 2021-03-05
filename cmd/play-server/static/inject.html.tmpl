@@ -180,7 +180,10 @@ var playBoxPaths;
 
         for (let x of matches) {
           if (title.check) {
-            var ctx = { path: path, title: title, x: x, o: null };
+            var ctx = {
+              path: path, title: title, x: x, o: null,
+              q: function(s) { return document.querySelector(s); }
+            };
 
             with (ctx) eval('o = ' + title.check);
 
@@ -189,18 +192,19 @@ var playBoxPaths;
             }
           }
 
-          for (let kind of (title.kinds || [])) {
+          for (let item of (title.items || [])) {
             var ctx = {
-              path: path, title: title, kind: kind, x: x, o: null,
+              path: path, title: title, x: x, o: null,
               q: function(s) { return document.querySelector(s); },
-              HOST: "hostname", USER: "Administrator", PSWD: "password"
+              item: item,
+              HOST: "cluster_url", USER: "Administrator", PSWD: "password"
             }
 
-            with (ctx) eval('o = `' + kind.tmpl + '`');
+            with (ctx) eval('o = `' + item.tmpl + '`');
 
             a.push(`<div>
-                      <h4>${kind.kind}</h4>
-                      ${kind.extra || ''}
+                      <h4>${item.item}</h4>
+                      ${item.extra || ''}
                       <pre>${ctx.o}</pre>
                     </div>`);
           }
