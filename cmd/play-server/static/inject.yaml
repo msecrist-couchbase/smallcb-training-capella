@@ -111,7 +111,65 @@ buckets:
           --password ${PSWD} \\
           --bucket '${q('input[ng-model="bucketConf.name"]').value || 'BUCKET_NAME'}' \\
           --bucket-ramsize ${q('input[ng-model="bucketConf.ramQuotaMB"]').value || '1024'} \\
-          --durability-min-level ${q('select[ng-model="bucketConf.durabilityMinLevel"]').value}
+          ${q('input[type="checkbox"]#for-enable-replicas').checked ?
+            '--bucket-replica '
+             + q('form select[name="replicaNumber"]').value.split(':')[1] + ' \\' : ''}
+          ${q('input[type="checkbox"]#enable_bucket_ttl').checked ?
+            '--max-ttl '
+             + (q('form input[ng-model="bucketConf.maxTTL"]').value || '0') + ' \\' : ''}
+          ${q('input[type="radio"]#for-comp-mode-off').checked ?
+            '--compression-mode off \\' : ''}
+          ${q('input[type="radio"]#for-comp-mode-active').checked ?
+            '--compression-mode active \\' : ''}
+          ${q('input[name="evictionPolicy"]#for-metadata-full-eject').checked ?
+            '--bucket-eviction-policy fullEviction \\' : ''}
+          ${q('input[name="evictionPolicyEphemeral"]#for-metadata-value-eject').checked ?
+            '--bucket-eviction-policy noEviction \\' : ''}
+          ${q('input[name="evictionPolicyEphemeral"]#for-metadata-full-eject').checked ?
+            '--bucket-eviction-policy nruEviction \\' : ''}
+          ${q('input#metadata-purge-frequency').value != '3' ?
+            '--purge-interval '
+             + (q('input#metadata-purge-frequency').value || '3') + ' \\' : ''}
+          ${q('input[type="radio"]#for-bucket-type-memcached').checked == false &&
+            q('input[type="radio"]#for-high-threads').checked ?
+            '--bucket-priority high \\' : ''}
+          ${q('select[ng-model="bucketConf.durabilityMinLevel"]').value != 'none' ?
+            '--durability-min-level '
+             + q('select[ng-model="bucketConf.durabilityMinLevel"]').value + ' \\' : ''}
+          ${q('input[type="checkbox"]#for-auto-compaction-override').checked &&
+            q('input[type="checkbox"]#for-data-frag-percent').checked ?
+            '--database-fragmentation-threshold-percentage '
+             + (q('input[ng-model="autoCompactionSettings.databaseFragmentationThreshold.percentage"]').value || 0) + ' \\' : ''}
+          ${q('input[type="checkbox"]#for-auto-compaction-override').checked &&
+            q('input[type="checkbox"]#for-data-frag-size').checked ?
+            '--database-fragmentation-threshold-size '
+             + (q('input[ng-model="autoCompactionSettings.databaseFragmentationThreshold.size"]').value || 0) + ' \\' : ''}
+          ${q('input[type="checkbox"]#for-auto-compaction-override').checked &&
+            q('input[type="checkbox"]#for-view-frag-percent').checked ?
+            '--view-fragmentation-threshold-percentage '
+             + (q('input[ng-model="autoCompactionSettings.viewFragmentationThreshold.percentage"]').value || 0) + ' \\' : ''}
+          ${q('input[type="checkbox"]#for-auto-compaction-override').checked &&
+            q('input[type="checkbox"]#for-view-frag-size').checked ?
+            '--view-fragmentation-threshold-size '
+             + (q('input[ng-model="autoCompactionSettings.viewFragmentationThreshold.size"]').value || 0) + ' \\' : ''}
+          ${q('input[type="checkbox"]#for-auto-compaction-override').checked &&
+            q('input[type="checkbox"]#for-enable-compaction-timeperiod').checked ?
+            '--from-hour '
+             + (q('input[ng-model="autoCompactionSettings[mnPeriod].fromHour"]').value || 0) + ' \\\n' +
+            '  --from-minute '
+             + (q('input[ng-model="autoCompactionSettings[mnPeriod].fromMinute"]').value || 0) + ' \\\n' +
+            '  --to-hour '
+             + (q('input[ng-model="autoCompactionSettings[mnPeriod].toHour"]').value || 0) + ' \\\n' +
+            '  --to-minute '
+             + (q('input[ng-model="autoCompactionSettings[mnPeriod].toMinute"]').value || 0) + ' \\' : ''}
+          ${q('input[type="checkbox"]#for-auto-compaction-override').checked &&
+            q('input[type="checkbox"]#for-compact-abort-outside-allowedTimePeriod').checked ?
+            '--abort-outside 1 \\' : ''}
+          ${q('input[type="checkbox"]#for-auto-compaction-override').checked &&
+            q('input[type="checkbox"]#for-compact-parallel').checked ?
+            '--parallel-db-view-compaction 1 \\' : ''}
+          ${q('input[type="checkbox"]#for-enable-flush').checked ?
+            '--enable-flush 1 \\' : ''}
    -
     title: Bucket Delete
     docs: https://docs.couchbase.com/server/current/manage/manage-buckets/delete-bucket.html
