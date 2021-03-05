@@ -110,7 +110,7 @@ var playBoxPaths;
 
     el.innerHTML =
       {{if .SessionId}}
-        '<a href="http://{{.Host}}:{{.PortApp}}/?s={{.SessionId}}">'+
+        '<a href="http://{{.Host}}:{{.PortApp}}/?s={{.SessionId}}" target="_blank">' +
           'Couchbase Playground</a>'
       {{else}}
         'Couchbase Playground'
@@ -118,12 +118,12 @@ var playBoxPaths;
       + `<button id="playBoxExtrasToggle" class="playBoxExtrasToggle"
                  onclick="playBoxExtrasToggle()">API Help</button>
          <div id="playBoxExtras" class="playBoxExtras">
-          <a class="ui-dialog-titlebar-close modal-close"
-             onclick="playBoxExtrasToggle()">X</a>
-          <div class="panel-header">
-           <h2>Couchbase Playground API Help</h2>
-          </div>
-          <div id="playBoxExtrasMain" class="playBoxExtrasMain"/>
+           <a class="ui-dialog-titlebar-close modal-close"
+              onclick="playBoxExtrasToggle()">X</a>
+           <div class="panel-header">
+             <h2>Couchbase Playground API Help</h2>
+           </div>
+           <div id="playBoxExtrasMain" class="playBoxExtrasMain"/>
          </div>`;
 
     document.body.appendChild(el);
