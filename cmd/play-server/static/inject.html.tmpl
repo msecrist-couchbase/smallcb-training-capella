@@ -125,7 +125,7 @@ var playBoxPaths;
            <a class="ui-dialog-titlebar-close modal-close"
               onclick="playBoxExtrasToggle()">X</a>
            <div class="panel-header">
-             <h2>Couchbase Playground API Help</h2>
+             <h2>API Help</h2>
            </div>
            <div id="playBoxExtrasMain" class="playBoxExtrasMain"/>
          </div>`;
@@ -248,7 +248,8 @@ var playBoxPaths;
 
             h.onclick = playBoxExtrasToggle;
             h.className = "playBoxAPIHelp";
-            h.innerText = "API Help";
+            h.innerHTML =
+              `API Help <span class="icon fa-question-circle-o"/>`;
 
             c.parentNode.insertBefore(h, c);
           }
