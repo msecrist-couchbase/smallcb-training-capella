@@ -29,7 +29,8 @@
   position: absolute;
   top: 1.1rem;
   left: 5px;
-  width: 50vw;
+  min-width: 25rem;
+  max-width: 50vw;
   max-height: 90vh;
   border: 1px solid #aaa;
   background-color: white;
@@ -55,6 +56,10 @@
 #playBox .playBoxExtrasMain .playBoxExtrasCard pre {
   margin-left: 8px;
   font-size: 8pt;
+}
+body.modal-open .panel.dialog .panel-footer a.playBoxAPIHelp {
+  flex-grow: 100;
+  margin-left: 0.5rem;
 }
 </style>
 <script type="text/javascript">
@@ -174,12 +179,21 @@ var playBoxPaths;
         var matches = document.querySelectorAll(title.querySelectorAll);
 
         for (let x of matches) {
+          if (title.check) {
+            var ctx = { path: path, title: title, x: x, o: null };
+
+            with (ctx) eval('o = ' + title.check);
+
+            if (!ctx.o) {
+              continue;
+            }
+          }
+
           for (let kind of (title.kinds || [])) {
             var ctx = {
-              kind: kind,
-              HOST: "hostname", USER: "Administrator", PSWD: "password",
-              x: x,
-              o: null
+              path: path, title: title, kind: kind, x: x, o: null,
+              q: function(s) { return document.querySelector(s); },
+              HOST: "hostname", USER: "Administrator", PSWD: "password"
             }
 
             with (ctx) eval('o = `' + kind.tmpl + '`');
@@ -208,6 +222,17 @@ var playBoxPaths;
              </div>`;
 
           document.getElementById("playBoxExtrasToggle").className = "playBoxExtrasToggle playBoxShow";
+
+	  var c = document.querySelector('body.modal-open .panel.dialog .panel-footer a[ng-click="$dismiss()"]');
+	  if (c && c.innerText.trim() == "Cancel" && !c.previousElementSibling) {
+            var h = document.createElement("a");
+
+            h.onclick = playBoxExtrasToggle;
+            h.className = "playBoxAPIHelp";
+            h.innerText = "API Help";
+
+            c.parentNode.insertBefore(h, c);
+          }
 
           setTimeout(checkAPIHelp, 1000);
 

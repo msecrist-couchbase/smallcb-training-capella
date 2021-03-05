@@ -7,6 +7,58 @@ buckets:
  -
   args: scenarioBucket scenarioZoom scenario
   samp: scenarioBucket=beer-sample scenarioZoom=minute scenario=7xv5w6opc
+  titles:
+   -
+    title: Bucket Create
+    docs: https://docs.couchbase.com/server/current/manage/manage-buckets/create-bucket.html
+    querySelectorAll: |
+      body.modal-open .panel.dialog .panel-header > h2[ng-show="bucketsDetailsDialogCtl.bucketConf.isNew"]
+    check: x.innerText.trim() == 'Add Data Bucket' && x.className != "ng-hide"
+    kinds:
+     -
+      kind: command-line
+      tmpl: |
+        /opt/couchbase/bin/couchbase-cli bucket-create \\
+          --cluster ${HOST} \\
+          --username ${USER} \\
+          --password ${PSWD} \\
+          --bucket '${q('input[ng-model="bucketConf.name"]').value || 'BUCKET_NAME'}' \\
+          --bucket-type couchbase \\
+          --bucket-ramsize ${q('input[ng-model="bucketConf.ramQuotaMB"]').value || '1024'} \\
+          --durability-min-level ${q('select[ng-model="bucketConf.durabilityMinLevel"]').value}
+   -
+    title: Bucket Edit
+    docs: https://docs.couchbase.com/server/current/manage/manage-buckets/edit-bucket.html
+    querySelectorAll: |
+      body.modal-open .panel.dialog .panel-header > h2[ng-show="!bucketsDetailsDialogCtl.bucketConf.isNew"]
+    check: x.innerText.trim() == 'Edit Bucket Settings' && x.className != "ng-hide"
+    kinds:
+     -
+      kind: command-line
+      tmpl: |
+        /opt/couchbase/bin/couchbase-cli bucket-edit \\
+          --cluster ${HOST} \\
+          --username ${USER} \\
+          --password ${PSWD} \\
+          --bucket '${q('input[ng-model="bucketConf.name"]').value || 'BUCKET_NAME'}' \\
+          --bucket-type couchbase \\
+          --bucket-ramsize ${q('input[ng-model="bucketConf.ramQuotaMB"]').value || '1024'} \\
+          --durability-min-level ${q('select[ng-model="bucketConf.durabilityMinLevel"]').value}
+   -
+    title: Bucket Delete
+    docs: https://docs.couchbase.com/server/current/manage/manage-buckets/delete-bucket.html
+    querySelectorAll: |
+      body.modal-open .panel.dialog .panel-header > h2
+    check: x.innerText.trim() == 'Confirm Drop Bucket'
+    kinds:
+     -
+      kind: command-line
+      tmpl: |
+        /opt/couchbase/bin/couchbase-cli bucket-delete \\
+          --cluster ${HOST} \\
+          --username ${USER} \\
+          --password ${PSWD} \\
+          --bucket '${q('body.modal-open .panel.dialog .panel-content strong.ng-binding').innerText || 'BUCKET_NAME'}'
  -
   args: scenarioBucket scenarioZoom scenario openedBucket
   samp: scenarioBucket=beer-sample scenarioZoom=minute scenario=7xv5w6opc openedBucket=beer-sample
@@ -158,8 +210,8 @@ settings/sampleBuckets:
       kind: command-line
       tmpl: |
        /opt/couchbase/bin/cbimport json --format sample \\
-          -c ${HOST} -u ${USER} -p ${PSWD} -b ${x.innerText.trim()} \\
-          -d file:///opt/couchbase/samples/${x.innerText.trim()}.zip
+         -c ${HOST} -u ${USER} -p ${PSWD} -b ${x.innerText.trim()} \\
+         -d file:///opt/couchbase/samples/${x.innerText.trim()}.zip
 
 views:
  -
