@@ -173,23 +173,22 @@ var playBoxPaths;
 
         var matches = document.querySelectorAll(title.querySelectorAll);
 
-        for (let m of matches) {
+        for (let x of matches) {
           for (let kind of (title.kinds || [])) {
             var ctx = {
               kind: kind,
-              HOST: "hostname",
-              USER: "Administrator",
-              PSWD: "password",
-              x: m,
+              HOST: "hostname", USER: "Administrator", PSWD: "password",
+              x: x,
               o: null
             }
 
             with (ctx) eval('o = `' + kind.tmpl + '`');
 
-            a.push('<div>');
-            a.push('<h4>' + kind.kind + '</h4>');
-            a.push('<pre>' + ctx.o + '</pre>');
-            a.push('</div>');
+            a.push(`<div>
+                      <h4>${kind.kind}</h4>
+                      ${kind.extra || ''}
+                      <pre>${ctx.o}</pre>
+                    </div>`);
           }
         }
 
@@ -204,6 +203,7 @@ var playBoxPaths;
                  ${title.title}
                  ${docs(title.docs)}
                </h3>
+               ${title.extra || ''}
                ${a.join('')}
              </div>`;
 
@@ -222,6 +222,8 @@ var playBoxPaths;
        </div>`;
 
     document.getElementById("playBoxExtrasToggle").className = "playBoxExtrasToggle";
+
+    document.getElementById("playBoxExtras").className = "playBoxExtras";
 
     setTimeout(checkAPIHelp, 1000);
   }
