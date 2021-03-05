@@ -123,13 +123,9 @@ var playBoxPaths;
 
     document.body.appendChild(el);
 
-    if (!hashListening) {
-      hashListening = true;
-
-      window.addEventListener('hashchange', hashChanged);
-    }
-
     setTimeout(checkPlayLogin, 200);
+
+    setTimeout(checkAPIHelp, 2500);
   }
 
   // -------------------------------------------
@@ -160,22 +156,9 @@ var playBoxPaths;
 
   // -------------------------------------------
 
-  var hashListening = false;
-  var hashLast = null;
-
-  function hashChanged() {
-    setTimeout(hashChangedProcess, 300);
-  }
-
-  function hashChangedProcess() {
-    if (hashLast == window.location.hash) {
-      return;
-    }
-
-    hashLast = window.location.hash;
-
+  function checkAPIHelp() {
     // Ex: #/overview/stats?scenarioBucket=beer-sample&scenarioZoom=minute&statsHostname=all
-    var hashParts = hashLast.slice(2).split(/[\?\&]/);
+    var hashParts = window.location.hash.slice(2).split(/[\?\&]/);
 
     var keys = [];
     for (let p of hashParts) {
@@ -226,6 +209,8 @@ var playBoxPaths;
 
           document.getElementById("playBoxExtrasToggle").className = "playBoxExtrasToggle playBoxShow";
 
+          setTimeout(checkAPIHelp, 1000);
+
           return;
         }
       }
@@ -233,10 +218,12 @@ var playBoxPaths;
 
     pbem.innerHTML =
       `<div class="playBoxExtrasCard">
-        No API Help for this feature yet
+        No API Help available for this feature
        </div>`;
 
     document.getElementById("playBoxExtrasToggle").className = "playBoxExtrasToggle";
+
+    setTimeout(checkAPIHelp, 1000);
   }
 })()
 
