@@ -12,7 +12,7 @@
   white-space: nowrap;
   z-index: 11000;
 }
-#playBox button.playBoxExtrasToggle {
+#playBox button.playBoxAHToggle {
   display: none;
   height: 1rem;
   min-width: 4rem;
@@ -21,10 +21,10 @@
   line-height: 1rem;
   font-size: 0.5rem;
 }
-#playBox button.playBoxExtrasToggle.playBoxShow {
+#playBox button.playBoxAHToggle.playBoxShow {
   display: inline-block;
 }
-#playBox .playBoxExtras {
+#playBox .playBoxAH {
   display: none;
   position: absolute;
   top: 1.1rem;
@@ -37,41 +37,42 @@
   padding: 0 0;
   overflow: hidden;
 }
-#playBox .playBoxExtras.playBoxShow {
+#playBox .playBoxAH.playBoxShow {
   display: block;
 }
-#playBox .playBoxExtrasMain {
+#playBox .playBoxAHMain {
   height: 100%;
   padding: 1rem 1rem;
   overflow: scroll;
 }
-#playBox .playBoxExtrasMain .playBoxExtrasCard h3 {
+#playBox .playBoxAHMain .playBoxAHCard h3 {
   margin-bottom: 0.5rem;
 }
-#playBox .playBoxExtrasMain .playBoxExtrasCard h3 a,
-#playBox .playBoxExtrasMain .playBoxExtrasCard h4 a {
+#playBox .playBoxAHMain .playBoxAHCard h3 a,
+#playBox .playBoxAHMain .playBoxAHCard h4 a {
   margin-left: 6px;
   font-size: 8pt;
 }
-#playBox .playBoxExtrasMain .playBoxExtrasCard h4 {
+#playBox .playBoxAHMain .playBoxAHCard h4 {
   margin-left: 4px;
   font-size: 10pt;
 }
-#playBox .playBoxExtrasMain .playBoxExtrasCard pre {
+#playBox .playBoxAHMain .playBoxAHCard pre {
   margin-left: 8px;
   font-size: 8pt;
 }
-form .playBoxAPIHelp {
+form .playBoxAH {
   margin-left: 0.7rem;
   line-height: 2rem;
 }
-body.modal-open .panel.dialog .panel-footer .playBoxAPIHelp {
+body.modal-open .panel.dialog .panel-footer .playBoxAH {
   flex-grow: 100;
   margin-left: 0.5rem;
 }
 </style>
+
 <script type="text/javascript">
-var playBoxPaths;
+var playBoxAPIHelpData;
 
 (function () {
   var checkPlayLoginN = 0;
@@ -109,6 +110,9 @@ var playBoxPaths;
 
   // -------------------------------------------
 
+  // Creates the top-left, high z-index div for the Couchbase Playground,
+  // aka, the "playBox", which has a hidden-by-default toggle button
+  // and popup for the API Help (AH).
   function createPlayBox() {
     if (!document.body) { return; }
 
@@ -123,15 +127,17 @@ var playBoxPaths;
       {{else}}
         'Couchbase Playground'
       {{end}}
-      + `<button id="playBoxExtrasToggle" class="playBoxExtrasToggle"
-                 onclick="playBoxExtrasToggle()">API Help</button>
-         <div id="playBoxExtras" class="playBoxExtras">
+      + `<button id="playBoxAHToggle" class="playBoxAHToggle"
+                 onclick="playBoxAHToggle()">
+           API Help
+         </button>
+         <div id="playBoxAH" class="playBoxAH">
            <a class="ui-dialog-titlebar-close modal-close"
-              onclick="playBoxExtrasToggle()">X</a>
+              onclick="playBoxAHToggle()">X</a>
            <div class="panel-header">
              <h2>API Help</h2>
            </div>
-           <div id="playBoxExtrasMain" class="playBoxExtrasMain"/>
+           <div id="playBoxAHMain" class="playBoxAHMain"/>
          </div>`;
 
     document.body.appendChild(el);
@@ -156,16 +162,18 @@ var playBoxPaths;
       createPlayBox();
     }
 
-    setTimeout(checkPlayBox, 500);
+    setTimeout(checkPlayBox, 500); // Repeatedly try creating the playBox.
   }
 
   checkPlayBox();
 
   // -------------------------------------------
 
-  var paths = {{.inject_data}}; // Keyed by location hash prefix.
+  // Holds the rules for the API Help, keyed by
+  // window location's hash prefix.
+  var apiHelpData = {{.inject_data}};
 
-  playBoxPaths = paths; // Global for debugging.
+  playBoxAPIHelpData = apiHelpData; // Global for debugging.
 
   // -------------------------------------------
 
@@ -178,14 +186,14 @@ var playBoxPaths;
       keys.push(p.split('=')[0]);
     }
 
-    var pbem = document.getElementById("playBoxExtrasMain");
-    if (!pbem) {
+    var pbam = document.getElementById("playBoxAHMain");
+    if (!pbam) {
       setTimeout(checkAPIHelp, 1000);
 
       return;
     }
 
-    for (let path of (paths[keys[0]] || [])) {
+    for (let path of (apiHelpData[keys[0]] || [])) {
       for (let title of (path.titles || [])) {
         var a = [];
 
@@ -232,7 +240,7 @@ var playBoxPaths;
 
         if (a.length > 0) {
           var h =
-            `<div class="playBoxExtrasCard">
+            `<div class="playBoxAHCard">
                <h3>
                  ${title.title}
                  ${title.docs ? '<a href="' + title.docs + '" target="_blank">documentation</a>' : ''}
@@ -241,9 +249,9 @@ var playBoxPaths;
                ${a.join('')}
              </div>`;
 
-          pbem.innerHTML = stripEmptyLines(h);
+          pbam.innerHTML = stripEmptyLines(h);
 
-          document.getElementById("playBoxExtrasToggle").className = "playBoxExtrasToggle playBoxShow";
+          document.getElementById("playBoxAHToggle").className = "playBoxAHToggle playBoxShow";
 
 	  var c = document.querySelector('body.modal-open .panel.dialog .panel-footer a[ng-click="$dismiss()"]');
 	  if (c && c.innerText.trim() == "Cancel" && !c.previousElementSibling) {
@@ -252,7 +260,7 @@ var playBoxPaths;
 
           if (title.apiHelpLinkAsLastSibling) {
             var c = document.querySelector(title.apiHelpLinkAsLastSibling);
-            if (c && c.parentNode.lastChild.className != "playBoxAPIHelp") {
+            if (c && c.parentNode.lastChild.className != "playBoxAH") {
               c.parentNode.appendChild(apiHelpLink());
             }
           }
@@ -264,14 +272,14 @@ var playBoxPaths;
       }
     }
 
-    pbem.innerHTML =
-      `<div class="playBoxExtrasCard">
+    pbam.innerHTML =
+      `<div class="playBoxAHCard">
         No API Help available for this feature
        </div>`;
 
-    document.getElementById("playBoxExtrasToggle").className = "playBoxExtrasToggle";
+    document.getElementById("playBoxAHToggle").className = "playBoxAHToggle";
 
-    document.getElementById("playBoxExtras").className = "playBoxExtras";
+    document.getElementById("playBoxAH").className = "playBoxAH";
 
     setTimeout(checkAPIHelp, 1000);
   }
@@ -279,10 +287,11 @@ var playBoxPaths;
   function apiHelpLink() {
     var h = document.createElement("span");
 
-    h.className = "playBoxAPIHelp";
+    h.className = "playBoxAH";
     h.innerHTML =
-      `<a onclick="playBoxExtrasToggle()">
-         API Help <span class="icon fa-question-circle-o"/></a>`;
+      `<a onclick="playBoxAHToggle()">
+         API Help <span class="icon fa-question-circle-o"/>
+       </a>`;
 
     return h;
   }
@@ -301,12 +310,12 @@ var playBoxPaths;
   }
 })()
 
-function playBoxExtrasToggle() {
-  var el = document.getElementById("playBoxExtras");
-  if (el.className == "playBoxExtras") {
-    el.className = "playBoxExtras playBoxShow";
+function playBoxAHToggle() {
+  var el = document.getElementById("playBoxAH");
+  if (el.className == "playBoxAH") {
+    el.className = "playBoxAH playBoxShow";
   } else {
-    el.className = "playBoxExtras";
+    el.className = "playBoxAH";
   }
 }
 </script>
