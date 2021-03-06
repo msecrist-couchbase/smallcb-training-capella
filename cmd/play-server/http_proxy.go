@@ -367,12 +367,32 @@ func InjectResponseUI(staticDir string, host string, portApp int,
 	d := SessionTemplateData(host, portApp, session,
 		*listenPortBase, *listenPortSpan, PortMapping)
 
-	inject_data, err := ReadYaml(staticDir + "/inject.yaml")
+	injectData, err := ReadYaml(staticDir + "/inject.yaml")
 	if err != nil {
 		return fmt.Errorf("ReadYaml, err: %v", err)
 	}
 
-	d["inject_data"] = CleanupInterfaceValue(inject_data)
+	d["injectData"] = CleanupInterfaceValue(injectData)
+
+	tours, _, err :=
+		ReadExamples(staticDir + "/tours")
+	if err != nil {
+		return fmt.Errorf("ReadExamples /tours, err: %v", err)
+	}
+
+	jtours, err := json.Marshal(CleanupInterfaceValue(tours))
+	if err != nil {
+		return fmt.Errorf("json.Marshal, err: %v", err)
+	}
+
+	var otours map[string]interface{}
+
+	err = json.Unmarshal(jtours, &otours)
+	if err != nil {
+		return fmt.Errorf("json.Unmarshal, err: %v", err)
+	}
+
+	d["tours"] = otours
 
 	t := template.Must(template.ParseFiles(staticDir + "/inject.html.tmpl"))
 

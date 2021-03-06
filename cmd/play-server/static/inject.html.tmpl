@@ -12,19 +12,24 @@
   white-space: nowrap;
   z-index: 11000;
 }
+
+#playBox button.playBoxGTToggle,
 #playBox button.playBoxAHToggle {
   display: none;
   height: 1rem;
   min-width: 4rem;
-  margin: 1px 0.5rem;
+  margin: 1px 0 1px 0.7rem;
   background-color: #669ee0;
   padding: 0 0.2rem;
   line-height: 1rem;
   font-size: 0.5rem;
 }
+
+#playBox button.playBoxGTToggle.playBoxShow,
 #playBox button.playBoxAHToggle.playBoxShow {
   display: inline-block;
 }
+
 #playBox .playBoxAH {
   display: none;
   position: absolute;
@@ -41,6 +46,7 @@
 #playBox .playBoxAH.playBoxShow {
   display: block;
 }
+
 #playBox .playBoxAHMain {
   height: 100%;
   padding: 1rem 1rem;
@@ -62,13 +68,39 @@
   margin-left: 8px;
   font-size: 8pt;
 }
+
 form .playBoxAH {
   margin-left: 0.7rem;
   line-height: 2rem;
 }
+
 body.modal-open .panel.dialog .panel-footer .playBoxAH {
   flex-grow: 100;
   margin-left: 0.5rem;
+}
+
+.playBoxGT {
+  display: none;
+  flex-basis: 20rem;
+  min-height: 600px;
+  margin-left: 0.8rem;
+  margin-right: 1rem;
+  border-right: 1px solid #ececec;
+  background-color: white;
+  padding: 0.5rem 1rem 1rem 0;
+  z-index: 1;
+}
+.playBoxGT.playBoxShow {
+  display: block;
+}
+.playBoxGTHeader .modal-close {
+  display: inline-block;
+  position: relative;
+  top: 0;
+  left: 0;
+  padding: 0.05rem 0.4rem;
+  background-color: #669ee0;
+  font-size: .8rem;
 }
 </style>
 
@@ -128,7 +160,11 @@ var playBoxAPIHelpData;
       {{else}}
         'Couchbase Playground'
       {{end}}
-      + `<button id="playBoxAHToggle" class="playBoxAHToggle"
+      + `<button id="playBoxGTToggle" class="playBoxGTToggle"
+                 onclick="playBoxGTToggle()">
+           Guided Tour
+         </button>
+         <button id="playBoxAHToggle" class="playBoxAHToggle"
                  onclick="playBoxAHToggle()">
            API Help
          </button>
@@ -172,14 +208,26 @@ var playBoxAPIHelpData;
 
   // Holds the rules for the API Help, keyed by
   // window location's hash prefix.
-  var apiHelpData = {{.inject_data}};
+  var apiHelpData = {{.injectData}};
 
   playBoxAPIHelpData = apiHelpData; // Global for debugging.
 
   // -------------------------------------------
 
   function checkAPIHelp() {
-    // Ex: #/overview/stats?scenarioBucket=beer-sample&scenarioZoom=minute&statsHostname=all
+    if (document.querySelector(".sign-in-background")) {
+      gtHide();
+
+      apiHelpHide()
+
+      setTimeout(checkAPIHelp, 1000);
+
+      return;
+    }
+
+    document.getElementById("playBoxGTToggle").className = "playBoxGTToggle playBoxShow";
+
+    // Ex: #/overview/stats?scenarioBucket=beer-sample
     var hashParts = window.location.hash.slice(2).split(/[\?\&]/);
 
     var keys = [];
@@ -278,12 +326,20 @@ var playBoxAPIHelpData;
         No API Help available for this feature
        </div>`;
 
-    document.getElementById("playBoxAHToggle").className = "playBoxAHToggle";
-
-    document.getElementById("playBoxAH").className = "playBoxAH";
+    apiHelpHide();
 
     setTimeout(checkAPIHelp, 1000);
   }
+
+  // -------------------------------------------
+
+  function apiHelpHide() {
+    document.getElementById("playBoxAHToggle").className = "playBoxAHToggle";
+
+    document.getElementById("playBoxAH").className = "playBoxAH";
+  }
+
+  // -------------------------------------------
 
   function apiHelpLink() {
     var h = document.createElement("span");
@@ -297,6 +353,8 @@ var playBoxAPIHelpData;
     return h;
   }
 
+  // -------------------------------------------
+
   function stripEmptyLines(s) {
     var lines = [];
 
@@ -309,7 +367,15 @@ var playBoxAPIHelpData;
 
     return lines.join('\n');
   }
+
+  // -------------------------------------------
+
+  function gtHide() {
+    document.getElementById("playBoxGTToggle").className = "playBoxGTToggle";
+  }
 })()
+
+// -------------------------------------------
 
 function playBoxAHToggle() {
   var el = document.getElementById("playBoxAH");
@@ -319,4 +385,41 @@ function playBoxAHToggle() {
     el.className = "playBoxAH";
   }
 }
+
+// -------------------------------------------
+
+var playBoxTours;
+var playBoxToursArr;
+
+function playBoxGTToggle() {
+  var gt = document.getElementById("playBoxGT");
+  if (!gt) {
+    gt = document.createElement("div");
+
+    gt.id = gt.className = "playBoxGT";
+
+    gt.innerHTML =
+      `<div id="playBoxGTMain" class="playBoxGTMain">
+         <div class="playBoxGTHeader">
+           Guided Tour
+           <a class="modal-close"
+              onclick="playBoxGTToggle()">X</a>
+         </div>
+       </div>`;
+
+    var m = document.querySelector("main");
+
+    m.insertBefore(gt, m.firstChild);
+  }
+
+  if (gt.className == "playBoxGT") {
+    gt.className = "playBoxGT playBoxShow";
+  } else {
+    gt.className = "playBoxGT";
+  }
+}
+</script>
+
+<script id="playBoxTours" type="application/json">
+{{.tours}}
 </script>

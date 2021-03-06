@@ -84,9 +84,17 @@ func CleanupInterfaceValue(v interface{}) interface{} {
 			res[fmt.Sprintf("%v", k)] = CleanupInterfaceValue(vv)
 		}
 		return res
+	case map[string]map[string]interface{}:
+		res := make(map[string]interface{})
+		for k, vv := range v {
+			res[fmt.Sprintf("%v", k)] = CleanupInterfaceValue(vv)
+		}
+		return res
 	case string:
 		return v
 	default:
+		fmt.Printf("unknown type: %T %#v\n", v, v)
+
 		return fmt.Sprintf("%v", v)
 	}
 }

@@ -1,0 +1,27 @@
+title: Welcome
+parts:
+ -
+  title: What's in this Guided Tour?
+  content: |
+   hello world
+   hope all is <b>well</b>
+
+   really hope this works!
+ -
+  title: And, then step 2
+  content: |
+   this is step 2
+
+   hello world
+   hope all is <b>well</b>
+
+   really hope this works!
+ -
+  title: Here's step 3
+  content: |
+   step 3 here
+
+   hello world
+   hope all is <b>well</b>
+
+   really hope this works!
