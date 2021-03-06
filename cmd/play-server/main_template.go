@@ -24,6 +24,8 @@ var LangAce = map[string]string{
 	"sh":     "sh",
 	"dotnet": "csharp",
 	"scala":  "scala",
+	"c":      "C",
+	"cc":     "C++",
 }
 
 var LangPretty = map[string]string{
@@ -35,6 +37,8 @@ var LangPretty = map[string]string{
 	"rb":     "Ruby",
 	"sh":     "shell",
 	"scala":  "Scala",
+	"c":      "C",
+	"cc":     "C++",
 }
 
 type MainTemplateData struct {

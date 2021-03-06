@@ -1,0 +1,11 @@
+cmake_minimum_required(VERSION 3.5.1)
+project(devguide LANGUAGES CXX C)
+
+include(FindThreads)
+
+macro(add_program name)
+    add_executable(${name} ${name}.c/${name}.cc)
+    target_link_libraries(${name} couchbase)
+endmacro()
+
+add_program(code)
