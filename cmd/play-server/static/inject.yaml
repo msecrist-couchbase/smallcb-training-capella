@@ -355,7 +355,7 @@ settings/sampleBuckets:
        /opt/couchbase/bin/cbimport json --format sample \\
          -c ${HOST} -u ${USER} -p ${PSWD} -b ${x.innerText.trim()} \\
          -d file:///opt/couchbase/samples/${x.innerText.trim()}.zip
-    apiHelpLinkAsLastSibling: |
+    helpLinkAsLastSibling: |
       form[ng-submit="settingsSampleBucketsCtl.installSampleBuckets()"] button[type="submit"]
 
 views:

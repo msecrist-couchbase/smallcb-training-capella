@@ -1,5 +1,5 @@
 <style>
-#playBox {
+#playg {
   display: block;
   position: absolute;
   top: 0;
@@ -13,8 +13,8 @@
   z-index: 11000;
 }
 
-#playBox button.playBoxGTToggle,
-#playBox button.playBoxAHToggle {
+#playg button.playgTourToggle,
+#playg button.playgHelpToggle {
   display: none;
   height: 1rem;
   min-width: 4rem;
@@ -25,12 +25,12 @@
   font-size: 0.5rem;
 }
 
-#playBox button.playBoxGTToggle.playBoxShow,
-#playBox button.playBoxAHToggle.playBoxShow {
+#playg button.playgTourToggle.playgShow,
+#playg button.playgHelpToggle.playgShow {
   display: inline-block;
 }
 
-#playBox .playBoxAH {
+#playg .playgHelp {
   display: none;
   position: absolute;
   top: 1.1rem;
@@ -43,43 +43,43 @@
   padding: 0 0;
   overflow: hidden;
 }
-#playBox .playBoxAH.playBoxShow {
+#playg .playgHelp.playgShow {
   display: block;
 }
 
-#playBox .playBoxAHMain {
+#playg .playgHelpMain {
   height: 100%;
   padding: 1rem 1rem;
   overflow: scroll;
 }
-#playBox .playBoxAHMain .playBoxAHCard h3 {
+#playg .playgHelpMain .playgHelpCard h3 {
   margin-bottom: 0.5rem;
 }
-#playBox .playBoxAHMain .playBoxAHCard h3 a,
-#playBox .playBoxAHMain .playBoxAHCard h4 a {
+#playg .playgHelpMain .playgHelpCard h3 a,
+#playg .playgHelpMain .playgHelpCard h4 a {
   margin-left: 6px;
   font-size: 8pt;
 }
-#playBox .playBoxAHMain .playBoxAHCard h4 {
+#playg .playgHelpMain .playgHelpCard h4 {
   margin-left: 4px;
   font-size: 10pt;
 }
-#playBox .playBoxAHMain .playBoxAHCard pre {
+#playg .playgHelpMain .playgHelpCard pre {
   margin-left: 8px;
   font-size: 8pt;
 }
 
-form .playBoxAH {
+form .playgHelp {
   margin-left: 0.7rem;
   line-height: 2rem;
 }
 
-body.modal-open .panel.dialog .panel-footer .playBoxAH {
+body.modal-open .panel.dialog .panel-footer .playgHelp {
   flex-grow: 100;
   margin-left: 0.5rem;
 }
 
-.playBoxGT {
+.playgTour {
   display: none;
   flex-basis: 20rem;
   min-height: 600px;
@@ -90,10 +90,10 @@ body.modal-open .panel.dialog .panel-footer .playBoxAH {
   padding: 0.5rem 1rem 1rem 0;
   z-index: 1;
 }
-.playBoxGT.playBoxShow {
+.playgTour.playgShow {
   display: block;
 }
-.playBoxGTHeader .modal-close {
+.playgTourHeader .modal-close {
   display: inline-block;
   position: relative;
   top: 0;
@@ -105,7 +105,7 @@ body.modal-open .panel.dialog .panel-footer .playBoxAH {
 </style>
 
 <script type="text/javascript">
-var playBoxAPIHelpData;
+var playgHelpData;
 
 (function () {
   var checkPlayLoginN = 0;
@@ -144,14 +144,14 @@ var playBoxAPIHelpData;
   // -------------------------------------------
 
   // Creates the top-left, high z-index div for the Couchbase Playground,
-  // aka, the "playBox", which has a hidden-by-default toggle button
-  // and popup for the API Help (AH).
-  function createPlayBox() {
+  // or, the "playg", which has hidden-by-default toggle buttons
+  // and is the parent for the API Help popup (playgHelp).
+  function createPlayG() {
     if (!document.body) { return; }
 
     var el = document.createElement("div");
 
-    el.id = el.className = "playBox";
+    el.id = el.className = "playg";
 
     el.innerHTML =
       {{if .SessionId}}
@@ -160,72 +160,72 @@ var playBoxAPIHelpData;
       {{else}}
         'Couchbase Playground'
       {{end}}
-      + `<button id="playBoxGTToggle" class="playBoxGTToggle"
-                 onclick="playBoxGTToggle()">
+      + `<button id="playgTourToggle" class="playgTourToggle"
+                 onclick="playgTourToggle()">
            Guided Tour
          </button>
-         <button id="playBoxAHToggle" class="playBoxAHToggle"
-                 onclick="playBoxAHToggle()">
+         <button id="playgHelpToggle" class="playgHelpToggle"
+                 onclick="playgHelpToggle()">
            API Help
          </button>
-         <div id="playBoxAH" class="playBoxAH">
+         <div id="playgHelp" class="playgHelp">
            <a class="ui-dialog-titlebar-close modal-close"
-              onclick="playBoxAHToggle()">X</a>
+              onclick="playgHelpToggle()">X</a>
            <div class="panel-header">
              <h2>API Help</h2>
            </div>
-           <div id="playBoxAHMain" class="playBoxAHMain"/>
+           <div id="playgHelpMain" class="playgHelpMain"/>
          </div>`;
 
     document.body.appendChild(el);
 
     setTimeout(checkPlayLogin, 200);
 
-    setTimeout(checkAPIHelp, 2500);
+    setTimeout(checkHelp, 2500);
   }
 
   // -------------------------------------------
 
-  var checkPlayBoxN = 0;
+  var checkPlayGN = 0;
 
-  function checkPlayBox() {
-    checkPlayBoxN += 1;
-    if (checkPlayBoxN > 20) {
+  function checkPlayG() {
+    checkPlayGN += 1;
+    if (checkPlayGN > 20) {
       return;
     }
 
-    var el = document.getElementById("playBox");
+    var el = document.getElementById("playg");
     if (!el) {
-      createPlayBox();
+      createPlayG();
     }
 
-    setTimeout(checkPlayBox, 500); // Repeatedly try creating the playBox.
+    setTimeout(checkPlayG, 500); // Repeatedly try creating the playg.
   }
 
-  checkPlayBox();
+  checkPlayG();
 
   // -------------------------------------------
 
   // Holds the rules for the API Help, keyed by
   // window location's hash prefix.
-  var apiHelpData = {{.injectData}};
+  var helpData = {{.injectData}};
 
-  playBoxAPIHelpData = apiHelpData; // Global for debugging.
+  playgHelpData = helpData; // Global for debugging.
 
   // -------------------------------------------
 
-  function checkAPIHelp() {
+  function checkHelp() {
     if (document.querySelector(".sign-in-background")) {
-      gtHide();
+      tourHide();
 
-      apiHelpHide()
+      helpHide()
 
-      setTimeout(checkAPIHelp, 1000);
+      setTimeout(checkHelp, 1000);
 
       return;
     }
 
-    document.getElementById("playBoxGTToggle").className = "playBoxGTToggle playBoxShow";
+    document.getElementById("playgTourToggle").className = "playgTourToggle playgShow";
 
     // Ex: #/overview/stats?scenarioBucket=beer-sample
     var hashParts = window.location.hash.slice(2).split(/[\?\&]/);
@@ -235,14 +235,14 @@ var playBoxAPIHelpData;
       keys.push(p.split('=')[0]);
     }
 
-    var pbam = document.getElementById("playBoxAHMain");
+    var pbam = document.getElementById("playgHelpMain");
     if (!pbam) {
-      setTimeout(checkAPIHelp, 1000);
+      setTimeout(checkHelp, 1000);
 
       return;
     }
 
-    for (let path of (apiHelpData[keys[0]] || [])) {
+    for (let path of (helpData[keys[0]] || [])) {
       for (let title of (path.titles || [])) {
         var a = [];
 
@@ -289,7 +289,7 @@ var playBoxAPIHelpData;
 
         if (a.length > 0) {
           var h =
-            `<div class="playBoxAHCard">
+            `<div class="playgHelpCard">
                <h3>
                  ${title.title}
                  ${title.docs ? '<a href="' + title.docs + '" target="_blank">documentation</a>' : ''}
@@ -300,21 +300,21 @@ var playBoxAPIHelpData;
 
           pbam.innerHTML = stripEmptyLines(h);
 
-          document.getElementById("playBoxAHToggle").className = "playBoxAHToggle playBoxShow";
+          document.getElementById("playgHelpToggle").className = "playgHelpToggle playgShow";
 
 	  var c = document.querySelector('body.modal-open .panel.dialog .panel-footer a[ng-click="$dismiss()"]');
 	  if (c && c.innerText.trim() == "Cancel" && !c.previousElementSibling) {
-            c.parentNode.insertBefore(apiHelpLink(), c);
+            c.parentNode.insertBefore(helpLink(), c);
           }
 
-          if (title.apiHelpLinkAsLastSibling) {
-            var c = document.querySelector(title.apiHelpLinkAsLastSibling);
-            if (c && c.parentNode.lastChild.className != "playBoxAH") {
-              c.parentNode.appendChild(apiHelpLink());
+          if (title.helpLinkAsLastSibling) {
+            var c = document.querySelector(title.helpLinkAsLastSibling);
+            if (c && c.parentNode.lastChild.className != "playgHelp") {
+              c.parentNode.appendChild(helpLink());
             }
           }
 
-          setTimeout(checkAPIHelp, 1000);
+          setTimeout(checkHelp, 1000);
 
           return;
         }
@@ -322,31 +322,31 @@ var playBoxAPIHelpData;
     }
 
     pbam.innerHTML =
-      `<div class="playBoxAHCard">
+      `<div class="playgHelpCard">
         No API Help available for this feature
        </div>`;
 
-    apiHelpHide();
+    helpHide();
 
-    setTimeout(checkAPIHelp, 1000);
+    setTimeout(checkHelp, 1000);
   }
 
   // -------------------------------------------
 
-  function apiHelpHide() {
-    document.getElementById("playBoxAHToggle").className = "playBoxAHToggle";
+  function helpHide() {
+    document.getElementById("playgHelpToggle").className = "playgHelpToggle";
 
-    document.getElementById("playBoxAH").className = "playBoxAH";
+    document.getElementById("playgHelp").className = "playgHelp";
   }
 
   // -------------------------------------------
 
-  function apiHelpLink() {
+  function helpLink() {
     var h = document.createElement("span");
 
-    h.className = "playBoxAH";
+    h.className = "playgHelp";
     h.innerHTML =
-      `<a onclick="playBoxAHToggle()">
+      `<a onclick="playgHelpToggle()">
          API Help <span class="icon fa-question-circle-o"/>
        </a>`;
 
@@ -370,40 +370,40 @@ var playBoxAPIHelpData;
 
   // -------------------------------------------
 
-  function gtHide() {
-    document.getElementById("playBoxGTToggle").className = "playBoxGTToggle";
+  function tourHide() {
+    document.getElementById("playgTourToggle").className = "playgTourToggle";
   }
 })()
 
 // -------------------------------------------
 
-function playBoxAHToggle() {
-  var el = document.getElementById("playBoxAH");
-  if (el.className == "playBoxAH") {
-    el.className = "playBoxAH playBoxShow";
+function playgHelpToggle() {
+  var el = document.getElementById("playgHelp");
+  if (el.className == "playgHelp") {
+    el.className = "playgHelp playgShow";
   } else {
-    el.className = "playBoxAH";
+    el.className = "playgHelp";
   }
 }
 
 // -------------------------------------------
 
-var playBoxTours;
-var playBoxToursArr;
+var playgTours;
+var playgToursArr;
 
-function playBoxGTToggle() {
-  var gt = document.getElementById("playBoxGT");
+function playgTourToggle() {
+  var gt = document.getElementById("playgTour");
   if (!gt) {
     gt = document.createElement("div");
 
-    gt.id = gt.className = "playBoxGT";
+    gt.id = gt.className = "playgTour";
 
     gt.innerHTML =
-      `<div id="playBoxGTMain" class="playBoxGTMain">
-         <div class="playBoxGTHeader">
+      `<div id="playgTourMain" class="playgTourMain">
+         <div class="playgTourHeader">
            Guided Tour
            <a class="modal-close"
-              onclick="playBoxGTToggle()">X</a>
+              onclick="playgTourToggle()">X</a>
          </div>
        </div>`;
 
@@ -412,14 +412,14 @@ function playBoxGTToggle() {
     m.insertBefore(gt, m.firstChild);
   }
 
-  if (gt.className == "playBoxGT") {
-    gt.className = "playBoxGT playBoxShow";
+  if (gt.className == "playgTour") {
+    gt.className = "playgTour playgShow";
   } else {
-    gt.className = "playBoxGT";
+    gt.className = "playgTour";
   }
 }
 </script>
 
-<script id="playBoxTours" type="application/json">
+<script id="playgTours" type="application/json">
 {{.tours}}
 </script>
