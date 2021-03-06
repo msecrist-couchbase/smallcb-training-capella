@@ -93,7 +93,7 @@ body.modal-open .panel.dialog .panel-footer .playgHelp {
 .playgTour.playgShow {
   display: block;
 }
-.playgTourHeader .modal-close {
+.playgTour .modal-close {
   display: inline-block;
   position: relative;
   top: 0;
@@ -102,9 +102,38 @@ body.modal-open .panel.dialog .panel-footer .playgHelp {
   background-color: #669ee0;
   font-size: .8rem;
 }
+
+.playgTour .playgTourContent h3,
+.playgTour .playgTourContent h4 {
+  margin: 0.5rem 0;
+}
+
+.playgTour .playgTourContent .playgTourControls {
+  margin: 1.5rem 0;
+  font-size: .7rem;
+}
+.playgTour .playgTourContent .playgTourControls button {
+  min-width: 3rem;
+  height: 1rem;
+  background-color: #669ee0;
+  padding: 0 0.5rem;
+  line-height: 1rem;
+  font-size: .7rem;
+  color: #fff;
+}
+.playgTour .playgTourContent .playgTourControls button:disabled {
+  background-color: #d4d4d4;
+  color: #f4f4f4;
+}
 </style>
 
 <script type="text/javascript">
+var playgApp = {
+  host: '{{.Host}}',
+  port: '{{.PortApp}}',
+  session: '{{.SessionId}}'
+};
+
 var playgHelpData;
 
 (function () {
@@ -225,7 +254,10 @@ var playgHelpData;
       return;
     }
 
-    document.getElementById("playgTourToggle").className = "playgTourToggle playgShow";
+    var gt = document.getElementById("playgTourToggle");
+    if (gt) {
+      gt.className = "playgTourToggle playgShow";
+    }
 
     // Ex: #/overview/stats?scenarioBucket=beer-sample
     var hashParts = window.location.hash.slice(2).split(/[\?\&]/);
@@ -388,9 +420,6 @@ function playgHelpToggle() {
 
 // -------------------------------------------
 
-var playgTours;
-var playgToursArr;
-
 function playgTourToggle() {
   var gt = document.getElementById("playgTour");
   if (!gt) {
@@ -399,23 +428,66 @@ function playgTourToggle() {
     gt.id = gt.className = "playgTour";
 
     gt.innerHTML =
-      `<div id="playgTourMain" class="playgTourMain">
-         <div class="playgTourHeader">
+      `<div>
+         <div>
            Guided Tour
            <a class="modal-close"
               onclick="playgTourToggle()">X</a>
          </div>
+         <div id="playgTourContent" class="playgTourContent">
+         </div>
        </div>`;
 
     var m = document.querySelector("main");
+    if (!m) { return; }
 
     m.insertBefore(gt, m.firstChild);
+
+    playgTourLoad("welcome", 0);
   }
 
   if (gt.className == "playgTour") {
     gt.className = "playgTour playgShow";
   } else {
     gt.className = "playgTour";
+  }
+}
+
+var playgTours;
+
+function playgTourLoad(name, part) {
+  if (!playgTours) {
+    playgTours = JSON.parse(document.getElementById("playgTours").innerText);
+  }
+
+  var t = playgTours[name];
+  var p = t.parts[part];
+
+  var controls = '';
+
+  if (t.parts.length > 1) {
+    controls =
+      `<div class="playgTourControls">
+         <button onclick="playgTourLoad('${name}', ${part - 1})"
+                 ${part <= 0 ? 'disabled' : ''}>
+           Previous</button>
+         <span>&nbsp;&nbsp;${part + 1} of ${t.parts.length}&nbsp;&nbsp;</span>
+         <button onclick="playgTourLoad('${name}', ${part + 1})"
+                 ${part >= t.parts.length - 1 ? 'disabled' : ''}>
+           Next</button>
+       </div>`;
+  }
+
+  var a = [`<h3>${t.title}</h3>`];
+
+  a.push(`<h4>${p.title}</h4>`);
+  a.push(p.content);
+  a.push(controls);
+
+  document.getElementById("playgTourContent").innerHTML = a.join('');
+
+  for (let a of document.querySelectorAll('.playgTourContent a[data-playg="app"]')) {
+    a.href = `http://${playgApp.host}:${playgApp.port}/?s=${playgApp.session}`;
   }
 }
 </script>

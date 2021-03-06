@@ -1,0 +1,173 @@
+title: Welcome
+parts:
+ -
+  title: What's in this Guided Tour?
+  content: |
+   In this guided tour, we'll briefly explore
+   some key features of Couchbase Server.
+   <br/><br/>
+
+   Major features of Couchbase Server are accessed
+   through the main menu.
+   <br/><br/>
+
+   <span style="color: #666;">
+   (On narrow screens,
+    click <span class="icon fa-navicon"></span>
+    to pop open the main menu.)</span>
+   <br/><br/>
+
+   You'll see links like Dashboard, Servers, Buckets, Backup, etc.
+   <br/><br/>
+
+   Next, let's look at the Dashboard.
+
+ -
+  title: Dashboard
+  content: |
+   Click on the main menu's Dashboard link.
+   <br/><br/>
+
+   The Dashboard gives a real-time sense of the
+   cluster's activity and performance.
+   <br/><br/>
+
+   At this point, the graphs shouldn't show much activity,
+   since we haven't sent any requests into the database yet.
+   <br/><br/>
+
+   For more info:
+   <a href="https://docs.couchbase.com/server/current/getting-started/look-at-the-results.html#examine-the-cluster-dashboard"
+      target="_blank">
+     Dashboard&nbsp;documentation</a>
+   <br/><br/>
+
+   Next: let's explore the Servers screen.
+
+ -
+  title: Servers
+  content: |
+   Click on the main menu's Servers link.
+   <br/><br/>
+
+   On the Servers screen,
+   you can see that we have only a single server (127.0.0.1) in
+   the cluster in this test-drive Playground installation.
+   <br/><br/>
+
+   The Servers screen is where you can add and remove
+   servers from the cluster.
+   <br/><br/>
+
+   For more info:
+   <a href="https://docs.couchbase.com/server/current/manage/manage-nodes/list-cluster-nodes.html"
+      target="_blank">
+    Servers&nbsp;documentation</a>
+   <br/><br/>
+
+   Next: let's explore the Buckets screen.
+
+ -
+  title: Buckets
+  content: |
+   Click on the main menu's Buckets link.
+   <br/><br/>
+
+   Data in Couchbase is stored in <i>buckets</i>.
+   <br/><br/>
+
+   A bucket holds containers called <i>scopes</i>,
+   which in turn holds containers called <i>collections</i>,
+   which in turn holds JSON documents.
+   <br/><br/>
+
+   In this test-drive Playground installation,
+   two sample buckets have been preloaded...
+   <ul>
+    <li><code>beer-sample</code></li>
+    <li><code>travel-sample</code></li>
+   </ul>
+   <br/>
+
+   For more info:
+   <a href="https://docs.couchbase.com/server/current/learn/buckets-memory-and-storage/buckets-memory-and-storage.html"
+      target="_blank">
+     Buckets&nbsp;documentation</a>
+   <br/><br/>
+
+   Next, let's check out the Documents editor.
+
+ -
+  title: Documents Editor
+  content: |
+   Click on the main menu's Documents link.
+   <br/><br/>
+
+   In the Documents Edit screen, you can find and modify your JSON
+   documents.
+   <br/><br/>
+
+   The Location controls let you examine the documents in a
+   specific bucket/scope/collection.
+   <br/><br/>
+
+   Try editing and saving a JSON document by clicking on a
+   <span class="icon fa-pencil"></span> button in a document row.
+   <br/><br/>
+
+   Next, let's learn about the Query Workbench.
+
+ -
+  title: Query Workbench
+  content: |
+   Click on the main menu's Query link.
+   <br/><br/>
+
+   You'll see the Query Workbench, which has a Query Editor, where you
+   can edit and execute N1QL queries (i.e., SQL for JSON).
+   <br/><br/>
+
+   For example, try:
+   <br/>
+   <code><pre>SELECT * FROM `travel-sample`
+   LIMIT 5;</pre></code>
+   <br/>
+
+   Excuting that query will show Query Results,
+   where you can see different views of the results,
+   including Table, JSON, Tree, Plan, etc.
+   <br/><br/>
+
+   For more info:
+   <a href="https://docs.couchbase.com/server/current/n1ql/query.html"
+      target="_blank">
+     Query docs
+   </a>,
+   <a href="https://docs.couchbase.com/server/current/n1ql/n1ql-language-reference/selectclause.html"
+      target="_blank">
+     SELECT syntax
+   </a>
+   <br/><br/>
+
+   Next, let's look at some next steps.
+
+ -
+  title: Next Steps
+  content: |
+   This welcome tour has only scratched the surface!
+   <br/><br/>
+
+   There's a lot more to learn about Couchbase Server --
+   take a look at the
+   <a href="https://docs.couchbase.com/home/server.html"
+      target="_blank">Couchbase Server documentation</a>.
+   <br/><br/>
+
+   Next, your test-drive Playground session has many runnable code
+   examples in Java, NodeJS, Python, .NET, PHP and more languages --
+   to help you learn how to easily develop applications using a
+   Couchbase database.  <br/><br/>
+
+   Take me to the
+   <a target="_blank" data-playg="app">
+     runnable code examples</a>
