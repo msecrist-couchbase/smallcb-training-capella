@@ -48,6 +48,8 @@ var ExecPrefixes = map[string]string{
 	"php":    "/run-php.sh",
 	"rb":     "/run-ruby.sh",
 	"scala":  "/run-scala-sbt.sh",
+	"c":      "/run-cc.sh",
+	"cc":     "/run-cc.sh",
 }
 
 // -----------------------------------
