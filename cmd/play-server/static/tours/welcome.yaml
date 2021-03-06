@@ -25,7 +25,7 @@ parts:
  -
   title: Dashboard
   content: |
-   Click on the main menu's Dashboard link.
+   Click on the main menu's <i>Dashboard</i> link.
    <br/><br/>
 
    The Dashboard gives a real-time sense of the
@@ -47,7 +47,7 @@ parts:
  -
   title: Servers
   content: |
-   Click on the main menu's Servers link.
+   Click on the main menu's <i>Servers</i> link.
    <br/><br/>
 
    On the Servers screen,
@@ -70,7 +70,7 @@ parts:
  -
   title: Buckets
   content: |
-   Click on the main menu's Buckets link.
+   Click on the main menu's <i>Buckets</i> link.
    <br/><br/>
 
    Data in Couchbase is stored in <i>buckets</i>.
@@ -95,19 +95,19 @@ parts:
      Buckets&nbsp;documentation</a>
    <br/><br/>
 
-   Next, let's check out the Documents editor.
+   Next, let's check out the Documents Workbench.
 
  -
-  title: Documents Editor
+  title: Documents Workbench
   content: |
-   Click on the main menu's Documents link.
+   Click on the main menu's <i>Documents</i> link.
    <br/><br/>
 
-   In the Documents Edit screen, you can find and modify your JSON
-   documents.
+   In the Documents Workbench screen, you can find and
+   modify your JSON documents.
    <br/><br/>
 
-   The Location controls let you examine the documents in a
+   The Keyspace control let you examine the documents in a
    specific bucket/scope/collection.
    <br/><br/>
 
@@ -120,7 +120,7 @@ parts:
  -
   title: Query Workbench
   content: |
-   Click on the main menu's Query link.
+   Click on the main menu's <i>Query</i> link.
    <br/><br/>
 
    You'll see the Query Workbench, which has a Query Editor, where you
@@ -133,7 +133,7 @@ parts:
    LIMIT 5;</pre></code>
    <br/>
 
-   Excuting that query will show Query Results,
+   Execute that query to see results in the Query Results area,
    where you can see different views of the results,
    including Table, JSON, Tree, Plan, etc.
    <br/><br/>
@@ -145,7 +145,7 @@ parts:
    </a>,
    <a href="https://docs.couchbase.com/server/current/n1ql/n1ql-language-reference/selectclause.html"
       target="_blank">
-     SELECT syntax
+     SELECT clause syntax
    </a>
    <br/><br/>
 
@@ -158,16 +158,20 @@ parts:
    <br/><br/>
 
    There's a lot more to learn about Couchbase Server --
-   take a look at the
+   check out the
    <a href="https://docs.couchbase.com/home/server.html"
-      target="_blank">Couchbase Server documentation</a>.
+      target="_blank">documentation</a>.
    <br/><br/>
 
-   Next, your test-drive Playground session has many runnable code
-   examples in Java, NodeJS, Python, .NET, PHP and more languages --
-   to help you learn how to easily develop applications using a
-   Couchbase database.  <br/><br/>
+   Also, your test-drive Playground session has many
+   <i>live code examples</i>
+   in Java, NodeJS, Python, .NET, PHP, etc --
+   to show you how to store and access data
+   from your application programs by
+   calling the Couchbase SDK.
+   <br/><br/>
 
-   Take me to the
-   <a target="_blank" data-playg="app">
-     runnable code examples</a>
+   <div class="playgAppSessionNeed">
+     Take me to the
+     <a target="_blank" data-playg="app">runnable code examples</a>
+   </div>

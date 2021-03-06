@@ -109,7 +109,7 @@ body.modal-open .panel.dialog .panel-footer .playgHelp {
 }
 
 .playgTour .playgTourContent .playgTourControls {
-  margin: 1.5rem 0;
+  margin: 1.75rem 0;
   font-size: .7rem;
 }
 .playgTour .playgTourContent .playgTourControls button {
@@ -125,6 +125,45 @@ body.modal-open .panel.dialog .panel-footer .playgHelp {
   background-color: #d4d4d4;
   color: #f4f4f4;
 }
+.playgTour .playgTourContent .playgTourControls .playgTourPage {
+  display: inline-block;
+  position: relative;
+  line-height: 1rem;
+  font-size: .7rem;
+  color: #777;
+  cursor: pointer;
+}
+.playgTour .playgTourContent .playgTourControls input[type="checkbox"].playgTourChooser {
+}
+.playgTour .playgTourContent .playgTourControls div.playgTourChooser {
+  display: none;
+}
+.playgTour .playgTourContent .playgTourControls input#playgTourChooser:checked ~ div.playgTourChooser {
+  display: block;
+  position: absolute;
+  bottom: 15px;
+  left: 0px;
+  max-height: 70vh;
+  margin-bottom: 5px;
+  border: 1px solid #aaa;
+  background: white;
+  padding: 0.5rem 0.5rem;
+  overflow: scroll-y;
+}
+.playgTour .playgTourContent .playgTourControls .playgTourChooser a {
+  display: block;
+  white-space: nowrap;
+}
+.playgTour .playgTourContent .playgTourControls .playgTourChooser a:hover {
+  background-color: #eee;
+}
+
+.playgAppSessionNeed {
+  display: none;
+}
+.playgAppSessionHave .playgAppSessionNeed {
+  display: block;
+}
 </style>
 
 <script type="text/javascript">
@@ -134,7 +173,7 @@ var playgApp = {
   session: '{{.SessionId}}'
 };
 
-var playgHelpData;
+var playgHelpData = {{.injectData}};
 
 (function () {
   var checkPlayLoginN = 0;
@@ -173,8 +212,8 @@ var playgHelpData;
   // -------------------------------------------
 
   // Creates the top-left, high z-index div for the Couchbase Playground,
-  // or, the "playg", which has hidden-by-default toggle buttons
-  // and is the parent for the API Help popup (playgHelp).
+  // or, the "playg", which has hidden-by-default toggle buttons and
+  // is also the parent for the API Help popup (playgHelp).
   function createPlayG() {
     if (!document.body) { return; }
 
@@ -235,19 +274,11 @@ var playgHelpData;
 
   // -------------------------------------------
 
-  // Holds the rules for the API Help, keyed by
-  // window location's hash prefix.
-  var helpData = {{.injectData}};
-
-  playgHelpData = helpData; // Global for debugging.
-
-  // -------------------------------------------
-
   function checkHelp() {
     if (document.querySelector(".sign-in-background")) {
-      tourHide();
+      document.getElementById("playgTourToggle").className = "playgTourToggle";
 
-      helpHide()
+      helpHide();
 
       setTimeout(checkHelp, 1000);
 
@@ -257,6 +288,13 @@ var playgHelpData;
     var gt = document.getElementById("playgTourToggle");
     if (gt) {
       gt.className = "playgTourToggle playgShow";
+    }
+
+    if (!playgTourLocationLoaded &&
+        window.location.search.indexOf("playgTour=") > 0) {
+      playgTourLocationLoaded = true;
+
+      playgTourToggle(true);
     }
 
     // Ex: #/overview/stats?scenarioBucket=beer-sample
@@ -274,7 +312,7 @@ var playgHelpData;
       return;
     }
 
-    for (let path of (helpData[keys[0]] || [])) {
+    for (let path of (playgHelpData[keys[0]] || [])) {
       for (let title of (path.titles || [])) {
         var a = [];
 
@@ -399,12 +437,6 @@ var playgHelpData;
 
     return lines.join('\n');
   }
-
-  // -------------------------------------------
-
-  function tourHide() {
-    document.getElementById("playgTourToggle").className = "playgTourToggle";
-  }
 })()
 
 // -------------------------------------------
@@ -420,7 +452,22 @@ function playgHelpToggle() {
 
 // -------------------------------------------
 
-function playgTourToggle() {
+var playgTourLocationLoaded = false;
+
+function playgTourToggle(forceShow) {
+  var gt = playgTourCreate();
+  if (gt) {
+    if (gt.className == "playgTour" || forceShow) {
+      gt.className = "playgTour playgShow";
+    } else {
+      gt.className = "playgTour";
+    }
+  }
+}
+
+// -------------------------------------------
+
+function playgTourCreate() {
   var gt = document.getElementById("playgTour");
   if (!gt) {
     gt = document.createElement("div");
@@ -428,7 +475,7 @@ function playgTourToggle() {
     gt.id = gt.className = "playgTour";
 
     gt.innerHTML =
-      `<div>
+      `<div class="${playgApp.session ? 'playgAppSessionHave' : ''}">
          <div>
            Guided Tour
            <a class="modal-close"
@@ -443,15 +490,17 @@ function playgTourToggle() {
 
     m.insertBefore(gt, m.firstChild);
 
-    playgTourLoad("welcome", 0);
+    var params = new URLSearchParams(document.location.search.substring(1));
+
+    var tour = params.get("playgTour").split(',');
+
+    playgTourLoad(tour[0] || "welcome", tour[1] || 0);
   }
 
-  if (gt.className == "playgTour") {
-    gt.className = "playgTour playgShow";
-  } else {
-    gt.className = "playgTour";
-  }
+  return gt;
 }
+
+// -------------------------------------------
 
 var playgTours;
 
@@ -466,12 +515,26 @@ function playgTourLoad(name, part) {
   var controls = '';
 
   if (t.parts.length > 1) {
+    chooser = [`<div class="playgTourChooser">`];
+
+    for (var i = 0; i < t.parts.length; i++) {
+      chooser.push(`<a onclick="playgTourLoad('${name}', ${i})">${i + 1} - ${t.parts[i].title}</a>`);
+    }
+
+    chooser.push(`</div>`);
+
     controls =
       `<div class="playgTourControls">
          <button onclick="playgTourLoad('${name}', ${part - 1})"
                  ${part <= 0 ? 'disabled' : ''}>
            Previous</button>
-         <span>&nbsp;&nbsp;${part + 1} of ${t.parts.length}&nbsp;&nbsp;</span>
+         <label class="playgTourPage" for="playgTourChooser">
+           <input type="checkbox" name="playgTourChooser" id="playgTourChooser" class="playgTourChooser"/>
+           ${chooser.join('')}
+           &nbsp;&nbsp;
+           ${part + 1} of ${t.parts.length}&nbsp;&#x25BC;
+           &nbsp;&nbsp;
+         </label>
          <button onclick="playgTourLoad('${name}', ${part + 1})"
                  ${part >= t.parts.length - 1 ? 'disabled' : ''}>
            Next</button>
@@ -487,7 +550,10 @@ function playgTourLoad(name, part) {
   document.getElementById("playgTourContent").innerHTML = a.join('');
 
   for (let a of document.querySelectorAll('.playgTourContent a[data-playg="app"]')) {
-    a.href = `http://${playgApp.host}:${playgApp.port}/?s=${playgApp.session}`;
+    // Ex: '/foo/bar' turns into 'foo/bar'.
+    var href = (a.href || '').replace(/^\//, '');
+
+    a.href = `http://${playgApp.host}:${playgApp.port}/${href}?s=${playgApp.session}`;
   }
 }
 </script>
