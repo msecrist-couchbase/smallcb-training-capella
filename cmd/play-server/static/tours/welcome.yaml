@@ -130,12 +130,10 @@ parts:
    <br/><br/>
 
    In this test-drive Playground installation,
-   the preloaded sample buckets are...
-   <ul>
-    <li><code>beer-sample</code></li>
-    <li><code>travel-sample</code></li>
-   </ul>
-   <br/>
+   the preloaded sample buckets are
+   <code>beer-sample</code> and
+   <code>travel-sample</code>.
+   <br/><br/>
 
    For more info:
    <a href="https://docs.couchbase.com/server/current/learn/buckets-memory-and-storage/buckets-memory-and-storage.html"
@@ -221,6 +219,72 @@ parts:
    </a>
    <br/><br/>
 
+   Next, let's look at some application code.
+
+ -
+  title: Application Code
+  content: |
+   You can access your JSON documents
+   from your applications by using a
+   <a href="https://docs.couchbase.com/home/sdk.html"
+      target="_blank">
+     Couchbase SDK.</a>
+   <br/><br/>
+
+   Here's a runnable example using the Couchbase SDK for Python
+   which retrieves a JSON document from your
+   test-drive Playground database...
+   <br/><br/>
+
+   <form data-playg="app" action="/run" method="post"
+         target="playgTourOutput">
+
+   <input name="s" type="hidden"/>
+
+   <input name="lang" type="hidden" value="py"/>
+
+   <textarea name="code">#!/usr/bin/python3
+
+   import sys
+
+   from couchbase.cluster import Cluster, ClusterOptions
+   from couchbase_core.cluster import PasswordAuthenticator
+
+   pa = PasswordAuthenticator(
+       'CB_USER', 'CB_PSWD')
+
+   cluster = Cluster(
+       'couchbase://127.0.0.1',
+       ClusterOptions(pa))
+
+   b = cluster.bucket('travel-sample')
+
+   coll = b.default_collection()
+
+   print(coll.get('airline_10').content)
+   </textarea>
+
+   <input type="submit" value="Run The Code"/>
+
+   </form>
+
+   <iframe id="playgTourOutput" name="playgTourOutput">
+     <i>output appears here</i>
+   </iframe>
+   <br/><br/>
+
+   Your test-drive Playground session has more
+   <i>live code examples</i>
+   that you can try out for
+   Java, NodeJS, Python, .NET, PHP, and more.
+   <br/><br/>
+
+   <div class="playgAppSessionNeed">
+     Take me to the
+     <a target="_blank" data-playg="app">runnable code examples</a>
+   </div>
+   <br/>
+
    Next, let's look at some next steps.
 
  -
@@ -235,19 +299,8 @@ parts:
       target="_blank">documentation</a>.
    <br/><br/>
 
-   Also, your test-drive Playground session has many
-   <i>live code examples</i>
-   in Java, NodeJS, Python, .NET, PHP, etc --
-   to show you how to store and access data
-   from your application programs by
-   calling the Couchbase SDK.
+   Thanks for trying out Couchbase!
    <br/><br/>
-
-   <div class="playgAppSessionNeed">
-     Take me to the
-     <a target="_blank" data-playg="app">runnable code examples</a>
-   </div>
-   <br/>
 
    To close this Guided Tour, click
    <a class="modal-close"

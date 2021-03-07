@@ -124,6 +124,34 @@ body.modal-open .panel.dialog .panel-footer .playgHelp {
   text-decoration: underline;
 }
 
+.playgTour .playgTourContent textarea {
+  overflow: scroll;
+  height: 9rem;
+  white-space: pre;
+  font-family: monospace;
+  font-size: 0.7rem;
+}
+
+.playgTour .playgTourContent iframe {
+  height: 5rem;
+  border: 1px solid #d1d1d1;
+  background-color: #666;
+}
+
+.playgTour .playgTourContent input[type="submit"] {
+  height: 1rem;
+  border: none;
+  border-radius: 2px;
+  box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.2);
+  background-color: #669ee0;
+  padding: 0 0.5rem;
+  white-space: nowrap;
+  line-height: 1rem;
+  font-size: 0.7rem;
+  color: #fff;
+  cursor: pointer;
+}
+
 .playgTour .playgTourContent .playgTourControls {
   margin: 1.75rem 0;
   font-size: .7rem;
@@ -186,7 +214,9 @@ body.modal-open .panel.dialog .panel-footer .playgHelp {
 var playgApp = {
   host: '{{.Host}}',
   port: '{{.PortApp}}',
-  session: '{{.SessionId}}'
+  session: '{{.SessionId}}',
+  user: '',
+  pswd: ''
 };
 
 var playgHelpData = {{.injectData}};
@@ -206,6 +236,10 @@ var playgHelpData = {{.injectData}};
     var lp = params.get("lp");
 
     if (lu != "" && lp != "") {
+      playgApp.user = playgApp.user || lu;
+      playgApp.pswd = playgApp.pswd || lp;
+
+
       var eu = document.getElementById("auth-username-input");
       if (eu && eu.value == "") {
         var ep = document.getElementById("auth-password-input");
@@ -587,6 +621,20 @@ function playgTourLoad(name, part) {
     var href = (a.href || '').replace(/^\//, '');
 
     a.href = `http://${playgApp.host}:${playgApp.port}/${href}?s=${playgApp.session}`;
+  }
+
+  for (let f of document.querySelectorAll('.playgTourContent form[data-playg="app"]')) {
+    var url = new URL(f.action);
+
+    f.action = `http://${playgApp.host}:${playgApp.port}${url.pathname}`;
+
+    f.querySelector('input[name="s"]').value = playgApp.session;
+
+    var t = f.querySelector('textarea[name="code"]');
+
+    t.value = t.value
+      .replace('CB_USER', playgApp.user)
+      .replace('CB_PSWD', playgApp.pswd);
   }
 
   playgTourLast = [name, part];
