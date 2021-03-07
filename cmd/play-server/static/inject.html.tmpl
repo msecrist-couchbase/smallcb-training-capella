@@ -93,14 +93,20 @@ body.modal-open .panel.dialog .panel-footer .playgHelp {
 .playgTour.playgShow {
   display: block;
 }
-.playgTour .modal-close {
+
+.playgTour .playgTourHeader {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+}
+.playgTour .playgTourHeader .modal-close {
   display: inline-block;
   position: relative;
   top: 0;
   left: 0;
-  padding: 0.05rem 0.4rem;
+  padding: 0.05rem 0.5rem;
   background-color: #669ee0;
-  font-size: .8rem;
+  font-size: .9rem;
 }
 
 .playgTour .playgTourContent h3,
@@ -487,7 +493,7 @@ function playgTourCreate() {
 
     gt.innerHTML =
       `<div class="${playgApp.session ? 'playgAppSessionHave' : ''}">
-         <div>
+         <div class="playgTourHeader">
            Guided Tour
            <a class="modal-close"
               onclick="playgTourToggle()">X</a>
