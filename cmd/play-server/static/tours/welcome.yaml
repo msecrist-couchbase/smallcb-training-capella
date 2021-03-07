@@ -17,7 +17,8 @@ parts:
     to pop open the main menu.)</span>
    <br/><br/>
 
-   You'll see links like Dashboard, Servers, Buckets, Backup, etc.
+   In the main menu, you'll see links for
+   Dashboard, Servers, Buckets, etc.
    <br/><br/>
 
    Next, let's look at the Dashboard.
@@ -25,7 +26,7 @@ parts:
  -
   title: Dashboard
   content: |
-   Click on the main menu's <em>Dashboard</em> link.
+   <i>Click on the main menu's <em>Dashboard</em> link.</i>
    <br/><br/>
 
    <style>
@@ -36,6 +37,7 @@ parts:
    body .root-container main nav.nav-sidebar a[mn-tab="overview"].currentnav {
      border: none;
      border-right: 4px solid #c6dbf2;
+     font-style: italic;
    }
    </style>
 
@@ -58,7 +60,7 @@ parts:
  -
   title: Servers
   content: |
-   Click on the main menu's <em>Servers</em> link.
+   <i>Click on the main menu's <em>Servers</em> link.</i>
    <br/><br/>
 
    <style>
@@ -69,6 +71,7 @@ parts:
    body .root-container main nav.nav-sidebar a[mn-tab="servers"].currentnav {
      border: none;
      border-right: 4px solid #c6dbf2;
+     font-style: italic;
    }
    </style>
 
@@ -92,7 +95,7 @@ parts:
  -
   title: Buckets
   content: |
-   Click on the main menu's <em>Buckets</em> link.
+   <i>Click on the main menu's <em>Buckets</em> link.</i>
    <br/><br/>
 
    <style>
@@ -103,6 +106,7 @@ parts:
    body .root-container main nav.nav-sidebar a[mn-tab="buckets"].currentnav {
      border: none;
      border-right: 4px solid #c6dbf2;
+     font-style: italic;
    }
    </style>
 
@@ -115,7 +119,7 @@ parts:
    <br/><br/>
 
    In this test-drive Playground installation,
-   two sample buckets have been preloaded...
+   the preloaded sample buckets are...
    <ul>
     <li><code>beer-sample</code></li>
     <li><code>travel-sample</code></li>
@@ -133,7 +137,7 @@ parts:
  -
   title: Documents Workbench
   content: |
-   Click on the main menu's <em>Documents</em> link.
+   <i>Click on the main menu's <em>Documents</em> link.</i>
    <br/><br/>
 
    <style>
@@ -144,6 +148,7 @@ parts:
    body .root-container main nav.nav-sidebar a[ui-sref="app.admin.docs.editor"].currentnav {
      border: none;
      border-right: 4px solid #c6dbf2;
+     font-style: italic;
    }
    </style>
 
@@ -164,7 +169,7 @@ parts:
  -
   title: Query Workbench
   content: |
-   Click on the main menu's <em>Query</em> link.
+   <i>Click on the main menu's <em>Query</em> link.</i>
    <br/><br/>
 
    <style>
@@ -175,6 +180,7 @@ parts:
    body .root-container main nav.nav-sidebar a[ui-sref="app.admin.query.workbench"].currentnav {
      border: none;
      border-right: 4px solid #c6dbf2;
+     font-style: italic;
    }
    </style>
 
