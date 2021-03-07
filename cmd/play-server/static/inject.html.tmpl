@@ -471,6 +471,12 @@ function playgTourToggle(forceShow) {
 function playgTourCreate() {
   var gt = document.getElementById("playgTour");
   if (!gt) {
+    var params = new URLSearchParams(document.location.search.substring(1));
+
+    if (!playgApp.session) {
+      playgApp.session = params.get("lu") + params.get("lp");
+    }
+
     gt = document.createElement("div");
 
     gt.id = gt.className = "playgTour";
@@ -490,8 +496,6 @@ function playgTourCreate() {
     if (!m) { return; }
 
     m.insertBefore(gt, m.firstChild);
-
-    var params = new URLSearchParams(document.location.search.substring(1));
 
     var tour = params.get("playgTour").split(',');
 
