@@ -236,3 +236,8 @@ parts:
      Take me to the
      <a target="_blank" data-playg="app">runnable code examples</a>
    </div>
+   <br/>
+
+   To close this Guided Tour, click
+   <a class="modal-close"
+      onclick="playgTourToggle()">X</a>
