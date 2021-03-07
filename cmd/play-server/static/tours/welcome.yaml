@@ -156,7 +156,7 @@ parts:
    modify your JSON documents.
    <br/><br/>
 
-   The Keyspace control let you examine the documents in a
+   The Keyspace control lets you examine the documents in a
    specific bucket/scope/collection.
    <br/><br/>
 
