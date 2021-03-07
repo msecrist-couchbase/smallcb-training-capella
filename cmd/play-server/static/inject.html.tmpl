@@ -86,8 +86,8 @@ body.modal-open .panel.dialog .panel-footer .playgHelp {
   margin-left: 0.8rem;
   margin-right: 1rem;
   border-right: 1px solid #ececec;
-  background-color: white;
-  padding: 0.5rem 1rem 1rem 0;
+  background-color: #f8f8f8;
+  padding: 0.5rem 1rem 1rem 0.75rem;
   z-index: 1;
 }
 .playgTour.playgShow {
@@ -275,7 +275,8 @@ var playgHelpData = {{.injectData}};
   // -------------------------------------------
 
   function checkHelp() {
-    if (document.querySelector(".sign-in-background")) {
+    if (document.querySelector(".sign-in-background") ||
+        !document.querySelector("body .root-container main")) {
       document.getElementById("playgTourToggle").className = "playgTourToggle";
 
       helpHide();
@@ -290,9 +291,9 @@ var playgHelpData = {{.injectData}};
       gt.className = "playgTourToggle playgShow";
     }
 
-    if (!playgTourLocationLoaded &&
+    if (playgTourLocationLoaded < 3 &&
         window.location.search.indexOf("playgTour=") > 0) {
-      playgTourLocationLoaded = true;
+      playgTourLocationLoaded += 1;
 
       playgTourToggle(true);
     }
@@ -452,7 +453,7 @@ function playgHelpToggle() {
 
 // -------------------------------------------
 
-var playgTourLocationLoaded = false;
+var playgTourLocationLoaded = 0;
 
 function playgTourToggle(forceShow) {
   var gt = playgTourCreate();
