@@ -7,9 +7,20 @@ parts:
    some key features of Couchbase Server.
    <br/><br/>
 
+   Let's get started -- please click Next.
+
+ -
+  title: Main Menu
+  content: |
    Major features of Couchbase Server are accessed
    through the <i>main menu</i>.
    <br/><br/>
+
+   <style>
+   body .root-container main nav.nav-sidebar {
+     border: 2px solid red;
+   }
+   </style>
 
    <span style="color: #666;">
    (On narrow screens,
