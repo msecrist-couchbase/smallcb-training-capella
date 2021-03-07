@@ -37,6 +37,7 @@
   display: inline-block;
   min-width: 140px;
   font-size: 9pt;
+  text-decoration: none;
 }
 .session-info .shots a div {
   width: 120px;
@@ -48,15 +49,18 @@
   border-color: #777;
   background-color: #222;
 }
-.session-info .shots a div center {
-  color: #bbb;
-}
 .session-info .shots a:hover div {
-  background-color: #444;
   border-color: #bbb;
 }
-.session-info .shots a:hover div center {
-  color: white;
+.session-info .shots a:first-child div {
+  border-color: #3a5552;
+}
+.session-info .shots a:first-child:hover div {
+  background-color: #333a32;
+  border-color: #3a5a52;
+}
+.session-info .shots a div center {
+  color: #bbb;
 }
 .session-info .shots a div img {
   position: absolute;
