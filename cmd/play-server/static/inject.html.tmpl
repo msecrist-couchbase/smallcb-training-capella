@@ -385,7 +385,11 @@ var playgHelpData = {{.injectData}};
                ${a.join('')}
              </div>`;
 
-          pbam.innerHTML = stripEmptyLines(h);
+          h = stripEmptyLines(h);
+
+          if (pbam.innerHTML != h) { // For copy/paste stability.
+            pbam.innerHTML = h;
+          }
 
           document.getElementById("playgHelpToggle").className = "playgHelpToggle playgShow";
 
