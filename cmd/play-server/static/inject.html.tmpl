@@ -465,7 +465,7 @@ function playgTourToggle(forceShow) {
     if (gt.className == "playgTour" || forceShow) {
       gt.className = "playgTour playgShow";
     } else {
-      gt.className = "playgTour";
+      gt.remove();
     }
   }
 }
@@ -501,7 +501,13 @@ function playgTourCreate() {
 
     m.insertBefore(gt, m.firstChild);
 
-    var tour = params.get("playgTour").split(',');
+    var tour = playgTourLast;
+    if (!tour) {
+      tour = params.get("playgTour").split(',');
+    }
+    if (!tour) {
+      tour = [];
+    }
 
     playgTourLoad(tour[0] || "welcome", tour[1] || 0);
   }
@@ -512,6 +518,8 @@ function playgTourCreate() {
 // -------------------------------------------
 
 var playgTours;
+
+var playgTourLast;
 
 function playgTourLoad(name, part) {
   if (!playgTours) {
@@ -564,6 +572,8 @@ function playgTourLoad(name, part) {
 
     a.href = `http://${playgApp.host}:${playgApp.port}/${href}?s=${playgApp.session}`;
   }
+
+  playgTourLast = [name, part];
 }
 </script>
 
