@@ -46,9 +46,17 @@
   border-width: 3px;
   border-style: solid;
   border-color: #777;
+  background-color: #222;
+}
+.session-info .shots a div center {
+  color: #bbb;
 }
 .session-info .shots a:hover div {
+  background-color: #444;
   border-color: #bbb;
+}
+.session-info .shots a:hover div center {
+  color: white;
 }
 .session-info .shots a div img {
   position: absolute;
