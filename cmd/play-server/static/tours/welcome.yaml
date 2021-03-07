@@ -1,14 +1,14 @@
 title: Welcome
 parts:
  -
-  title: What's in this Guided Tour?
+  title: Welcome to Couchbase Server
   content: |
    In this guided tour, we'll briefly explore
    some key features of Couchbase Server.
    <br/><br/>
 
    Major features of Couchbase Server are accessed
-   through the main menu.
+   through the <i>main menu</i>.
    <br/><br/>
 
    <span style="color: #666;">
@@ -25,8 +25,17 @@ parts:
  -
   title: Dashboard
   content: |
-   Click on the main menu's <i>Dashboard</i> link.
+   Click on the main menu's <em>Dashboard</em> link.
    <br/><br/>
+
+   <style>
+   body .root-container main nav.nav-sidebar a[mn-tab="overview"] {
+     border: 2px solid red;
+   }
+   body .root-container main nav.nav-sidebar a[mn-tab="overview"].currentnav {
+     border-right: 4px solid #c6dbf2;
+   }
+   </style>
 
    The Dashboard gives a real-time sense of the
    cluster's activity and performance.
@@ -47,8 +56,17 @@ parts:
  -
   title: Servers
   content: |
-   Click on the main menu's <i>Servers</i> link.
+   Click on the main menu's <em>Servers</em> link.
    <br/><br/>
+
+   <style>
+   body .root-container main nav.nav-sidebar a[mn-tab="servers"] {
+     border: 2px solid red;
+   }
+   body .root-container main nav.nav-sidebar a[mn-tab="servers"].currentnav {
+     border-right: 4px solid #c6dbf2;
+   }
+   </style>
 
    On the Servers screen,
    you can see that we have only a single server (127.0.0.1) in
@@ -70,8 +88,17 @@ parts:
  -
   title: Buckets
   content: |
-   Click on the main menu's <i>Buckets</i> link.
+   Click on the main menu's <em>Buckets</em> link.
    <br/><br/>
+
+   <style>
+   body .root-container main nav.nav-sidebar a[mn-tab="buckets"] {
+     border: 2px solid red;
+   }
+   body .root-container main nav.nav-sidebar a[mn-tab="buckets"].currentnav {
+     border-right: 4px solid #c6dbf2;
+   }
+   </style>
 
    Data in Couchbase is stored in <i>buckets</i>.
    <br/><br/>
@@ -100,8 +127,17 @@ parts:
  -
   title: Documents Workbench
   content: |
-   Click on the main menu's <i>Documents</i> link.
+   Click on the main menu's <em>Documents</em> link.
    <br/><br/>
+
+   <style>
+   body .root-container main nav.nav-sidebar a[ui-sref="app.admin.docs.editor"] {
+     border: 2px solid red;
+   }
+   body .root-container main nav.nav-sidebar a[ui-sref="app.admin.docs.editor"].currentnav {
+     border-right: 4px solid #c6dbf2;
+   }
+   </style>
 
    In the Documents Workbench screen, you can find and
    modify your JSON documents.
@@ -120,8 +156,17 @@ parts:
  -
   title: Query Workbench
   content: |
-   Click on the main menu's <i>Query</i> link.
+   Click on the main menu's <em>Query</em> link.
    <br/><br/>
+
+   <style>
+   body .root-container main nav.nav-sidebar a[ui-sref="app.admin.query.workbench"] {
+     border: 2px solid red;
+   }
+   body .root-container main nav.nav-sidebar a[ui-sref="app.admin.query.workbench"].currentnav {
+     border-right: 4px solid #c6dbf2;
+   }
+   </style>
 
    You'll see the Query Workbench, which has a Query Editor, where you
    can edit and execute N1QL queries (i.e., SQL for JSON).
