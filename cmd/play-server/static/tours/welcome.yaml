@@ -304,6 +304,10 @@ parts:
    Thanks for trying out Couchbase!
    <br/><br/>
 
+   To reopen this Guided Tour, click the top-left
+   <input type="submit" value="Guided Tour"/> button.
+   <br/>
+
    To close this Guided Tour, click
    <a class="modal-close"
       onclick="playgTourToggle()">X</a>
