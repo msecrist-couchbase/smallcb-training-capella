@@ -309,7 +309,7 @@ var playgHelpData = {{.injectData}};
 
     setTimeout(checkPlayLogin, 200);
 
-    setTimeout(checkHelp, 2500);
+    setTimeout(checkContext, 2500);
   }
 
   // -------------------------------------------
@@ -334,14 +334,14 @@ var playgHelpData = {{.injectData}};
 
   // -------------------------------------------
 
-  function checkHelp() {
+  function checkContext() {
     if (document.querySelector(".sign-in-background") ||
         !document.querySelector("body .root-container main")) {
       document.getElementById("playgTourToggle").className = "playgTourToggle";
 
       helpHide();
 
-      setTimeout(checkHelp, 1000);
+      setTimeout(checkContext, 1000);
 
       return;
     }
@@ -358,6 +358,8 @@ var playgHelpData = {{.injectData}};
       playgTourToggle(true);
     }
 
+    // -------------------------------------------
+
     // Ex: #/overview/stats?scenarioBucket=beer-sample
     var hashParts = window.location.hash.slice(2).split(/[\?\&]/);
 
@@ -368,7 +370,7 @@ var playgHelpData = {{.injectData}};
 
     var pbam = document.getElementById("playgHelpMain");
     if (!pbam) {
-      setTimeout(checkHelp, 1000);
+      setTimeout(checkContext, 1000);
 
       return;
     }
@@ -391,6 +393,10 @@ var playgHelpData = {{.injectData}};
             if (!ctx.o) {
               continue;
             }
+          }
+
+          if (title.replace) {
+            x.innerHTML = title.replace;
           }
 
           for (let item of (title.items || [])) {
@@ -449,7 +455,7 @@ var playgHelpData = {{.injectData}};
             }
           }
 
-          setTimeout(checkHelp, 1000);
+          setTimeout(checkContext, 1000);
 
           return;
         }
@@ -463,7 +469,7 @@ var playgHelpData = {{.injectData}};
 
     helpHide();
 
-    setTimeout(checkHelp, 1000);
+    setTimeout(checkContext, 1000);
   }
 
   // -------------------------------------------
