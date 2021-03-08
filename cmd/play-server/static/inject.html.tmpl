@@ -559,7 +559,10 @@ function playgTourCreate() {
 
     gt.addEventListener('click', function(ev) {
       if (ev.target.className.indexOf("playgTourChooser") < 0) {
-        gt.querySelector('input[type="checkbox"]#playgTourChooser').checked = false;
+        var ie = gt.querySelector('input[type="checkbox"]#playgTourChooser');
+        if (ie) {
+          ie.checked = false;
+        }
       }
     });
 
@@ -618,8 +621,13 @@ function playgTourLoad(name, part) {
                       ${i + 1} - ${t.parts[i].title}</a>`);
     }
 
-    if (playgTours.length > 2) {
-      chooser.push(`<br/><a onclick="playgTourLoad('index', 0)">More Guided Tours...</a>`);
+    var i = 0;
+    for (var k in playgTours) {
+      i += 1;
+      if (i > 2) {
+        chooser.push(`<br/><a onclick="playgTourLoad('index', 0)">More Guided Tours...</a>`);
+        break;
+      }
     }
 
     chooser.push(`</div>`);

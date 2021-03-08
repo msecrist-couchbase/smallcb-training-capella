@@ -245,24 +245,19 @@ parts:
 
    <input name="lang" type="hidden" value="py"/>
 
-   <textarea name="code">#!/usr/bin/python3
+   <textarea name="code"
+             style="height: 15rem;">#!/usr/bin/python3
 
    import sys
-
    from couchbase.cluster import Cluster, ClusterOptions
    from couchbase_core.cluster import PasswordAuthenticator
 
    pa = PasswordAuthenticator(
        'CB_USER', 'CB_PSWD')
+   c = Cluster('couchbase://127.0.0.1', ClusterOptions(pa))
 
-   cluster = Cluster(
-       'couchbase://127.0.0.1',
-       ClusterOptions(pa))
-
-   b = cluster.bucket('travel-sample')
-
+   b = c.bucket('travel-sample')
    coll = b.default_collection()
-
    print(coll.get('airline_10').content)
    </textarea>
 
@@ -282,8 +277,11 @@ parts:
    <br/><br/>
 
    <div class="playgAppSessionNeed">
-     Take me to the
-     <a target="_blank" data-playg="app">runnable code examples</a>
+     Go to the
+     <a target="_blank" data-playg="app">
+       runnable code examples
+       <span class="icon fa-external-link"/>
+     </a>
    </div>
    <br/>
 
