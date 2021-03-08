@@ -552,7 +552,7 @@ function playgTourCreate() {
     m.insertBefore(gt, m.firstChild);
 
     var tour = playgTourLast;
-    if (!tour) {
+    if (!tour && params && params.get("playgTour")) {
       tour = params.get("playgTour").split(',');
     }
     if (!tour) {
