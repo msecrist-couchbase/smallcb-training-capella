@@ -87,7 +87,7 @@ body.modal-open .panel.dialog .panel-footer .playgHelp {
   margin-right: 1rem;
   border-right: 1px solid #ececec;
   background-color: #f8f8f8;
-  padding: 0.5rem 1rem 1rem 0.75rem;
+  padding: 0.5rem 1rem 5rem 0.75rem;
   z-index: 1;
 }
 .playgTour.playgShow {
@@ -172,7 +172,7 @@ body.modal-open .panel.dialog .panel-footer .playgHelp {
   background-color: #d4d4d4;
   color: #f4f4f4;
 }
-.playgTour .playgTourContent .playgTourControls .playgTourPage {
+.playgTour .playgTourContent .playgTourControls label.playgTourChooser {
   display: inline-block;
   position: relative;
   line-height: 1rem;
@@ -557,6 +557,12 @@ function playgTourCreate() {
 
     gt.id = gt.className = "playgTour";
 
+    gt.addEventListener('click', function(ev) {
+      if (ev.target.className.indexOf("playgTourChooser") < 0) {
+        gt.querySelector('input[type="checkbox"]#playgTourChooser').checked = false;
+      }
+    });
+
     gt.innerHTML =
       `<div class="${playgApp.session ? 'playgAppSessionHave' : ''}">
          <div class="playgTourHeader">
@@ -623,7 +629,7 @@ function playgTourLoad(name, part) {
          <button onclick="playgTourLoad('${name}', ${part - 1})"
                  ${part <= 0 ? 'disabled' : ''}>
            Previous</button>
-         <label class="playgTourPage" for="playgTourChooser">
+         <label class="playgTourChooser" for="playgTourChooser">
            <input type="checkbox" name="playgTourChooser" id="playgTourChooser" class="playgTourChooser"/>
            ${chooser.join('')}
            &nbsp;&nbsp;${part + 1} of ${t.parts.length}&nbsp;&#x25BC;&nbsp;&nbsp;
