@@ -201,6 +201,9 @@ body.modal-open .panel.dialog .panel-footer .playgHelp {
   display: block;
   white-space: nowrap;
 }
+.playgTour .playgTourContent .playgTourControls .playgTourChooser a.playgTourChooserCur {
+  font-weight: bold;
+}
 .playgTour .playgTourContent .playgTourControls .playgTourChooser a:hover {
   background-color: #eee;
 }
@@ -604,7 +607,9 @@ function playgTourLoad(name, part) {
     chooser = [`<div class="playgTourChooser">`];
 
     for (var i = 0; i < t.parts.length; i++) {
-      chooser.push(`<a onclick="playgTourLoad('${name}', ${i})">${i + 1} - ${t.parts[i].title}</a>`);
+      chooser.push(`<a onclick="playgTourLoad('${name}', ${i})"
+                       class="${i == part ? 'playgTourChooserCur' : ''}">
+                      ${i + 1} - ${t.parts[i].title}</a>`);
     }
 
     chooser.push(`</div>`);
