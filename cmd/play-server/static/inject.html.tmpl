@@ -612,6 +612,10 @@ function playgTourLoad(name, part) {
                       ${i + 1} - ${t.parts[i].title}</a>`);
     }
 
+    if (playgTours.length > 2) {
+      chooser.push(`<br/><a onclick="playgTourLoad('index', 0)">More Guided Tours...</a>`);
+    }
+
     chooser.push(`</div>`);
 
     controls =
@@ -622,9 +626,7 @@ function playgTourLoad(name, part) {
          <label class="playgTourPage" for="playgTourChooser">
            <input type="checkbox" name="playgTourChooser" id="playgTourChooser" class="playgTourChooser"/>
            ${chooser.join('')}
-           &nbsp;&nbsp;
-           ${part + 1} of ${t.parts.length}&nbsp;&#x25BC;
-           &nbsp;&nbsp;
+           &nbsp;&nbsp;${part + 1} of ${t.parts.length}&nbsp;&#x25BC;&nbsp;&nbsp;
          </label>
          <button onclick="playgTourLoad('${name}', ${part + 1})"
                  ${part >= t.parts.length - 1 ? 'disabled' : ''}>

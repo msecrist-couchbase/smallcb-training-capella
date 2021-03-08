@@ -1,0 +1,8 @@
+title: List of Guided Tours
+parts:
+ -
+  title: ''
+  content: |
+   <ul>
+     <li><a onclick="playgTourLoad('welcome', 0)">Welcome to Couchbase Server</a></li>
+   </ul>
