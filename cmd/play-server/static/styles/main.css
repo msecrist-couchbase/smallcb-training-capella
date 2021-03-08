@@ -60,7 +60,7 @@
   border-color: #3a5a52;
 }
 .session-info .shots a div center {
-  color: #bbb;
+  color: rgba(159, 226, 100, 0.95);
 }
 .session-info .shots a div img {
   position: absolute;
