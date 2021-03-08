@@ -13,7 +13,7 @@ parts:
   title: Main Menu
   content: |
    Major features of Couchbase Server are accessed
-   through the <i>main menu</i>.
+   through the <em>main menu</em>.
    <br/><br/>
 
    <style>
@@ -22,11 +22,13 @@ parts:
    }
    </style>
 
+   <div class="playBoxNarrowOnly">
    <span style="color: #666;">
    (On narrow screens,
     click <span class="icon fa-navicon"></span>
     to pop open the main menu.)</span>
    <br/><br/>
+   </div>
 
    In the main menu, you'll see links for
    Dashboard, Servers, Buckets, etc.
