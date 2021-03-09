@@ -24,8 +24,8 @@ var LangAce = map[string]string{
 	"sh":     "sh",
 	"dotnet": "csharp",
 	"scala":  "scala",
-	"c":      "C",
-	"cc":     "C++",
+	"c":      "c_cpp",
+	"cc":     "c_cpp",
 }
 
 var LangPretty = map[string]string{
