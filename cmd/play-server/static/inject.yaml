@@ -4,14 +4,14 @@ backup/repositories:
   samp: scenarioBucket=beer-sample scenarioZoom=minute scenario=7xv5w6opc
   titles:
    -
-    title: Buckets Ad
+    title: Backup Ad
     querySelectorAll: main .main-content ui-view .error
     check: x.innerText.trim().startsWith('The backup interface is only available on Couchbase clusters running the backup service.')
     replace: |
      <div style="color: #555;">
-     This test-drive Playground installation doesn't support backups.
+     This test-drive Playground installation doesn't support Couchbase Backups.
      <br/><br/>
-     To try out the backups feature, please try the
+     To try out the Backups feature, please try the
      <a href="https://cloud.couchbase.com" target="_blank">Couchbase Cloud</a>
      or install Couchbase Server from a
      <a href="https://www.couchbase.com/downloads" target="_blank">Download</a>.
@@ -261,6 +261,20 @@ eventing/summary:
  -
   args: scenarioBucket scenarioZoom scenario
   samp: scenarioBucket=beer-sample scenarioZoom=minute scenario=7xv5w6opc
+  titles:
+   -
+    title: Eventing Ad
+    querySelectorAll: main .main-content ui-view .error
+    check: x.innerText.trim().startsWith('The eventing interface is only available on Couchbase clusters running the eventing service.')
+    replace: |
+     <div style="color: #555;">
+     This test-drive Playground installation doesn't support Couchbase Eventing.
+     <br/><br/>
+     To try out Eventing, please try the
+     <a href="https://cloud.couchbase.com" target="_blank">Couchbase Cloud</a>
+     or install Couchbase Server from a
+     <a href="https://www.couchbase.com/downloads" target="_blank">Download</a>.
+     </div>
 
 fts/fts_list:
  -
