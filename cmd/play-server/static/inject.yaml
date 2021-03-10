@@ -264,7 +264,7 @@ eventing/summary:
   titles:
    -
     title: Eventing Ad
-    querySelectorAll: main .main-content ui-view .error
+    querySelectorAll: main .main-content div[ui-view=""] p
     check: x.innerText.trim().startsWith('The eventing interface is only available on Couchbase clusters running the eventing service.')
     replace: |
      <div style="color: #555;">
@@ -275,6 +275,11 @@ eventing/summary:
      or install Couchbase Server from a
      <a href="https://www.couchbase.com/downloads" target="_blank">Download</a>.
      </div>
+   -
+    title: Eventing Ad
+    querySelectorAll: main .main-content div[ui-view=""] p
+    check: x.innerText.trim().startsWith('No Eventing nodes were found on this cluster.')
+    replace:
 
 fts/fts_list:
  -
