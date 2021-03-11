@@ -299,8 +299,6 @@ main .info-header .header-right code {
 
 .workspace .workspace-body .code-editor .sticky .empty-example-frame {
   display: flex;
-  justify-content: center;
-  align-items: top;
   width: 95%;
   height: 60vh;
 }
@@ -311,12 +309,10 @@ main .info-header .header-right code {
   width: 80%;
   height: 20%;
   line-height: 1.5em;
-  margin-top: 1.5em;
 }
 
 .workspace .workspace-body .code-editor .sticky .empty-example-frame .info-frame a {
   display: inline-block;
-  margin-top: 1em;
   border-width: 1px;
   border-style: solid;
   border-radius: 4px;
@@ -325,6 +321,7 @@ main .info-header .header-right code {
 }
 
 .workspace .workspace-body .code-editor .sticky .empty-example-frame .info-frame a.shot {
+  margin-top: 1em;
   border: none;
 }
 
@@ -451,7 +448,7 @@ body.dark .workspace .workspace-body .code-examples .example-nav ul.examples li 
 }
 
 body.dark .workspace .workspace-body .code-editor .sticky .empty-example-frame {
-  border-color: #4B5963;
+  border-color: #2e3440;
   border-width: 1px;
   border-style: solid;
 }
