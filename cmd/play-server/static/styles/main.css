@@ -137,12 +137,7 @@ main .info-header .header-right code {
 }
 
 .workspace .workspace-body .code-examples h2 label {
-  color: #aaa;
   cursor: pointer;
-}
-
-.workspace .workspace-body .code-examples h2 label:hover {
-  color: white;
 }
 
 .workspace .workspace-body .code-examples .div-hr {
@@ -406,6 +401,14 @@ body.dark main .info-header .header-right .head-pass {
 
 body.dark main .info-header .header-right code {
   color: #bbb;
+}
+
+body.dark .workspace .workspace-body .code-examples h2 label {
+  color: #aaa;
+}
+
+body.dark .workspace .workspace-body .code-examples h2 label:hover {
+  color: white;
 }
 
 body.dark .workspace .workspace-body .code-examples .pages button {
