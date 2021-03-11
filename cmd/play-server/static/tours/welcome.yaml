@@ -90,7 +90,7 @@ parts:
 
    On the Servers screen,
    you can see that we have only a single server (127.0.0.1) in
-   the cluster in this test-drive Playground installation.
+   the cluster in this playground installation.
    <br/><br/>
 
    The Servers screen is where you can add and remove
@@ -131,7 +131,7 @@ parts:
    which in turn holds JSON documents.
    <br/><br/>
 
-   In this test-drive Playground installation,
+   In this playground installation,
    the preloaded sample buckets are
    <code>beer-sample</code> and
    <code>travel-sample</code>.
@@ -234,8 +234,7 @@ parts:
    <br/><br/>
 
    Here's a runnable example using the Couchbase SDK for Python
-   which retrieves a JSON document from your
-   test-drive Playground database...
+   which retrieves a JSON document from your playground database...
    <br/><br/>
 
    <form data-playg="app" action="/run" method="post"
@@ -270,7 +269,7 @@ parts:
    </iframe>
    <br/><br/>
 
-   Your test-drive Playground session has more
+   Your playground session has more
    <i>live code examples</i>
    that you can try out for
    Java, NodeJS, Python, .NET, PHP, and more.

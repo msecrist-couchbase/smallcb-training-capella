@@ -38,7 +38,7 @@ func HttpProxy(listenProxy, // Ex: ":8091", ":8093".
 				http.Error(w,
 					http.StatusText(http.StatusUnauthorized)+
 						fmt.Sprintf(", HttpProxy, username/password rejected,"+
-							" try using a test-drive session"),
+							" try using a playground session"),
 					http.StatusUnauthorized)
 
 				log.Printf("ERROR: HttpProxy, path: %s,"+

@@ -9,7 +9,7 @@ backup/repositories:
     check: x.innerText.trim().startsWith('The backup interface is only available on Couchbase clusters running the backup service.')
     replace: |
      <div style="color: #555;">
-     This test-drive Playground installation doesn't support Couchbase Backups.
+     This playground installation doesn't support Couchbase Backups.
      <br/><br/>
      To try out the Backups feature, please try the
      <a href="https://cloud.couchbase.com" target="_blank">Couchbase Cloud</a>
@@ -231,7 +231,7 @@ cbas/workbench:
     check: x.innerText.trim().startsWith('The analytics interface is only available on Couchbase clusters running the analytics service.')
     replace: |
      <div style="color: #555;">
-     This test-drive Playground installation doesn't support Couchbase Analytics.
+     This playground installation doesn't support Couchbase Analytics.
      <br/><br/>
      To try out the Analytics feature, please try the
      <a href="https://cloud.couchbase.com" target="_blank">Couchbase Cloud</a>
@@ -268,7 +268,7 @@ eventing/summary:
     check: x.innerText.trim().startsWith('The eventing interface is only available on Couchbase clusters running the eventing service.')
     replace: |
      <div style="color: #555;">
-     This test-drive Playground installation doesn't support Couchbase Eventing.
+     This playground installation doesn't support Couchbase Eventing.
      <br/><br/>
      To try out Eventing, please try the
      <a href="https://cloud.couchbase.com" target="_blank">Couchbase Cloud</a>

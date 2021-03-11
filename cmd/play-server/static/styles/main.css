@@ -283,8 +283,8 @@ main .info-header .header-right code {
 
 .workspace .workspace-body .code-editor .example-frame .session-cta a {
   display: block;
-  width: 8em;
   margin-top: 7px;
+  width: 14rem;
   border-width: 1px;
   border-style: solid;
   border-radius: 4px;

@@ -80,11 +80,11 @@
           {{if .Session}}
             <a href="/session-exit?s={{.Session.SessionId}}"
                onclick="localStorage.setItem('infoPanel', 'show');" class="session">
-              stop test-drive
+              stop playground session
             </a>
           {{else}}
             <a href="/session">
-              start test-drive
+              start playground session
             </a>
           {{end}}
         </li>
@@ -125,7 +125,7 @@
       {{if .Session}}
       <div class="session-info">
         <div>
-          Your test-drive session will end after {{.SessionsMaxAge}}
+          Your playground session will end after {{.SessionsMaxAge}}
           or until there's {{.SessionsMaxIdle}} of inactivity.
         </div>
         <div class="shots">
@@ -275,8 +275,8 @@
 
                 {{if not .Session}}
                   <div class="session-cta">
-                    Also try Couchbase Server's web admin UI:
-                    <a href="/session" class="nowrap">Start Test-Drive</a>
+                    Also try Couchbase Server in an online playground:
+                    <a href="/session" class="nowrap">Start Playground Session</a>
                   </div>
                 {{end}}
               </div>
@@ -284,14 +284,14 @@
             {{else}}
             <div class="no-session">
               <h2>
-                Try Couchbase in a playground
+                Try Couchbase in an online playground
               </h2>
             </div>
             <div class="empty-example-frame">
               <div class="info-frame session-cta">
                 {{if not .Session}}
                   <div>
-                    <a href="/session" class="nowrap">Start Test-Drive</a>
+                    <a href="/session" class="nowrap">Start Playground Session</a>
                   </div>
                   <a href="/session" class="shot">
                     <img src="/static/shots/shot-documents.png"/>

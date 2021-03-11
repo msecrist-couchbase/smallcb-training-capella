@@ -68,7 +68,7 @@ header nav ul > li a.session {
 header nav ul > li a.session:hover {
   text-decoration: none;
   background-position: 0% 100%;
-  background-size: 29% 1px;
+  background-size: 2.2em 1px;
 }
 header nav ul > li a:focus,
 header nav ul > li a:visited {
