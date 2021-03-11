@@ -366,6 +366,7 @@ body.dark .session-info .shots a:hover div {
 }
 body.dark .session-info .shots a.start-here div {
   border-color: rgba(159, 226, 100, 0.95);
+  margin-right: 50px;
 }
 body.dark .session-info .shots a.start-here:hover div {
   background-color: #333a32;
