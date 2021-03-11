@@ -313,6 +313,10 @@ main .info-header .header-right code {
 
 .workspace .workspace-body .code-editor .sticky .empty-example-frame .info-frame a {
   display: inline-block;
+}
+
+.workspace .workspace-body .code-editor .sticky .empty-example-frame .info-frame a div,
+.workspace .workspace-body .code-editor .sticky .empty-example-frame .info-frame a img {
   width: 190px;
   border-width: 1px;
   border-style: solid;
@@ -321,13 +325,9 @@ main .info-header .header-right code {
   text-decoration: none;
 }
 
-.workspace .workspace-body .code-editor .sticky .empty-example-frame .info-frame a.shot {
-  margin-top: 1em;
-  border: none;
-}
-
-.workspace .workspace-body .code-editor .sticky .empty-example-frame .info-frame a.shot img {
+.workspace .workspace-body .code-editor .sticky .empty-example-frame .info-frame a img {
   width: 190px;
+  margin-top: 1em;
 }
 
 @media screen and (max-width: 750px) {
@@ -454,13 +454,16 @@ body.dark .workspace .workspace-body .code-editor .sticky .empty-example-frame {
   border-style: solid;
 }
 
-body.dark .workspace .workspace-body .code-editor .sticky .empty-example-frame .info-frame a {
+body.dark .workspace .workspace-body .code-editor .sticky .empty-example-frame .info-frame a div,
+body.dark .workspace .workspace-body .code-editor .sticky .empty-example-frame .info-frame a img {
   background-color: #526373;
   border-color: #526373;
 }
 
-body.dark .workspace .workspace-body .code-editor .sticky .empty-example-frame .info-frame a:hover,
-body.dark .workspace .workspace-body .code-editor .sticky .empty-example-frame .info-frame a:focus {
+body.dark .workspace .workspace-body .code-editor .sticky .empty-example-frame .info-frame a:hover div,
+body.dark .workspace .workspace-body .code-editor .sticky .empty-example-frame .info-frame a:focus div,
+body.dark .workspace .workspace-body .code-editor .sticky .empty-example-frame .info-frame a:hover img,
+body.dark .workspace .workspace-body .code-editor .sticky .empty-example-frame .info-frame a:focus img {
   background-color: #778fa7;
 }
 
