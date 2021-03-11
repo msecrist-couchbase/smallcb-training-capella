@@ -165,7 +165,12 @@
     <div class="workspace" id="workspace">
       <div class="workspace-body">
         <div class="code-examples">
-          <h2>Examples</h2>
+          <input name="examplesToggle" id="examplesToggle"
+                 type="checkbox"
+                 {{if .Lang}}{{if .Code}}checked{{end}}{{end}}
+                 {{if .Session}}checked{{end}}/>
+
+          <h2><label for="examplesToggle"><span class="chevron down"></span></a>Code Examples</label></h2>
 
           <div class="div-hr">
             <hr/>
@@ -279,14 +284,12 @@
             {{else}}
             <div class="no-session">
               <h2>
-                Try Couchbase in a playground <span class="prompt">&mdash; please select an example</span>.
+                Try Couchbase in a playground
               </h2>
             </div>
             <div class="empty-example-frame">
               <div class="info-frame session-cta">
                 {{if not .Session}}
-                  Or start a test-drive and try<br/>
-                  Couchbase Server's web admin UI...
                   <div>
                     <a href="/session" class="nowrap">Start Test-Drive</a>
                   </div>

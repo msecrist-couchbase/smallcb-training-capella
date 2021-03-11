@@ -113,21 +113,56 @@ main .info-header .header-right code {
 .workspace .workspace-body h2 {
   height: 23px;
 }
-.workspace .workspace-body h2 .lang,
-.workspace .workspace-body h2 .prompt {
+.workspace .workspace-body h2 .lang {
   font-weight: normal;
 }
 
+.workspace .workspace-body .code-examples input[type="checkbox"]#examplesToggle {
+  display: none;
+}
+
 .workspace .workspace-body .code-examples h2 {
+  max-width: 2rem;
+  max-height: 2rem;
   margin-left: 15px;
+  transform: translateY(6rem) rotate(-90deg) translateX(-4rem);
+  transition: all 0.2s;
+}
+
+.workspace .workspace-body .code-examples input[type="checkbox"]#examplesToggle:checked ~ h2 {
+  max-width: auto;
+  max-height: auto;
+  margin-left: 15px;
+  transform: none;
+}
+
+.workspace .workspace-body .code-examples h2 label {
+  color: #aaa;
+  cursor: pointer;
+}
+
+.workspace .workspace-body .code-examples h2 label:hover {
+  color: white;
+}
+
+.workspace .workspace-body .code-examples .div-hr {
+  display: none;
+}
+
+.workspace .workspace-body .code-examples input[type="checkbox"]#examplesToggle:checked ~ .div-hr {
+  display: block;
 }
 
 .workspace .workspace-body .code-examples .pages {
+  display: none;
   width: 240px;
-  display: flex;
   margin: 0 0 30px 0;
   padding: 0 5px 5px 6px;
   flex-wrap: wrap;
+}
+
+.workspace .workspace-body .code-examples input[type="checkbox"]#examplesToggle:checked ~ .pages {
+  display: flex;
 }
 
 .workspace .workspace-body .code-examples .pages button {
@@ -142,12 +177,16 @@ main .info-header .header-right code {
 }
 
 .workspace .workspace-body .code-examples .example-nav {
+  display: none;
   height: 100%;
   width: 240px;
-}
-.workspace .workspace-body .code-examples .example-nav  {
   padding: 0 8px 0 9px;
 }
+
+.workspace .workspace-body .code-examples input[type="checkbox"]#examplesToggle:checked ~ .example-nav {
+  display: block;
+}
+
 .workspace .workspace-body .code-examples .example-nav ul.examples {
   display: block;
   list-style-type: none;
