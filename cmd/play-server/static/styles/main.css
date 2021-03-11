@@ -313,6 +313,7 @@ main .info-header .header-right code {
 
 .workspace .workspace-body .code-editor .sticky .empty-example-frame .info-frame a {
   display: inline-block;
+  width: 190px;
   border-width: 1px;
   border-style: solid;
   border-radius: 4px;
@@ -326,7 +327,7 @@ main .info-header .header-right code {
 }
 
 .workspace .workspace-body .code-editor .sticky .empty-example-frame .info-frame a.shot img {
-  width: 250px;
+  width: 190px;
 }
 
 @media screen and (max-width: 750px) {
