@@ -268,6 +268,11 @@ var playgHelpData = {{.injectData}};
           eu.dispatchEvent(new InputEvent("input"));
           ep.dispatchEvent(new InputEvent("input"));
 
+          var pl = document.getElementById("playgLoading");
+          if (pl) {
+            pl.style.display = "none";
+          }
+
           return;
         }
       }
@@ -291,9 +296,9 @@ var playgHelpData = {{.injectData}};
     el.innerHTML =
       {{if .SessionId}}
         '<a href="http://{{.Host}}:{{.PortApp}}/?s={{.SessionId}}" target="_blank">' +
-          'Couchbase Playground</a>'
+          'Couchbase Playground <span id="playgLoading">loading...</span></a>'
       {{else}}
-        'Couchbase Playground'
+        'Couchbase Playground <span id="playgLoading">loading...</span>'
       {{end}}
       + `<button id="playgTourToggle" class="playgTourToggle"
                  onclick="playgTourToggle()">
@@ -351,6 +356,11 @@ var playgHelpData = {{.injectData}};
       setTimeout(checkContext, 1000);
 
       return;
+    }
+
+    var pl = document.getElementById("playgLoading");
+    if (pl) {
+      pl.style.display = "none";
     }
 
     var gt = document.getElementById("playgTourToggle");
