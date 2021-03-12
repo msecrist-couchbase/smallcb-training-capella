@@ -13,11 +13,12 @@ code: |
       static async Task Main(string[] args)
       {
         var cluster = await Cluster.ConnectAsync(
-          "couchbase://{{.Host}}","{{.CBUser}}","{{.CBPswd}}"
+          "couchbase://{{.Host}}", "{{.CBUser}}", "{{.CBPswd}}"
         );
 
         var bucket = await cluster.BucketAsync("travel-sample");
-        var collection = bucket.DefaultCollection();
+        var scope = await bucket.ScopeAsync("_default");
+        var collection = await scope.CollectionAsync("_default");
 
         var result = await collection.GetAsync("airline_10");
         var airline = result.ContentAs<dynamic>();

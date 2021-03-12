@@ -13,32 +13,34 @@ code: |
   {
     class Program
     {
-        static async Task Main(string[] args)
+      static async Task Main(string[] args)
+      {
+        var cluster = await Cluster.ConnectAsync(
+          "couchbase://{{.Host}}", "{{.CBUser}}", "{{.CBPswd}}"
+        );
+
+        var bucket = await cluster.BucketAsync("travel-sample");
+        var scope = await bucket.ScopeAsync("_default");
+        var collection = await scope.CollectionAsync("_default");
+
+        try
         {
-            var cluster = await Cluster.ConnectAsync(
-                "couchbase://{{.Host}}", "{{.CBUser}}", "{{.CBPswd}}"
-            );
-            var bucket = await cluster.BucketAsync("travel-sample");
-            var collection = bucket.DefaultCollection();
+          var result = await collection.LookupInAsync("airport_1254",
+            new List<LookupInSpec>
+              {
+                LookupInSpec.Get("geo.alt")
+              });
 
-            try
-            {
-                var result = await collection.LookupInAsync("airport_1254",
-                    new List<LookupInSpec>
-                    {
-                        LookupInSpec.Get("geo.alt")
-                    });
-
-                var geoAlt = result.ContentAs<string>(0);
-                Console.WriteLine("Altitude = " + geoAlt);
-            }
-            catch (DocumentNotFoundException)
-            {
-                Console.WriteLine("Document not found!");
-            }
-
-            await cluster.DisposeAsync();
+          var geoAlt = result.ContentAs<string>(0);
+          Console.WriteLine("Altitude = " + geoAlt);
         }
+        catch (DocumentNotFoundException)
+        {
+          Console.WriteLine("Document not found!");
+        }
+
+        await cluster.DisposeAsync();
+      }
     }
   }
 infoAfter: |

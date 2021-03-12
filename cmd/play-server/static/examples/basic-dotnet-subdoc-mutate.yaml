@@ -11,71 +11,75 @@ code: |
 
   namespace CouchbaseDotNetExample
   {
-      class Program
+    class Program
+    {
+      static async Task Main(string[] args)
       {
-          static async Task Main(string[] args)
-          {
-              var cluster = await Cluster.ConnectAsync(
-                  "couchbase://{{.Host}}", "{{.CBUser}}", "{{.CBPswd}}"
+        var cluster = await Cluster.ConnectAsync(
+          "couchbase://{{.Host}}", "{{.CBUser}}", "{{.CBPswd}}"
+        );
+
+        var bucket = await cluster.BucketAsync("travel-sample");
+        var scope = await bucket.ScopeAsync("_default");
+        var collection = await scope.CollectionAsync("_default");
+
+        // get the country from airline_10 and show it
+        try
+        {
+           var result = await collection.LookupInAsync("airline_10",
+              new List<LookupInSpec>
+                {
+                  LookupInSpec.Get("country")
+                }
               );
-              var bucket = await cluster.BucketAsync("travel-sample");
-              var collection = bucket.DefaultCollection();
 
-              // get the country from airline_10 and show it
-              try
+           var country = result.ContentAs<string>(0);
+           Console.WriteLine("Sub-doc before: ");
+           Console.WriteLine(country);
+        }
+        catch (PathNotFoundException)
+        {
+          Console.WriteLine("Sub-doc path not found!");
+        }
+
+        // change the country in airline_10
+        try
+        {
+          await collection.MutateInAsync("airline_10",
+            new List<MutateInSpec>
               {
-                  var result = await collection.LookupInAsync("airline_10",
-                      new List<LookupInSpec>
-                      {
-                          LookupInSpec.Get("country")
-                      }
-                  );
-
-                  var country = result.ContentAs<string>(0);
-                  Console.WriteLine("Sub-doc before: ");
-                  Console.WriteLine(country);
-              } catch (PathNotFoundException) {
-                  Console.WriteLine("Sub-doc path not found!");
+                MutateInSpec.Upsert("country", "Canada")
               }
+            );
+        }
+        catch (PathExistsException)
+        {
+          Console.WriteLine("Sub-doc path exists!");
+        }
 
-              // change the country in airline_10
-              try
+        // get the country from airline_10 (should be updated)
+        // and show it
+        try
+        {
+          var result = await collection.LookupInAsync("airline_10",
+            new List<LookupInSpec>
               {
-                  await collection.MutateInAsync("airline_10",
-                      new List<MutateInSpec>
-                      {
-                          MutateInSpec.Upsert("country", "Canada")
-                      }
-                  );
+                LookupInSpec.Get("country")
               }
-              catch (PathExistsException)
-              {
-                  Console.WriteLine("Sub-doc path exists!");
-              }
+            );
 
-              // get the country from airline_10 (should be updated)
-              // and show it
-              try
-              {
-                  var result = await collection.LookupInAsync("airline_10",
-                      new List<LookupInSpec>
-                      {
-                          LookupInSpec.Get("country")
-                      }
-                  );
+          var country = result.ContentAs<string>(0);
+          Console.WriteLine("Sub-doc after: ");
+          Console.WriteLine(country);
+        }
+        catch (PathNotFoundException)
+        {
+          Console.WriteLine("Sub-doc path not found!");
+        }
 
-                  var country = result.ContentAs<string>(0);
-                  Console.WriteLine("Sub-doc after: ");
-                  Console.WriteLine(country);
-              }
-              catch (PathNotFoundException)
-              {
-                  Console.WriteLine("Sub-doc path not found!");
-              }
-
-              await cluster.DisposeAsync();
-          }
+        await cluster.DisposeAsync();
       }
+    }
   }
 infoAfter: |
   The Sub-document API allows for retrieving or mutating a portion of
