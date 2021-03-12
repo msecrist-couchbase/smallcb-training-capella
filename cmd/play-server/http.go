@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"regexp"
+	"sort"
 	"strconv"
 	"strings"
 	"time"
@@ -291,7 +292,25 @@ func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 	}
 
 	lang := r.FormValue("lang")
-	code := r.FormValue("code")
+
+	// Concatenate all form values whose name starts with
+	// a "code" prefix, sorted by the name.
+
+	var codeKeys []string
+	for k := range r.Form {
+		if strings.HasPrefix(k, "code") {
+			codeKeys = append(codeKeys, k)
+		}
+	}
+
+	sort.Strings(codeKeys)
+
+	var codeVals []string
+	for _, k := range codeKeys {
+		codeVals = append(codeVals, r.Form[k]...)
+	}
+
+	code := strings.Join(codeVals, "")
 
 	var result []byte
 
