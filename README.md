@@ -1,7 +1,7 @@
 README for couchbase playground
 
-* aka, "smallcb" / "small house couchbase"
 * aka, "couchbase.live"
+* aka, "small house couchbase" / "smallcb"
 
 -------------------------
 Dependencies...
@@ -40,10 +40,6 @@ One time setup/init/build steps...
 
     # 2) To create the vol-snapshot directory...
     #
-    # This step launches a smallcb docker image from step 1
-    # in order to initialize a couchbase-server with sample data
-    # and configures it for lower resource utilization.
-    #
     # TIP: Make sure you're not already running couchbase-server
     # as it needs the standard couchbase-server port #'s.
     
@@ -68,8 +64,22 @@ For command-line usage/help...
 
 Example usage during development...
 
-    ./play-server -sessionsMaxAge 20m -containers 2 -restarters=2
+    ./play-server -sessionsMaxAge=60m -sessionsMaxIdle=60m -containers 2 -restarters=2
 
+During development, to see the playground web page, visit...
+
+    http://127.0.0.1:8080
+
+During development, if you modify any of the Dockerfile parts
+or the ./init-couchbase parts, you will have to run `make build`
+and `make create` again.  If you change the golang code, you'll
+have to run `make play-server` again.
+
+Changes to the static files (e.g., HTML templates, CSS, examples, etc)
+should not need a re-make and should be immediately visible in
+the next web browser page refresh.
+
+-------------------------
 Production usage should set the CB_ADMIN_PASSWORD env
 variable for security and the host parameter that
 represents the publically visible DNS hostname...
@@ -78,6 +88,13 @@ represents the publically visible DNS hostname...
       ./play-server \
         -host couchbase.live \
         -containers=5 -containersSingleUse=2 -restarters=5
+
+-------------------------
+YAML files are used to define more content, including...
+
+- cmd/play-server/static/examples - Code Examples
+- cmd/play-server/static/tours - Guided Tours
+- cmd/play-server/static/inject.yaml - contextual / API Help
 
 -------------------------
 Aside...
