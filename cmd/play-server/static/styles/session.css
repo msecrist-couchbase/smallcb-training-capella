@@ -31,10 +31,6 @@ article input[type=submit] {
   font-size: 11pt;
   cursor: pointer;
 }
-article input[type=submit]:hover {
-  border-width: 1px;
-  border-style: solid;
-}
 article img.captcha {
   display: block;
 }
@@ -84,6 +80,11 @@ body.dark article input[type=submit]:hover {
   border-color: #778fa7;
   background-color: #778fa7;
   color: #EFEFEF;
+}
+body.dark article input[type=submit]:disabled {
+  border-color: #526373;
+  background-color: #526373;
+  color: #888;
 }
 
 body.dark form .error {

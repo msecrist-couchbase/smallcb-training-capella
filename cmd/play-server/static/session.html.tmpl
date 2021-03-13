@@ -62,7 +62,9 @@
           </label>
 
           <div class="actions">
-            <input type="submit" name="session-start" value="Start Playground Session"/>
+            <input type="submit" name="session-start"
+                   value="Start Playground Session"
+                   onclick="submitted(); return true"/>
             <div class="cancel">
               or <a href="/">cancel</a>
             </div>
@@ -94,4 +96,12 @@
     <div>© 2021 Couchbase Labs</div>
   </footer>
 </body>
+<script>
+function submitted() {
+  setTimeout(function() {
+    document.querySelector("form .actions input[type=submit]").disabled = true;
+    document.querySelector("form .actions .cancel").innerText = "working...";
+  }, 100);
+}
+</script>
 </html>
