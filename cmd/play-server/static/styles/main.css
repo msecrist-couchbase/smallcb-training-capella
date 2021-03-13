@@ -38,6 +38,7 @@
   min-width: 140px;
   font-size: 9pt;
   text-decoration: none;
+  outline: 0;
 }
 .session-info .shots a div {
   width: 120px;
