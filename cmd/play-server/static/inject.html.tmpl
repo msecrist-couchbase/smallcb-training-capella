@@ -347,7 +347,15 @@ var playgHelpData = {{.injectData}};
   // -------------------------------------------
 
   function checkContext() {
-    if (document.querySelector(".sign-in-background") ||
+    var signIn = document.querySelector(".sign-in-background");
+    if (signIn) {
+      var pl = document.getElementById("playgLoading");
+      if (pl) {
+        pl.style.display = "none";
+      }
+    }
+
+    if (signIn ||
         !document.querySelector("body .root-container main")) {
       document.getElementById("playgTourToggle").className = "playgTourToggle";
 
