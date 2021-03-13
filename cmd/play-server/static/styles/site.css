@@ -51,6 +51,7 @@ header nav ul li { list-style-type: none; }
 header nav ul > li:not(:last-child) { margin-right: 1em; }
 
 header nav ul > li a {
+  white-space: nowrap;
   text-decoration: none;
   background-position: 50% 50%;
   background-repeat: no-repeat;
