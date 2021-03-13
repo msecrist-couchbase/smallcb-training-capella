@@ -22,19 +22,20 @@ code: |
       },
     })
     if err != nil {
-      panic(err)
+      log.Fatal(err)
     }
 
     bucket := cluster.Bucket("travel-sample")
     err = bucket.WaitUntilReady(5*time.Second, nil)
     if err != nil {
-      panic(err)
+      log.Fatal(err)
     }
 
     collection := bucket.DefaultCollection()
+
     result, err := collection.Get("airline_10", nil)
     if err != nil {
-      panic(err)
+      log.Fatal(err)
     }
 
     type Doc struct {
@@ -50,7 +51,7 @@ code: |
     var document Doc
     err = result.Content(&document)
     if err != nil {
-      panic(err)
+      log.Fatal(err)
     }
 
     prettyJSON, err := json.MarshalIndent(document, "", "    ")

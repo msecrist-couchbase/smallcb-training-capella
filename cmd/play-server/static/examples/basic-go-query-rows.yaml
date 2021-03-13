@@ -22,37 +22,40 @@ code: |
       },
     })
     if err != nil {
-      panic(err)
+      log.Fatal(err)
     }
 
     bucket := cluster.Bucket("travel-sample")
     err = bucket.WaitUntilReady(5*time.Second, nil)
     if err != nil {
-      panic(err)
+      log.Fatal(err)
     }
     
-    results, err := cluster.Query("SELECT x.* FROM `travel-sample` x " +
-                                  "WHERE x.`type`=\"hotel\" AND x.name LIKE \"%hotel%\" LIMIT 10", nil)
+    results, err := cluster.Query(
+      "SELECT x.* FROM `travel-sample` x " +
+      "WHERE x.`type`=\"hotel\" AND x.name LIKE \"%hotel%\" LIMIT 10", nil)
     if err != nil {
-      panic(err)
+      log.Fatal(err)
     }
 
-    var content interface{}
     for results.Next() {
+      var content interface{}
       err := results.Row(&content)
       if err != nil {
-        panic(err)
+        log.Fatal(err)
       }
+
       prettyJSON, err := json.MarshalIndent(content, "", "    ")
       if err != nil {
           log.Fatal("Failed to generate json", err)
       }
+
       fmt.Printf("%s\n", string(prettyJSON))
     }
 
     err = results.Err()
     if err != nil {
-      panic(err)
+      log.Fatal(err)
     }
   }
 infoAfter: |

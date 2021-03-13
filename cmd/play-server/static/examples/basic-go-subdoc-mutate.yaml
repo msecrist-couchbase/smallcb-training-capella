@@ -7,6 +7,7 @@ code: |
 
   import (
     "fmt"
+    "log"
     "time"
 
     "github.com/couchbase/gocb/v2"
@@ -20,14 +21,15 @@ code: |
       },
     })
     if err != nil {
-      panic(err)
+      log.Fatal(err)
     }
 
     bucket := cluster.Bucket("travel-sample")
     err = bucket.WaitUntilReady(5*time.Second, nil)
     if err != nil {
-      panic(err)
+      log.Fatal(err)
     }
+
     collection := bucket.DefaultCollection()
 
     options := []gocb.LookupInSpec{
@@ -35,13 +37,13 @@ code: |
     }
     results, err := collection.LookupIn("airline_10", options, &gocb.LookupInOptions{})
     if err != nil {
-      panic(err)
+      log.Fatal(err)
     }
 
     var country string
     err = results.ContentAt(0, &country)
     if err != nil {
-      panic(err)
+      log.Fatal(err)
     }
 
     fmt.Printf("Sub-doc before: %s\n", country)
@@ -49,9 +51,10 @@ code: |
     mops := []gocb.MutateInSpec{
       gocb.UpsertSpec("country", "Canada", &gocb.UpsertSpecOptions{}),
     }
-    _, merr := collection.MutateIn("airline_10", mops, &gocb.MutateInOptions{ Timeout: 10050 * time.Millisecond,})
+    _, merr := collection.MutateIn("airline_10", mops,
+      &gocb.MutateInOptions{Timeout: 10050 * time.Millisecond})
     if merr != nil {
-      panic(merr)
+      log.Fatal(merr)
     }
 
     options = []gocb.LookupInSpec{
@@ -59,12 +62,12 @@ code: |
     }
     results, err = collection.LookupIn("airline_10", options, &gocb.LookupInOptions{})
     if err != nil {
-      panic(err)
+      log.Fatal(err)
     }
 
     err = results.ContentAt(0, &country)
     if err != nil {
-      panic(err)
+      log.Fatal(err)
     }
 
     fmt.Printf("Sub-doc after: %s\n", country)

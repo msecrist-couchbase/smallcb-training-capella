@@ -7,6 +7,7 @@ code: |
 
   import (
     "fmt"
+    "log"
     "time"
 
     "github.com/couchbase/gocb/v2"
@@ -20,14 +21,15 @@ code: |
       },
     })
     if err != nil {
-      panic(err)
+      log.Fatal(err)
     }
 
     bucket := cluster.Bucket("travel-sample")
     err = bucket.WaitUntilReady(5*time.Second, nil)
     if err != nil {
-      panic(err)
+      log.Fatal(err)
     }
+
     collection := bucket.DefaultCollection()
 
     options := []gocb.LookupInSpec{
@@ -35,13 +37,13 @@ code: |
     }
     results, err := collection.LookupIn("airport_1254", options, &gocb.LookupInOptions{})
     if err != nil {
-      panic(err)
+      log.Fatal(err)
     }
 
     var alt float64
     err = results.ContentAt(0, &alt)
     if err != nil {
-      panic(err)
+      log.Fatal(err)
     }
 
     fmt.Printf("Altitude = %g", alt)
