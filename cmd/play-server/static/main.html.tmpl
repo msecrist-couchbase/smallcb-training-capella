@@ -180,7 +180,7 @@
             {{range $i, $v := .Examples}}
               {{if not .code}}
                 <a class="{{if .className}}{{.className}} {{end}}{{.page}}"
-                   {{if .nameNext}}href="/{{$.ExamplesPath}}/{{.nameNext}}"{{end}}
+                   {{if .nameNext}}href="/{{$.ExamplesPath}}/{{.nameNext}}{{if $.Session}}?s={{$.Session.SessionId}}{{end}}"{{end}}
                    onclick="return pageToggle('{{.page}}')">
                   {{.title}}
                 </a>
