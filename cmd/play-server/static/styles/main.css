@@ -160,14 +160,16 @@ main .info-header .header-right code {
   display: flex;
 }
 
-.workspace .workspace-body .code-examples .pages button {
-  flex-basis: 73px;
+.workspace .workspace-body .code-examples .pages a {
+  flex-basis: 60px;
   margin: 3px 3px;
   padding: 3px 5px 3px 5px;
   cursor: pointer;
+  text-decoration: none;
+  font-size: 11px;
 }
 
-.workspace .workspace-body .code-examples .pages button:focus {
+.workspace .workspace-body .code-examples .pages a:focus {
   outline: none;
 }
 
@@ -409,13 +411,13 @@ body.dark .workspace .workspace-body .code-examples h2 label:hover {
   color: white;
 }
 
-body.dark .workspace .workspace-body .code-examples .pages button {
+body.dark .workspace .workspace-body .code-examples .pages a {
   border: 1px solid #3a5552;
   background-color: #262a35;
   color: rgba(159, 226, 100, 0.95);
 }
 
-body.dark .workspace .workspace-body .code-examples .pages button:hover {
+body.dark .workspace .workspace-body .code-examples .pages a:hover {
   background-color: #333a32;
 }
 

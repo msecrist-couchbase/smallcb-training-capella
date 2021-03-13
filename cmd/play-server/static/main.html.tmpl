@@ -179,12 +179,13 @@
           <div class="pages">
             {{range $i, $v := .Examples}}
               {{if not .code}}
-                <button class="{{if .className}}{{.className}} {{end}}{{.page}}"
-                        onclick="pageToggle('{{.page}}')">
+                <a class="{{if .className}}{{.className}} {{end}}{{.page}}"
+                   {{if .nameNext}}href="/{{$.ExamplesPath}}/{{.nameNext}}"{{end}}
+                   onclick="return pageToggle('{{.page}}')">
                   {{.title}}
-                </button>
+                </a>
                 <style>
-                  main.{{.page}} .workspace .workspace-body .code-examples .pages button.{{.page}} {
+                  main.{{.page}} .workspace .workspace-body .code-examples .pages a.{{.page}} {
                     border: 1px solid rgba(159, 226, 100, 0.95);
                     background-color: #333a32;
                   }
@@ -354,13 +355,20 @@
   <script>
     function pageToggle(page) {
       var main = document.getElementById("main");
+
+      var wasPageFocused = main.className.indexOf("page-focus") >= 0;
+
       if (main.className != page + " page-focus") {
         main.className = page + " page-focus";
         localStorage.setItem('page', page);
-      } else {
-        main.className = "";
-        localStorage.setItem('page', '');
+
+	return true;
       }
+
+      main.className = "";
+      localStorage.setItem('page', '');
+
+      return false;
     }
 
     var page = localStorage.getItem('page');

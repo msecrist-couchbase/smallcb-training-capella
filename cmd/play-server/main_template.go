@@ -320,9 +320,18 @@ func ReadExamples(dir string) (
 		return false
 	})
 
+	var namePrev string
+
 	for _, name := range names {
 		examples[name]["name"] = name
+
 		examplesArr = append(examplesArr, examples[name])
+
+		if examples[namePrev] != nil {
+			examples[namePrev]["nameNext"] = name
+		}
+
+		namePrev = name
 	}
 
 	return examples, examplesArr, nil
