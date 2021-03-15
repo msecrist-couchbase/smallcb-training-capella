@@ -6,7 +6,7 @@ CONTAINER_NUM = 0
 
 CONTAINER_PORTS = -p 8091-8096:8091-8096 -p 11210:11210
 
-# To enable strace diagnosis, use...
+# To enable strace diagnostics during development, use...
 # CONTAINER_EXTRAS = --cap-add=SYS_PTRACE
 CONTAINER_EXTRAS =
 
@@ -72,7 +72,7 @@ create:
 
 # Restart the docker container instance and wait until its
 # couchbase-server is healthy.
-restart: restart-snapshot wait-healthy
+restart: restart-snapshot wait-healthy instance-pause
 
 # Restart the docker container instance from the vol-snapshot.
 restart-snapshot: instance-stop snapshot-reset instance-start
@@ -80,8 +80,8 @@ restart-snapshot: instance-stop snapshot-reset instance-start
 # -------------------------------------------------
 
 instance-stop:
-	docker stop $(IMAGE_NAME)-$(CONTAINER_NUM) || true
-	docker rm $(IMAGE_NAME)-$(CONTAINER_NUM) || true
+	docker stop $(IMAGE_NAME)-$(CONTAINER_NUM) || echo ignoring-err-docker-stop
+	docker rm $(IMAGE_NAME)-$(CONTAINER_NUM) || echo ignoring-err-docker-rm
 
 instance-start:
 	docker run --name=$(IMAGE_NAME)-$(CONTAINER_NUM) \
@@ -89,6 +89,12 @@ instance-start:
                -v $(shell pwd)/vol-instances/vol-$(CONTAINER_NUM)/:/opt/couchbase/var \
                --add-host="$(SERVICE_HOST):127.0.0.1" \
                -d $(IMAGE_NAME)
+
+instance-pause:
+	docker pause $(IMAGE_NAME)-$(CONTAINER_NUM)
+
+instance-unpause:
+	docker unpause $(IMAGE_NAME)-$(CONTAINER_NUM) || echo ignoring-err-docker-unpause
 
 # -------------------------------------------------
 

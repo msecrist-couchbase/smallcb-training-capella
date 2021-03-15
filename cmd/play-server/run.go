@@ -211,6 +211,16 @@ func WaitForReadyContainer(ctx context.Context, readyCh chan int,
 	case containerId := <-readyCh:
 		StatsNumInc("WaitForReadyContainer.ready")
 
+		cmd := exec.Command("make",
+			fmt.Sprintf("CONTAINER_NUM=%d", containerId),
+			"instance-unpause")
+
+		out, err := ExecCmd(ctx, cmd, containerWaitDuration)
+		if err != nil {
+			return -1, fmt.Errorf("WaitForReadyContainer.instance-unpause,"+
+				" out: %s, err: %v", out, err)
+		}
+
 		return containerId, nil
 
 	case <-time.After(containerWaitDuration):
