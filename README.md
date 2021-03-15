@@ -332,7 +332,14 @@ more use cases with persistent data?
 
 poor man's sizing estimator / guesstimator?
 
-perhaps can use docker pause/unpause feature to reduce footprint?
+docker pause/unpause feature to reduce footprint?
+  tried this -- see commit 228f20f744126ed49
+  and although it works for macbook local dev with localhost
+  and on a test EC2 instance with direct IP address access,
+  leading to very low CPU usage with the paused container instances,
+  the web-admin UI for Couchbase (port 8091) does not seem
+  to work in production via the cb-XXYY.couchbase.live domain names,
+  so need to figure that out.
 
 dev-mode config is reusable for laptops, too?
 
