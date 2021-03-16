@@ -234,7 +234,9 @@ var playgApp = {
   port: '{{.PortApp}}',
   session: '{{.SessionId}}',
   user: '',
-  pswd: ''
+  pswd: '',
+  id: {{.ContainerId}},
+  ip: '{{.ContainerIP}}'
 };
 
 var playgHelpData = {{.injectData}};
@@ -357,7 +359,7 @@ var playgHelpData = {{.injectData}};
 
     if (signIn ||
         !document.querySelector("body .root-container main")) {
-      document.getElementById("playgTourToggle").className = "playgTourToggle";
+      (document.getElementById("playgTourToggle") || {}).className = "playgTourToggle";
 
       helpHide();
 
@@ -500,9 +502,9 @@ var playgHelpData = {{.injectData}};
   // -------------------------------------------
 
   function helpHide() {
-    document.getElementById("playgHelpToggle").className = "playgHelpToggle";
+    (document.getElementById("playgHelpToggle") || {}).className = "playgHelpToggle";
 
-    document.getElementById("playgHelp").className = "playgHelp";
+    (document.getElementById("playgHelp") || {}).className = "playgHelp";
   }
 
   // -------------------------------------------

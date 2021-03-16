@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"strings"
 	"time"
 )
 
@@ -91,6 +92,11 @@ func SessionAssignContainer(session *Session, req RunRequest,
 		return nil, err
 	}
 
+	containerIP, err := RetrieveIP(req, containerId)
+	if err != nil {
+		return nil, err
+	}
+
 	session = sessions.SessionAccess(session.SessionId,
 		func(session *Session) *Session {
 			if session.ContainerId < 0 {
@@ -101,13 +107,16 @@ func SessionAssignContainer(session *Session, req RunRequest,
 						" no container left for your session")
 				} else {
 					session.ContainerId = containerId
+					session.ContainerIP = containerIP
 					session.RestartCh = restartCh
 					session.ReadyCh = readyCh
 					session.TouchedAtUnix = time.Now().Unix()
 
 					log.Printf("run_session, SessionAssignContainer,"+
-						" sessionId: %s, containerId: %d",
-						session.SessionId, session.ContainerId)
+						" sessionId: %s, containerId: %d, containerIP: %s",
+						session.SessionId,
+						session.ContainerId,
+						session.ContainerIP)
 
 					// Session owns the containerId.
 					containerId = -1
@@ -166,9 +175,26 @@ func StartCbsh(session *Session, req RunRequest, containerId int) error {
 
 	out, err := ExecCmd(req.ctx, cmd, req.codeDuration)
 	if err != nil {
-		return fmt.Errorf("StartGritty,"+
+		return fmt.Errorf("StartCbsh,"+
 			" out: %s, err: %v", out, err)
 	}
 
 	return nil
+}
+
+// ------------------------------------------------
+
+func RetrieveIP(req RunRequest, containerId int) (string, error) {
+	containerName := fmt.Sprintf("%s%d",
+		req.containerNamePrefix, containerId)
+
+	cmd := exec.Command("docker", "exec", containerName, "hostname", "-I")
+
+	out, err := ExecCmd(req.ctx, cmd, req.codeDuration)
+	if err != nil {
+		return "", fmt.Errorf("RetrieveIP,"+
+			" out: %s, err: %v", out, err)
+	}
+
+	return strings.Trim(string(out), " \n"), nil
 }

@@ -248,6 +248,7 @@ func SessionTemplateData(host string, portApp int,
 		"CBUser":      "username",
 		"CBPswd":      "password",
 		"ContainerId": -1,
+		"ContainerIP": "",
 	}
 
 	if session != nil {
@@ -265,6 +266,8 @@ func SessionTemplateData(host string, portApp int,
 
 			data["ContainerId"] = session.ContainerId
 		}
+
+		data["ContainerIP"] = session.ContainerIP
 	}
 
 	return data

@@ -25,6 +25,8 @@ type Session struct {
 
 	ContainerId int
 
+	ContainerIP string
+
 	RestartCh chan<- Restart
 	ReadyCh   chan int
 
