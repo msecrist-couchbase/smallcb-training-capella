@@ -176,7 +176,7 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 		if fullName == "" {
 			StatsNumInc("http.Session.post.err.fullName")
 
-			data["errFullName"] = "full name required"
+			data["errFullName"] = "name required"
 			errs += 1
 		}
 		data["fullName"] = fullName
