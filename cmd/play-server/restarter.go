@@ -52,6 +52,13 @@ func Restarter(restarterId int, restartCh chan Restart, host string,
 
 		cmd.Args = append(cmd.Args, "restart")
 
+		if restart.ContainerId > 0 {
+			// Keep container #0 unpaused so that it
+			// can still serve up the web login UI when
+			// the session id isn't known yet.
+			cmd.Args = append(cmd.Args, "instance-pause")
+		}
+
 		log.Printf("INFO: Restarter, restarterId: %d, containerId: %d\n",
 			restarterId, restart.ContainerId)
 

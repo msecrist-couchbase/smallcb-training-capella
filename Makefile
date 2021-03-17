@@ -72,7 +72,7 @@ create:
 
 # Restart the docker container instance and wait until its
 # couchbase-server is healthy.
-restart: restart-snapshot wait-healthy instance-pause
+restart: restart-snapshot wait-healthy
 
 # Restart the docker container instance from the vol-snapshot.
 restart-snapshot: instance-stop snapshot-reset instance-start
