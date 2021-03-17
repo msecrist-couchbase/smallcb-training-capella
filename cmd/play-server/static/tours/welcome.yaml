@@ -1,7 +1,7 @@
 title: Welcome
 parts:
  -
-  title: Welcome to Couchbase Server
+  title: Hello there!
   content: |
    In this guided tour, we'll briefly explore
    some key features of Couchbase Server.
