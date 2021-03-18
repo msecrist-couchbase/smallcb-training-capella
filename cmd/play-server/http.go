@@ -208,7 +208,7 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 
 			session, err := sessions.SessionCreate(name, email)
 			if err == nil && session != nil && session.SessionId != "" {
-				StatsNumInc("http.Session.post.ok", "http.Session.post.create.ok")
+				StatsNumInc("http.Session.post.ok", "http.Session.post.create.assign")
 
 				req := RunRequest{
 					ctx:                 context.Background(),
@@ -221,26 +221,31 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 					cbAdminPassword:     CBAdminPassword,
 				}
 
-				go SessionAssignContainer(session, req,
+				_, err = SessionAssignContainer(session, req,
 					readyCh, *containerWaitDuration, restartCh,
 					*containers, *containersSingleUse)
+				if err == nil {
+					StatsNumInc("http.Session.post.ok", "http.Session.post.create.assign.ok")
 
-				// In case a container is ready, give it a chance
-				// to be immediately assigned to the new session.
-				time.Sleep(4 * time.Second)
+					url := "/"
 
-				url := "/"
+					if e != "" {
+						url = url + e
+					}
 
-				if e != "" {
-					url = url + e
+					url += "?s=" + session.SessionId
+
+					http.Redirect(w, r, url,
+						http.StatusSeeOther)
+
+					StatsNumInc("http.Session.post.ok", "http.Session.post.create.ok")
+
+					return
 				}
 
-				url += "?s=" + session.SessionId
+				StatsNumInc("http.Session.post.ok", "http.Session.post.create.assign.err")
 
-				http.Redirect(w, r, url,
-					http.StatusSeeOther)
-
-				return
+				sessions.SessionExit(session.SessionId)
 			}
 
 			StatsNumInc("http.Session.post.create.err")
