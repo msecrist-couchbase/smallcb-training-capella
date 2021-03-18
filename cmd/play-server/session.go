@@ -14,8 +14,8 @@ import (
 type Sessions struct {
 	m sync.Mutex // Protects the fields that follow.
 
-	mapBySessionId     map[string]*Session
-	mapByFullNameEmail map[string]string // Value is sessionId.
+	mapBySessionId map[string]*Session
+	mapByNameEmail map[string]string // Value is sessionId.
 }
 
 type Session struct {
@@ -37,8 +37,8 @@ type Session struct {
 type SessionInfo struct {
 	SessionId string
 
-	FullName string
-	Email    string
+	Name  string
+	Email string
 
 	CBUser string
 	CBPswd string
@@ -51,8 +51,8 @@ type SessionInfo struct {
 // ------------------------------------------------
 
 var sessions = Sessions{
-	mapBySessionId:     map[string]*Session{},
-	mapByFullNameEmail: map[string]string{},
+	mapBySessionId: map[string]*Session{},
+	mapByNameEmail: map[string]string{},
 }
 
 // ------------------------------------------------
@@ -129,8 +129,8 @@ func (sessions *Sessions) SessionExit(sessionId string) error {
 	if exists && session != nil {
 		delete(sessions.mapBySessionId, sessionId)
 
-		delete(sessions.mapByFullNameEmail,
-			FullNameEmail(session.FullName, session.Email))
+		delete(sessions.mapByNameEmail,
+			NameEmail(session.Name, session.Email))
 
 		go func() { // Async to not hold the sessions lock.
 			j, err := json.Marshal(session.SessionInfo)
@@ -153,16 +153,16 @@ func (sessions *Sessions) SessionExit(sessionId string) error {
 
 // ------------------------------------------------
 
-func (s *Sessions) SessionCreate(fullName, email string) (
+func (s *Sessions) SessionCreate(name, email string) (
 	session *Session, err error) {
 	StatsNumInc("sessions.SessionCreate")
 
-	fullName = strings.TrimSpace(fullName)
-	if fullName == "" {
+	name = strings.TrimSpace(name)
+	if name == "" {
 		StatsNumInc("sessions.SessionCreate.err",
-			"sessions.SessionCreate.err.ErrNeedFullName")
+			"sessions.SessionCreate.err.ErrNeedName")
 
-		return nil, fmt.Errorf("ErrNeedFullName")
+		return nil, fmt.Errorf("ErrNeedName")
 	}
 
 	email = strings.TrimSpace(email)
@@ -173,17 +173,17 @@ func (s *Sessions) SessionCreate(fullName, email string) (
 		return nil, fmt.Errorf("ErrNeedEmail")
 	}
 
-	fullNameEmail := FullNameEmail(fullName, email)
+	nameEmail := NameEmail(name, email)
 
 	sessions.m.Lock()
 	defer sessions.m.Unlock()
 
-	sessionId, exists := sessions.mapByFullNameEmail[fullNameEmail]
+	sessionId, exists := sessions.mapByNameEmail[nameEmail]
 	if exists || sessionId != "" {
 		StatsNumInc("sessions.SessionCreate.err",
-			"sessions.SessionCreate.err.ErrFullNameEmailUsed")
+			"sessions.SessionCreate.err.ErrNameEmailUsed")
 
-		return nil, fmt.Errorf("ErrFullNameEmailUsed")
+		return nil, fmt.Errorf("ErrNameEmailUsed")
 	}
 
 	session, exists = sessions.mapBySessionId[sessionId]
@@ -209,7 +209,7 @@ func (s *Sessions) SessionCreate(fullName, email string) (
 	session = &Session{
 		SessionInfo: SessionInfo{
 			SessionId: sessionId,
-			FullName:  fullName,
+			Name:      name,
 			Email:     email,
 			CBUser:    sessionId[:16],
 			CBPswd:    sessionId[16:],
@@ -222,7 +222,7 @@ func (s *Sessions) SessionCreate(fullName, email string) (
 	}
 
 	sessions.mapBySessionId[sessionId] = session
-	sessions.mapByFullNameEmail[fullNameEmail] = sessionId
+	sessions.mapByNameEmail[nameEmail] = sessionId
 
 	StatsNumInc("sessions.SessionCreate.ok")
 
@@ -238,8 +238,8 @@ func (s *Sessions) SessionCreate(fullName, email string) (
 
 // ------------------------------------------------
 
-func FullNameEmail(fullName, email string) string {
-	return fullName + "-" + email
+func NameEmail(name, email string) string {
+	return name + "-" + email
 }
 
 // ------------------------------------------------

@@ -172,14 +172,14 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 
 		errs := 0
 
-		fullName := strings.TrimSpace(r.FormValue("fullName"))
-		if fullName == "" {
-			StatsNumInc("http.Session.post.err.fullName")
+		name := strings.TrimSpace(r.FormValue("name"))
+		if name == "" {
+			StatsNumInc("http.Session.post.err.name")
 
-			data["errFullName"] = "name required"
+			data["errName"] = "name required"
 			errs += 1
 		}
-		data["fullName"] = fullName
+		data["name"] = name
 
 		email := strings.TrimSpace(r.FormValue("email"))
 		if email == "" {
@@ -206,7 +206,7 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 		if errs <= 0 {
 			StatsNumInc("http.Session.post.create")
 
-			session, err := sessions.SessionCreate(fullName, email)
+			session, err := sessions.SessionCreate(name, email)
 			if err == nil && session != nil && session.SessionId != "" {
 				StatsNumInc("http.Session.post.ok", "http.Session.post.create.ok")
 
