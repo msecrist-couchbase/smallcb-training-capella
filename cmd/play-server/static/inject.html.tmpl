@@ -4,14 +4,19 @@
   position: absolute;
   top: 0;
   left: 0;
-  width: 470px;
+  width: 400px;
+  height: 18px;
   padding: 0 1rem 0 0.5rem;
   background-color: white;
-  color: #555;
+  color: #000;
   font-size: .75rem;
   white-space: nowrap;
   z-index: 11000;
 }
+/* Override: Remove Dev Preview Text */
+div.panel-header.playg-header { border-radius: 0; }
+div.row.ng-scope > .red-1.nowrap { display: none; }
+/* Override: Remove Dev Preview Text */
 
 #playg button.playgTourToggle,
 #playg button.playgHelpToggle {
@@ -20,9 +25,9 @@
   min-width: 4rem;
   margin: 1px 0 1px 0.7rem;
   background-color: #669ee0;
-  padding: 0 0.2rem;
+  padding: 0 4px;
   line-height: 1rem;
-  font-size: 0.5rem;
+  font-size: 12px;
 }
 
 #playg button.playgTourToggle.playgShow,
@@ -33,8 +38,8 @@
 #playg .playgHelp {
   display: none;
   position: absolute;
-  top: 1.1rem;
-  left: 5px;
+  top: 18px;
+  left: 0;
   min-width: 25rem;
   max-width: 50vw;
   max-height: 90vh;
@@ -82,11 +87,12 @@ body.modal-open .panel.dialog .panel-footer .playgHelp {
 .playgTour {
   display: none;
   flex-basis: 20rem;
-  min-height: 600px;
-  margin-left: 0.8rem;
+  min-height: 532px;
+  max-height: 100%;
+  margin-left: 0;
   margin-right: 1rem;
   border-right: 1px solid #ececec;
-  background-color: #f8f8f8;
+  background-color: #fefefe;
   padding: 0.5rem 1rem 5rem 0.75rem;
   z-index: 1;
 }
@@ -116,7 +122,7 @@ body.modal-open .panel.dialog .panel-footer .playgHelp {
 }
 
 .playgTour .playgTourContent em {
-  color: red;
+  color: #EA2328;
 }
 
 .playgTour .playgTourContent a:hover {
@@ -135,6 +141,26 @@ body.modal-open .panel.dialog .panel-footer .playgHelp {
   color: white;
 }
 
+.playgTour .playgTourContent code {
+  margin: 0;
+  padding: 4px;
+  border: 1px solid rgba(0, 0, 0, 0.07);
+  border-radius: 4px;
+}
+.playgTour .playgTourContent code pre {
+  font-size: 12px;
+}
+.playgTour .playgTourContent code.block {
+  margin: 8px 0 8px 0;
+  padding: 4px;
+  border: 1px solid rgba(0, 0, 0, 0.07);
+  border-radius: 4px;
+  width: 100%;
+}
+.playgTour .playgTourContent code.block pre {
+  font-size: 12px;
+}
+
 .playgTour .playgTourContent iframe {
   height: 5rem;
   border: 1px solid #222;
@@ -142,6 +168,7 @@ body.modal-open .panel.dialog .panel-footer .playgHelp {
 }
 
 .playgTour .playgTourContent input[type="submit"] {
+  margin-top: 0.5rem;
   margin-bottom: 0.5rem;
   border: none;
   border-radius: 2px;
@@ -149,23 +176,23 @@ body.modal-open .panel.dialog .panel-footer .playgHelp {
   background-color: #669ee0;
   padding: 0 0.5rem;
   white-space: nowrap;
-  line-height: 1rem;
-  font-size: 0.7rem;
+  line-height: 1.25rem;
+  font-size: 1rem;
   color: #fff;
   cursor: pointer;
 }
 
 .playgTour .playgTourContent .playgTourControls {
   margin: 1.75rem 0;
-  font-size: .7rem;
+  font-size: 1rem;
 }
 .playgTour .playgTourContent .playgTourControls button {
   min-width: 3rem;
-  height: 1rem;
+  height: 2rem;
   background-color: #669ee0;
   padding: 0 0.5rem;
-  line-height: 1rem;
-  font-size: .7rem;
+  line-height: 2rem;
+  font-size: 1rem;
   color: #fff;
 }
 .playgTour .playgTourContent .playgTourControls button:disabled {
@@ -176,11 +203,14 @@ body.modal-open .panel.dialog .panel-footer .playgHelp {
   display: inline-block;
   position: relative;
   line-height: 1rem;
-  font-size: .7rem;
+  font-size: 1rem;
   color: #777;
   cursor: pointer;
 }
 .playgTour .playgTourContent .playgTourControls input[type="checkbox"].playgTourChooser {
+}
+.playgTour .playgTourContent .playgTourControls label.playgTourChooser {
+  margin-top: 8px;
 }
 .playgTour .playgTourContent .playgTourControls div.playgTourChooser {
   display: none;
@@ -190,6 +220,7 @@ body.modal-open .panel.dialog .panel-footer .playgHelp {
   position: absolute;
   bottom: 15px;
   left: 0px;
+  margin-top: 16px;
   margin-bottom: 5px;
   border: 1px solid #aaa;
   background: white;
@@ -304,16 +335,16 @@ var playgHelpData = {{.injectData}};
       {{end}}
       + `<button id="playgTourToggle" class="playgTourToggle"
                  onclick="playgTourToggle()">
-           Guided Tour
+           GUIDED TOUR
          </button>
          <button id="playgHelpToggle" class="playgHelpToggle"
                  onclick="playgHelpToggle()">
-           API Help
+           API HELP
          </button>
          <div id="playgHelp" class="playgHelp">
            <a class="ui-dialog-titlebar-close modal-close"
               onclick="playgHelpToggle()">X</a>
-           <div class="panel-header">
+           <div class="panel-header playg-header">
              <h2>API Help</h2>
            </div>
            <div id="playgHelpMain" class="playgHelpMain"/>
@@ -657,7 +688,7 @@ function playgTourLoad(name, part) {
       `<div class="playgTourControls">
          <button onclick="playgTourLoad('${name}', ${part - 1})"
                  ${part <= 0 ? 'disabled' : ''}>
-           Previous</button>
+           Prev</button>
          <label class="playgTourChooser" for="playgTourChooser">
            <input type="checkbox" name="playgTourChooser" id="playgTourChooser" class="playgTourChooser"/>
            ${chooser.join('')}
@@ -701,6 +732,35 @@ function playgTourLoad(name, part) {
   playgTourLast = [name, part];
 
   document.body.scrollTo(0, 0);
+
+
+  // Select the node that will be observed for mutations
+const elementToObserve = document.getElementById('playgHelp');
+console.log(elementToObserve.className);
+// Options for the observer (which mutations to observe)
+const config = { attributes: true, childList: true, subtree: true };
+
+// Callback function to execute when mutations are observed
+const callback = function(mutationsList, observer) {
+    // Use traditional 'for loops' for IE 11
+    for(const mutation of mutationsList) {
+        if (mutation.type === 'childList') {
+            console.log('A child node has been added or removed.');
+        }
+        else if (mutation.type === 'attributes') {
+            console.log('The ' + mutation.attributeName + ' attribute was modified.');
+        }
+    }
+};
+
+// Create an observer instance linked to the callback function
+const observer = new MutationObserver(callback);
+
+// Start observing the target node for configured mutations
+observer.observe(elementToObserve, config);
+
+// Later, you can stop observing
+observer.disconnect();
 }
 </script>
 
