@@ -262,6 +262,8 @@ parts:
 
    <input type="submit" value="Run The Code"/>
 
+   <input name="color" type="hidden" value="#FFF"/>
+
    </form>
 
    <iframe id="playgTourOutput" name="playgTourOutput">
