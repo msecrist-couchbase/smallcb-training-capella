@@ -1,7 +1,0 @@
-cbsh is connected to one or more Couchbase Server clusters.
-
-Try 'nodes' to list the nodes in the cluster.
-
-Try 'buckets' to list the buckets in the cluster.
-
-And, use 'next' to move to the next step in the tutorial.

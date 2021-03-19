@@ -131,7 +131,7 @@ RUN useradd -u 1002 -g couchbase -m cbsh
 
 USER cbsh
 
-ENV CBSH_VERSION 0.4.0
+ENV CBSH_VERSION 0.5.0
 
 RUN mkdir -p /home/cbsh && \
     cd /home/cbsh && \
@@ -139,10 +139,6 @@ RUN mkdir -p /home/cbsh && \
     unzip cbsh-*-linux.zip && \
     tar -xzvf cbsh-linux-x86_64.tar.gz && \
     rm *.zip && rm *.gz
-
-COPY tutorials-cbsh /home/cbsh/tutorials-cbsh/
-
-ENV PATH="$PATH:/home/cbsh/tutorials-cbsh"
 
 USER root
 

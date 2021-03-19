@@ -154,7 +154,8 @@ func StartCbsh(session *Session, req RunRequest, containerId int) error {
 
 	cbshConfigBytes := []byte(
 		"version = 1\n\n" +
-			"[clusters.default]\n" +
+			"[[clusters]]\n" +
+			"identifier = \"default\"\n" +
 			"hostnames = [\"127.0.0.1\"]\n" +
 			"default-bucket = \"travel-sample\"\n" +
 			"username = \"" + session.CBUser + "\"\n" +
