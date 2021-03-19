@@ -1,0 +1,12 @@
+Couchbase Shell (or cbsh) is a tool to access and work with Couchbase Server.
+
+cbsh is a real shell, like sh or bash, but is aware of structured
+or tabular data, as it is built upon the open-source Nushell project.
+
+Try typing...
+
+  ls
+
+...to get a directory listing, and notice that the output is a table.
+
+Then, run 'next' to move to the next step in this tutorial.

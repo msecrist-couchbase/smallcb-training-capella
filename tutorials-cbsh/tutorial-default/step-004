@@ -1,0 +1,16 @@
+You can use the query command to run N1QL queries (or
+SQL for JSON queries) against the Couchbase Server database.
+
+Try...
+
+    query 'SELECT name, callsign FROM `travel-sample` LIMIT 5'
+
+And, you can pipe the tabular data to commands like save...
+
+    query 'SELECT name, callsign FROM `travel-sample` LIMIT 5' | save output.csv
+
+Which you can work with as local files...
+
+    cat output.csv
+
+Use 'next' to move to the next step in the tutorial.

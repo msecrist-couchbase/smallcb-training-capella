@@ -8,4 +8,4 @@ Dockerfile
 /gen-examples
 /vol-*
 /tmp
-
+/tutorials-cbsh/CURRENT

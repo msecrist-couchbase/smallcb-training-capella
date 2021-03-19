@@ -1,0 +1,17 @@
+#!/usr/bin/env python3
+
+# Show the current tutorial step.
+
+import os
+
+dirPath, fileName = os.path.split(os.path.abspath(__file__))
+
+try:
+    with open(dirPath + "/CURRENT") as f:
+        name, step = f.read().split(':')
+
+    with open(dirPath + "/tutorial-" + name + "/step-" + step.zfill(3)) as f:
+        print(f.read())
+
+except:
+    print("The tutorial is done.  Use 'tutorial' to start again from the beginning.")
