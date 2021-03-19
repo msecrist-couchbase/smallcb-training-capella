@@ -282,6 +282,8 @@ func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 
 	s := r.FormValue("s")
 
+	color := r.FormValue("color")
+
 	session := sessions.SessionGet(s)
 	if session == nil && s != "" {
 		StatsNumInc("http.Run.err")
@@ -289,7 +291,7 @@ func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 		t := http.StatusText(http.StatusNotFound) +
 			", err: session unknown"
 
-		EmitOutput(w, t)
+		EmitOutput(w, t, color)
 
 		log.Printf("ERROR: HttpHandleRun, session unknown, s: %v", s)
 
@@ -380,7 +382,7 @@ func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 		//
 		// http.Error(w, t, http.StatusInternalServerError)
 
-		EmitOutput(w, t)
+		EmitOutput(w, t, color)
 
 		req.cbAdminPassword = "" // To avoid log.
 
@@ -395,14 +397,14 @@ func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 
 	StatsNumInc("http.Run.ok")
 
-	EmitOutput(w, string(result))
+	EmitOutput(w, string(result), color)
 }
 
-func EmitOutput(w http.ResponseWriter, result string) {
+func EmitOutput(w http.ResponseWriter, result, color string) {
 	data := map[string]interface{}{
 		"AnalyticsHTML": template.HTML(AnalyticsHTML(*host)),
-		"OptanonHTML":   template.HTML(OptanonHTML(*host)),
 		"Output":        string(result),
+		"Color":         color,
 	}
 
 	w.Header().Set("Content-Type", "text/html")

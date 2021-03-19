@@ -3,9 +3,13 @@
 <head>
   <title>Couchbase Playground</title>
   {{.AnalyticsHTML}}
+  <style>
+  {{if .Color}}
+    pre { color: {{.Color}}; }
+  {{end}}
+  </style>
 <head>
 <body>
-  <pre>{{.Output}}</pre>
-  <link rel="stylesheet" type="text/css" href="/static/styles/output.css">
+<pre>{{.Output}}</pre>
 </body>
 </html>
