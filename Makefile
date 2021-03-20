@@ -10,6 +10,8 @@ CONTAINER_PORTS = -p 8091-8096:8091-8096 -p 11210:11210
 # CONTAINER_EXTRAS = --cap-add=SYS_PTRACE
 CONTAINER_EXTRAS =
 
+CREATE_EXTRAS =
+
 BUILD_EXTRAS =
 
 SERVICE_HOST = couchbase.live
@@ -47,7 +49,7 @@ create:
                -v $(shell pwd)/vol-snapshot$(SNAPSHOT_SUFFIX)/:/opt/couchbase/var \
                -d $(IMAGE_NAME)
 	sleep 3
-	docker exec -u root $(IMAGE_NAME)-$(CONTAINER_NUM) /init-couchbase/init.sh
+	docker exec -u root $(IMAGE_NAME)-$(CONTAINER_NUM) bash -c "${CREATE_EXTRAS} /init-couchbase/init.sh"
 	sleep 3
 	docker exec -u root $(IMAGE_NAME)-$(CONTAINER_NUM) /init-couchbase/init-buckets.sh
 	sleep 3
