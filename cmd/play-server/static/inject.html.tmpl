@@ -24,7 +24,7 @@ div.row.ng-scope > .red-1.nowrap { display: none; }
   height: 1rem;
   min-width: 4rem;
   margin: 1px 0 1px 0.7rem;
-  background-color: #669ee0;
+  background-color: #4287D6;
   padding: 0 4px;
   line-height: 1rem;
   font-size: 12px;
@@ -112,7 +112,7 @@ body.modal-open .panel.dialog .panel-footer .playgHelp {
   top: 0;
   left: 0;
   padding: 0.05rem 0.5rem;
-  background-color: #669ee0;
+  background-color: #4287D6;
   font-size: .9rem;
 }
 
@@ -131,40 +131,47 @@ body.modal-open .panel.dialog .panel-footer .playgHelp {
 }
 
 .playgTour .playgTourContent textarea {
+  margin: 4px 0 4px 0;
   overflow: scroll;
   height: 9rem;
-  border: 1px solid #222;
-  background-color: #666;
+  border: 1px solid rgba(0, 0, 0,0.08);
+  background-color: #F6F7F9;
   white-space: pre;
   font-family: monospace;
   font-size: 0.7rem;
-  color: white;
-}
-
-.playgTour .playgTourContent code {
-  margin: 0;
-  padding: 4px;
-  border: 1px solid rgba(0, 0, 0, 0.07);
-  border-radius: 4px;
-}
-.playgTour .playgTourContent code pre {
-  font-size: 12px;
-}
-.playgTour .playgTourContent code.block {
-  margin: 8px 0 8px 0;
-  padding: 4px;
-  border: 1px solid rgba(0, 0, 0, 0.07);
-  border-radius: 4px;
-  width: 100%;
-}
-.playgTour .playgTourContent code.block pre {
-  font-size: 12px;
+  color: #000;
 }
 
 .playgTour .playgTourContent iframe {
+  margin: 4px 0 4px 0;
   height: 5rem;
-  border: 1px solid #222;
-  background-color: #666;
+  padding: 4px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background-color: #F6F7F9;
+  color: #000;
+}
+
+.playgTour .playgTourContent code.playg-inline {
+  margin: 0;
+  padding: 2px;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  background-color: #EBEFF2;
+  border-radius: 4px;
+  font-size: 12px;
+  color: #318495;
+}
+.playgTour .playgTourContent code.playg-multiline {
+  width: 100%;
+  margin: 8px 0 8px 0;
+  padding: 4px;
+  border: 1px solid rgba(0, 0, 0,0.08);
+  background-color: #F6F7F9;
+  border-radius: 4px;
+  font-size: 12px;
+}
+.playgTour .playgTourContent code.playg-multiline pre {
+  font-size: inherit;
+  background-color: inherit;
 }
 
 .playgTour .playgTourContent input[type="submit"] {
@@ -173,7 +180,7 @@ body.modal-open .panel.dialog .panel-footer .playgHelp {
   border: none;
   border-radius: 2px;
   box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.2);
-  background-color: #669ee0;
+  background-color: #4287D6;
   padding: 0 0.5rem;
   white-space: nowrap;
   line-height: 1.25rem;
@@ -189,7 +196,7 @@ body.modal-open .panel.dialog .panel-footer .playgHelp {
 .playgTour .playgTourContent .playgTourControls button {
   min-width: 3rem;
   height: 2rem;
-  background-color: #669ee0;
+  background-color: #4287D6;
   padding: 0 0.5rem;
   line-height: 2rem;
   font-size: 1rem;
@@ -218,27 +225,35 @@ body.modal-open .panel.dialog .panel-footer .playgHelp {
 .playgTour .playgTourContent .playgTourControls input#playgTourChooser:checked ~ div.playgTourChooser {
   display: block;
   position: absolute;
-  bottom: 15px;
-  left: 0px;
+  bottom: 30px;
+  left: 2px;
   margin-top: 16px;
   margin-bottom: 5px;
-  border: 1px solid #aaa;
-  background: white;
-  padding: 0.5rem 0.5rem;
+  border-right: 1px solid #ececec;
+  border-left: 1px solid #ececec;
+  background: #fefefe;
+  padding: 0;
   overflow: scroll-y;
 }
 .playgTour .playgTourContent .playgTourControls .playgTourChooser a {
   display: block;
-  margin: 2px 0;
-  padding: 2px 2px;
+  cursor: pointer;
+  margin: 2px 0px 2px 6px;
+  padding-right: 6px;
   white-space: nowrap;
+  line-height: 1.625em;
   font-size: 1rem;
+  text-decoration: none;
+  border-right: 4px solid #FFF;
+  transition: all .3s;
 }
 .playgTour .playgTourContent .playgTourControls .playgTourChooser a.playgTourChooserCur {
-  font-weight: bold;
+  border-right: 4px solid #669ee0;
+  color: #333;
 }
 .playgTour .playgTourContent .playgTourControls .playgTourChooser a:hover {
-  background-color: #eee;
+  border-right: 4px solid #c6dbf2;
+  color: #333;
 }
 
 .playgAppSessionNeed {
@@ -688,7 +703,7 @@ function playgTourLoad(name, part) {
       `<div class="playgTourControls">
          <button onclick="playgTourLoad('${name}', ${part - 1})"
                  ${part <= 0 ? 'disabled' : ''}>
-           Prev</button>
+           Previous</button>
          <label class="playgTourChooser" for="playgTourChooser">
            <input type="checkbox" name="playgTourChooser" id="playgTourChooser" class="playgTourChooser"/>
            ${chooser.join('')}

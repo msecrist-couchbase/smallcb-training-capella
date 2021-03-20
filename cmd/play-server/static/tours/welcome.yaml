@@ -133,8 +133,8 @@ parts:
 
    In this playground installation,
    the preloaded sample buckets are
-   <code>beer-sample</code> and
-   <code>travel-sample</code>.
+   <code class="playg-inline">beer-sample</code> and
+   <code class="playg-inline">travel-sample</code>.
    <br/><br/>
 
    For more info:
@@ -201,7 +201,7 @@ parts:
 
    For example, try:
    <br/>
-   <code class="block"><pre>SELECT * FROM `travel-sample`
+   <code class="playg-multiline"><pre>SELECT * FROM `travel-sample`
    LIMIT 5;</pre></code>
    <br/>
 
