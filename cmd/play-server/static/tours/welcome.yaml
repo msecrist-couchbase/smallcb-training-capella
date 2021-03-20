@@ -18,7 +18,7 @@ parts:
 
    <style>
    body .root-container main nav.nav-sidebar {
-     border: 2px solid red;
+     border: 2px solid #EA2328;
    }
    </style>
 
@@ -44,8 +44,8 @@ parts:
 
    <style>
    body .root-container main nav.nav-sidebar a[mn-tab="overview"] {
-     border: 2px solid red;
-     color: red;
+     border: 2px solid #EA2328;
+     color: #EA2328;
    }
    body .root-container main nav.nav-sidebar a[mn-tab="overview"].currentnav {
      border: none;
@@ -78,8 +78,8 @@ parts:
 
    <style>
    body .root-container main nav.nav-sidebar a[mn-tab="servers"] {
-     border: 2px solid red;
-     color: red;
+     border: 2px solid #EA2328;
+     color: #EA2328;
    }
    body .root-container main nav.nav-sidebar a[mn-tab="servers"].currentnav {
      border: none;
@@ -113,8 +113,8 @@ parts:
 
    <style>
    body .root-container main nav.nav-sidebar a[mn-tab="buckets"] {
-     border: 2px solid red;
-     color: red;
+     border: 2px solid #EA2328;
+     color: #EA2328;
    }
    body .root-container main nav.nav-sidebar a[mn-tab="buckets"].currentnav {
      border: none;
@@ -133,8 +133,8 @@ parts:
 
    In this playground installation,
    the preloaded sample buckets are
-   <code>beer-sample</code> and
-   <code>travel-sample</code>.
+   <code class="playg-inline">beer-sample</code> and
+   <code class="playg-inline">travel-sample</code>.
    <br/><br/>
 
    For more info:
@@ -153,8 +153,8 @@ parts:
 
    <style>
    body .root-container main nav.nav-sidebar a[ui-sref="app.admin.docs.editor"] {
-     border: 2px solid red;
-     color: red;
+     border: 2px solid #EA2328;
+     color: #EA2328;
    }
    body .root-container main nav.nav-sidebar a[ui-sref="app.admin.docs.editor"].currentnav {
      border: none;
@@ -185,8 +185,8 @@ parts:
 
    <style>
    body .root-container main nav.nav-sidebar a[ui-sref="app.admin.query.workbench"] {
-     border: 2px solid red;
-     color: red;
+     border: 2px solid #EA2328;
+     color: #EA2328;
    }
    body .root-container main nav.nav-sidebar a[ui-sref="app.admin.query.workbench"].currentnav {
      border: none;
@@ -201,7 +201,7 @@ parts:
 
    For example, try:
    <br/>
-   <code><pre>SELECT * FROM `travel-sample`
+   <code class="playg-multiline"><pre>SELECT * FROM `travel-sample`
    LIMIT 5;</pre></code>
    <br/>
 
@@ -260,7 +260,7 @@ parts:
    print(coll.get('airline_10').content)
    </textarea>
 
-   <input type="submit" value="Run The Code"/>
+   <input type="submit" value="Run Code"/>
 
    <input name="color" type="hidden" value="#FFF"/>
 
