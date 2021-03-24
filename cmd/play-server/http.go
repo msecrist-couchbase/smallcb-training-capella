@@ -206,6 +206,21 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 			errs += 1
 		}
 
+		groupSize, err := strconv.Atoi(strings.TrimSpace(r.FormValue("groupSize")))
+		if err != nil || groupSize < 1 {
+			groupSize = 1
+		}
+
+		// Racy-y check to see if there's enough containers available,
+		// where it's cheaper to check this early rather than trying
+		// to allocate containers and fail partway through.
+		_, sessionsCountWithContainer := sessions.Count()
+		if *containers-int(sessionsCountWithContainer)-groupSize < *containersSingleUse {
+			data["err"] = fmt.Sprintf("Not enough resources right now - "+
+				"please try again later.")
+			errs += 1
+		}
+
 		if errs <= 0 {
 			StatsNumInc("http.Session.post.create")
 
@@ -224,9 +239,28 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 					cbAdminPassword:     CBAdminPassword,
 				}
 
-				_, err = SessionAssignContainer(session, req,
-					readyCh, *containerWaitDuration, restartCh,
+				_, err = SessionAssignContainer(
+					session, req, readyCh,
+					*containerWaitDuration, restartCh,
 					*containers, *containersSingleUse)
+
+				for i := 1; err == nil && i < groupSize; i++ {
+					var childSession *Session
+
+					childSession, err = sessions.SessionCreate(
+						session.SessionId,
+						fmt.Sprintf("~%s-%d", session.SessionId, i),
+						"~")
+					if err != nil {
+						break
+					}
+
+					_, err = SessionAssignContainer(
+						childSession, req, readyCh,
+						*containerWaitDuration, restartCh,
+						*containers, *containersSingleUse)
+				}
+
 				if err == nil {
 					StatsNumInc("http.Session.post.ok", "http.Session.post.create.assign.ok")
 
