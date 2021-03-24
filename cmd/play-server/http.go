@@ -39,6 +39,8 @@ func HttpMuxInit(mux *http.ServeMux) {
 
 	mux.HandleFunc("/session-exit", HttpHandleSessionExit)
 
+	mux.HandleFunc("/session-info", HttpHandleSessionInfo)
+
 	mux.HandleFunc("/session", HttpHandleSession)
 
 	mux.HandleFunc("/run", HttpHandleRun)
@@ -131,6 +133,38 @@ func HttpHandleSessionExit(w http.ResponseWriter, r *http.Request) {
 
 // ------------------------------------------------
 
+func HttpHandleSessionInfo(w http.ResponseWriter, r *http.Request) {
+	StatsNumInc("http.SessionInfo")
+
+	d, err := sessions.SessionInfo(r.FormValue("s"))
+	if err != nil {
+		http.Error(w,
+			http.StatusText(http.StatusBadRequest),
+			http.StatusBadRequest)
+
+		log.Printf("ERROR: HttpHandleSessionInfo, err: %v", err)
+
+		return
+	}
+
+	j, err := json.Marshal(d)
+	if err != nil {
+		http.Error(w,
+			http.StatusText(http.StatusBadRequest),
+			http.StatusBadRequest)
+
+		log.Printf("ERROR: HttpHandleSessionInfo, err: %v", err)
+
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+
+	w.Write(j)
+}
+
+// ------------------------------------------------
+
 var regexpE = regexp.MustCompile(`^[a-zA-Z0-9\-_#/]*$`)
 
 func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
@@ -216,7 +250,7 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 		// to allocate containers and fail partway through.
 		_, sessionsCountWithContainer := sessions.Count()
 		if *containers-int(sessionsCountWithContainer)-groupSize < *containersSingleUse {
-			data["err"] = fmt.Sprintf("Not enough resources right now - "+
+			data["err"] = fmt.Sprintf("Not enough resources right now - " +
 				"please try again later.")
 			errs += 1
 		}

@@ -27,8 +27,8 @@ type Session struct {
 
 	ContainerIP string
 
-	RestartCh chan<- Restart
-	ReadyCh   chan int
+	RestartCh chan<- Restart `json:"-"`
+	ReadyCh   chan int       `json:"-"`
 
 	Cookies []string
 }
@@ -174,6 +174,37 @@ func (sessions *Sessions) SessionExitLOCKED(session *Session) {
 
 		CookiesRemove(session.Cookies)
 	}()
+}
+
+// ------------------------------------------------
+
+func (sessions *Sessions) SessionInfo(sessionId string) (map[string]interface{}, error) {
+	StatsNumInc("sessions.SessionInfo")
+
+	sessions.m.Lock()
+	defer sessions.m.Unlock()
+
+	session, exists := sessions.mapBySessionId[sessionId]
+	if !exists && session == nil {
+		return nil, fmt.Errorf("unknown session")
+	}
+
+	rv := map[string]interface{}{}
+
+	rv["sessionId"] = sessionId
+
+	group := map[string]interface{}{}
+	group[sessionId] = session
+
+	for childSessionId, childSession := range sessions.mapBySessionId {
+		if childSession.SessionIdMain == sessionId {
+			group[childSessionId] = childSession
+		}
+	}
+
+	rv["group"] = group
+
+	return rv, nil
 }
 
 // ------------------------------------------------
