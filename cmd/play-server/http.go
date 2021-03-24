@@ -201,7 +201,8 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 			sessionsMaxAge.String(), "m0s", " min", 1),
 		"SessionsMaxIdle": strings.Replace(
 			sessionsMaxIdle.String(), "m0s", " min", 1),
-		"e": e,
+		"groupSize": r.FormValue("groupSize"),
+		"e":         e,
 	}
 
 	if r.Method == "POST" {

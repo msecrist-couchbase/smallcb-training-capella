@@ -74,6 +74,10 @@
             <div class="error">{{.err}}</div>
           {{end}}
 
+          {{if .groupSize}}
+            <input type="hidden" name="groupSize" value="{{.groupSize}}"/>
+          {{end}}
+
           {{if .e}}
             <input type="hidden" name="e" value="{{.e}}"/>
           {{end}}
