@@ -1,0 +1,92 @@
+splash: |
+  Welcome to this playground session.
+  <br/><br/>
+  Please follow the tour steps on the left.
+
+panels:
+ -
+  id: w-database
+  title: west database
+ -
+  id: w-appserver
+  title: west appserver (nodejs)
+ -
+  id: w-browser
+  title: west browser
+ -
+  id: e-database
+  title: east database
+ -
+  id: e-syncgw
+  title: east sync-gateway
+ -
+  id: e-mobile
+  title: east mobile device
+ -
+  id: net
+  title: wide area network
+
+diagram:
+ height: 110px
+ content: |
+  <label for="w-database"
+         class="title"
+         style="top: 80px; width: 12em; height: 35px;">
+    <img src="./img/db.svg"
+         style="top: 0px; left: 0px; width: 50px;"/>
+    <span style="top: 0px; left: 50px;">west database</span>
+  </label>
+  <label for="w-appserver"
+         class="title"
+         style="top: 40px; width: 12em; height: 1.2rem;">
+    west appserver (nodejs)</label>
+  <label for="w-browser"
+         class="title"
+         style="top: 0px; width: 12em; height: 1.2rem;">
+    west web browser</label>
+
+  <label for="e-database"
+         class="title"
+         style="top: 80px; left: 300px; width: 12em; height: 35px;">
+    <img src="./img/db.svg"
+         style="top: 0px; left: 0px; width: 50px;"/>
+    <span style="top: 0px; left: 50px;">east database</span>
+  </label>
+  <label for="e-syncgw"
+         class="title"
+         style="top: 40px; left: 300px; width: 12em; height: 1.2rem;">
+    east sync-gateway</label>
+  <label for="e-mobile"
+         class="title"
+         style="top: 0px; left: 300px; width: 12em; height: 1.2rem;">
+    east mobile</label>
+
+  <label for="net"
+         class="title"
+         style="top: 80px; left: 225px; width: 40px; height: 35px;">
+    <img src="./img/switch-blue.svg"
+         style="top: 0px; left: 0px; width: 50px;"/>
+  </label>
+
+steps:
+ -
+  title: hello
+  content: |
+    welcome, hi, this is the first page
+ -
+  title: yay
+  content: |
+    yada yada
+ -
+  title: more
+  content: |
+    yada yada
+    yada yada
+    yada yada
+    yada yada
+    yada yada
+    yada yada
+ -
+  title: done
+  content: |
+    great! you made it to the end

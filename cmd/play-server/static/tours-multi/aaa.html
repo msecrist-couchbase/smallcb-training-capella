@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+<body>
+<input type="radio" class="display-none" name="panel" id="none" checked>
+
+<div class="container">
+  <header>
+    Couchbase Playground
+  </header>
+  <main>
+    <div class="left resize-h"></div>
+
+    <div class="right">
+      <div class="diagram-area" style="height: 110px;">
+        <div class="diagram"></div>
+      </div>
+
+      <div id="panel-none" class="panel">
+        <div class="splash"></div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<style>
+.display-none {
+  display: none;
+}
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.flex-row .close {
+  display: block;
+  flex-grow: 100;
+  text-align: right;
+  cursor: pointer;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: safe start;
+}
+
+.container header {
+  flex-basis: auto;
+  flex-grow: 0;
+  flex-shrink: 0;
+  height: 2rem;
+  border-bottom: 1px solid #999;
+  padding: 10px 10px 5px 20px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.container main {
+  flex-basis: auto;
+  flex-shrink: 1;
+  flex-grow: 1;
+  height: calc(100vh - 4.5rem);
+  display: flex;
+  flex-direction: row;
+  justify-content: stretch;
+  align-items: stretch;
+}
+
+.container main .left {
+  min-width: 100px;
+  max-width: 60%;
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid #999;
+  padding: 20px 10px 20px 20px;
+  overflow: scroll;
+  resize: horizontal;
+}
+
+.container main .left > div {
+  display: none;
+}
+
+.container main .right {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: stretch;
+}
+
+.container main .right .diagram-area {
+  flex-shrink: 0;
+  position: relative;
+  border-right: 1px solid #999;
+  border-bottom: 1px solid #999;
+  padding: 20px 0px 20px 20px;
+  background-color: #fcfcfc;
+  overflow: scroll;
+  resize: vertical;
+}
+.container main .right .diagram-area .diagram {
+  position: absolute;
+}
+.container main .right .diagram-area .diagram label {
+  position: absolute;
+  border: 1px solid #aaa;
+  padding-left: 10px;
+  cursor: pointer;
+}
+.container main .right .diagram-area .diagram label:hover {
+  background-color: #e0e0e0;
+}
+.container main .right .diagram-area .diagram label > * {
+  position: absolute;
+  white-space: nowrap;
+}
+
+.container main .right .panel {
+  flex-grow: 1;
+  flex-shrink: 1;
+  min-height: 1px;
+  display: none;
+  flex-direction: column;
+  padding: 15px 0px 0px 20px;
+}
+
+input#none:checked ~ .container main .right #panel-none {
+  display: flex;
+}
+
+.container main .right .panel div {
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.container main .right .panel div label.title {
+  position: relative;
+  border-top: 1px solid #444;
+  border-right: 1px solid #444;
+  border-left: 1px solid #444;
+}
+
+.container main .right .panel div label.title > * {
+  position: absolute;
+  white-space: nowrap;
+}
+
+.container main .right .panel iframe {
+  flex-grow: 1;
+  border: 1px solid #999;
+}
+
+.container main .right .panel label.title {
+  background-color: #eee;
+  padding-left: 10px;
+}
+
+.step-nav {
+  padding-top: 20px;
+  white-space: nowrap;
+}
+.step-nav span {
+  padding: 0 5px 0 5px;
+}
+.step-nav button {
+  cursor: pointer;
+}
+</style>
+
+<script>
+var name = (new URLSearchParams(document.location.search.substring(1))).get("name");
+if (name) {
+  fetch("/static-data?path=tours-multi/" + name)
+    .then(response => response.json())
+    .then(loadData);
+}
+
+function loadData(data) {
+  var splashEl = document.querySelector(".right .panel .splash");
+  if (splashEl) {
+    splashEl.innerHTML = data.splash || splashEl.innerHTML;
+  }
+
+  var diagram = data.diagram;
+  if (diagram) {
+    document.querySelector(".diagram").innerHTML = diagram.content || "";
+
+    document.querySelector(".diagram-area").style = `height: ${diagram.height || 0};`;
+  }
+
+  var rightEl = document.querySelector(".right");
+
+  for (let panel of data.panels) {
+    var input = document.createElement("input");
+
+    input.type = "radio";
+    input.className = "display-none";
+    input.name = "panel";
+    input.id = panel.id;
+
+    document.body.insertBefore(input, document.body.firstChild);
+
+    var diagramLabelEl = document.querySelector(`.right .diagram label[for="${panel.id}"]`) || {};
+    var diagramLabelStyle = diagramLabelEl.style || {};
+
+    var div = document.createElement("div");
+
+    div.id = "panel-" + panel.id;
+    div.className = "panel";
+    div.innerHTML =
+      `<div class="flex-row">
+         <label class="title"
+                style="width: ${diagramLabelStyle.width || 'auto'}; height: ${diagramLabelStyle.height || 'auto'};">
+           ${diagramLabelEl.innerHTML || panel.title}</label>
+         <label class="close" for="none">[X]</label>
+       </div>
+       <iframe src=""></iframe>
+       <style>
+         input#${panel.id}:checked ~ .container main .right #panel-${panel.id} {
+           display: flex;
+         }
+         input#${panel.id}:checked ~ .container main .right .diagram-area .diagram label[for="${panel.id}"] {
+           border: 1px solid #444;
+           background-color: #eee;
+         }
+       </style>`;
+
+    rightEl.appendChild(div);
+  }
+
+  var leftEl = document.querySelector(".left");
+
+  for (var i = 0; i < data.steps.length; i++) {
+    let step = data.steps[i];
+
+    var div = document.createElement("div");
+
+    div.id = "step-" + i;
+    div.className = "step-" + i;
+    div.innerHTML =
+      `<div class="step">
+         <h2>${step.title}</h2>
+         <div>${step.content}</div>
+         <div class="step-nav">
+           <button ${i <= 0 ? 'disabled' : ''}
+                   onclick="showStep(${i - 1})">Previous</button>
+           <span>${i + 1} of ${data.steps.length}</span>
+           <button ${i >= data.steps.length - 1 ? 'disabled' : ''}
+                   onclick="showStep(${i + 1})">Next</button>
+         </div>
+         <style>
+           main.step-${i} .left #step-${i} { display: flex; }
+         </style>
+       </div>`;
+
+    leftEl.appendChild(div);
+  }
+
+  showStep(0);
+}
+
+function showStep(i) {
+  document.querySelector("main").className = "step-" + i;
+}
+</script>
+</body>
+</html>

@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"html/template"
 	"log"
@@ -26,6 +27,8 @@ func HttpMuxInit(mux *http.ServeMux) {
 	mux.Handle("/static/",
 		http.StripPrefix("/static/",
 			http.FileServer(http.Dir(*staticDir))))
+
+	mux.HandleFunc("/static-data", HttpHandleStaticData)
 
 	mux.HandleFunc("/admin/dashboard", HttpHandleAdminDashboard)
 
@@ -399,6 +402,52 @@ func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 
 	EmitOutput(w, string(result), color)
 }
+
+// ------------------------------------------------
+
+func HttpHandleStaticData(w http.ResponseWriter, r *http.Request) {
+	path := r.FormValue("path")
+
+	if strings.Index(path, "..") >= 0 {
+		http.Error(w,
+			http.StatusText(http.StatusBadRequest),
+			http.StatusBadRequest)
+
+		log.Printf("ERROR: HttpHandleStaticData, err: path has '..'")
+
+		return
+	}
+
+	m, err := ReadYaml(*staticDir + "/" + path + ".yaml")
+	if err != nil {
+		http.Error(w,
+			http.StatusText(http.StatusBadRequest),
+			http.StatusBadRequest)
+
+		log.Printf("ERROR: HttpHandleStaticData, err: %v", err)
+
+		return
+	}
+
+	d := CleanupInterfaceValue(m)
+
+	j, err := json.Marshal(d)
+	if err != nil {
+		http.Error(w,
+			http.StatusText(http.StatusBadRequest),
+			http.StatusBadRequest)
+
+		log.Printf("ERROR: HttpHandleStaticData, err: %v", err)
+
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+
+	w.Write(j)
+}
+
+// ------------------------------------------------
 
 func EmitOutput(w http.ResponseWriter, result, color string) {
 	data := map[string]interface{}{

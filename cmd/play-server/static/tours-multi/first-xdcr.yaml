@@ -1,0 +1,53 @@
+splash: |
+  Welcome to this playground session.
+  <br/><br/>
+  Please follow the tour steps on the left.
+
+panels:
+ -
+  id: w-database
+  title: west database
+ -
+  id: e-database
+  title: east database
+
+diagram:
+ height: 55px
+ content: |
+  <label for="w-database"
+         class="title"
+         style="top: 10px; width: 12em; height: 35px;">
+    <img src="./img/db.svg"
+         style="top: 0px; left: 0px; width: 50px;"/>
+    <span style="top: 0px; left: 50px;">west database</span>
+  </label>
+  <label for="e-database"
+         class="title"
+         style="top: 10px; left: 250px; width: 12em; height: 35px;">
+    <img src="./img/db.svg"
+         style="top: 0px; left: 0px; width: 50px;"/>
+    <span style="top: 0px; left: 50px;">east database</span>
+  </label>
+
+steps:
+ -
+  title: hello
+  content: |
+    welcome, hi, this is the first page
+ -
+  title: yay
+  content: |
+    yada yada
+ -
+  title: more
+  content: |
+    yada yada
+    yada yada
+    yada yada
+    yada yada
+    yada yada
+    yada yada
+ -
+  title: done
+  content: |
+    great! you made it to the end
