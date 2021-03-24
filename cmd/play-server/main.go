@@ -186,7 +186,20 @@ func main() {
 	HttpMuxInit(mux)
 
 	for _, lp := range strings.Split(*listenProxy, ",") {
-		go HttpProxy(lp, *staticDir, *proxyFlushInterval,
+		// Ex: lp == ":8091".
+		go HttpProxy(lp, "", *staticDir, *proxyFlushInterval,
+			*host, listenPort, PortMap,
+			*listenPortBase,
+			*listenPortSpan)
+	}
+
+	lp := strings.Split(*listenProxy, ",")[0] // Ex: lp == ":8091".
+
+	for containerId := 0; containerId < *containers; containerId++ {
+		// Ex: lpActual == ":10000"
+		lpActual := fmt.Sprintf(":%d", *listenPortBase + (containerId * *listenPortSpan))
+
+		go HttpProxy(lp, lpActual, *staticDir, *proxyFlushInterval,
 			*host, listenPort, PortMap,
 			*listenPortBase,
 			*listenPortSpan)

@@ -18,6 +18,7 @@ import (
 )
 
 func HttpProxy(listenProxy, // Ex: ":8091", ":8093".
+	listenProxyActual,
 	staticDir string,
 	proxyFlushInterval time.Duration,
 	host string, // Ex: "couchbase.live", "127.0.0.1".
@@ -78,17 +79,27 @@ func HttpProxy(listenProxy, // Ex: ":8091", ":8093".
 
 			sessionId = user + pswd
 			if sessionId != "" {
-				sessionIdFrom = "cookie"
+				sessionIdFrom = "form"
 			}
 		}
 
+		cookieNameSuffix := "%3A" + listenProxyActual[1:] // Ex: "%3A10000", "%3A8091".
+
 		if sessionId == "" {
+			// log.Printf("INFO: lpa: %s, cookies: %+v\n", listenProxyActual, r.Cookies())
+
 			for _, cookie := range r.Cookies() {
+				// Ex: cookie.Name == "ui-auth-127.0.0.1%3A10000".
+				// Ex: cookie.Name == "ui-auth-cb-57216.couchbase.live%3A8091".
+				if !strings.HasSuffix(cookie.Name, cookieNameSuffix) {
+					continue
+				}
+
 				c := cookie.Name + "=" + cookie.Value
 
 				sessionId = CookiesGet(c)
 				if sessionId != "" {
-					sessionIdFrom = "cookie"
+					sessionIdFrom = "cookie (" + c + ")"
 
 					break
 				}
@@ -104,8 +115,9 @@ func HttpProxy(listenProxy, // Ex: ":8091", ":8093".
 		var flushInterval time.Duration
 
 		if sessionId != "" {
-			// log.Printf("INFO: HttpProxy, port: %d,"+
+			// log.Printf("INFO: lpa: %s, HttpProxy, port: %d,"+
 			//	" path: %s, sessionId: %s, via %s",
+			//	listenProxyActual,
 			//	portProxy, r.URL.Path, sessionId, sessionIdFrom)
 
 			_ = sessionIdFrom // Normally used by above log.Printf().
@@ -134,6 +146,11 @@ func HttpProxy(listenProxy, // Ex: ":8091", ":8093".
 
 				// Example targetPort: portStart + 1 == 10001.
 				targetPort = portStart + portMap[portProxy]
+
+				// log.Printf("INFO: lpa: %s, HttpProxy, path: %s, sessionId: %s,"+
+				//	" containerId: %d, portStart: %d, targetPort: %d",
+				//	listenProxyActual,
+				//	r.URL.Path, sessionId, session.ContainerId, portStart, targetPort)
 
 				remapResponse, streamResponse :=
 					ResponseKindForURLPath(r.URL.Path)
@@ -178,8 +195,9 @@ func HttpProxy(listenProxy, // Ex: ":8091", ":8093".
 					flushInterval = proxyFlushInterval
 				}
 
-				// log.Printf("INFO: HttpProxy, port: %d, path: %s,"+
+				// log.Printf("INFO: lpa: %s, HttpProxy, port: %d, path: %s,"+
 				//	" sessionId: %s, containerId: %d, remap: %t, stream: %t",
+				//	listenProxyActual,
 				//	portProxy, r.URL.Path, sessionId, session.ContainerId,
 				//	remapResponse, streamResponse)
 			}
@@ -213,9 +231,13 @@ func HttpProxy(listenProxy, // Ex: ":8091", ":8093".
 		proxy.ServeHTTP(w, r)
 	})
 
-	log.Printf("INFO: HttpProxy, listenProxy: %s", listenProxy)
+	if listenProxyActual == "" {
+		listenProxyActual = listenProxy
+	}
 
-	log.Fatal(http.ListenAndServe(listenProxy, proxyMux))
+	log.Printf("INFO: HttpProxy, listenProxyActual: %s", listenProxyActual)
+
+	log.Fatal(http.ListenAndServe(listenProxyActual, proxyMux))
 }
 
 // ------------------------------------------------
