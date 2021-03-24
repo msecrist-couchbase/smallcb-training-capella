@@ -6,6 +6,7 @@
 <div class="container">
   <header>
     Couchbase Playground
+    <a class="logout">stop playground session</a>
   </header>
   <main>
     <div class="left resize-h"></div>
@@ -49,11 +50,17 @@
   flex-basis: auto;
   flex-grow: 0;
   flex-shrink: 0;
+  display: flex;
   height: 2rem;
   border-bottom: 1px solid #999;
   padding: 10px 10px 5px 20px;
   white-space: nowrap;
   overflow: hidden;
+}
+
+.container header a.logout {
+  flex-grow: 1;
+  text-align: right;
 }
 
 .container main {
@@ -170,7 +177,14 @@ input#none:checked ~ .container main .right #panel-none {
 </style>
 
 <script>
-var name = (new URLSearchParams(document.location.search.substring(1))).get("name");
+var params = new URLSearchParams(document.location.search.substring(1));
+
+var sessionId = params.get("s");
+if (sessionId) {
+  document.querySelector("a.logout").href = "/session-exit?s=" + sessionId;
+}
+
+var name = params.get("name");
 if (name) {
   fetch("/static-data?path=tours-multi/" + name)
     .then(response => response.json())
