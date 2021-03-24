@@ -40,15 +40,7 @@ code: |
       TransactionConfigBuilder config = TransactionConfigBuilder.create()
           .durabilityLevel(TransactionDurabilityLevel.NONE);
       Transactions transactions = Transactions.create(cluster, config);
-      cluster.environment().eventBus().subscribe(event -> {
-        if (event instanceof TransactionEvent) {
-          TransactionEvent te = (TransactionEvent) event;
-          if (te.severity().ordinal() >= Event.Severity.WARN.ordinal()) {
-            System.out.println("Handling of the transaction event...");
-          }
-        }
-      });
-
+      
       var route1Id = "route_46586";
       var route2Id = "route_35816";
 
@@ -159,7 +151,8 @@ code: |
     }
   }
 infoAfter: |
-  This example shows an example of distributed transactions with key value mutations and creating a record of the event.
+  This example shows an example of distributed transactions with key value mutations.
   <br/><br/>
   Visit the docs to learn more about
-  <a target="_blank" href="https://docs.couchbase.com/java-sdk/current/howtos/distributed-acid-transactions-from-the-sdk.html">Distributed Transacttions in .Java</a>.
+  <a target="_blank" href="https://docs.couchbase.com/java-sdk/current/howtos/distributed-acid-transactions-from-the-sdk.html">Distributed Transacttions in Java</a>.
+  
