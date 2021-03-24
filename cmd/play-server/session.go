@@ -23,9 +23,9 @@ type Session struct {
 
 	// The following fields are ephemeral / runtime-only.
 
-	ContainerId int
-
-	ContainerIP string
+	ContainerId       int
+	ContainerIP       string
+	ContainerPortBase int
 
 	RestartCh chan<- Restart `json:"-"`
 	ReadyCh   chan int       `json:"-"`

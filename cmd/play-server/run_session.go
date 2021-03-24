@@ -108,6 +108,9 @@ func SessionAssignContainer(session *Session, req RunRequest,
 				} else {
 					session.ContainerId = containerId
 					session.ContainerIP = containerIP
+					session.ContainerPortBase =
+						*listenPortBase + (containerId * *listenPortSpan)
+
 					session.RestartCh = restartCh
 					session.ReadyCh = readyCh
 					session.TouchedAtUnix = time.Now().Unix()
