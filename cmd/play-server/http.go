@@ -209,7 +209,7 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 		if errs <= 0 {
 			StatsNumInc("http.Session.post.create")
 
-			session, err := sessions.SessionCreate(name, email)
+			session, err := sessions.SessionCreate("", name, email)
 			if err == nil && session != nil && session.SessionId != "" {
 				StatsNumInc("http.Session.post.ok", "http.Session.post.create.assign")
 

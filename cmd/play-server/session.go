@@ -35,7 +35,8 @@ type Session struct {
 
 // SessionInfo fields are intended to be persistable.
 type SessionInfo struct {
-	SessionId string
+	SessionId     string
+	SessionIdMain string // Can be "".
 
 	Name  string
 	Email string
@@ -47,6 +48,16 @@ type SessionInfo struct {
 	CreatedAtUnix int64
 	TouchedAtUnix int64
 }
+
+// For multi-session scenarios, sessions can be grouped
+// together, where the first session in a group becomes
+// the main session that has a real name and email,
+// where a group can look like...
+//
+//      SessionId SessionIdMain Name     Email
+// main "123"     ""            "a"      "a@email.com"
+// 2nd  "234"     "123"         "~123-1" "~"
+// 3rd  "456"     "123"         "~123-2" "~"
 
 // ------------------------------------------------
 
@@ -127,21 +138,13 @@ func (sessions *Sessions) SessionExit(sessionId string) error {
 
 	session, exists := sessions.mapBySessionId[sessionId]
 	if exists && session != nil {
-		delete(sessions.mapBySessionId, sessionId)
+		sessions.SessionExitLOCKED(session)
 
-		delete(sessions.mapByNameEmail,
-			NameEmail(session.Name, session.Email))
-
-		go func() { // Async to not hold the sessions lock.
-			j, err := json.Marshal(session.SessionInfo)
-			if err == nil {
-				log.Printf("session, SessionExit, sessionInfo: %+v", string(j))
+		for _, childSession := range sessions.mapBySessionId {
+			if childSession.SessionIdMain == session.SessionId {
+				sessions.SessionExitLOCKED(childSession)
 			}
-
-			session.ReleaseContainer()
-
-			CookiesRemove(session.Cookies)
-		}()
+		}
 
 		StatsNumInc("sessions.SessionExit.ok")
 	} else {
@@ -153,7 +156,29 @@ func (sessions *Sessions) SessionExit(sessionId string) error {
 
 // ------------------------------------------------
 
-func (s *Sessions) SessionCreate(name, email string) (
+func (sessions *Sessions) SessionExitLOCKED(session *Session) {
+	delete(sessions.mapBySessionId, session.SessionId)
+
+	delete(sessions.mapByNameEmail,
+		NameEmail(session.Name, session.Email))
+
+	go func() { // Async to not hold the sessions lock.
+		if session.SessionIdMain == "" {
+			j, err := json.Marshal(session.SessionInfo)
+			if err == nil {
+				log.Printf("session, SessionExit, sessionInfo: %+v", string(j))
+			}
+		}
+
+		session.ReleaseContainer()
+
+		CookiesRemove(session.Cookies)
+	}()
+}
+
+// ------------------------------------------------
+
+func (s *Sessions) SessionCreate(sessionIdMain, name, email string) (
 	session *Session, err error) {
 	StatsNumInc("sessions.SessionCreate")
 
@@ -208,11 +233,12 @@ func (s *Sessions) SessionCreate(name, email string) (
 
 	session = &Session{
 		SessionInfo: SessionInfo{
-			SessionId: sessionId,
-			Name:      name,
-			Email:     email,
-			CBUser:    sessionId[:16],
-			CBPswd:    sessionId[16:],
+			SessionId:     sessionId,
+			SessionIdMain: sessionIdMain,
+			Name:          name,
+			Email:         email,
+			CBUser:        sessionId[:16],
+			CBPswd:        sessionId[16:],
 
 			CreatedAt:     now.Format("2006-01-02T15:04:05.000-07:00"),
 			CreatedAtUnix: now.Unix(),
@@ -226,9 +252,11 @@ func (s *Sessions) SessionCreate(name, email string) (
 
 	StatsNumInc("sessions.SessionCreate.ok")
 
-	j, err := json.Marshal(session.SessionInfo)
-	if err == nil {
-		log.Printf("session, SessionCreate, sessionInfo: %+v", string(j))
+	if session.SessionIdMain == "" {
+		j, err := json.Marshal(session.SessionInfo)
+		if err == nil {
+			log.Printf("session, SessionCreate, sessionInfo: %+v", string(j))
+		}
 	}
 
 	rv := *session // Copy

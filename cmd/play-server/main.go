@@ -197,7 +197,7 @@ func main() {
 
 	for containerId := 0; containerId < *containers; containerId++ {
 		// Ex: lpActual == ":10000"
-		lpActual := fmt.Sprintf(":%d", *listenPortBase + (containerId * *listenPortSpan))
+		lpActual := fmt.Sprintf(":%d", *listenPortBase+(containerId**listenPortSpan))
 
 		go HttpProxy(lp, lpActual, *staticDir, *proxyFlushInterval,
 			*host, listenPort, PortMap,
