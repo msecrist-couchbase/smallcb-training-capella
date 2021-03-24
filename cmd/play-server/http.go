@@ -165,7 +165,7 @@ func HttpHandleSessionInfo(w http.ResponseWriter, r *http.Request) {
 
 // ------------------------------------------------
 
-var regexpE = regexp.MustCompile(`^[a-zA-Z0-9\-_#/]*$`)
+var regexpE = regexp.MustCompile(`^[a-zA-Z0-9_#=/\-\?\.]*$`)
 
 func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 	StatsNumInc("http.Session")
@@ -182,14 +182,14 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 	}
 
 	e := r.FormValue("e") // Optional example name target.
-	if !regexpE.MatchString(e) {
+	if !regexpE.MatchString(e) || strings.Index(e, "..") >= 0 {
 		StatsNumInc("http.Session.err", "http.Session.err.bad-e")
 
 		http.Error(w,
 			http.StatusText(http.StatusBadRequest),
 			http.StatusBadRequest)
 
-		log.Printf("ERROR: HttpHandleMain, err: e unmatched")
+		log.Printf("ERROR: HttpHandleMain, e: %s, err: e unmatched", e)
 
 		return
 	}
@@ -305,7 +305,11 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 						url = url + e
 					}
 
-					url += "?s=" + session.SessionId
+					if strings.Index(url, "?") < 0 {
+						url += "?s=" + session.SessionId
+					} else {
+						url += "&s=" + session.SessionId
+					}
 
 					http.Redirect(w, r, url,
 						http.StatusSeeOther)
