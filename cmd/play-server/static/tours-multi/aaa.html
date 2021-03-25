@@ -175,6 +175,10 @@ input#none:checked ~ .container main .right #panel-none {
 .step-nav button {
   cursor: pointer;
 }
+
+.container main .right label.title .small {
+  font-size: .7rem;
+}
 </style>
 
 <script>
@@ -222,7 +226,11 @@ function loadTour(data, sess) {
 
   var diagram = data.diagram;
   if (diagram) {
-    document.querySelector(".diagram").innerHTML = diagram.content || "";
+    var ctx = { s: sessArr, o: '' };
+
+    with (ctx) eval('o = `' + (diagram.content || '') + '`');
+
+    document.querySelector(".diagram").innerHTML = ctx.o;
 
     document.querySelector(".diagram-area").style = `height: ${diagram.height || 0};`;
   }

@@ -23,14 +23,20 @@ diagram:
          style="top: 10px; width: 12em; height: 35px;">
     <img src="./img/db.svg"
          style="top: 0px; left: 0px; width: 50px;"/>
-    <span style="top: 0px; left: 50px;">west database</span>
+    <div style="top: 0px; left: 50px;">
+      west database
+      <div class="small">${s[0].ContainerIP}</div>
+    </div>
   </label>
   <label for="e-database"
          class="title"
          style="top: 10px; left: 250px; width: 12em; height: 35px;">
     <img src="./img/db.svg"
          style="top: 0px; left: 0px; width: 50px;"/>
-    <span style="top: 0px; left: 50px;">east database</span>
+    <div style="top: 0px; left: 50px;">
+      east database
+      <div class="small">${s[1].ContainerIP}</div>
+    </div>
   </label>
 
 steps:
