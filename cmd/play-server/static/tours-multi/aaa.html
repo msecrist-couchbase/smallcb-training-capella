@@ -101,7 +101,7 @@ body * {
   display: flex;
   flex-direction: column;
   border-right: 1px solid #ddd;
-  padding: 20px 10px 20px 20px;
+  padding: 20px 20px 20px 20px;
   overflow: scroll;
   resize: horizontal;
   color: #444;
@@ -236,6 +236,10 @@ input#none:checked ~ .container main .right #panel-none {
 
 .container main .right label.title .small {
   font-size: .75rem;
+}
+
+code {
+  font-family: Courier;
 }
 </style>
 
@@ -396,7 +400,7 @@ function showStep(i) {
   document.querySelector("main").className = "step-" + i;
 }
 
-function talk(panel, message) {
+function tell(panel, message) {
   var f = document.querySelector(`#panel-${panel} iframe`);
   if (f) {
     f.contentWindow.postMessage(message, (new URL(f.src)).origin);

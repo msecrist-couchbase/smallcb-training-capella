@@ -45,53 +45,58 @@ steps:
  -
   title: Welcome
   content: |
-    welcome, hi, this is the first page
+    In this tour, we'll see how easy it is to setup a data
+    <b>replication stream</b>
+    between two Couchbase databases:
     <br/>
-    welcome, hi, this is the first page
-    <br/>
-    welcome, hi, this is the first page
-    <br/>
-    welcome, hi, this is the first page
-    <br/>
-    welcome, hi, this is the first page
-    <br/>
+    <ul>
+      <li>a <code>west</code> database<br/></li>
+      <li>an <code>east</code> database<br/></li>
+    </ul>
+ -
+  title: The databases
+  content: |
+    The <code>west</code> database is running on server
+    <code>${s[0].ContainerIP}</code> with<br/>
+    <small>username:&nbsp;${s[0].CBUser}</small>
+    <small>password:&nbsp;${s[0].CBPswd}</small>
+    <br/><br/>
 
-    <button onclick="talk(
-      'w-database',
+    The <code>east</code> database is running on server
+    <code>${s[1].ContainerIP}</code> with<br/>
+    <small>username:&nbsp;${s[1].CBUser}</small>
+    <small>password:&nbsp;${s[1].CBPswd}</small>
+    <br/><br/>
+
+    You can <b>open and explore</b> their web-admin UI's by
+    clicking on their diagram icons.
+    <br/><br/>
+ -
+  title: A new bucket in the east
+  content: |
+    Let's create a new, empty bucket in the <code>east</code> database.
+    <br/><br/>
+    First, open the <code>east</code> web-admin UI.
+    <br/><br/>
+
+    Then, click on <i>Buckets</i> in the main menu.
+    <br/><br/>
+
+    Then, click on <i>Add Bucket</i> in order
+    to open the bucket creation dialog box.
+    <br/><br/>
+
+    <button onclick="tell(
+      'e-database',
       {
         clicks: ['a[mn-tab=buckets]',
                  'header .row.flex-right .header-controls a[ng-click]'
                 ],
-        styles: 'body {border: 3px solid red;}'
       })">
-      talk to the w-database iframe
+      take me there
     </button>
+    <br/><br/>
 
-    <button onclick="talk('w-database', {})">
-      reset styles
-    </button>
- -
-  title: Yay
-  content: |
-    yada yada
-    <br/><br/><br/>
-
-    The west database is:<br/><br/>
-    &nbsp;${s[0].ContainerIP}<br/>
-    &nbsp;user: ${s[0].CBUser}<br/>
-    &nbsp;pswd: ${s[0].CBPswd}<br/>
-    <br/>
-    <br/>
-
-    The east database is:<br/><br/>
-    &nbsp;${s[1].ContainerIP}<br/>
-    &nbsp;user: ${s[1].CBUser}<br/>
-    &nbsp;pswd: ${s[1].CBPswd}<br/>
-    <br/>
-    <br/>
- -
-  title: And more
-  content: |
     yada yada
     yada yada
     yada yada

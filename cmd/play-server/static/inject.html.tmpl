@@ -321,6 +321,28 @@ var playgHelpData = {{.injectData}};
             pl.style.display = "none";
           }
 
+          if (window.self !== window.top) { // When in iframe.
+            var trys = 0;
+
+            setTimeout(signIn, 200);
+
+            function signIn() {
+              if (trys < 40) {
+                trys += 1;
+
+                var signIn = document.querySelector(
+                  '.sign-in-background + .flex-center form .panel-footer button[type=submit]');
+                if (signIn && signIn.click) {
+                  signIn.click();
+
+                  return;
+                }
+
+                setTimeout(signIn, 200);
+              }
+            }
+          }
+
           return;
         }
       }
