@@ -24,6 +24,10 @@
 </div>
 
 <style>
+body * {
+  font-family: OpenSans, sans-serif;
+}
+
 .display-none {
   display: none;
 }
@@ -40,6 +44,14 @@
   cursor: pointer;
 }
 
+.flex-row .close span {
+  color: #777;
+}
+
+.flex-row .close span:hover {
+  color: black;
+}
+
 .container {
   display: flex;
   flex-direction: column;
@@ -51,8 +63,8 @@
   flex-grow: 0;
   flex-shrink: 0;
   display: flex;
-  height: 2rem;
-  border-bottom: 1px solid #999;
+  height: 1.5rem;
+  border-bottom: 1px solid #bbb;
   padding: 10px 10px 5px 20px;
   white-space: nowrap;
   overflow: hidden;
@@ -61,6 +73,15 @@
 .container header a.logout {
   flex-grow: 1;
   text-align: right;
+}
+
+.container header a.logout,
+.container header a.logout:visited {
+  color: #555;
+}
+
+.container header a.logout:hover {
+  color: black;
 }
 
 .container main {
@@ -80,10 +101,11 @@
   width: 220px;
   display: flex;
   flex-direction: column;
-  border-right: 1px solid #999;
+  border-right: 1px solid #ddd;
   padding: 20px 10px 20px 20px;
   overflow: scroll;
   resize: horizontal;
+  color: #444;
 }
 
 .container main .left > div {
@@ -99,8 +121,7 @@
 
 .container main .right .diagram-area {
   position: relative;
-  border-right: 1px solid #999;
-  border-bottom: 1px solid #999;
+  border-bottom: 1px solid #eee;
   padding: 20px 0px 20px 20px;
   background-color: #fcfcfc;
   overflow: scroll;
@@ -136,21 +157,39 @@ input#none:checked ~ .container main .right #panel-none {
   display: flex;
 }
 
-.container main .right .panel div {
+.container main .right .panel div.header {
   flex-shrink: 0;
   overflow: hidden;
 }
 
-.container main .right .panel div label.title {
+.container main .right .panel div.header label.title {
   position: relative;
+  margin-right: 10px;
   border-top: 1px solid #444;
   border-right: 1px solid #444;
   border-left: 1px solid #444;
 }
 
-.container main .right .panel div label.title > * {
+.container main .right .panel div.header label.title > * {
   position: absolute;
   white-space: nowrap;
+}
+
+.container main .right .panel div.header div.title-more {
+  align-self: end;
+  margin: 5px 5px 5px 10px;
+  white-space: nowrap;
+  font-size: 0.75rem;
+  color: #777;
+}
+
+.container main .right .panel div.header div.title-more a,
+.container main .right .panel div.header div.title-more a:visited {
+  color: #777;
+}
+
+.container main .right .panel div.header div.title-more a:hover {
+  color: black;
 }
 
 .container main .right .panel iframe {
@@ -172,11 +211,32 @@ input#none:checked ~ .container main .right #panel-none {
   padding: 0 5px 0 5px;
 }
 .step-nav button {
+  display: inline-block;
+  min-width: 3rem;
+  width: auto;
+  height: 1.5rem;
+  margin: 0;
+  border: none;
+  border-radius: 2px;
+  box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.2);
+  background-color: #4287D6;
+  padding: 0 0.6rem;
+  font-size: 1rem;
+  line-height: 1.6rem;
+  text-align: center;
+  white-space: nowrap;
+  outline: none;
+  color: #fff;
   cursor: pointer;
 }
 
+.step-nav button:disabled {
+  background-color: #d4d4d4;
+  color: #f4f4f4;
+}
+
 .container main .right label.title .small {
-  font-size: .7rem;
+  font-size: .75rem;
 }
 </style>
 
@@ -249,8 +309,16 @@ function loadTour(data, sess) {
     var diagramLabelEl = document.querySelector(`.right .diagram label[for="${panel.id}"]`) || {};
     var diagramLabelStyle = diagramLabelEl.style || {};
 
-    var ctx = { s: sessArr, o: '' };
+    var ctx;
 
+    ctx = { s: sessArr, o: '' };
+    if (panel['title-more']) {
+      with (ctx) eval('o = `' + panel['title-more'] + '`');
+    }
+
+    var titleMore = ctx.o;
+
+    ctx = { s: sessArr, o: '' };
     if (panel['iframe-src']) {
       with (ctx) eval('o = `' + panel['iframe-src'] + '`');
     }
@@ -262,11 +330,13 @@ function loadTour(data, sess) {
     div.id = "panel-" + panel.id;
     div.className = "panel";
     div.innerHTML =
-      `<div class="flex-row">
+      `<div class="flex-row header">
          <label class="title"
                 style="width: ${diagramLabelStyle.width || 'auto'}; height: ${diagramLabelStyle.height || 'auto'};">
            ${diagramLabelEl.innerHTML || panel.title}</label>
-         <label class="close" for="none">[X]</label>
+         <div class="title-more">${titleMore}</div>
+         <div class="title-more"><a href="${iframeSrc}" target="_blank">[open &#x2B08;]</a></div>
+         <label class="close" for="none"><span>[X]</span></label>
        </div>
        <iframe src="${iframeSrc}"></iframe>
        <style>
@@ -287,6 +357,13 @@ function loadTour(data, sess) {
   for (var i = 0; i < data.steps.length; i++) {
     let step = data.steps[i];
 
+    ctx = { s: sessArr, o: '' };
+    if (step.content) {
+      with (ctx) eval('o = `' + step.content + '`');
+    }
+
+    var stepContent = ctx.o;
+
     var div = document.createElement("div");
 
     div.id = "step-" + i;
@@ -294,7 +371,7 @@ function loadTour(data, sess) {
     div.innerHTML =
       `<div class="step">
          <h2>${step.title}</h2>
-         <div>${step.content}</div>
+         <div>${stepContent}</div>
          <div class="step-nav">
            <button ${i <= 0 ? 'disabled' : ''}
                    onclick="showStep(${i - 1})">Previous</button>
