@@ -157,6 +157,7 @@ input#none:checked ~ .container main .right #panel-none {
 .container main .right .panel iframe {
   flex-grow: 1;
   border: 1px solid #999;
+  padding-top: 10px;
 }
 
 .container main .right .panel label.title {
@@ -177,21 +178,43 @@ input#none:checked ~ .container main .right #panel-none {
 </style>
 
 <script>
+// Ex: http://localhost:8080/session?groupSize=2&e=static/tours-multi/aaa.html%3Fname%3Dfirst-xdcr
+
 var params = new URLSearchParams(document.location.search.substring(1));
 
 var sessionId = params.get("s");
 if (sessionId) {
   document.querySelector("a.logout").href = "/session-exit?s=" + sessionId;
+
+  var name = params.get("name");
+  if (name) {
+    fetch("/static-data?path=tours-multi/" + name)
+      .then(resp => resp.json())
+      .then(data => {
+        fetch("/session-info?s=" + sessionId)
+          .then(resp => resp.json())
+          .then(sess => loadTour(data, sess));
+      });
+  }
 }
 
-var name = params.get("name");
-if (name) {
-  fetch("/static-data?path=tours-multi/" + name)
-    .then(response => response.json())
-    .then(loadData);
-}
+var tourData;
+var tourSess;
 
-function loadData(data) {
+function loadTour(data, sess) {
+  tourData = data;
+  tourSess = sess;
+
+  var sessArr = [sess.group[sess.sessionId]];
+
+  for (var k in sess.group) {
+    var s = sess.group[k];
+
+    if (s.SessionIdMain == sess.sessionId) {
+      sessArr[parseInt(s.Name.split('-')[1])] = s;
+    }
+  }
+
   var splashEl = document.querySelector(".right .panel .splash");
   if (splashEl) {
     splashEl.innerHTML = data.splash || splashEl.innerHTML;
@@ -219,6 +242,14 @@ function loadData(data) {
     var diagramLabelEl = document.querySelector(`.right .diagram label[for="${panel.id}"]`) || {};
     var diagramLabelStyle = diagramLabelEl.style || {};
 
+    var ctx = { s: sessArr, o: '' };
+
+    if (panel['iframe-src']) {
+      with (ctx) eval('o = `' + panel['iframe-src'] + '`');
+    }
+
+    var iframeSrc = ctx.o;
+
     var div = document.createElement("div");
 
     div.id = "panel-" + panel.id;
@@ -230,7 +261,7 @@ function loadData(data) {
            ${diagramLabelEl.innerHTML || panel.title}</label>
          <label class="close" for="none">[X]</label>
        </div>
-       <iframe src=""></iframe>
+       <iframe src="${iframeSrc}"></iframe>
        <style>
          input#${panel.id}:checked ~ .container main .right #panel-${panel.id} {
            display: flex;

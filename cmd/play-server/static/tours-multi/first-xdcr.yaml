@@ -9,11 +9,11 @@ panels:
  -
   id: w-database
   title: west database
-  iframe-src: http://${s[0].ContainerIP}:${s[0].ContainerPortBase}/ui/index.html?lu=${s[0].CBUser&lp=s[0].CBPswd
+  iframe-src: http://${document.location.hostname}:${s[0].ContainerPortBase}/ui/index.html?lu=${s[0].CBUser}&lp=${s[0].CBPswd}
  -
   id: e-database
   title: east database
-  iframe-src: http://${s[0].ContainerIP}:${s[0].ContainerPortBase}/ui/index.html?lu=${s[0].CBUser&lp=s[0].CBPswd
+  iframe-src: http://${document.location.hostname}:${s[1].ContainerPortBase}/ui/index.html?lu=${s[1].CBUser}&lp=${s[1].CBPswd}
 
 diagram:
  height: 55px
