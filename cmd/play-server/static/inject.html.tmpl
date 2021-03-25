@@ -341,6 +341,12 @@ var playgHelpData = {{.injectData}};
 
     el.id = el.className = "playg";
 
+    if (window.self !== window.top) { // When in iframe.
+      el.style.top = "auto";
+      el.style.bottom = "0";
+      el.style.zIndex = 0;
+    }
+
     el.innerHTML =
       {{if .SessionId}}
         '<a href="http://{{.Host}}:{{.PortApp}}/?s={{.SessionId}}" target="_blank">' +
@@ -420,7 +426,7 @@ var playgHelpData = {{.injectData}};
     }
 
     var gt = document.getElementById("playgTourToggle");
-    if (gt) {
+    if (gt && (window.self === window.top)) {
       gt.className = "playgTourToggle playgShow";
     }
 
