@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:ns1="http://sozi.baierouge.fr" xmlns:cc="http://creativecommons.org/ns#" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" id="svg7827" viewBox="0 0 1052.4 744.09" version="1.1" inkscape:version="0.91 r13725">
+  <defs id="defs3">
+    <linearGradient id="linearGradient7825" y2="447.95" gradientUnits="userSpaceOnUse" x2="179.67" gradientTransform="matrix(6.755 0 0 6.755 -348.32 -2345.6)" y1="448.81" x1="106.71">
+      <stop id="stop4074-2-8" style="stop-color:#8742d6" offset="0"/>
+      <stop id="stop4076-1-1" style="stop-color:#999999;stop-opacity:0" offset="1"/>
+    </linearGradient>
+  </defs>
+  <g id="layer1" transform="translate(0 -308.27)">
+    <path id="rect3286-4-0" style="opacity:.84167;stroke:#000000;stroke-width:23.557;fill:url(#linearGradient7825)" d="m859.38 456.77v451.77l-0.18882-1.4428c0 50.92-149.14 92.199-333.11 92.199s-331.56-41.279-331.56-92.199l-0.41709 1.4428v-451.77m665.08-3.2406c0 50.92-149.14 92.199-333.11 92.199s-333.11-41.279-333.11-92.199 149.14-92.199 333.11-92.199 333.11 41.279 333.11 92.199z"/>
+  </g>
+  <metadata>
+    <rdf:RDF>
+      <cc:Work>
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+        <cc:license rdf:resource="http://creativecommons.org/licenses/publicdomain/"/>
+        <dc:publisher>
+          <cc:Agent rdf:about="http://openclipart.org/">
+            <dc:title>Openclipart</dc:title>
+          </cc:Agent>
+        </dc:publisher>
+      </cc:Work>
+      <cc:License rdf:about="http://creativecommons.org/licenses/publicdomain/">
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction"/>
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution"/>
+        <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks"/>
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+</svg>

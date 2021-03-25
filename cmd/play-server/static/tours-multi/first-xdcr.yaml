@@ -21,7 +21,7 @@ diagram:
   <label for="w-database"
          class="title"
          style="top: 10px; width: 12em; height: 35px;">
-    <img src="./img/db.svg"
+    <img src="./img/db-blue.svg"
          style="top: 0px; left: 0px; width: 50px;"/>
     <div style="top: 0px; left: 50px;">
       west database
@@ -31,7 +31,7 @@ diagram:
   <label for="e-database"
          class="title"
          style="top: 10px; left: 250px; width: 12em; height: 35px;">
-    <img src="./img/db.svg"
+    <img src="./img/db-green.svg"
          style="top: 0px; left: 0px; width: 50px;"/>
     <div style="top: 0px; left: 50px;">
       east database
@@ -44,6 +44,15 @@ steps:
   title: hello
   content: |
     welcome, hi, this is the first page
+    <br/>
+    welcome, hi, this is the first page
+    <br/>
+    welcome, hi, this is the first page
+    <br/>
+    welcome, hi, this is the first page
+    <br/>
+    welcome, hi, this is the first page
+    <br/>
  -
   title: yay
   content: |
