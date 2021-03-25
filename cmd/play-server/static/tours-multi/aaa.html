@@ -37,18 +37,17 @@ body * {
   flex-direction: row;
 }
 
-.flex-row .close {
-  display: block;
+.flex-row .controls {
   flex-grow: 100;
   text-align: right;
+}
+
+.flex-row .controls .close {
+  color: #777;
   cursor: pointer;
 }
 
-.flex-row .close span {
-  color: #777;
-}
-
-.flex-row .close span:hover {
+.flex-row .controls .close:hover {
   color: black;
 }
 
@@ -336,7 +335,9 @@ function loadTour(data, sess) {
            ${diagramLabelEl.innerHTML || panel.title}</label>
          <div class="title-more">${titleMore}</div>
          <div class="title-more"><a href="${iframeSrc}" target="_blank">[open &#x2B08;]</a></div>
-         <label class="close" for="none"><span>[X]</span></label>
+         <div class="controls">
+            <label class="close" for="none">[X]</label>
+         </div>
        </div>
        <iframe src="${iframeSrc}"
                sandbox="allow-same-origin allow-scripts allow-forms allow-popups"></iframe>
