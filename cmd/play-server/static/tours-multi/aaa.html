@@ -338,7 +338,8 @@ function loadTour(data, sess) {
          <div class="title-more"><a href="${iframeSrc}" target="_blank">[open &#x2B08;]</a></div>
          <label class="close" for="none"><span>[X]</span></label>
        </div>
-       <iframe src="${iframeSrc}"></iframe>
+       <iframe src="${iframeSrc}"
+               sandbox="allow-same-origin allow-scripts allow-forms allow-popups"></iframe>
        <style>
          input#${panel.id}:checked ~ .container main .right #panel-${panel.id} {
            display: flex;
@@ -392,6 +393,13 @@ function loadTour(data, sess) {
 
 function showStep(i) {
   document.querySelector("main").className = "step-" + i;
+}
+
+function talk(panel, message) {
+  var f = document.querySelector(`#panel-${panel} iframe`);
+  if (f) {
+    f.contentWindow.postMessage(message, (new URL(f.src)).origin);
+  }
 }
 </script>
 </body>

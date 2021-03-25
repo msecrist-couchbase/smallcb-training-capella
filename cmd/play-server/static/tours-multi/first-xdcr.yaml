@@ -55,6 +55,21 @@ steps:
     <br/>
     welcome, hi, this is the first page
     <br/>
+
+    <button onclick="talk(
+      'w-database',
+      {
+        clicks: ['a[mn-tab=buckets]',
+                 'header .row.flex-right .header-controls a[ng-click]'
+                ],
+        styles: 'body {border: 3px solid red;}'
+      })">
+      talk to the w-database iframe
+    </button>
+
+    <button onclick="talk('w-database', {})">
+      reset styles
+    </button>
  -
   title: Yay
   content: |
