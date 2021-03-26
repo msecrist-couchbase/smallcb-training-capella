@@ -436,15 +436,13 @@ function loadTour(data, sess) {
   leftEl.appendChild(popupInputEl);
 
   leftEl.onclick = function(ev) {
-    for (var e = ev.target; e; e = e.parentNode) {
-      if (e.target.className.indexOf("step-nav") >= 0) {
+    for (var e = ev.target; e; e = e.parentElement) {
+      if (e.className.indexOf("step-nav") >= 0) {
         return;
       }
     }
 
-    if (popupInputEl.checked) {
-      popupInputEl.checked = false;
-    }
+    popupInputEl.checked = false;
   };
 
   for (var i = 0; i < data.steps.length; i++) {
