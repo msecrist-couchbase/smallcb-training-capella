@@ -798,6 +798,8 @@ function playgHandleMessage(data, tries) {
     if (el && el.click) {
       el.click();
 
+      document.body.scrollTop = 0;
+
       data.clicks = data.clicks.slice(1);
 
       setTimeout(function() { playgHandleMessage(data, 0) }, 500);

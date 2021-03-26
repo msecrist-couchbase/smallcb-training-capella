@@ -495,25 +495,30 @@ function loadTour(data, sess) {
 }
 
 function showStep(i) {
-  document.querySelector("main").className = "step-" + i;
+  var className = "step-" + i;
 
-  if (tourData &&
-      tourData.steps &&
-      tourData.steps[i]) {
-    var panel = tourData.steps[i].panel;
-    if (panel) {
-      var el = document.getElementById(panel);
-      if (el) {
-        el.checked = true;
+  if (tourData && tourData.steps) {
+    var step = tourData.steps[i];
+    if (step) {
+      if (step.title) {
+        className += " step-" + step.title.trim().replaceAll(' ', '-').toLowerCase();
+      }
 
-        if (tourData.steps[i]['panel-tell']) {
-          tell(panel, tourData.steps[i]['panel-tell']);
+      var panel = step.panel;
+      if (panel) {
+        var el = document.getElementById(panel);
+        if (el) {
+          el.checked = true;
 
-          return;
+          if (step['panel-tell']) {
+            tell(panel, step['panel-tell']);
+          }
         }
       }
     }
   }
+
+  document.querySelector("main").className = className;
 }
 
 function tell(panel, message) {

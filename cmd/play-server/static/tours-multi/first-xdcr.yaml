@@ -21,14 +21,14 @@ diagram:
     <div style="position: absolute; top: 80px; left: 60px;">
       <img src="./img/db-purple.svg"
            style="position: absolute; top: 0px; left: 0px; width: 20px;"/>
-      <div style="position: absolute; top: 0px; left: 25px" class="small">terminal-w01</div>
+      <div style="position: absolute; top: 0px; left: 25px" class="small">warehouse-w01</div>
     </div>
 
     <div style="position: absolute; top: 30px; left: 25px; border-top: 2px solid #777; transform-origin: top left; width: 80px; transform: rotateZ(75deg);"></div>
     <div style="position: absolute; top: 110px; left: 40px;">
       <img src="./img/db-purple.svg"
            style="position: absolute; top: 0px; left: 0px; width: 20px;"/>
-      <div style="position: absolute; top: 0px; left: 25px" class="small">terminal-w02</div>
+      <div style="position: absolute; top: 0px; left: 25px" class="small">store-w02</div>
     </div>
 
     <div style="position: absolute; top: 30px; left: 25px; border-top: 2px solid #777; transform-origin: top left; width: 105px; transform: rotateZ(88deg);"></div>
@@ -45,37 +45,35 @@ diagram:
     <div style="position: absolute; top: 80px; left: 60px;">
       <img src="./img/db-green.svg"
            style="position: absolute; top: 0px; left: 0px; width: 20px;"/>
-      <div style="position: absolute; top: 0px; left: 25px" class="small">terminal-e01</div>
+      <div style="position: absolute; top: 0px; left: 25px" class="small">port-e01</div>
     </div>
 
     <div style="position: absolute; top: 30px; left: 25px; border-top: 2px solid #777; transform-origin: top left; width: 80px; transform: rotateZ(75deg);"></div>
     <div style="position: absolute; top: 110px; left: 40px;">
       <img src="./img/db-green.svg"
            style="position: absolute; top: 0px; left: 0px; width: 20px;"/>
-      <div style="position: absolute; top: 0px; left: 25px" class="small">terminal-e02</div>
+      <div style="position: absolute; top: 0px; left: 25px" class="small">store-e09</div>
     </div>
 
     <div style="position: absolute; top: 30px; left: 25px; border-top: 2px solid #777; transform-origin: top left; width: 105px; transform: rotateZ(88deg);"></div>
     <div style="position: absolute; top: 140px; left: 20px;">
       <img src="./img/db-green.svg"
            style="position: absolute; top: 0px; left: 0px; width: 20px;"/>
-      <div style="position: absolute; top: 0px; left: 25px" class="small">vehicle-15</div>
+      <div style="position: absolute; top: 0px; left: 25px" class="small">store-e15</div>
     </div>
   </div>
 
-  <div class="diagram-more background-stripes"
+  <div class="diagram-more west-east-stream"
        style="display: none; position: absolute; top: 27px; left: 12em; height: 4px; width: 60px;"></div>
 
   <style>
-    .background-stripes {
-      background-color: white;
+    .west-east-stream {
       background: linear-gradient(-90deg, #999, white);
       background-repeat: repeat-x;
       background-size: 15px 4px;
-      background-position: 0px 0px;
-      animation: background-stripes-animation 20s infinite linear;
+      animation: west-east-stream 10s infinite linear;
     }
-    @keyframes background-stripes-animation {
+    @keyframes west-east-stream {
       0% {
         background-position: 0px 0px;
       }
@@ -113,7 +111,7 @@ steps:
   content: |
    Mission-critical enterprise applications
    are often distributed across
-   <span class="nowrap">multi-locations</span> and clouds,
+   <span class="nowrap">multiple locations</span> and clouds,
    where remote databases are connected
    by <b>data&nbsp;streams</b>.
    <br/><br/>
@@ -273,7 +271,10 @@ steps:
     clicks:
      - "nav.nav-sidebar a[mn-tab=replications]"
   content:
-    Next, on the <i>XDCR&nbsp;Replications</i> screen,
+    Continuing in the <code>west</code> database...
+    <br/><br/>
+
+    On the <i>XDCR&nbsp;Replications</i> screen,
     click on <i>ADD&nbsp;REPLICATION</i> to add an
     outgoing replication.
     <br/><br/>
@@ -296,7 +297,7 @@ steps:
 
     Finally, click <i>Save&nbsp;Replication</i>.
  -
-  title: Data appears in the east
+  title: Congratulations
   panel: e-database
   panel-tell:
    clicks:
@@ -305,7 +306,39 @@ steps:
    Going back to the <code>east</code> database,
    we can now see data appearing in the
    <code class="nowrap">my-first-bucket</code> bucket.
+   <br/><br/>
+
+   <b>Congratulations!</b>
+   <br/><br/>
+
+   You've created a data stream from
+   a <code>west</code> bucket to an <code>east</code> bucket.
+
+   <style>
+     body .container main.step-congratulations .right .diagram-area .west-east-stream {
+       display: block !important;
+       opacity: 1;
+     }
+   </style>
  -
-  title: Done
+  title: Next Steps
   content: |
-    great! you made it to the end!
+   There's a lot more that Couchbase can do
+   to help you build modern, distributed enterprise
+   database applications.
+   <br/><br/>
+
+   Some good next tutorials to look at next: foo, bar, baz
+   <br/><br/>
+
+   And, you can try this setup and code
+   and on your own computer by downloading Couchbase,
+   or by using a free cloud trial account.
+   <br/><br/>
+
+   <style>
+     body .container main.step-next-steps .right .diagram-area .west-east-stream {
+       display: block !important;
+       opacity: 1;
+     }
+   </style>
