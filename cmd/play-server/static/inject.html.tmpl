@@ -447,8 +447,12 @@ var playgHelpData = {{.injectData}};
       pl.style.display = "none";
     }
 
+    if (window.self !== window.top) {
+      return; // In iframe.
+    }
+
     var gt = document.getElementById("playgTourToggle");
-    if (gt && (window.self === window.top)) {
+    if (gt) {
       gt.className = "playgTourToggle playgShow";
     }
 
