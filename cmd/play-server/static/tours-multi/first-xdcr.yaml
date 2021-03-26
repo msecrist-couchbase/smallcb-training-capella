@@ -45,7 +45,7 @@ steps:
  -
   title: Welcome
   content: |
-    In this tour, we'll see how easy it is to setup a data
+    In this tour, we'll walk through how to setup a data
     <b>replication stream</b>
     between two Couchbase databases:
     <br/>
@@ -53,6 +53,10 @@ steps:
       <li>a <code>west</code> database<br/></li>
       <li>an <code>east</code> database<br/></li>
     </ul>
+
+    The <code>west</code> will be our source
+    of data and the <code>east</code> will
+    be the destination of our data replication stream.
  -
   title: The databases
   content: |
@@ -73,13 +77,14 @@ steps:
     <br/><br/>
  -
   title: A new bucket in the east
+  panel: e-database 
   content: |
-    Let's create a new, empty bucket in the <code>east</code> database.
-    <br/><br/>
-    First, open the <code>east</code> web-admin UI.
+    We'll first create a new, empty bucket in the <code>east</code> database.
     <br/><br/>
 
-    Then, click on <i>Buckets</i> in the main menu.
+    In the <code>east</code> web-admin UI,
+    click on <i>Buckets</i> in the main menu
+    (in <span class="icon fa-navicon"></span>).
     <br/><br/>
 
     Then, click on <i>Add Bucket</i> in order
