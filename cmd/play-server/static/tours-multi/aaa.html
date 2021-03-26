@@ -430,6 +430,18 @@ function loadTour(data, sess) {
 
   leftEl.appendChild(popupInputEl);
 
+  leftEl.onclick = function(ev) {
+    for (var e = ev.target; e; e = e.parentNode) {
+      if (e.target.className.indexOf("step-nav") >= 0) {
+        return;
+      }
+    }
+
+    if (popupInputEl.checked) {
+      popupInputEl.checked = false;
+    }
+  };
+
   for (var i = 0; i < data.steps.length; i++) {
     let step = data.steps[i];
 

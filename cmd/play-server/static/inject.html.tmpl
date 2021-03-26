@@ -290,7 +290,7 @@ var playgHelpData = {{.injectData}};
 
   function checkPlayLogin() {
     checkPlayLoginN += 1;
-    if (checkPlayLoginN > 2000) {
+    if (checkPlayLoginN > 4000) {
       return;
     }
 
@@ -304,9 +304,14 @@ var playgHelpData = {{.injectData}};
       playgApp.pswd = playgApp.pswd || lp;
 
       var eu = document.getElementById("auth-username-input");
-      if (eu && eu.value == "") {
-        var ep = document.getElementById("auth-password-input");
-        if (ep && ep.value == "") {
+      var ep = document.getElementById("auth-password-input");
+      if (eu && ep) {
+        var pl = document.getElementById("playgLoading");
+        if (pl) {
+          pl.style.display = "none";
+        }
+
+        if (eu.value == "" && ep.value == "") {
           eu.value = lu;
           ep.value = lp;
 
@@ -314,18 +319,13 @@ var playgHelpData = {{.injectData}};
           eu.dispatchEvent(new InputEvent("input"));
           ep.dispatchEvent(new InputEvent("input"));
 
-          var pl = document.getElementById("playgLoading");
-          if (pl) {
-            pl.style.display = "none";
-          }
-
           if (window.self !== window.top) { // When in iframe.
             var trys = 0;
 
             setTimeout(signIn, 200);
 
             function signIn() {
-              if (trys < 40) {
+              if (trys < 400) {
                 trys += 1;
 
                 var signIn = document.querySelector(
@@ -340,9 +340,9 @@ var playgHelpData = {{.injectData}};
               }
             }
           }
-
-          return;
         }
+
+        return;
       }
 
       setTimeout(checkPlayLogin, 200);

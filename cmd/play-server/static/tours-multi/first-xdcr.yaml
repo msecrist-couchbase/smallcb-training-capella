@@ -45,8 +45,18 @@ steps:
  -
   title: Welcome
   content: |
-   In this tour, we'll walk through how to setup a data
-   <b>replication stream</b>
+   Mission-critical applications often need a multi-cloud,
+   multi-location approach, where remote databases
+   are connected by <b>data streams</b>.
+   <br/><br/>
+
+   <style>
+     body main.step-0 .right .diagram-area {
+       min-height: 200px;
+     }
+   </style>
+
+   In this tour, we'll create a data stream
    between two Couchbase databases:
    <br/>
    <ul>
@@ -56,21 +66,17 @@ steps:
 
    The <code>west</code> will be our source
    of data and the <code>east</code> will
-   be the destination of our data replication stream.
+   be the destination of our data stream.
  -
   title: The databases
   panel: e-database
   content: |
    The <code>west</code> database is running on server
-   <code>${s[0].ContainerIP}</code> with<br/>
-   <small>username:&nbsp;${s[0].CBUser}</small>
-   <small>password:&nbsp;${s[0].CBPswd}</small>
+   <code>${s[0].ContainerIP}</code>
    <br/><br/>
 
    The <code>east</code> database is running on server
-   <code>${s[1].ContainerIP}</code> with<br/>
-   <small>username:&nbsp;${s[1].CBUser}</small>
-   <small>password:&nbsp;${s[1].CBPswd}</small>
+   <code>${s[1].ContainerIP}</code>
    <br/><br/>
 
    You can <b>open and explore</b> their web-admin UI's by
@@ -113,7 +119,8 @@ steps:
   title: Buckets in the east
   panel: e-database
   panel-tell:
-    reset: true
+   clicks:
+    - "nav.nav-sidebar a[mn-tab=buckets]"
   content: |
    You should now see three buckets in the
    <code>east</code> database:
@@ -125,8 +132,9 @@ steps:
     <li><code>travel-sample</code></li>
    </ul>
 
-   Note that the <code class="nowrap">my-first-bucket</code>
-   is currently <b>empty</b> with 0 items.
+   You can see that your new
+   <code class="nowrap">my-first-bucket</code>
+   is <b>empty</b> with 0 items.
    <br/><br/>
 
    Next, let's examine the <code>west</code> database.
@@ -162,7 +170,8 @@ steps:
     <i>XDCR</i>, or cross-datacenter replication.
     <br/><br/>
 
-    On the <i>XDCR&nbsp;Replications</i> screen,
+    In the <code>west</code> database,
+    on the <i>XDCR&nbsp;Replications</i> screen
     click on <i>ADD&nbsp;REMOTE</i>.
     <br/><br/>
 
