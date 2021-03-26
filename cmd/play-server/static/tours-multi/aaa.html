@@ -35,6 +35,11 @@ body * {
   display: none;
 }
 
+.nowrap {
+  display: inline-block;
+  white-space: nowrap;
+}
+
 .flex-row {
   display: flex;
   flex-direction: row;
@@ -112,6 +117,10 @@ body * {
 
 .container main .left > div {
   display: none;
+}
+
+.container main .left ul {
+  padding-left: 1rem;
 }
 
 .container main .right {
@@ -402,10 +411,21 @@ function loadTour(data, sess) {
 function showStep(i) {
   document.querySelector("main").className = "step-" + i;
 
-  if (tourData && tourData.steps && tourData.steps[i] && tourData.steps[i].panel) {
-    var el = document.getElementById(tourData.steps[i].panel);
-    if (el) {
-      el.checked = true;
+  if (tourData &&
+      tourData.steps &&
+      tourData.steps[i]) {
+    var panel = tourData.steps[i].panel;
+    if (panel) {
+      var el = document.getElementById(panel);
+      if (el) {
+        el.checked = true;
+
+        if (tourData.steps[i]['panel-tell']) {
+          tell(panel, tourData.steps[i]['panel-tell']);
+
+          return;
+        }
+      }
     }
   }
 }

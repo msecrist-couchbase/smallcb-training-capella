@@ -23,7 +23,7 @@ diagram:
   <label for="w-database"
          class="title"
          style="top: 10px; width: 12em; height: 35px;">
-    <img src="./img/db-blue.svg"
+    <img src="./img/db-purple.svg"
          style="top: 0px; left: 0px; width: 50px;"/>
     <div style="top: 3px; left: 50px;">
       west database
@@ -45,70 +45,181 @@ steps:
  -
   title: Welcome
   content: |
-    In this tour, we'll walk through how to setup a data
-    <b>replication stream</b>
-    between two Couchbase databases:
-    <br/>
-    <ul>
-      <li>a <code>west</code> database<br/></li>
-      <li>an <code>east</code> database<br/></li>
-    </ul>
+   In this tour, we'll walk through how to setup a data
+   <b>replication stream</b>
+   between two Couchbase databases:
+   <br/>
+   <ul>
+    <li>a <code>west</code> database<br/></li>
+    <li>a <code>east</code> database<br/></li>
+   </ul>
 
-    The <code>west</code> will be our source
-    of data and the <code>east</code> will
-    be the destination of our data replication stream.
+   The <code>west</code> will be our source
+   of data and the <code>east</code> will
+   be the destination of our data replication stream.
  -
   title: The databases
+  panel: e-database
   content: |
-    The <code>west</code> database is running on server
-    <code>${s[0].ContainerIP}</code> with<br/>
-    <small>username:&nbsp;${s[0].CBUser}</small>
-    <small>password:&nbsp;${s[0].CBPswd}</small>
-    <br/><br/>
+   The <code>west</code> database is running on server
+   <code>${s[0].ContainerIP}</code> with<br/>
+   <small>username:&nbsp;${s[0].CBUser}</small>
+   <small>password:&nbsp;${s[0].CBPswd}</small>
+   <br/><br/>
 
-    The <code>east</code> database is running on server
-    <code>${s[1].ContainerIP}</code> with<br/>
-    <small>username:&nbsp;${s[1].CBUser}</small>
-    <small>password:&nbsp;${s[1].CBPswd}</small>
-    <br/><br/>
+   The <code>east</code> database is running on server
+   <code>${s[1].ContainerIP}</code> with<br/>
+   <small>username:&nbsp;${s[1].CBUser}</small>
+   <small>password:&nbsp;${s[1].CBPswd}</small>
+   <br/><br/>
 
-    You can <b>open and explore</b> their web-admin UI's by
-    clicking on their diagram icons.
-    <br/><br/>
+   You can <b>open and explore</b> their web-admin UI's by
+   clicking on their diagram icons.
  -
   title: A new bucket in the east
-  panel: e-database 
+  panel: e-database
+  panel-tell:
+   clicks:
+    - "nav.nav-sidebar a[mn-tab=buckets]"
   content: |
-    We'll first create a new, empty bucket in the <code>east</code> database.
-    <br/><br/>
+   Let's start by creating a new, empty bucket
+   in the <code>east</code> database.
+   <br/><br/>
 
-    In the <code>east</code> web-admin UI,
-    click on <i>Buckets</i> in the main menu
-    (in <span class="icon fa-navicon"></span>).
-    <br/><br/>
+   In the <code>east</code> web-admin UI, click on
+   <i>ADD&nbsp;BUCKET</i>.
 
-    Then, click on <i>Add Bucket</i> in order
-    to open the bucket creation dialog box.
-    <br/><br/>
-
-    <button onclick="tell(
+   <button onclick="tell(
       'e-database',
       {
-        clicks: ['a[mn-tab=buckets]',
+        clicks: ['nav.nav-sidebar a[mn-tab=buckets]',
                  'header .row.flex-right .header-controls a[ng-click]'
                 ],
       })">
-      take me there
-    </button>
+      (just take me there)
+   </button>
+
+   <br/><br/>
+
+   In the <b>Add&nbsp;Data&nbsp;Bucket</b> dialog box that appears...
+   <br/><br/>
+
+   Please type in a name for the new bucket, like
+   <code class="nowrap">"my-first-bucket"</code>.
+   <br/><br/>
+
+   Then, press the <i>Add&nbsp;Bucket</i> button.
+ -
+  title: Buckets in the east
+  panel: e-database
+  panel-tell:
+    reset: true
+  content: |
+   You should now see three buckets in the
+   <code>east</code> database:
+   <br/>
+
+   <ul>
+    <li><code>beer-sample</code></li>
+    <li><code>my-first-bucket</code></li>
+    <li><code>travel-sample</code></li>
+   </ul>
+
+   Note that <code>my-first-bucket</code>
+   currently is empty and has 0 items.
+   <br/><br/>
+
+   Next, let's examine the <code>west</code> database.
+ -
+  title: Buckets in the west
+  panel: w-database
+  panel-tell:
+    clicks:
+     - "nav.nav-sidebar a[mn-tab=buckets]"
+  content: |
+   In the <code>west</code> database,
+   there are only two buckets:
+   <br/>
+
+   <ul>
+    <li><code>beer-sample</code></li>
+    <li><code>travel-sample</code></li>
+   </ul>
+
+   We are going to replicate data from the
+   west's <code class"nowrap">beer-sample</code>
+   bucket over into the east's
+   <code class="nowrap">my-first-bucket</code>
+   that you had just created.
+ -
+  title: Add a remote server
+  panel: w-database
+  panel-tell:
+    clicks:
+     - "nav.nav-sidebar a[mn-tab=replications]"
+  content:
+    A data replication stream between Couchbase databases is called
+    <i>XDCR</i>, or cross-datacenter replication.
     <br/><br/>
 
-    yada yada
-    yada yada
-    yada yada
-    yada yada
-    yada yada
-    yada yada
+    On the <i>XDCR Replications</i> screen,
+    click on <i>ADD REMOTE</i>.
+    <br/><br/>
+
+    In the dialog box, enter a memorable cluster name, like <code>east</code>.
+    <br/><br/>
+
+    Enter the <i>IP/Hostname</i> of the <code>east</code> database,
+    which is <small>${s[1].ContainerIP}</small>
+    <br/><br/>
+
+    Enter the <i>Username</i> of the <code>east</code> database,
+    which is <small>${s[1].CBUser}</small>
+    <br/><br/>
+
+    Enter the <i>Password</i> of the <code>east</code> database,
+    which is <small>${s[1].CBPswd}</small>
+    <br/><br/>
+
+    Then, click the <i>Save</i> button.
+ -
+  title: Add a replication
+  panel: w-database
+  panel-tell:
+    clicks:
+     - "nav.nav-sidebar a[mn-tab=replications]"
+  content:
+    Next, on the <i>XDCR Replications</i> screen,
+    click on <i>ADD REPLICATION</i> to add an
+    outgoing replication.
+    <br/><br/>
+
+    In the dialog screen that appears,
+    for the <i>Replicate From Bucket</i>
+    dropdown, choose a data source bucket,
+    like <code>beer-sample</code>.
+    <br/><br/>
+
+    For the <i>Remote Bucket</i> field, enter
+    <code class="nowrap">my-first-bucket</code>.
+    <br/><br/>
+
+    For the <i>Remote Cluster</i> dropdown,
+    choose the <code>east</code> remote cluster name.
+    <br/><br/>
+
+    Finally, click <i>Save Replication</i>.
+ -
+  title: Data appears in the east
+  panel: e-database
+  panel-tell:
+   clicks:
+    - "nav.nav-sidebar a[mn-tab=buckets]"
+  content: |
+   Going back to the <code>east</code> database,
+   we can now see data appearing in the
+   <code>my-first-bucket</code> bucket.
  -
   title: Done
   content: |
-    great! you made it to the end
+    great! you made it to the end!
