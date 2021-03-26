@@ -88,6 +88,9 @@ steps:
 
    In the <code>east</code> web-admin UI, click on
    <i>ADD&nbsp;BUCKET</i>.
+   <br/><br/>
+
+   In the <b>Add&nbsp;Data&nbsp;Bucket</b> dialog box that appears...
 
    <button onclick="tell(
       'e-database',
@@ -99,9 +102,6 @@ steps:
       (just take me there)
    </button>
 
-   <br/><br/>
-
-   In the <b>Add&nbsp;Data&nbsp;Bucket</b> dialog box that appears...
    <br/><br/>
 
    Please type in a name for the new bucket, like
@@ -125,8 +125,8 @@ steps:
     <li><code>travel-sample</code></li>
    </ul>
 
-   Note that <code>my-first-bucket</code>
-   currently is empty and has 0 items.
+   Note that the <code class="nowrap">my-first-bucket</code>
+   is currently <b>empty</b> with 0 items.
    <br/><br/>
 
    Next, let's examine the <code>west</code> database.
@@ -146,7 +146,7 @@ steps:
     <li><code>travel-sample</code></li>
    </ul>
 
-   We are going to replicate data from the
+   Next, we are going to replicate data from the
    west's <code class"nowrap">beer-sample</code>
    bucket over into the east's
    <code class="nowrap">my-first-bucket</code>
@@ -162,11 +162,14 @@ steps:
     <i>XDCR</i>, or cross-datacenter replication.
     <br/><br/>
 
-    On the <i>XDCR Replications</i> screen,
-    click on <i>ADD REMOTE</i>.
+    On the <i>XDCR&nbsp;Replications</i> screen,
+    click on <i>ADD&nbsp;REMOTE</i>.
     <br/><br/>
 
-    In the dialog box, enter a memorable cluster name, like <code>east</code>.
+    In the <b>Add Remote Cluster</b> dialog box that appears...
+    <br/><br/>
+
+    Enter a <i>Cluster&nbsp;Name</i>, like <code>"east"</code>.
     <br/><br/>
 
     Enter the <i>IP/Hostname</i> of the <code>east</code> database,
@@ -189,26 +192,28 @@ steps:
     clicks:
      - "nav.nav-sidebar a[mn-tab=replications]"
   content:
-    Next, on the <i>XDCR Replications</i> screen,
-    click on <i>ADD REPLICATION</i> to add an
+    Next, on the <i>XDCR&nbsp;Replications</i> screen,
+    click on <i>ADD&nbsp;REPLICATION</i> to add an
     outgoing replication.
     <br/><br/>
 
-    In the dialog screen that appears,
-    for the <i>Replicate From Bucket</i>
-    dropdown, choose a data source bucket,
-    like <code>beer-sample</code>.
+    In the dialog screen that appears...
     <br/><br/>
 
-    For the <i>Remote Bucket</i> field, enter
-    <code class="nowrap">my-first-bucket</code>.
+    For the <i>Replicate&nbsp;From&nbsp;Bucket</i>
+    dropdown, choose the data source bucket of
+    <code>beer-sample</code>.
     <br/><br/>
 
-    For the <i>Remote Cluster</i> dropdown,
-    choose the <code>east</code> remote cluster name.
+    For the <i>Remote&nbsp;Bucket</i> field, enter
+    <code class="nowrap">"my-first-bucket"</code>
     <br/><br/>
 
-    Finally, click <i>Save Replication</i>.
+    For the <i>Remote&nbsp;Cluster</i> dropdown,
+    choose the <code>east</code> remote cluster.
+    <br/><br/>
+
+    Finally, click <i>Save&nbsp;Replication</i>.
  -
   title: Data appears in the east
   panel: e-database
@@ -218,7 +223,7 @@ steps:
   content: |
    Going back to the <code>east</code> database,
    we can now see data appearing in the
-   <code>my-first-bucket</code> bucket.
+   <code class="nowrap">my-first-bucket</code> bucket.
  -
   title: Done
   content: |
