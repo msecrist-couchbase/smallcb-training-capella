@@ -17,6 +17,28 @@ backup/repositories:
      <a href="https://www.couchbase.com/downloads" target="_blank">Download</a>.
      </div>
 
+servers/list:
+ -
+  args: scenarioBucket
+  samp: scenarioBucket=beer-sample&scenarioZoom=minute&openedServers=127.0.0.1:8091
+  titles:
+   -
+    title: Add Server
+    docs: https://docs.couchbase.com/server/current/cli/cbcli/couchbase-cli-server-add.html
+    querySelectorAll: |
+      body.modal-open .panel.dialog .panel-header > h2
+    check: x.innerText.trim() == 'Add Server Node'
+    items:
+     -
+      item: Command-line
+      tmpl: |-
+        /opt/couchbase/bin/couchbase-cli server-add -c ${HOST} \\
+          --username ${USER} \\
+          --password ${PSWD} \\
+          --server-add ${q('input#add-server-hostname').value || HOST} \\
+          --server-add-username ${q('input#user_inp').value || USER} --server-add-password ${q('input#password_inp').value || PSWD } \\
+          --services ${q('input[type="checkbox"]#for-kv-service').checked ? addSelectedService('data') : ''}${q('input[type="checkbox"]#for-index-service').checked ? addSelectedService('index') : ''}${q('input[type="checkbox"]#for-query-service').checked ? addSelectedService('query') : ''}${q('input[type="checkbox"]#for-fts-service').checked ? addSelectedService('fts') : ''}${q('input[type="checkbox"]#for-cbas-service').checked ? addSelectedService('analytics') : ''}${q('input[type="checkbox"]#for-eventing-service').checked ? addSelectedService('eventing') : ''}${strSelectedService()}
+
 buckets:
  -
   args: scenarioBucket scenarioZoom scenario
