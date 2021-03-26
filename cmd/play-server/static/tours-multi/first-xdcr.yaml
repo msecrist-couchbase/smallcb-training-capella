@@ -5,11 +5,13 @@ panels:
   id: w-database
   title: west database
   title-more: "username: ${s[0].CBUser} &nbsp;&nbsp; password: ${s[0].CBPswd}"
+  color: "#8762a0;"
   iframe-src: http://${document.location.hostname}:${s[0].ContainerPortBase}/ui/index.html?lu=${s[0].CBUser}&lp=${s[0].CBPswd}
  -
   id: e-database
   title: east database
   title-more: "username: ${s[1].CBUser} &nbsp;&nbsp; password: ${s[1].CBPswd}"
+  color: "#87d642"
   iframe-src: http://${document.location.hostname}:${s[1].ContainerPortBase}/ui/index.html?lu=${s[1].CBUser}&lp=${s[1].CBPswd}
 
 diagram:
@@ -64,21 +66,21 @@ diagram:
   </div>
 
   <div class="diagram-more west-east-stream"
-       style="display: none; position: absolute; top: 27px; left: 12em; height: 4px; width: 60px;"></div>
+       style="display: none; position: absolute; top: 27px; left: 205px; height: 4px; width: 44px;"></div>
 
   <style>
     .west-east-stream {
       background: linear-gradient(-90deg, #999, white);
       background-repeat: repeat-x;
       background-size: 15px 4px;
-      animation: west-east-stream 10s infinite linear;
+      animation: west-east-stream 4s infinite linear;
     }
     @keyframes west-east-stream {
       0% {
         background-position: 0px 0px;
       }
       100% {
-        background-position: 50px 0px;
+        background-position: 44px 0px;
       }
     }
   </style>
@@ -111,10 +113,8 @@ steps:
   content: |
    Mission-critical enterprise applications
    are often distributed across
-   <span class="nowrap">multiple locations</span> and clouds.
-   <br/><br/>
-
-   And, these remote databases are connected
+   <span class="nowrap">multiple locations</span>
+   and clouds and are connected
    by <b>data&nbsp;streams</b>.
    <br/><br/>
 
@@ -131,16 +131,20 @@ steps:
    between two Couchbase databases:
    <br/>
    <ul>
-    <li>a <code>west</code> database<br/></li>
-    <li>a <code>east</code> database<br/></li>
+    <li>a <img src="./img/db-purple.svg" style="height: 1rem;"/>
+        west database<br/></li>
+    <li>a <img src="./img/db-green.svg" style="height: 1rem;"/>
+        east database<br/></li>
    </ul>
 
-   The <code>west</code> will be our source
-   of data and the <code>east</code> will
+   The <code>west</code> database will be
+   the source of our data stream.
+   <br/><br/>
+
+   The <code>east</code> database will
    be the destination of our data stream.
  -
   title: The databases
-  panel: e-database
   content: |
    The <code>west</code> database is running on server
    <code>${s[0].ContainerIP}</code>
@@ -150,8 +154,8 @@ steps:
    <code>${s[1].ContainerIP}</code>
    <br/><br/>
 
-   You can <b>open and explore</b> their web-admin UI's by
-   clicking on their diagram icons.
+   <b>Click</b> on their diagram icons
+   to open their web-admin UI's.
  -
   title: A new bucket in the east
   panel: e-database
@@ -163,25 +167,17 @@ steps:
    in the <code>east</code> database.
    <br/><br/>
 
-   In the <code>east</code> web-admin UI, click on
-   <i>ADD&nbsp;BUCKET</i>.
+   In the <code>east</code> web-admin UI...
+   <br/><br/>
+
+   Click on <i>ADD&nbsp;BUCKET</i>.
    <br/><br/>
 
    In the <b>Add&nbsp;Data&nbsp;Bucket</b> dialog box that appears...
-
-   <button onclick="tell(
-      'e-database',
-      {
-        clicks: ['nav.nav-sidebar a[mn-tab=buckets]',
-                 'header .row.flex-right .header-controls a[ng-click]'
-                ],
-      })">
-      (just take me there)
-   </button>
-
    <br/><br/>
 
-   Please type in a <i>Name</i> for the new bucket,
+   For the <i>Name</i> field, type
+   in a new bucket name,
    such as
    <code class="nowrap">"my-first-bucket"</code>.
    <br/><br/>
@@ -230,7 +226,7 @@ steps:
    west's <code class"nowrap">beer-sample</code>
    bucket over into the east's
    <code class="nowrap">my-first-bucket</code>
-   that you had just created.
+   that you had previously created.
  -
   title: Add a remote server
   panel: w-database
@@ -243,8 +239,10 @@ steps:
     <br/><br/>
 
     In the <code>west</code> database,
-    on the <i>XDCR&nbsp;Replications</i> screen
-    click on <i>ADD&nbsp;REMOTE</i>.
+    on the <i>XDCR&nbsp;Replications</i> screen...
+    <br/><br/>
+
+    Click on <i>ADD&nbsp;REMOTE</i>.
     <br/><br/>
 
     In the <b>Add Remote Cluster</b> dialog box that appears...
@@ -276,8 +274,10 @@ steps:
     Continuing in the <code>west</code> database...
     <br/><br/>
 
-    On the <i>XDCR&nbsp;Replications</i> screen,
-    click on <i>ADD&nbsp;REPLICATION</i> to add an
+    On the <i>XDCR&nbsp;Replications</i> screen...
+    <br/><br/>
+
+    Click on <i>ADD&nbsp;REPLICATION</i> to add an
     outgoing replication.
     <br/><br/>
 
@@ -294,7 +294,7 @@ steps:
     <br/><br/>
 
     For the <i>Remote&nbsp;Cluster</i> dropdown,
-    choose the <code>east</code> remote cluster.
+    choose the <code>east</code> cluster.
     <br/><br/>
 
     Finally, click <i>Save&nbsp;Replication</i>.
@@ -313,8 +313,9 @@ steps:
    <b>Congratulations!</b>
    <br/><br/>
 
-   You've created a data stream from
-   a <code>west</code> bucket to an <code>east</code> bucket.
+   You've created an ongoing data stream from a bucket
+   in the <code>west</code> database to a bucket
+   in the <code>east</code> database.
 
    <style>
      body .container main.step-congratulations .right .diagram-area .west-east-stream {
@@ -325,6 +326,21 @@ steps:
  -
   title: Next Steps
   content: |
+   The same approach, whether through the web-admin UI or through
+   Couchbase's API's, can be used to setup a distributed topology of
+   data flows between remote databases.
+   <br/><br/>
+
+   <style>
+     body .container main.step-next-steps .right .diagram-area {
+       min-height: 200px;
+     }
+     body .container main.step-next-steps .right .diagram-area .diagram-more {
+       display: block !important;
+       opacity: 1;
+     }
+   </style>
+
    There's a lot more that Couchbase can do
    to help you build modern, distributed enterprise
    database applications.

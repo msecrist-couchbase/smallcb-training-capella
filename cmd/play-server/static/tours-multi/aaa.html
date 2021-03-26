@@ -207,7 +207,7 @@ input#none:checked ~ .container main .right #panel-none {
 .container main .right .panel iframe {
   flex-grow: 1;
   border: 1px solid #999;
-  padding-top: 10px;
+  padding-top: 2px;
 }
 
 .container main .right .panel label.title {
@@ -398,7 +398,7 @@ function loadTour(data, sess) {
     div.id = "panel-" + panel.id;
     div.className = "panel";
     div.innerHTML =
-      `<div class="flex-row header">
+      `<div class="flex-row header" style="border-bottom: 2px solid ${panel.color || '#444'};">
          <label class="title"
                 style="width: ${diagramLabelStyle.width || 'auto'}; height: ${diagramLabelStyle.height || 'auto'};">
            ${diagramLabelEl.innerHTML || panel.title}</label>
