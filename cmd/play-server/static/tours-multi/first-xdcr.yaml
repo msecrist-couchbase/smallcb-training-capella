@@ -111,8 +111,10 @@ steps:
   content: |
    Mission-critical enterprise applications
    are often distributed across
-   <span class="nowrap">multiple locations</span> and clouds,
-   where remote databases are connected
+   <span class="nowrap">multiple locations</span> and clouds.
+   <br/><br/>
+
+   And, these remote databases are connected
    by <b>data&nbsp;streams</b>.
    <br/><br/>
 
