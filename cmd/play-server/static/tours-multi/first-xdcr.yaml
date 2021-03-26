@@ -1,8 +1,3 @@
-splash: |
-  Welcome to this playground session.
-  <br/><br/>
-  Please follow the tour steps on the left.
-
 containers: 2
 
 panels:
@@ -20,8 +15,78 @@ panels:
 diagram:
  height: 55px
  content: |
+  <div class="diagram-more"
+       style="position: absolute; display: none; opacity: 0.3;">
+    <div style="position: absolute; top: 30px; left: 25px; border-top: 2px solid #777; transform-origin: top left; width: 60px; transform: rotateZ(50deg);"></div>
+    <div style="position: absolute; top: 80px; left: 60px;">
+      <img src="./img/db-purple.svg"
+           style="position: absolute; top: 0px; left: 0px; width: 20px;"/>
+      <div style="position: absolute; top: 0px; left: 25px" class="small">terminal-w01</div>
+    </div>
+
+    <div style="position: absolute; top: 30px; left: 25px; border-top: 2px solid #777; transform-origin: top left; width: 80px; transform: rotateZ(75deg);"></div>
+    <div style="position: absolute; top: 110px; left: 40px;">
+      <img src="./img/db-purple.svg"
+           style="position: absolute; top: 0px; left: 0px; width: 20px;"/>
+      <div style="position: absolute; top: 0px; left: 25px" class="small">terminal-w02</div>
+    </div>
+
+    <div style="position: absolute; top: 30px; left: 25px; border-top: 2px solid #777; transform-origin: top left; width: 105px; transform: rotateZ(88deg);"></div>
+    <div style="position: absolute; top: 140px; left: 20px;">
+      <img src="./img/db-purple.svg"
+           style="position: absolute; top: 0px; left: 0px; width: 20px;"/>
+      <div style="position: absolute; top: 0px; left: 25px" class="small">vehicle-17</div>
+    </div>
+  </div>
+
+  <div class="diagram-more"
+       style="position: absolute; display: none; opacity: 0.3; left: 250px;">
+    <div style="position: absolute; top: 30px; left: 25px; border-top: 2px solid #777; transform-origin: top left; width: 60px; transform: rotateZ(50deg);"></div>
+    <div style="position: absolute; top: 80px; left: 60px;">
+      <img src="./img/db-green.svg"
+           style="position: absolute; top: 0px; left: 0px; width: 20px;"/>
+      <div style="position: absolute; top: 0px; left: 25px" class="small">terminal-e01</div>
+    </div>
+
+    <div style="position: absolute; top: 30px; left: 25px; border-top: 2px solid #777; transform-origin: top left; width: 80px; transform: rotateZ(75deg);"></div>
+    <div style="position: absolute; top: 110px; left: 40px;">
+      <img src="./img/db-green.svg"
+           style="position: absolute; top: 0px; left: 0px; width: 20px;"/>
+      <div style="position: absolute; top: 0px; left: 25px" class="small">terminal-e02</div>
+    </div>
+
+    <div style="position: absolute; top: 30px; left: 25px; border-top: 2px solid #777; transform-origin: top left; width: 105px; transform: rotateZ(88deg);"></div>
+    <div style="position: absolute; top: 140px; left: 20px;">
+      <img src="./img/db-green.svg"
+           style="position: absolute; top: 0px; left: 0px; width: 20px;"/>
+      <div style="position: absolute; top: 0px; left: 25px" class="small">vehicle-15</div>
+    </div>
+  </div>
+
+  <div class="diagram-more background-stripes"
+       style="display: none; position: absolute; top: 27px; left: 12em; height: 4px; width: 60px;"></div>
+
+  <style>
+    .background-stripes {
+      background-color: white;
+      background: linear-gradient(-90deg, #999, white);
+      background-repeat: repeat-x;
+      background-size: 15px 4px;
+      background-position: 0px 0px;
+      animation: background-stripes-animation 20s infinite linear;
+    }
+    @keyframes background-stripes-animation {
+      0% {
+        background-position: 0px 0px;
+      }
+      100% {
+        background-position: 50px 0px;
+      }
+    }
+  </style>
+
   <label for="w-database"
-         class="title"
+         class="title background-color-white"
          style="top: 10px; width: 12em; height: 35px;">
     <img src="./img/db-purple.svg"
          style="top: 0px; left: 0px; width: 50px;"/>
@@ -30,8 +95,9 @@ diagram:
       <div class="small">${s[0].ContainerIP}</div>
     </div>
   </label>
+
   <label for="e-database"
-         class="title"
+         class="title background-color-white"
          style="top: 10px; left: 250px; width: 12em; height: 35px;">
     <img src="./img/db-green.svg"
          style="top: 0px; left: 0px; width: 50px;"/>
@@ -45,14 +111,19 @@ steps:
  -
   title: Welcome
   content: |
-   Mission-critical applications often need a multi-cloud,
-   multi-location approach, where remote databases
-   are connected by <b>data streams</b>.
+   Mission-critical enterprise applications
+   are often distributed across
+   <span class="nowrap">multi-locations</span> and clouds,
+   where remote databases are connected
+   by <b>data&nbsp;streams</b>.
    <br/><br/>
 
    <style>
-     body main.step-0 .right .diagram-area {
+     body .container main.step-0 .right .diagram-area {
        min-height: 200px;
+     }
+     body .container main.step-0 .right .diagram-area .diagram-more {
+       display: block !important;
      }
    </style>
 
@@ -110,7 +181,8 @@ steps:
 
    <br/><br/>
 
-   Please type in a name for the new bucket, like
+   Please type in a <i>Name</i> for the new bucket,
+   such as
    <code class="nowrap">"my-first-bucket"</code>.
    <br/><br/>
 
