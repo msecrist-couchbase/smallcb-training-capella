@@ -12,17 +12,19 @@
     <a class="logout">stop playground session</a>
   </header>
   <main>
-    <div class="left resize-h"></div>
+    <article>
+      <div class="left resize-h"></div>
 
-    <div class="right">
-      <div class="diagram-area" style="height: 110px;">
-        <div class="diagram"></div>
-      </div>
+      <div class="right">
+        <div class="diagram-area" style="height: 110px;">
+          <div class="diagram"></div>
+        </div>
 
-      <div id="panel-none" class="panel">
-        <div class="splash"></div>
+        <div id="panel-none" class="panel">
+          <div class="splash"></div>
+        </div>
       </div>
-    </div>
+    </article>
   </main>
 </div>
 
@@ -91,7 +93,7 @@ body * {
   color: black;
 }
 
-.container main {
+.container article {
   flex-basis: auto;
   flex-shrink: 1;
   flex-grow: 1;
@@ -102,7 +104,7 @@ body * {
   align-items: stretch;
 }
 
-.container main .left {
+.container article .left {
   min-width: 100px;
   max-width: 60%;
   width: 220px;
@@ -115,22 +117,22 @@ body * {
   color: #444;
 }
 
-.container main .left > div {
+.container article .left > div {
   display: none;
 }
 
-.container main .left ul {
+.container article .left ul {
   padding-left: 1rem;
 }
 
-.container main .right {
+.container article .right {
   flex-grow: 1;
   display: flex;
   flex-direction: column;
   justify-content: stretch;
 }
 
-.container main .right .diagram-area {
+.container article .right .diagram-area {
   position: relative;
   border-bottom: 1px solid #eee;
   padding: 20px 0px 20px 20px;
@@ -139,24 +141,24 @@ body * {
   overflow: scroll;
   resize: vertical;
 }
-.container main .right .diagram-area .diagram {
+.container article .right .diagram-area .diagram {
   position: absolute;
 }
-.container main .right .diagram-area .diagram label {
+.container article .right .diagram-area .diagram label {
   position: absolute;
   border: 1px solid #aaa;
   padding-left: 10px;
   cursor: pointer;
 }
-.container main .right .diagram-area .diagram label:hover {
+.container article .right .diagram-area .diagram label:hover {
   background-color: #e0e0e0;
 }
-.container main .right .diagram-area .diagram label > * {
+.container article .right .diagram-area .diagram label > * {
   position: absolute;
   white-space: nowrap;
 }
 
-.container main .right .panel {
+.container article .right .panel {
   flex-grow: 1;
   flex-shrink: 1;
   min-height: 1px;
@@ -165,16 +167,16 @@ body * {
   padding: 15px 0px 0px 20px;
 }
 
-input#none:checked ~ .container main .right #panel-none {
+input#none:checked ~ .container article .right #panel-none {
   display: flex;
 }
 
-.container main .right .panel div.header {
+.container article .right .panel div.header {
   flex-shrink: 0;
   overflow: hidden;
 }
 
-.container main .right .panel div.header label.title {
+.container article .right .panel div.header label.title {
   position: relative;
   margin-right: 10px;
   border-top: 1px solid #444;
@@ -182,12 +184,12 @@ input#none:checked ~ .container main .right #panel-none {
   border-left: 1px solid #444;
 }
 
-.container main .right .panel div.header label.title > * {
+.container article .right .panel div.header label.title > * {
   position: absolute;
   white-space: nowrap;
 }
 
-.container main .right .panel div.header div.title-more {
+.container article .right .panel div.header div.title-more {
   align-self: end;
   margin: 5px 5px 5px 10px;
   white-space: nowrap;
@@ -195,22 +197,22 @@ input#none:checked ~ .container main .right #panel-none {
   color: #777;
 }
 
-.container main .right .panel div.header div.title-more a,
-.container main .right .panel div.header div.title-more a:visited {
+.container article .right .panel div.header div.title-more a,
+.container article .right .panel div.header div.title-more a:visited {
   color: #777;
 }
 
-.container main .right .panel div.header div.title-more a:hover {
+.container article .right .panel div.header div.title-more a:hover {
   color: black;
 }
 
-.container main .right .panel iframe {
+.container article .right .panel iframe {
   flex-grow: 1;
   border: 1px solid #999;
   padding-top: 2px;
 }
 
-.container main .right .panel label.title {
+.container article .right .panel label.title {
   background-color: #eee;
   padding-left: 10px;
 }
@@ -295,7 +297,7 @@ input[type="checkbox"].step-nav-popup:checked ~ .step-x .step .step-nav label .s
   color: #f4f4f4;
 }
 
-.container main .small {
+.container article .small {
   font-size: .75rem;
 }
 
@@ -411,10 +413,10 @@ function loadTour(data, sess) {
        <iframe src="${iframeSrc}"
                sandbox="allow-same-origin allow-scripts allow-forms allow-popups"></iframe>
        <style>
-         input#${panel.id}:checked ~ .container main .right #panel-${panel.id} {
+         input#${panel.id}:checked ~ .container article .right #panel-${panel.id} {
            display: flex;
          }
-         input#${panel.id}:checked ~ .container main .right .diagram-area .diagram label[for="${panel.id}"] {
+         input#${panel.id}:checked ~ .container article .right .diagram-area .diagram label[for="${panel.id}"] {
            border: 1px solid #444;
            background-color: #eee;
          }

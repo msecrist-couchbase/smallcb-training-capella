@@ -213,8 +213,8 @@ steps:
   title: Buckets in the west
   panel: w-database
   panel-tell:
-    clicks:
-     - "nav.nav-sidebar a[mn-tab=buckets]"
+   clicks:
+    - "nav.nav-sidebar a[mn-tab=buckets]"
   content: |
    In the
    <img src="./img/db-purple.svg" style="height: 0.7rem; possition: relative; top: 1px;"/>
@@ -242,91 +242,91 @@ steps:
   title: Add a remote cluster
   panel: w-database
   panel-tell:
-    clicks:
-     - "nav.nav-sidebar a[mn-tab=replications]"
+   clicks:
+    - "nav.nav-sidebar a[mn-tab=replications]"
   content: |
-    A data replication stream between Couchbase clusters is called
-    <i>XDCR</i>, or cross-datacenter replication.
-    <br/><br/>
+   A data replication stream between Couchbase clusters is called
+   <i>XDCR</i>, or cross-datacenter replication.
+   <br/><br/>
 
-    In the
-    <img src="./img/db-purple.svg" style="height: 0.7rem; possition: relative; top: 1px;"/>
-    <code>west</code> database,
-    on the <b>XDCR&nbsp;Replications</b> screen...
-    <br/><br/>
+   In the
+   <img src="./img/db-purple.svg" style="height: 0.7rem; possition: relative; top: 1px;"/>
+   <code>west</code> database,
+   on the <b>XDCR&nbsp;Replications</b> screen...
+   <br/><br/>
 
-    Click on <b>ADD&nbsp;REMOTE</b>.
-    <br/><br/>
+   Click on <b>ADD&nbsp;REMOTE</b>.
+   <br/><br/>
 
-    In the <b>Add Remote Cluster</b> dialog box that appears...
-    <br/>
+   In the <b>Add Remote Cluster</b> dialog box that appears...
+   <br/>
 
-    <ul>
-    <li>
+   <ul>
+   <li>
     For the <b>Cluster&nbsp;Name</b> field,
     enter <code>"east"</code>, to represent the east cluster.
     <br/></br>
-    </li>
-    <li>
+   </li>
+   <li>
     For the <b>IP/Hostname</b> field,
     enter the IP address of the <code>east</code> database:
     <small><pre>${s[1].ContainerIP}</pre></small>
-    </li>
-    <li>
+   </li>
+   <li>
     For the <b>Username for Remote Cluster</b> field,
     enter the admin username of the <code>east</code> database:
     <small><pre>${s[1].CBUser}</pre></small>
-    </li>
-    <li>
+   </li>
+   <li>
     For the <b>Password</b> field,
     enter the admin password of the <code>east</code> database:
     <small><pre>${s[1].CBPswd}</pre></small>
-    </li>
-    </ul>
+   </li>
+   </ul>
 
-    Click the <b>Save</b> button.
+   Click the <b>Save</b> button.
  -
   title: Add a replication
   panel: w-database
   panel-tell:
-    clicks:
-     - "nav.nav-sidebar a[mn-tab=replications]"
+   clicks:
+    - "nav.nav-sidebar a[mn-tab=replications]"
   content: |
-    Continuing in the
-    <img src="./img/db-purple.svg" style="height: 0.7rem; possition: relative; top: 1px;"/>
-    <code>west</code> database...
-    <br/><br/>
+   Continuing in the
+   <img src="./img/db-purple.svg" style="height: 0.7rem; possition: relative; top: 1px;"/>
+   <code>west</code> database...
+   <br/><br/>
 
-    On the <b>XDCR&nbsp;Replications</b> screen...
-    <br/><br/>
+   On the <b>XDCR&nbsp;Replications</b> screen...
+   <br/><br/>
 
-    Click on <b>ADD&nbsp;REPLICATION</b> to add an
-    outgoing replication.
-    <br/><br/>
+   Click on <b>ADD&nbsp;REPLICATION</b> to add an
+   outgoing replication.
+   <br/><br/>
 
-    In the dialog screen that appears...
-    <br/>
+   In the dialog screen that appears...
+   <br/>
 
-    <ul>
-    <li>
+   <ul>
+   <li>
     For the <b>Replicate From Bucket</b>
     dropdown, choose the data source bucket of
     <code>beer-sample</code>.
     <br/><br/>
-    </li>
-    <li>
+   </li>
+   <li>
     For the <b>Remote&nbsp;Bucket</b> field, enter
     <code class="nowrap">"my-first-bucket"</code>
     <br/><br/>
-    </li>
-    <li>
+   </li>
+   <li>
     For the <b>Remote&nbsp;Cluster</b> dropdown,
     choose the <code>east</code> cluster.
     <br/>
-    </li>
-    </ul>
+   </li>
+   </ul>
 
-    Click <b>Save&nbsp;Replication</b>.
+   Click <b>Save&nbsp;Replication</b>.
  -
   title: Congratulations
   panel: e-database
