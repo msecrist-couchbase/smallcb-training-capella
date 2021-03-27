@@ -70,7 +70,7 @@ diagram:
 
   <style>
     .west-east-stream {
-      background: linear-gradient(-90deg, #999, white);
+      background: linear-gradient(-90deg, #4287D6, white);
       background-repeat: repeat-x;
       background-size: 15px 6px;
       animation: west-east-stream 4s infinite linear;
@@ -259,23 +259,30 @@ steps:
     <br/><br/>
 
     In the <b>Add Remote Cluster</b> dialog box that appears...
-    <br/><br/>
+    <br/>
 
+    <ul>
+    <li>
     For the <b>Cluster&nbsp;Name</b> field,
     enter <code>"east"</code>, to represent the east cluster.
-    <br/><br/>
-
+    <br/></br>
+    </li>
+    <li>
     For the <b>IP/Hostname</b> field,
     enter the IP address of the <code>east</code> database:
     <small><pre>${s[1].ContainerIP}</pre></small>
-
+    </li>
+    <li>
     For the <b>Username for Remote Cluster</b> field,
     enter the admin username of the <code>east</code> database:
     <small><pre>${s[1].CBUser}</pre></small>
-
+    </li>
+    <li>
     For the <b>Password</b> field,
     enter the admin password of the <code>east</code> database:
     <small><pre>${s[1].CBPswd}</pre></small>
+    </li>
+    </ul>
 
     Click the <b>Save</b> button.
  -
@@ -298,20 +305,26 @@ steps:
     <br/><br/>
 
     In the dialog screen that appears...
-    <br/><br/>
+    <br/>
 
-    For the <b>Replicate&nbsp;From&nbsp;Bucket</b>
+    <ul>
+    <li>
+    For the <b>Replicate From Bucket</b>
     dropdown, choose the data source bucket of
     <code>beer-sample</code>.
     <br/><br/>
-
+    </li>
+    <li>
     For the <b>Remote&nbsp;Bucket</b> field, enter
     <code class="nowrap">"my-first-bucket"</code>
     <br/><br/>
-
+    </li>
+    <li>
     For the <b>Remote&nbsp;Cluster</b> dropdown,
     choose the <code>east</code> cluster.
-    <br/><br/>
+    <br/>
+    </li>
+    </ul>
 
     Click <b>Save&nbsp;Replication</b>.
  -
@@ -344,10 +357,10 @@ steps:
  -
   title: Learn More
   content: |
-   In addition to using Couchbase's web-admin UI,
-   you can also setup data streams
-   by using command-line tools and REST API's,
-   and configure optional data filtering rules and more.
+   In addition to using the web-admin UI,
+   you can also use Couchbase's <i>command-line tools</i>
+   or <i>REST API's</i> to setup data streams,
+   and also configure optional data filtering rules and more.
    <br/><br/>
 
    Learn more:
