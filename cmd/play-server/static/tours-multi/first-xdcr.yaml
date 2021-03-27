@@ -66,13 +66,13 @@ diagram:
   </div>
 
   <div class="diagram-more west-east-stream"
-       style="display: none; position: absolute; top: 27px; left: 205px; height: 4px; width: 44px;"></div>
+       style="display: none; position: absolute; top: 27px; left: 205px; height: 6px; width: 44px;"></div>
 
   <style>
     .west-east-stream {
       background: linear-gradient(-90deg, #999, white);
       background-repeat: repeat-x;
-      background-size: 15px 4px;
+      background-size: 15px 6px;
       animation: west-east-stream 4s infinite linear;
     }
     @keyframes west-east-stream {
@@ -131,9 +131,9 @@ steps:
    between two Couchbase databases:
    <br/>
    <ul>
-    <li>a <img src="./img/db-purple.svg" style="height: 1rem;"/>
+    <li>a <img src="./img/db-purple.svg" style="height: 1rem; position: relative; top: 3px;"/>
         west database<br/></li>
-    <li>a <img src="./img/db-green.svg" style="height: 1rem;"/>
+    <li>a <img src="./img/db-green.svg" style="height: 1rem; position: relative; top: 3px;"/>
         east database<br/></li>
    </ul>
 
@@ -155,7 +155,7 @@ steps:
    <br/><br/>
 
    <b>Click</b> on their diagram icons
-   to open their web-admin UI's.
+   on the right to open their web-admin UI's.
  -
   title: A new bucket in the east
   panel: e-database
@@ -164,25 +164,27 @@ steps:
     - "nav.nav-sidebar a[mn-tab=buckets]"
   content: |
    Let's start by creating a new, empty bucket
-   in the <code>east</code> database.
+   in the
+   <img src="./img/db-green.svg" style="height: 0.7rem; position: relative; top: 1px;"/>
+   <code>east</code> database.
    <br/><br/>
 
    In the <code>east</code> web-admin UI...
    <br/><br/>
 
-   Click on <i>ADD&nbsp;BUCKET</i>.
+   Click on <b>ADD&nbsp;BUCKET</b>.
    <br/><br/>
 
    In the <b>Add&nbsp;Data&nbsp;Bucket</b> dialog box that appears...
    <br/><br/>
 
-   For the <i>Name</i> field, type
+   For the <b>Name</b> field, type
    in a new bucket name,
    such as
    <code class="nowrap">"my-first-bucket"</code>.
    <br/><br/>
 
-   Then, press the <i>Add&nbsp;Bucket</i> button.
+   Click the <b>Add&nbsp;Bucket</b> button.
  -
   title: Buckets in the east
   panel: e-database
@@ -191,6 +193,7 @@ steps:
     - "nav.nav-sidebar a[mn-tab=buckets]"
   content: |
    You should now see three buckets in the
+   <img src="./img/db-green.svg" style="height: 0.7rem; possition: relative; top: 1px;"/>
    <code>east</code> database:
    <br/>
 
@@ -213,7 +216,9 @@ steps:
     clicks:
      - "nav.nav-sidebar a[mn-tab=buckets]"
   content: |
-   In the <code>west</code> database,
+   In the
+   <img src="./img/db-purple.svg" style="height: 0.7rem; possition: relative; top: 1px;"/>
+   <code>west</code> database,
    there are only two buckets:
    <br/>
 
@@ -223,81 +228,92 @@ steps:
    </ul>
 
    Next, we are going to replicate data from the
+   <img src="./img/db-purple.svg" style="height: 0.7rem; possition: relative; top: 1px;"/>
    west's <code class"nowrap">beer-sample</code>
-   bucket over into the east's
+   bucket...
+   <br/><br/>
+
+   ...over into the
+   <img src="./img/db-green.svg" style="height: 0.7rem; possition: relative; top: 1px;"/>
+   east's
    <code class="nowrap">my-first-bucket</code>
    that you had previously created.
  -
-  title: Add a remote server
+  title: Add a remote cluster
   panel: w-database
   panel-tell:
     clicks:
      - "nav.nav-sidebar a[mn-tab=replications]"
-  content:
-    A data replication stream between Couchbase databases is called
+  content: |
+    A data replication stream between Couchbase clusters is called
     <i>XDCR</i>, or cross-datacenter replication.
     <br/><br/>
 
-    In the <code>west</code> database,
-    on the <i>XDCR&nbsp;Replications</i> screen...
+    In the
+    <img src="./img/db-purple.svg" style="height: 0.7rem; possition: relative; top: 1px;"/>
+    <code>west</code> database,
+    on the <b>XDCR&nbsp;Replications</b> screen...
     <br/><br/>
 
-    Click on <i>ADD&nbsp;REMOTE</i>.
+    Click on <b>ADD&nbsp;REMOTE</b>.
     <br/><br/>
 
     In the <b>Add Remote Cluster</b> dialog box that appears...
     <br/><br/>
 
-    Enter a <i>Cluster&nbsp;Name</i>, like <code>"east"</code>.
+    For the <b>Cluster&nbsp;Name</b> field,
+    enter <code>"east"</code>, to represent the east cluster.
     <br/><br/>
 
-    Enter the <i>IP/Hostname</i> of the <code>east</code> database,
-    which is <small>${s[1].ContainerIP}</small>
-    <br/><br/>
+    For the <b>IP/Hostname</b> field,
+    enter the IP address of the <code>east</code> database:
+    <small><pre>${s[1].ContainerIP}</pre></small>
 
-    Enter the <i>Username</i> of the <code>east</code> database,
-    which is <small>${s[1].CBUser}</small>
-    <br/><br/>
+    For the <b>Username for Remote Cluster</b> field,
+    enter the admin username of the <code>east</code> database:
+    <small><pre>${s[1].CBUser}</pre></small>
 
-    Enter the <i>Password</i> of the <code>east</code> database,
-    which is <small>${s[1].CBPswd}</small>
-    <br/><br/>
+    For the <b>Password</b> field,
+    enter the admin password of the <code>east</code> database:
+    <small><pre>${s[1].CBPswd}</pre></small>
 
-    Then, click the <i>Save</i> button.
+    Click the <b>Save</b> button.
  -
   title: Add a replication
   panel: w-database
   panel-tell:
     clicks:
      - "nav.nav-sidebar a[mn-tab=replications]"
-  content:
-    Continuing in the <code>west</code> database...
+  content: |
+    Continuing in the
+    <img src="./img/db-purple.svg" style="height: 0.7rem; possition: relative; top: 1px;"/>
+    <code>west</code> database...
     <br/><br/>
 
-    On the <i>XDCR&nbsp;Replications</i> screen...
+    On the <b>XDCR&nbsp;Replications</b> screen...
     <br/><br/>
 
-    Click on <i>ADD&nbsp;REPLICATION</i> to add an
+    Click on <b>ADD&nbsp;REPLICATION</b> to add an
     outgoing replication.
     <br/><br/>
 
     In the dialog screen that appears...
     <br/><br/>
 
-    For the <i>Replicate&nbsp;From&nbsp;Bucket</i>
+    For the <b>Replicate&nbsp;From&nbsp;Bucket</b>
     dropdown, choose the data source bucket of
     <code>beer-sample</code>.
     <br/><br/>
 
-    For the <i>Remote&nbsp;Bucket</i> field, enter
+    For the <b>Remote&nbsp;Bucket</b> field, enter
     <code class="nowrap">"my-first-bucket"</code>
     <br/><br/>
 
-    For the <i>Remote&nbsp;Cluster</i> dropdown,
+    For the <b>Remote&nbsp;Cluster</b> dropdown,
     choose the <code>east</code> cluster.
     <br/><br/>
 
-    Finally, click <i>Save&nbsp;Replication</i>.
+    Click <b>Save&nbsp;Replication</b>.
  -
   title: Congratulations
   panel: e-database
@@ -305,7 +321,9 @@ steps:
    clicks:
     - "nav.nav-sidebar a[mn-tab=buckets]"
   content: |
-   Going back to the <code>east</code> database,
+   Going back to the
+   <img src="./img/db-green.svg" style="height: 0.7rem; possition: relative; top: 1px;"/>
+   <code>east</code> database,
    we can now see data appearing in the
    <code class="nowrap">my-first-bucket</code> bucket.
    <br/><br/>
@@ -324,38 +342,37 @@ steps:
      }
    </style>
  -
-  title: Next Steps
+  title: Learn More
   content: |
-   The same approach, whether through the web-admin UI or through
-   Couchbase's API's, can be used to setup a distributed topology of
-   data flows between remote databases.
+   In addition to using Couchbase's web-admin UI,
+   you can also setup data streams
+   by using command-line tools and REST API's,
+   and configure optional data filtering rules and more.
    <br/><br/>
 
-   <style>
-     body .container main.step-next-steps .right .diagram-area {
-       min-height: 200px;
-     }
-     body .container main.step-next-steps .right .diagram-area .diagram-more {
-       display: block !important;
-       opacity: 1;
-     }
-   </style>
+   Learn more:
+   <a href="https://docs.couchbase.com/server/current/learn/clusters-and-availability/xdcr-overview.html"
+      target="_blank">
+     XDCR&nbsp;Documentation
+   </a>
+   <br/><br/>
 
    There's a lot more that Couchbase can do
    to help you build modern, distributed enterprise
    database applications.
    <br/><br/>
 
-   Some good next tutorials to look at next: foo, bar, baz
-   <br/><br/>
-
-   And, you can try this setup and code
-   and on your own computer by downloading Couchbase,
-   or by using a free cloud trial account.
-   <br/><br/>
+   Take a look:
+   <a href="https://docs.couchbase.com/home/index.html"
+      target="_blank">
+     Couchbase&nbsp;Documentation
+   </a>
 
    <style>
-     body .container main.step-next-steps .right .diagram-area .west-east-stream {
+     body .container main.step-learn-more .right .diagram-area {
+       min-height: 200px;
+     }
+     body .container main.step-learn-more .right .diagram-area .diagram-more {
        display: block !important;
        opacity: 1;
      }
