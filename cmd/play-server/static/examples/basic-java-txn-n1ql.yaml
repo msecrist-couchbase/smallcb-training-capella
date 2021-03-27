@@ -1,4 +1,4 @@
-title: Transactions KV Mutate
+title: Transactions N1QL
 page: page-01
 lang: java
 code: |
@@ -9,6 +9,7 @@ code: |
   import com.couchbase.client.java.Collection;
   import com.couchbase.client.java.json.JsonArray;
   import com.couchbase.client.java.json.JsonObject;
+  import com.couchbase.client.java.query.QueryResult;
   import com.couchbase.transactions.TransactionDurabilityLevel;
   import com.couchbase.transactions.TransactionGetResult;
   import com.couchbase.transactions.Transactions;
@@ -34,7 +35,6 @@ code: |
 
       Cluster cluster = Cluster.connect(clusterName, username, password);
       Bucket bucket = cluster.bucket(bucketName);
-      Collection collection = bucket.defaultCollection();
       bucket.waitUntilReady(Duration.ofSeconds(30));
 
       TransactionConfigBuilder config = TransactionConfigBuilder.create()
@@ -45,9 +45,9 @@ code: |
       var route2Id = "route_35816";
 
       // Pre-transaction
-      JsonObject preroute1 = collection.get(route1Id).contentAsObject();
-      JsonObject preroute2 = collection.get(route2Id).contentAsObject();
-
+      JsonObject preroute1 = getDocById(cluster, bucketName, route1Id);
+      JsonObject preroute2 = getDocById(cluster, bucketName, route2Id);
+      
       System.out.printf(
           "Before transaction - got %s's details: source airport: %s, destination airport: %s, airline: %s:%s \n",
           route1Id, preroute1.getString("sourceairport"), preroute1.getString("destinationairport"),
@@ -56,12 +56,12 @@ code: |
           "Before transaction - got %s's details: source airport: %s, destination airport: %s, airline: %s:%s \n",
           route2Id, preroute2.getString("sourceairport"), preroute2.getString("destinationairport"),
           preroute2.getString("airline"), preroute2.getString("airlineid"));
-
+      
       // In-transaction
       try {
-        String swapId = swapAirlineRoute(transactions, collection, route1Id, route2Id);
+        String swapId = swapAirlineRoute(transactions, cluster, bucketName, route1Id, route2Id);
         if (swapId != null) {
-          JsonObject swapRecord = collection.get(swapId).contentAsObject();
+          JsonObject swapRecord = getDocById(cluster, bucketName,swapId);
           System.out.println("After transaction - swap route record: " + swapRecord);
         }
       } catch (RuntimeException err) {
@@ -69,9 +69,9 @@ code: |
       }
 
       // Post-transaction
-      JsonObject postroute1 = collection.get(route1Id).contentAsObject();
-      JsonObject postroute2 = collection.get(route2Id).contentAsObject();
-
+      JsonObject postroute1 = getDocById(cluster, bucketName, route1Id);
+      JsonObject postroute2 = getDocById(cluster, bucketName, route2Id);
+      
       System.out.printf(
           "After transaction - got %s's details: source airport: %s, destination airport: %s, airline: %s:%s \n",
           route1Id, postroute1.getString("sourceairport"), postroute1.getString("destinationairport"),
@@ -80,21 +80,25 @@ code: |
           "After transaction - got %s's details: source airport: %s, destination airport: %s, airline: %s:%s \n",
           route2Id, postroute2.getString("sourceairport"), postroute2.getString("destinationairport"),
           postroute2.getString("airline"), postroute2.getString("airlineid"));
-
       System.exit(0);
     }
+    
+    private static JsonObject getDocById(Cluster cluster, String bucketName, String docId) {
+    	String sqry = "SELECT `" + bucketName + "`.* " + 
+    					"FROM `" + bucketName + "` " + 
+    					"WHERE META().id = '" + docId + "'";
+        QueryResult qr = cluster.query(sqry);
+        return qr.rowsAsObject().size()>0? qr.rowsAsObject().get(0): null;
+    }
 
-    private static String swapAirlineRoute(Transactions transactions, Collection collection, String route1Id,
+    private static String swapAirlineRoute(Transactions transactions, Cluster cluster, String bucketName, String route1Id,
         String route2Id) {
       AtomicReference<String> swapId = new AtomicReference<>();
       try {
         transactions.run(ctx -> {
-          TransactionGetResult route1 = ctx.get(collection, route1Id);
-          TransactionGetResult route2 = ctx.get(collection, route2Id);
-
-          JsonObject route1Content = route1.contentAsObject();
-          JsonObject route2Content = route2.contentAsObject();
-
+        	JsonObject route1Content = getDocById(cluster, bucketName, route1Id);
+            JsonObject route2Content = getDocById(cluster, bucketName, route2Id);
+            
           System.out.printf("In transaction - got %s's details: %s\n", route1Id,
               route1Content.getString("airlineid"));
           System.out.printf("In transaction - got %s's details: %s\n", route2Id,
@@ -113,24 +117,23 @@ code: |
               .put("created", new java.util.Date().toString());
           swapId.set(UUID.randomUUID().toString());
 
-          ctx.insert(collection, swapId.get(), swapRecord);
-
           System.out.println("In transaction - creating a record of swap routes with UUID: " + swapId.get());
-
-          route1Content.put("airline", airline2);
-          route1Content.put("airlineid", airlineid2);
-          route1Content.put("schedule", schedule2);
-          route2Content.put("airline", airline1);
-          route2Content.put("airlineid", airlineid1);
-          route2Content.put("schedule", schedule1);
-
+          ctx.query("INSERT INTO `"+bucketName+"` " +
+                    "VALUES ('"+swapId.get()+"', "+swapRecord+")");
+          
           System.out.printf("In transaction - changing %s's airline to: %s\n", route1Id,
               route1Content.getString("airlineid"));
           System.out.printf("In transaction - changing %s's airline to: %s\n", route2Id,
               route2Content.getString("airlineid"));
 
-          ctx.replace(route1, route1Content);
-          ctx.replace(route2, route2Content);
+          String updateRoute1 = "UPDATE `"+bucketName+"` " + 
+                                "SET airline='"+airline2+"', airlineid='"+airlineid2+"', schedule="+schedule2 +
+                                " WHERE META().id = '"+route1Id+"'";
+          ctx.query(updateRoute1);
+          String updateRoute2 = "UPDATE `"+bucketName+"` " + 
+                                "SET airline='"+airline1+"', airlineid='"+airlineid1+"', schedule="+schedule1 +
+                                " WHERE META().id = '"+route2Id+"'";
+          ctx.query(updateRoute2);
 
           System.out.println("In transaction - about to commit");
           ctx.commit();
@@ -151,7 +154,7 @@ code: |
     }
   }
 infoAfter: |
-  This example shows an example of distributed transactions with key value mutations.
+  This example shows an example of distributed transactions with N1QL Queries.
   <br/><br/>
   Visit the docs to learn more about
-  <a target="_blank" href="https://docs.couchbase.com/java-sdk/current/howtos/distributed-acid-transactions-from-the-sdk.html">Distributed Transactions in Java</a>.
+  <a target="_blank" href="https://docs.couchbase.com/java-sdk/current/howtos/distributed-acid-transactions-from-the-sdk.html#n1ql-queries">Distributed Transactions with N1QL Queries in Java</a>.
