@@ -410,7 +410,8 @@ function loadTour(data, sess) {
             <label class="close" for="none">[X]</label>
          </div>
        </div>
-       <iframe src="${iframeSrc}"
+       <iframe id="iframe-${panel.id}"
+               src="${iframeSrc}"
                sandbox="allow-same-origin allow-scripts allow-forms allow-popups"></iframe>
        <style>
          input#${panel.id}:checked ~ .container article .right #panel-${panel.id} {
@@ -449,7 +450,7 @@ function loadTour(data, sess) {
   for (var i = 0; i < data.steps.length; i++) {
     let step = data.steps[i];
 
-    ctx = { s: sessArr, o: '' };
+    var ctx = { s: sessArr, o: '' };
     if (step.content) {
       with (ctx) eval('o = `' + step.content + '`');
     }
@@ -459,7 +460,7 @@ function loadTour(data, sess) {
     var popup = [`<div class="step-nav-popup">`];
 
     for (var k = 0; k < data.steps.length; k++) {
-      popup.push(`<a onclick="showStep(${k})"
+      popup.push(`<a onclick="stepShow(${k})"
                      class="${k == i ? 'step-nav-popup-cur' : ''}">
                     ${k + 1} - ${data.steps[k].title}</a>`);
     }
@@ -476,13 +477,13 @@ function loadTour(data, sess) {
          <div>${stepContent}</div>
          <div class="step-nav">
            <button ${i <= 0 ? 'disabled' : ''}
-                   onclick="showStep(${i - 1})">Previous</button>
+                   onclick="stepShow(${i - 1})">Previous</button>
            <label for="step-nav-popup">
              ${popup.join('')}
              &nbsp;${i + 1} of ${data.steps.length}&nbsp;&#x25BC;&nbsp;
            </label>
            <button ${i >= data.steps.length - 1 ? 'disabled' : ''}
-                   onclick="showStep(${i + 1})">Next</button>
+                   onclick="stepShow(${i + 1})">Next</button>
          </div>
          <style>
            main.step-${i} .left #step-${i} { display: flex; }
@@ -490,12 +491,25 @@ function loadTour(data, sess) {
        </div>`;
 
     leftEl.appendChild(div);
+
+    if (step['panel-tell']) {
+      var checks = step['panel-tell'].checks;
+      if (checks) {
+        for (var j = 0; j < checks.length; j++) {
+          var ctx = { s: sessArr, o: '' };
+
+          with (ctx) eval('o = `' + checks[j] + '`');
+
+          checks[j] = ctx.o;
+        }
+      }
+    }
   }
 
-  showStep(0);
+  stepShow(0);
 }
 
-function showStep(i) {
+function stepShow(i) {
   var className = "step-" + i;
 
   if (tourData && tourData.steps) {
@@ -523,11 +537,28 @@ function showStep(i) {
 }
 
 function tell(panel, message) {
+  message.panel = panel;
+
   var f = document.querySelector(`#panel-${panel} iframe`);
   if (f) {
     f.contentWindow.postMessage(message, (new URL(f.src)).origin);
   }
 }
+
+window.addEventListener("message", function(e) {
+  var prefix = `checked-${e.data.panel}-`;
+
+  var checked = (e.data.checked || []).map(x => `${prefix}${x}`);
+
+  var article = document.querySelector("article");
+
+  var next = article.className.split(' ').
+    filter(x => x && !x.startsWith(prefix)).concat(checked).sort().join(' ');
+
+  if (article.className != next) {
+    article.className = next;
+  }
+}, false);
 </script>
 </body>
 </html>

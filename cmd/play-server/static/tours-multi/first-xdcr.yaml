@@ -244,6 +244,11 @@ steps:
   panel-tell:
    clicks:
     - "nav.nav-sidebar a[mn-tab=replications]"
+   checks:
+    - "q('input#cluster_reference_name').value == 'east' && 'cluster-name'"
+    - "q('input#cluster_reference_hostname').value == '${s[1].ContainerIP}' && 'cluster-hostname'"
+    - "q('input[formcontrolname=username]').value == '${s[1].CBUser}' && 'cluster-username'"
+    - "q('input[formcontrolname=password]').value == '${s[1].CBPswd}' && 'cluster-password'"
   content: |
    A data replication stream between Couchbase clusters is called
    <i>XDCR</i>, or cross-datacenter replication.
@@ -265,21 +270,49 @@ steps:
    <li>
     For the <b>Cluster&nbsp;Name</b> field,
     enter <code>"east"</code>, to represent the east cluster.
+    <span class="check-cluster-name"
+          style="visibility: hidden; color: green;">&check;</span>
+    <style>
+      article.checked-w-database-cluster-name .check-cluster-name {
+        visibility: visible !important;
+      }
+    </style>
     <br/></br>
    </li>
    <li>
     For the <b>IP/Hostname</b> field,
     enter the IP address of the <code>east</code> database:
+    <span class="check-cluster-hostname"
+          style="visibility: hidden; color: green;">&check;</span>
+    <style>
+      article.checked-w-database-cluster-hostname .check-cluster-hostname {
+        visibility: visible !important;
+      }
+    </style>
     <small><pre>${s[1].ContainerIP}</pre></small>
    </li>
    <li>
     For the <b>Username for Remote Cluster</b> field,
     enter the admin username of the <code>east</code> database:
+    <span class="check-cluster-username"
+          style="visibility: hidden; color: green;">&check;</span>
+    <style>
+      article.checked-w-database-cluster-username .check-cluster-username {
+        visibility: visible !important;
+      }
+    </style>
     <small><pre>${s[1].CBUser}</pre></small>
    </li>
    <li>
     For the <b>Password</b> field,
     enter the admin password of the <code>east</code> database:
+    <span class="check-cluster-password"
+          style="visibility: hidden; color: green;">&check;</span>
+    <style>
+      article.checked-w-database-cluster-password .check-cluster-password {
+        visibility: visible !important;
+      }
+    </style>
     <small><pre>${s[1].CBPswd}</pre></small>
    </li>
    </ul>
@@ -291,6 +324,10 @@ steps:
   panel-tell:
    clicks:
     - "nav.nav-sidebar a[mn-tab=replications]"
+   checks:
+    - "(q('select[formcontrolname=fromBucket]').value || '').indexOf('beer-sample') >= 0 && 'rep-fromBucket'"
+    - "q('input#replication_to_bucket').value == 'my-first-bucket' && 'rep-toBucket'"
+    - "(q('select[formcontrolname=toCluster]').value || '').indexOf('east') >= 0 && 'rep-toCluster'"
   content: |
    Continuing in the
    <img src="./img/db-purple.svg" style="height: 0.7rem; possition: relative; top: 1px;"/>
@@ -312,16 +349,37 @@ steps:
     For the <b>Replicate From Bucket</b>
     dropdown, choose the data source bucket of
     <code>beer-sample</code>.
+    <span class="check-rep-fromBucket"
+          style="visibility: hidden; color: green;">&check;</span>
+    <style>
+      article.checked-w-database-rep-fromBucket .check-rep-fromBucket {
+        visibility: visible !important;
+      }
+    </style>
     <br/><br/>
    </li>
    <li>
     For the <b>Remote&nbsp;Bucket</b> field, enter
     <code class="nowrap">"my-first-bucket"</code>
+    <span class="check-rep-toBucket"
+          style="visibility: hidden; color: green;">&check;</span>
+    <style>
+      article.checked-w-database-rep-toBucket .check-rep-toBucket {
+        visibility: visible !important;
+      }
+    </style>
     <br/><br/>
    </li>
    <li>
     For the <b>Remote&nbsp;Cluster</b> dropdown,
     choose the <code>east</code> cluster.
+    <span class="check-rep-toCluster"
+          style="visibility: hidden; color: green;">&check;</span>
+    <style>
+      article.checked-w-database-rep-toCluster .check-rep-toCluster {
+        visibility: visible !important;
+      }
+    </style>
     <br/>
    </li>
    </ul>
