@@ -8,21 +8,23 @@
 
 <div class="container">
   <header>
-    Couchbase Playground
-    <a class="logout">stop playground session</a>
+    <h1>Couchbase Playground</h1>
+    <a class="logout">end session</a>
   </header>
   <main>
-    <div class="left resize-h"></div>
+    <article>
+      <div class="left resize-h"></div>
 
-    <div class="right">
-      <div class="diagram-area" style="height: 110px;">
-        <div class="diagram"></div>
-      </div>
+      <div class="right">
+        <div class="diagram-area" style="height: 110px;">
+          <div class="diagram"></div>
+        </div>
 
-      <div id="panel-none" class="panel">
-        <div class="splash"></div>
+        <div id="panel-none" class="panel">
+          <div class="splash"></div>
+        </div>
       </div>
-    </div>
+    </article>
   </main>
 </div>
 
@@ -70,16 +72,24 @@ body * {
   flex-grow: 0;
   flex-shrink: 0;
   display: flex;
-  height: 1.5rem;
   border-bottom: 1px solid #bbb;
-  padding: 10px 10px 5px 20px;
+  padding: 5px 10px 5px 15px;
   white-space: nowrap;
   overflow: hidden;
+}
+
+.container header h1 {
+  margin: 0;
+  padding: 0;
+  font-size: 1rem;
+  font-weight: 1.5;
+
 }
 
 .container header a.logout {
   flex-grow: 1;
   text-align: right;
+  font-weight: 1.5;
 }
 
 .container header a.logout,
@@ -91,18 +101,18 @@ body * {
   color: black;
 }
 
-.container main {
+.container article {
   flex-basis: auto;
   flex-shrink: 1;
   flex-grow: 1;
-  height: calc(100vh - 4.5rem);
+  height: calc(100vh - 1rem - 25px);
   display: flex;
   flex-direction: row;
   justify-content: stretch;
   align-items: stretch;
 }
 
-.container main .left {
+.container article .left {
   min-width: 100px;
   max-width: 60%;
   width: 220px;
@@ -115,22 +125,22 @@ body * {
   color: #444;
 }
 
-.container main .left > div {
+.container article .left > div {
   display: none;
 }
 
-.container main .left ul {
+.container article .left ul {
   padding-left: 1rem;
 }
 
-.container main .right {
+.container article .right {
   flex-grow: 1;
   display: flex;
   flex-direction: column;
   justify-content: stretch;
 }
 
-.container main .right .diagram-area {
+.container article .right .diagram-area {
   position: relative;
   border-bottom: 1px solid #eee;
   padding: 20px 0px 20px 20px;
@@ -139,24 +149,24 @@ body * {
   overflow: scroll;
   resize: vertical;
 }
-.container main .right .diagram-area .diagram {
+.container article .right .diagram-area .diagram {
   position: absolute;
 }
-.container main .right .diagram-area .diagram label {
+.container article .right .diagram-area .diagram label {
   position: absolute;
   border: 1px solid #aaa;
   padding-left: 10px;
   cursor: pointer;
 }
-.container main .right .diagram-area .diagram label:hover {
+.container article .right .diagram-area .diagram label:hover {
   background-color: #e0e0e0;
 }
-.container main .right .diagram-area .diagram label > * {
+.container article .right .diagram-area .diagram label > * {
   position: absolute;
   white-space: nowrap;
 }
 
-.container main .right .panel {
+.container article .right .panel {
   flex-grow: 1;
   flex-shrink: 1;
   min-height: 1px;
@@ -165,16 +175,16 @@ body * {
   padding: 15px 0px 0px 20px;
 }
 
-input#none:checked ~ .container main .right #panel-none {
+input#none:checked ~ .container article .right #panel-none {
   display: flex;
 }
 
-.container main .right .panel div.header {
+.container article .right .panel div.header {
   flex-shrink: 0;
   overflow: hidden;
 }
 
-.container main .right .panel div.header label.title {
+.container article .right .panel div.header label.title {
   position: relative;
   margin-right: 10px;
   border-top: 1px solid #444;
@@ -182,12 +192,12 @@ input#none:checked ~ .container main .right #panel-none {
   border-left: 1px solid #444;
 }
 
-.container main .right .panel div.header label.title > * {
+.container article .right .panel div.header label.title > * {
   position: absolute;
   white-space: nowrap;
 }
 
-.container main .right .panel div.header div.title-more {
+.container article .right .panel div.header div.title-more {
   align-self: end;
   margin: 5px 5px 5px 10px;
   white-space: nowrap;
@@ -195,22 +205,22 @@ input#none:checked ~ .container main .right #panel-none {
   color: #777;
 }
 
-.container main .right .panel div.header div.title-more a,
-.container main .right .panel div.header div.title-more a:visited {
+.container article .right .panel div.header div.title-more a,
+.container article .right .panel div.header div.title-more a:visited {
   color: #777;
 }
 
-.container main .right .panel div.header div.title-more a:hover {
+.container article .right .panel div.header div.title-more a:hover {
   color: black;
 }
 
-.container main .right .panel iframe {
+.container article .right .panel iframe {
   flex-grow: 1;
   border: 1px solid #999;
   padding-top: 2px;
 }
 
-.container main .right .panel label.title {
+.container article .right .panel label.title {
   background-color: #eee;
   padding-left: 10px;
 }
@@ -241,7 +251,7 @@ input[type="checkbox"].step-nav-popup:checked ~ .step-x .step .step-nav label .s
   left: -5rem;
   margin-top: 10px;
   margin-bottom: 5px;
-  border: 1px solid #ececec;
+  border: 1px solid #ccc;
   background: #fefefe;
   padding: 10px 0 0 0;
   overflow: scroll;
@@ -295,7 +305,7 @@ input[type="checkbox"].step-nav-popup:checked ~ .step-x .step .step-nav label .s
   color: #f4f4f4;
 }
 
-.container main .small {
+.container article .small {
   font-size: .75rem;
 }
 
@@ -335,6 +345,10 @@ var tourSess;
 function loadTour(data, sess) {
   tourData = data;
   tourSess = sess;
+
+  if (data.title) {
+    document.querySelector("header h1").innerHTML = data.title;
+  }
 
   var sessArr = [sess.group[sess.sessionId]];
 
@@ -408,13 +422,14 @@ function loadTour(data, sess) {
             <label class="close" for="none">[X]</label>
          </div>
        </div>
-       <iframe src="${iframeSrc}"
+       <iframe id="iframe-${panel.id}"
+               src="${iframeSrc}"
                sandbox="allow-same-origin allow-scripts allow-forms allow-popups"></iframe>
        <style>
-         input#${panel.id}:checked ~ .container main .right #panel-${panel.id} {
+         input#${panel.id}:checked ~ .container article .right #panel-${panel.id} {
            display: flex;
          }
-         input#${panel.id}:checked ~ .container main .right .diagram-area .diagram label[for="${panel.id}"] {
+         input#${panel.id}:checked ~ .container article .right .diagram-area .diagram label[for="${panel.id}"] {
            border: 1px solid #444;
            background-color: #eee;
          }
@@ -447,7 +462,7 @@ function loadTour(data, sess) {
   for (var i = 0; i < data.steps.length; i++) {
     let step = data.steps[i];
 
-    ctx = { s: sessArr, o: '' };
+    var ctx = { s: sessArr, o: '' };
     if (step.content) {
       with (ctx) eval('o = `' + step.content + '`');
     }
@@ -457,7 +472,7 @@ function loadTour(data, sess) {
     var popup = [`<div class="step-nav-popup">`];
 
     for (var k = 0; k < data.steps.length; k++) {
-      popup.push(`<a onclick="showStep(${k})"
+      popup.push(`<a onclick="stepShow(${k})"
                      class="${k == i ? 'step-nav-popup-cur' : ''}">
                     ${k + 1} - ${data.steps[k].title}</a>`);
     }
@@ -474,13 +489,13 @@ function loadTour(data, sess) {
          <div>${stepContent}</div>
          <div class="step-nav">
            <button ${i <= 0 ? 'disabled' : ''}
-                   onclick="showStep(${i - 1})">Previous</button>
+                   onclick="stepShow(${i - 1})">Previous</button>
            <label for="step-nav-popup">
              ${popup.join('')}
              &nbsp;${i + 1} of ${data.steps.length}&nbsp;&#x25BC;&nbsp;
            </label>
            <button ${i >= data.steps.length - 1 ? 'disabled' : ''}
-                   onclick="showStep(${i + 1})">Next</button>
+                   onclick="stepShow(${i + 1})">Next</button>
          </div>
          <style>
            main.step-${i} .left #step-${i} { display: flex; }
@@ -488,12 +503,25 @@ function loadTour(data, sess) {
        </div>`;
 
     leftEl.appendChild(div);
+
+    if (step['panel-tell']) {
+      var checks = step['panel-tell'].checks;
+      if (checks) {
+        for (var j = 0; j < checks.length; j++) {
+          var ctx = { s: sessArr, o: '' };
+
+          with (ctx) eval('o = `' + checks[j] + '`');
+
+          checks[j] = ctx.o;
+        }
+      }
+    }
   }
 
-  showStep(0);
+  stepShow(0);
 }
 
-function showStep(i) {
+function stepShow(i) {
   var className = "step-" + i;
 
   if (tourData && tourData.steps) {
@@ -518,14 +546,33 @@ function showStep(i) {
   }
 
   document.querySelector("main").className = className;
+
+  document.querySelector(".left").scrollTop = 0;
 }
 
 function tell(panel, message) {
+  message.panel = panel;
+
   var f = document.querySelector(`#panel-${panel} iframe`);
   if (f) {
     f.contentWindow.postMessage(message, (new URL(f.src)).origin);
   }
 }
+
+window.addEventListener("message", function(e) {
+  var prefix = `checked-${e.data.panel}-`;
+
+  var checked = (e.data.checked || []).map(x => `${prefix}${x}`);
+
+  var article = document.querySelector("article");
+
+  var next = article.className.split(' ').
+    filter(x => x && !x.startsWith(prefix)).concat(checked).sort().join(' ');
+
+  if (article.className != next) {
+    article.className = next;
+  }
+}, false);
 </script>
 </body>
 </html>

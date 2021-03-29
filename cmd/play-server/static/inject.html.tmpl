@@ -792,32 +792,56 @@ function playgTourLoad(name, part) {
 
 <script>
 window.addEventListener("message",
-  function(e) { playgHandleMessage(e.data, 0) }, false);
+  function(e) { playgHandleMessage(e, 0) }, false);
 
-function playgHandleMessage(data, tries) {
-  console.log("playgHandleMessage", data, tries);
+function playgHandleMessage(e, tries) {
+  playgChecksEvent = null;
 
-  if (data.clicks && data.clicks.length > 0 && tries < 10) {
-    var el = document.querySelector(data.clicks[0]);
+  if (e.data.clicks && e.data.clicks.length > 0 && tries < 10) {
+    var el = document.querySelector(e.data.clicks[0]);
     if (el && el.click) {
       el.click();
 
       document.body.scrollTop = 0;
 
-      data.clicks = data.clicks.slice(1);
+      e.data.clicks = e.data.clicks.slice(1);
 
-      setTimeout(function() { playgHandleMessage(data, 0) }, 500);
+      setTimeout(function() { playgHandleMessage(e, 0) }, 500);
 
       return;
     }
 
-    console.log("playgHandleMessage couldn't find click target, retrying");
-
-    setTimeout(function() { playgHandleMessage(data, tries + 1) }, 500);
+    setTimeout(function() { playgHandleMessage(e, tries + 1) }, 500);
 
     return;
   }
 
-  document.getElementById("playgStyles").innerHTML = data.styles || '';
+  document.getElementById("playgStyles").innerHTML = e.data.styles || '';
+
+  playgChecksEvent = e;
 }
+
+var playgChecksEvent = null; // A MessageEvent or null.
+
+function playgChecks() {
+  var e = playgChecksEvent;
+  if (e && e.data && e.source && document && document.querySelector) {
+    var checked = [];
+
+    for (let check of (e.data['checks'] || [])) {
+      var ctx = { o: null,
+                  q: function(s) { return document.querySelector(s) || {}; } };
+
+      with (ctx) eval('o = ' + check);
+
+      if (ctx.o) {
+        checked.push(ctx.o);
+      }
+    }
+
+    e.source.postMessage({ checked: checked, panel: e.data.panel }, e.origin);
+  }
+}
+
+setInterval(playgChecks, 1000);
 </script>

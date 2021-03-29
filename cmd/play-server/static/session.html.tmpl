@@ -32,8 +32,12 @@
         <h2>Start Playground Session</h2>
       </header>
       <section>
+        {{if .intro}}
+          <p>{{.intro}}</p>
+        {{end}}
+
         <p>
-          Starting a playground session allocates a Couchbase Server instance for you.
+          Starting a playground session allocates Couchbase Server resources to you.
         </p>
         <p>
           Your session will expire after {{.SessionsMaxAge}} total or after {{.SessionsMaxIdle}} of inactivity.
