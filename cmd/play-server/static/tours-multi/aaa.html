@@ -8,8 +8,8 @@
 
 <div class="container">
   <header>
-    Couchbase Playground
-    <a class="logout">stop playground session</a>
+    <h1>Couchbase Playground</h1>
+    <a class="logout">end session</a>
   </header>
   <main>
     <article>
@@ -79,9 +79,18 @@ body * {
   overflow: hidden;
 }
 
+.container header h1 {
+  margin: 0;
+  padding: 0;
+  font-size: 1rem;
+  font-weight: 1.5;
+
+}
+
 .container header a.logout {
   flex-grow: 1;
   text-align: right;
+  font-weight: 1.5;
 }
 
 .container header a.logout,
@@ -337,6 +346,10 @@ var tourSess;
 function loadTour(data, sess) {
   tourData = data;
   tourSess = sess;
+
+  if (data.title) {
+    document.querySelector("header h1").innerHTML = data.title;
+  }
 
   var sessArr = [sess.group[sess.sessionId]];
 
