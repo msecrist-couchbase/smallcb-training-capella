@@ -20,7 +20,7 @@ diagram:
  height: 50px
  content: |
   <div class="diagram-more"
-       style="position: absolute; display: none; opacity: 0.3;">
+       style="position: absolute; display: none; opacity: 0.3; user-select: none;">
     <div style="position: absolute; top: 30px; left: 25px; border-top: 2px solid #777; transform-origin: top left; width: 60px; transform: rotateZ(50deg);"></div>
     <div style="position: absolute; top: 80px; left: 60px;">
       <img src="./img/db-purple.svg"
@@ -44,7 +44,7 @@ diagram:
   </div>
 
   <div class="diagram-more"
-       style="position: absolute; display: none; opacity: 0.3; left: 250px;">
+       style="position: absolute; display: none; opacity: 0.3; user-select: none; left: 250px;">
     <div style="position: absolute; top: 30px; left: 25px; border-top: 2px solid #777; transform-origin: top left; width: 60px; transform: rotateZ(50deg);"></div>
     <div style="position: absolute; top: 80px; left: 60px;">
       <img src="./img/db-green.svg"
