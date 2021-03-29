@@ -1,4 +1,4 @@
-title: Connecting Multiple Locations with Data Streaming
+title: Connect Multiple Locations with Data Streaming
 
 containers: 2
 
@@ -426,15 +426,18 @@ steps:
  -
   title: Learn More
   content: |
-   In addition to using the web-admin UI,
+   Besides the web-admin UI,
    you can also use Couchbase's <i>command-line tools</i>
    or <i>REST API's</i>
    to set up flexible <b>data streams</b>
-   to suit your enterprise needs,
-   including support for
+   to meet your app's
+   distributed topology needs.
+   <br/><br/>
+
+   Support for
    multi-master (bi-directional) replication,
    data filtering rules,
-   mobile sync, and more.
+   mobile sync, and more is also available.
    <br/><br/>
 
    Learn more:
@@ -446,7 +449,7 @@ steps:
 
    There's a lot more that Couchbase can do
    to help you build modern, distributed
-   applications that can run across
+   applications that can be deployed across
    multiple locations and clouds.
    <br/><br/>
 
