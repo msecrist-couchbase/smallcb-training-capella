@@ -175,6 +175,9 @@ steps:
    <code>east</code> database.
    <br/><br/>
 
+   A <i>bucket</i> is a logical container of data in Couchbase.
+   <br/><br/>
+
    In the <code>east</code> web-admin UI...
    <br/><br/>
 
@@ -423,8 +426,12 @@ steps:
   content: |
    In addition to using the web-admin UI,
    you can also use Couchbase's <i>command-line tools</i>
-   or <i>REST API's</i> to setup data streams,
-   and also configure optional data filtering rules and more.
+   or <i>REST API's</i>
+   to set up flexible <b>data streams</b>
+   to suit your enterprise needs,
+   including support for bi-directional,
+   multi-master replication,
+   with optional data filtering and more.
    <br/><br/>
 
    Learn more:
@@ -436,8 +443,7 @@ steps:
 
    There's a lot more that Couchbase can do
    to help you build modern, distributed
-   applications that can be
-   connected by data streams across
+   applications that can run across
    multiple locations and clouds.
    <br/><br/>
 
