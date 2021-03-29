@@ -502,14 +502,10 @@ var playgHelpData = {{.injectData}};
             x.innerHTML = title.replace;
           }
 
-          var selectedService = [];
-
           for (let item of (title.items || [])) {
             var ctx = {
               path: path, title: title, x: x, o: '',
               q: function(s) { return document.querySelector(s) || {}; },
-              addSelectedService: (s) => { selectedService.push(s); return ''; },
-              strSelectedService: () => { return selectedService.join(','); },
               item: item,
               HOST: "cluster_url", USER: "Administrator", PSWD: "password"
             }

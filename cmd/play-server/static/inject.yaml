@@ -37,7 +37,7 @@ servers/list:
           --password ${PSWD} \\
           --server-add ${q('input#add-server-hostname').value || HOST} \\
           --server-add-username ${q('input#user_inp').value || USER} --server-add-password ${q('input#password_inp').value || PSWD } \\
-          --services ${q('input[type="checkbox"]#for-kv-service').checked ? addSelectedService('data') : ''}${q('input[type="checkbox"]#for-index-service').checked ? addSelectedService('index') : ''}${q('input[type="checkbox"]#for-query-service').checked ? addSelectedService('query') : ''}${q('input[type="checkbox"]#for-fts-service').checked ? addSelectedService('fts') : ''}${q('input[type="checkbox"]#for-cbas-service').checked ? addSelectedService('analytics') : ''}${q('input[type="checkbox"]#for-eventing-service').checked ? addSelectedService('eventing') : ''}${strSelectedService()}
+          --services ${[q('input[type="checkbox"]#for-kv-service').checked && 'data', q('input[type="checkbox"]#for-index-service').checked && 'index',q('input[type="checkbox"]#for-query-service').checked && 'query',q('input[type="checkbox"]#for-fts-service').checked && 'fts',q('input[type="checkbox"]#for-cbas-service').checked && 'analytics',q('input[type="checkbox"]#for-eventing-service').checked && 'eventing'].filter(x => x).join(',')}
 
 buckets:
  -
