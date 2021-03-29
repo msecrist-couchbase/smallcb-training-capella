@@ -256,6 +256,7 @@ steps:
    clicks:
     - "nav.nav-sidebar a[mn-tab=replications]"
    checks:
+    - "(q('header h1 > span:last-child').innerText || '').trim() == 'XDCR Replications' && 'xdcr'"
     - "q('input#cluster_reference_name').value == 'east' && 'cluster-name'"
     - "q('input#cluster_reference_hostname').value == '${s[1].ContainerIP}' && 'cluster-hostname'"
     - "q('input[formcontrolname=username]').value == '${s[1].CBUser}' && 'cluster-username'"
@@ -268,8 +269,18 @@ steps:
 
    In the
    <img src="./img/db-purple.svg" style="height: 0.7rem; possition: relative; top: 1px;"/>
-   <code>west</code> database,
-   on the <b>XDCR&nbsp;Replications</b> screen...
+   <code>west</code> database...
+   <br/><br/>
+
+   <div class="check-xdcr-nav">
+    In the main menu, click on <b>XDCR</b>.
+    <br/><br/>
+   </div>
+   <style>
+     article.checked-w-database-xdcr .check-xdcr-nav { display: none; }
+   </style>
+
+   On the <b>XDCR&nbsp;Replications</b> screen...
    <br/><br/>
 
    Click on <b>ADD&nbsp;REMOTE</b>.
