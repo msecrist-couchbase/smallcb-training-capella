@@ -260,6 +260,7 @@ steps:
     - "q('input#cluster_reference_hostname').value == '${s[1].ContainerIP}' && 'cluster-hostname'"
     - "q('input[formcontrolname=username]').value == '${s[1].CBUser}' && 'cluster-username'"
     - "q('input[formcontrolname=password]').value == '${s[1].CBPswd}' && 'cluster-password'"
+    - "q('.modal-dialog .panel-header h2').innerText == 'Add Remote Cluster' && (document.body.scrollTop = 0) && false"
   content: |
    A data replication stream between Couchbase clusters is called
    <i>XDCR</i>, or cross-datacenter replication.
