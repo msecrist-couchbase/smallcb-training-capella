@@ -431,9 +431,10 @@ steps:
    or <i>REST API's</i>
    to set up flexible <b>data streams</b>
    to suit your enterprise needs,
-   including support for bi-directional,
-   multi-master replication,
-   with optional data filtering and more.
+   including support for
+   multi-master (bi-directional) replication,
+   data filtering rules,
+   mobile sync, and more.
    <br/><br/>
 
    Learn more:
