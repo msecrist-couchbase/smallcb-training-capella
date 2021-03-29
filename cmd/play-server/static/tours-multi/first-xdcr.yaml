@@ -114,8 +114,8 @@ steps:
    Mission-critical enterprise applications
    are often distributed across
    <span class="nowrap">multiple locations</span>
-   and clouds and are connected
-   by <b>data&nbsp;streams</b>.
+   and clouds and are connected by
+   <b>data&nbsp;streams</b>.
    <br/><br/>
 
    <style>
@@ -132,25 +132,31 @@ steps:
    <br/>
    <ul>
     <li>a <img src="./img/db-purple.svg" style="height: 1rem; position: relative; top: 3px;"/>
-        west database<br/></li>
+        <code>west</code> database<br/></li>
     <li>a <img src="./img/db-green.svg" style="height: 1rem; position: relative; top: 3px;"/>
-        east database<br/></li>
+        <code>east</code> database<br/></li>
    </ul>
 
-   The <code>west</code> database will be
+   The
+   <code>west</code> database will be
    the source of our data stream.
    <br/><br/>
 
-   The <code>east</code> database will
+   The
+   <code>east</code> database will
    be the destination of our data stream.
  -
   title: The databases
   content: |
-   The <code>west</code> database is running on server
+   The
+   <img src="./img/db-purple.svg" style="height: 0.7rem; possition: relative; top: 1px;"/>
+   <code>west</code> database is running on server
    <code>${s[0].ContainerIP}</code>
    <br/><br/>
 
-   The <code>east</code> database is running on server
+   The
+   <img src="./img/db-green.svg" style="height: 0.7rem; possition: relative; top: 1px;"/>
+   <code>east</code> database is running on server
    <code>${s[1].ContainerIP}</code>
    <br/><br/>
 
