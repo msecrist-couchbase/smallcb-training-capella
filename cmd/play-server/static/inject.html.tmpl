@@ -826,7 +826,12 @@ function playgChecks() {
 
     for (let check of (e.data['checks'] || [])) {
       var ctx = { o: null,
-                  q: function(s) { return document.querySelector(s) || {}; } };
+                  qLast: null,
+                  q: function(s) {
+                    ctx.qLast = document.querySelector(s) || {};
+                    return ctx.qLast;
+                  }
+                };
 
       with (ctx) eval('o = ' + check);
 

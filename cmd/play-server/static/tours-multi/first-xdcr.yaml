@@ -170,6 +170,8 @@ steps:
   panel-tell:
    clicks:
     - "nav.nav-sidebar a[mn-tab=buckets]"
+   checks:
+    - q('form input[ng-model="bucketConf.name"]').value == '' && (qLast.value = 'my-first-bucket') && qLast.dispatchEvent && qLast.dispatchEvent(new InputEvent("input")) && false
   content: |
    Let's start by creating a new, empty bucket
    in the
@@ -189,9 +191,7 @@ steps:
    In the <b>Add&nbsp;Data&nbsp;Bucket</b> dialog box that appears...
    <br/><br/>
 
-   For the <b>Name</b> field, type
-   in a new bucket name,
-   such as
+   For the <b>Name</b> field, we'll use
    <code class="nowrap">"my-first-bucket"</code>.
    <br/><br/>
 
