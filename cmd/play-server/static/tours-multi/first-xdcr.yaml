@@ -174,25 +174,21 @@ steps:
     - q('form input[ng-model="bucketConf.name"]').value == '' && (qLast.value = 'my-first-bucket') && qLast.dispatchEvent && qLast.dispatchEvent(new InputEvent("input")) && false
   content: |
    Let's start by creating a new, empty bucket
+   <aside style="display: inline; color: #777;">(or data container)</aside>
    in the
    <img src="./img/db-green.svg" style="height: 0.7rem; position: relative; top: 1px;"/>
    <code>east</code> database.
    <br/><br/>
 
-   A <i>bucket</i> is a logical container of data in Couchbase.
-   <br/><br/>
-
    In the <code>east</code> web-admin UI...
    <br/><br/>
 
-   Click on <b>ADD&nbsp;BUCKET</b>.
+   Click on <b>ADD&nbsp;BUCKET</b> and fill in...
    <br/><br/>
 
-   In the <b>Add&nbsp;Data&nbsp;Bucket</b> dialog box that appears...
-   <br/><br/>
-
-   For the <b>Name</b> field, we'll use
-   <code class="nowrap">"my-first-bucket"</code>.
+   <b>Name</b>:
+   <br/>
+   &nbsp;&nbsp;<code class="nowrap">my-first-bucket</code>
    <br/><br/>
 
    Click the <b>Add&nbsp;Bucket</b> button.
@@ -210,7 +206,7 @@ steps:
 
    <ul>
     <li><code>beer-sample</code></li>
-    <li><code>my-first-bucket</code></li>
+    <li><b><code>my-first-bucket</code></b></li>
     <li><code>travel-sample</code></li>
    </ul>
 
@@ -234,21 +230,25 @@ steps:
    <br/>
 
    <ul>
-    <li><code>beer-sample</code></li>
+    <li><b><code>beer-sample</code></b></li>
     <li><code>travel-sample</code></li>
    </ul>
 
-   Next, we are going to replicate data from the
+   We are going to create a data stream...
+   <br/><br/>
+
+   ...that will send data from the
+   <code class"nowrap">beer-sample</code>
+   bucket from the 
    <img src="./img/db-purple.svg" style="height: 0.7rem; possition: relative; top: 1px;"/>
-   west's <code class"nowrap">beer-sample</code>
-   bucket...
+   west side...
    <br/><br/>
 
    ...over into the
-   <img src="./img/db-green.svg" style="height: 0.7rem; possition: relative; top: 1px;"/>
-   east's
    <code class="nowrap">my-first-bucket</code>
-   that you had previously created.
+   <br/>
+   on the
+   <img src="./img/db-green.svg" style="height: 0.7rem; possition: relative; top: 1px;"/>east.
  -
   title: Add a remote cluster
   panel: w-database
@@ -257,23 +257,23 @@ steps:
     - "nav.nav-sidebar a[mn-tab=replications]"
    checks:
     - "(q('header h1 > span:last-child').innerText || '').trim() == 'XDCR Replications' && 'xdcr'"
+    - "q('input#cluster_reference_name').value == '' && (qLast.value = 'east') && qLast.dispatchEvent && qLast.dispatchEvent(new InputEvent('input')) && false"
     - "q('input#cluster_reference_name').value == 'east' && 'cluster-name'"
+    - "q('input#cluster_reference_hostname').value == '' && (qLast.value = '${s[1].ContainerIP}') && qLast.dispatchEvent && qLast.dispatchEvent(new InputEvent('input')) && false"
     - "q('input#cluster_reference_hostname').value == '${s[1].ContainerIP}' && 'cluster-hostname'"
+    - "(q('input[formcontrolname=username]').value == '' || qLast.value == 'Administrator') && (qLast.value = '${s[1].CBUser}') && qLast.dispatchEvent && qLast.dispatchEvent(new InputEvent('input')) && false"
     - "q('input[formcontrolname=username]').value == '${s[1].CBUser}' && 'cluster-username'"
+    - "q('input[formcontrolname=password]').value == '' && (qLast.value = '${s[1].CBPswd}') && qLast.dispatchEvent && qLast.dispatchEvent(new InputEvent('input')) && false"
     - "q('input[formcontrolname=password]').value == '${s[1].CBPswd}' && 'cluster-password'"
     - "q('.modal-dialog .panel-header h2').innerText == 'Add Remote Cluster' && (document.body.scrollTop = 0) && false"
   content: |
-   A data replication stream between Couchbase clusters is called
-   <i>XDCR</i>, or cross-datacenter replication.
-   <br/><br/>
-
    In the
    <img src="./img/db-purple.svg" style="height: 0.7rem; possition: relative; top: 1px;"/>
    <code>west</code> database...
    <br/><br/>
 
    <div class="check-xdcr-nav">
-    In the main menu, click on <b>XDCR</b>.
+    In the main menu, click on <b>XDCR</b> (for cross-datacenter replication).
     <br/><br/>
    </div>
    <style>
@@ -283,16 +283,12 @@ steps:
    On the <b>XDCR&nbsp;Replications</b> screen...
    <br/><br/>
 
-   Click on <b>ADD&nbsp;REMOTE</b>.
-   <br/><br/>
-
-   In the <b>Add Remote Cluster</b> dialog box that appears...
+   Click on <b>ADD&nbsp;REMOTE</b> and fill in...
    <br/>
 
    <ul>
    <li>
-    For the <b>Cluster&nbsp;Name</b> field,
-    enter <code>"east"</code>, to represent the east cluster.
+    <b>Cluster&nbsp;Name</b>:
     <span class="check-cluster-name"
           style="visibility: hidden; color: green;">&check;</span>
     <style>
@@ -300,11 +296,12 @@ steps:
         visibility: visible !important;
       }
     </style>
-    <br/></br>
+    <br/>
+    <code>east</code>
+    <br/><br/>
    </li>
    <li>
-    For the <b>IP/Hostname</b> field,
-    enter the IP address of the <code>east</code> database:
+    <b>IP/Hostname</b>:
     <span class="check-cluster-hostname"
           style="visibility: hidden; color: green;">&check;</span>
     <style>
@@ -312,11 +309,12 @@ steps:
         visibility: visible !important;
       }
     </style>
-    <small><pre>${s[1].ContainerIP}</pre></small>
+    <br/>
+    <small><pre style="margin: 3px 0; padding: 0;">${s[1].ContainerIP}</pre></small>
+    </br>
    </li>
    <li>
-    For the <b>Username for Remote Cluster</b> field,
-    enter the admin username of the <code>east</code> database:
+    <b>Username&nbspfor Remote&nbsp;Cluster</b>:
     <span class="check-cluster-username"
           style="visibility: hidden; color: green;">&check;</span>
     <style>
@@ -324,11 +322,11 @@ steps:
         visibility: visible !important;
       }
     </style>
-    <small><pre>${s[1].CBUser}</pre></small>
+    <small><pre style="margin: 3px 0; padding: 0;">${s[1].CBUser}</pre></small>
+    </br>
    </li>
    <li>
-    For the <b>Password</b> field,
-    enter the admin password of the <code>east</code> database:
+    <b>Password</b>:
     <span class="check-cluster-password"
           style="visibility: hidden; color: green;">&check;</span>
     <style>
@@ -336,7 +334,8 @@ steps:
         visibility: visible !important;
       }
     </style>
-    <small><pre>${s[1].CBPswd}</pre></small>
+    <br/>
+    <small><pre style="margin: 3px 0; padding: 0;">${s[1].CBPswd}</pre></small>
    </li>
    </ul>
 
@@ -347,7 +346,13 @@ steps:
   panel-tell:
    clicks:
     - "nav.nav-sidebar a[mn-tab=replications]"
+   styles: |
+    body[data-h1=XDCRAddReplication] form.forms .width-10 .formrow.row {
+      border: 2px solid red;
+      padding: 2px;
+    }
    checks:
+    - "document.body.setAttribute('data-h1', q('header > h1 > span:last-child').innerText.trim().replaceAll(' ', '')) && false"
     - "(q('select[formcontrolname=fromBucket]').value || '').indexOf('beer-sample') >= 0 && 'rep-fromBucket'"
     - "q('input#replication_to_bucket').value == 'my-first-bucket' && 'rep-toBucket'"
     - "(q('select[formcontrolname=toCluster]').value || '').indexOf('east') >= 0 && 'rep-toCluster'"
@@ -360,18 +365,13 @@ steps:
    On the <b>XDCR&nbsp;Replications</b> screen...
    <br/><br/>
 
-   Click on <b>ADD&nbsp;REPLICATION</b> to add an
-   outgoing replication.
-   <br/><br/>
-
-   In the dialog screen that appears...
+   Click on <b>ADD&nbsp;REPLICATION</b> and fill in...
    <br/>
 
    <ul>
    <li>
-    For the <b>Replicate From Bucket</b>
-    dropdown, choose the data source bucket of
-    <code>beer-sample</code>.
+    <b>Replicate&nbsp;From&nbsp;Bucket</b>:<br/>
+    <code>beer-sample</code>
     <span class="check-rep-fromBucket"
           style="visibility: hidden; color: green;">&check;</span>
     <style>
@@ -382,8 +382,8 @@ steps:
     <br/><br/>
    </li>
    <li>
-    For the <b>Remote&nbsp;Bucket</b> field, enter
-    <code class="nowrap">"my-first-bucket"</code>
+    <b>Remote&nbsp;Bucket</b>:<br/>
+    <code class="nowrap">my-first-bucket</code>
     <span class="check-rep-toBucket"
           style="visibility: hidden; color: green;">&check;</span>
     <style>
@@ -394,8 +394,8 @@ steps:
     <br/><br/>
    </li>
    <li>
-    For the <b>Remote&nbsp;Cluster</b> dropdown,
-    choose the <code>east</code> cluster.
+    <b>Remote&nbsp;Cluster</b>:
+    <code>east</code>
     <span class="check-rep-toCluster"
           style="visibility: hidden; color: green;">&check;</span>
     <style>
@@ -428,6 +428,9 @@ steps:
    You've created an ongoing data stream from a bucket
    in the <code>west</code> database to a bucket
    in the <code>east</code> database.
+   <br/><br/>
+
+   That's how simple it is to configure.
 
    <style>
      body .container main.step-congratulations .right .diagram-area .west-east-stream {
