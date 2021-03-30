@@ -365,6 +365,12 @@ var playgHelpData = {{.injectData}};
       el.style.top = "auto";
       el.style.bottom = "0";
       el.style.zIndex = 0;
+
+      var resp = document.querySelector(
+        'head link[rel="stylesheet"][href="app/css/cbui-responsive.css"]');
+      if (resp) {
+        resp.parentElement.removeChild(resp);
+      }
     }
 
     el.innerHTML =
