@@ -179,7 +179,7 @@ steps:
     - document.body.setAttribute('data-my-first-bucket', (q('div[buckets="buckets.details"] .cbui-tablerow-title[title="my-first-bucket"]').tagName && 'y') || 'n') && false
     - q('form input[ng-model="bucketConf.name"]').value == '' && (qLast.value = 'my-first-bucket') && qLast.dispatchEvent && qLast.dispatchEvent(new InputEvent("input")) && false
   content: |
-   Let's start by creating a new bucket
+   Let's start by creating a new <i>bucket</i>
    <aside style="display: inline;">(or data container)</aside>
    in the
    <img src="./img/db-green.svg" class="small-db"/>
@@ -227,7 +227,7 @@ steps:
     - "q('input[formcontrolname=password]').value == '${s[1].CBPswd}' && 'cluster-password'"
     - "q('.modal-dialog .panel-header h2').innerText == 'Add Remote Cluster' && (document.body.scrollTop = 0) && false"
   content: |
-   Next, let's connect the clusters.
+   Next, let's <i>connect</i> the clusters.
    <br/><br/>
 
    In the
@@ -293,7 +293,7 @@ steps:
 
    Click the <b>Save</b> button.
  -
-  title: Add a replication stream
+  title: Add a data stream
   panel: w-cluster
   panel-tell:
    clicks:
@@ -316,7 +316,7 @@ steps:
     - "q('input#replication_to_bucket').value == 'my-first-bucket' && 'rep-toBucket'"
     - "(q('select[formcontrolname=toCluster]').value || '').indexOf('east') >= 0 && 'rep-toCluster'"
   content: |
-   Next, we'll create a data replication stream from a
+   Next, we'll create a <i>data replication stream</i> from a
    <br/>
    <code>beer-sample</code> bucket
    on the
@@ -390,7 +390,7 @@ steps:
    <b>Congratulations!</b>
    <br/><br/>
 
-   You've created an ongoing data stream from
+   You've created an ongoing <i>data stream</i> from
    the <code>west</code> cluster
    to
    the <code>east</code> cluster.
@@ -426,7 +426,7 @@ steps:
    <br/><br/>
 
    In the <code class="nowrap">beer-sample</code> bucket,
-   edit <span class="icon fa-pencil"></span>
+   <i>edit</i> <span class="icon fa-pencil"></span>
    a document and save your changes.
 
    <style>
@@ -442,7 +442,7 @@ steps:
    clicks:
     - nav.nav-sidebar a[ui-sref="app.admin.docs.editor"]
    checks:
-    - q('qw-collection-menu div select:first-child').value != 'my-first-bucket' && (qLast.value = 'my-first-bucket') && qLast.dispatchEvent(new UIEvent('change')) && false
+    - q('qw-collection-menu div select:first-child').value != 'my-first-bucket' && !qLast.getAttribute('data-touched') && (qLast.value = 'my-first-bucket') && qLast.dispatchEvent(new UIEvent('change')) && qLast.setAttribute('data-touched', true) && false
   content: |
    In the
    <img src="./img/db-green.svg" class="small-db"/>
@@ -473,8 +473,9 @@ steps:
   content: |
    <b>Data streaming</b>
    across multiple locations
-   for your enterprise applications are straightforwards
-   and flexible with Couchbase.
+   for your enterprise database
+   apps are <i>straightforwards
+   and flexible</i> with Couchbase.
    <br/><br/>
 
    You can also use more features like
