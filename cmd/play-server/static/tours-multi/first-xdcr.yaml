@@ -4,14 +4,14 @@ containers: 2
 
 panels:
  -
-  id: w-database
-  title: west database
+  id: w-cluster
+  title: west cluster
   title-more: "username: ${s[0].CBUser} &nbsp;&nbsp; password: ${s[0].CBPswd}"
   color: "#8762a0;"
   iframe-src: http://${document.location.hostname}:${s[0].ContainerPortBase}/ui/index.html?lu=${s[0].CBUser}&lp=${s[0].CBPswd}
  -
-  id: e-database
-  title: east database
+  id: e-cluster
+  title: east cluster
   title-more: "username: ${s[1].CBUser} &nbsp;&nbsp; password: ${s[1].CBPswd}"
   color: "#87d642"
   iframe-src: http://${document.location.hostname}:${s[1].ContainerPortBase}/ui/index.html?lu=${s[1].CBUser}&lp=${s[1].CBPswd}
@@ -87,24 +87,24 @@ diagram:
     }
   </style>
 
-  <label for="w-database"
+  <label for="w-cluster"
          class="title background-color-white"
          style="top: 10px; width: 12em; height: 35px;">
     <img src="./img/db-purple.svg"
          style="top: 0px; left: 0px; width: 50px;"/>
     <div style="top: 3px; left: 50px;">
-      west database
+      west cluster
       <div class="small">${s[0].ContainerIP}</div>
     </div>
   </label>
 
-  <label for="e-database"
+  <label for="e-cluster"
          class="title background-color-white"
          style="top: 10px; left: 250px; width: 12em; height: 35px;">
     <img src="./img/db-green.svg"
          style="top: 0px; left: 0px; width: 50px;"/>
     <div style="top: 3px; left: 50px;">
-      east database
+      east cluster
       <div class="small">${s[1].ContainerIP}</div>
     </div>
   </label>
@@ -130,35 +130,35 @@ steps:
    </style>
 
    In this tour, we'll create a data stream
-   between two Couchbase databases:
+   between two Couchbase database clusters:
    <br/>
    <ul>
     <li>a <img src="./img/db-purple.svg" style="height: 1rem; position: relative; top: 3px;"/>
-        <code>west</code> database<br/></li>
+        <code>west</code> cluster<br/></li>
     <li>a <img src="./img/db-green.svg" style="height: 1rem; position: relative; top: 3px;"/>
-        <code>east</code> database<br/></li>
+        <code>east</code> cluster<br/></li>
    </ul>
 
    The
-   <code>west</code> database will be
+   <code>west</code> cluster will be
    the source of our data stream.
    <br/><br/>
 
    The
-   <code>east</code> database will
+   <code>east</code> cluster will
    be the destination of our data stream.
  -
-  title: The databases
+  title: The clusters
   content: |
    The
    <img src="./img/db-purple.svg" style="height: 0.7rem; possition: relative; top: 1px;"/>
-   <code>west</code> database is running on server
+   <code>west</code> cluster is running on server
    <code>${s[0].ContainerIP}</code>
    <br/><br/>
 
    The
    <img src="./img/db-green.svg" style="height: 0.7rem; possition: relative; top: 1px;"/>
-   <code>east</code> database is running on server
+   <code>east</code> cluster is running on server
    <code>${s[1].ContainerIP}</code>
    <br/><br/>
 
@@ -166,7 +166,7 @@ steps:
    on the right to open their web-admin UI's.
  -
   title: A new bucket in the east
-  panel: e-database
+  panel: e-cluster
   panel-tell:
    clicks:
     - "nav.nav-sidebar a[mn-tab=buckets]"
@@ -177,31 +177,34 @@ steps:
    <aside style="display: inline; color: #777;">(or data container)</aside>
    in the
    <img src="./img/db-green.svg" style="height: 0.7rem; position: relative; top: 1px;"/>
-   <code>east</code> database.
+   <code>east</code> cluster.
    <br/><br/>
 
    In the <code>east</code> web-admin UI...
    <br/><br/>
 
    Click on <b>ADD&nbsp;BUCKET</b> and fill in...
-   <br/><br/>
-
-   <b>Name</b>:
    <br/>
-   &nbsp;&nbsp;<code class="nowrap">my-first-bucket</code>
-   <br/><br/>
+
+   <ul>
+   <li>
+    <b>Name</b>:
+    <br/>
+    <code class="nowrap">my-first-bucket</code>
+   </li>
+   </ul>
 
    Click the <b>Add&nbsp;Bucket</b> button.
  -
   title: Buckets in the east
-  panel: e-database
+  panel: e-cluster
   panel-tell:
    clicks:
     - "nav.nav-sidebar a[mn-tab=buckets]"
   content: |
    You should now see three buckets in the
    <img src="./img/db-green.svg" style="height: 0.7rem; possition: relative; top: 1px;"/>
-   <code>east</code> database:
+   <code>east</code> cluster:
    <br/>
 
    <ul>
@@ -215,17 +218,17 @@ steps:
    is <b>empty</b> with 0 items.
    <br/><br/>
 
-   Next, let's examine the <code>west</code> database.
+   Next, let's examine the <code>west</code> cluster.
  -
   title: Buckets in the west
-  panel: w-database
+  panel: w-cluster
   panel-tell:
    clicks:
     - "nav.nav-sidebar a[mn-tab=buckets]"
   content: |
    In the
    <img src="./img/db-purple.svg" style="height: 0.7rem; possition: relative; top: 1px;"/>
-   <code>west</code> database,
+   <code>west</code> cluster,
    there are only two buckets:
    <br/>
 
@@ -250,8 +253,8 @@ steps:
    on the
    <img src="./img/db-green.svg" style="height: 0.7rem; possition: relative; top: 1px;"/>east.
  -
-  title: Add a remote cluster
-  panel: w-database
+  title: Connect the clusters
+  panel: w-cluster
   panel-tell:
    clicks:
     - "nav.nav-sidebar a[mn-tab=replications]"
@@ -269,7 +272,7 @@ steps:
   content: |
    In the
    <img src="./img/db-purple.svg" style="height: 0.7rem; possition: relative; top: 1px;"/>
-   <code>west</code> database...
+   <code>west</code> cluster...
    <br/><br/>
 
    <div class="check-xdcr-nav">
@@ -277,7 +280,7 @@ steps:
     <br/><br/>
    </div>
    <style>
-     article.checked-w-database-xdcr .check-xdcr-nav { display: none; }
+     article.checked-w-cluster-xdcr .check-xdcr-nav { display: none; }
    </style>
 
    On the <b>XDCR&nbsp;Replications</b> screen...
@@ -292,7 +295,7 @@ steps:
     <span class="check-cluster-name"
           style="visibility: hidden; color: green;">&check;</span>
     <style>
-      article.checked-w-database-cluster-name .check-cluster-name {
+      article.checked-w-cluster-cluster-name .check-cluster-name {
         visibility: visible !important;
       }
     </style>
@@ -305,7 +308,7 @@ steps:
     <span class="check-cluster-hostname"
           style="visibility: hidden; color: green;">&check;</span>
     <style>
-      article.checked-w-database-cluster-hostname .check-cluster-hostname {
+      article.checked-w-cluster-cluster-hostname .check-cluster-hostname {
         visibility: visible !important;
       }
     </style>
@@ -318,7 +321,7 @@ steps:
     <span class="check-cluster-username"
           style="visibility: hidden; color: green;">&check;</span>
     <style>
-      article.checked-w-database-cluster-username .check-cluster-username {
+      article.checked-w-cluster-cluster-username .check-cluster-username {
         visibility: visible !important;
       }
     </style>
@@ -330,7 +333,7 @@ steps:
     <span class="check-cluster-password"
           style="visibility: hidden; color: green;">&check;</span>
     <style>
-      article.checked-w-database-cluster-password .check-cluster-password {
+      article.checked-w-cluster-cluster-password .check-cluster-password {
         visibility: visible !important;
       }
     </style>
@@ -341,8 +344,8 @@ steps:
 
    Click the <b>Save</b> button.
  -
-  title: Add a replication
-  panel: w-database
+  title: Add a replication stream
+  panel: w-cluster
   panel-tell:
    clicks:
     - "nav.nav-sidebar a[mn-tab=replications]"
@@ -359,7 +362,7 @@ steps:
   content: |
    Continuing in the
    <img src="./img/db-purple.svg" style="height: 0.7rem; possition: relative; top: 1px;"/>
-   <code>west</code> database...
+   <code>west</code> cluster...
    <br/><br/>
 
    On the <b>XDCR&nbsp;Replications</b> screen...
@@ -375,7 +378,7 @@ steps:
     <span class="check-rep-fromBucket"
           style="visibility: hidden; color: green;">&check;</span>
     <style>
-      article.checked-w-database-rep-fromBucket .check-rep-fromBucket {
+      article.checked-w-cluster-rep-fromBucket .check-rep-fromBucket {
         visibility: visible !important;
       }
     </style>
@@ -387,7 +390,7 @@ steps:
     <span class="check-rep-toBucket"
           style="visibility: hidden; color: green;">&check;</span>
     <style>
-      article.checked-w-database-rep-toBucket .check-rep-toBucket {
+      article.checked-w-cluster-rep-toBucket .check-rep-toBucket {
         visibility: visible !important;
       }
     </style>
@@ -399,7 +402,7 @@ steps:
     <span class="check-rep-toCluster"
           style="visibility: hidden; color: green;">&check;</span>
     <style>
-      article.checked-w-database-rep-toCluster .check-rep-toCluster {
+      article.checked-w-cluster-rep-toCluster .check-rep-toCluster {
         visibility: visible !important;
       }
     </style>
@@ -410,14 +413,14 @@ steps:
    Click <b>Save&nbsp;Replication</b>.
  -
   title: Congratulations
-  panel: e-database
+  panel: e-cluster
   panel-tell:
    clicks:
     - "nav.nav-sidebar a[mn-tab=buckets]"
   content: |
    Going back to the
    <img src="./img/db-green.svg" style="height: 0.7rem; possition: relative; top: 1px;"/>
-   <code>east</code> database,
+   <code>east</code> cluster,
    we can now see data appearing in the
    <code class="nowrap">my-first-bucket</code> bucket.
    <br/><br/>
@@ -426,8 +429,8 @@ steps:
    <br/><br/>
 
    You've created an ongoing data stream from a bucket
-   in the <code>west</code> database to a bucket
-   in the <code>east</code> database.
+   in the <code>west</code> cluster to a bucket
+   in the <code>east</code> cluster.
    <br/><br/>
 
    That's how simple it is to configure.
@@ -458,7 +461,7 @@ steps:
    Learn more:
    <a href="https://docs.couchbase.com/server/current/learn/clusters-and-availability/xdcr-overview.html"
       target="_blank">
-     XDCR&nbsp;Documentation
+     Cross-datacenter Replication (XDCR) Documentation
    </a>
    <br/><br/>
 
