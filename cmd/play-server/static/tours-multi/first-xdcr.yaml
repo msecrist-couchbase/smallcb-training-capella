@@ -49,7 +49,7 @@ diagram:
     <div style="position: absolute; top: 80px; left: 60px;">
       <img src="./img/db-green.svg"
            style="position: absolute; top: 0px; left: 0px; width: 20px;"/>
-      <div style="position: absolute; top: 0px; left: 25px" class="small">port-e01</div>
+      <div style="position: absolute; top: 0px; left: 25px" class="small">store-e07</div>
     </div>
 
     <div style="position: absolute; top: 30px; left: 25px; border-top: 2px solid #777; transform-origin: top left; width: 80px; transform: rotateZ(75deg);"></div>
@@ -139,29 +139,6 @@ steps:
         <code>east</code> cluster<br/></li>
    </ul>
 
-   The
-   <code>west</code> cluster will be
-   the source of our data stream.
-   <br/><br/>
-
-   The
-   <code>east</code> cluster will
-   be the destination of our data stream.
- -
-  title: The clusters
-  content: |
-   The
-   <img src="./img/db-purple.svg" style="height: 0.7rem; possition: relative; top: 1px;"/>
-   <code>west</code> cluster is running on server
-   <code>${s[0].ContainerIP}</code>
-   <br/><br/>
-
-   The
-   <img src="./img/db-green.svg" style="height: 0.7rem; possition: relative; top: 1px;"/>
-   <code>east</code> cluster is running on server
-   <code>${s[1].ContainerIP}</code>
-   <br/><br/>
-
    <b>Click</b> on their diagram icons
    on the right to open their web-admin UI's.
  -
@@ -174,7 +151,7 @@ steps:
     - q('form input[ng-model="bucketConf.name"]').value == '' && (qLast.value = 'my-first-bucket') && qLast.dispatchEvent && qLast.dispatchEvent(new InputEvent("input")) && false
   content: |
    Let's start by creating a new, empty bucket
-   <aside style="display: inline; color: #777;">(or data container)</aside>
+   <aside style="display: inline;">(or data container)</aside>
    in the
    <img src="./img/db-green.svg" style="height: 0.7rem; position: relative; top: 1px;"/>
    <code>east</code> cluster.
