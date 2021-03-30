@@ -452,6 +452,11 @@ var playgHelpData = {{.injectData}};
     }
 
     if (window.self !== window.top) {
+      var aw = document.querySelector('.alert-wrapper');
+      if (aw) {
+        aw.style.display = "none";
+      }
+
       return; // In iframe.
     }
 
