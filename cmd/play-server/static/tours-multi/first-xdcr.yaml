@@ -25,21 +25,21 @@ diagram:
     <div style="position: absolute; top: 80px; left: 60px;">
       <img src="./img/db-purple.svg"
            style="position: absolute; top: 0px; left: 0px; width: 20px;"/>
-      <div style="position: absolute; top: 0px; left: 25px" class="small">warehouse-w01</div>
+      <div style="position: absolute; top: 0px; left: 25px" class="small">warehouse-w01 cluster</div>
     </div>
 
     <div style="position: absolute; top: 30px; left: 25px; border-top: 2px solid #777; transform-origin: top left; width: 80px; transform: rotateZ(75deg);"></div>
     <div style="position: absolute; top: 110px; left: 40px;">
       <img src="./img/db-purple.svg"
            style="position: absolute; top: 0px; left: 0px; width: 20px;"/>
-      <div style="position: absolute; top: 0px; left: 25px" class="small">store-w02</div>
+      <div style="position: absolute; top: 0px; left: 25px" class="small">store-w02 cluster</div>
     </div>
 
     <div style="position: absolute; top: 30px; left: 25px; border-top: 2px solid #777; transform-origin: top left; width: 105px; transform: rotateZ(88deg);"></div>
     <div style="position: absolute; top: 140px; left: 20px;">
       <img src="./img/db-purple.svg"
            style="position: absolute; top: 0px; left: 0px; width: 20px;"/>
-      <div style="position: absolute; top: 0px; left: 25px" class="small">vehicle-17</div>
+      <div style="position: absolute; top: 0px; left: 25px" class="small">vehicle-17 db</div>
     </div>
   </div>
 
@@ -49,21 +49,21 @@ diagram:
     <div style="position: absolute; top: 80px; left: 60px;">
       <img src="./img/db-green.svg"
            style="position: absolute; top: 0px; left: 0px; width: 20px;"/>
-      <div style="position: absolute; top: 0px; left: 25px" class="small">store-e07</div>
+      <div style="position: absolute; top: 0px; left: 25px" class="small">store-e07 cluster</div>
     </div>
 
     <div style="position: absolute; top: 30px; left: 25px; border-top: 2px solid #777; transform-origin: top left; width: 80px; transform: rotateZ(75deg);"></div>
     <div style="position: absolute; top: 110px; left: 40px;">
       <img src="./img/db-green.svg"
            style="position: absolute; top: 0px; left: 0px; width: 20px;"/>
-      <div style="position: absolute; top: 0px; left: 25px" class="small">store-e09</div>
+      <div style="position: absolute; top: 0px; left: 25px" class="small">store-e09 cluster</div>
     </div>
 
     <div style="position: absolute; top: 30px; left: 25px; border-top: 2px solid #777; transform-origin: top left; width: 105px; transform: rotateZ(88deg);"></div>
     <div style="position: absolute; top: 140px; left: 20px;">
       <img src="./img/db-green.svg"
            style="position: absolute; top: 0px; left: 0px; width: 20px;"/>
-      <div style="position: absolute; top: 0px; left: 25px" class="small">store-e15</div>
+      <div style="position: absolute; top: 0px; left: 25px" class="small">store-e15 cluster</div>
     </div>
   </div>
 
@@ -405,12 +405,19 @@ steps:
    <b>Congratulations!</b>
    <br/><br/>
 
-   You've created an ongoing data stream from a bucket
-   in the <code>west</code> cluster to a bucket
-   in the <code>east</code> cluster.
+   You've created an ongoing data stream from
+   the <code>west</code> cluster
+   to
+   the <code>east</code> cluster.
    <br/><br/>
 
-   That's how simple it is to configure.
+   It's simple to configure!
+   <br/><br/>
+
+   Besides the web-admin UI,
+   you can also use Couchbase's <i>command-line tools</i>
+   or <i>REST API's</i>
+   to set up the same data streams.
 
    <style>
      body .container main.step-congratulations .right .diagram-area .west-east-stream {
@@ -420,19 +427,16 @@ steps:
    </style>
  -
   title: Learn More
+  panel: none
   content: |
-   Besides the web-admin UI,
-   you can also use Couchbase's <i>command-line tools</i>
-   or <i>REST API's</i>
-   to set up flexible <b>data streams</b>
-   to meet your app's
-   distributed topology needs.
+   Distributed <b>data stream</b> topologies
+   for your enterprise applications are straightforwards
+   and flexible with Couchbase.
    <br/><br/>
 
-   Support for
-   multi-master (bi-directional) replication,
+   Multi-master (bi-directional) replication,
    data filtering rules,
-   mobile sync, and more is also available.
+   mobile sync, and more are supported.
    <br/><br/>
 
    Learn more:
