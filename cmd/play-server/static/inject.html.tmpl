@@ -325,21 +325,23 @@ var playgHelpData = {{.injectData}};
           if (window.self !== window.top) { // When in iframe.
             var trys = 0;
 
-            setTimeout(signIn, 200);
+            signIn();
 
             function signIn() {
-              if (trys < 4000) {
+              if (trys < 400) {
                 trys += 1;
+
+                setTimeout(signIn, 200);
 
                 var signIn = document.querySelector(
                   '.sign-in-background + .flex-center form .panel-footer button[type=submit]');
                 if (signIn && signIn.click) {
+                  console.log("signIn.click()", lu, trys);
+
                   signIn.click();
 
-                  return;
+                  trys += 100;
                 }
-
-                setTimeout(signIn, 200);
               }
             }
           }

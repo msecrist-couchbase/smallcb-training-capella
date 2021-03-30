@@ -376,69 +376,6 @@ function loadTour(data, sess) {
     document.querySelector(".diagram-area").style = `height: ${diagram.height || 0};`;
   }
 
-  var rightEl = document.querySelector(".right");
-
-  for (let panel of data.panels) {
-    var input = document.createElement("input");
-
-    input.type = "radio";
-    input.className = "display-none";
-    input.name = "panel";
-    input.id = panel.id;
-
-    document.body.insertBefore(input, document.body.firstChild);
-
-    var diagramLabelEl = document.querySelector(`.right .diagram label[for="${panel.id}"]`) || {};
-    var diagramLabelStyle = diagramLabelEl.style || {};
-
-    var ctx;
-
-    ctx = { s: sessArr, o: '' };
-    if (panel['title-more']) {
-      with (ctx) eval('o = `' + panel['title-more'] + '`');
-    }
-
-    var titleMore = ctx.o;
-
-    ctx = { s: sessArr, o: '' };
-    if (panel['iframe-src']) {
-      with (ctx) eval('o = `' + panel['iframe-src'] + '`');
-    }
-
-    var iframeSrc = ctx.o;
-
-    var div = document.createElement("div");
-
-    div.id = "panel-" + panel.id;
-    div.className = "panel";
-    div.innerHTML =
-      `<div class="flex-row header" style="border-bottom: 2px solid ${panel.color || '#444'};">
-         <label class="title"
-                style="width: ${diagramLabelStyle.width || 'auto'}; height: ${diagramLabelStyle.height || 'auto'};">
-           ${diagramLabelEl.innerHTML || panel.title}</label>
-         <div class="title-more">${titleMore}</div>
-         <div class="title-more"><a href="${iframeSrc}" target="_blank">[open &#x2B08;]</a></div>
-         <div class="controls">
-            <label class="close" for="none">[X]</label>
-         </div>
-       </div>
-       <iframe id="iframe-${panel.id}"
-               src="${iframeSrc}"
-               sandbox="allow-same-origin allow-scripts allow-forms allow-popups"></iframe>
-       <style>
-         input#${panel.id}:checked ~ .container article .right #panel-${panel.id} {
-           display: flex;
-         }
-         input#${panel.id}:checked ~ .container article .right .diagram-area .diagram label[for="${panel.id}"] {
-           border: 1px solid #444;
-           box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.2);
-           background-color: #eee;
-         }
-       </style>`;
-
-    rightEl.appendChild(div);
-  }
-
   var leftEl = document.querySelector(".left");
 
   var popupInputEl = document.createElement("input");
@@ -520,6 +457,73 @@ function loadTour(data, sess) {
   }
 
   stepShow(0);
+
+  setTimeout(function() { loadTourPanels(data, sessArr) }, 500);
+}
+
+function loadTourPanels(data, sessArr) {
+  var rightEl = document.querySelector(".right");
+
+  for (let panel of data.panels) {
+    var input = document.createElement("input");
+
+    input.type = "radio";
+    input.className = "display-none";
+    input.name = "panel";
+    input.id = panel.id;
+
+    document.body.insertBefore(input, document.body.firstChild);
+
+    var diagramLabelEl = document.querySelector(`.right .diagram label[for="${panel.id}"]`) || {};
+    var diagramLabelStyle = diagramLabelEl.style || {};
+
+    var ctx;
+
+    ctx = { s: sessArr, o: '' };
+    if (panel['title-more']) {
+      with (ctx) eval('o = `' + panel['title-more'] + '`');
+    }
+
+    var titleMore = ctx.o;
+
+    ctx = { s: sessArr, o: '' };
+    if (panel['iframe-src']) {
+      with (ctx) eval('o = `' + panel['iframe-src'] + '`');
+    }
+
+    var iframeSrc = ctx.o;
+
+    var div = document.createElement("div");
+
+    div.id = "panel-" + panel.id;
+    div.className = "panel";
+    div.innerHTML =
+      `<div class="flex-row header" style="border-bottom: 2px solid ${panel.color || '#444'};">
+         <label class="title"
+                style="width: ${diagramLabelStyle.width || 'auto'}; height: ${diagramLabelStyle.height || 'auto'};">
+           ${diagramLabelEl.innerHTML || panel.title}</label>
+         <div class="title-more">${titleMore}</div>
+         <div class="title-more"><a href="${iframeSrc}" target="_blank">[open &#x2B08;]</a></div>
+         <div class="controls">
+            <label class="close" for="none">[X]</label>
+         </div>
+       </div>
+       <iframe id="iframe-${panel.id}"
+               src="${iframeSrc}"
+               sandbox="allow-same-origin allow-scripts allow-forms allow-popups"></iframe>
+       <style>
+         input#${panel.id}:checked ~ .container article .right #panel-${panel.id} {
+           display: flex;
+         }
+         input#${panel.id}:checked ~ .container article .right .diagram-area .diagram label[for="${panel.id}"] {
+           border: 1px solid #444;
+           box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.2);
+           background-color: #eee;
+         }
+       </style>`;
+
+    rightEl.appendChild(div);
+  }
 }
 
 function stepShow(i) {

@@ -129,7 +129,7 @@ steps:
      }
    </style>
 
-   In this tour, we'll create a data stream
+   So, let's create a data stream
    between two Couchbase database clusters:
    <br/>
    <ul>
@@ -139,33 +139,43 @@ steps:
         <code>east</code> cluster<br/></li>
    </ul>
 
-   <b>Click</b> on their diagram icons
-   on the right to open their web-admin UI's.
+   <b>Click</b> on the boxes in the right diagram
+   to log into their web-admin UI's.
  -
   title: A new bucket in the east
   panel: e-cluster
   panel-tell:
    clicks:
     - "nav.nav-sidebar a[mn-tab=buckets]"
+   styles: |
+    .header-controls a[ng-click="bucketsCtl.addBucket()"] {
+      text-decoration: underline red 2px;
+    }
    checks:
     - q('form input[ng-model="bucketConf.name"]').value == '' && (qLast.value = 'my-first-bucket') && qLast.dispatchEvent && qLast.dispatchEvent(new InputEvent("input")) && false
   content: |
-   Let's start by creating a new, empty bucket
+   Let's start by creating a new bucket
    <aside style="display: inline;">(or data container)</aside>
    in the
    <img src="./img/db-green.svg" style="height: 0.7rem; position: relative; top: 1px;"/>
    <code>east</code> cluster.
    <br/><br/>
 
-   In the <code>east</code> web-admin UI...
+   In the
+   <img src="./img/db-green.svg" style="height: 0.7rem; possition: relative; top: 1px;"/>
+   <code>east</code> cluster...
    <br/><br/>
 
-   Click on <b>ADD&nbsp;BUCKET</b> and fill in...
-   <br/>
+   In the main menu, click on <b>Buckets</b>.
+   <br/><br/>
 
+   Click on <b>ADD&nbsp;BUCKET</b>.
+   <br/><br/>
+
+   We've already filled in...
    <ul>
    <li>
-    <b>Name</b>:
+    <b>Name</b>
     <br/>
     <code class="nowrap">my-first-bucket</code>
    </li>
@@ -186,13 +196,13 @@ steps:
 
    <ul>
     <li><code>beer-sample</code></li>
-    <li><b><code>my-first-bucket</code></b></li>
+    <li><code>my-first-bucket</code></li>
     <li><code>travel-sample</code></li>
    </ul>
 
-   You can see that your new
+   Your new
    <code class="nowrap">my-first-bucket</code>
-   is <b>empty</b> with 0 items.
+   is empty with <b>0&nbsp;items</b>.
    <br/><br/>
 
    Next, let's examine the <code>west</code> cluster.
@@ -205,38 +215,49 @@ steps:
   content: |
    In the
    <img src="./img/db-purple.svg" style="height: 0.7rem; possition: relative; top: 1px;"/>
-   <code>west</code> cluster,
-   there are only two buckets:
+   <code>west</code> cluster...
+   <br/><br/>
+
+   In the main menu, click on <b>Buckets</b>.
+   <br/><br/>
+
+   There are only two buckets:
    <br/>
 
    <ul>
-    <li><b><code>beer-sample</code></b></li>
+    <li><code>beer-sample</code></li>
     <li><code>travel-sample</code></li>
    </ul>
 
-   We are going to create a data stream...
+   We are going to create a data stream
+   to send data...
    <br/><br/>
 
-   ...that will send data from the
-   <code class"nowrap">beer-sample</code>
-   bucket from the 
+   ...from the
    <img src="./img/db-purple.svg" style="height: 0.7rem; possition: relative; top: 1px;"/>
-   west side...
+   west side's
+   <br/>
+   <code class"nowrap">beer-sample</code>
+   bucket
    <br/><br/>
 
-   ...over into the
-   <code class="nowrap">my-first-bucket</code>
+   ...over into
+   the
+   <img src="./img/db-green.svg" style="height: 0.7rem; possition: relative; top: 1px;"/>
+   east side's
    <br/>
-   on the
-   <img src="./img/db-green.svg" style="height: 0.7rem; possition: relative; top: 1px;"/>east.
+   <code class="nowrap">my-first-bucket</code>.
  -
   title: Connect the clusters
   panel: w-cluster
   panel-tell:
    clicks:
     - "nav.nav-sidebar a[mn-tab=replications]"
+   styles: |
+    .header-controls a:last-child {
+      text-decoration: underline red 2px;
+    }
    checks:
-    - "(q('header h1 > span:last-child').innerText || '').trim() == 'XDCR Replications' && 'xdcr'"
     - "q('input#cluster_reference_name').value == '' && (qLast.value = 'east') && qLast.dispatchEvent && qLast.dispatchEvent(new InputEvent('input')) && false"
     - "q('input#cluster_reference_name').value == 'east' && 'cluster-name'"
     - "q('input#cluster_reference_hostname').value == '' && (qLast.value = '${s[1].ContainerIP}') && qLast.dispatchEvent && qLast.dispatchEvent(new InputEvent('input')) && false"
@@ -252,23 +273,16 @@ steps:
    <code>west</code> cluster...
    <br/><br/>
 
-   <div class="check-xdcr-nav">
-    In the main menu, click on <b>XDCR</b> (for cross-datacenter replication).
-    <br/><br/>
-   </div>
-   <style>
-     article.checked-w-cluster-xdcr .check-xdcr-nav { display: none; }
-   </style>
-
-   On the <b>XDCR&nbsp;Replications</b> screen...
+   In the main menu, click on <b>XDCR</b> (for cross-datacenter replication).
    <br/><br/>
 
-   Click on <b>ADD&nbsp;REMOTE</b> and fill in...
-   <br/>
+   Click on <b>ADD&nbsp;REMOTE</b>.
+   <br/><br/>
 
+   We've already filled in...
    <ul>
    <li>
-    <b>Cluster&nbsp;Name</b>:
+    <b>Cluster&nbsp;Name</b>
     <span class="check-cluster-name"
           style="visibility: hidden; color: green;">&check;</span>
     <style>
@@ -281,7 +295,7 @@ steps:
     <br/><br/>
    </li>
    <li>
-    <b>IP/Hostname</b>:
+    <b>IP/Hostname</b>
     <span class="check-cluster-hostname"
           style="visibility: hidden; color: green;">&check;</span>
     <style>
@@ -294,7 +308,7 @@ steps:
     </br>
    </li>
    <li>
-    <b>Username&nbspfor Remote&nbsp;Cluster</b>:
+    <b>Username&nbspfor Remote&nbsp;Cluster</b>
     <span class="check-cluster-username"
           style="visibility: hidden; color: green;">&check;</span>
     <style>
@@ -306,7 +320,7 @@ steps:
     </br>
    </li>
    <li>
-    <b>Password</b>:
+    <b>Password</b>
     <span class="check-cluster-password"
           style="visibility: hidden; color: green;">&check;</span>
     <style>
@@ -327,9 +341,15 @@ steps:
    clicks:
     - "nav.nav-sidebar a[mn-tab=replications]"
    styles: |
-    body[data-h1=XDCRAddReplication] form.forms .width-10 .formrow.row {
+    .header-controls a[ng-reflect-state="app.admin.replications.add"] {
+      text-decoration: underline red 2px;
+    }
+    body[data-h1=XDCRAddReplication] .main-content form.forms .width-10 .formrow.row {
       border: 2px solid red;
       padding: 2px;
+    }
+    body[data-h1=XDCRAddReplication] .main-content footer.footer-save button[type="submit"] {
+      border: 2px solid red;
     }
    checks:
     - "document.body.setAttribute('data-h1', q('header > h1 > span:last-child').innerText.trim().replaceAll(' ', '')) && false"
@@ -342,15 +362,13 @@ steps:
    <code>west</code> cluster...
    <br/><br/>
 
-   On the <b>XDCR&nbsp;Replications</b> screen...
+   Click on <b>ADD&nbsp;REPLICATION</b>.
    <br/><br/>
 
-   Click on <b>ADD&nbsp;REPLICATION</b> and fill in...
-   <br/>
-
+   Fill in...
    <ul>
    <li>
-    <b>Replicate&nbsp;From&nbsp;Bucket</b>:<br/>
+    <b>Replicate&nbsp;From&nbsp;Bucket</b><br/>
     <code>beer-sample</code>
     <span class="check-rep-fromBucket"
           style="visibility: hidden; color: green;">&check;</span>
@@ -362,7 +380,7 @@ steps:
     <br/><br/>
    </li>
    <li>
-    <b>Remote&nbsp;Bucket</b>:<br/>
+    <b>Remote&nbsp;Bucket</b><br/>
     <code class="nowrap">my-first-bucket</code>
     <span class="check-rep-toBucket"
           style="visibility: hidden; color: green;">&check;</span>
@@ -374,7 +392,7 @@ steps:
     <br/><br/>
    </li>
    <li>
-    <b>Remote&nbsp;Cluster</b>:
+    <b>Remote&nbsp;Cluster</b>
     <code>east</code>
     <span class="check-rep-toCluster"
           style="visibility: hidden; color: green;">&check;</span>
@@ -426,14 +444,15 @@ steps:
   title: Learn More
   panel: none
   content: |
-   Distributed <b>data stream</b> topologies
+   Distributed <b>data streaming</b> deployments
+   across multiple locations and clouds
    for your enterprise applications are straightforwards
    and flexible with Couchbase.
    <br/><br/>
 
    Multi-master (bi-directional) replication,
-   data filtering rules,
-   mobile sync, and more are supported.
+   data filtering rules, mobile sync, and more
+   features are also supported.
    <br/><br/>
 
    Learn more:
@@ -442,18 +461,6 @@ steps:
      Cross-datacenter Replication (XDCR) Documentation
    </a>
    <br/><br/>
-
-   There's a lot more that Couchbase can do
-   to help you build modern, distributed
-   applications that can be deployed with agility
-   across multiple locations and clouds.
-   <br/><br/>
-
-   Take a look:
-   <a href="https://docs.couchbase.com/home/index.html"
-      target="_blank">
-     Couchbase&nbsp;Documentation
-   </a>
 
    <style>
      body .container main.step-learn-more .right .diagram-area {
