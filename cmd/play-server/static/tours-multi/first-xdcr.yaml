@@ -408,11 +408,70 @@ steps:
      }
    </style>
  -
-  title: Learn More
+  title: A mutation in the west
+  panel: w-cluster
+  panel-tell:
+   clicks:
+    - nav.nav-sidebar a[ui-sref="app.admin.docs.editor"]
+  content: |
+   In the
+   <img src="./img/db-purple.svg" class="small-db"/>
+   <code>west</code> cluster,
+   let's <i>mutate or change</i> a document
+   to see whether the data stream works.
+   <br/><br/>
+
+   In the main menu, click on <b>Documents</b>.
+   <br/><br/>
+
+   In the <code class="nowrap">beer-sample</code> bucket,
+   edit <span class="icon fa-pencil"></span>
+   a document and save your changes.
+
+   <style>
+     body .container main.step-a-mutation-in-the-west .right .diagram-area .west-east-stream {
+       display: block !important;
+       opacity: 1;
+     }
+   </style>
+ -
+  title: Will the east see the change?
+  panel: e-cluster
+  panel-tell:
+   clicks:
+    - nav.nav-sidebar a[ui-sref="app.admin.docs.editor"]
+   checks:
+    - q('qw-collection-menu div select:first-child').value != 'my-first-bucket' && (qLast.value = 'my-first-bucket') && qLast.dispatchEvent(new UIEvent('change')) && false
+  content: |
+   In the
+   <img src="./img/db-green.svg" class="small-db"/>
+   <code>east</code> cluster...
+   <br/><br/>
+
+   In the main menu, click on <b>Documents</b>
+   and select the
+   <code>my-first-bucket</code>.
+   <br/><br/>
+
+   Did your changed document from the
+   <img src="./img/db-purple.svg" class="small-db"/>
+   <code>west</code> cluster
+   show up in the
+   <img src="./img/db-green.svg" class="small-db"/>
+   <code>east</code> cluster?
+
+   <style>
+     body .container main.step-will-the-east-see-the-change .right .diagram-area .west-east-stream {
+       display: block !important;
+       opacity: 1;
+     }
+   </style>
+ -
+  title: Learn more
   panel: none
   content: |
-   Distributed <b>data streaming</b> deployments
-   across multiple locations and clouds
+   <b>Data streaming</b>
+   across multiple locations
    for your enterprise applications are straightforwards
    and flexible with Couchbase.
    <br/><br/>

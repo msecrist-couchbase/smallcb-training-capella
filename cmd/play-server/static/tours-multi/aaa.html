@@ -256,6 +256,7 @@ input[type="checkbox"].step-nav-popup {
 input[type="checkbox"].step-nav-popup:checked ~ .step-x .step .step-nav label .step-nav-popup {
   display: block;
   position: absolute;
+  width: 210px;
   max-height: 500px;
   bottom: 20px;
   left: -5rem;
@@ -272,12 +273,12 @@ input[type="checkbox"].step-nav-popup:checked ~ .step-x .step .step-nav label .s
 }
 
 .step .step-nav label .step-nav-popup a {
-  display: block;
+  display: flex;
   margin: 0 6px 0 6px;
   border: 2px solid #FFF;
   padding: 0 6px 0 6px;
-  white-space: nowrap;
   line-height: 1.2rem;
+  white-space: nowrap;
   text-decoration: none;
   cursor: pointer;
 }
@@ -288,6 +289,10 @@ input[type="checkbox"].step-nav-popup:checked ~ .step-x .step .step-nav label .s
 .step .step-nav label .step-nav-popup a:hover {
   border: 2px solid #c6dbf2;
   color: #333;
+}
+.step .step-nav label .step-nav-popup a span:last-child {
+  display: inline-block;
+  white-space: normal;
 }
 
 .step-nav button {
@@ -427,7 +432,7 @@ function loadTour(data, sess) {
     for (var k = 0; k < data.steps.length; k++) {
       popup.push(`<a onclick="stepShow(${k})"
                      class="${k == i ? 'step-nav-popup-cur' : ''}">
-                    ${k + 1} - ${data.steps[k].title}</a>`);
+                    <span>${k + 1} -</span>&nbsp;<span>${data.steps[k].title}</span></a>`);
     }
 
     popup.push('</div>');
@@ -548,7 +553,8 @@ function stepShow(i) {
     var step = tourData.steps[i];
     if (step) {
       if (step.title) {
-        className += " step-" + step.title.trim().replaceAll(' ', '-').toLowerCase();
+        className += " step-" + step.title.trim()
+          .replaceAll('?', '').replaceAll(' ', '-').toLowerCase();
       }
 
       var panel = step.panel;
