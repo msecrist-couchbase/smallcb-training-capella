@@ -115,6 +115,14 @@ diagram:
     </div>
   </label>
 
+  <style>
+    img.small-db {
+      position: relative;
+      top: 1px;
+      height: 0.7rem;
+    }
+  </style>
+
 steps:
  -
   title: Welcome
@@ -174,7 +182,7 @@ steps:
    Let's start by creating a new bucket
    <aside style="display: inline;">(or data container)</aside>
    in the
-   <img src="./img/db-green.svg" style="height: 0.7rem; position: relative; top: 1px;"/>
+   <img src="./img/db-green.svg" class="small-db"/>
    <code>east</code> cluster.
    <br/><br/>
 
@@ -223,7 +231,7 @@ steps:
    <br/><br/>
 
    In the
-   <img src="./img/db-purple.svg" style="height: 0.7rem; position: relative; top: 1px;"/>
+   <img src="./img/db-purple.svg" class="small-db"/>
    <code>west</code> cluster...
    <br/><br/>
 
@@ -237,8 +245,7 @@ steps:
    <ul>
    <li>
     Cluster&nbsp;Name:
-    <span class="check-cluster-name"
-          style="visibility: hidden; color: green;">&check;</span>
+    <span class="check check-cluster-name">&check;</span>
     <style>
       article.checked-w-cluster-cluster-name .check-cluster-name {
         visibility: visible !important;
@@ -250,8 +257,7 @@ steps:
    </li>
    <li>
     IP/Hostname:
-    <span class="check-cluster-hostname"
-          style="visibility: hidden; color: green;">&check;</span>
+    <span class="check check-cluster-hostname">&check;</span>
     <style>
       article.checked-w-cluster-cluster-hostname .check-cluster-hostname {
         visibility: visible !important;
@@ -263,8 +269,7 @@ steps:
    </li>
    <li>
     Username&nbspfor Remote&nbsp;Cluster:
-    <span class="check-cluster-username"
-          style="visibility: hidden; color: green;">&check;</span>
+    <span class="check check-cluster-username">&check;</span>
     <style>
       article.checked-w-cluster-cluster-username .check-cluster-username {
         visibility: visible !important;
@@ -275,8 +280,7 @@ steps:
    </li>
    <li>
     Password:
-    <span class="check-cluster-password"
-          style="visibility: hidden; color: green;">&check;</span>
+    <span class="check check-cluster-password">&check;</span>
     <style>
       article.checked-w-cluster-cluster-password .check-cluster-password {
         visibility: visible !important;
@@ -312,9 +316,20 @@ steps:
     - "q('input#replication_to_bucket').value == 'my-first-bucket' && 'rep-toBucket'"
     - "(q('select[formcontrolname=toCluster]').value || '').indexOf('east') >= 0 && 'rep-toCluster'"
   content: |
-   Continuing in the
-   <img src="./img/db-purple.svg" style="height: 0.7rem; position: relative; top: 1px;"/>
-   <code>west</code> cluster...
+   Next, we'll create a data replication stream from the
+   <br/>
+   <code>beer-sample</code> bucket
+   on the
+   <br/>
+   <img src="./img/db-purple.svg" class="small-db"/>
+   <code>west</code> cluster
+   to the
+   <br/>
+   <code>my-first-bucket</code>
+   on the
+   <br/>
+   <img src="./img/db-green.svg" class="small-db"/>
+   <code>east</code> cluster.
    <br/><br/>
 
    Click on <b>ADD&nbsp;REPLICATION</b>.
@@ -325,8 +340,7 @@ steps:
    <li>
     Replicate&nbsp;From&nbsp;Bucket:<br/>
     <code>beer-sample</code>
-    <span class="check-rep-fromBucket"
-          style="visibility: hidden; color: green;">&check;</span>
+    <span class="check check-rep-fromBucket">&check;</span>
     <style>
       article.checked-w-cluster-rep-fromBucket .check-rep-fromBucket {
         visibility: visible !important;
@@ -337,8 +351,7 @@ steps:
    <li>
     Remote&nbsp;Bucket:<br/>
     <code class="nowrap">my-first-bucket</code>
-    <span class="check-rep-toBucket"
-          style="visibility: hidden; color: green;">&check;</span>
+    <span class="check check-rep-toBucket">&check;</span>
     <style>
       article.checked-w-cluster-rep-toBucket .check-rep-toBucket {
         visibility: visible !important;
@@ -349,8 +362,7 @@ steps:
    <li>
     Remote&nbsp;Cluster:<br/>
     <code>east</code>
-    <span class="check-rep-toCluster"
-          style="visibility: hidden; color: green;">&check;</span>
+    <span class="check check-rep-toCluster">&check;</span>
     <style>
       article.checked-w-cluster-rep-toCluster .check-rep-toCluster {
         visibility: visible !important;
@@ -369,7 +381,7 @@ steps:
     - "nav.nav-sidebar a[mn-tab=buckets]"
   content: |
    Going back to the
-   <img src="./img/db-green.svg" style="height: 0.7rem; position: relative; top: 1px;"/>
+   <img src="./img/db-green.svg" class="small-db"/>
    <code>east</code> cluster,
    we can now see data appearing in
    <code class="nowrap">my-first-bucket</code>.
@@ -385,7 +397,7 @@ steps:
    <br/><br/>
 
    Besides the web-admin UI,
-   you can also use Couchbase's <i>command-line tools</i>
+   you can also use <i>command-line tools</i>
    or <i>REST API's</i>
    to set up the same data streams.
 
@@ -415,7 +427,6 @@ steps:
       target="_blank">
      Cross-datacenter Replication (XDCR) Documentation
    </a>
-   <br/><br/>
 
    <style>
      body .container main.step-learn-more .right .diagram-area {
