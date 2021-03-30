@@ -127,11 +127,21 @@ steps:
    <br/><br/>
 
    <style>
-     body .container main.step-0 .right .diagram-area {
+     .container main.step-0 .right .diagram-area {
        min-height: 200px;
      }
-     body .container main.step-0 .right .diagram-area .diagram-more {
+     .container main.step-0 .right .diagram-area .diagram-more {
        display: block !important;
+     }
+
+     input#w-cluster:checked ~ .container main.step-0 .right .diagram-area,
+     input#e-cluster:checked ~ .container main.step-0 .right .diagram-area {
+       min-height: 50px !important;
+     }
+
+     input#w-cluster:checked ~ .container main.step-0 .right .diagram-area .diagram-more,
+     input#e-cluster:checked ~ .container main.step-0 .right .diagram-area .diagram-more {
+       display: none !important;
      }
    </style>
 
@@ -154,10 +164,11 @@ steps:
    clicks:
     - "nav.nav-sidebar a[mn-tab=buckets]"
    styles: |
-    .header-controls a[ng-click="bucketsCtl.addBucket()"] {
+    body[data-my-first-bucket=n] .header-controls a[ng-click="bucketsCtl.addBucket()"] {
       text-decoration: underline red 2px;
     }
    checks:
+    - document.body.setAttribute('data-my-first-bucket', (q('div[buckets="buckets.details"] .cbui-tablerow-title[title="my-first-bucket"]').tagName && 'y') || 'n') && false
     - q('form input[ng-model="bucketConf.name"]').value == '' && (qLast.value = 'my-first-bucket') && qLast.dispatchEvent && qLast.dispatchEvent(new InputEvent("input")) && false
   content: |
    Let's start by creating a new bucket
@@ -176,78 +187,16 @@ steps:
    We've already filled in...
    <ul>
    <li>
-    <b>Name</b>
-    <br/>
-    <code class="nowrap">my-first-bucket</code>
+    Name: <code class="nowrap">my-first-bucket</code>
    </li>
    </ul>
 
    Click the <b>Add&nbsp;Bucket</b> button.
- -
-  title: Buckets in the east
-  panel: e-cluster
-  panel-tell:
-   clicks:
-    - "nav.nav-sidebar a[mn-tab=buckets]"
-  content: |
-   You should now see three buckets in the
-   <img src="./img/db-green.svg" style="height: 0.7rem; position: relative; top: 1px;"/>
-   <code>east</code> cluster:
-   <br/>
-
-   <ul>
-    <li><code>beer-sample</code></li>
-    <li><code>my-first-bucket</code></li>
-    <li><code>travel-sample</code></li>
-   </ul>
+   <br/><br/>
 
    Your new
    <code class="nowrap">my-first-bucket</code>
-   is empty with <b>0&nbsp;items</b>.
-   <br/><br/>
-
-   Next, let's examine the <code>west</code> cluster.
- -
-  title: Buckets in the west
-  panel: w-cluster
-  panel-tell:
-   clicks:
-    - "nav.nav-sidebar a[mn-tab=buckets]"
-  content: |
-   In the
-   <img src="./img/db-purple.svg" style="height: 0.7rem; position: relative; top: 1px;"/>
-   <code>west</code> cluster...
-   <br/><br/>
-
-   In the main menu, click on <b>Buckets</b>.
-   <br/><br/>
-
-   There are only two buckets:
-   <br/>
-
-   <ul>
-    <li><code>beer-sample</code></li>
-    <li><code>travel-sample</code></li>
-   </ul>
-
-   We are going to create a <b>data&nbsp;stream</b>
-   to send data...
-   <br/><br/>
-
-   ...from the
-   <img src="./img/db-purple.svg" style="height: 0.7rem; position: relative; top: 1px;"/>
-   west side's
-   <br/>
-   <code class"nowrap">beer-sample</code>
-   bucket
-   <br/><br/>
-
-   ...over into
-   the
-   <img src="./img/db-green.svg" style="height: 0.7rem; position: relative; top: 1px;"/>
-   east side's
-   <br/>
-   <code class="nowrap">my-first-bucket</code>.
+   will be empty with <b>0&nbsp;items</b>.
  -
   title: Connect the clusters
   panel: w-cluster
@@ -255,10 +204,11 @@ steps:
    clicks:
     - "nav.nav-sidebar a[mn-tab=replications]"
    styles: |
-    .header-controls a:last-child {
+    body[data-remote-east=n] .header-controls a:last-child {
       text-decoration: underline red 2px;
     }
    checks:
+    - document.body.setAttribute('data-remote-east', (q('ui-view h4').innerText == 'Remote Clusters' && q('ui-view .cbui-table-cell[title="east"]').tagName && 'y') || 'n') && false
     - "q('input#cluster_reference_name').value == '' && (qLast.value = 'east') && qLast.dispatchEvent && qLast.dispatchEvent(new InputEvent('input')) && false"
     - "q('input#cluster_reference_name').value == 'east' && 'cluster-name'"
     - "q('input#cluster_reference_hostname').value == '' && (qLast.value = '${s[1].ContainerIP}') && qLast.dispatchEvent && qLast.dispatchEvent(new InputEvent('input')) && false"
@@ -269,6 +219,9 @@ steps:
     - "q('input[formcontrolname=password]').value == '${s[1].CBPswd}' && 'cluster-password'"
     - "q('.modal-dialog .panel-header h2').innerText == 'Add Remote Cluster' && (document.body.scrollTop = 0) && false"
   content: |
+   Next, let's connect the clusters.
+   <br/><br/>
+
    In the
    <img src="./img/db-purple.svg" style="height: 0.7rem; position: relative; top: 1px;"/>
    <code>west</code> cluster...
@@ -283,7 +236,7 @@ steps:
    We've already filled in...
    <ul>
    <li>
-    <b>Cluster&nbsp;Name</b>
+    Cluster&nbsp;Name:
     <span class="check-cluster-name"
           style="visibility: hidden; color: green;">&check;</span>
     <style>
@@ -296,7 +249,7 @@ steps:
     <br/><br/>
    </li>
    <li>
-    <b>IP/Hostname</b>
+    IP/Hostname:
     <span class="check-cluster-hostname"
           style="visibility: hidden; color: green;">&check;</span>
     <style>
@@ -309,7 +262,7 @@ steps:
     </br>
    </li>
    <li>
-    <b>Username&nbspfor Remote&nbsp;Cluster</b>
+    Username&nbspfor Remote&nbsp;Cluster:
     <span class="check-cluster-username"
           style="visibility: hidden; color: green;">&check;</span>
     <style>
@@ -321,7 +274,7 @@ steps:
     </br>
    </li>
    <li>
-    <b>Password</b>
+    Password:
     <span class="check-cluster-password"
           style="visibility: hidden; color: green;">&check;</span>
     <style>
@@ -342,7 +295,7 @@ steps:
    clicks:
     - "nav.nav-sidebar a[mn-tab=replications]"
    styles: |
-    .header-controls a[ng-reflect-state="app.admin.replications.add"] {
+    body[data-rep-east=n] .header-controls a[ng-reflect-state="app.admin.replications.add"] {
       text-decoration: underline red 2px;
     }
     body[data-h1=XDCRAddReplication] .main-content form.forms .width-10 .formrow.row {
@@ -353,7 +306,8 @@ steps:
       border: 2px solid red;
     }
    checks:
-    - "document.body.setAttribute('data-h1', q('header > h1 > span:last-child').innerText.trim().replaceAll(' ', '')) && false"
+    - document.body.setAttribute('data-h1', q('header > h1 > span:last-child').innerText.trim().replaceAll(' ', '')) && false
+    - document.body.setAttribute('data-rep-east', (q('ui-view ng-component div:last-child .cbui-table-header .cbui-table-cell:first-child').innerText == 'source bucket' && q('ui-view ng-component div:last-child .cbui-table-cell[title="beer-sample"]').tagName && 'y') || 'n') && false
     - "(q('select[formcontrolname=fromBucket]').value || '').indexOf('beer-sample') >= 0 && 'rep-fromBucket'"
     - "q('input#replication_to_bucket').value == 'my-first-bucket' && 'rep-toBucket'"
     - "(q('select[formcontrolname=toCluster]').value || '').indexOf('east') >= 0 && 'rep-toCluster'"
@@ -369,7 +323,7 @@ steps:
    Fill in...
    <ul>
    <li>
-    <b>Replicate&nbsp;From&nbsp;Bucket</b><br/>
+    Replicate&nbsp;From&nbsp;Bucket:<br/>
     <code>beer-sample</code>
     <span class="check-rep-fromBucket"
           style="visibility: hidden; color: green;">&check;</span>
@@ -381,7 +335,7 @@ steps:
     <br/><br/>
    </li>
    <li>
-    <b>Remote&nbsp;Bucket</b><br/>
+    Remote&nbsp;Bucket:<br/>
     <code class="nowrap">my-first-bucket</code>
     <span class="check-rep-toBucket"
           style="visibility: hidden; color: green;">&check;</span>
@@ -393,7 +347,7 @@ steps:
     <br/><br/>
    </li>
    <li>
-    <b>Remote&nbsp;Cluster</b>
+    Remote&nbsp;Cluster:<br/>
     <code>east</code>
     <span class="check-rep-toCluster"
           style="visibility: hidden; color: green;">&check;</span>
