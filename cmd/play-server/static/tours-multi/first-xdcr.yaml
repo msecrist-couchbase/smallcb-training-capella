@@ -316,7 +316,7 @@ steps:
     - "q('input#replication_to_bucket').value == 'my-first-bucket' && 'rep-toBucket'"
     - "(q('select[formcontrolname=toCluster]').value || '').indexOf('east') >= 0 && 'rep-toCluster'"
   content: |
-   Next, we'll create a data replication stream from the
+   Next, we'll create a data replication stream from a
    <br/>
    <code>beer-sample</code> bucket
    on the
