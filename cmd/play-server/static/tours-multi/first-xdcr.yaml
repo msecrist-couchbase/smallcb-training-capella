@@ -417,9 +417,10 @@ steps:
    and flexible with Couchbase.
    <br/><br/>
 
-   Multi-master (bi-directional) replication,
-   data filtering rules, mobile sync, and more
-   features are also supported.
+   You can also use more features like
+   multi-master (bi-directional) replication,
+   data filtering expressions, compression,
+   encryption, mobile sync and more.
    <br/><br/>
 
    Learn more:
