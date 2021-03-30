@@ -21,21 +21,24 @@ diagram:
  content: |
   <div class="diagram-more"
        style="position: absolute; display: none; opacity: 0.3; user-select: none;">
-    <div style="position: absolute; top: 30px; left: 25px; border-top: 2px solid #777; transform-origin: top left; width: 60px; transform: rotateZ(50deg);"></div>
+    <div class="animated-stream"
+         style="position: absolute; top: 35px; left: 25px; transform-origin: top left; height: 2px; width: 57px; transform: rotateZ(47deg);"></div>
     <div style="position: absolute; top: 80px; left: 60px;">
       <img src="./img/db-purple.svg"
            style="position: absolute; top: 0px; left: 0px; width: 20px;"/>
       <div style="position: absolute; top: 0px; left: 25px" class="small">warehouse-w01 cluster</div>
     </div>
 
-    <div style="position: absolute; top: 30px; left: 25px; border-top: 2px solid #777; transform-origin: top left; width: 80px; transform: rotateZ(75deg);"></div>
+    <div class="animated-stream"
+         style="position: absolute; top: 30px; left: 25px; transform-origin: top left; height: 2px; width: 80px; transform: rotateZ(75deg);"></div>
     <div style="position: absolute; top: 110px; left: 40px;">
       <img src="./img/db-purple.svg"
            style="position: absolute; top: 0px; left: 0px; width: 20px;"/>
       <div style="position: absolute; top: 0px; left: 25px" class="small">store-w02 cluster</div>
     </div>
 
-    <div style="position: absolute; top: 30px; left: 25px; border-top: 2px solid #777; transform-origin: top left; width: 105px; transform: rotateZ(88deg);"></div>
+    <div class="animated-stream"
+         style="position: absolute; top: 30px; left: 25px; transform-origin: top left; height: 2px; width: 105px; transform: rotateZ(88deg);"></div>
     <div style="position: absolute; top: 140px; left: 20px;">
       <img src="./img/db-purple.svg"
            style="position: absolute; top: 0px; left: 0px; width: 20px;"/>
@@ -45,39 +48,42 @@ diagram:
 
   <div class="diagram-more"
        style="position: absolute; display: none; opacity: 0.3; user-select: none; left: 250px;">
-    <div style="position: absolute; top: 30px; left: 25px; border-top: 2px solid #777; transform-origin: top left; width: 60px; transform: rotateZ(50deg);"></div>
+    <div class="animated-stream"
+         style="position: absolute; top: 35px; left: 25px; transform-origin: top left; height: 2px; width: 57px; transform: rotateZ(47deg);"></div>
     <div style="position: absolute; top: 80px; left: 60px;">
       <img src="./img/db-green.svg"
            style="position: absolute; top: 0px; left: 0px; width: 20px;"/>
-      <div style="position: absolute; top: 0px; left: 25px" class="small">store-e07 cluster</div>
+      <div style="position: absolute; top: 0px; left: 25px" class="small">warehouse-w01 cluster</div>
     </div>
 
-    <div style="position: absolute; top: 30px; left: 25px; border-top: 2px solid #777; transform-origin: top left; width: 80px; transform: rotateZ(75deg);"></div>
+    <div class="animated-stream"
+         style="position: absolute; top: 30px; left: 25px; transform-origin: top left; height: 2px; width: 80px; transform: rotateZ(75deg);"></div>
     <div style="position: absolute; top: 110px; left: 40px;">
       <img src="./img/db-green.svg"
            style="position: absolute; top: 0px; left: 0px; width: 20px;"/>
-      <div style="position: absolute; top: 0px; left: 25px" class="small">store-e09 cluster</div>
+      <div style="position: absolute; top: 0px; left: 25px" class="small">store-w02 cluster</div>
     </div>
 
-    <div style="position: absolute; top: 30px; left: 25px; border-top: 2px solid #777; transform-origin: top left; width: 105px; transform: rotateZ(88deg);"></div>
+    <div class="animated-stream"
+         style="position: absolute; top: 30px; left: 25px; transform-origin: top left; height: 2px; width: 105px; transform: rotateZ(88deg);"></div>
     <div style="position: absolute; top: 140px; left: 20px;">
       <img src="./img/db-green.svg"
            style="position: absolute; top: 0px; left: 0px; width: 20px;"/>
-      <div style="position: absolute; top: 0px; left: 25px" class="small">store-e15 cluster</div>
+      <div style="position: absolute; top: 0px; left: 25px" class="small">vehicle-17 db</div>
     </div>
   </div>
 
-  <div class="diagram-more west-east-stream"
+  <div class="diagram-more west-east-stream animated-stream"
        style="display: none; position: absolute; top: 27px; left: 205px; height: 6px; width: 44px;"></div>
 
   <style>
-    .west-east-stream {
+    .animated-stream {
       background: linear-gradient(-90deg, #4287D6, white);
       background-repeat: repeat-x;
       background-size: 15px 6px;
-      animation: west-east-stream 4s infinite linear;
+      animation: animated-stream 8s infinite linear;
     }
-    @keyframes west-east-stream {
+    @keyframes animated-stream {
       0% {
         background-position: 0px 0px;
       }
@@ -411,8 +417,8 @@ steps:
    Going back to the
    <img src="./img/db-green.svg" style="height: 0.7rem; position: relative; top: 1px;"/>
    <code>east</code> cluster,
-   we can now see data appearing in the
-   <code class="nowrap">my-first-bucket</code> bucket.
+   we can now see data appearing in
+   <code class="nowrap">my-first-bucket</code>.
    <br/><br/>
 
    <b>Congratulations!</b>
