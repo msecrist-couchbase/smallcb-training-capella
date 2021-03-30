@@ -417,8 +417,9 @@ steps:
    In the
    <img src="./img/db-purple.svg" class="small-db"/>
    <code>west</code> cluster,
-   let's <i>mutate or change</i> a document
-   to see whether the data stream works.
+   let's <i>change</i> a document
+   to see whether data streaming works
+   for mutations.
    <br/><br/>
 
    In the main menu, click on <b>Documents</b>.

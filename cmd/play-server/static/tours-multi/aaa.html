@@ -276,7 +276,7 @@ input[type="checkbox"].step-nav-popup:checked ~ .step-x .step .step-nav label .s
   display: flex;
   margin: 0 6px 0 6px;
   border: 2px solid #FFF;
-  padding: 0 6px 0 6px;
+  padding: 0 5px 0 5px;
   line-height: 1.2rem;
   white-space: nowrap;
   text-decoration: none;
@@ -432,7 +432,7 @@ function loadTour(data, sess) {
     for (var k = 0; k < data.steps.length; k++) {
       popup.push(`<a onclick="stepShow(${k})"
                      class="${k == i ? 'step-nav-popup-cur' : ''}">
-                    <span>${k + 1} -</span>&nbsp;<span>${data.steps[k].title}</span></a>`);
+                    <span>${k + 1}.</span>&nbsp;<span>${data.steps[k].title}</span></a>`);
     }
 
     popup.push('</div>');
