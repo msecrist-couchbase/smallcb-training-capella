@@ -161,11 +161,6 @@ steps:
    <code>east</code> cluster.
    <br/><br/>
 
-   In the
-   <img src="./img/db-green.svg" style="height: 0.7rem; possition: relative; top: 1px;"/>
-   <code>east</code> cluster...
-   <br/><br/>
-
    In the main menu, click on <b>Buckets</b>.
    <br/><br/>
 
@@ -190,7 +185,7 @@ steps:
     - "nav.nav-sidebar a[mn-tab=buckets]"
   content: |
    You should now see three buckets in the
-   <img src="./img/db-green.svg" style="height: 0.7rem; possition: relative; top: 1px;"/>
+   <img src="./img/db-green.svg" style="height: 0.7rem; position: relative; top: 1px;"/>
    <code>east</code> cluster:
    <br/>
 
@@ -214,7 +209,7 @@ steps:
     - "nav.nav-sidebar a[mn-tab=buckets]"
   content: |
    In the
-   <img src="./img/db-purple.svg" style="height: 0.7rem; possition: relative; top: 1px;"/>
+   <img src="./img/db-purple.svg" style="height: 0.7rem; position: relative; top: 1px;"/>
    <code>west</code> cluster...
    <br/><br/>
 
@@ -229,12 +224,12 @@ steps:
     <li><code>travel-sample</code></li>
    </ul>
 
-   We are going to create a data stream
+   We are going to create a <b>data&nbsp;stream</b>
    to send data...
    <br/><br/>
 
    ...from the
-   <img src="./img/db-purple.svg" style="height: 0.7rem; possition: relative; top: 1px;"/>
+   <img src="./img/db-purple.svg" style="height: 0.7rem; position: relative; top: 1px;"/>
    west side's
    <br/>
    <code class"nowrap">beer-sample</code>
@@ -243,7 +238,7 @@ steps:
 
    ...over into
    the
-   <img src="./img/db-green.svg" style="height: 0.7rem; possition: relative; top: 1px;"/>
+   <img src="./img/db-green.svg" style="height: 0.7rem; position: relative; top: 1px;"/>
    east side's
    <br/>
    <code class="nowrap">my-first-bucket</code>.
@@ -269,7 +264,7 @@ steps:
     - "q('.modal-dialog .panel-header h2').innerText == 'Add Remote Cluster' && (document.body.scrollTop = 0) && false"
   content: |
    In the
-   <img src="./img/db-purple.svg" style="height: 0.7rem; possition: relative; top: 1px;"/>
+   <img src="./img/db-purple.svg" style="height: 0.7rem; position: relative; top: 1px;"/>
    <code>west</code> cluster...
    <br/><br/>
 
@@ -358,7 +353,7 @@ steps:
     - "(q('select[formcontrolname=toCluster]').value || '').indexOf('east') >= 0 && 'rep-toCluster'"
   content: |
    Continuing in the
-   <img src="./img/db-purple.svg" style="height: 0.7rem; possition: relative; top: 1px;"/>
+   <img src="./img/db-purple.svg" style="height: 0.7rem; position: relative; top: 1px;"/>
    <code>west</code> cluster...
    <br/><br/>
 
@@ -414,7 +409,7 @@ steps:
     - "nav.nav-sidebar a[mn-tab=buckets]"
   content: |
    Going back to the
-   <img src="./img/db-green.svg" style="height: 0.7rem; possition: relative; top: 1px;"/>
+   <img src="./img/db-green.svg" style="height: 0.7rem; position: relative; top: 1px;"/>
    <code>east</code> cluster,
    we can now see data appearing in the
    <code class="nowrap">my-first-bucket</code> bucket.

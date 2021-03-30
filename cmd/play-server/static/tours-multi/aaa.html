@@ -53,12 +53,21 @@ body * {
 }
 
 .flex-row .controls .close {
+  position: relative;
+  top: 0.7rem;
+  background-color: #ddd;
+  border-radius: 50%;
+  padding: .25rem .4rem .2rem .4rem;
+  text-align: center;
+  font-size: .9rem;
   color: #777;
   cursor: pointer;
 }
 
 .flex-row .controls .close:hover {
+  background-color: #ccc;
   color: black;
+  transition: all .4s ease;
 }
 
 .container {
@@ -160,6 +169,7 @@ body * {
 }
 .container article .right .diagram-area .diagram label:hover {
   background-color: #e0e0e0;
+  transition: background-color .25s ease;
 }
 .container article .right .diagram-area .diagram label > * {
   position: absolute;
@@ -505,7 +515,7 @@ function loadTourPanels(data, sessArr) {
          <div class="title-more">${titleMore}</div>
          <div class="title-more"><a href="${iframeSrc}" target="_blank">[open &#x2B08;]</a></div>
          <div class="controls">
-            <label class="close" for="none">[X]</label>
+            <label class="close" for="none">X</label>
          </div>
        </div>
        <iframe id="iframe-${panel.id}"
