@@ -266,7 +266,7 @@ steps:
    </div>
    <div class="left-bottom">
     <h3>NEXT</h3>
-    We'll create the actual data stream.
+    We'll create the actual data&nbsp;stream.
    </div>
  -
   title: Add a data stream
@@ -344,9 +344,7 @@ steps:
      <code class="nowrap">my-first-bucket</code>.
    </div>
    <div>
-    You've created an ongoing <i>data stream</i> from
-    the <em>west&nbsp;cluster</em>
-    to the <em>east&nbsp;cluster</em>.
+    Your data&nbsp;stream works!
    </div>
 
    <style>
@@ -365,8 +363,8 @@ steps:
    <div>
     Let's change a document in the
     <em>west&nbsp;cluster</em>
-    to try out data streaming
-    of mutations.
+    to see whether your data&nbsp;stream
+    handles mutations.
    </div>
    <div>
     <h3>On the right&nbsp;
