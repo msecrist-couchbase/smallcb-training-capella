@@ -343,7 +343,7 @@ steps:
      <code class="nowrap">my-first-bucket</code>.
    </div>
    <div>
-    Your data&nbsp;stream works!
+    Your ongoing data&nbsp;stream works!
    </div>
 
    <style>
@@ -438,8 +438,6 @@ steps:
     That and other features
     makes Couchbase a great fit
     for applications that need
-    a <span class="nowrap">high-performance</span>
-    database that can handle
     <em>flexible, distributed, <span class="nowrap">multi-location</span></em>
     data&nbsp;flows.
    </div>
@@ -450,6 +448,9 @@ steps:
       Cross-datacenter Replication (XDCR) Documentation
     </a>
    </div>
+   <div>
+    Thanks!
+   </div>
 
    <style>
      body .container main.step-mission-success .right .diagram-area {
@@ -458,5 +459,9 @@ steps:
      body .container main.step-mission-success .right .diagram-area .diagram-more {
        display: block !important;
        opacity: 1 !important;
+       color: #777;
+     }
+     body .container main.step-mission-success .right .diagram-area .diagram-more img {
+       opacity: 0.5;
      }
    </style>
