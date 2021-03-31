@@ -164,7 +164,7 @@ steps:
     <p>Then connect the source <em>west&nbsp;cluster</em>,
        to the remote <em>east&nbsp;cluster</em>.
     </p>
-    <p>Lastly, start the data stream by specifying
+    <p>Lastly, start a data stream between
        source and destination buckets and watch
        your first mutation get replicated.
     </p>
@@ -302,7 +302,10 @@ steps:
         </div>
     </h3>
     <ul>
-     <li>Click ADD REPLICATION to create the data replication stream... and save it.
+     <li>Click ADD REPLICATION to specify the data replication stream...
+         (use <code class="nowrap">beer-sample</code>
+         as the source bucket)
+         and save it.
          <span class="check check-rep-east">&check;</span>
          <style>
            article.checked-w-cluster-rep-east .check-rep-east {
@@ -315,7 +318,7 @@ steps:
    <div>
     <br/>
     <h3>REMEMBER</h3>
-    The empty, remote bucket you created is:
+    The empty, remote bucket you created was:
     <b>my-first-bucket</b>
    </div>
    <div class="left-bottom">
@@ -428,9 +431,8 @@ steps:
    <div>
     <b>Data streaming</b>
     across multiple locations
-    for your enterprise database
-    apps is <i>straightforwards
-    and flexible</i> with Couchbase.
+    for your enterprise applications is
+    <i>easy and flexible</i> with Couchbase.
    </div>
    <div>
     You can also use more features like
