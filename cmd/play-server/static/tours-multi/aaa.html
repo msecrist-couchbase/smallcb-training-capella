@@ -139,7 +139,17 @@ body * {
 }
 
 .container article .left ul {
-  padding-left: 1rem;
+  padding: 0 0 0 1rem;
+}
+
+.container article .left h3 {
+  margin: 0 0 0.5em 0;
+  padding: 0;
+}
+
+.container article .left p {
+  margin: 0 0 0.7em 0;
+  padding: 0;
 }
 
 .container article .right {
@@ -235,7 +245,9 @@ input#none:checked ~ .container article .right #panel-none {
   padding-left: 10px;
 }
 
-.step-nav {
+.container article .left .step > div.step-nav {
+  display: flex;
+  flex-direction: row;
   padding: 30px 0 25px 0;
   white-space: nowrap;
 }
@@ -331,6 +343,11 @@ input[type="checkbox"].step-nav-popup:checked ~ .step-x .step .step-nav label .s
 
 code {
   font-family: Courier;
+}
+
+em {
+  font-weight: bold;
+  font-style: italic;
 }
 
 .background-color-white {
