@@ -13,7 +13,7 @@ panels:
   id: e-cluster
   title: east cluster
   title-more: "username: ${s[1].CBUser} &nbsp;&nbsp; password: ${s[1].CBPswd}"
-  color: "#87d642"
+  color: "#87b642"
   iframe-src: http://${document.location.hostname}:${s[1].ContainerPortBase}/ui/index.html?lu=${s[1].CBUser}&lp=${s[1].CBPswd}
 
 diagram:
@@ -159,14 +159,14 @@ steps:
    </div>
    <div>
     <h3>Your mission</h3>
-    <p>Create a new <b>bucket</b> (database)
-       in the destination <i>east&nbsp;cluster</i>.
+    <p>Create a destination <b>bucket</b> (database)
+       in the <i>east&nbsp;cluster</i>.
     </p>
-    <p>Then connect the <i>west&nbsp;cluster</i>
+    <p>And, connect the <i>west&nbsp;cluster</i>
        to the <b>remote</b> <i>east&nbsp;cluster</i>.
     </p>
-    <p>Lastly, start a data stream between
-       <b>source</b> and <b>destination</b> buckets
+    <p>Lastly, start an ongoing data stream
+       between buckets
        and watch your first mutation get replicated.
     </p>
    </div>
