@@ -22,7 +22,7 @@ diagram:
   <div class="diagram-more"
        style="position: absolute; display: none; opacity: 0.3; user-select: none;">
     <div class="animated-stream"
-         style="position: absolute; top: 35px; left: 25px; transform-origin: top left; height: 2px; width: 57px; transform: rotateZ(47deg);"></div>
+         style="position: absolute; top: 35px; left: 25px; transform-origin: top left; height: 3px; width: 57px; transform: rotateZ(47deg);"></div>
     <div style="position: absolute; top: 80px; left: 60px;">
       <img src="./img/db-purple.svg"
            style="position: absolute; top: 0px; left: 0px; width: 20px;"/>
@@ -30,7 +30,7 @@ diagram:
     </div>
 
     <div class="animated-stream"
-         style="position: absolute; top: 30px; left: 25px; transform-origin: top left; height: 2px; width: 80px; transform: rotateZ(75deg);"></div>
+         style="position: absolute; top: 30px; left: 25px; transform-origin: top left; height: 3px; width: 80px; transform: rotateZ(75deg);"></div>
     <div style="position: absolute; top: 110px; left: 40px;">
       <img src="./img/db-purple.svg"
            style="position: absolute; top: 0px; left: 0px; width: 20px;"/>
@@ -38,7 +38,7 @@ diagram:
     </div>
 
     <div class="animated-stream"
-         style="position: absolute; top: 30px; left: 25px; transform-origin: top left; height: 2px; width: 105px; transform: rotateZ(88deg);"></div>
+         style="position: absolute; top: 30px; left: 25px; transform-origin: top left; height: 3px; width: 105px; transform: rotateZ(88deg);"></div>
     <div style="position: absolute; top: 140px; left: 20px;">
       <img src="./img/db-purple.svg"
            style="position: absolute; top: 0px; left: 0px; width: 20px;"/>
@@ -49,7 +49,7 @@ diagram:
   <div class="diagram-more"
        style="position: absolute; display: none; opacity: 0.3; user-select: none; left: 250px;">
     <div class="animated-stream"
-         style="position: absolute; top: 35px; left: 25px; transform-origin: top left; height: 2px; width: 57px; transform: rotateZ(47deg);"></div>
+         style="position: absolute; top: 35px; left: 25px; transform-origin: top left; height: 3px; width: 57px; transform: rotateZ(47deg);"></div>
     <div style="position: absolute; top: 80px; left: 60px;">
       <img src="./img/db-green.svg"
            style="position: absolute; top: 0px; left: 0px; width: 20px;"/>
@@ -57,7 +57,7 @@ diagram:
     </div>
 
     <div class="animated-stream"
-         style="position: absolute; top: 30px; left: 25px; transform-origin: top left; height: 2px; width: 80px; transform: rotateZ(75deg);"></div>
+         style="position: absolute; top: 30px; left: 25px; transform-origin: top left; height: 3px; width: 80px; transform: rotateZ(75deg);"></div>
     <div style="position: absolute; top: 110px; left: 40px;">
       <img src="./img/db-green.svg"
            style="position: absolute; top: 0px; left: 0px; width: 20px;"/>
@@ -65,7 +65,7 @@ diagram:
     </div>
 
     <div class="animated-stream"
-         style="position: absolute; top: 30px; left: 25px; transform-origin: top left; height: 2px; width: 105px; transform: rotateZ(88deg);"></div>
+         style="position: absolute; top: 30px; left: 25px; transform-origin: top left; height: 3px; width: 105px; transform: rotateZ(88deg);"></div>
     <div style="position: absolute; top: 140px; left: 20px;">
       <img src="./img/db-green.svg"
            style="position: absolute; top: 0px; left: 0px; width: 20px;"/>
@@ -139,7 +139,8 @@ steps:
   title: Welcome
   content: |
    <div>
-    It's easy to create a <i>data&nbsp;stream</i>
+    Let's see how simple it is
+    to create a <i>data&nbsp;stream</i>
     between two Couchbase clusters.
    </div>
    <div>
@@ -159,7 +160,7 @@ steps:
    </div>
    <div>
     <h3>Your mission</h3>
-    <p>Create a new bucket (database)
+    <p>Create a new bucket (or database)
        in the destination <em>east&nbsp;cluster</em>.
     </p>
     <p>Then connect the source <em>west&nbsp;cluster</em>
@@ -170,7 +171,7 @@ steps:
        your first mutation get replicated.
     </p>
    </div>
-   <div class="left-bottom">
+   <div class="left-bottom" style="margin-bottom: -0.8rem;">
     <h3>&nbsp&nbsp&nbsp;&nbsp;&nbsp;&nbsp&nbsp&nbsp&nbsp;Begin Here
         <div style="display: inline-block; transform-origin: left center; transform: rotateZ(60deg) scaleX(2);">
           &#x279E;
@@ -192,7 +193,7 @@ steps:
     - q('form input[ng-model="bucketConf.name"]').value == '' && (qLast.value = 'my-first-bucket') && qLast.dispatchEvent && qLast.dispatchEvent(new InputEvent("input")) && false
   content: |
    <div>
-    Add a bucket (database) to be the destination of your data stream.
+    Add a new bucket to be the destination of your data stream.
    </div>
    <div>
     <h3>On the right&nbsp;
@@ -251,7 +252,7 @@ steps:
     <ul>
      <li>On the XDCR (cross-datacenter replication) screen...
      </li>
-     <li>Click ADD REMOTE to create the reference.
+     <li>Click ADD REMOTE to create the reference to the <i>east</i>.
      </li>
      <li>Save the pre-filled form.
          <span class="check check-cluster-connect">&check;</span>
@@ -293,8 +294,7 @@ steps:
     - (q('select[formcontrolname=toCluster]').value || '').indexOf('east') >= 0 && 'rep-toCluster'
   content: |
    <div>
-    Specify from and to buckets and
-    the remote cluster that you had just set up.
+    Let's create a data replication stream.
    </div>
    <div>
     <h3>On the right&nbsp;
@@ -319,7 +319,7 @@ steps:
    <div>
     <h3>REMEMBER</h3>
     The empty, remote bucket you created was:
-    <b>my-first-bucket</b>
+    <code class="nowrap">my-first-bucket</code>
    </div>
    <div class="left-bottom">
     <br/>
@@ -336,8 +336,11 @@ steps:
   content: |
    <div>
      Looking at the
-     <em>east&nbsp;cluster</em>,
-     we can now see data appearing in
+     <em>east&nbsp;cluster</em>...
+   </div>
+   <div class="left-bottom">
+    <h3>NOTICE</h3>
+     You can now see data appearing in
      <code class="nowrap">my-first-bucket</code>.
    </div>
    <div>
@@ -361,7 +364,7 @@ steps:
   content: |
    <div>
     Let's change a document in the
-    <em>west&nbsp;cluster</em>,
+    <em>west&nbsp;cluster</em>
     to try out data streaming
     of mutations.
    </div>
@@ -398,8 +401,7 @@ steps:
     - q('qw-collection-menu div select:first-child').value != 'my-first-bucket' && !qLast.getAttribute('data-touched') && (qLast.value = 'my-first-bucket') && qLast.dispatchEvent(new UIEvent('change')) && qLast.setAttribute('data-touched', true) && false
   content: |
    <div>
-    Let's see if your change was replicated
-    to the
+    Let's see if your change was replicated to the
     <em>east&nbsp;cluster</em>.
    </div>
    <div>
@@ -413,7 +415,7 @@ steps:
      </li>
      <li>Select the <code class="nowrap">my-first-bucket</code> bucket.
      </li>
-     <li>Did your document change propagate to the <em>east</em>?
+     <li>Was your document change propagated to the <em>east</em>?
      </li>
     </ul>
    </div>
@@ -425,23 +427,21 @@ steps:
      }
    </style>
  -
-  title: Learn more
+  title: Mission success
   panel: none
   content: |
    <div>
-    Mission success!
+    The takeaway...
    </div>
    <div>
-    <b>Data streaming</b>
-    across multiple locations
-    for your enterprise applications is
-    <i>easy and flexible</i> with Couchbase.
+    <b>Data streaming</b> between clusters is straightforwards.
    </div>
    <div>
-    You can also use more features like
-    multi-master (bi-directional) replication,
-    data filtering expressions, compression,
-    encryption, mobile sync and more.
+    That and other features
+    makes Couchbase a great fit
+    for applications
+    that need flexible, distributed, multi-location data flows
+    from a high-performance database.
    </div>
    <div>
     Learn more:
@@ -452,11 +452,11 @@ steps:
    </div>
 
    <style>
-     body .container main.step-learn-more .right .diagram-area {
+     body .container main.step-mission-success .right .diagram-area {
        min-height: 200px;
      }
-     body .container main.step-learn-more .right .diagram-area .diagram-more {
+     body .container main.step-mission-success .right .diagram-area .diagram-more {
        display: block !important;
-       opacity: 1;
+       opacity: 1 !important;
      }
    </style>
