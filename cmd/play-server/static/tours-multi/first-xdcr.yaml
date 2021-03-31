@@ -217,6 +217,7 @@ steps:
     }
    checks:
     - document.body.setAttribute('data-remote-east', (q('ui-view h4').innerText == 'Remote Clusters' && q('ui-view .cbui-table-cell[title="east"]').tagName && 'y') || 'n') && false
+    - q('body[data-remote-east=y]').tagName && 'cluster-connect'
     - "q('input#cluster_reference_name').value == '' && (qLast.value = 'east') && qLast.dispatchEvent && qLast.dispatchEvent(new InputEvent('input')) && false"
     - "q('input#cluster_reference_name').value == 'east' && 'cluster-name'"
     - "q('input#cluster_reference_hostname').value == '' && (qLast.value = '${s[1].ContainerIP}') && qLast.dispatchEvent && qLast.dispatchEvent(new InputEvent('input')) && false"
@@ -292,6 +293,12 @@ steps:
    </ul>
 
    Click the <b>Save</b> button.
+   <span class="check check-cluster-connect">&check;</span>
+   <style>
+     article.checked-w-cluster-cluster-connect .check-cluster-connect {
+       visibility: visible !important;
+     }
+   </style>
  -
   title: Add a data stream
   panel: w-cluster
@@ -312,6 +319,7 @@ steps:
    checks:
     - document.body.setAttribute('data-h1', q('header > h1 > span:last-child').innerText.trim().replaceAll(' ', '')) && false
     - document.body.setAttribute('data-rep-east', (q('ui-view ng-component div:last-child .cbui-table-header .cbui-table-cell:first-child').innerText == 'source bucket' && q('ui-view ng-component div:last-child .cbui-table-cell[title="beer-sample"]').tagName && 'y') || 'n') && false
+    - "q('body[data-rep-east=y]').tagName && 'rep-east'"
     - "(q('select[formcontrolname=fromBucket]').value || '').indexOf('beer-sample') >= 0 && 'rep-fromBucket'"
     - "q('input#replication_to_bucket').value == 'my-first-bucket' && 'rep-toBucket'"
     - "(q('select[formcontrolname=toCluster]').value || '').indexOf('east') >= 0 && 'rep-toCluster'"
@@ -373,6 +381,12 @@ steps:
    </ul>
 
    Click <b>Save&nbsp;Replication</b>.
+   <span class="check check-rep-east">&check;</span>
+   <style>
+     article.checked-w-cluster-rep-east .check-rep-east {
+       visibility: visible !important;
+     }
+   </style>
  -
   title: Congratulations
   panel: e-cluster
