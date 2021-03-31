@@ -139,7 +139,8 @@ steps:
   title: Welcome
   content: |
    <div>
-    It's easy to create a data stream between two Couchbase clusters.
+    It's easy to create a <i>data&nbsp;stream</i>
+    between two Couchbase clusters.
    </div>
    <div>
     <h3>On the right&nbsp;
@@ -161,7 +162,7 @@ steps:
     <p>Create a new bucket (database)
        in the destination <em>east&nbsp;cluster</em>.
     </p>
-    <p>Then connect the source <em>west&nbsp;cluster</em>,
+    <p>Then connect the source <em>west&nbsp;cluster</em>
        to the remote <em>east&nbsp;cluster</em>.
     </p>
     <p>Lastly, start a data stream between
@@ -292,7 +293,7 @@ steps:
     - (q('select[formcontrolname=toCluster]').value || '').indexOf('east') >= 0 && 'rep-toCluster'
   content: |
    <div>
-    Select from and to buckets and
+    Specify from and to buckets and
     the remote cluster that you had just set up.
    </div>
    <div>
