@@ -53,7 +53,7 @@ diagram:
     <div style="position: absolute; top: 80px; left: 60px;">
       <img src="./img/db-green.svg"
            style="position: absolute; top: 0px; left: 0px; width: 20px;"/>
-      <div style="position: absolute; top: 0px; left: 25px" class="small">warehouse-w01 cluster</div>
+      <div style="position: absolute; top: 0px; left: 25px" class="small">store-e03 cluster</div>
     </div>
 
     <div class="animated-stream"
@@ -61,7 +61,7 @@ diagram:
     <div style="position: absolute; top: 110px; left: 40px;">
       <img src="./img/db-green.svg"
            style="position: absolute; top: 0px; left: 0px; width: 20px;"/>
-      <div style="position: absolute; top: 0px; left: 25px" class="small">store-w02 cluster</div>
+      <div style="position: absolute; top: 0px; left: 25px" class="small">store-e06 cluster</div>
     </div>
 
     <div class="animated-stream"
@@ -69,7 +69,7 @@ diagram:
     <div style="position: absolute; top: 140px; left: 20px;">
       <img src="./img/db-green.svg"
            style="position: absolute; top: 0px; left: 0px; width: 20px;"/>
-      <div style="position: absolute; top: 0px; left: 25px" class="small">vehicle-17 db</div>
+      <div style="position: absolute; top: 0px; left: 25px" class="small">store-e09 cluster</div>
     </div>
   </div>
 
