@@ -227,15 +227,15 @@ steps:
    checks:
     - document.body.setAttribute('data-remote-east', (q('ui-view h4').innerText == 'Remote Clusters' && q('ui-view .cbui-table-cell[title="east"]').tagName && 'y') || 'n') && false
     - q('body[data-remote-east=y]').tagName && 'cluster-connect'
-    - "q('input#cluster_reference_name').value == '' && (qLast.value = 'east') && qLast.dispatchEvent && qLast.dispatchEvent(new InputEvent('input')) && false"
-    - "q('input#cluster_reference_name').value == 'east' && 'cluster-name'"
-    - "q('input#cluster_reference_hostname').value == '' && (qLast.value = '${s[1].ContainerIP}') && qLast.dispatchEvent && qLast.dispatchEvent(new InputEvent('input')) && false"
-    - "q('input#cluster_reference_hostname').value == '${s[1].ContainerIP}' && 'cluster-hostname'"
-    - "(q('input[formcontrolname=username]').value == '' || qLast.value == 'Administrator') && (qLast.value = '${s[1].CBUser}') && qLast.dispatchEvent && qLast.dispatchEvent(new InputEvent('input')) && false"
-    - "q('input[formcontrolname=username]').value == '${s[1].CBUser}' && 'cluster-username'"
-    - "q('input[formcontrolname=password]').value == '' && (qLast.value = '${s[1].CBPswd}') && qLast.dispatchEvent && qLast.dispatchEvent(new InputEvent('input')) && false"
-    - "q('input[formcontrolname=password]').value == '${s[1].CBPswd}' && 'cluster-password'"
-    - "q('.modal-dialog .panel-header h2').innerText == 'Add Remote Cluster' && (document.body.scrollTop = 0) && false"
+    - q('input#cluster_reference_name').value == '' && (qLast.value = 'east') && qLast.dispatchEvent && qLast.dispatchEvent(new InputEvent('input')) && false
+    - q('input#cluster_reference_name').value == 'east' && 'cluster-name'
+    - q('input#cluster_reference_hostname').value == '' && (qLast.value = '${s[1].ContainerIP}') && qLast.dispatchEvent && qLast.dispatchEvent(new InputEvent('input')) && false
+    - q('input#cluster_reference_hostname').value == '${s[1].ContainerIP}' && 'cluster-hostname'
+    - (q('input[formcontrolname=username]').value == '' || qLast.value == 'Administrator') && (qLast.value = '${s[1].CBUser}') && qLast.dispatchEvent && qLast.dispatchEvent(new InputEvent('input')) && false
+    - q('input[formcontrolname=username]').value == '${s[1].CBUser}' && 'cluster-username'
+    - q('input[formcontrolname=password]').value == '' && (qLast.value = '${s[1].CBPswd}') && qLast.dispatchEvent && qLast.dispatchEvent(new InputEvent('input')) && false
+    - q('input[formcontrolname=password]').value == '${s[1].CBPswd}' && 'cluster-password'
+    - q('.modal-dialog .panel-header h2').innerText == 'Add Remote Cluster' && (document.body.scrollTop = 0) && false
   content: |
    <div>
     In the <em>west&nbsp;cluster</em> (the source cluster)
@@ -286,10 +286,10 @@ steps:
    checks:
     - document.body.setAttribute('data-h1', q('header > h1 > span:last-child').innerText.trim().replaceAll(' ', '')) && false
     - document.body.setAttribute('data-rep-east', (q('ui-view ng-component div:last-child .cbui-table-header .cbui-table-cell:first-child').innerText == 'source bucket' && q('ui-view ng-component div:last-child .cbui-table-cell[title="beer-sample"]').tagName && 'y') || 'n') && false
-    - "q('body[data-rep-east=y]').tagName && 'rep-east'"
-    - "(q('select[formcontrolname=fromBucket]').value || '').indexOf('beer-sample') >= 0 && 'rep-fromBucket'"
-    - "q('input#replication_to_bucket').value == 'my-first-bucket' && 'rep-toBucket'"
-    - "(q('select[formcontrolname=toCluster]').value || '').indexOf('east') >= 0 && 'rep-toCluster'"
+    - q('body[data-rep-east=y]').tagName && 'rep-east'
+    - (q('select[formcontrolname=fromBucket]').value || '').indexOf('beer-sample') >= 0 && 'rep-fromBucket'
+    - q('input#replication_to_bucket').value == 'my-first-bucket' && 'rep-toBucket'
+    - (q('select[formcontrolname=toCluster]').value || '').indexOf('east') >= 0 && 'rep-toCluster'
   content: |
    <div>
     Select from and to buckets and
@@ -316,7 +316,6 @@ steps:
     </ul>
    </div>
    <div>
-    <br/>
     <h3>REMEMBER</h3>
     The empty, remote bucket you created was:
     <b>my-first-bucket</b>
@@ -360,10 +359,10 @@ steps:
     - nav.nav-sidebar a[ui-sref="app.admin.docs.editor"]
   content: |
    <div>
-    You can change a document in the
+    Let's change a document in the
     <em>west&nbsp;cluster</em>,
-    to see whether data streaming
-    of mutations works.
+    to try out data streaming
+    of mutations.
    </div>
    <div>
     <h3>On the right&nbsp;
@@ -428,6 +427,9 @@ steps:
   title: Learn more
   panel: none
   content: |
+   <div>
+    Mission success!
+   </div>
    <div>
     <b>Data streaming</b>
     across multiple locations
