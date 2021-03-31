@@ -13,6 +13,7 @@
   white-space: nowrap;
   z-index: 11000;
 }
+
 /* Override: panel-header & Remove "Dev Preview Text" */
 .playgHelp.playgShow > .panel-header.playg-header { border-radius: 0; }
 .root-container.ng-scope > .row.ng-scope > .red-1.nowrap { display: none; }
@@ -96,6 +97,7 @@ body.modal-open .panel.dialog .panel-footer .playgHelp {
   padding: 0.5rem 1rem 5rem 0.75rem;
   z-index: 1;
 }
+
 .playgTour.playgShow {
   display: block;
 }
@@ -160,6 +162,7 @@ body.modal-open .panel.dialog .panel-footer .playgHelp {
   font-size: 12px;
   color: #318495;
 }
+
 .playgTour .playgTourContent code.playg-multiline {
   width: 100%;
   margin: 8px 0 8px 0;
@@ -290,7 +293,7 @@ var playgHelpData = {{.injectData}};
 
   function checkPlayLogin() {
     checkPlayLoginN += 1;
-    if (checkPlayLoginN > 4000) {
+    if (checkPlayLoginN > 5000) {
       return;
     }
 
@@ -322,21 +325,23 @@ var playgHelpData = {{.injectData}};
           if (window.self !== window.top) { // When in iframe.
             var trys = 0;
 
-            setTimeout(signIn, 200);
+            signIn();
 
             function signIn() {
               if (trys < 400) {
                 trys += 1;
 
+                setTimeout(signIn, 200);
+
                 var signIn = document.querySelector(
                   '.sign-in-background + .flex-center form .panel-footer button[type=submit]');
                 if (signIn && signIn.click) {
+                  console.log("signIn.click()", lu, trys);
+
                   signIn.click();
 
-                  return;
+                  trys += 100;
                 }
-
-                setTimeout(signIn, 200);
               }
             }
           }
@@ -365,6 +370,12 @@ var playgHelpData = {{.injectData}};
       el.style.top = "auto";
       el.style.bottom = "0";
       el.style.zIndex = 0;
+
+      var resp = document.querySelector(
+        'head link[rel="stylesheet"][href="app/css/cbui-responsive.css"]');
+      if (resp) {
+        resp.parentElement.removeChild(resp);
+      }
     }
 
     el.innerHTML =
@@ -446,6 +457,11 @@ var playgHelpData = {{.injectData}};
     }
 
     if (window.self !== window.top) {
+      var aw = document.querySelector('.alert-wrapper');
+      if (aw) {
+        aw.style.display = "none";
+      }
+
       return; // In iframe.
     }
 
@@ -793,7 +809,7 @@ window.addEventListener("message",
 function playgHandleMessage(e, tries) {
   playgChecksEvent = null;
 
-  if (e.data.clicks && e.data.clicks.length > 0 && tries < 10) {
+  if (e.data.clicks && e.data.clicks.length > 0 && tries < 50) {
     var el = document.querySelector(e.data.clicks[0]);
     if (el && el.click) {
       el.click();
@@ -826,7 +842,12 @@ function playgChecks() {
 
     for (let check of (e.data['checks'] || [])) {
       var ctx = { o: null,
-                  q: function(s) { return document.querySelector(s) || {}; } };
+                  qLast: null,
+                  q: function(s) {
+                    ctx.qLast = document.querySelector(s) || {};
+                    return ctx.qLast;
+                  }
+                };
 
       with (ctx) eval('o = ' + check);
 

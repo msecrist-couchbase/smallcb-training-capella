@@ -53,12 +53,21 @@ body * {
 }
 
 .flex-row .controls .close {
+  position: relative;
+  top: 0.7rem;
+  background-color: #ddd;
+  border-radius: 50%;
+  padding: .25rem .4rem .2rem .4rem;
+  text-align: center;
+  font-size: .9rem;
   color: #777;
   cursor: pointer;
 }
 
 .flex-row .controls .close:hover {
+  background-color: #ccc;
   color: black;
+  transition: all .4s ease;
 }
 
 .container {
@@ -79,6 +88,7 @@ body * {
 }
 
 .container header h1 {
+  flex-grow: 1;
   margin: 0;
   padding: 0;
   font-size: 1rem;
@@ -87,7 +97,6 @@ body * {
 }
 
 .container header a.logout {
-  flex-grow: 1;
   text-align: right;
   font-weight: 1.5;
 }
@@ -130,7 +139,17 @@ body * {
 }
 
 .container article .left ul {
-  padding-left: 1rem;
+  padding: 0 0 0 1rem;
+}
+
+.container article .left h3 {
+  margin: 0 0 0.5em 0;
+  padding: 0;
+}
+
+.container article .left p {
+  margin: 0 0 0.7em 0;
+  padding: 0;
 }
 
 .container article .right {
@@ -160,6 +179,7 @@ body * {
 }
 .container article .right .diagram-area .diagram label:hover {
   background-color: #e0e0e0;
+  transition: background-color .25s ease;
 }
 .container article .right .diagram-area .diagram label > * {
   position: absolute;
@@ -225,7 +245,9 @@ input#none:checked ~ .container article .right #panel-none {
   padding-left: 10px;
 }
 
-.step-nav {
+.container article .left .step > div.step-nav {
+  display: flex;
+  flex-direction: row;
   padding: 30px 0 25px 0;
   white-space: nowrap;
 }
@@ -246,6 +268,7 @@ input[type="checkbox"].step-nav-popup {
 input[type="checkbox"].step-nav-popup:checked ~ .step-x .step .step-nav label .step-nav-popup {
   display: block;
   position: absolute;
+  width: 210px;
   max-height: 500px;
   bottom: 20px;
   left: -5rem;
@@ -262,12 +285,12 @@ input[type="checkbox"].step-nav-popup:checked ~ .step-x .step .step-nav label .s
 }
 
 .step .step-nav label .step-nav-popup a {
-  display: block;
+  display: flex;
   margin: 0 6px 0 6px;
   border: 2px solid #FFF;
-  padding: 0 6px 0 6px;
-  white-space: nowrap;
+  padding: 0 5px 0 5px;
   line-height: 1.2rem;
+  white-space: nowrap;
   text-decoration: none;
   cursor: pointer;
 }
@@ -278,6 +301,10 @@ input[type="checkbox"].step-nav-popup:checked ~ .step-x .step .step-nav label .s
 .step .step-nav label .step-nav-popup a:hover {
   border: 2px solid #c6dbf2;
   color: #333;
+}
+.step .step-nav label .step-nav-popup a span:last-child {
+  display: inline-block;
+  white-space: normal;
 }
 
 .step-nav button {
@@ -303,14 +330,36 @@ input[type="checkbox"].step-nav-popup:checked ~ .step-x .step .step-nav label .s
 .step-nav button:disabled {
   background-color: #d4d4d4;
   color: #f4f4f4;
+  cursor: initial;
+}
+
+.step-nav button:first-child {
+  background-color: #d4d4d4;
+  color: white;
+}
+.step-nav button:first-child:hover {
+  color: #999;
+}
+.step-nav button:first-child:disabled {
+  color: #f4f4f4;
 }
 
 .container article .small {
   font-size: .75rem;
 }
 
+.check {
+  visibility: hidden;
+  color: green;
+}
+
 code {
   font-family: Courier;
+}
+
+em {
+  font-weight: bold;
+  font-style: italic;
 }
 
 .background-color-white {
@@ -376,68 +425,6 @@ function loadTour(data, sess) {
     document.querySelector(".diagram-area").style = `height: ${diagram.height || 0};`;
   }
 
-  var rightEl = document.querySelector(".right");
-
-  for (let panel of data.panels) {
-    var input = document.createElement("input");
-
-    input.type = "radio";
-    input.className = "display-none";
-    input.name = "panel";
-    input.id = panel.id;
-
-    document.body.insertBefore(input, document.body.firstChild);
-
-    var diagramLabelEl = document.querySelector(`.right .diagram label[for="${panel.id}"]`) || {};
-    var diagramLabelStyle = diagramLabelEl.style || {};
-
-    var ctx;
-
-    ctx = { s: sessArr, o: '' };
-    if (panel['title-more']) {
-      with (ctx) eval('o = `' + panel['title-more'] + '`');
-    }
-
-    var titleMore = ctx.o;
-
-    ctx = { s: sessArr, o: '' };
-    if (panel['iframe-src']) {
-      with (ctx) eval('o = `' + panel['iframe-src'] + '`');
-    }
-
-    var iframeSrc = ctx.o;
-
-    var div = document.createElement("div");
-
-    div.id = "panel-" + panel.id;
-    div.className = "panel";
-    div.innerHTML =
-      `<div class="flex-row header" style="border-bottom: 2px solid ${panel.color || '#444'};">
-         <label class="title"
-                style="width: ${diagramLabelStyle.width || 'auto'}; height: ${diagramLabelStyle.height || 'auto'};">
-           ${diagramLabelEl.innerHTML || panel.title}</label>
-         <div class="title-more">${titleMore}</div>
-         <div class="title-more"><a href="${iframeSrc}" target="_blank">[open &#x2B08;]</a></div>
-         <div class="controls">
-            <label class="close" for="none">[X]</label>
-         </div>
-       </div>
-       <iframe id="iframe-${panel.id}"
-               src="${iframeSrc}"
-               sandbox="allow-same-origin allow-scripts allow-forms allow-popups"></iframe>
-       <style>
-         input#${panel.id}:checked ~ .container article .right #panel-${panel.id} {
-           display: flex;
-         }
-         input#${panel.id}:checked ~ .container article .right .diagram-area .diagram label[for="${panel.id}"] {
-           border: 1px solid #444;
-           background-color: #eee;
-         }
-       </style>`;
-
-    rightEl.appendChild(div);
-  }
-
   var leftEl = document.querySelector(".left");
 
   var popupInputEl = document.createElement("input");
@@ -474,7 +461,7 @@ function loadTour(data, sess) {
     for (var k = 0; k < data.steps.length; k++) {
       popup.push(`<a onclick="stepShow(${k})"
                      class="${k == i ? 'step-nav-popup-cur' : ''}">
-                    ${k + 1} - ${data.steps[k].title}</a>`);
+                    <span>${k + 1}.</span>&nbsp;<span>${data.steps[k].title}</span></a>`);
     }
 
     popup.push('</div>');
@@ -519,6 +506,73 @@ function loadTour(data, sess) {
   }
 
   stepShow(0);
+
+  setTimeout(function() { loadTourPanels(data, sessArr) }, 500);
+}
+
+function loadTourPanels(data, sessArr) {
+  var rightEl = document.querySelector(".right");
+
+  for (let panel of data.panels) {
+    var input = document.createElement("input");
+
+    input.type = "radio";
+    input.className = "display-none";
+    input.name = "panel";
+    input.id = panel.id;
+
+    document.body.insertBefore(input, document.body.firstChild);
+
+    var diagramLabelEl = document.querySelector(`.right .diagram label[for="${panel.id}"]`) || {};
+    var diagramLabelStyle = diagramLabelEl.style || {};
+
+    var ctx;
+
+    ctx = { s: sessArr, o: '' };
+    if (panel['title-more']) {
+      with (ctx) eval('o = `' + panel['title-more'] + '`');
+    }
+
+    var titleMore = ctx.o;
+
+    ctx = { s: sessArr, o: '' };
+    if (panel['iframe-src']) {
+      with (ctx) eval('o = `' + panel['iframe-src'] + '`');
+    }
+
+    var iframeSrc = ctx.o;
+
+    var div = document.createElement("div");
+
+    div.id = "panel-" + panel.id;
+    div.className = "panel";
+    div.innerHTML =
+      `<div class="flex-row header" style="border-bottom: 2px solid ${panel.color || '#444'};">
+         <label class="title"
+                style="width: ${diagramLabelStyle.width || 'auto'}; height: ${diagramLabelStyle.height || 'auto'};">
+           ${diagramLabelEl.innerHTML || panel.title}</label>
+         <div class="title-more">${titleMore}</div>
+         <div class="title-more"><a href="${iframeSrc}" target="_blank">[open &#x2B08;]</a></div>
+         <div class="controls">
+            <label class="close" for="none">X</label>
+         </div>
+       </div>
+       <iframe id="iframe-${panel.id}"
+               src="${iframeSrc}"
+               sandbox="allow-same-origin allow-scripts allow-forms allow-popups"></iframe>
+       <style>
+         input#${panel.id}:checked ~ .container article .right #panel-${panel.id} {
+           display: flex;
+         }
+         input#${panel.id}:checked ~ .container article .right .diagram-area .diagram label[for="${panel.id}"] {
+           border: 1px solid #444;
+           box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.2);
+           background-color: #eee;
+         }
+       </style>`;
+
+    rightEl.appendChild(div);
+  }
 }
 
 function stepShow(i) {
@@ -528,7 +582,8 @@ function stepShow(i) {
     var step = tourData.steps[i];
     if (step) {
       if (step.title) {
-        className += " step-" + step.title.trim().replaceAll(' ', '-').toLowerCase();
+        className += " step-" + step.title.trim()
+          .replaceAll('?', '').replaceAll(' ', '-').toLowerCase();
       }
 
       var panel = step.panel;

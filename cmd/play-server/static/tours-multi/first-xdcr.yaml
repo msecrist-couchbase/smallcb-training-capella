@@ -4,14 +4,14 @@ containers: 2
 
 panels:
  -
-  id: w-database
-  title: west database
+  id: w-cluster
+  title: west cluster
   title-more: "username: ${s[0].CBUser} &nbsp;&nbsp; password: ${s[0].CBPswd}"
   color: "#8762a0;"
   iframe-src: http://${document.location.hostname}:${s[0].ContainerPortBase}/ui/index.html?lu=${s[0].CBUser}&lp=${s[0].CBPswd}
  -
-  id: e-database
-  title: east database
+  id: e-cluster
+  title: east cluster
   title-more: "username: ${s[1].CBUser} &nbsp;&nbsp; password: ${s[1].CBPswd}"
   color: "#87d642"
   iframe-src: http://${document.location.hostname}:${s[1].ContainerPortBase}/ui/index.html?lu=${s[1].CBUser}&lp=${s[1].CBPswd}
@@ -20,64 +20,70 @@ diagram:
  height: 50px
  content: |
   <div class="diagram-more"
-       style="position: absolute; display: none; opacity: 0.3;">
-    <div style="position: absolute; top: 30px; left: 25px; border-top: 2px solid #777; transform-origin: top left; width: 60px; transform: rotateZ(50deg);"></div>
+       style="position: absolute; display: none; opacity: 0.3; user-select: none;">
+    <div class="animated-stream"
+         style="position: absolute; top: 35px; left: 25px; transform-origin: top left; height: 2px; width: 57px; transform: rotateZ(47deg);"></div>
     <div style="position: absolute; top: 80px; left: 60px;">
       <img src="./img/db-purple.svg"
            style="position: absolute; top: 0px; left: 0px; width: 20px;"/>
-      <div style="position: absolute; top: 0px; left: 25px" class="small">warehouse-w01</div>
+      <div style="position: absolute; top: 0px; left: 25px" class="small">warehouse-w01 cluster</div>
     </div>
 
-    <div style="position: absolute; top: 30px; left: 25px; border-top: 2px solid #777; transform-origin: top left; width: 80px; transform: rotateZ(75deg);"></div>
+    <div class="animated-stream"
+         style="position: absolute; top: 30px; left: 25px; transform-origin: top left; height: 2px; width: 80px; transform: rotateZ(75deg);"></div>
     <div style="position: absolute; top: 110px; left: 40px;">
       <img src="./img/db-purple.svg"
            style="position: absolute; top: 0px; left: 0px; width: 20px;"/>
-      <div style="position: absolute; top: 0px; left: 25px" class="small">store-w02</div>
+      <div style="position: absolute; top: 0px; left: 25px" class="small">store-w02 cluster</div>
     </div>
 
-    <div style="position: absolute; top: 30px; left: 25px; border-top: 2px solid #777; transform-origin: top left; width: 105px; transform: rotateZ(88deg);"></div>
+    <div class="animated-stream"
+         style="position: absolute; top: 30px; left: 25px; transform-origin: top left; height: 2px; width: 105px; transform: rotateZ(88deg);"></div>
     <div style="position: absolute; top: 140px; left: 20px;">
       <img src="./img/db-purple.svg"
            style="position: absolute; top: 0px; left: 0px; width: 20px;"/>
-      <div style="position: absolute; top: 0px; left: 25px" class="small">vehicle-17</div>
+      <div style="position: absolute; top: 0px; left: 25px" class="small">vehicle-17 db</div>
     </div>
   </div>
 
   <div class="diagram-more"
-       style="position: absolute; display: none; opacity: 0.3; left: 250px;">
-    <div style="position: absolute; top: 30px; left: 25px; border-top: 2px solid #777; transform-origin: top left; width: 60px; transform: rotateZ(50deg);"></div>
+       style="position: absolute; display: none; opacity: 0.3; user-select: none; left: 250px;">
+    <div class="animated-stream"
+         style="position: absolute; top: 35px; left: 25px; transform-origin: top left; height: 2px; width: 57px; transform: rotateZ(47deg);"></div>
     <div style="position: absolute; top: 80px; left: 60px;">
       <img src="./img/db-green.svg"
            style="position: absolute; top: 0px; left: 0px; width: 20px;"/>
-      <div style="position: absolute; top: 0px; left: 25px" class="small">port-e01</div>
+      <div style="position: absolute; top: 0px; left: 25px" class="small">store-e03 cluster</div>
     </div>
 
-    <div style="position: absolute; top: 30px; left: 25px; border-top: 2px solid #777; transform-origin: top left; width: 80px; transform: rotateZ(75deg);"></div>
+    <div class="animated-stream"
+         style="position: absolute; top: 30px; left: 25px; transform-origin: top left; height: 2px; width: 80px; transform: rotateZ(75deg);"></div>
     <div style="position: absolute; top: 110px; left: 40px;">
       <img src="./img/db-green.svg"
            style="position: absolute; top: 0px; left: 0px; width: 20px;"/>
-      <div style="position: absolute; top: 0px; left: 25px" class="small">store-e09</div>
+      <div style="position: absolute; top: 0px; left: 25px" class="small">store-e06 cluster</div>
     </div>
 
-    <div style="position: absolute; top: 30px; left: 25px; border-top: 2px solid #777; transform-origin: top left; width: 105px; transform: rotateZ(88deg);"></div>
+    <div class="animated-stream"
+         style="position: absolute; top: 30px; left: 25px; transform-origin: top left; height: 2px; width: 105px; transform: rotateZ(88deg);"></div>
     <div style="position: absolute; top: 140px; left: 20px;">
       <img src="./img/db-green.svg"
            style="position: absolute; top: 0px; left: 0px; width: 20px;"/>
-      <div style="position: absolute; top: 0px; left: 25px" class="small">store-e15</div>
+      <div style="position: absolute; top: 0px; left: 25px" class="small">store-e09 cluster</div>
     </div>
   </div>
 
-  <div class="diagram-more west-east-stream"
+  <div class="diagram-more west-east-stream animated-stream"
        style="display: none; position: absolute; top: 27px; left: 205px; height: 6px; width: 44px;"></div>
 
   <style>
-    .west-east-stream {
+    .animated-stream {
       background: linear-gradient(-90deg, #4287D6, white);
       background-repeat: repeat-x;
       background-size: 15px 6px;
-      animation: west-east-stream 4s infinite linear;
+      animation: animated-stream 8s infinite linear;
     }
-    @keyframes west-east-stream {
+    @keyframes animated-stream {
       0% {
         background-position: 0px 0px;
       }
@@ -87,27 +93,35 @@ diagram:
     }
   </style>
 
-  <label for="w-database"
+  <label for="w-cluster"
          class="title background-color-white"
          style="top: 10px; width: 12em; height: 35px;">
     <img src="./img/db-purple.svg"
          style="top: 0px; left: 0px; width: 50px;"/>
     <div style="top: 3px; left: 50px;">
-      west database
+      west cluster
       <div class="small">${s[0].ContainerIP}</div>
     </div>
   </label>
 
-  <label for="e-database"
+  <label for="e-cluster"
          class="title background-color-white"
          style="top: 10px; left: 250px; width: 12em; height: 35px;">
     <img src="./img/db-green.svg"
          style="top: 0px; left: 0px; width: 50px;"/>
     <div style="top: 3px; left: 50px;">
-      east database
+      east cluster
       <div class="small">${s[1].ContainerIP}</div>
     </div>
   </label>
+
+  <style>
+    img.small-db {
+      position: relative;
+      top: 1px;
+      height: 0.7rem;
+    }
+  </style>
 
 steps:
  -
@@ -121,285 +135,244 @@ steps:
    <br/><br/>
 
    <style>
-     body .container main.step-0 .right .diagram-area {
+     .container main.step-0 .right .diagram-area {
        min-height: 200px;
      }
-     body .container main.step-0 .right .diagram-area .diagram-more {
+     .container main.step-0 .right .diagram-area .diagram-more {
        display: block !important;
+     }
+
+     input#w-cluster:checked ~ .container main.step-0 .right .diagram-area,
+     input#e-cluster:checked ~ .container main.step-0 .right .diagram-area {
+       min-height: 50px !important;
+     }
+
+     input#w-cluster:checked ~ .container main.step-0 .right .diagram-area .diagram-more,
+     input#e-cluster:checked ~ .container main.step-0 .right .diagram-area .diagram-more {
+       display: none !important;
      }
    </style>
 
-   In this tour, we'll create a data stream
-   between two Couchbase databases:
+   So, let's create a data stream
+   between two Couchbase database clusters:
    <br/>
    <ul>
     <li>a <img src="./img/db-purple.svg" style="height: 1rem; position: relative; top: 3px;"/>
-        <code>west</code> database<br/></li>
+        <code>west</code> cluster<br/></li>
     <li>a <img src="./img/db-green.svg" style="height: 1rem; position: relative; top: 3px;"/>
-        <code>east</code> database<br/></li>
+        <code>east</code> cluster<br/></li>
    </ul>
 
-   The
-   <code>west</code> database will be
-   the source of our data stream.
-   <br/><br/>
-
-   The
-   <code>east</code> database will
-   be the destination of our data stream.
- -
-  title: The databases
-  content: |
-   The
-   <img src="./img/db-purple.svg" style="height: 0.7rem; possition: relative; top: 1px;"/>
-   <code>west</code> database is running on server
-   <code>${s[0].ContainerIP}</code>
-   <br/><br/>
-
-   The
-   <img src="./img/db-green.svg" style="height: 0.7rem; possition: relative; top: 1px;"/>
-   <code>east</code> database is running on server
-   <code>${s[1].ContainerIP}</code>
-   <br/><br/>
-
-   <b>Click</b> on their diagram icons
-   on the right to open their web-admin UI's.
+   <b>Click</b> on the boxes in the right diagram
+   to log into their web-admin UI's.
  -
   title: A new bucket in the east
-  panel: e-database
+  panel: e-cluster
   panel-tell:
    clicks:
     - "nav.nav-sidebar a[mn-tab=buckets]"
+   styles: |
+    body[data-my-first-bucket=n] .header-controls a[ng-click="bucketsCtl.addBucket()"] {
+      text-decoration: underline red 2px;
+    }
+   checks:
+    - document.body.setAttribute('data-my-first-bucket', (q('div[buckets="buckets.details"] .cbui-tablerow-title[title="my-first-bucket"]').tagName && 'y') || 'n') && false
+    - q('form input[ng-model="bucketConf.name"]').value == '' && (qLast.value = 'my-first-bucket') && qLast.dispatchEvent && qLast.dispatchEvent(new InputEvent("input")) && false
   content: |
-   Let's start by creating a new, empty bucket
+   Let's start by creating a new <i>bucket</i>
+   <aside style="display: inline;">(or data container)</aside>
    in the
-   <img src="./img/db-green.svg" style="height: 0.7rem; position: relative; top: 1px;"/>
-   <code>east</code> database.
+   <img src="./img/db-green.svg" class="small-db"/>
+   <code>east</code> cluster.
    <br/><br/>
 
-   A <i>bucket</i> is a logical container of data in Couchbase.
-   <br/><br/>
-
-   In the <code>east</code> web-admin UI...
+   In the main menu, click on <b>Buckets</b>.
    <br/><br/>
 
    Click on <b>ADD&nbsp;BUCKET</b>.
    <br/><br/>
 
-   In the <b>Add&nbsp;Data&nbsp;Bucket</b> dialog box that appears...
-   <br/><br/>
-
-   For the <b>Name</b> field, type
-   in a new bucket name,
-   such as
-   <code class="nowrap">"my-first-bucket"</code>.
-   <br/><br/>
+   We've already filled in...
+   <ul>
+   <li>
+    Name: <code class="nowrap">my-first-bucket</code>
+   </li>
+   </ul>
 
    Click the <b>Add&nbsp;Bucket</b> button.
- -
-  title: Buckets in the east
-  panel: e-database
-  panel-tell:
-   clicks:
-    - "nav.nav-sidebar a[mn-tab=buckets]"
-  content: |
-   You should now see three buckets in the
-   <img src="./img/db-green.svg" style="height: 0.7rem; possition: relative; top: 1px;"/>
-   <code>east</code> database:
-   <br/>
-
-   <ul>
-    <li><code>beer-sample</code></li>
-    <li><code>my-first-bucket</code></li>
-    <li><code>travel-sample</code></li>
-   </ul>
-
-   You can see that your new
-   <code class="nowrap">my-first-bucket</code>
-   is <b>empty</b> with 0 items.
    <br/><br/>
 
-   Next, let's examine the <code>west</code> database.
- -
-  title: Buckets in the west
-  panel: w-database
-  panel-tell:
-   clicks:
-    - "nav.nav-sidebar a[mn-tab=buckets]"
-  content: |
-   In the
-   <img src="./img/db-purple.svg" style="height: 0.7rem; possition: relative; top: 1px;"/>
-   <code>west</code> database,
-   there are only two buckets:
-   <br/>
-
-   <ul>
-    <li><code>beer-sample</code></li>
-    <li><code>travel-sample</code></li>
-   </ul>
-
-   Next, we are going to replicate data from the
-   <img src="./img/db-purple.svg" style="height: 0.7rem; possition: relative; top: 1px;"/>
-   west's <code class"nowrap">beer-sample</code>
-   bucket...
-   <br/><br/>
-
-   ...over into the
-   <img src="./img/db-green.svg" style="height: 0.7rem; possition: relative; top: 1px;"/>
-   east's
+   Your new
    <code class="nowrap">my-first-bucket</code>
-   that you had previously created.
+   will be empty with <b>0&nbsp;items</b>.
  -
-  title: Add a remote cluster
-  panel: w-database
+  title: Connect the clusters
+  panel: w-cluster
   panel-tell:
    clicks:
     - "nav.nav-sidebar a[mn-tab=replications]"
+   styles: |
+    body[data-remote-east=n] .header-controls a:last-child {
+      text-decoration: underline red 2px;
+    }
    checks:
-    - "(q('header h1 > span:last-child').innerText || '').trim() == 'XDCR Replications' && 'xdcr'"
+    - document.body.setAttribute('data-remote-east', (q('ui-view h4').innerText == 'Remote Clusters' && q('ui-view .cbui-table-cell[title="east"]').tagName && 'y') || 'n') && false
+    - q('body[data-remote-east=y]').tagName && 'cluster-connect'
+    - "q('input#cluster_reference_name').value == '' && (qLast.value = 'east') && qLast.dispatchEvent && qLast.dispatchEvent(new InputEvent('input')) && false"
     - "q('input#cluster_reference_name').value == 'east' && 'cluster-name'"
+    - "q('input#cluster_reference_hostname').value == '' && (qLast.value = '${s[1].ContainerIP}') && qLast.dispatchEvent && qLast.dispatchEvent(new InputEvent('input')) && false"
     - "q('input#cluster_reference_hostname').value == '${s[1].ContainerIP}' && 'cluster-hostname'"
+    - "(q('input[formcontrolname=username]').value == '' || qLast.value == 'Administrator') && (qLast.value = '${s[1].CBUser}') && qLast.dispatchEvent && qLast.dispatchEvent(new InputEvent('input')) && false"
     - "q('input[formcontrolname=username]').value == '${s[1].CBUser}' && 'cluster-username'"
+    - "q('input[formcontrolname=password]').value == '' && (qLast.value = '${s[1].CBPswd}') && qLast.dispatchEvent && qLast.dispatchEvent(new InputEvent('input')) && false"
     - "q('input[formcontrolname=password]').value == '${s[1].CBPswd}' && 'cluster-password'"
     - "q('.modal-dialog .panel-header h2').innerText == 'Add Remote Cluster' && (document.body.scrollTop = 0) && false"
   content: |
-   A data replication stream between Couchbase clusters is called
-   <i>XDCR</i>, or cross-datacenter replication.
+   Next, let's <i>connect</i> the clusters.
    <br/><br/>
 
    In the
-   <img src="./img/db-purple.svg" style="height: 0.7rem; possition: relative; top: 1px;"/>
-   <code>west</code> database...
+   <img src="./img/db-purple.svg" class="small-db"/>
+   <code>west</code> cluster...
    <br/><br/>
 
-   <div class="check-xdcr-nav">
-    In the main menu, click on <b>XDCR</b>.
-    <br/><br/>
-   </div>
-   <style>
-     article.checked-w-database-xdcr .check-xdcr-nav { display: none; }
-   </style>
-
-   On the <b>XDCR&nbsp;Replications</b> screen...
+   In the main menu, click on <b>XDCR</b> (for cross-datacenter replication).
    <br/><br/>
 
    Click on <b>ADD&nbsp;REMOTE</b>.
    <br/><br/>
 
-   In the <b>Add Remote Cluster</b> dialog box that appears...
-   <br/>
-
+   We've already filled in...
    <ul>
    <li>
-    For the <b>Cluster&nbsp;Name</b> field,
-    enter <code>"east"</code>, to represent the east cluster.
-    <span class="check-cluster-name"
-          style="visibility: hidden; color: green;">&check;</span>
+    Cluster&nbsp;Name:
+    <span class="check check-cluster-name">&check;</span>
     <style>
-      article.checked-w-database-cluster-name .check-cluster-name {
+      article.checked-w-cluster-cluster-name .check-cluster-name {
         visibility: visible !important;
       }
     </style>
-    <br/></br>
+    <br/>
+    <code>east</code>
+    <br/><br/>
    </li>
    <li>
-    For the <b>IP/Hostname</b> field,
-    enter the IP address of the <code>east</code> database:
-    <span class="check-cluster-hostname"
-          style="visibility: hidden; color: green;">&check;</span>
+    IP/Hostname:
+    <span class="check check-cluster-hostname">&check;</span>
     <style>
-      article.checked-w-database-cluster-hostname .check-cluster-hostname {
+      article.checked-w-cluster-cluster-hostname .check-cluster-hostname {
         visibility: visible !important;
       }
     </style>
-    <small><pre>${s[1].ContainerIP}</pre></small>
+    <br/>
+    <small><pre style="margin: 3px 0; padding: 0;">${s[1].ContainerIP}</pre></small>
+    </br>
    </li>
    <li>
-    For the <b>Username for Remote Cluster</b> field,
-    enter the admin username of the <code>east</code> database:
-    <span class="check-cluster-username"
-          style="visibility: hidden; color: green;">&check;</span>
+    Username&nbspfor Remote&nbsp;Cluster:
+    <span class="check check-cluster-username">&check;</span>
     <style>
-      article.checked-w-database-cluster-username .check-cluster-username {
+      article.checked-w-cluster-cluster-username .check-cluster-username {
         visibility: visible !important;
       }
     </style>
-    <small><pre>${s[1].CBUser}</pre></small>
+    <small><pre style="margin: 3px 0; padding: 0;">${s[1].CBUser}</pre></small>
+    </br>
    </li>
    <li>
-    For the <b>Password</b> field,
-    enter the admin password of the <code>east</code> database:
-    <span class="check-cluster-password"
-          style="visibility: hidden; color: green;">&check;</span>
+    Password:
+    <span class="check check-cluster-password">&check;</span>
     <style>
-      article.checked-w-database-cluster-password .check-cluster-password {
+      article.checked-w-cluster-cluster-password .check-cluster-password {
         visibility: visible !important;
       }
     </style>
-    <small><pre>${s[1].CBPswd}</pre></small>
+    <br/>
+    <small><pre style="margin: 3px 0; padding: 0;">${s[1].CBPswd}</pre></small>
    </li>
    </ul>
 
    Click the <b>Save</b> button.
+   <span class="check check-cluster-connect">&check;</span>
+   <style>
+     article.checked-w-cluster-cluster-connect .check-cluster-connect {
+       visibility: visible !important;
+     }
+   </style>
  -
-  title: Add a replication
-  panel: w-database
+  title: Add a data stream
+  panel: w-cluster
   panel-tell:
    clicks:
     - "nav.nav-sidebar a[mn-tab=replications]"
+   styles: |
+    body[data-rep-east=n] .header-controls a[ng-reflect-state="app.admin.replications.add"] {
+      text-decoration: underline red 2px;
+    }
+    body[data-h1=XDCRAddReplication] .main-content form.forms .width-10 .formrow.row {
+      border: 2px solid red;
+      padding: 2px;
+    }
+    body[data-h1=XDCRAddReplication] .main-content footer.footer-save button[type="submit"] {
+      border: 2px solid red;
+    }
    checks:
+    - document.body.setAttribute('data-h1', q('header > h1 > span:last-child').innerText.trim().replaceAll(' ', '')) && false
+    - document.body.setAttribute('data-rep-east', (q('ui-view ng-component div:last-child .cbui-table-header .cbui-table-cell:first-child').innerText == 'source bucket' && q('ui-view ng-component div:last-child .cbui-table-cell[title="beer-sample"]').tagName && 'y') || 'n') && false
+    - "q('body[data-rep-east=y]').tagName && 'rep-east'"
     - "(q('select[formcontrolname=fromBucket]').value || '').indexOf('beer-sample') >= 0 && 'rep-fromBucket'"
     - "q('input#replication_to_bucket').value == 'my-first-bucket' && 'rep-toBucket'"
     - "(q('select[formcontrolname=toCluster]').value || '').indexOf('east') >= 0 && 'rep-toCluster'"
   content: |
-   Continuing in the
-   <img src="./img/db-purple.svg" style="height: 0.7rem; possition: relative; top: 1px;"/>
-   <code>west</code> database...
-   <br/><br/>
-
-   On the <b>XDCR&nbsp;Replications</b> screen...
-   <br/><br/>
-
-   Click on <b>ADD&nbsp;REPLICATION</b> to add an
-   outgoing replication.
-   <br/><br/>
-
-   In the dialog screen that appears...
+   Next, we'll create a <i>data replication stream</i> from a
    <br/>
+   <code>beer-sample</code> bucket
+   on the
+   <br/>
+   <img src="./img/db-purple.svg" class="small-db"/>
+   <code>west</code> cluster
+   to the
+   <br/>
+   <code>my-first-bucket</code>
+   on the
+   <br/>
+   <img src="./img/db-green.svg" class="small-db"/>
+   <code>east</code> cluster.
+   <br/><br/>
 
+   Click on <b>ADD&nbsp;REPLICATION</b>.
+   <br/><br/>
+
+   Fill in...
    <ul>
    <li>
-    For the <b>Replicate From Bucket</b>
-    dropdown, choose the data source bucket of
-    <code>beer-sample</code>.
-    <span class="check-rep-fromBucket"
-          style="visibility: hidden; color: green;">&check;</span>
+    Replicate&nbsp;From&nbsp;Bucket:<br/>
+    <code>beer-sample</code>
+    <span class="check check-rep-fromBucket">&check;</span>
     <style>
-      article.checked-w-database-rep-fromBucket .check-rep-fromBucket {
+      article.checked-w-cluster-rep-fromBucket .check-rep-fromBucket {
         visibility: visible !important;
       }
     </style>
     <br/><br/>
    </li>
    <li>
-    For the <b>Remote&nbsp;Bucket</b> field, enter
-    <code class="nowrap">"my-first-bucket"</code>
-    <span class="check-rep-toBucket"
-          style="visibility: hidden; color: green;">&check;</span>
+    Remote&nbsp;Bucket:<br/>
+    <code class="nowrap">my-first-bucket</code>
+    <span class="check check-rep-toBucket">&check;</span>
     <style>
-      article.checked-w-database-rep-toBucket .check-rep-toBucket {
+      article.checked-w-cluster-rep-toBucket .check-rep-toBucket {
         visibility: visible !important;
       }
     </style>
     <br/><br/>
    </li>
    <li>
-    For the <b>Remote&nbsp;Cluster</b> dropdown,
-    choose the <code>east</code> cluster.
-    <span class="check-rep-toCluster"
-          style="visibility: hidden; color: green;">&check;</span>
+    Remote&nbsp;Cluster:<br/>
+    <code>east</code>
+    <span class="check check-rep-toCluster">&check;</span>
     <style>
-      article.checked-w-database-rep-toCluster .check-rep-toCluster {
+      article.checked-w-cluster-rep-toCluster .check-rep-toCluster {
         visibility: visible !important;
       }
     </style>
@@ -408,26 +381,39 @@ steps:
    </ul>
 
    Click <b>Save&nbsp;Replication</b>.
+   <span class="check check-rep-east">&check;</span>
+   <style>
+     article.checked-w-cluster-rep-east .check-rep-east {
+       visibility: visible !important;
+     }
+   </style>
  -
   title: Congratulations
-  panel: e-database
+  panel: e-cluster
   panel-tell:
    clicks:
     - "nav.nav-sidebar a[mn-tab=buckets]"
   content: |
    Going back to the
-   <img src="./img/db-green.svg" style="height: 0.7rem; possition: relative; top: 1px;"/>
-   <code>east</code> database,
-   we can now see data appearing in the
-   <code class="nowrap">my-first-bucket</code> bucket.
+   <img src="./img/db-green.svg" class="small-db"/>
+   <code>east</code> cluster,
+   we can now see data appearing in
+   <code class="nowrap">my-first-bucket</code>.
    <br/><br/>
 
    <b>Congratulations!</b>
    <br/><br/>
 
-   You've created an ongoing data stream from a bucket
-   in the <code>west</code> database to a bucket
-   in the <code>east</code> database.
+   You've created an ongoing <i>data stream</i> from
+   the <code>west</code> cluster
+   to
+   the <code>east</code> cluster.
+   <br/><br/>
+
+   Besides the web-admin UI,
+   you can also use <i>command-line tools</i>
+   or <i>REST API's</i>
+   to set up the same data streams.
 
    <style>
      body .container main.step-congratulations .right .diagram-area .west-east-stream {
@@ -436,39 +422,86 @@ steps:
      }
    </style>
  -
-  title: Learn More
+  title: A mutation in the west
+  panel: w-cluster
+  panel-tell:
+   clicks:
+    - nav.nav-sidebar a[ui-sref="app.admin.docs.editor"]
   content: |
-   Besides the web-admin UI,
-   you can also use Couchbase's <i>command-line tools</i>
-   or <i>REST API's</i>
-   to set up flexible <b>data streams</b>
-   to meet your app's
-   distributed topology needs.
+   In the
+   <img src="./img/db-purple.svg" class="small-db"/>
+   <code>west</code> cluster,
+   let's <i>change</i> a document
+   to see whether data streaming works
+   for mutations.
    <br/><br/>
 
-   Support for
+   In the main menu, click on <b>Documents</b>.
+   <br/><br/>
+
+   In the <code class="nowrap">beer-sample</code> bucket,
+   <i>edit</i> <span class="icon fa-pencil"></span>
+   a document and save your changes.
+
+   <style>
+     body .container main.step-a-mutation-in-the-west .right .diagram-area .west-east-stream {
+       display: block !important;
+       opacity: 1;
+     }
+   </style>
+ -
+  title: Will the east see the change?
+  panel: e-cluster
+  panel-tell:
+   clicks:
+    - nav.nav-sidebar a[ui-sref="app.admin.docs.editor"]
+   checks:
+    - q('qw-collection-menu div select:first-child').value != 'my-first-bucket' && !qLast.getAttribute('data-touched') && (qLast.value = 'my-first-bucket') && qLast.dispatchEvent(new UIEvent('change')) && qLast.setAttribute('data-touched', true) && false
+  content: |
+   In the
+   <img src="./img/db-green.svg" class="small-db"/>
+   <code>east</code> cluster...
+   <br/><br/>
+
+   In the main menu, click on <b>Documents</b>
+   and select the
+   <code>my-first-bucket</code>.
+   <br/><br/>
+
+   Did your changed document from the
+   <img src="./img/db-purple.svg" class="small-db"/>
+   <code>west</code> cluster
+   show up in the
+   <img src="./img/db-green.svg" class="small-db"/>
+   <code>east</code> cluster?
+
+   <style>
+     body .container main.step-will-the-east-see-the-change .right .diagram-area .west-east-stream {
+       display: block !important;
+       opacity: 1;
+     }
+   </style>
+ -
+  title: Learn more
+  panel: none
+  content: |
+   <b>Data streaming</b>
+   across multiple locations
+   for your enterprise database
+   apps is <i>straightforwards
+   and flexible</i> with Couchbase.
+   <br/><br/>
+
+   You can also use more features like
    multi-master (bi-directional) replication,
-   data filtering rules,
-   mobile sync, and more is also available.
+   data filtering expressions, compression,
+   encryption, mobile sync and more.
    <br/><br/>
 
    Learn more:
    <a href="https://docs.couchbase.com/server/current/learn/clusters-and-availability/xdcr-overview.html"
       target="_blank">
-     XDCR&nbsp;Documentation
-   </a>
-   <br/><br/>
-
-   There's a lot more that Couchbase can do
-   to help you build modern, distributed
-   applications that can be deployed across
-   multiple locations and clouds.
-   <br/><br/>
-
-   Take a look:
-   <a href="https://docs.couchbase.com/home/index.html"
-      target="_blank">
-     Couchbase&nbsp;Documentation
+     Cross-datacenter Replication (XDCR) Documentation
    </a>
 
    <style>
