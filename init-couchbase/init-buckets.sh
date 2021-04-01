@@ -49,6 +49,10 @@ echo "couchbase-cli bucket-create travel-sample..."
 # Sometimes failing to load the sample without sleep
 sleep 10
 
+echo "couchbase-cli bucket-list..."
+/opt/couchbase/bin/couchbase-cli bucket-list \
+ -c localhost -u ${CB_USER} -p ${CB_PSWD}
+
 echo "cbimport travel-sample..."
 /opt/couchbase/bin/cbimport json --format sample --verbose \
  -c localhost -u ${CB_USER} -p ${CB_PSWD} \
@@ -109,6 +113,30 @@ sleep 10
 echo "create travel-sample primary index..."
 curl http://${CB_USER}:${CB_PSWD}@localhost:8093/query/service \
     -d 'statement=CREATE PRIMARY INDEX idx_primary ON `travel-sample`'
+
+echo "couchbase-cli bucket-list..."
+/opt/couchbase/bin/couchbase-cli bucket-list \
+ -c localhost -u ${CB_USER} -p ${CB_PSWD}
+
+echo "couchbase-cli bucket-edit beer-sample..."
+/opt/couchbase/bin/couchbase-cli bucket-edit \
+ -c localhost -u ${CB_USER} -p ${CB_PSWD} \
+ --bucket beer-sample \
+ --bucket-replica 0
+
+echo "couchbase-cli bucket-edit travel-sample..."
+/opt/couchbase/bin/couchbase-cli bucket-edit \
+ -c localhost -u ${CB_USER} -p ${CB_PSWD} \
+ --bucket travel-sample \
+ --bucket-replica 0
+
+echo "couchbase-cli bucket-list..."
+/opt/couchbase/bin/couchbase-cli bucket-list \
+ -c localhost -u ${CB_USER} -p ${CB_PSWD}
+
+echo "couchbase-cli rebalance..."
+/opt/couchbase/bin/couchbase-cli rebalance \
+ -c localhost -u ${CB_USER} -p ${CB_PSWD} --no-progress-bar
 
 echo "sleep 40 to allow stabilization..."
 sleep 40
