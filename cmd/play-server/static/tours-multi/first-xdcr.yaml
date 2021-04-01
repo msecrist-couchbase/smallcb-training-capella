@@ -413,8 +413,8 @@ steps:
     }
   content: |
    <div>
-     Look at the
-     <em>east</em>&nbsp;cluster...
+    Let's look at the
+    <em>east</em>&nbsp;cluster...
    </div>
    <div>
     <h3>NOTICE</h3>
