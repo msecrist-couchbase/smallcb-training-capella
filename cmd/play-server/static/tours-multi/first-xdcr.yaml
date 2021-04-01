@@ -372,11 +372,11 @@ steps:
      </li>
      <li>For <i>Remote&nbsp;Bucket</i>
          <br/>
-         &nbsp;use <code class="nowrap">my-first-bucket</code>
+         &nbsp;&nbsp;use <code class="nowrap">my-first-bucket</code>
      </li>
      <li>For <i>Remote&nbsp;Cluster</i>
          <br/>
-         &nbsp;use <code class="nowrap">east</code>
+         &nbsp;&nbsp;use <code class="nowrap">east</code>
          <br/><br/>
      </li>
      <li>Click Save Replication.
@@ -543,7 +543,7 @@ steps:
     </a>
    </div>
    <div>
-    Thanks for <i>streaming</i> with Couchbase!
+    Thanks for <i>streamin'</i> with Couchbase!
    </div>
 
    <style>
