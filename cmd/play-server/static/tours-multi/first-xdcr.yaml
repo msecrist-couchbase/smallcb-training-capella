@@ -176,6 +176,7 @@ steps:
      <li>There are 2 active clusters:
          <br/>
          <em>west</em> and <em>east</em>
+         <br/><br/>
      </li>
      <li>Click on their names and you'll see
          an admin interface for each.
@@ -234,14 +235,24 @@ steps:
     </h3>
     <ul>
      <li>On the Buckets screen...
+         <br/><br/>
      </li>
      <li>Click ADD BUCKET.
+         <br/><br/>
      </li>
      <li>Submit the pre-filled form.
+         <span class="check check-my-first-bucket">&check;</span>
+         <style>
+           article.checked-e-cluster-my-first-bucket .check-my-first-bucket {
+             visibility: visible !important;
+           }
+         </style>
      </li>
     </ul>
    </div>
    <div>
+    <br/>
+    <br/>
     <h3>NOTICE</h3>
     Your new bucket is named<br/>
     <code>my-first-bucket</code>
@@ -290,8 +301,10 @@ steps:
     </h3>
     <ul>
      <li>On the XDCR (cross-datacenter replication) screen...
+         <br/><br/>
      </li>
      <li>Click ADD REMOTE to create the reference to the <i>east</i>.
+         <br/><br/>
      </li>
      <li>Save the pre-filled form.
          <span class="check check-cluster-connect">&check;</span>
@@ -304,6 +317,8 @@ steps:
     </ul>
    </div>
    <div>
+    <br/>
+    <br/>
     <h3>NEXT</h3>
     We'll create the actual data&nbsp;stream.
    </div>
@@ -346,11 +361,25 @@ steps:
     </h3>
     <ul>
      <li>On the XDCR screen...
+         <br/><br/>
      </li>
-     <li>Click ADD REPLICATION to specify the data replication stream...
-         (use <code class="nowrap">beer-sample</code>
-         as the <i>replicate&nbsp;from&nbsp;bucket</i>)
-         and save it.
+     <li>Click ADD REPLICATION.
+         <br/><br/>
+     </li>
+     <li>For <i>Replicate&nbsp;From&nbsp;Bucket</i>
+         <br/>
+         &nbsp;&nbsp;use <code class="nowrap">beer-sample</code>
+     </li>
+     <li>For <i>Remote&nbsp;Bucket</i>
+         <br/>
+         &nbsp;use <code class="nowrap">my-first-bucket</code>
+     </li>
+     <li>For <i>Remote&nbsp;Cluster</i>
+         <br/>
+         &nbsp;use <code class="nowrap">east</code>
+         <br/><br/>
+     </li>
+     <li>Click Save Replication.
          <span class="check check-rep-east">&check;</span>
          <style>
            article.checked-w-cluster-rep-east .check-rep-east {
@@ -359,12 +388,6 @@ steps:
          </style>
      </li>
     </ul>
-   </div>
-   <div>
-    <h3>REMEMBER</h3>
-    The empty, remote bucket that you created was
-    <code class="nowrap">my-first-bucket</code>
-    and you're replicating to the <i>east</i> remote&nbsp;cluster.
    </div>
    <div>
     <br/>
@@ -433,8 +456,10 @@ steps:
     </h3>
     <ul>
      <li>On the Documents screen...
+         <br/><br/>
      </li>
      <li>Select the <code class="nowrap">beer-sample</code> keyspace bucket.
+         <br/><br/>
      </li>
      <li>Edit <span class="icon fa-pencil"></span>
          a document and save your changes.
@@ -476,8 +501,10 @@ steps:
     </h3>
     <ul>
      <li>On the Documents screen...
+         <br/><br/>
      </li>
      <li>Select the <code class="nowrap">my-first-bucket</code> keyspace bucket.
+         <br/><br/>
      </li>
      <li>Was your document change propagated to the <em>east</em>?
      </li>
