@@ -92,6 +92,10 @@ func CleanupInterfaceValue(v interface{}) interface{} {
 		return res
 	case string:
 		return v
+	case int:
+		return v
+	case nil:
+		return nil
 	default:
 		fmt.Printf("unknown type: %T %#v\n", v, v)
 

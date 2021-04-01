@@ -1,4 +1,4 @@
-title: Connect Multiple Locations with Data Streaming
+title: A NodeJS App with Couchbase
 
 containers: 2
 
@@ -15,12 +15,20 @@ panels:
   title-more: "username: ${s[1].CBUser} &nbsp;&nbsp; password: ${s[1].CBPswd}"
   color: "#87d642"
   iframe-src: http://${document.location.hostname}:${s[1].ContainerPortBase}/ui/index.html?lu=${s[1].CBUser}&lp=${s[1].CBPswd}
+ -
+  id: w-browser
+  title: browser
+  color: "#8762a0;"
+ -
+  id: w-appserver
+  title: nodejs
+  color: "#8762a0;"
 
 diagram:
  height: 50px
  content: |
   <div class="diagram-more"
-       style="position: absolute; display: none; opacity: 0.3; user-select: none;">
+       style="position: absolute; display: none; opacity: 0.3; user-select: none; left: 230px;">
     <div class="animated-stream"
          style="position: absolute; top: 35px; left: 25px; transform-origin: top left; height: 3px; width: 57px; transform: rotateZ(47deg);"></div>
     <div style="position: absolute; top: 80px; left: 60px;">
@@ -30,8 +38,8 @@ diagram:
     </div>
 
     <div class="animated-stream"
-         style="position: absolute; top: 30px; left: 25px; transform-origin: top left; height: 3px; width: 80px; transform: rotateZ(75deg);"></div>
-    <div style="position: absolute; top: 110px; left: 40px;">
+         style="position: absolute; top: 30px; left: 25px; transform-origin: top left; height: 3px; width: 80px; transform: rotateZ(72deg);"></div>
+    <div style="position: absolute; top: 108px; left: 42px;">
       <img src="./img/db-purple.svg"
            style="position: absolute; top: 0px; left: 0px; width: 20px;"/>
       <div style="position: absolute; top: 0px; left: 25px" class="small">store-w02 cluster</div>
@@ -42,12 +50,12 @@ diagram:
     <div style="position: absolute; top: 140px; left: 20px;">
       <img src="./img/db-purple.svg"
            style="position: absolute; top: 0px; left: 0px; width: 20px;"/>
-      <div style="position: absolute; top: 0px; left: 25px" class="small">vehicle-17 db</div>
+      <div style="position: absolute; top: 0px; left: 25px" class="small">store-w04 cluster</div>
     </div>
   </div>
 
   <div class="diagram-more"
-       style="position: absolute; display: none; opacity: 0.3; user-select: none; left: 250px;">
+       style="position: absolute; display: none; opacity: 0.3; user-select: none; left: 470px;">
     <div class="animated-stream"
          style="position: absolute; top: 35px; left: 25px; transform-origin: top left; height: 3px; width: 57px; transform: rotateZ(47deg);"></div>
     <div style="position: absolute; top: 80px; left: 60px;">
@@ -57,11 +65,11 @@ diagram:
     </div>
 
     <div class="animated-stream"
-         style="position: absolute; top: 30px; left: 25px; transform-origin: top left; height: 3px; width: 80px; transform: rotateZ(75deg);"></div>
-    <div style="position: absolute; top: 110px; left: 40px;">
+         style="position: absolute; top: 30px; left: 25px; transform-origin: top left; height: 3px; width: 80px; transform: rotateZ(72deg);"></div>
+    <div style="position: absolute; top: 108px; left: 42px;">
       <img src="./img/db-green.svg"
            style="position: absolute; top: 0px; left: 0px; width: 20px;"/>
-      <div style="position: absolute; top: 0px; left: 25px" class="small">store-e06 cluster</div>
+      <div style="position: absolute; top: 0px; left: 25px" class="small">store-e07 cluster</div>
     </div>
 
     <div class="animated-stream"
@@ -74,7 +82,7 @@ diagram:
   </div>
 
   <div class="diagram-more west-east-stream animated-stream"
-       style="display: none; position: absolute; top: 27px; left: 205px; height: 6px; width: 44px;"></div>
+       style="display: none; position: absolute; top: 27px; left: 425px; height: 6px; width: 44px;"></div>
 
   <style>
     .animated-stream {
@@ -93,25 +101,44 @@ diagram:
     }
   </style>
 
+  <div style="position: absolute; top: 28px; left: 70px; height: 2px; width: 35px; background-color: #aaa;"></div>
+  <label for="w-browser"
+         class="title background-color-white"
+         style="top: 10px; left: 0px; width: 70px; height: 35px;">
+    <div style="padding-top: 3px; font-size: 14px;">
+      browser
+    </div>
+  </label>
+
+  <div style="position: absolute; top: 27px; left: 205px; height: 3px; width: 25px; background-color: #aaa;"></div>
+  <label for="w-appserver"
+         class="title background-color-white"
+         style="top: 10px; left: 105px; width: 95px; height: 35px;">
+    <div style="padding-top: 3px; font-size: 14px;">
+      app server
+      <div class="small" style="color: #666;">NodeJS</div>
+    </div>
+  </label>
+
   <label for="w-cluster"
          class="title background-color-white"
-         style="top: 10px; width: 12em; height: 35px;">
+         style="top: 10px; left: 230px; width: 190px; height: 35px;">
     <img src="./img/db-purple.svg"
          style="top: 0px; left: 0px; width: 50px;"/>
     <div style="top: 3px; left: 50px;">
       west cluster
-      <div class="small">${s[0].ContainerIP}</div>
+      <div class="small" style="color: #666;">${s[0].ContainerIP}</div>
     </div>
   </label>
 
   <label for="e-cluster"
          class="title background-color-white"
-         style="top: 10px; left: 250px; width: 12em; height: 35px;">
+         style="top: 10px; left: 470px; width: 190px; height: 35px;">
     <img src="./img/db-green.svg"
          style="top: 0px; left: 0px; width: 50px;"/>
     <div style="top: 3px; left: 50px;">
       east cluster
-      <div class="small">${s[1].ContainerIP}</div>
+      <div class="small" style="color: #666;">${s[1].ContainerIP}</div>
     </div>
   </label>
 
@@ -139,9 +166,8 @@ steps:
   title: Welcome
   content: |
    <div>
-    Let's see how simple it is
-    to create a <i>data&nbsp;stream</i>
-    between two Couchbase clusters.
+    Creating a <b>data&nbsp;stream</b>
+    between two Couchbase clusters is <i>easy</i>.
    </div>
    <div>
     <h3>On the right&nbsp;
@@ -160,15 +186,15 @@ steps:
    </div>
    <div>
     <h3>Your mission</h3>
-    <p>Create a new bucket (or database)
-       in the destination <em>east&nbsp;cluster</em>.
+    <p>Create a new <b>bucket</b> (database)
+       in the destination <i>east&nbsp;cluster</i>.
     </p>
-    <p>Then connect the source <em>west&nbsp;cluster</em>
-       to the remote <em>east&nbsp;cluster</em>.
+    <p>Then connect the <i>west&nbsp;cluster</i>
+       to the <b>remote</b> <i>east&nbsp;cluster</i>.
     </p>
     <p>Lastly, start a data stream between
-       source and destination buckets and watch
-       your first mutation get replicated.
+       <b>source</b> and <b>destination</b> buckets
+       and watch your first mutation get replicated.
     </p>
    </div>
    <div class="left-bottom" style="margin-bottom: -0.8rem;">
@@ -191,6 +217,7 @@ steps:
    checks:
     - document.body.setAttribute('data-my-first-bucket', (q('div[buckets="buckets.details"] .cbui-tablerow-title[title="my-first-bucket"]').tagName && 'y') || 'n') && false
     - q('form input[ng-model="bucketConf.name"]').value == '' && (qLast.value = 'my-first-bucket') && qLast.dispatchEvent && qLast.dispatchEvent(new InputEvent("input")) && false
+    - q('div[buckets="buckets.details"] .cbui-tablerow-title[title="my-first-bucket"]').tagName && 'my-first-bucket'
   content: |
    <div>
     Add a new bucket to be the destination of your data stream.
@@ -215,6 +242,12 @@ steps:
     Your new bucket is named<br/>
     <code>my-first-bucket</code>
     and has 0 items in it.
+    <span class="check check-my-first-bucket">&check;</span>
+    <style>
+      article.checked-e-cluster-my-first-bucket .check-my-first-bucket {
+        visibility: visible !important;
+      }
+    </style>
    </div>
  -
   title: Connect the clusters
@@ -230,13 +263,9 @@ steps:
     - document.body.setAttribute('data-remote-east', (q('ui-view h4').innerText == 'Remote Clusters' && q('ui-view .cbui-table-cell[title="east"]').tagName && 'y') || 'n') && false
     - q('body[data-remote-east=y]').tagName && 'cluster-connect'
     - q('input#cluster_reference_name').value == '' && (qLast.value = 'east') && qLast.dispatchEvent && qLast.dispatchEvent(new InputEvent('input')) && false
-    - q('input#cluster_reference_name').value == 'east' && 'cluster-name'
     - q('input#cluster_reference_hostname').value == '' && (qLast.value = '${s[1].ContainerIP}') && qLast.dispatchEvent && qLast.dispatchEvent(new InputEvent('input')) && false
-    - q('input#cluster_reference_hostname').value == '${s[1].ContainerIP}' && 'cluster-hostname'
     - (q('input[formcontrolname=username]').value == '' || qLast.value == 'Administrator') && (qLast.value = '${s[1].CBUser}') && qLast.dispatchEvent && qLast.dispatchEvent(new InputEvent('input')) && false
-    - q('input[formcontrolname=username]').value == '${s[1].CBUser}' && 'cluster-username'
     - q('input[formcontrolname=password]').value == '' && (qLast.value = '${s[1].CBPswd}') && qLast.dispatchEvent && qLast.dispatchEvent(new InputEvent('input')) && false
-    - q('input[formcontrolname=password]').value == '${s[1].CBPswd}' && 'cluster-password'
     - q('.modal-dialog .panel-header h2').innerText == 'Add Remote Cluster' && (document.body.scrollTop = 0) && false
   content: |
    <div>
@@ -289,9 +318,6 @@ steps:
     - document.body.setAttribute('data-h1', q('header > h1 > span:last-child').innerText.trim().replaceAll(' ', '')) && false
     - document.body.setAttribute('data-rep-east', (q('ui-view ng-component div:last-child .cbui-table-header .cbui-table-cell:first-child').innerText == 'source bucket' && q('ui-view ng-component div:last-child .cbui-table-cell[title="beer-sample"]').tagName && 'y') || 'n') && false
     - q('body[data-rep-east=y]').tagName && 'rep-east'
-    - (q('select[formcontrolname=fromBucket]').value || '').indexOf('beer-sample') >= 0 && 'rep-fromBucket'
-    - q('input#replication_to_bucket').value == 'my-first-bucket' && 'rep-toBucket'
-    - (q('select[formcontrolname=toCluster]').value || '').indexOf('east') >= 0 && 'rep-toCluster'
   content: |
    <div>
     Let's create a data replication stream.
@@ -354,7 +380,7 @@ steps:
      }
    </style>
  -
-  title: A mutation in the west
+  title: A change in the west
   panel: w-cluster
   panel-tell:
    clicks:
@@ -384,13 +410,13 @@ steps:
    </div>
 
    <style>
-     body .container main.step-a-mutation-in-the-west .right .diagram-area .west-east-stream {
+     body .container main.step-a-change-in-the-west .right .diagram-area .west-east-stream {
        display: block !important;
        opacity: 1;
      }
    </style>
  -
-  title: Will the east see the change?
+  title: Will the change go to the east?
   panel: e-cluster
   panel-tell:
    clicks:
@@ -419,7 +445,7 @@ steps:
    </div>
 
    <style>
-     body .container main.step-will-the-east-see-the-change .right .diagram-area .west-east-stream {
+     body .container main.step-will-the-change-go-to-the-east .right .diagram-area .west-east-stream {
        display: block !important;
        opacity: 1;
      }
@@ -432,14 +458,17 @@ steps:
     The takeaway...
    </div>
    <div>
-    <b>Data streaming</b> between clusters is straightforwards.
+    <b>Data streaming</b> between clusters is
+    straightforwards with Couchbase.
    </div>
    <div>
     That and other features
     makes Couchbase a great fit
-    for applications
-    that need flexible, distributed, multi-location data flows
-    from a high-performance database.
+    for applications that need
+    a <span class="nowrap">high-performance</span>
+    database that can handle
+    <em>flexible, distributed, <span class="nowrap">multi-location</span></em>
+    data&nbsp;flows.
    </div>
    <div>
     Learn more:

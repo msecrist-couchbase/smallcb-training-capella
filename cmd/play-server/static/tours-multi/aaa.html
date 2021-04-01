@@ -328,7 +328,7 @@ input[type="checkbox"].step-nav-popup:checked ~ .step-x .step .step-nav label .s
 }
 
 .step-nav button:disabled {
-  background-color: #d4d4d4;
+  background-color: #dddddd;
   color: #f4f4f4;
   cursor: initial;
 }
@@ -420,7 +420,31 @@ function loadTour(data, sess) {
 
     with (ctx) eval('o = `' + (diagram.content || '') + '`');
 
-    document.querySelector(".diagram").innerHTML = ctx.o;
+    var diagramEl = document.querySelector(".diagram");
+
+    diagramEl.innerHTML = ctx.o;
+
+    diagramEl.addEventListener("click", function(e) {
+      // When a label was clicked in the diagram,
+      // SET-insert `saw-${panel}` to .container's className.
+      for (var t = e.target; t; t = t.parentElement) {
+        if (t.tagName == "LABEL") {
+          var panel = t.getAttribute("for");
+          if (panel) {
+            var sawPanel = `saw-${panel}`;
+
+            var c = document.querySelector(".container");
+
+            var names = c.className.split(' ');
+            if (!names.find(x => x == sawPanel)) {
+              names.push(sawPanel);
+
+              c.className = names.sort().join(' ');
+            }
+          }
+        }
+      }
+    });
 
     document.querySelector(".diagram-area").style = `height: ${diagram.height || 0};`;
   }
@@ -542,12 +566,14 @@ function loadTourPanels(data, sessArr) {
 
     var iframeSrc = ctx.o;
 
+    var color = panel.color || '#444';
+
     var div = document.createElement("div");
 
     div.id = "panel-" + panel.id;
     div.className = "panel";
     div.innerHTML =
-      `<div class="flex-row header" style="border-bottom: 2px solid ${panel.color || '#444'};">
+      `<div class="flex-row header" style="border-bottom: 2px solid ${color};">
          <label class="title"
                 style="width: ${diagramLabelStyle.width || 'auto'}; height: ${diagramLabelStyle.height || 'auto'};">
            ${diagramLabelEl.innerHTML || panel.title}</label>
@@ -559,7 +585,8 @@ function loadTourPanels(data, sessArr) {
        </div>
        <iframe id="iframe-${panel.id}"
                src="${iframeSrc}"
-               sandbox="allow-same-origin allow-scripts allow-forms allow-popups"></iframe>
+               sandbox="allow-same-origin allow-scripts allow-forms allow-popups"
+               style="border-left: 2px solid ${color};"></iframe>
        <style>
          input#${panel.id}:checked ~ .container article .right #panel-${panel.id} {
            display: flex;
@@ -583,7 +610,7 @@ function stepShow(i) {
     if (step) {
       if (step.title) {
         className += " step-" + step.title.trim()
-          .replaceAll('?', '').replaceAll(' ', '-').toLowerCase();
+          .replaceAll(/[\?!]/g, '').replaceAll(' ', '-').toLowerCase();
       }
 
       var panel = step.panel;
