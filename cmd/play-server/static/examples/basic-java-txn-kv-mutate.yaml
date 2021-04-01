@@ -38,7 +38,7 @@ code: |
       bucket.waitUntilReady(Duration.ofSeconds(30));
 
       TransactionConfigBuilder config = TransactionConfigBuilder.create()
-          .durabilityLevel(TransactionDurabilityLevel.NONE);
+          .durabilityLevel(TransactionDurabilityLevel.MAJORITY_AND_PERSIST_TO_ACTIVE);
       Transactions transactions = Transactions.create(cluster, config);
       
       var route1Id = "route_46586";
@@ -135,6 +135,7 @@ code: |
           System.out.println("In transaction - about to commit");
           ctx.commit();
         });
+        return swapId.get();
       } catch (TransactionCommitAmbiguous err) {
         System.err.println("Transaction " + err.result().transactionId() + " possibly committed:");
         err.result().log().logs().forEach(System.err::println);
@@ -146,7 +147,7 @@ code: |
           err.result().log().logs().forEach(System.err::println);
         }
       }
-      return swapId.get();
+      return null;
 
     }
   }
