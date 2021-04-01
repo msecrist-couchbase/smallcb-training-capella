@@ -91,6 +91,15 @@ diagram:
         background-position: 44px 0px;
       }
     }
+
+    @keyframes animated-border-red {
+      40% {
+        border-color: red;
+      }
+      60% {
+        border-color: red;
+      }
+    }
   </style>
 
   <label for="w-cluster"
@@ -181,8 +190,8 @@ steps:
          <em>west</em> and <em>east</em>
          <br/><br/>
      </li>
-     <li>Click on their names and you'll see
-         an admin interface for each.
+     <li>Click on their names and
+         open up their admin interfaces.
      </li>
     </ul>
    </div>
@@ -195,14 +204,13 @@ steps:
 
    <style>
      .container main.step-your-mission article .right .diagram-area .diagram label {
-       border: 1px solid #f66;
-       border-bottom: 3px solid #a33;
-       border-right: 3px solid #a33;
+       animation: animated-border-red 1s infinite linear;
      }
 
      .container.saw-w-cluster main.step-your-mission article .right .diagram-area .diagram label[for="w-cluster"],
      .container.saw-e-cluster main.step-your-mission article .right .diagram-area .diagram label[for="e-cluster"] {
        border: 1px solid #aaa;
+       animation: none;
      }
    </style>
  -
