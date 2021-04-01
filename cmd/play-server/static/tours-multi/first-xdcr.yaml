@@ -126,6 +126,8 @@ diagram:
     </div>
   </label>
 
+  <div id="diagram-overlay" style="display: none;"></div>
+
   <style>
     img.small-db {
       position: relative;
@@ -176,8 +178,17 @@ steps:
    </div>
 
    <style>
-     .container main.step-0 .right .diagram-area .diagram {
-       visibility: hidden;
+     .container main.step-0 .right .diagram #diagram-overlay {
+       display: block !important;
+       position: absolute;
+       width: 400px;
+       height: 50px;
+       background: white;
+       opacity: 0.4;
+       z-index: 1;
+     }
+     .container main.step-0 .right .diagram .west-east-stream {
+       display: block !important;
      }
    </style>
  -
@@ -208,12 +219,6 @@ steps:
          open up their admin interfaces.
      </li>
     </ul>
-   </div>
-   <div>
-    <br/>
-    <h3>NEXT</h3>
-    Let's create an empty bucket (database) in the
-    <i>east</i>.
    </div>
 
    <style>
@@ -459,7 +464,7 @@ steps:
    </div>
 
    <style>
-     body .container main.step-confirm-its-working .right .diagram-area .west-east-stream {
+     .container main.step-confirm-its-working .right .diagram .west-east-stream {
        display: block !important;
        opacity: 1;
      }
@@ -504,7 +509,7 @@ steps:
    </div>
 
    <style>
-     body .container main.step-a-change-in-the-west .right .diagram-area .west-east-stream {
+     .container main.step-a-change-in-the-west .right .diagram .west-east-stream {
        display: block !important;
        opacity: 1;
      }
@@ -548,7 +553,7 @@ steps:
    </div>
 
    <style>
-     body .container main.step-will-the-change-go-to-the-east .right .diagram-area .west-east-stream {
+     .container main.step-will-the-change-go-to-the-east .right .diagram .west-east-stream {
        display: block !important;
        opacity: 1;
      }
@@ -582,7 +587,7 @@ steps:
    </div>
 
    <style>
-     body .container main.step-mission-success .right .diagram-area .west-east-stream {
+     .container main.step-mission-success .right .diagram .west-east-stream {
        display: block !important;
        opacity: 1;
      }
@@ -590,15 +595,15 @@ steps:
 
    <!--
    <style>
-     body .container main.step-mission-success .right .diagram-area {
+     .container main.step-mission-success .right .diagram-area {
        min-height: 200px;
      }
-     body .container main.step-mission-success .right .diagram-area .diagram-more {
+     .container main.step-mission-success .right .diagram-area .diagram-more {
        display: block !important;
        opacity: 1 !important;
        color: #777;
      }
-     body .container main.step-mission-success .right .diagram-area .diagram-more img {
+     .container main.step-mission-success .right .diagram-area .diagram-more img {
        opacity: 0.5;
      }
    </style>
