@@ -140,9 +140,12 @@ steps:
   panel: none
   content: |
    <div>
-    We're going to see how <i>easy</i><br/>
-    it is to create <b>data&nbsp;streams</b><br/>
-    between Couchbase clusters.
+    How easy is it to create
+    create <b>data&nbsp;streams</b>
+    between Couchbase clusters?
+   </div>
+   <div>
+    Let's find out...
    </div>
    <div class="left-bottom" style="margin-bottom: -0.8rem;">
     <br/>
@@ -159,9 +162,9 @@ steps:
   content: |
    <div>
     <p>You'll be creating a <b>data&nbsp;stream</b>
-       in the <i>west</i>&nbsp;cluster
-       that'll send data to a new, empty bucket
-       in the <i>east</i>&nbsp;cluster.
+       in a <i>west</i>&nbsp;cluster
+       that'll send data
+       to an <i>east</i>&nbsp;cluster.
     <p>You'll also <b>mutate</b> data in the <i>west</i> and
        watch your mutation replicate over to the <i>east</i>.
     </p>
