@@ -420,7 +420,31 @@ function loadTour(data, sess) {
 
     with (ctx) eval('o = `' + (diagram.content || '') + '`');
 
-    document.querySelector(".diagram").innerHTML = ctx.o;
+    var diagramEl = document.querySelector(".diagram");
+
+    diagramEl.innerHTML = ctx.o;
+
+    diagramEl.addEventListener("click", function(e) {
+      // When a label was clicked in the diagram,
+      // SET-insert `saw-${panel}` to .container's className.
+      for (var t = e.target; t; t = t.parentElement) {
+        if (t.tagName == "LABEL") {
+          var panel = t.getAttribute("for");
+          if (panel) {
+            var sawPanel = `saw-${panel}`;
+
+            var c = document.querySelector(".container");
+
+            var names = c.className.split(' ');
+            if (!names.find(x => x == sawPanel)) {
+              names.push(sawPanel);
+
+              c.className = names.sort().join(' ');
+            }
+          }
+        }
+      }
+    });
 
     document.querySelector(".diagram-area").style = `height: ${diagram.height || 0};`;
   }
