@@ -1,4 +1,4 @@
-title: Connect Multiple Locations with Data Streaming
+title: A NodeJS App with Couchbase
 
 containers: 2
 
@@ -13,14 +13,22 @@ panels:
   id: e-cluster
   title: east cluster
   title-more: "username: ${s[1].CBUser} &nbsp;&nbsp; password: ${s[1].CBPswd}"
-  color: "#87b642"
+  color: "#87d642"
   iframe-src: http://${document.location.hostname}:${s[1].ContainerPortBase}/ui/index.html?lu=${s[1].CBUser}&lp=${s[1].CBPswd}
+ -
+  id: w-browser
+  title: browser
+  color: "#8762a0;"
+ -
+  id: w-appserver
+  title: nodejs
+  color: "#8762a0;"
 
 diagram:
  height: 50px
  content: |
   <div class="diagram-more"
-       style="position: absolute; display: none; opacity: 0.3; user-select: none;">
+       style="position: absolute; display: none; opacity: 0.3; user-select: none; left: 230px;">
     <div class="animated-stream"
          style="position: absolute; top: 35px; left: 25px; transform-origin: top left; height: 3px; width: 57px; transform: rotateZ(47deg);"></div>
     <div style="position: absolute; top: 80px; left: 60px;">
@@ -47,7 +55,7 @@ diagram:
   </div>
 
   <div class="diagram-more"
-       style="position: absolute; display: none; opacity: 0.3; user-select: none; left: 250px;">
+       style="position: absolute; display: none; opacity: 0.3; user-select: none; left: 470px;">
     <div class="animated-stream"
          style="position: absolute; top: 35px; left: 25px; transform-origin: top left; height: 3px; width: 57px; transform: rotateZ(47deg);"></div>
     <div style="position: absolute; top: 80px; left: 60px;">
@@ -74,7 +82,7 @@ diagram:
   </div>
 
   <div class="diagram-more west-east-stream animated-stream"
-       style="display: none; position: absolute; top: 27px; left: 205px; height: 6px; width: 44px;"></div>
+       style="display: none; position: absolute; top: 27px; left: 425px; height: 6px; width: 44px;"></div>
 
   <style>
     .animated-stream {
@@ -93,25 +101,44 @@ diagram:
     }
   </style>
 
+  <div style="position: absolute; top: 28px; left: 70px; height: 2px; width: 35px; background-color: #aaa;"></div>
+  <label for="w-browser"
+         class="title background-color-white"
+         style="top: 10px; left: 0px; width: 70px; height: 35px;">
+    <div style="padding-top: 3px; font-size: 14px;">
+      browser
+    </div>
+  </label>
+
+  <div style="position: absolute; top: 27px; left: 205px; height: 3px; width: 25px; background-color: #aaa;"></div>
+  <label for="w-appserver"
+         class="title background-color-white"
+         style="top: 10px; left: 105px; width: 95px; height: 35px;">
+    <div style="padding-top: 3px; font-size: 14px;">
+      app server
+      <div class="small" style="color: #666;">NodeJS</div>
+    </div>
+  </label>
+
   <label for="w-cluster"
          class="title background-color-white"
-         style="top: 10px; width: 12em; height: 35px;">
+         style="top: 10px; left: 230px; width: 190px; height: 35px;">
     <img src="./img/db-purple.svg"
          style="top: 0px; left: 0px; width: 50px;"/>
     <div style="top: 3px; left: 50px;">
-      west <span style="color: #777;">cluster</span>
-      <div class="small">${s[0].ContainerIP}</div>
+      west cluster
+      <div class="small" style="color: #666;">${s[0].ContainerIP}</div>
     </div>
   </label>
 
   <label for="e-cluster"
          class="title background-color-white"
-         style="top: 10px; left: 250px; width: 12em; height: 35px;">
+         style="top: 10px; left: 470px; width: 190px; height: 35px;">
     <img src="./img/db-green.svg"
          style="top: 0px; left: 0px; width: 50px;"/>
     <div style="top: 3px; left: 50px;">
-      east <span style="color: #777;">cluster</span>
-      <div class="small">${s[1].ContainerIP}</div>
+      east cluster
+      <div class="small" style="color: #666;">${s[1].ContainerIP}</div>
     </div>
   </label>
 
@@ -137,34 +164,10 @@ diagram:
 steps:
  -
   title: Welcome
-  panel: none
   content: |
    <div>
-    We're going to see how <i>easy</i><br/>
-    it is to create <b>data&nbsp;streams</b><br/>
-    between Couchbase clusters.
-   </div>
-   <div class="left-bottom" style="margin-bottom: -0.8rem;">
-    <br/>
-    <br/>
-    <br/>
-    <h3>&nbsp&nbsp&nbsp;&nbsp;&nbsp;&nbsp&nbsp&nbsp&nbsp;Begin Here
-        <div style="display: inline-block; transform-origin: left center; transform: rotateZ(60deg) scaleX(2);">
-          &#x279E;
-        </div>
-    </h3>
-   </div>
- -
-  title: Your mission
-  content: |
-   <div>
-    <p>You'll be creating a <b>data&nbsp;stream</b>
-       in the <i>west</i>&nbsp;cluster
-       that sends data to a new, empty bucket
-       in the <i>east</i>&nbsp;cluster.
-    <p>You'll also mutate data in the <i>west</i> and
-       watch your mutation get replicated to the <i>east</i>.
-    </p>
+    Creating a <b>data&nbsp;stream</b>
+    between two Couchbase clusters is <i>easy</i>.
    </div>
    <div>
     <h3>On the right&nbsp;
@@ -173,20 +176,33 @@ steps:
         </div>
     </h3>
     <ul>
-     <li>There are 2 active clusters:
-         <br/>
-         <em>west</em> and <em>east</em>
+     <li>2 active clusters: <em>west</em> and <em>east</em>
      </li>
-     <li>Click on their names and you'll see
-         an admin interface for each.
+     <li>click on their names and you'll see...
+     </li>
+     <li>an admin interface for each
      </li>
     </ul>
    </div>
    <div>
-    <br/>
-    <h3>NEXT</h3>
-    Let's create an empty bucket (database) in the
-    <i>east</i>.
+    <h3>Your mission</h3>
+    <p>Create a new <b>bucket</b> (database)
+       in the destination <i>east&nbsp;cluster</i>.
+    </p>
+    <p>Then connect the <i>west&nbsp;cluster</i>
+       to the <b>remote</b> <i>east&nbsp;cluster</i>.
+    </p>
+    <p>Lastly, start a data stream between
+       <b>source</b> and <b>destination</b> buckets
+       and watch your first mutation get replicated.
+    </p>
+   </div>
+   <div class="left-bottom" style="margin-bottom: -0.8rem;">
+    <h3>&nbsp&nbsp&nbsp;&nbsp;&nbsp;&nbsp&nbsp&nbsp&nbsp;Begin Here
+        <div style="display: inline-block; transform-origin: left center; transform: rotateZ(60deg) scaleX(2);">
+          &#x279E;
+        </div>
+    </h3>
    </div>
  -
   title: Destination east
@@ -195,12 +211,6 @@ steps:
    clicks:
     - "nav.nav-sidebar a[mn-tab=buckets]"
    styles: |
-    nav.nav-sidebar a[mn-tab=buckets] {
-      text-decoration: underline red 3px;
-    }
-    nav.nav-sidebar a[mn-tab=buckets].currentnav {
-      text-decoration: none !important;
-    }
     body[data-my-first-bucket=n] .header-controls a[ng-click="bucketsCtl.addBucket()"] {
       text-decoration: underline red 2px;
     }
@@ -210,8 +220,7 @@ steps:
     - q('div[buckets="buckets.details"] .cbui-tablerow-title[title="my-first-bucket"]').tagName && 'my-first-bucket'
   content: |
    <div>
-    Add a new bucket in the <em>east</em>
-    to be the destination of your data stream.
+    Add a new bucket to be the destination of your data stream.
    </div>
    <div>
     <h3>On the right&nbsp;
@@ -228,7 +237,7 @@ steps:
      </li>
     </ul>
    </div>
-   <div>
+   <div class="left-bottom">
     <h3>NOTICE</h3>
     Your new bucket is named<br/>
     <code>my-first-bucket</code>
@@ -247,12 +256,6 @@ steps:
    clicks:
     - "nav.nav-sidebar a[mn-tab=replications]"
    styles: |
-    nav.nav-sidebar a[mn-tab=replications] {
-      text-decoration: underline red 3px;
-    }
-    nav.nav-sidebar a[mn-tab=replications].currentnav {
-      text-decoration: none !important;
-    }
     body[data-remote-east=n] .header-controls a:last-child {
       text-decoration: underline red 2px;
     }
@@ -266,8 +269,8 @@ steps:
     - q('.modal-dialog .panel-header h2').innerText == 'Add Remote Cluster' && (document.body.scrollTop = 0) && false
   content: |
    <div>
-    In the <em>west</em>&nbsp;cluster (the source cluster)
-    you'll create a reference to the <em>east</em>&nbsp;cluster.
+    In the <em>west&nbsp;cluster</em> (the source cluster)
+    you'll create a reference to the <em>east&nbsp;cluster</em>.
    </div>
    <div>
     <h3>On the right&nbsp;
@@ -290,7 +293,7 @@ steps:
      </li>
     </ul>
    </div>
-   <div>
+   <div class="left-bottom">
     <h3>NEXT</h3>
     We'll create the actual data&nbsp;stream.
    </div>
@@ -301,12 +304,6 @@ steps:
    clicks:
     - "nav.nav-sidebar a[mn-tab=replications]"
    styles: |
-    nav.nav-sidebar a[mn-tab=replications] {
-      text-decoration: underline red 3px;
-    }
-    nav.nav-sidebar a[mn-tab=replications].currentnav {
-      text-decoration: none !important;
-    }
     body[data-rep-east=n] .header-controls a[ng-reflect-state="app.admin.replications.add"] {
       text-decoration: underline red 2px;
     }
@@ -323,7 +320,7 @@ steps:
     - q('body[data-rep-east=y]').tagName && 'rep-east'
   content: |
    <div>
-    In the <em>west</em>&nbsp;cluster, let's create a data replication stream.
+    Let's create a data replication stream.
    </div>
    <div>
     <h3>On the right&nbsp;
@@ -332,11 +329,9 @@ steps:
         </div>
     </h3>
     <ul>
-     <li>On the XDCR screen...
-     </li>
      <li>Click ADD REPLICATION to specify the data replication stream...
          (use <code class="nowrap">beer-sample</code>
-         as the <i>replicate&nbsp;from&nbsp;bucket</i>)
+         as the source bucket)
          and save it.
          <span class="check check-rep-east">&check;</span>
          <style>
@@ -349,11 +344,10 @@ steps:
    </div>
    <div>
     <h3>REMEMBER</h3>
-    The empty, remote bucket that you created was
+    The empty, remote bucket you created was:
     <code class="nowrap">my-first-bucket</code>
-    and you're replicating to the <i>east</i> remote&nbsp;cluster.
    </div>
-   <div>
+   <div class="left-bottom">
     <br/>
     <h3>NOTICE</h3>
     The outgoing data replication stream is now active and replicating.
@@ -365,25 +359,18 @@ steps:
   panel-tell:
    clicks:
     - "nav.nav-sidebar a[mn-tab=buckets]"
-   styles: |
-    nav.nav-sidebar a[mn-tab=buckets] {
-      text-decoration: underline red 3px;
-    }
-    nav.nav-sidebar a[mn-tab=buckets].currentnav {
-      text-decoration: none !important;
-    }
   content: |
    <div>
      Looking at the
-     <em>east</em>&nbsp;cluster...
+     <em>east&nbsp;cluster</em>...
    </div>
-   <div>
+   <div class="left-bottom">
     <h3>NOTICE</h3>
      You can now see data appearing in
      <code class="nowrap">my-first-bucket</code>.
    </div>
    <div>
-    Your ongoing data&nbsp;stream works!
+    Your data&nbsp;stream works!
    </div>
 
    <style>
@@ -398,17 +385,10 @@ steps:
   panel-tell:
    clicks:
     - nav.nav-sidebar a[ui-sref="app.admin.docs.editor"]
-   styles: |
-    nav.nav-sidebar a[ui-sref="app.admin.docs.editor"] {
-      text-decoration: underline red 3px;
-    }
-    nav.nav-sidebar a[ui-sref="app.admin.docs.editor"].currentnav {
-      text-decoration: none !important;
-    }
   content: |
    <div>
     Let's change a document in the
-    <em>west</em>&nbsp;cluster
+    <em>west&nbsp;cluster</em>
     to see whether your data&nbsp;stream
     handles mutations.
    </div>
@@ -421,7 +401,7 @@ steps:
     <ul>
      <li>On the Documents screen...
      </li>
-     <li>Select the <code class="nowrap">beer-sample</code> keyspace bucket.
+     <li>Select the <code class="nowrap">beer-sample</code> bucket.
      </li>
      <li>Edit <span class="icon fa-pencil"></span>
          a document and save your changes.
@@ -441,19 +421,12 @@ steps:
   panel-tell:
    clicks:
     - nav.nav-sidebar a[ui-sref="app.admin.docs.editor"]
-   styles: |
-    nav.nav-sidebar a[ui-sref="app.admin.docs.editor"] {
-      text-decoration: underline red 3px;
-    }
-    nav.nav-sidebar a[ui-sref="app.admin.docs.editor"].currentnav {
-      text-decoration: none !important;
-    }
    checks:
     - q('qw-collection-menu div select:first-child').value != 'my-first-bucket' && !qLast.getAttribute('data-touched') && (qLast.value = 'my-first-bucket') && qLast.dispatchEvent(new UIEvent('change')) && qLast.setAttribute('data-touched', true) && false
   content: |
    <div>
     Let's see if your change was replicated to the
-    <em>east</em>&nbsp;cluster.
+    <em>east&nbsp;cluster</em>.
    </div>
    <div>
     <h3>On the right&nbsp;
@@ -464,7 +437,7 @@ steps:
     <ul>
      <li>On the Documents screen...
      </li>
-     <li>Select the <code class="nowrap">my-first-bucket</code> keyspace bucket.
+     <li>Select the <code class="nowrap">my-first-bucket</code> bucket.
      </li>
      <li>Was your document change propagated to the <em>east</em>?
      </li>
@@ -478,7 +451,7 @@ steps:
      }
    </style>
  -
-  title: Mission success!
+  title: Mission success
   panel: none
   content: |
    <div>
@@ -492,6 +465,8 @@ steps:
     That and other features
     makes Couchbase a great fit
     for applications that need
+    a <span class="nowrap">high-performance</span>
+    database that can handle
     <em>flexible, distributed, <span class="nowrap">multi-location</span></em>
     data&nbsp;flows.
    </div>
@@ -502,9 +477,6 @@ steps:
       Cross-datacenter Replication (XDCR) Documentation
     </a>
    </div>
-   <div>
-    Thanks!
-   </div>
 
    <style>
      body .container main.step-mission-success .right .diagram-area {
@@ -513,9 +485,5 @@ steps:
      body .container main.step-mission-success .right .diagram-area .diagram-more {
        display: block !important;
        opacity: 1 !important;
-       color: #777;
-     }
-     body .container main.step-mission-success .right .diagram-area .diagram-more img {
-       opacity: 0.5;
      }
    </style>
