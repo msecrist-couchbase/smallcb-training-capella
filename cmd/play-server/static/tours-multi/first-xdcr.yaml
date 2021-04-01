@@ -7,13 +7,13 @@ panels:
   id: w-cluster
   title: west cluster
   title-more: "username: ${s[0].CBUser} &nbsp;&nbsp; password: ${s[0].CBPswd}"
-  color: "#8762a0;"
+  color: "#CC2A2E;"
   iframe-src: http://${document.location.hostname}:${s[0].ContainerPortBase}/ui/index.html?lu=${s[0].CBUser}&lp=${s[0].CBPswd}
  -
   id: e-cluster
   title: east cluster
   title-more: "username: ${s[1].CBUser} &nbsp;&nbsp; password: ${s[1].CBPswd}"
-  color: "#87b642"
+  color: "#4287D6;"
   iframe-src: http://${document.location.hostname}:${s[1].ContainerPortBase}/ui/index.html?lu=${s[1].CBUser}&lp=${s[1].CBPswd}
 
 diagram:
@@ -24,7 +24,7 @@ diagram:
     <div class="animated-stream"
          style="position: absolute; top: 35px; left: 25px; transform-origin: top left; height: 3px; width: 57px; transform: rotateZ(47deg);"></div>
     <div style="position: absolute; top: 80px; left: 60px;">
-      <img src="./img/db-purple.svg"
+      <img src="./img/cb-icon-red.png"
            style="position: absolute; top: 0px; left: 0px; width: 20px;"/>
       <div style="position: absolute; top: 0px; left: 25px" class="small">warehouse-w01 cluster</div>
     </div>
@@ -32,7 +32,7 @@ diagram:
     <div class="animated-stream"
          style="position: absolute; top: 30px; left: 25px; transform-origin: top left; height: 3px; width: 80px; transform: rotateZ(72deg);"></div>
     <div style="position: absolute; top: 108px; left: 42px;">
-      <img src="./img/db-purple.svg"
+      <img src="./img/cb-icon-red.png"
            style="position: absolute; top: 0px; left: 0px; width: 20px;"/>
       <div style="position: absolute; top: 0px; left: 25px" class="small">store-w02 cluster</div>
     </div>
@@ -40,7 +40,7 @@ diagram:
     <div class="animated-stream"
          style="position: absolute; top: 30px; left: 25px; transform-origin: top left; height: 3px; width: 105px; transform: rotateZ(88deg);"></div>
     <div style="position: absolute; top: 140px; left: 20px;">
-      <img src="./img/db-purple.svg"
+      <img src="./img/cb-icon-red.png"
            style="position: absolute; top: 0px; left: 0px; width: 20px;"/>
       <div style="position: absolute; top: 0px; left: 25px" class="small">store-w04 cluster</div>
     </div>
@@ -51,7 +51,7 @@ diagram:
     <div class="animated-stream"
          style="position: absolute; top: 35px; left: 25px; transform-origin: top left; height: 3px; width: 57px; transform: rotateZ(47deg);"></div>
     <div style="position: absolute; top: 80px; left: 60px;">
-      <img src="./img/db-green.svg"
+      <img src="./img/cb-icon-blue.png"
            style="position: absolute; top: 0px; left: 0px; width: 20px;"/>
       <div style="position: absolute; top: 0px; left: 25px" class="small">store-e03 cluster</div>
     </div>
@@ -59,7 +59,7 @@ diagram:
     <div class="animated-stream"
          style="position: absolute; top: 30px; left: 25px; transform-origin: top left; height: 3px; width: 80px; transform: rotateZ(72deg);"></div>
     <div style="position: absolute; top: 108px; left: 42px;">
-      <img src="./img/db-green.svg"
+      <img src="./img/cb-icon-blue.png"
            style="position: absolute; top: 0px; left: 0px; width: 20px;"/>
       <div style="position: absolute; top: 0px; left: 25px" class="small">store-e07 cluster</div>
     </div>
@@ -67,7 +67,7 @@ diagram:
     <div class="animated-stream"
          style="position: absolute; top: 30px; left: 25px; transform-origin: top left; height: 3px; width: 105px; transform: rotateZ(88deg);"></div>
     <div style="position: absolute; top: 140px; left: 20px;">
-      <img src="./img/db-green.svg"
+      <img src="./img/cb-icon-blue.png"
            style="position: absolute; top: 0px; left: 0px; width: 20px;"/>
       <div style="position: absolute; top: 0px; left: 25px" class="small">store-e09 cluster</div>
     </div>
@@ -105,22 +105,24 @@ diagram:
   <label for="w-cluster"
          class="title background-color-white"
          style="top: 10px; width: 12em; height: 35px;">
-    <img src="./img/db-purple.svg"
-         style="top: 0px; left: 0px; width: 50px;"/>
-    <div style="top: 3px; left: 50px;">
-      west <span style="color: #777;">cluster</span>
-      <div class="small">${s[0].ContainerIP}</div>
+    <img src="./img/cb-icon-red.png"
+         style="top: 2px; left: 2px; width: 30px;"/>
+    <div style="top: 5px; left: 36px; font-size: 0.82em; font-weight: bold; color: #333;">
+      Couchbase Cluster
+      <span style="color: #CC2A2E;">WEST</span>
+      <div style="font-size: 0.75em; font-weight: normal;">${s[0].ContainerIP}</div>
     </div>
   </label>
 
   <label for="e-cluster"
          class="title background-color-white"
          style="top: 10px; left: 250px; width: 12em; height: 35px;">
-    <img src="./img/db-green.svg"
-         style="top: 0px; left: 0px; width: 50px;"/>
-    <div style="top: 3px; left: 50px;">
-      east <span style="color: #777;">cluster</span>
-      <div class="small">${s[1].ContainerIP}</div>
+    <img src="./img/cb-icon-blue.png"
+         style="top: 2px; left: 2px; width: 30px;"/>
+    <div style="top: 5px; left: 36px; font-size: 0.82em; font-weight: bold; color: #333;">
+      Couchbase Cluster
+      <span style="color: #4287D6;">EAST</span>
+      <div style="font-size: 0.75em; font-weight: normal;">${s[1].ContainerIP}</div>
     </div>
   </label>
 
