@@ -37,7 +37,19 @@ servers/list:
           --password ${PSWD} \\
           --server-add ${q('input#add-server-hostname').value || HOST} \\
           --server-add-username ${q('input#user_inp').value || USER} --server-add-password ${q('input#password_inp').value || PSWD } \\
-          --services ${[q('input[type="checkbox"]#for-kv-service').checked && 'data', q('input[type="checkbox"]#for-index-service').checked && 'index',q('input[type="checkbox"]#for-query-service').checked && 'query',q('input[type="checkbox"]#for-fts-service').checked && 'fts',q('input[type="checkbox"]#for-cbas-service').checked && 'analytics',q('input[type="checkbox"]#for-eventing-service').checked && 'eventing'].filter(x => x).join(',')}
+          --services ${[q('input[type="checkbox"]#for-kv-service').checked && 'data', q('input[type="checkbox"]#for-index-service').checked && 'index',q('input[type="checkbox"]#for-query-service').checked && 'query',q('input[type="checkbox"]#for-fts-service').checked && 'fts',q('input[type="checkbox"]#for-cbas-service').checked && 'analytics',q('input[type="checkbox"]#for-eventing-service').checked && 'eventing',q('input[type="checkbox"]#for-backup-service').checked && 'backup'].filter(x => x).join(',')} \\\n
+        ${q('input[type="checkbox"]#for-use-disk-paths').checked ? 
+        'node-init -c '+ (q('input#add-server-hostname').value || HOST) + 
+          ' -u ' + (q('input#user_inp').value || USER) + 
+          ' -p ' + (q('input#password_inp').value || PSWD) + ' \\' : ''}
+          ${q('input[type="checkbox"]#for-use-disk-paths').checked ? 
+            '--node-init-data-path '+ (q('input#setup_db_path_input').value) + ' \\' : ''}
+          ${q('input[type="checkbox"]#for-use-disk-paths').checked ? 
+            '--node-init-index-path '+ (q('input#setup_index_path_input').value) + ' \\' : ''}
+          ${q('input[type="checkbox"]#for-use-disk-paths').checked ? 
+            '--node-init-eventing-path '+ (q('input#setup_eventing_path_input').value) + ' \\' : ''}
+          ${q('input[type="checkbox"]#for-use-disk-paths').checked ? 
+            '--node-init-analytics-path '+ (q('input#setup_cbas_dirs_input0').value) : ''}
 
 buckets:
  -
