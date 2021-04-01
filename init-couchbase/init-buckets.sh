@@ -33,6 +33,14 @@ echo "cbimport beer-sample..."
  -b beer-sample \
  -d file:///opt/couchbase/samples/beer-sample.zip
 
+echo "drop beer-sample indexes..."
+curl http://${CB_USER}:${CB_PSWD}@localhost:8093/query/service \
+    -d 'statement=DROP INDEX beer_primary ON `beer-sample`'
+
+echo "create beer-sample primary index..."
+curl http://${CB_USER}:${CB_PSWD}@localhost:8093/query/service \
+    -d 'statement=CREATE PRIMARY INDEX beer_primary ON `beer-sample`'
+
 echo "couchbase-cli bucket-create travel-sample..."
 /opt/couchbase/bin/couchbase-cli bucket-create \
  -c localhost -u ${CB_USER} -p ${CB_PSWD} \
@@ -108,7 +116,7 @@ sleep 10
 
 echo "create travel-sample primary index..."
 curl http://${CB_USER}:${CB_PSWD}@localhost:8093/query/service \
-    -d 'statement=CREATE PRIMARY INDEX idx_primary ON `travel-sample`'
+    -d 'statement=CREATE PRIMARY INDEX def_primary ON `travel-sample`'
 
 echo "sleep 40 to allow stabilization..."
 sleep 40
