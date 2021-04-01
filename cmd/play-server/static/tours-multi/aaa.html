@@ -610,7 +610,7 @@ function stepShow(i) {
     if (step) {
       if (step.title) {
         className += " step-" + step.title.trim()
-          .replaceAll(/[\?!]/g, '').replaceAll(' ', '-').toLowerCase();
+          .replaceAll(/[\?!']/g, '').replaceAll(' ', '-').toLowerCase();
       }
 
       var panel = step.panel;

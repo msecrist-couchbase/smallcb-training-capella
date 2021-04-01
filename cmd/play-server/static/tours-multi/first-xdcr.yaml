@@ -93,7 +93,7 @@ diagram:
     }
 
     @keyframes animated-border-red {
-      40% {
+      30% {
         border-color: red;
       }
       60% {
@@ -210,7 +210,7 @@ steps:
 
    <style>
      .container main.step-your-mission article .right .diagram-area .diagram label {
-       animation: animated-border-red 1s infinite linear;
+       animation: animated-border-red 1.5s infinite linear;
      }
 
      .container.saw-w-cluster main.step-your-mission article .right .diagram-area .diagram label[for="w-cluster"],
@@ -257,7 +257,9 @@ steps:
      <li>Click ADD BUCKET.
          <br/><br/>
      </li>
-     <li>Submit the pre-filled form.
+     <li>In the pre-filled form,
+         <br/>
+         click Add Bucket.
          <span class="check check-my-first-bucket">&check;</span>
          <style>
            article.checked-e-cluster-my-first-bucket .check-my-first-bucket {
@@ -323,7 +325,8 @@ steps:
      <li>Click ADD REMOTE to create the reference to the <i>east</i>.
          <br/><br/>
      </li>
-     <li>Save the pre-filled form.
+     <li>In the pre-filled form,<br/>
+         click Save.
          <span class="check check-cluster-connect">&check;</span>
          <style>
            article.checked-w-cluster-cluster-connect .check-cluster-connect {
@@ -409,11 +412,18 @@ steps:
    <div>
     <br/>
     <h3>NOTICE</h3>
-    The outgoing data replication stream is now active and replicating.
+    The outgoing data replication stream is now
+    <span class="replicating check-rep-east">replicating</span>.
     <span class="check check-rep-east">&check;</span>
    </div>
+
+   <style>
+     article.checked-w-cluster-rep-east .replicating.check-rep-east {
+       font-weight: bold;
+     }
+   </style>
  -
-  title: Congratulations
+  title: Confirm it's working
   panel: e-cluster
   panel-tell:
    clicks:
@@ -432,15 +442,16 @@ steps:
    </div>
    <div>
     <h3>NOTICE</h3>
-     You can now see data appearing in
-     <code class="nowrap">my-first-bucket</code>.
+     You can now see that your
+     <code class="nowrap">my-first-bucket</code>
+     has more than 0 <i>items</i>.
    </div>
    <div>
     Your ongoing data&nbsp;stream works!
    </div>
 
    <style>
-     body .container main.step-congratulations .right .diagram-area .west-east-stream {
+     body .container main.step-confirm-its-working .right .diagram-area .west-east-stream {
        display: block !important;
        opacity: 1;
      }
@@ -478,8 +489,8 @@ steps:
      <li>Select the <code class="nowrap">beer-sample</code> keyspace bucket.
          <br/><br/>
      </li>
-     <li>Edit <span class="icon fa-pencil"></span>
-         a document and save your changes.
+     <li>Edit <span class="icon fa-pencil"></span> a document
+         and save your changes.
      </li>
     </ul>
    </div>
