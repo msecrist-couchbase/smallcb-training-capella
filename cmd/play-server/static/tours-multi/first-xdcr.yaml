@@ -563,6 +563,14 @@ steps:
    </div>
 
    <style>
+     body .container main.step-mission-success .right .diagram-area .west-east-stream {
+       display: block !important;
+       opacity: 1;
+     }
+   </style>
+
+   <!--
+   <style>
      body .container main.step-mission-success .right .diagram-area {
        min-height: 200px;
      }
@@ -575,3 +583,4 @@ steps:
        opacity: 0.5;
      }
    </style>
+   -->
