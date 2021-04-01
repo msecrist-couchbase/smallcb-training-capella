@@ -294,7 +294,7 @@ steps:
   content: |
    <div>
     In the <em>west</em>&nbsp;cluster (the source cluster),
-    create a reference to the <em>east</em>&nbsp;cluster.
+    create a reference to the <i>east</i>&nbsp;cluster.
    </div>
    <div>
     <h3>On the right&nbsp;
@@ -546,7 +546,7 @@ steps:
     </a>
    </div>
    <div>
-    Thanks for <i>streamin'</i> with Couchbase!
+    Thanks for playing with Couchbase!
    </div>
 
    <style>
