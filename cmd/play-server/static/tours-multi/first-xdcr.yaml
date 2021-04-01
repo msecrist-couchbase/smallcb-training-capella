@@ -141,7 +141,7 @@ steps:
   content: |
    <div>
     How easy is it to create
-    create <b>data&nbsp;streams</b>
+    <b>data&nbsp;streams</b>
     between Couchbase clusters?
    </div>
    <div>
