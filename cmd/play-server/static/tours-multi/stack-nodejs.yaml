@@ -7,13 +7,13 @@ panels:
   id: w-cluster
   title: west cluster
   title-more: "username: ${s[0].CBUser} &nbsp;&nbsp; password: ${s[0].CBPswd}"
-  color: "#8762a0;"
+  color: "#CC2A2E"
   iframe-src: http://${document.location.hostname}:${s[0].ContainerPortBase}/ui/index.html?lu=${s[0].CBUser}&lp=${s[0].CBPswd}
  -
   id: e-cluster
   title: east cluster
   title-more: "username: ${s[1].CBUser} &nbsp;&nbsp; password: ${s[1].CBPswd}"
-  color: "#87d642"
+  color: "#4287D6"
   iframe-src: http://${document.location.hostname}:${s[1].ContainerPortBase}/ui/index.html?lu=${s[1].CBUser}&lp=${s[1].CBPswd}
  -
   id: w-browser
@@ -123,22 +123,24 @@ diagram:
   <label for="w-cluster"
          class="title background-color-white"
          style="top: 10px; left: 230px; width: 190px; height: 35px;">
-    <img src="./img/db-purple.svg"
-         style="top: 0px; left: 0px; width: 50px;"/>
-    <div style="top: 3px; left: 50px;">
-      west cluster
-      <div class="small" style="color: #666;">${s[0].ContainerIP}</div>
+    <img src="./img/cb-icon-red.png"
+         style="top: 2px; left: 2px; width: 30px;"/>
+    <div style="top: 5px; left: 36px; font-size: 0.82em; font-weight: bold; color: #333;">
+      Couchbase Cluster
+      <span style="color: #CC2A2E;">WEST</span>
+      <div style="font-size: 0.75em; font-weight: normal;">${s[0].ContainerIP}</div>
     </div>
   </label>
 
   <label for="e-cluster"
          class="title background-color-white"
          style="top: 10px; left: 470px; width: 190px; height: 35px;">
-    <img src="./img/db-green.svg"
-         style="top: 0px; left: 0px; width: 50px;"/>
-    <div style="top: 3px; left: 50px;">
-      east cluster
-      <div class="small" style="color: #666;">${s[1].ContainerIP}</div>
+    <img src="./img/cb-icon-blue.png"
+         style="top: 2px; left: 2px; width: 30px;"/>
+    <div style="top: 5px; left: 36px; font-size: 0.82em; font-weight: bold; color: #333;">
+      Couchbase Cluster
+      <span style="color: #4287D6;">EAST</span>
+      <div style="font-size: 0.75em; font-weight: normal;">${s[1].ContainerIP}</div>
     </div>
   </label>
 

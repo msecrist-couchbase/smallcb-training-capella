@@ -113,8 +113,11 @@ diagram:
     </div>
   </div>
 
+  <div class="diagram-more west-east-connect"
+       style="display: none; position: absolute; top: 29px; left: 200px; width: 55px; height: 2px;"></div>
+
   <div class="diagram-more west-east-stream animated-stream"
-       style="display: none; position: absolute; top: 27px; left: 205px; height: 6px; width: 44px;"></div>
+       style="display: none; position: absolute; top: 27px; left: 205px; width: 44px; height: 6px;"></div>
 
   <style>
     .animated-stream {
@@ -137,7 +140,7 @@ diagram:
         background-color: initial;
       }
       90% {
-        background-color: #e0d0d0;
+        background-color: #f0d0d0;
       }
       100% {
         background-color: initial;
@@ -196,7 +199,7 @@ steps:
   panel: none
   content: |
    <div>
-    Mission-critical enterprise applications
+    Mission-critical applications
     are often distributed across
     multiple locations and clouds
     <br/>
@@ -222,7 +225,7 @@ steps:
    </div>
 
    <style>
-     .container main.step-0 .right .diagram #diagram-overlay {
+     main.step-0 .right .diagram #diagram-overlay {
        display: block !important;
        position: absolute;
        width: 600px;
@@ -231,7 +234,7 @@ steps:
        opacity: 0.4;
        z-index: 1;
      }
-     .container main.step-0 .right .diagram .west-east-stream {
+     main.step-0 .right .diagram .west-east-stream {
        display: block !important;
      }
    </style>
@@ -266,13 +269,13 @@ steps:
    </div>
 
    <style>
-     .container main.step-your-mission article .right .diagram-area .diagram label {
+     main.step-your-mission article .right .diagram label {
        border: 1px solid red;
-       animation: animated-background 5s infinite linear;
+       animation: animated-background 1.5s infinite linear;
      }
 
-     .container.saw-w-cluster main.step-your-mission article .right .diagram-area .diagram label[for="w-cluster"],
-     .container.saw-e-cluster main.step-your-mission article .right .diagram-area .diagram label[for="e-cluster"] {
+     .container.saw-w-cluster main.step-your-mission article .right .diagram label[for="w-cluster"],
+     .container.saw-e-cluster main.step-your-mission article .right .diagram label[for="e-cluster"] {
        border: 1px solid #aaa;
        animation: none;
      }
@@ -400,6 +403,13 @@ steps:
     <h3>NEXT</h3>
     It's time to create an actual data&nbsp;stream!
    </div>
+
+   <style>
+     article.checked-w-cluster-cluster-connect .right .diagram .west-east-connect {
+       display: block !important;
+       background-color: #80c677;
+     }
+   </style>
  -
   title: Add a data stream
   panel: w-cluster
@@ -476,8 +486,21 @@ steps:
    </div>
 
    <style>
-     article.checked-w-cluster-rep-east .replicating.check-rep-east {
+     main.step-add-a-data-stream .right .diagram .west-east-connect {
+       display: block !important;
+       background-color: #aaa;
+     }
+
+     main.step-add-a-data-stream article.checked-w-cluster-rep-east .right .diagram .west-east-connect {
+       display: none !important;
+     }
+
+     main.step-add-a-data-stream article.checked-w-cluster-rep-east .replicating.check-rep-east {
        font-weight: bold;
+     }
+
+     main.step-add-a-data-stream article.checked-w-cluster-rep-east .right .diagram .west-east-stream {
+       display: block !important;
      }
    </style>
  -
@@ -510,9 +533,8 @@ steps:
    </div>
 
    <style>
-     .container main.step-confirm-its-working .right .diagram .west-east-stream {
+     main.step-confirm-its-working .right .diagram .west-east-stream {
        display: block !important;
-       opacity: 1;
      }
    </style>
  -
@@ -555,9 +577,8 @@ steps:
    </div>
 
    <style>
-     .container main.step-a-change-in-the-west .right .diagram .west-east-stream {
+     main.step-a-change-in-the-west .right .diagram .west-east-stream {
        display: block !important;
-       opacity: 1;
      }
    </style>
  -
@@ -599,14 +620,15 @@ steps:
    </div>
 
    <style>
-     .container main.step-will-the-change-go-to-the-east .right .diagram .west-east-stream {
+     main.step-will-the-change-go-to-the-east .right .diagram .west-east-stream {
        display: block !important;
-       opacity: 1;
      }
    </style>
  -
   title: Mission success!
   panel: none
+  panel-tell:
+    clear: true
   content: |
    <div>
     The takeaway...
@@ -636,23 +658,22 @@ steps:
    </div>
 
    <style>
-     .container main.step-mission-success .right .diagram .west-east-stream {
+     main.step-mission-success .right .diagram .west-east-stream {
        display: block !important;
-       opacity: 1;
      }
    </style>
 
    <!--
    <style>
-     .container main.step-mission-success .right .diagram-area {
+     main.step-mission-success .right .diagram-area {
        min-height: 200px;
      }
-     .container main.step-mission-success .right .diagram-area .diagram-more {
+     main.step-mission-success .right .diagram-area .diagram-more {
        display: block !important;
        opacity: 1 !important;
        color: #777;
      }
-     .container main.step-mission-success .right .diagram-area .diagram-more img {
+     main.step-mission-success .right .diagram-area .diagram-more img {
        opacity: 0.5;
      }
    </style>
