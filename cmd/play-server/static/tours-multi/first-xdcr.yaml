@@ -221,11 +221,11 @@ steps:
   title: Your mission
   content: |
    <div>
-    <p>You'll be creating a <b>data&nbsp;stream</b>
+    <p>Create a <b>data&nbsp;stream</b>
        in a <i>west</i>&nbsp;cluster
        that'll send data
        to an <i>east</i>&nbsp;cluster.
-    <p>You'll also <b>mutate</b> data in the <i>west</i> and
+    <p>Also, <b>mutate</b> data in the <i>west</i> and
        watch your mutation replicate over to the <i>east</i>.
     </p>
    </div>
@@ -379,7 +379,7 @@ steps:
     <br/>
     <br/>
     <h3>NEXT</h3>
-    We'll create the actual data&nbsp;stream.
+    It's time to create an actual data&nbsp;stream!
    </div>
  -
   title: Add a data stream
@@ -410,7 +410,7 @@ steps:
     - q('body[data-rep-east=y]').tagName && 'rep-east'
   content: |
    <div>
-    In the <em>west</em>&nbsp;cluster, let's create a data replication stream.
+    In the <em>west</em>&nbsp;cluster, create a data replication stream.
    </div>
    <div>
     <h3>On the right&nbsp;
@@ -476,13 +476,14 @@ steps:
     }
   content: |
    <div>
-    Let's look at the
-    <em>east</em>&nbsp;cluster...
+    Take a look at the
+    <em>east</em>&nbsp;cluster.
    </div>
    <div>
     <h3>NOTICE</h3>
-     You can now see that your
+     See that your
      <code class="nowrap">my-first-bucket</code>
+     <br/>
      has more than 0 <i>items</i>.
    </div>
    <div>
@@ -510,7 +511,7 @@ steps:
     }
   content: |
    <div>
-    Let's change a document in the
+    Change a document in the
     <em>west</em>&nbsp;cluster
     to see whether your data&nbsp;stream
     handles mutations.
@@ -557,7 +558,7 @@ steps:
     - q('qw-collection-menu div select:first-child').value != 'my-first-bucket' && qLast.getAttribute && !qLast.getAttribute('data-touched') && (qLast.value = 'my-first-bucket') && qLast.dispatchEvent(new UIEvent('change')) && qLast.setAttribute('data-touched', true) && false
   content: |
    <div>
-    Let's see if your change was replicated to the
+    See if your change was replicated to the
     <em>east</em>&nbsp;cluster.
    </div>
    <div>
