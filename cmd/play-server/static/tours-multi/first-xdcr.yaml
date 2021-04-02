@@ -118,12 +118,15 @@ diagram:
       }
     }
 
-    @keyframes animated-border-red {
+    @keyframes animated-background {
       0% {
-        border-color: red;
+        background-color: initial;
       }
-      60% {
-        border-color: initial;
+      90% {
+        background-color: #e0d0d0;
+      }
+      100% {
+        background-color: initial;
       }
     }
   </style>
@@ -179,14 +182,15 @@ steps:
   panel: none
   content: |
    <div>
-    Modern, mission-critical applications
-    are often distributed
-    and connected by ongoing data flows
-    or streams between locations.
+    Mission-critical enterprise applications
+    are often distributed across
+    multiple locations and clouds
+    <br/>
+    and are connected by <b>data&nbsp;streams</b>.
    </div>
    <div>
-    It's easy to create
-    <b>data&nbsp;streams</b>
+    It is <i>easy</i> to create
+    data&nbsp;streams
     between Couchbase clusters.
    </div>
    <div>
@@ -241,7 +245,7 @@ steps:
          <i>west</i> and <i>east</i>
          <br/><br/>
      </li>
-     <li><b>Click</b> on their icons and
+     <li><b>Click</b> on their icons to
          open up their admin interfaces.
      </li>
     </ul>
@@ -249,7 +253,7 @@ steps:
 
    <style>
      .container main.step-your-mission article .right .diagram-area .diagram label {
-       animation: animated-border-red 1.5s infinite linear;
+       animation: animated-background 5s infinite linear;
      }
 
      .container.saw-w-cluster main.step-your-mission article .right .diagram-area .diagram label[for="w-cluster"],
@@ -597,10 +601,13 @@ steps:
     straightforwards with Couchbase.
    </div>
    <div>
-    That and other Couchbase features
-    can help you build modern applications with<br/>
-    <em>flexible, distributed, <span class="nowrap">multi-location</span></em>
-    data&nbsp;flows.
+    That and more Couchbase features
+    can help you build mission-critical applications
+    that are
+    <em>flexible</em>,
+    <em>distributed</em>,
+    and
+    <em><span class="nowrap">multi-location</span></em>.
    </div>
    <div>
     Learn more:
