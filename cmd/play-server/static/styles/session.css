@@ -59,7 +59,7 @@ form .captcha-bg {
 }
 
 form .actions * {
-  display: inline;
+  display: inline-block;
 }
 
 form .actions .cancel, .actions .cancel a {

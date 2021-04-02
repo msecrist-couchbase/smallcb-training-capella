@@ -108,8 +108,31 @@
 function submitted() {
   setTimeout(function() {
     document.querySelector("form .actions input[type=submit]").disabled = true;
-    document.querySelector("form .actions .cancel").innerText = "launching...";
+    document.querySelector("form .actions .cancel").innerHTML =
+      `launching containers<span class="loading"></span>`;
   }, 100);
 }
 </script>
+<style>
+.loading:after {
+  overflow: hidden;
+  display: inline-block;
+  vertical-align: text-bottom;
+  animation: ellipsis steps(5,end) 1.5s infinite;
+  content: "\2026\2026\2026\2026"; /* ascii code for the ellipsis character */
+  width: 0px;
+}
+
+@keyframes ellipsis {
+  to {
+    width: 30px;
+  }
+}
+
+@-webkit-keyframes ellipsis {
+  to {
+    width: 30px;
+  }
+}
+</style>
 </html>

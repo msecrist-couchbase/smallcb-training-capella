@@ -327,21 +327,18 @@ input[type="checkbox"].step-nav-popup:checked ~ .step-x .step .step-nav label .s
   cursor: pointer;
 }
 
-.step-nav button:disabled {
-  background-color: #dddddd;
-  color: #f4f4f4;
-  cursor: initial;
+.step-nav button:hover {
+  color: #ddd;
 }
 
 .step-nav button:first-child {
-  background-color: #d4d4d4;
-  color: white;
+  opacity: 0.5;
 }
-.step-nav button:first-child:hover {
-  color: #999;
-}
-.step-nav button:first-child:disabled {
-  color: #f4f4f4;
+
+.step-nav button:disabled {
+  background-color: #bbb;
+  color: #eee;
+  cursor: initial;
 }
 
 .container article .small {
@@ -552,19 +549,19 @@ function loadTourPanels(data, sessArr) {
 
     var ctx;
 
-    ctx = { s: sessArr, o: '' };
+    ctx = { s: sessArr, panel: panel, titleMore: '', iframeSrc: '' };
+
+    if (panel.init) {
+      with (ctx) eval(panel.init);
+    }
+
     if (panel['title-more']) {
-      with (ctx) eval('o = `' + panel['title-more'] + '`');
+      with (ctx) eval('titleMore = `' + panel['title-more'] + '`');
     }
 
-    var titleMore = ctx.o;
-
-    ctx = { s: sessArr, o: '' };
     if (panel['iframe-src']) {
-      with (ctx) eval('o = `' + panel['iframe-src'] + '`');
+      with (ctx) eval('iframeSrc = `' + panel['iframe-src'] + '`');
     }
-
-    var iframeSrc = ctx.o;
 
     var color = panel.color || '#444';
 
@@ -577,16 +574,15 @@ function loadTourPanels(data, sessArr) {
          <label class="title"
                 style="width: ${diagramLabelStyle.width || 'auto'}; height: ${diagramLabelStyle.height || 'auto'};">
            ${diagramLabelEl.innerHTML || panel.title}</label>
-         <div class="title-more">${titleMore}</div>
-         <div class="title-more"><a href="${iframeSrc}" target="_blank">[open &#x2B08;]</a></div>
+         <div class="title-more">${ctx.titleMore}</div>
+         <div class="title-more"><a href="${ctx.iframeSrc}" target="_blank">[open &#x2B08;]</a></div>
          <div class="controls">
             <label class="close" for="none">X</label>
          </div>
        </div>
        <iframe id="iframe-${panel.id}"
-               src="${iframeSrc}"
-               sandbox="allow-same-origin allow-scripts allow-forms allow-popups"
-               style="border-left: 2px solid ${color};"></iframe>
+               src="${ctx.iframeSrc}"
+               sandbox="allow-same-origin allow-scripts allow-forms allow-popups"></iframe>
        <style>
          input#${panel.id}:checked ~ .container article .right #panel-${panel.id} {
            display: flex;
@@ -600,6 +596,23 @@ function loadTourPanels(data, sessArr) {
 
     rightEl.appendChild(div);
   }
+
+  setTimeout(function() { initTell(0) }, 1000);
+}
+
+function initTell(x) {
+  if (document.querySelector("main").className.indexOf("step-0") < 0 ||
+      x >= 20) {
+    return;
+  }
+
+  for (let panel of (tourData && tourData.panels)) {
+    if (panel['init-tell']) {
+      tell(panel.id, panel['init-tell']);
+    }
+  }
+
+  setTimeout(function() { initTell(x + 1); }, 500);
 }
 
 function stepShow(i) {
@@ -610,7 +623,7 @@ function stepShow(i) {
     if (step) {
       if (step.title) {
         className += " step-" + step.title.trim()
-          .replaceAll(/[\?!]/g, '').replaceAll(' ', '-').toLowerCase();
+          .replaceAll(/[\?!']/g, '').replaceAll(' ', '-').toLowerCase();
       }
 
       var panel = step.panel;
@@ -621,6 +634,12 @@ function stepShow(i) {
 
           if (step['panel-tell']) {
             tell(panel, step['panel-tell']);
+
+            for (let p of (tourData.panels)) {
+              if (p.id != panel) {
+                tell(p.id, {});
+              }
+            }
           }
         }
       }
