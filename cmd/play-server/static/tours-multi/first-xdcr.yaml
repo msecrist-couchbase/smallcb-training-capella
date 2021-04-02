@@ -593,8 +593,6 @@ steps:
     nav.nav-sidebar a[ui-sref="app.admin.docs.editor"].currentnav {
       animation: none !important;
     }
-   checks:
-    - q('qw-collection-menu div select:first-child').value != 'my-first-bucket' && qLast.getAttribute && !qLast.getAttribute('data-touched') && (qLast.value = 'my-first-bucket') && qLast.dispatchEvent(new UIEvent('change')) && qLast.setAttribute('data-touched', true) && false
   content: |
    <div>
     See if your change was replicated to the
