@@ -554,7 +554,7 @@ steps:
       animation: none !important;
     }
    checks:
-    - q('qw-collection-menu div select:first-child').value != 'my-first-bucket' && qlast.getAttribute && !qLast.getAttribute('data-touched') && (qLast.value = 'my-first-bucket') && qLast.dispatchEvent(new UIEvent('change')) && qLast.setAttribute('data-touched', true) && false
+    - q('qw-collection-menu div select:first-child').value != 'my-first-bucket' && qLast.getAttribute && !qLast.getAttribute('data-touched') && (qLast.value = 'my-first-bucket') && qLast.dispatchEvent(new UIEvent('change')) && qLast.setAttribute('data-touched', true) && false
   content: |
    <div>
     Let's see if your change was replicated to the
