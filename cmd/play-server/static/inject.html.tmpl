@@ -800,6 +800,8 @@ function playgTourLoad(name, part) {
 {{.tours}}
 </script>
 
+<style id="playgStylesKeep"></style>
+
 <style id="playgStyles"></style>
 
 <script>
@@ -828,6 +830,12 @@ function playgHandleMessage(e, tries) {
     return;
   }
 
+  if (e.data['styles-keep']) {
+    // The styles-keep is retained until we see another non-null styles-keep.
+    document.getElementById("playgStylesKeep").innerHTML = e.data['styles-keep'];
+  }
+
+  // The styles is updated or cleared on every received message.
   document.getElementById("playgStyles").innerHTML = e.data.styles || '';
 
   playgChecksEvent = e;
@@ -840,7 +848,7 @@ function playgChecks() {
   if (e && e.data && e.source && document && document.querySelector) {
     var checked = [];
 
-    for (let check of (e.data['checks'] || [])) {
+    for (let check of (e.data.checks || [])) {
       var ctx = { o: null,
                   qLast: null,
                   q: function(s) {

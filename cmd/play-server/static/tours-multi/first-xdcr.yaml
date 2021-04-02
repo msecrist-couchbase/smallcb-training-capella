@@ -9,12 +9,38 @@ panels:
   title-more: "username: ${s[0].CBUser} &nbsp;&nbsp; password: ${s[0].CBPswd}"
   color: "#CC2A2E;"
   iframe-src: http://${document.location.hostname}:${s[0].ContainerPortBase}/ui/index.html?lu=${s[0].CBUser}&lp=${s[0].CBPswd}
+  init-tell:
+   styles-keep: |
+    @keyframes playg-animated-underline {
+      0% {
+        text-decoration: underline red 3px;
+      }
+      70% {
+        text-decoration: underline transparent 3px;
+      }
+      100% {
+        text-decoration: underline transparent 3px;
+      }
+    }
  -
   id: e-cluster
   title: east cluster
   title-more: "username: ${s[1].CBUser} &nbsp;&nbsp; password: ${s[1].CBPswd}"
   color: "#4287D6;"
   iframe-src: http://${document.location.hostname}:${s[1].ContainerPortBase}/ui/index.html?lu=${s[1].CBUser}&lp=${s[1].CBPswd}
+  init-tell:
+   styles-keep: |
+    @keyframes playg-animated-underline {
+      0% {
+        text-decoration: underline red 3px;
+      }
+      70% {
+        text-decoration: underline transparent 3px;
+      }
+      100% {
+        text-decoration: underline transparent 3px;
+      }
+    }
 
 diagram:
  height: 50px
@@ -93,11 +119,11 @@ diagram:
     }
 
     @keyframes animated-border-red {
-      30% {
+      0% {
         border-color: red;
       }
       60% {
-        border-color: red;
+        border-color: initial;
       }
     }
   </style>
@@ -240,13 +266,13 @@ steps:
     - "nav.nav-sidebar a[mn-tab=buckets]"
    styles: |
     nav.nav-sidebar a[mn-tab=buckets] {
-      text-decoration: underline red 3px;
+      animation: playg-animated-underline 1.5s infinite linear;
     }
     nav.nav-sidebar a[mn-tab=buckets].currentnav {
-      text-decoration: none !important;
+      animation: none !important;
     }
     body[data-my-first-bucket=n] .header-controls a[ng-click="bucketsCtl.addBucket()"] {
-      text-decoration: underline red 2px;
+      animation: playg-animated-underline 1.5s infinite linear;
     }
    checks:
     - document.body.setAttribute('data-my-first-bucket', (q('div[buckets="buckets.details"] .cbui-tablerow-title[title="my-first-bucket"]').tagName && 'y') || 'n') && false
@@ -304,13 +330,13 @@ steps:
     - "nav.nav-sidebar a[mn-tab=replications]"
    styles: |
     nav.nav-sidebar a[mn-tab=replications] {
-      text-decoration: underline red 3px;
+      animation: playg-animated-underline 1.5s infinite linear;
     }
     nav.nav-sidebar a[mn-tab=replications].currentnav {
-      text-decoration: none !important;
+      animation: none !important;
     }
     body[data-remote-east=n] .header-controls a:last-child {
-      text-decoration: underline red 2px;
+      animation: playg-animated-underline 1.5s infinite linear;
     }
    checks:
     - document.body.setAttribute('data-remote-east', (q('ui-view h4').innerText == 'Remote Clusters' && q('ui-view .cbui-table-cell[title="east"]').tagName && 'y') || 'n') && false
@@ -363,13 +389,13 @@ steps:
     - "nav.nav-sidebar a[mn-tab=replications]"
    styles: |
     nav.nav-sidebar a[mn-tab=replications] {
-      text-decoration: underline red 3px;
+      animation: playg-animated-underline 1.5s infinite linear;
     }
     nav.nav-sidebar a[mn-tab=replications].currentnav {
-      text-decoration: none !important;
+      animation: none !important;
     }
     body[data-rep-east=n] .header-controls a[ng-reflect-state="app.admin.replications.add"] {
-      text-decoration: underline red 2px;
+      animation: playg-animated-underline 1.5s infinite linear;
     }
     body[data-h1=XDCRAddReplication] .main-content form.forms .width-10 .formrow.row {
       border: 2px solid red;
@@ -443,10 +469,10 @@ steps:
     - "nav.nav-sidebar a[mn-tab=buckets]"
    styles: |
     nav.nav-sidebar a[mn-tab=buckets] {
-      text-decoration: underline red 3px;
+      animation: playg-animated-underline 1.5s infinite linear;
     }
     nav.nav-sidebar a[mn-tab=buckets].currentnav {
-      text-decoration: none !important;
+      animation: none !important;
     }
   content: |
    <div>
@@ -477,10 +503,10 @@ steps:
     - nav.nav-sidebar a[ui-sref="app.admin.docs.editor"]
    styles: |
     nav.nav-sidebar a[ui-sref="app.admin.docs.editor"] {
-      text-decoration: underline red 3px;
+      animation: playg-animated-underline 1.5s infinite linear;
     }
     nav.nav-sidebar a[ui-sref="app.admin.docs.editor"].currentnav {
-      text-decoration: none !important;
+      animation: none !important;
     }
   content: |
    <div>
@@ -522,13 +548,13 @@ steps:
     - nav.nav-sidebar a[ui-sref="app.admin.docs.editor"]
    styles: |
     nav.nav-sidebar a[ui-sref="app.admin.docs.editor"] {
-      text-decoration: underline red 3px;
+      animation: playg-animated-underline 1.5s infinite linear;
     }
     nav.nav-sidebar a[ui-sref="app.admin.docs.editor"].currentnav {
-      text-decoration: none !important;
+      animation: none !important;
     }
    checks:
-    - q('qw-collection-menu div select:first-child').value != 'my-first-bucket' && !qLast.getAttribute('data-touched') && (qLast.value = 'my-first-bucket') && qLast.dispatchEvent(new UIEvent('change')) && qLast.setAttribute('data-touched', true) && false
+    - q('qw-collection-menu div select:first-child').value != 'my-first-bucket' && qlast.getAttribute && !qLast.getAttribute('data-touched') && (qLast.value = 'my-first-bucket') && qLast.dispatchEvent(new UIEvent('change')) && qLast.setAttribute('data-touched', true) && false
   content: |
    <div>
     Let's see if your change was replicated to the

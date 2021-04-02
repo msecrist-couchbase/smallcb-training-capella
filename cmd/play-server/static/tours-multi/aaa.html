@@ -599,6 +599,23 @@ function loadTourPanels(data, sessArr) {
 
     rightEl.appendChild(div);
   }
+
+  setTimeout(function() { initTell(0) }, 1000);
+}
+
+function initTell(x) {
+  if (document.querySelector("main").className.indexOf("step-0") < 0 ||
+      x >= 20) {
+    return;
+  }
+
+  for (let panel of (tourData && tourData.panels)) {
+    if (panel['init-tell']) {
+      tell(panel.id, panel['init-tell']);
+    }
+  }
+
+  setTimeout(function() { initTell(x + 1); }, 500);
 }
 
 function stepShow(i) {
@@ -620,6 +637,12 @@ function stepShow(i) {
 
           if (step['panel-tell']) {
             tell(panel, step['panel-tell']);
+
+            for (let p of (tourData.panels)) {
+              if (p.id != panel) {
+                tell(p.id, {});
+              }
+            }
           }
         }
       }
