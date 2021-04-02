@@ -211,7 +211,7 @@ steps:
      .container main.step-0 .right .diagram #diagram-overlay {
        display: block !important;
        position: absolute;
-       width: 400px;
+       width: 600px;
        height: 50px;
        background: white;
        opacity: 0.4;
@@ -601,7 +601,7 @@ steps:
     straightforwards with Couchbase.
    </div>
    <div>
-    That and more Couchbase features
+    That and more features of Couchbase
     can help you build mission-critical applications
     that are
     <em>flexible</em>,
