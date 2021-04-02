@@ -456,13 +456,15 @@ var playgHelpData = {{.injectData}};
       pl.style.display = "none";
     }
 
-    if (window.self !== window.top) {
+    if (window.self !== window.top) { // In iframe.
       var aw = document.querySelector('.alert-wrapper');
       if (aw) {
         aw.style.display = "none";
       }
 
-      return; // In iframe.
+      setTimeout(checkContext, 1000);
+
+      return;
     }
 
     var gt = document.getElementById("playgTourToggle");

@@ -180,17 +180,6 @@ diagram:
       top: 1px;
       height: 0.7rem;
     }
-    .container article .left .step > div {
-      display: flex;
-      flex-direction: column;
-    }
-    .container article .left .step > div > div {
-      margin-bottom: 1.5em;
-    }
-    .container article .left ul {
-      margin: 5px 0 0 0;
-      padding: 0 0 0 1rem;
-    }
   </style>
 
 steps:
@@ -331,6 +320,7 @@ steps:
     </ul>
    </div>
    <div>
+    <br/>
     <br/>
     <br/>
     <h3>NOTICE</h3>

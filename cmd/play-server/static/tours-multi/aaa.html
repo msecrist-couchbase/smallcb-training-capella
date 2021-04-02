@@ -138,16 +138,26 @@ body * {
   display: none;
 }
 
-.container article .left ul {
+.container article .left .step > div {
+  display: flex;
+  flex-direction: column;
+}
+
+.container article .left .step > div > div {
+  margin-bottom: 1.5em;
+}
+
+.container article .left .step ul {
+  margin: 5px 0 0 0;
   padding: 0 0 0 1rem;
 }
 
-.container article .left h3 {
+.container article .left .step h3 {
   margin: 0 0 0.5em 0;
   padding: 0;
 }
 
-.container article .left p {
+.container article .left .step p {
   margin: 0 0 0.7em 0;
   padding: 0;
 }
