@@ -9,6 +9,13 @@ panels:
   title-more: "username: ${s[0].CBUser} &nbsp;&nbsp; password: ${s[0].CBPswd}"
   color: "#CC2A2E;"
   iframe-src: http://${document.location.hostname}:${s[0].ContainerPortBase}/ui/index.html?lu=${s[0].CBUser}&lp=${s[0].CBPswd}
+  init: |
+   setTimeout(function() {
+     var code = `#!/bin/sh
+     /opt/couchbase/bin/couchbase-cli cluster-edit -c 127.0.0.1 -u ${s[0].CBUser} -p ${s[0].CBPswd} --cluster-name WEST
+     `;
+     fetch(`/run?s=${s[0].SessionId}&lang=sh&code=${encodeURIComponent(code)}`);
+   }, 3000);
   init-tell:
    styles-keep: |
     @keyframes playg-animated-underline {
@@ -28,6 +35,13 @@ panels:
   title-more: "username: ${s[1].CBUser} &nbsp;&nbsp; password: ${s[1].CBPswd}"
   color: "#4287D6;"
   iframe-src: http://${document.location.hostname}:${s[1].ContainerPortBase}/ui/index.html?lu=${s[1].CBUser}&lp=${s[1].CBPswd}
+  init: |
+   setTimeout(function() {
+     var code = `#!/bin/sh
+     /opt/couchbase/bin/couchbase-cli cluster-edit -c 127.0.0.1 -u ${s[1].CBUser} -p ${s[1].CBPswd} --cluster-name EAST
+     `;
+     fetch(`/run?s=${s[1].SessionId}&lang=sh&code=${encodeURIComponent(code)}`);
+   }, 3000);
   init-tell:
    styles-keep: |
     @keyframes playg-animated-underline {
