@@ -549,19 +549,19 @@ function loadTourPanels(data, sessArr) {
 
     var ctx;
 
-    ctx = { s: sessArr, o: '' };
+    ctx = { s: sessArr, panel: panel, titleMore: '', iframeSrc: '' };
+
+    if (panel.init) {
+      with (ctx) eval(panel.init);
+    }
+
     if (panel['title-more']) {
-      with (ctx) eval('o = `' + panel['title-more'] + '`');
+      with (ctx) eval('titleMore = `' + panel['title-more'] + '`');
     }
 
-    var titleMore = ctx.o;
-
-    ctx = { s: sessArr, o: '' };
     if (panel['iframe-src']) {
-      with (ctx) eval('o = `' + panel['iframe-src'] + '`');
+      with (ctx) eval('iframeSrc = `' + panel['iframe-src'] + '`');
     }
-
-    var iframeSrc = ctx.o;
 
     var color = panel.color || '#444';
 
@@ -574,14 +574,14 @@ function loadTourPanels(data, sessArr) {
          <label class="title"
                 style="width: ${diagramLabelStyle.width || 'auto'}; height: ${diagramLabelStyle.height || 'auto'};">
            ${diagramLabelEl.innerHTML || panel.title}</label>
-         <div class="title-more">${titleMore}</div>
-         <div class="title-more"><a href="${iframeSrc}" target="_blank">[open &#x2B08;]</a></div>
+         <div class="title-more">${ctx.titleMore}</div>
+         <div class="title-more"><a href="${ctx.iframeSrc}" target="_blank">[open &#x2B08;]</a></div>
          <div class="controls">
             <label class="close" for="none">X</label>
          </div>
        </div>
        <iframe id="iframe-${panel.id}"
-               src="${iframeSrc}"
+               src="${ctx.iframeSrc}"
                sandbox="allow-same-origin allow-scripts allow-forms allow-popups"></iframe>
        <style>
          input#${panel.id}:checked ~ .container article .right #panel-${panel.id} {
