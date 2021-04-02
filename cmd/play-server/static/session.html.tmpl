@@ -29,7 +29,13 @@
   <main>
     <article>
       <header>
-        <h2>Start Playground Session</h2>
+        <h2>
+          {{if .title}}
+            {{.title}}
+          {{else}}
+            Start Playground Session
+          {{end}}
+        </h2>
       </header>
       <section>
         {{if .intro}}
@@ -80,6 +86,10 @@
 
           {{if .groupSize}}
             <input type="hidden" name="groupSize" value="{{.groupSize}}"/>
+          {{end}}
+
+          {{if .init}}
+            <input type="hidden" name="init" value="{{.init}}"/>
           {{end}}
 
           {{if .e}}

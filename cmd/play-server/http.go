@@ -181,7 +181,9 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	e := r.FormValue("e") // Optional example name target.
+	// Optional extra URL suffix for redirect on success,
+	// used to target a particular code example or tour.
+	e := r.FormValue("e")
 	if !regexpE.MatchString(e) || strings.Index(e, "..") >= 0 {
 		StatsNumInc("http.Session.err", "http.Session.err.bad-e")
 
@@ -201,8 +203,10 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 			sessionsMaxAge.String(), "m0s", " min", 1),
 		"SessionsMaxIdle": strings.Replace(
 			sessionsMaxIdle.String(), "m0s", " min", 1),
+		"title":     r.FormValue("title"),
 		"intro":     r.FormValue("intro"),
 		"groupSize": r.FormValue("groupSize"),
+		"init":      r.FormValue("init"),
 		"e":         e,
 	}
 
