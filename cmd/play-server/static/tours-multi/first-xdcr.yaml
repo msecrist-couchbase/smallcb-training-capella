@@ -283,13 +283,13 @@ steps:
     - "nav.nav-sidebar a[mn-tab=buckets]"
    styles: |
     nav.nav-sidebar a[mn-tab=buckets] {
-      animation: playg-animated-underline 1.5s infinite linear;
+      animation: playg-animated-underline .8s infinite linear;
     }
     nav.nav-sidebar a[mn-tab=buckets].currentnav {
       animation: none !important;
     }
     body[data-my-first-bucket=n] .header-controls a[ng-click="bucketsCtl.addBucket()"] {
-      animation: playg-animated-underline 1.5s infinite linear;
+      animation: playg-animated-underline .8s infinite linear;
     }
    checks:
     - document.body.setAttribute('data-my-first-bucket', (q('div[buckets="buckets.details"] .cbui-tablerow-title[title="my-first-bucket"]').tagName && 'y') || 'n') && false
@@ -348,13 +348,13 @@ steps:
     - "nav.nav-sidebar a[mn-tab=replications]"
    styles: |
     nav.nav-sidebar a[mn-tab=replications] {
-      animation: playg-animated-underline 1.5s infinite linear;
+      animation: playg-animated-underline .8s infinite linear;
     }
     nav.nav-sidebar a[mn-tab=replications].currentnav {
       animation: none !important;
     }
     body[data-remote-east=n] .header-controls a:last-child {
-      animation: playg-animated-underline 1.5s infinite linear;
+      animation: playg-animated-underline .8s infinite linear;
     }
    checks:
     - document.body.setAttribute('data-remote-east', (q('ui-view h4').innerText == 'Remote Clusters' && q('ui-view .cbui-table-cell[title="east"]').tagName && 'y') || 'n') && false
@@ -417,13 +417,13 @@ steps:
     - "nav.nav-sidebar a[mn-tab=replications]"
    styles: |
     nav.nav-sidebar a[mn-tab=replications] {
-      animation: playg-animated-underline 1.5s infinite linear;
+      animation: playg-animated-underline .8s infinite linear;
     }
     nav.nav-sidebar a[mn-tab=replications].currentnav {
       animation: none !important;
     }
     body[data-rep-east=n] .header-controls a[ng-reflect-state="app.admin.replications.add"] {
-      animation: playg-animated-underline 1.5s infinite linear;
+      animation: playg-animated-underline .8s infinite linear;
     }
     body[data-h1=XDCRAddReplication] .main-content form.forms .width-10 .formrow.row {
       border: 2px solid red;
@@ -510,7 +510,7 @@ steps:
     - "nav.nav-sidebar a[mn-tab=buckets]"
    styles: |
     nav.nav-sidebar a[mn-tab=buckets] {
-      animation: playg-animated-underline 1.5s infinite linear;
+      animation: playg-animated-underline .8s infinite linear;
     }
     nav.nav-sidebar a[mn-tab=buckets].currentnav {
       animation: none !important;
@@ -544,7 +544,7 @@ steps:
     - nav.nav-sidebar a[ui-sref="app.admin.docs.editor"]
    styles: |
     nav.nav-sidebar a[ui-sref="app.admin.docs.editor"] {
-      animation: playg-animated-underline 1.5s infinite linear;
+      animation: playg-animated-underline .8s infinite linear;
     }
     nav.nav-sidebar a[ui-sref="app.admin.docs.editor"].currentnav {
       animation: none !important;
@@ -588,7 +588,7 @@ steps:
     - nav.nav-sidebar a[ui-sref="app.admin.docs.editor"]
    styles: |
     nav.nav-sidebar a[ui-sref="app.admin.docs.editor"] {
-      animation: playg-animated-underline 1.5s infinite linear;
+      animation: playg-animated-underline .8s infinite linear;
     }
     nav.nav-sidebar a[ui-sref="app.admin.docs.editor"].currentnav {
       animation: none !important;
