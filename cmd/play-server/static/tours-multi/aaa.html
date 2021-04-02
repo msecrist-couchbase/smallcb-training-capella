@@ -397,6 +397,7 @@ if (sessionId) {
 
 var tourData;
 var tourSess;
+var tourSessArr;
 
 function loadTour(data, sess) {
   tourData = data;
@@ -414,6 +415,14 @@ function loadTour(data, sess) {
     if (s.SessionIdMain == sess.sessionId) {
       sessArr[parseInt(s.Name.split('-')[1])] = s;
     }
+  }
+
+  tourSessArr = sessArr;
+
+  var ctx = { s: sessArr };
+
+  if (data['splash-init']) {
+    with (ctx) eval(data['splash-init']);
   }
 
   var splashEl = document.querySelector(".right .panel .splash");
@@ -557,9 +566,7 @@ function loadTourPanels(data, sessArr) {
     var diagramLabelEl = document.querySelector(`.right .diagram label[for="${panel.id}"]`) || {};
     var diagramLabelStyle = diagramLabelEl.style || {};
 
-    var ctx;
-
-    ctx = { s: sessArr, panel: panel, titleMore: '', iframeSrc: '' };
+    var ctx = { s: sessArr, panel: panel, titleMore: '', iframeSrc: '' };
 
     if (panel.init) {
       with (ctx) eval(panel.init);

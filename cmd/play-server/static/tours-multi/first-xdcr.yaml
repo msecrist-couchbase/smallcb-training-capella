@@ -13,6 +13,7 @@ panels:
    setTimeout(function() {
      var code = `#!/bin/sh
      /opt/couchbase/bin/couchbase-cli cluster-edit -c 127.0.0.1 -u ${s[0].CBUser} -p ${s[0].CBPswd} --cluster-name WEST
+     /opt/couchbase/bin/couchbase-cli bucket-delete -c 127.0.0.1 -u ${s[0].CBUser} -p ${s[0].CBPswd} --bucket travel-sample
      `;
      fetch(`/run?s=${s[0].SessionId}&lang=sh&code=${encodeURIComponent(code)}`);
    }, 3000);
@@ -39,6 +40,8 @@ panels:
    setTimeout(function() {
      var code = `#!/bin/sh
      /opt/couchbase/bin/couchbase-cli cluster-edit -c 127.0.0.1 -u ${s[1].CBUser} -p ${s[1].CBPswd} --cluster-name EAST
+     /opt/couchbase/bin/couchbase-cli bucket-delete -c 127.0.0.1 -u ${s[1].CBUser} -p ${s[1].CBPswd} --bucket beer-sample
+     /opt/couchbase/bin/couchbase-cli bucket-delete -c 127.0.0.1 -u ${s[1].CBUser} -p ${s[1].CBPswd} --bucket travel-sample
      `;
      fetch(`/run?s=${s[1].SessionId}&lang=sh&code=${encodeURIComponent(code)}`);
    }, 3000);
