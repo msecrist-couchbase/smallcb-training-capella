@@ -253,6 +253,7 @@ steps:
 
    <style>
      .container main.step-your-mission article .right .diagram-area .diagram label {
+       border: 1px solid red;
        animation: animated-background 5s infinite linear;
      }
 
