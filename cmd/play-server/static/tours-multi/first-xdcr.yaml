@@ -566,7 +566,7 @@ steps:
      <li>On the Documents screen...
          <br/><br/>
      </li>
-     <li>Select the <code class="nowrap">beer-sample</code> keyspace bucket.
+     <li>Select the <code class="nowrap">beer-sample</code> bucket.
          <br/><br/>
      </li>
      <li>Edit <span class="icon fa-pencil"></span> a document
@@ -608,7 +608,7 @@ steps:
      <li>On the Documents screen...
          <br/><br/>
      </li>
-     <li>Select the <code class="nowrap">my-first-bucket</code> keyspace bucket.
+     <li>Select the <code class="nowrap">my-first-bucket</code> bucket.
          <br/><br/>
      </li>
      <li>Was your document change propagated to the <em>east</em>?
