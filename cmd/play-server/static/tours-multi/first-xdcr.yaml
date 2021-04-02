@@ -119,6 +119,9 @@ diagram:
   <div class="diagram-more west-east-stream animated-stream"
        style="display: none; position: absolute; top: 27px; left: 205px; width: 44px; height: 6px;"></div>
 
+  <div class="west-east-check"
+       style="display: none; position: absolute; top: 9px; left: 222px; width: 2rem; height: 1rem; color: #80c677;">&check;</div>
+
   <style>
     .animated-stream {
       background: linear-gradient(-90deg, #4287D6, white);
@@ -398,6 +401,9 @@ steps:
      article.checked-w-cluster-cluster-connect .right .diagram .west-east-connect {
        display: block !important;
        background-color: #80c677;
+     }
+     article.checked-w-cluster-cluster-connect .right .diagram .west-east-check {
+       display: block !important;
      }
    </style>
  -
