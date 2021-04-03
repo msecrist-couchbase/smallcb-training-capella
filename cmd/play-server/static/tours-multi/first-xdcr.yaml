@@ -274,6 +274,16 @@ steps:
        border: 1px solid #aaa;
        animation: none;
      }
+
+     main.step-your-mission .step-nav button.next {
+       z-index: -1;
+       opacity: 0.1;
+     }
+
+     .container.saw-w-cluster.saw-e-cluster main.step-your-mission .step-nav button.next {
+       z-index: 0;
+       opacity: initial;
+     }
    </style>
  -
   title: Destination east
@@ -340,6 +350,18 @@ steps:
       }
     </style>
    </div>
+
+   <style>
+     main.step-destination-east article .left .step-nav button.next {
+       z-index: -1;
+       opacity: 0.1;
+     }
+
+     main.step-destination-east article.checked-e-cluster-my-first-bucket .left .step-nav button.next {
+       z-index: 0;
+       opacity: initial;
+     }
+   </style>
  -
   title: Connect the clusters
   panel: w-cluster
@@ -407,6 +429,16 @@ steps:
      }
      article.checked-w-cluster-cluster-connect .right .diagram .west-east-check {
        display: block !important;
+     }
+
+     main.step-connect-the-clusters article .left .step-nav button.next {
+       z-index: -1;
+       opacity: 0.1;
+     }
+
+     main.step-connect-the-clusters article.checked-w-cluster-cluster-connect .left .step-nav button.next {
+       z-index: 0;
+       opacity: initial;
      }
    </style>
  -
@@ -500,6 +532,16 @@ steps:
 
      main.step-add-a-data-stream article.checked-w-cluster-rep-east .right .diagram .west-east-stream {
        display: block !important;
+     }
+
+     main.step-add-a-data-stream article .left .step-nav button.next {
+       z-index: -1;
+       opacity: 0.1;
+     }
+
+     main.step-add-a-data-stream article.checked-w-cluster-rep-east .left .step-nav button.next {
+       z-index: 0;
+       opacity: initial;
      }
    </style>
  -

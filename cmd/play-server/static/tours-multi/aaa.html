@@ -342,7 +342,7 @@ input[type="checkbox"].step-nav-popup:checked ~ .step-x .step .step-nav label .s
 }
 
 .step-nav button:first-child {
-  opacity: 0.5;
+  opacity: 0.6;
 }
 
 .step-nav button:disabled {
@@ -516,13 +516,13 @@ function loadTour(data, sess) {
          <div>${stepContent}</div>
          <div class="step-nav">
            <button ${i <= 0 ? 'disabled' : ''}
-                   onclick="stepShow(${i - 1})">Previous</button>
+                   onclick="stepShow(${i - 1})" class="previous">Previous</button>
            <label for="step-nav-popup">
              ${popup.join('')}
              &nbsp;${i + 1} of ${data.steps.length}&nbsp;&#x25BC;&nbsp;
            </label>
            <button ${i >= data.steps.length - 1 ? 'disabled' : ''}
-                   onclick="stepShow(${i + 1})">Next</button>
+                   onclick="stepShow(${i + 1})" class="next">Next</button>
          </div>
          <style>
            main.step-${i} .left #step-${i} { display: flex; }
