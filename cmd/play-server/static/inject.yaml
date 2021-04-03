@@ -45,7 +45,6 @@ servers/list:
             '--node-init-eventing-path '+ (q('input#setup_eventing_path_input').value) + ' \\' : ''}
           ${q('input[type="checkbox"]#for-use-disk-paths').checked ? 
             '--node-init-analytics-path '+ (q('input#setup_cbas_dirs_input0').value) : ''}
-# newline??? (this is a comment/next line is not)
         # Add Server
         /opt/couchbase/bin/couchbase-cliserver-add -c ${HOST} \\
           --username ${USER} \\
