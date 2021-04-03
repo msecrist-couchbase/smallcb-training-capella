@@ -31,15 +31,10 @@ servers/list:
     items:
      -
       item: Command-line
-      tmpl: |-
-        /opt/couchbase/bin/couchbase-cli server-add -c ${HOST} \\
-          --username ${USER} \\
-          --password ${PSWD} \\
-          --server-add ${q('input#add-server-hostname').value || HOST} \\
-          --server-add-username ${q('input#user_inp').value || USER} --server-add-password ${q('input#password_inp').value || PSWD } \\
-          --services ${[q('input[type="checkbox"]#for-kv-service').checked && 'data', q('input[type="checkbox"]#for-index-service').checked && 'index',q('input[type="checkbox"]#for-query-service').checked && 'query',q('input[type="checkbox"]#for-fts-service').checked && 'fts',q('input[type="checkbox"]#for-cbas-service').checked && 'analytics',q('input[type="checkbox"]#for-eventing-service').checked && 'eventing',q('input[type="checkbox"]#for-backup-service').checked && 'backup'].filter(x => x).join(',')} \\\n
+      tmpl: |
+        ${q('input[type="checkbox"]#for-use-disk-paths').checked ? '# Initialize and Custom Disk Path' : ''}
         ${q('input[type="checkbox"]#for-use-disk-paths').checked ? 
-        'node-init -c '+ (q('input#add-server-hostname').value || HOST) + 
+        '/opt/couchbase/bin/couchbase-cli node-init -c '+ (q('input#add-server-hostname').value || HOST) + 
           ' -u ' + (q('input#user_inp').value || USER) + 
           ' -p ' + (q('input#password_inp').value || PSWD) + ' \\' : ''}
           ${q('input[type="checkbox"]#for-use-disk-paths').checked ? 
@@ -50,6 +45,15 @@ servers/list:
             '--node-init-eventing-path '+ (q('input#setup_eventing_path_input').value) + ' \\' : ''}
           ${q('input[type="checkbox"]#for-use-disk-paths').checked ? 
             '--node-init-analytics-path '+ (q('input#setup_cbas_dirs_input0').value) : ''}
+# newline??? (this is a comment/next line is not)
+        # Add Server
+        /opt/couchbase/bin/couchbase-cliserver-add -c ${HOST} \\
+          --username ${USER} \\
+          --password ${PSWD} \\
+          --server-add ${q('input#add-server-hostname').value ? (/^http(s?)|couchbase(s?)/.test(q('input#add-server-hostname').value) ? q('input#add-server-hostname').value : 'http://' + q('input#add-server-hostname').value) : 'new-server-ip_hostname'}
+          --server-add-username ${q('input#user_inp').value ? q('input#user_inp').value : 'your-username'} 
+          --server-add-password ${q('input#password_inp').value ? q('input#password_inp').value : 'new-server-password'} \\
+          --services ${[q('input[type="checkbox"]#for-kv-service').checked && 'data', q('input[type="checkbox"]#for-index-service').checked && 'index',q('input[type="checkbox"]#for-query-service').checked && 'query',q('input[type="checkbox"]#for-fts-service').checked && 'fts',q('input[type="checkbox"]#for-cbas-service').checked && 'analytics',q('input[type="checkbox"]#for-eventing-service').checked && 'eventing',q('input[type="checkbox"]#for-backup-service').checked && 'backup'].filter(x => x).join(',')} \\\n
 
 buckets:
  -
