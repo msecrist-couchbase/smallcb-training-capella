@@ -30,6 +30,17 @@ panels:
         text-decoration: underline transparent 3px;
       }
     }
+    @keyframes playg-animated-border {
+      0% {
+        border: 2px solid red;
+      }
+      70% {
+        border: 2px solid #4287d6;
+      }
+      100% {
+        border: 2px solid #4287d6;
+      }
+    }
  -
   id: e-cluster
   title: east cluster
@@ -591,6 +602,13 @@ steps:
     nav.nav-sidebar a[ui-sref="app.admin.docs.editor"].currentnav {
       animation: none !important;
     }
+    body:not([data-doc-edited=y]) .doc-editor qw-json-table-editor2 .data-table-wrapper form[name=row0Form] .doc-editor-cell > a.square-button:first-child {
+      border: 2px solid red;
+      animation: playg-animated-border .8s infinite linear;
+    }
+   checks:
+    - q('.modal-dialog form .panel-header h2').innerText == 'Edit Document' && document.body.setAttribute('data-doc-edited', 'y') && false
+    - q('body[data-doc-edited=y]').tagName && 'doc-edited'
   content: |
    <div>
     Change a document in the
@@ -620,6 +638,16 @@ steps:
    <style>
      main.step-a-change-in-the-west .right .diagram .west-east-stream {
        display: block !important;
+     }
+
+     main.step-a-change-in-the-west article .left .step-nav button.next {
+       z-index: -1;
+       opacity: 0.1;
+     }
+
+     main.step-a-change-in-the-west article.checked-w-cluster-doc-edited .left .step-nav button.next {
+       z-index: 0;
+       opacity: initial;
      }
    </style>
  -
