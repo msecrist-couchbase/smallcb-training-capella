@@ -4,8 +4,6 @@
   <link rel="stylesheet" type="text/css" href="/static/styles/font-awesome.css"/>
 </head>
 <body>
-<input type="radio" class="display-none" name="panel" id="none" checked>
-
 <div class="container">
   <header>
     <h1>Couchbase Playground</h1>
@@ -18,10 +16,6 @@
       <div class="right">
         <div class="diagram-area" style="height: 110px;">
           <div class="diagram"></div>
-        </div>
-
-        <div id="panel-none" class="panel">
-          <div class="splash"></div>
         </div>
       </div>
     </article>
@@ -418,17 +412,6 @@ function loadTour(data, sess) {
   }
 
   tourSessArr = sessArr;
-
-  var ctx = { s: sessArr };
-
-  if (data['splash-init']) {
-    with (ctx) eval(data['splash-init']);
-  }
-
-  var splashEl = document.querySelector(".right .panel .splash");
-  if (splashEl) {
-    splashEl.innerHTML = data.splash || splashEl.innerHTML;
-  }
 
   var diagram = data.diagram;
   if (diagram) {
