@@ -32,7 +32,7 @@ servers/list:
      -
       item: Command-line
       tmpl: |
-        ${q('input[type="checkbox"]#for-use-disk-paths').checked ? '# Initialize and Custom Disk Path' : ''}
+        ${q('input[type="checkbox"]#for-use-disk-paths').checked ? '# Initialize Server' : ''}
         ${q('input[type="checkbox"]#for-use-disk-paths').checked ? 
         '/opt/couchbase/bin/couchbase-cli node-init -c '+ (q('input#add-server-hostname').value || HOST) + 
           ' -u ' + (q('input#user_inp').value || USER) + 
@@ -428,7 +428,7 @@ settings/sampleBuckets:
   titles:
    -
     title: Sample Buckets loading
-    docs: https://docs.couchbase.com/server/current/manage/manage-settings/install-sample-buckets.html
+    docs: https://docs.couchbase.com/server/current/cli/cbcli/couchbase-cli.html
     querySelectorAll: |
       form.forms div[ng-repeat="bucket in settingsSampleBucketsCtl.state.available"] label,
       form.forms div[ng-repeat="bucket in settingsSampleBucketsCtl.state.installed"]
