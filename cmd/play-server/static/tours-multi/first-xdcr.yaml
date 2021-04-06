@@ -73,6 +73,76 @@ panels:
   id: none
  -
   id: end
+  content: |
+   <style>
+    #panel-end {
+      padding-top: 2rem;
+      max-width: 550px;
+      min-width: 300px;
+    }
+    #panel-end div {
+      margin: 0 0 1.2rem 3rem;
+    }
+    #panel-end div ul {
+      padding-left: 1rem;
+    }
+    #panel-end div ul li {
+      margin-bottom: .5rem;
+    }
+    #panel-end div ul li h4 {
+      font-weight: 150;
+      margin-bottom: 0.2rem;
+    }
+   </style>
+   <div>
+    The takeaway...
+   </div>
+   <div>
+    <b>Data streaming</b> between clusters is
+    straightforwards with Couchbase.
+   </div>
+   <div>
+    Learn more:
+    <a href="https://docs.couchbase.com/server/current/learn/clusters-and-availability/xdcr-overview.html"
+       target="_blank">
+      Cross-datacenter Replication (XDCR) Documentation
+    </a>
+   </div>
+   <div>
+    XDCR and more features of Couchbase<br/>
+    can help you build mission-critical applications<br/>
+    that are
+    <em>flexible</em>,
+    <em>distributed</em>,
+    and
+    <em><span class="nowrap">multi-location</span></em>.
+   </div>
+   <div>
+    Frequently asked questions...
+    <ul>
+    <li><h4>What if the network goes down between clusters?</h4>
+        As soon as connectivity is restored, any changes
+        that happened during the interruption
+        will be automatically replicated.
+    </li>
+    <li><h4>Can I chain data streams?</h4>
+        Yes, you can setup a chain of data streams,
+        to replicate data across a topology of multiple clusters,
+        such as from US-west to US-east to EU, and from US-west to asia.
+    </li>
+    <li><h4>Can I have data filtering in my data streams?</h4>
+        Yes, you can provide optional data filtering expressions,
+        like a SQL WHERE clause,
+        so that only a relevant subset of documents will be replicated.
+    </li>
+    <li><h4>Can I have bi-directional replication?</h4>
+        Yes, you can have bi-dirational or multi-master replication
+        by setting up two unidirectional streams.
+        So, in the above example,
+        you would also setup a stream from east to west.
+    </li>
+    </ul>
+   </div>
 
 diagram:
  height: 50px
@@ -640,30 +710,8 @@ steps:
     clear: true
   content: |
    <div>
-    The takeaway...
-   </div>
-   <div>
-    <b>Data streaming</b> between clusters is
-    straightforwards with Couchbase.
-   </div>
-   <div>
-    That and more features of Couchbase
-    can help you build mission-critical applications
-    that are
-    <em>flexible</em>,
-    <em>distributed</em>,
-    and
-    <em><span class="nowrap">multi-location</span></em>.
-   </div>
-   <div>
-    Learn more:
-    <a href="https://docs.couchbase.com/server/current/learn/clusters-and-availability/xdcr-overview.html"
-       target="_blank">
-      Cross-datacenter Replication (XDCR) Documentation
-    </a>
-   </div>
-   <div>
     Thanks for playing with Couchbase!
+    <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
    </div>
 
    <style>
