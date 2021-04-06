@@ -69,6 +69,8 @@ panels:
         text-decoration: underline transparent 3px;
       }
     }
+ -
+  id: end
 
 diagram:
  height: 50px
@@ -631,7 +633,7 @@ steps:
    </style>
  -
   title: Mission success!
-  panel: none
+  panel: end
   panel-tell:
     clear: true
   content: |

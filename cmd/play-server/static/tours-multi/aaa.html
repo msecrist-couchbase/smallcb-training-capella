@@ -566,7 +566,8 @@ function loadTourPanels(data, sessArr) {
     var diagramLabelEl = document.querySelector(`.right .diagram label[for="${panel.id}"]`) || {};
     var diagramLabelStyle = diagramLabelEl.style || {};
 
-    var ctx = { s: sessArr, panel: panel, titleMore: '', iframeSrc: '' };
+    var ctx = { s: sessArr, panel: panel, titleMore: '',
+                iframeSrc: '', iframeContent: '', content: '' };
 
     if (panel.init) {
       with (ctx) eval(panel.init);
@@ -580,6 +581,14 @@ function loadTourPanels(data, sessArr) {
       with (ctx) eval('iframeSrc = `' + panel['iframe-src'] + '`');
     }
 
+    if (panel['iframe-content']) {
+      with (ctx) eval('iframeContent = `' + panel['iframe-content'] + '`');
+    }
+
+    if (panel['content']) {
+      with (ctx) eval('content = `' + panel['content'] + '`');
+    }
+
     var color = panel.color || '#444';
 
     var div = document.createElement("div");
@@ -587,20 +596,28 @@ function loadTourPanels(data, sessArr) {
     div.id = "panel-" + panel.id;
     div.className = "panel";
     div.innerHTML =
-      `<div class="flex-row header" style="border-bottom: 2px solid ${color};">
-         <label class="title"
-                style="width: ${diagramLabelStyle.width || 'auto'}; height: ${diagramLabelStyle.height || 'auto'};">
-           ${diagramLabelEl.innerHTML || panel.title}</label>
+      ((diagramLabelEl.innerHTML || panel.title || ctx.titleMore || ctx.iframeSrc) ?
+       `<div class="flex-row header" style="border-bottom: 2px solid ${color};">
+          <label class="title"
+                 style="width: ${diagramLabelStyle.width || 'auto'}; height: ${diagramLabelStyle.height || 'auto'};">
+            ${diagramLabelEl.innerHTML || panel.title}
+          </label>
          <div class="title-more">${ctx.titleMore}</div>
-         <div class="title-more"><a href="${ctx.iframeSrc}" target="_blank">[open &#x2B08;]</a></div>
-         <div class="controls">
-            <label class="close" for="none">X</label>
+         <div class="title-more">
+           <a href="${ctx.iframeSrc}" target="_blank">${ctx.iframeSrc && '[open &#x2B08;]'}</a>
          </div>
-       </div>
-       <iframe id="iframe-${panel.id}"
-               src="${ctx.iframeSrc}"
-               sandbox="allow-same-origin allow-scripts allow-forms allow-popups"></iframe>
-       <style>
+         <div class="controls">
+           <label class="close" for="none">X</label>
+         </div>
+        </div>` : '') +
+      (ctx.iframeSrc ?
+       `<iframe id="iframe-${panel.id}"
+                src="${ctx.iframeSrc}"
+                sandbox="allow-same-origin allow-scripts allow-forms allow-popups">
+         ${ctx.iframeContent}
+        </iframe>` :
+        (ctx.content || '')) +
+      `<style>
          input#${panel.id}:checked ~ .container article .right #panel-${panel.id} {
            display: flex;
          }
