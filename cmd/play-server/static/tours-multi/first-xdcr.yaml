@@ -73,60 +73,6 @@ panels:
 diagram:
  height: 50px
  content: |
-  <div class="diagram-more"
-       style="position: absolute; display: none; opacity: 0.3; user-select: none;">
-    <div class="animated-stream"
-         style="position: absolute; top: 35px; left: 25px; transform-origin: top left; height: 3px; width: 57px; transform: rotateZ(47deg);"></div>
-    <div style="position: absolute; top: 80px; left: 60px;">
-      <img src="./img/cb-icon-red.png"
-           style="position: absolute; top: 0px; left: 0px; width: 20px;"/>
-      <div style="position: absolute; top: 0px; left: 25px" class="small">warehouse-w01 cluster</div>
-    </div>
-
-    <div class="animated-stream"
-         style="position: absolute; top: 30px; left: 25px; transform-origin: top left; height: 3px; width: 80px; transform: rotateZ(72deg);"></div>
-    <div style="position: absolute; top: 108px; left: 42px;">
-      <img src="./img/cb-icon-red.png"
-           style="position: absolute; top: 0px; left: 0px; width: 20px;"/>
-      <div style="position: absolute; top: 0px; left: 25px" class="small">store-w02 cluster</div>
-    </div>
-
-    <div class="animated-stream"
-         style="position: absolute; top: 30px; left: 25px; transform-origin: top left; height: 3px; width: 105px; transform: rotateZ(88deg);"></div>
-    <div style="position: absolute; top: 140px; left: 20px;">
-      <img src="./img/cb-icon-red.png"
-           style="position: absolute; top: 0px; left: 0px; width: 20px;"/>
-      <div style="position: absolute; top: 0px; left: 25px" class="small">store-w04 cluster</div>
-    </div>
-  </div>
-
-  <div class="diagram-more"
-       style="position: absolute; display: none; opacity: 0.3; user-select: none; left: 250px;">
-    <div class="animated-stream"
-         style="position: absolute; top: 35px; left: 25px; transform-origin: top left; height: 3px; width: 57px; transform: rotateZ(47deg);"></div>
-    <div style="position: absolute; top: 80px; left: 60px;">
-      <img src="./img/cb-icon-blue.png"
-           style="position: absolute; top: 0px; left: 0px; width: 20px;"/>
-      <div style="position: absolute; top: 0px; left: 25px" class="small">store-e03 cluster</div>
-    </div>
-
-    <div class="animated-stream"
-         style="position: absolute; top: 30px; left: 25px; transform-origin: top left; height: 3px; width: 80px; transform: rotateZ(72deg);"></div>
-    <div style="position: absolute; top: 108px; left: 42px;">
-      <img src="./img/cb-icon-blue.png"
-           style="position: absolute; top: 0px; left: 0px; width: 20px;"/>
-      <div style="position: absolute; top: 0px; left: 25px" class="small">store-e07 cluster</div>
-    </div>
-
-    <div class="animated-stream"
-         style="position: absolute; top: 30px; left: 25px; transform-origin: top left; height: 3px; width: 105px; transform: rotateZ(88deg);"></div>
-    <div style="position: absolute; top: 140px; left: 20px;">
-      <img src="./img/cb-icon-blue.png"
-           style="position: absolute; top: 0px; left: 0px; width: 20px;"/>
-      <div style="position: absolute; top: 0px; left: 25px" class="small">store-e09 cluster</div>
-    </div>
-  </div>
-
   <div class="diagram-more west-east-connect"
        style="display: none; position: absolute; top: 29px; left: 200px; width: 55px; height: 2px;"></div>
 
@@ -190,14 +136,6 @@ diagram:
   </label>
 
   <div id="diagram-overlay" style="display: none;"></div>
-
-  <style>
-    img.small-db {
-      position: relative;
-      top: 1px;
-      height: 0.7rem;
-    }
-  </style>
 
 steps:
  -
@@ -729,19 +667,3 @@ steps:
        display: block !important;
      }
    </style>
-
-   <!--
-   <style>
-     main.step-mission-success .right .diagram-area {
-       min-height: 200px;
-     }
-     main.step-mission-success .right .diagram-area .diagram-more {
-       display: block !important;
-       opacity: 1 !important;
-       color: #777;
-     }
-     main.step-mission-success .right .diagram-area .diagram-more img {
-       opacity: 0.5;
-     }
-   </style>
-   -->
