@@ -7,7 +7,7 @@
   <link rel="stylesheet" type="text/css" href="/static/styles/session.css">
   {{.AnalyticsHTML}}
 </head>
-<body class="dark">
+<body class="{{.bodyClass}}">
   <header>
     <div class="logo">
       <a href="/">
@@ -94,6 +94,10 @@
 
           {{if .e}}
             <input type="hidden" name="e" value="{{.e}}"/>
+          {{end}}
+
+          {{if .bodyClass}}
+            <input type="hidden" name="bodyClass" value="{{.bodyClass}}"/>
           {{end}}
         </form>
 

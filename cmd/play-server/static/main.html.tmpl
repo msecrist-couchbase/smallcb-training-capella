@@ -67,7 +67,7 @@
   </script>
   {{.AnalyticsHTML}}
 </head>
-<body class="dark">
+<body class="{{.BodyClass}}">
   <header>
     <div class="logo">
       <a href="/{{if .Session}}?s={{.Session.SessionId}}{{end}}">

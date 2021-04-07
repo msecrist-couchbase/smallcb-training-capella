@@ -70,6 +70,8 @@ type MainTemplateData struct {
 	OptanonHTML   template.HTML
 
 	PageColor func(string) string
+
+	BodyClass string
 }
 
 func MainTemplateEmit(w http.ResponseWriter,
@@ -78,7 +80,7 @@ func MainTemplateEmit(w http.ResponseWriter,
 	session *Session, sessionsMaxAge, sessionsMaxIdle time.Duration,
 	containerPublishPortBase, containerPublishPortSpan int,
 	portMapping [][]int,
-	examplesPath string, name, lang, code, view string) error {
+	examplesPath string, name, lang, code, view, bodyClass string) error {
 	host := hostIn
 	if session == nil {
 		host = "127.0.0.1"
@@ -189,6 +191,8 @@ func MainTemplateEmit(w http.ResponseWriter,
 
 			return fmt.Sprintf("%2x%2x%2x", r, g, b)
 		},
+
+		BodyClass: bodyClass,
 	}
 
 	if view != "" {

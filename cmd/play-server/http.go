@@ -108,10 +108,15 @@ func HttpHandleMain(w http.ResponseWriter, r *http.Request) {
 
 	portApp, _ := strconv.Atoi(strings.Split(*listen, ":")[1])
 
+	bodyClass := r.FormValue("bodyClass")
+	if bodyClass == "" {
+		bodyClass = "dark"
+	}
+
 	err := MainTemplateEmit(w, *staticDir, msg, *host, portApp,
 		*version, VersionSDKs, session, *sessionsMaxAge, *sessionsMaxIdle,
 		*listenPortBase, *listenPortSpan, PortMapping,
-		examplesPath, name, lang, code, view)
+		examplesPath, name, lang, code, view, bodyClass)
 	if err != nil {
 		StatsNumInc("http.Main.err", "http.Main.err.template")
 
@@ -196,6 +201,11 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	bodyClass := r.FormValue("bodyClass")
+	if bodyClass == "" {
+		bodyClass = "dark"
+	}
+
 	data := map[string]interface{}{
 		"AnalyticsHTML": template.HTML(AnalyticsHTML(*host)),
 		"OptanonHTML":   template.HTML(OptanonHTML(*host)),
@@ -208,6 +218,7 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 		"groupSize": r.FormValue("groupSize"),
 		"init":      r.FormValue("init"),
 		"e":         e,
+		"bodyClass": bodyClass,
 	}
 
 	if r.Method == "POST" {

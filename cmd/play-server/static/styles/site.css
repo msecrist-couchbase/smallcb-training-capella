@@ -12,6 +12,10 @@ body {
   /*                  header  main   footer */
 }
 
+body a {
+  color: #333;
+}
+
 /* Header Styles */
 header {
   display: flex;
