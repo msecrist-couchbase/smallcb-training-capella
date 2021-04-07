@@ -40,7 +40,7 @@ code: |
       TransactionConfigBuilder config = TransactionConfigBuilder.create()
           .durabilityLevel(TransactionDurabilityLevel.MAJORITY_AND_PERSIST_TO_ACTIVE);
       Transactions transactions = Transactions.create(cluster, config);
-      
+
       var route1Id = "route_46586";
       var route2Id = "route_35816";
 
@@ -84,8 +84,9 @@ code: |
       System.exit(0);
     }
 
-    private static String swapAirlineRoute(Transactions transactions, Collection collection, String route1Id,
-        String route2Id) {
+    private static String swapAirlineRoute(Transactions transactions, Collection collection,
+      String route1Id,
+      String route2Id) {
       AtomicReference<String> swapId = new AtomicReference<>();
       try {
         transactions.run(ctx -> {
@@ -100,9 +101,10 @@ code: |
           System.out.printf("In transaction - got %s's details: %s\n", route2Id,
               route2Content.getString("airlineid"));
 
-          String airlineid1 = route1Content.getString("airlineid");
           String airline1 = route1Content.getString("airline");
+          String airlineid1 = route1Content.getString("airlineid");
           JsonArray schedule1 = route1Content.getArray("schedule");
+
           String airline2 = route2Content.getString("airline");
           String airlineid2 = route2Content.getString("airlineid");
           JsonArray schedule2 = route2Content.getArray("schedule");
@@ -111,6 +113,7 @@ code: |
               .put("from_airline", airline1).put("from_airlineid", airlineid1).put("to_airline", airline2)
               .put("to_airlineid", airlineid2).put("type", "Transactions_History")
               .put("created", new java.util.Date().toString());
+
           swapId.set(UUID.randomUUID().toString());
 
           ctx.insert(collection, swapId.get(), swapRecord);
@@ -120,6 +123,7 @@ code: |
           route1Content.put("airline", airline2);
           route1Content.put("airlineid", airlineid2);
           route1Content.put("schedule", schedule2);
+
           route2Content.put("airline", airline1);
           route2Content.put("airlineid", airlineid1);
           route2Content.put("schedule", schedule1);
@@ -135,6 +139,7 @@ code: |
           System.out.println("In transaction - about to commit");
           ctx.commit();
         });
+
         return swapId.get();
       } catch (TransactionCommitAmbiguous err) {
         System.err.println("Transaction " + err.result().transactionId() + " possibly committed:");
@@ -147,8 +152,8 @@ code: |
           err.result().log().logs().forEach(System.err::println);
         }
       }
-      return null;
 
+      return null;
     }
   }
 infoAfter: |

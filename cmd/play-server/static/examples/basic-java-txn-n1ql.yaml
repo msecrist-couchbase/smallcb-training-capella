@@ -24,7 +24,8 @@ code: |
   class NoRouteFound extends RuntimeException {
     private static final long serialVersionUID = 1L;
   }
-  class Program {  
+
+  class Program {
     public static void main(String[] args) {
       var clusterName = "couchbase://{{.Host}}";
       var username = "{{.CBUser}}";
@@ -39,14 +40,14 @@ code: |
           .durabilityLevel(TransactionDurabilityLevel.MAJORITY_AND_PERSIST_TO_ACTIVE)
           .expirationTime(Duration.ofSeconds(60));
       Transactions transactions = Transactions.create(cluster, config);
-      
+
       var route1Id = "46586";
       var route2Id = "35816";
 
       // Pre-transaction
       JsonObject preroute1 = getDocByWhere(cluster, bucketName, "type='route' and id="+route1Id);
       JsonObject preroute2 = getDocByWhere(cluster, bucketName, "type='route' and id="+route2Id);
-      
+
       System.out.printf(
           "Before transaction - got %s's details: source airport: %s, destination airport: %s, airline: %s:%s \n",
           route1Id, preroute1.getString("sourceairport"), preroute1.getString("destinationairport"),
@@ -55,7 +56,7 @@ code: |
           "Before transaction - got %s's details: source airport: %s, destination airport: %s, airline: %s:%s \n",
           route2Id, preroute2.getString("sourceairport"), preroute2.getString("destinationairport"),
           preroute2.getString("airline"), preroute2.getString("airlineid"));
-      
+
       // In-transaction
       try {
         String swapId = swapAirlineRoute(transactions, cluster, bucketName, route1Id, route2Id);
@@ -72,7 +73,7 @@ code: |
       // Post-transaction
       JsonObject postroute1 = getDocByWhere(cluster, bucketName, "type='route' and id="+route1Id);
       JsonObject postroute2 = getDocByWhere(cluster, bucketName, "type='route' and id="+route2Id);
-      
+
       System.out.printf(
           "After transaction - got %s's details: source airport: %s, destination airport: %s, airline: %s:%s \n",
           route1Id, postroute1.getString("sourceairport"), postroute1.getString("destinationairport"),
@@ -83,56 +84,59 @@ code: |
           postroute2.getString("airline"), postroute2.getString("airlineid"));
       System.exit(0);
     }
-    
+
     private static JsonObject getDocByWhere(Cluster cluster, String bucketName, String where) {
-    	String sqry = "SELECT `" + bucketName + "`.* " + 
-    					"FROM `" + bucketName + "` " + 
-    					"WHERE "+where;
-        QueryResult qr = cluster.query(sqry);
-        return qr.rowsAsObject().size()>0? qr.rowsAsObject().get(0): null;
+      String sqry = "SELECT `" + bucketName + "`.* " +
+                    "FROM `" + bucketName + "` " +
+                    "WHERE "+where;
+      QueryResult qr = cluster.query(sqry);
+      return qr.rowsAsObject().size()>0? qr.rowsAsObject().get(0): null;
     }
-    
-    private static String swapAirlineRoute(Transactions transactions, Cluster cluster, String bucketName, String route1Id,
-        String route2Id) {
+
+    private static String swapAirlineRoute(Transactions transactions, Cluster cluster, String bucketName,
+      String route1Id,
+      String route2Id) {
       AtomicReference<String> swapId = new AtomicReference<>();
       try {
         transactions.run(ctx -> {
           JsonObject route1Content = getDocByWhere(cluster, bucketName, "type='route' and id="+route1Id);
           JsonObject route2Content = getDocByWhere(cluster, bucketName, "type='route' and id="+route2Id);
-            
+
           System.out.printf("In transaction - got %s's details: %s\n", route1Id,
               route1Content.getString("airlineid"));
           System.out.printf("In transaction - got %s's details: %s\n", route2Id,
               route2Content.getString("airlineid"));
 
-          String airlineid1 = route1Content.getString("airlineid");
           String airline1 = route1Content.getString("airline");
+          String airlineid1 = route1Content.getString("airlineid");
           JsonArray schedule1 = route1Content.getArray("schedule");
+
           String airline2 = route2Content.getString("airline");
           String airlineid2 = route2Content.getString("airlineid");
           JsonArray schedule2 = route2Content.getArray("schedule");
-  
+
           swapId.set(UUID.randomUUID().toString());
+
           JsonObject swapRecord = JsonObject.create().put("id", swapId.get())
-        		  .put("from_route", route1Id).put("to_route", route2Id)
+              .put("from_route", route1Id).put("to_route", route2Id)
               .put("from_airline", airline1).put("from_airlineid", airlineid1).put("to_airline", airline2)
               .put("to_airlineid", airlineid2).put("type", "Transactions_History")
               .put("created", new java.util.Date().toString());
-          
 
           System.out.println("In transaction - creating a record of swap routes with UUID: " + swapId.get());
           ctx.query("INSERT INTO `"+bucketName+"` VALUES ('"+swapId.get()+"', "+swapRecord+")");
-          
+
           System.out.printf("In transaction - changing %s's airline to: %s\n", route1Id,
               route2Content.getString("airlineid"));
           System.out.printf("In transaction - changing %s's airline to: %s\n", route2Id,
               route1Content.getString("airlineid"));
 
-          String updateRoute1 = "UPDATE `"+bucketName+"` " + 
-                                "SET airline='"+airline2+"', airlineid='"+airlineid2+"', schedule="+schedule2 + 
+          String updateRoute1 = "UPDATE `"+bucketName+"` " +
+                                "SET airline='"+airline2+"', airlineid='"+airlineid2+"', schedule="+schedule2 +
                                 " WHERE type='route' and id = "+route1Id;
           ctx.query(updateRoute1);
-          String updateRoute2 = "UPDATE `"+bucketName+"` " + 
+
+          String updateRoute2 = "UPDATE `"+bucketName+"` " +
                                 "SET airline='"+airline1+"', airlineid='"+airlineid1+"', schedule="+schedule1 +
                                 " WHERE type='route' and id = "+route2Id;
           ctx.query(updateRoute2);
@@ -140,6 +144,7 @@ code: |
           System.out.println("In transaction - about to commit");
           ctx.commit();
         });
+
         return swapId.get();
       } catch (TransactionCommitAmbiguous err) {
         System.err.println("Transaction " + err.result().transactionId() + " possibly committed:");
@@ -152,8 +157,8 @@ code: |
           err.result().log().logs().forEach(System.err::println);
         }
       }
-      return null;
 
+      return null;
     }
   }
 infoAfter: |
