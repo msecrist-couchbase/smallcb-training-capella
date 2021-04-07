@@ -129,7 +129,7 @@ SUBDOMAIN="cb-${array[2]}${array[3]}.couchbase.live"
 echo "Subdomain of this node = $SUBDOMAIN"
 
 #Start SmallCb
-./play-server -host "$SUBDOMAIN" -containers=10 -sessionsMaxAge=35m0s -codeDuration=30s -containersSingleUse=2 -restarters=5 &> nohup.out &
+./play-server -host "$SUBDOMAIN" -containers=10 -sessionsMaxAge=35m0s -codeDuration=60s -containersSingleUse=2 -restarters=5 &> nohup.out &
 ```
 
 *IMPORTANT:* This script run as "root". For some reason when we tried
