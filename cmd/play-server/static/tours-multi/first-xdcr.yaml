@@ -655,14 +655,6 @@ steps:
      main.step-a-change-in-the-west .right .diagram .west-east-stream {
        display: block !important;
      }
-
-     main.step-a-change-in-the-west article .left .step-nav button.next {
-       opacity: 0.2;
-     }
-
-     main.step-a-change-in-the-west article.checked-w-cluster-doc-edited .left .step-nav button.next {
-       opacity: initial;
-     }
    </style>
  -
   title: Will the change go to the east?
