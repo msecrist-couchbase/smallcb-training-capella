@@ -17,7 +17,7 @@ func RunRequestSession(session *Session, req RunRequest,
 	containers, containersSingleUse int) (out []byte, err error) {
 	session, err = SessionAssignContainer(session, req,
 		readyCh, containerWaitDuration, restartCh,
-		containers, containersSingleUse)
+		containers, containersSingleUse, "", "", "")
 	if err != nil {
 		return nil, fmt.Errorf("RunRequestSession,"+
 			" could not assign container, err: %v", err)
@@ -43,7 +43,8 @@ func RunRequestSession(session *Session, req RunRequest,
 func SessionAssignContainer(session *Session, req RunRequest,
 	readyCh chan int, containerWaitDuration time.Duration,
 	restartCh chan<- Restart,
-	containers, containersSingleUse int) (*Session, error) {
+	containers, containersSingleUse int,
+	init, initKey, defaultBucket string) (*Session, error) {
 	if session == nil {
 		return nil, fmt.Errorf("SessionAssignContainer, no session")
 	}
@@ -87,7 +88,12 @@ func SessionAssignContainer(session *Session, req RunRequest,
 		return nil, err
 	}
 
-	err = StartCbsh(session, req, containerId)
+	err = StartInit(req, containerId, init, initKey)
+	if err != nil {
+		return nil, err
+	}
+
+	err = StartCbsh(session, req, containerId, defaultBucket)
 	if err != nil {
 		return nil, err
 	}
@@ -136,7 +142,56 @@ func SessionAssignContainer(session *Session, req RunRequest,
 
 // ------------------------------------------------
 
-func StartCbsh(session *Session, req RunRequest, containerId int) error {
+func StartInit(req RunRequest, containerId int, init, initKey string) error {
+	if init == "" {
+		return nil
+	}
+
+	if strings.Index(init, "..") >= 0 {
+		log.Printf("ERROR: StartInit, bad init: %s", init);
+
+		return fmt.Errorf("StartInit, bad init");
+	}
+
+	data, err := ReadYaml(*staticDir + "/" + init + ".yaml")
+	if err != nil {
+		return err
+	}
+
+	v, ok := CleanupInterfaceValue(data).(map[string]interface{})[initKey]
+	if !ok {
+		return nil
+        }
+
+	m, ok := v.(map[string]interface{})
+	if !ok {
+		log.Printf("ERROR: StartInit, bad initKey: %s, init: %s, v: %+v", initKey, init, v)
+
+		return fmt.Errorf("StartInit, bad initKey");
+	}
+
+	init_req := req // Copy.
+
+	if _, ok := m["execPrefix"]; ok {
+		init_req.execPrefix = m["execPrefix"].(string)
+	}
+
+	init_req.lang = m["lang"].(string)
+	init_req.code = m["code"].(string)
+	init_req.codeDuration = *sessionsMaxAge
+	init_req.user = "couchbase"
+
+	_, err = RunRequestInContainer(init_req, containerId)
+	if err != nil {
+		log.Printf("ERROR: StartInit, err: %v", err)
+	}
+
+	return err
+}
+
+// ------------------------------------------------
+
+func StartCbsh(session *Session, req RunRequest, containerId int, defaultBucket string) error {
 	containerName := fmt.Sprintf("%s%d",
 		req.containerNamePrefix, containerId)
 
@@ -155,13 +210,17 @@ func StartCbsh(session *Session, req RunRequest, containerId int) error {
 	// Ex: "/opt/couchbase/var/tmp/cbsh-config".
 	cbshConfigInst := DirVar + "/tmp/cbsh-config"
 
+
 	cbshConfigBytes := []byte(
 		"version = 1\n\n" +
 			"[clusters.default]\n" +
 			"hostnames = [\"127.0.0.1\"]\n" +
-			"default-bucket = \"travel-sample\"\n" +
 			"username = \"" + session.CBUser + "\"\n" +
 			"password = \"" + session.CBPswd + "\"\n")
+
+	if defaultBucket != "" && defaultBucket != "NONE" {
+		cbshConfigBytes = append(cbshConfigBytes, []byte("default-bucket = \"" + defaultBucket + "\"\n")...)
+	}
 
 	// File mode 0777 executable, for scripts like 'code.py'.
 	err = ioutil.WriteFile(cbshConfigHost, cbshConfigBytes, 0777)

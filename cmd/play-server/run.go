@@ -77,6 +77,8 @@ type RunRequest struct {
 	containerVolPrefix  string
 
 	cbAdminPassword string
+
+	user string
 }
 
 func RunRequestInContainer(req RunRequest, containerId int) (
@@ -113,17 +115,22 @@ func RunRequestInContainer(req RunRequest, containerId int) (
 	containerName := fmt.Sprintf("%s%d",
 		req.containerNamePrefix, containerId)
 
+	user := req.user
+	if user == "" {
+		user = "play"
+	}
+
 	var cmd *exec.Cmd
 
 	if len(req.execPrefix) > 0 {
 		// Case of an execPrefix like "/run-java.sh".
 		cmd = exec.Command("docker", "exec",
 			containerName,
-			"/run-code.sh", req.execPrefix, codePathInst)
+			"/run-code.sh", user, req.execPrefix, codePathInst)
 	} else {
 		cmd = exec.Command("docker", "exec",
 			containerName,
-			"/run-code.sh", codePathInst)
+			"/run-code.sh", user, codePathInst)
 	}
 
 	log.Printf("INFO: RunRequest, containerId: %d, lang: %s\n",

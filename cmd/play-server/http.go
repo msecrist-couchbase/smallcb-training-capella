@@ -213,12 +213,13 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 			sessionsMaxAge.String(), "m0s", " min", 1),
 		"SessionsMaxIdle": strings.Replace(
 			sessionsMaxIdle.String(), "m0s", " min", 1),
-		"title":     r.FormValue("title"),
-		"intro":     r.FormValue("intro"),
-		"groupSize": r.FormValue("groupSize"),
-		"init":      r.FormValue("init"),
-		"e":         e,
-		"bodyClass": bodyClass,
+		"title":         r.FormValue("title"),
+		"intro":         r.FormValue("intro"),
+		"defaultBucket": r.FormValue("defaultBucket"),
+		"groupSize":     r.FormValue("groupSize"),
+		"init":          r.FormValue("init"),
+		"e":             e,
+		"bodyClass":     bodyClass,
 	}
 
 	if r.Method == "POST" {
@@ -290,10 +291,17 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 					cbAdminPassword:     CBAdminPassword,
 				}
 
+				defaultBucket := r.FormValue("defaultBucket")
+				if defaultBucket == "" {
+					defaultBucket = "travel-sample"
+				}
+
 				_, err = SessionAssignContainer(
 					session, req, readyCh,
 					*containerWaitDuration, restartCh,
-					*containers, *containersSingleUse)
+					*containers, *containersSingleUse,
+					r.FormValue("init"), "0",
+					defaultBucket)
 
 				for i := 1; err == nil && i < groupSize; i++ {
 					var childSession *Session
@@ -309,7 +317,9 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 					_, err = SessionAssignContainer(
 						childSession, req, readyCh,
 						*containerWaitDuration, restartCh,
-						*containers, *containersSingleUse)
+						*containers, *containersSingleUse,
+						r.FormValue("init"), fmt.Sprintf("%d", i),
+						defaultBucket)
 				}
 
 				if err == nil {

@@ -75,6 +75,8 @@ var PortMapping = [][]int{
 	[]int{11211, 31}, // 11211 is exposed on port 10000 + 31.
 
 	[]int{1337, 40}, // The gritty port is exposed on port 10000 + 40.
+
+	[]int{8080, 45}, // 8080 (optional web app) is exposed on port 10000 + 45.
 }
 
 var PortMap = map[int]int{}
