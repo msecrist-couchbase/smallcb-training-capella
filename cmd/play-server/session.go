@@ -29,8 +29,6 @@ type Session struct {
 
 	RestartCh chan<- Restart `json:"-"`
 	ReadyCh   chan int       `json:"-"`
-
-	Cookies []string
 }
 
 // SessionInfo fields are intended to be persistable.
@@ -171,8 +169,6 @@ func (sessions *Sessions) SessionExitLOCKED(session *Session) {
 		}
 
 		session.ReleaseContainer()
-
-		CookiesRemove(session.Cookies)
 	}()
 }
 
@@ -194,11 +190,16 @@ func (sessions *Sessions) SessionInfo(sessionId string) (map[string]interface{},
 	rv["sessionId"] = sessionId
 
 	group := map[string]interface{}{}
-	group[sessionId] = session
+
+	sessionCopy := *session
+
+	group[sessionId] = sessionCopy
 
 	for childSessionId, childSession := range sessions.mapBySessionId {
 		if childSession.SessionIdMain == sessionId {
-			group[childSessionId] = childSession
+			sessionCopy = *childSession
+
+			group[childSessionId] = sessionCopy
 		}
 	}
 
