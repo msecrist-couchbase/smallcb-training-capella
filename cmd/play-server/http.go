@@ -179,9 +179,18 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 		strings.Split(r.Host, ":")[0] != *host {
 		StatsNumInc("http.Session.redirect.host")
 
-		http.Redirect(w, r, "http://"+*host+"/session", http.StatusSeeOther)
+		var suffix string
 
-		log.Printf("INFO: Session redirect, from host: %v, to host: %s", r.Host, *host)
+		if r.ParseForm() == nil {
+			suffix = r.Form.Encode()
+			if len(suffix) > 0 {
+				suffix = "?" + suffix
+			}
+		}
+
+		http.Redirect(w, r, "http://"+*host+"/session"+suffix, http.StatusSeeOther)
+
+		log.Printf("INFO: Session redirect, from host: %v, to host: %s, suffix: %s", r.Host, *host, suffix)
 
 		return
 	}

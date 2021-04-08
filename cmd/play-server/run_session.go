@@ -148,9 +148,9 @@ func StartInit(req RunRequest, containerId int, init, initKey string) error {
 	}
 
 	if strings.Index(init, "..") >= 0 {
-		log.Printf("ERROR: StartInit, bad init: %s", init);
+		log.Printf("ERROR: StartInit, bad init: %s", init)
 
-		return fmt.Errorf("StartInit, bad init");
+		return fmt.Errorf("StartInit, bad init")
 	}
 
 	data, err := ReadYaml(*staticDir + "/" + init + ".yaml")
@@ -161,13 +161,13 @@ func StartInit(req RunRequest, containerId int, init, initKey string) error {
 	v, ok := CleanupInterfaceValue(data).(map[string]interface{})[initKey]
 	if !ok {
 		return nil
-        }
+	}
 
 	m, ok := v.(map[string]interface{})
 	if !ok {
 		log.Printf("ERROR: StartInit, bad initKey: %s, init: %s, v: %+v", initKey, init, v)
 
-		return fmt.Errorf("StartInit, bad initKey");
+		return fmt.Errorf("StartInit, bad initKey")
 	}
 
 	init_req := req // Copy.
@@ -210,7 +210,6 @@ func StartCbsh(session *Session, req RunRequest, containerId int, defaultBucket 
 	// Ex: "/opt/couchbase/var/tmp/cbsh-config".
 	cbshConfigInst := DirVar + "/tmp/cbsh-config"
 
-
 	cbshConfigBytes := []byte(
 		"version = 1\n\n" +
 			"[clusters.default]\n" +
@@ -219,7 +218,7 @@ func StartCbsh(session *Session, req RunRequest, containerId int, defaultBucket 
 			"password = \"" + session.CBPswd + "\"\n")
 
 	if defaultBucket != "" && defaultBucket != "NONE" {
-		cbshConfigBytes = append(cbshConfigBytes, []byte("default-bucket = \"" + defaultBucket + "\"\n")...)
+		cbshConfigBytes = append(cbshConfigBytes, []byte("default-bucket = \""+defaultBucket+"\"\n")...)
 	}
 
 	// File mode 0777 executable, for scripts like 'code.py'.
