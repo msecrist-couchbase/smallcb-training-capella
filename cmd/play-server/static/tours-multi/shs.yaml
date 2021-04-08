@@ -2,8 +2,6 @@
  lang: sh
  code: |
   #!/bin/sh
-  cd /tmp
-  pwd > /tmp/pwd.out
-  nohup /usr/bin/python3 -m http.server 8080 > /tmp/nohup.out &
-  sleep 2
-  ls -al > /tmp/ls.out
+  cd /opt/couchbase/var/static/tours-multi
+  nohup /usr/bin/python3 -m http.server 8080 &
+  echo started http.server 8080

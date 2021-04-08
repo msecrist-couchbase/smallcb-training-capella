@@ -69,6 +69,7 @@ create:
 	sleep 3
 	rm -rf vol-snapshot$(SNAPSHOT_SUFFIX)/lib/couchbase/logs/*
 	rm -rf vol-snapshot$(SNAPSHOT_SUFFIX)/lib/couchbase/stats/*
+	cp -R cmd/play-server/static vol-snapshot$(SNAPSHOT_SUFFIX)/
 
 # -------------------------------------------------
 
