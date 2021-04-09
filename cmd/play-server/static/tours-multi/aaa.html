@@ -6,7 +6,7 @@
 <body>
 <div class="container">
   <header>
-    <h1>Couchbase Playground</h1>
+    <h1><a href="https://couchbase.live">Couchbase Playground</a></h1>
     <div id="msg" class="msg"></div>
     <a id="logout" class="logout">end session</a>
   </header>
@@ -26,6 +26,10 @@
 <style>
 body * {
   font-family: OpenSans, sans-serif;
+}
+
+a, a:visited {
+  color: #333;
 }
 
 .display-none {
@@ -393,7 +397,18 @@ if (sessionId) {
       .then(data => {
         fetch("/session-info?s=" + sessionId)
           .then(resp => resp.json())
-          .then(sess => loadTour(data, sess));
+          .then(sess => loadTour(data, sess))
+          .catch(err => {
+            console.log("fetch session-info err", err);
+
+            document.querySelector("a.logout").style.display = "none";
+
+            document.querySelector(".right").innerHTML =
+              `<div style="margin: 1rem 2rem;">
+                 Your playground session has ended.<br/><br/>
+                 Back to <a href="https://developer.couchbase.com">developer.couchbase.com</a>
+               </div>`;
+          });
       });
   }
 }
