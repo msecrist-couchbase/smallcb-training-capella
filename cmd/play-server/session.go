@@ -205,6 +205,10 @@ func (sessions *Sessions) SessionInfo(sessionId string) (map[string]interface{},
 
 	rv["group"] = group
 
+	rv["sessionsMaxAgeSecs"] = sessionsMaxAge.Seconds()
+
+	rv["sessionsMaxIdleSecs"] = sessionsMaxIdle.Seconds()
+
 	return rv, nil
 }
 
