@@ -142,7 +142,15 @@ a, a:visited {
 }
 
 .container article .left > div {
-  display: none;
+  display: flex;
+  position: relative;
+  height: 0px;
+  margin-left: 10px;
+  margin-right: 0px;
+  opacity: 0;
+  pointer-events: none;
+
+  transition: margin-left 0.4s, margin-right 0.4s, opacity 0.4s;
 }
 
 .container article .left .step > div {
@@ -532,7 +540,7 @@ function loadTour(data, sess) {
                    onclick="stepShow(${i + 1})" class="next">Next</button>
          </div>
          <style>
-           main.step-${i} .left #step-${i} { display: flex; }
+           main.step-${i} .left #step-${i} { margin-left: 0px; margin-right: 10px; opacity: 100%; pointer-events: auto; }
          </style>
        </div>`;
 
