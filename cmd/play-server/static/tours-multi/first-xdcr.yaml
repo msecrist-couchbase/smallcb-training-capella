@@ -155,6 +155,11 @@ panels:
     </li>
     </ul>
    </div>
+   <div>
+    <br/>
+    That's it, congrats! And, <b><a href="/session-exit?s=${s[0].SessionId}">end your session</a></b>.
+    <br/><br/><br/><br/><br/><br/><br/><br/>
+   </div>
 
 diagram:
  height: 50px
