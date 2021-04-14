@@ -133,7 +133,23 @@ func HttpHandleSessionExit(w http.ResponseWriter, r *http.Request) {
 
 	sessions.SessionExit(r.FormValue("s"))
 
-	http.Redirect(w, r, "/?m=session-exit", http.StatusSeeOther)
+	url := r.FormValue("ebase")
+	if url == "" {
+		url = "/"
+	}
+
+	e := r.FormValue("e")
+	if e != "" {
+		url = url + e
+	}
+
+	if strings.Index(url, "?") < 0 {
+		url += "?m=session-exit"
+	} else {
+		url += "&m=session-exit"
+	}
+
+	http.Redirect(w, r, url, http.StatusSeeOther)
 }
 
 // ------------------------------------------------
@@ -334,7 +350,10 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 				if err == nil {
 					StatsNumInc("http.Session.post.ok", "http.Session.post.create.assign.ok")
 
-					url := "/"
+					url := r.FormValue("ebase")
+					if url == "" {
+						url = "/"
+					}
 
 					if e != "" {
 						url = url + e
@@ -346,8 +365,7 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 						url += "&s=" + session.SessionId
 					}
 
-					http.Redirect(w, r, url,
-						http.StatusSeeOther)
+					http.Redirect(w, r, url, http.StatusSeeOther)
 
 					StatsNumInc("http.Session.post.ok", "http.Session.post.create.ok")
 
