@@ -153,6 +153,10 @@ panels:
     </ul>
    </div>
    <div>
+    Got more questions / feedback? <a href="mailto:devadvocates@couchbase.com">devadvocates@couchbase.com</a>
+    <br/>
+    <br/>
+    <br/>
     <br/>
     And, finally... <b><a href="/session-exit?s=${s[0].SessionId}">end session</a></b>.
     <br/><br/><br/><br/><br/><br/><br/><br/>
