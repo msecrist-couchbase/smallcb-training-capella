@@ -95,9 +95,6 @@ panels:
     }
    </style>
    <div>
-    The takeaway...
-   </div>
-   <div>
     <b>Data streaming</b> between clusters is
     straightforwards with Couchbase.
    </div>
@@ -109,8 +106,8 @@ panels:
     </a>
    </div>
    <div>
-    XDCR and more features of Couchbase can help<br/>
-    you build mission-critical applications that are<br/>
+    XDCR and more features of Couchbase can help you build<br/>
+    high performance, mission-critical applications that are<br/>
     <em>flexible</em>,
     <em>distributed</em>
     and
@@ -157,7 +154,7 @@ panels:
    </div>
    <div>
     <br/>
-    That's it, congrats! And, <b><a href="/session-exit?s=${s[0].SessionId}">end your session</a></b>.
+    And, finally... <b><a href="/session-exit?s=${s[0].SessionId}">end session</a></b>.
     <br/><br/><br/><br/><br/><br/><br/><br/>
    </div>
 
@@ -709,9 +706,19 @@ steps:
     clear: true
   content: |
    <div>
-    Thanks for playing with Couchbase!
-    <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+    Congratulations!
+    <br/>
+    <br/>
+    The takeaway...
    </div>
+   <div>
+    <h3>On the right&nbsp;
+        <div style="display: inline-block; transform-origin: left center; transform: scaleX(5);">
+          &#x279E;
+        </div>
+    </h3>
+    <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+   <div>
 
    <style>
      main.step-mission-success .right .diagram .west-east-stream {
