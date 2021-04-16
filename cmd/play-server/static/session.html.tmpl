@@ -53,23 +53,33 @@
         </p>
 
         <form action="/session" method="post" autocomplete="off">
-          <label> Your Name:
+          <label {{if .namec}}class="{{.namec}}"{{end}}> Your Name:
             <span class="error">{{.errName}}</span>
             <input type="text" name="name" value="{{.name}}" autofocus/>
           </label>
-          <label> Your Email:
+          {{if .namec}}
+            <input type="hidden" name="namec" value="{{.namec}}"/>
+          {{end}}
+
+          <label {{if .emailc}}class="{{.emailc}}"{{end}}> Your Email:
             <span class="error">{{.errEmail}}</span>
             <input type="text" name="email" value="{{.email}}"/>
           </label>
+          {{if .emailc}}
+            <input type="hidden" name="emailc" value="{{.emailc}}"/>
+          {{end}}
 
-          <div class="captcha-bg">
+          <div class="captcha-bg {{if .captchac}}{{.captchac}}{{end}}">
             <img class="captcha" {{.captchaSrc}}/>
           </div>
 
-          <label>Enter Captcha:
+          <label {{if .captchac}}class="{{.captchac}}"{{end}}>Enter Captcha:
             <span class="error">{{.errCaptcha}}</span>
             <input type="text" name="captcha"/>
           </label>
+          {{if .captchac}}
+            <input type="hidden" name="captchac" value="{{.captchac}}"/>
+          {{end}}
 
           <div class="actions">
             <input type="submit" name="session-start"
@@ -102,6 +112,14 @@
 
           {{if .bodyClass}}
             <input type="hidden" name="bodyClass" value="{{.bodyClass}}"/>
+          {{end}}
+
+          {{if .title}}
+            <input type="hidden" name="title" value="{{.title}}"/>
+          {{end}}
+
+          {{if .intro}}
+            <input type="hidden" name="intro" value="{{.intro}}"/>
           {{end}}
         </form>
 

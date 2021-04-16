@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"html/template"
 	"log"
+	"math/rand"
 	"net/http"
 	"regexp"
 	"sort"
@@ -240,6 +241,9 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 			sessionsMaxIdle.String(), "m0s", " min", 1),
 		"title":         r.FormValue("title"),
 		"intro":         r.FormValue("intro"),
+		"namec":         r.FormValue("namec"),
+		"emailc":        r.FormValue("emailc"),
+		"captchac":      r.FormValue("captchac"),
 		"defaultBucket": r.FormValue("defaultBucket"),
 		"groupSize":     r.FormValue("groupSize"),
 		"init":          r.FormValue("init"),
@@ -250,9 +254,16 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 		StatsNumInc("http.Session.post")
 
+		gen := fmt.Sprintf("gen!%s-%d",
+			time.Now().Format("2006/01/02-15:04:05"),
+			rand.Intn(1000000))
+
 		errs := 0
 
 		name := strings.TrimSpace(r.FormValue("name"))
+		if r.FormValue("namec") == "skip" {
+			name = gen
+		}
 		if name == "" {
 			StatsNumInc("http.Session.post.err.name")
 
@@ -262,6 +273,9 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 		data["name"] = name
 
 		email := strings.TrimSpace(r.FormValue("email"))
+		if r.FormValue("emailc") == "skip" {
+			email = gen
+		}
 		if email == "" {
 			StatsNumInc("http.Session.post.err.email")
 
@@ -271,16 +285,18 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 		data["email"] = email
 
 		captcha := strings.TrimSpace(r.FormValue("captcha"))
-		if captcha == "" {
-			data["errCaptcha"] = "guess required"
-			errs += 1
-		} else if !CaptchaCheck(captcha) {
-			StatsNumInc("http.Session.post.err.captcha")
+		if r.FormValue("captchac") != "skip" {
+			if captcha == "" {
+				data["errCaptcha"] = "guess required"
+				errs += 1
+			} else if !CaptchaCheck(captcha) {
+				StatsNumInc("http.Session.post.err.captcha")
 
-			time.Sleep(WrongCaptchaSleepTime)
+				time.Sleep(WrongCaptchaSleepTime)
 
-			data["errCaptcha"] = "please guess again"
-			errs += 1
+				data["errCaptcha"] = "please guess again"
+				errs += 1
+			}
 		}
 
 		groupSize, err := strconv.Atoi(strings.TrimSpace(r.FormValue("groupSize")))
