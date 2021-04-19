@@ -716,8 +716,14 @@ Information about Cookie Pro (OptanonWrapper)
   https://community.cookiepro.com/s/article/UUID-730ad441-6c4d-7877-7f85-36f1e801e8ca
 
 ---------
-Multi-playground
+Multi-container playground tours...
 
 Mockup (slides) with links to UX testing feedback (2021/03) - https://docs.google.com/presentation/d/1UFItkNOFp7BYKuzWBEGN5x8otxbGykdaOHW6cFbZZN0/edit?pli=1#slide=id.gcb03ecc9b0_0_6
 
-Walkthru (recording) of internals of aaa.html and first-tour.yaml with Eric B. (2021/03/29) - https://couchbase.zoom.us/rec/play/tZUxpjfd9ZzOdvNVVZIEzEXxKZfBd6N-QaYlIY3VnU-hC5Xtvg_h8QfmKmY6sg5se8rvyjinVc2Leb7z.YB_nMwLv983kb0rl?startTime=1617042768000
+Walkthru (recording) of internals of the multi-container playground with Eric B. (2021/03/29) - https://couchbase.zoom.us/rec/play/tZUxpjfd9ZzOdvNVVZIEzEXxKZfBd6N-QaYlIY3VnU-hC5Xtvg_h8QfmKmY6sg5se8rvyjinVc2Leb7z.YB_nMwLv983kb0rl?startTime=1617042768000
+
+To play with a multi-container playground tour, such as the
+tours-multi/first-xdcr tour...
+
+http://localhost:8080/session?groupSize=2&bodyClass=normal&e=static/tours-multi/aaa.html%3Fname%3Dfirst-xdcr&title=Try+Data+Streaming+with+Couchbase...&init=tours-multi/shs&defaultBucket=NONE
+
