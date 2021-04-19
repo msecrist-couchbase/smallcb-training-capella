@@ -722,6 +722,8 @@ Mockup (slides) with links to UX testing feedback (2021/03) - https://docs.googl
 
 Walkthru (recording) of internals of the multi-container playground with Eric B. (2021/03/29) - https://couchbase.zoom.us/rec/play/tZUxpjfd9ZzOdvNVVZIEzEXxKZfBd6N-QaYlIY3VnU-hC5Xtvg_h8QfmKmY6sg5se8rvyjinVc2Leb7z.YB_nMwLv983kb0rl?startTime=1617042768000
 
+Another walkthru (recording) of multi-container playground internals with David Quintas Vilanova (2021/04/19) - Topic: multi-container playground internals, w/ David Quintas Vilanova - https://couchbase.zoom.us/rec/share/WBlGcJqrLxjgvaeVLuFQ_WhVx4o1i_hQNQoiNOTyYNTMnNGqpwZ7WQg8jfUVCOu_.65d7w3TmcOhw3AMV / Access Passcode: 62.6z&+b
+
 To play with a multi-container playground tour, such as the
 tours-multi/first-xdcr tour...
 
