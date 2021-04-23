@@ -34,6 +34,9 @@ article input[type=submit] {
 article img.captcha {
   display: block;
 }
+article .skip {
+  display: none;
+}
 
 article > section {
   padding-left: 17px;
