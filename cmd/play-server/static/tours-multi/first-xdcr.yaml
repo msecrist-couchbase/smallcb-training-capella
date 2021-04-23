@@ -374,7 +374,7 @@ steps:
      </li>
     </ul>
    </div>
-   <div>
+   <div class="notice">
     <br/>
     <br/>
     <br/>
@@ -394,9 +394,15 @@ steps:
      main.step-destination-east article .left .step-nav button.next {
        opacity: 0.2;
      }
-
      main.step-destination-east article.checked-e-cluster-my-first-bucket .left .step-nav button.next {
        opacity: initial;
+     }
+
+     main.step-destination-east article .left .notice {
+       opacity: 0.3;
+     }
+     main.step-destination-east article.checked-e-cluster-my-first-bucket .left .notice {
+       opacity: 1.0;
      }
    </style>
  -
@@ -452,7 +458,7 @@ steps:
      </li>
     </ul>
    </div>
-   <div>
+   <div class="notice">
     <br/>
     <br/>
     <h3>NEXT</h3>
@@ -471,9 +477,15 @@ steps:
      main.step-connect-the-clusters article .left .step-nav button.next {
        opacity: 0.2;
      }
-
      main.step-connect-the-clusters article.checked-w-cluster-cluster-connect .left .step-nav button.next {
        opacity: initial;
+     }
+
+     main.step-connect-the-clusters article .left .notice {
+       opacity: 0.3;
+     }
+     main.step-connect-the-clusters article.checked-w-cluster-cluster-connect .left .notice {
+       opacity: 1.0;
      }
    </style>
  -
@@ -543,7 +555,7 @@ steps:
      </li>
     </ul>
    </div>
-   <div>
+   <div class="notice">
     <br/>
     <h3>NOTICE</h3>
     The outgoing data replication stream is now
@@ -556,15 +568,12 @@ steps:
        display: block !important;
        background-color: #aaa;
      }
-
      main.step-add-a-data-stream article.checked-w-cluster-rep-east .right .diagram .west-east-connect {
        display: none !important;
      }
-
      main.step-add-a-data-stream article.checked-w-cluster-rep-east .replicating.check-rep-east {
        font-weight: bold;
      }
-
      main.step-add-a-data-stream article.checked-w-cluster-rep-east .right .diagram .west-east-stream {
        display: block !important;
      }
@@ -572,9 +581,15 @@ steps:
      main.step-add-a-data-stream article .left .step-nav button.next {
        opacity: 0.2;
      }
-
      main.step-add-a-data-stream article.checked-w-cluster-rep-east .left .step-nav button.next {
        opacity: initial;
+     }
+
+     main.step-add-a-data-stream article .left .notice {
+       opacity: 0.3;
+     }
+     main.step-add-a-data-stream article.checked-w-cluster-rep-east .left .notice {
+       opacity: 1.0;
      }
    </style>
  -
