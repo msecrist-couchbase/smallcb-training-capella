@@ -462,16 +462,7 @@ function loadTour(data, sess) {
         if (t.tagName == "LABEL") {
           var panel = t.getAttribute("for");
           if (panel) {
-            var sawPanel = `saw-${panel}`;
-
-            var c = document.querySelector(".container");
-
-            var names = c.className.split(' ');
-            if (!names.find(x => x == sawPanel)) {
-              names.push(sawPanel);
-
-              c.className = names.sort().join(' ');
-            }
+            document.querySelector(".container").classList.add(`saw-${panel}`);
           }
         }
       }
