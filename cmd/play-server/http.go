@@ -114,6 +114,10 @@ func HttpHandleMain(w http.ResponseWriter, r *http.Request) {
 		bodyClass = "dark"
 	}
 
+	program := r.FormValue("program")
+
+	code = CodeFromFixup(code, program, lang, r.FormValue("from"))
+
 	err := MainTemplateEmit(w, *staticDir, msg, *host, portApp,
 		*version, VersionSDKs, session, *sessionsMaxAge, *sessionsMaxIdle,
 		*listenPortBase, *listenPortSpan, PortMapping,
@@ -632,4 +636,30 @@ func OptanonHTML(host string) string {
 	return `<link type="text/css" rel="stylesheet" href="https://cdn.cookielaw.org/skins/4.3.3/default_flat_bottom_two_button_black/v2/css/optanon.css"/>
 <script src="https://cdn.cookielaw.org/scripttemplates/otSDKStub.js" type="text/javascript" charset="UTF-8" data-domain-script="589e23c3-a7c6-4ff3-a948-b7d86b33b846"></script>
 <script>function OptanonWrapper(){}</script>`
+}
+
+// ------------------------------------------------
+
+func CodeFromFixup(code, program, lang, from string) string {
+	if from == "docs" {
+		code = strings.ReplaceAll(code, "\"Administrator\"", "\"username\"")
+		code = strings.ReplaceAll(code, "'Administrator'", "'username'")
+
+		if lang == "java" {
+			code = strings.ReplaceAll(code,
+				"public class "+program, "class Program")
+		}
+
+		if lang == "scala" {
+			code = strings.ReplaceAll(code,
+				"object "+program, "object Program")
+		}
+
+		if lang == "dotnet" {
+			code = strings.ReplaceAll(code,
+				"class "+program, "class Program")
+		}
+	}
+
+	return code
 }
