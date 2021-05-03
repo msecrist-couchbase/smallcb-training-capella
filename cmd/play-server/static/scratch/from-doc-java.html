@@ -1,6 +1,36 @@
 <html>
 <body>
 Testing from=doc java code...
+<br/><br/>
+
+View source to see how the HTML on this example static page works,
+with a FORM POST element and various INPUT / TEXTAREA controls...
+
+<ul>
+<li>lang == java</li>
+<li>code - code taken from java hello / StartUsing example from the docs</li>
+<li>program == i.e., StartUsing (or whatever is the actual Java main class name).
+    May be "" or empty for languages that don't have a main class (e.g., python, nodejs, etc).</li>
+<li>from == docs --
+    which signals to the playground to apply rewrites to the POST'ed code
+    (such as fixing up username for connection strings...
+     e.g., replacing "Administrator" with "username")</li>
+<li>title, infoBfore, infoAfter ==
+    optional snippets of HTML to go before and after the code</li>
+</ul>
+
+In production, your actual HTML pages, such as coming from docs.couchbase.com,
+might be generated via a server-side app or client-side scripting.
+<br/><br/>
+
+And, the INPUT elements might be type="hidden".
+<br/><br/>
+
+Note for production usage, when this HTML FORM is coming
+from a non-playground server (e.g., docs.couchbase.com),
+the FORM's action URL should be "https://couchbase.live/".
+<br/><br/>
+
 <form action="/"
       method="post"
 lang
@@ -8,7 +38,7 @@ lang
 <input type="text" name="lang" value="java"/>
 <br/><br/>
 
-lang
+code
 <br/>
 <textarea name="code" rows="15" cols="70">
 /*
@@ -105,7 +135,22 @@ from
 <input type="text" name="from" value="docs"/>
 <br/><br/>
 
-<input type="submit" value="submit"/>
+title
+<br/>
+<input type="text" name="title" value="An Optional Example Title!"/>
+<br/><br/>
+
+infoBefore
+<br/>
+<input type="text" name="infoBefore" value="An optional paragraph that goes before the code"/>
+<br/><br/>
+
+infoAfter
+<br/>
+<input type="text" name="infoAfter" value="An optional paragraph that goes after the code"/>
+<br/><br/>
+
+<input type="submit" value="try this code now"/>
 </form>
 </body>
 </html>

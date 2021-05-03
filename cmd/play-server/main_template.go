@@ -57,11 +57,11 @@ type MainTemplateData struct {
 	ExamplesPath string
 	Examples     []map[string]interface{} // Sorted.
 
-	Name       string // Current example name or "".
-	Title      string // Current example title or "".
-	Lang       string // Ex: 'py'.
-	LangAce    string // Ex: 'python'.
-	LangPretty string // Ex: 'Python'.
+	Name       string        // Current example name or "".
+	Title      template.HTML // Current example title or "".
+	Lang       string        // Ex: 'py'.
+	LangAce    string        // Ex: 'python'.
+	LangPretty string        // Ex: 'Python'.
 	Code       string
 	InfoBefore template.HTML
 	InfoAfter  template.HTML
@@ -80,7 +80,8 @@ func MainTemplateEmit(w http.ResponseWriter,
 	session *Session, sessionsMaxAge, sessionsMaxIdle time.Duration,
 	containerPublishPortBase, containerPublishPortSpan int,
 	portMapping [][]int,
-	examplesPath string, name, lang, code, view, bodyClass string) error {
+	examplesPath string, name, title, lang, code, view, bodyClass,
+	infoBefore, infoAfter string) error {
 	host := hostIn
 	if session == nil {
 		host = "127.0.0.1"
@@ -97,8 +98,6 @@ func MainTemplateEmit(w http.ResponseWriter,
 		return err
 	}
 
-	var title, infoBefore, infoAfter string
-
 	if session != nil && name == "" && lang == "" && code == "" {
 		for _, example := range examplesArr {
 			if code, exists := example["code"]; exists && code != "" {
@@ -110,7 +109,9 @@ func MainTemplateEmit(w http.ResponseWriter,
 
 	example, exists := examples[name]
 	if exists && example != nil {
-		title = MapGetString(example, "title")
+		if title == "" {
+			title = MapGetString(example, "title")
+		}
 
 		if lang == "" {
 			lang = MapGetString(example, "lang")
@@ -130,9 +131,13 @@ func MainTemplateEmit(w http.ResponseWriter,
 				portMapping, code)
 		}
 
-		infoBefore = MapGetString(example, "infoBefore")
+		if infoBefore == "" {
+			infoBefore = MapGetString(example, "infoBefore")
+		}
 
-		infoAfter = MapGetString(example, "infoAfter")
+		if infoAfter == "" {
+			infoAfter = MapGetString(example, "infoAfter")
+		}
 	}
 
 	data := &MainTemplateData{
@@ -158,7 +163,7 @@ func MainTemplateEmit(w http.ResponseWriter,
 		Examples:     examplesArr,
 
 		Name:       name,
-		Title:      title,
+		Title:      template.HTML(title),
 		Lang:       lang,
 		LangAce:    LangAce[lang],
 		LangPretty: LangPretty[lang],
