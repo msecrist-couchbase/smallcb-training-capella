@@ -83,7 +83,9 @@ RUN tr ' ' '\n' < /home/play/hellodotnet/run-csharp-hello.csproj | grep Version 
 
 # ------------------------------------------------
 # SDK PHP.
+
 USER root
+
 RUN echo ${COUCHBASE_SDK_PHP_VERSION} > /opt/couchbase/VERSION-sdk-php.ver
 
 # ------------------------------------------------
@@ -92,34 +94,48 @@ RUN echo ${COUCHBASE_SDK_PHP_VERSION} > /opt/couchbase/VERSION-sdk-php.ver
 COPY cmd/play-server/run-scala-build.sbt /home/play/helloscala/build.sbt
 COPY cmd/play-server/run-scala-build.sbt /run-scala-build.sbt
 COPY cmd/play-server/run-scala-pom.xml /home/play/helloscala/run-scala-pom.xml
+
 RUN mkdir /scala && \
     sed -i -e "s/1.1.2/${COUCHBASE_SDK_SCALA_VERSION}/g" -e "s/2.12.12/${SCALA_VERSION}/g" /home/play/helloscala/build.sbt && \
     sed -i -e "s/1.1.2/${COUCHBASE_SDK_SCALA_VERSION}/g" -e "s/2.12/`echo ${SCALA_VERSION}|cut -f1-2 -d'.'`/g" /home/play/helloscala/run-scala-pom.xml
+
 COPY cmd/play-server/run-scala-hello.scala /home/play/helloscala/run-scala-hello.scala
 COPY cmd/play-server/run-scala-hello.scala /tmp/helloscala/run-scala-hello.scala
+
 RUN /run-scala-sbt.sh /tmp/helloscala && \
     rm -rf /tmp/helloscala
+
 RUN chown -R play:couchbase /home/play
+
 USER play
+
 RUN cd /home/play/helloscala && \
     sbt run
+
 USER root
+
 RUN echo ${COUCHBASE_SDK_SCALA_VERSION} > /opt/couchbase/VERSION-sdk-scala.ver
 
 # ------------------------------------------------
 # SDK ruby.
+
 USER root
+
 RUN echo ${COUCHBASE_SDK_RUBY_VERSION} > /opt/couchbase/VERSION-sdk-ruby.ver
 
 # ------------------------------------------------
 # SDK go.
+
 USER root
+
 RUN go list -m github.com/couchbase/gocb/v2 |cut -f2 -d' '|sed 's/v//g' >/opt/couchbase/VERSION-sdk-go.ver
 
 # ------------------------------------------------
 # SDK C.
+
 COPY cmd/play-server/run-cc.makefile run-cc.makefile
 COPY cmd/play-server/run-cc.cmakelists run-cc.cmakelists
+
 RUN cbc version |head -3 |egrep 'Runtime'|cut -f4 -d' '|cut -f2 -d'='|cut -f1 -d',' >/opt/couchbase/VERSION-sdk-c.ver
 
 # ------------------------------------------------

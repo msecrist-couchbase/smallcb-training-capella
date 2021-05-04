@@ -24,7 +24,6 @@ RUN go version && \
     go mod init test && \
     go get github.com/couchbase/gocb/v2
     
-
 COPY --from=adoptopenjdk /opt/java /opt/java
 
 ENV JAVA_HOME=/opt/java/openjdk
@@ -63,7 +62,6 @@ RUN pip3 show couchbase | grep Version | cut -f 2 -d ' ' > /opt/couchbase/VERSIO
 
 RUN go get github.com/couchbase/gocb
 
-
 # -------------------------------------------------------
 #   PHP
 # -------------------------------------------------------
@@ -87,7 +85,6 @@ RUN pecl install https://packages.couchbase.com/clients/php/couchbase-${COUCHBAS
     cp /usr/lib/php/${PHP_VERSION}/php.ini-development /usr/lib/php/${PHP_VERSION}/php.ini && \
     printf 'extension=json.so\nextension=couchbase.so' >> /etc/php/${PHP_VERSION}/cli/php.ini
 
-
 # -------------------------------------------------------
 #   Scala and SBT
 # -------------------------------------------------------
@@ -108,10 +105,12 @@ RUN wget -q -O sbt-${SBT_VERSION}.tgz https://github.com/sbt/sbt/releases/downlo
 # -------------------------------------------------------
 #   Ruby
 # -------------------------------------------------------
+
 RUN gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB \
     && curl -sSL https://get.rvm.io | bash -s stable \
     && bash -c "source /etc/profile.d/rvm.sh;rvm install ruby-${RUBY_VERSION};ruby --version; wget -q -O couchbase-${COUCHBASE_SDK_RUBY_VERSION}-x86_64-linux-${RUBY_VERSION}.gem https://packages.couchbase.com/clients/ruby/sdk-${COUCHBASE_SDK_RUBY_VERSION}/couchbase-${COUCHBASE_SDK_RUBY_VERSION}-x86_64-linux-${RUBY_VERSION}.gem;gem install couchbase-${COUCHBASE_SDK_RUBY_VERSION}-x86_64-linux-${RUBY_VERSION}.gem"
 
 ENV GEM_HOME="/usr/local/rvm/gems/ruby-${RUBY_VERSION}" \
     GEM_PATH="/usr/local/rvm/gems/ruby-${RUBY_VERSION}/bin:/usr/local/rvm/gems/ruby-${RUBY_VERSION}@global/bin"
+
 ENV PATH="${PATH}:/usr/local/rvm/rubies/ruby-${RUBY_VERSION}/bin:${GEM_PATH}:/usr/local/rvm/bin"
