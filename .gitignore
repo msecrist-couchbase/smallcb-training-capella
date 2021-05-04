@@ -9,3 +9,4 @@ Dockerfile
 /vol-*
 /tmp
 /tutorials-cbsh/CURRENT
+.DS_Store
