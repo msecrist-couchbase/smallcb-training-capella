@@ -4,7 +4,8 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 RUN apt-get update && \
     apt-get install -y \
 	git curl wget jq unzip zip \
-	build-essential cmake libssl-dev \
+	build-essential cmake libssl-dev libevent-dev libev-dev \
+	lsb-release software-properties-common apt-transport-https gnupg2 \
 	atop htop psmisc strace time \
 	emacs vim
 
@@ -53,7 +54,7 @@ RUN ln -s /usr/share/dotnet/dotnet /usr/bin/dotnet && \
 # Install python couchbase SDK, see:
 # https://docs.couchbase.com/tutorials/quick-start/quickstart-python3-native-firstquery-cb65.html
 
-RUN pip3 install six couchbase==3.0.10
+RUN pip3 install six couchbase==${COUCHBASE_SDK_PYTHON_VERSION}
 RUN pip3 show couchbase | grep Version | cut -f 2 -d ' ' > /opt/couchbase/VERSION-sdk-python.ver
 
 # ------------------------------------------------------
@@ -63,7 +64,7 @@ RUN pip3 show couchbase | grep Version | cut -f 2 -d ' ' > /opt/couchbase/VERSIO
 RUN go get github.com/couchbase/gocb
 
 # -------------------------------------------------------
-#   PHP
+#   C/C++ (libcouchbase, LCB)
 # -------------------------------------------------------
 
 # Get the Couchbase Repository Key
@@ -71,16 +72,23 @@ ADD https://packages.couchbase.com/clients/c/repos/deb/couchbase.key .
 
 RUN apt-key add ./couchbase.key \
     && rm ./couchbase.key \
-    && apt -y install lsb-release software-properties-common apt-transport-https gnupg2 \
-    && LC_ALL=C.UTF-8 add-apt-repository ppa:ondrej/php \
-    && apt-add-repository "deb http://packages.couchbase.com/clients/c/repos/deb/${CB_CLIENT_OS} ${CB_CLIENT_OS_TYPE} ${CB_CLIENT_OS_TYPE}/main" \
+    && apt-add-repository "deb http://packages.couchbase.com/clients/c/repos/deb/${CB_CLIENT_OS} ${CB_CLIENT_OS_TYPE} ${CB_CLIENT_OS_TYPE}/main"
+
+RUN curl -O https://packages.couchbase.com/clients/c/libcouchbase-${COUCHBASE_SDK_C_VERSION}_${CB_CLIENT_OS}_${CB_CLIENT_OS_TYPE}_amd64.tar \
+    && tar xvf libcouchbase-*_amd64.tar \
+    && cd libcouchbase-*_amd64 \
+    && dpkg -i libcouchbase3-libevent_*.deb libcouchbase3-libev_*.deb libcouchbase3_*.deb libcouchbase3-tools_*.deb libcouchbase-dev*.deb
+
+# -------------------------------------------------------
+#   PHP
+# -------------------------------------------------------
+
+RUN LC_ALL=C.UTF-8 add-apt-repository ppa:ondrej/php \
     && apt-get update \
     && apt-get -y install php${PHP_VERSION} php${PHP_VERSION}-cli php${PHP_VERSION}-common php${PHP_VERSION}-fpm php${PHP_VERSION}-dev php${PHP_VERSION}-xml \
-    && apt-get -y install --allow-unauthenticated libcouchbase3 libcouchbase-dev libcouchbase3-tools libcouchbase-dbg libcouchbase3-libev libcouchbase3-libevent
+    && php -v
 
-RUN php -v
-
-# Install ext-couchbase
+# Install PHP ext-couchbase
 RUN pecl install https://packages.couchbase.com/clients/php/couchbase-${COUCHBASE_SDK_PHP_VERSION}.tgz && \
     cp /usr/lib/php/${PHP_VERSION}/php.ini-development /usr/lib/php/${PHP_VERSION}/php.ini && \
     printf 'extension=json.so\nextension=couchbase.so' >> /etc/php/${PHP_VERSION}/cli/php.ini
@@ -106,7 +114,7 @@ RUN wget -q -O sbt-${SBT_VERSION}.tgz https://github.com/sbt/sbt/releases/downlo
 #   Ruby
 # -------------------------------------------------------
 
-RUN gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB \
+RUN gpg2 --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB \
     && curl -sSL https://get.rvm.io | bash -s stable \
     && bash -c "source /etc/profile.d/rvm.sh;rvm install ruby-${RUBY_VERSION};ruby --version; wget -q -O couchbase-${COUCHBASE_SDK_RUBY_VERSION}-x86_64-linux-${RUBY_VERSION}.gem https://packages.couchbase.com/clients/ruby/sdk-${COUCHBASE_SDK_RUBY_VERSION}/couchbase-${COUCHBASE_SDK_RUBY_VERSION}-x86_64-linux-${RUBY_VERSION}.gem;gem install couchbase-${COUCHBASE_SDK_RUBY_VERSION}-x86_64-linux-${RUBY_VERSION}.gem"
 

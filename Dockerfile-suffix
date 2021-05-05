@@ -128,7 +128,7 @@ RUN echo ${COUCHBASE_SDK_RUBY_VERSION} > /opt/couchbase/VERSION-sdk-ruby.ver
 
 USER root
 
-RUN go list -m github.com/couchbase/gocb/v2 |cut -f2 -d' '|sed 's/v//g' >/opt/couchbase/VERSION-sdk-go.ver
+RUN go list -m github.com/couchbase/gocb/v2 | cut -f2 -d' ' | sed 's/v//g' >/opt/couchbase/VERSION-sdk-go.ver
 
 # ------------------------------------------------
 # SDK C.
@@ -136,7 +136,7 @@ RUN go list -m github.com/couchbase/gocb/v2 |cut -f2 -d' '|sed 's/v//g' >/opt/co
 COPY cmd/play-server/run-cc.makefile run-cc.makefile
 COPY cmd/play-server/run-cc.cmakelists run-cc.cmakelists
 
-RUN cbc version |head -3 |egrep 'Runtime'|cut -f4 -d' '|cut -f2 -d'='|cut -f1 -d',' >/opt/couchbase/VERSION-sdk-c.ver
+RUN cbc version | head -3 | egrep 'Runtime' | cut -f4 -d' ' | cut -f2 -d'=' | cut -f1 -d',' >/opt/couchbase/VERSION-sdk-c.ver
 
 # ------------------------------------------------
 # couchbase shell, via a cbsh user.
