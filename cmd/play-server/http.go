@@ -121,7 +121,8 @@ func HttpHandleMain(w http.ResponseWriter, r *http.Request) {
 	err := MainTemplateEmit(w, *staticDir, msg, *host, portApp,
 		*version, VersionSDKs, session, *sessionsMaxAge, *sessionsMaxIdle,
 		*listenPortBase, *listenPortSpan, PortMapping,
-		examplesPath, name, r.FormValue("title"), lang, code, view, bodyClass,
+		examplesPath, name, r.FormValue("title"),
+		lang, code, r.FormValue("highlight"), view, bodyClass,
 		r.FormValue("infoBefore"),
 		r.FormValue("infoAfter"))
 	if err != nil {

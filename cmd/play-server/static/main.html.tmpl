@@ -339,6 +339,24 @@
     {{if .LangAce}}
       codeAce.setOption("mode", "ace/mode/{{.LangAce}}");
     {{end}}
+
+    {{if .Highlight}}
+    var highlight = "{{.Highlight}}";
+    if (highlight) {
+      var beg = highlight.split('-')[0];
+      if (beg) {
+        var begN = parseInt(beg) - 1; // 1-based.
+
+        setTimeout(function () {
+          codeAce.navigateTo(begN, 0);
+
+          if (begN > 5) {
+            codeAce.scrollToRow(begN - 2);
+          }
+        }, 100);
+      }
+    }
+    {{end}}
   </script>
 
   <script>

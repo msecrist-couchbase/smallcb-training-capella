@@ -63,6 +63,7 @@ type MainTemplateData struct {
 	LangAce    string        // Ex: 'python'.
 	LangPretty string        // Ex: 'Python'.
 	Code       string
+	Highlight  string
 	InfoBefore template.HTML
 	InfoAfter  template.HTML
 
@@ -80,7 +81,7 @@ func MainTemplateEmit(w http.ResponseWriter,
 	session *Session, sessionsMaxAge, sessionsMaxIdle time.Duration,
 	containerPublishPortBase, containerPublishPortSpan int,
 	portMapping [][]int,
-	examplesPath string, name, title, lang, code, view, bodyClass,
+	examplesPath, name, title, lang, code, highlight, view, bodyClass,
 	infoBefore, infoAfter string) error {
 	host := hostIn
 	if session == nil {
@@ -168,6 +169,7 @@ func MainTemplateEmit(w http.ResponseWriter,
 		LangAce:    LangAce[lang],
 		LangPretty: LangPretty[lang],
 		Code:       code,
+		Highlight:  highlight,
 		InfoBefore: template.HTML(infoBefore),
 		InfoAfter:  template.HTML(infoAfter),
 
