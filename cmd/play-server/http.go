@@ -471,6 +471,8 @@ func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 
 	code := strings.Join(codeVals, "")
 
+	code = CodeFromFixup(code, r.FormValue("program"), lang, r.FormValue("from"))
+
 	var result []byte
 
 	var req RunRequest
