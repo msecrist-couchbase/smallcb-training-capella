@@ -120,9 +120,9 @@ func HttpHandleMain(w http.ResponseWriter, r *http.Request) {
 
 	code = CodeFromFixup(code, program, lang, r.FormValue("from"))
 
-	err := SDKVerCheck(lang, r.FormValue("sdkVer"))
+	err := CheckVerSDK(lang, r.FormValue("verSDK"))
 	if err != nil {
-		StatsNumInc("http.Main.err", "http.Main.err.sdkVerCheck")
+		StatsNumInc("http.Main.err", "http.Main.err.checkVerSDK")
 
 		http.Error(w,
 			http.StatusText(http.StatusBadRequest),
@@ -488,15 +488,30 @@ func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 
 	code = CodeFromFixup(code, r.FormValue("program"), lang, r.FormValue("from"))
 
-	err := SDKVerCheck(lang, r.FormValue("sdkVer"))
+	err := CheckVerSDK(lang, r.FormValue("verSDK"))
 	if err != nil {
-		StatsNumInc("http.Run.err", "http.Run.err.sdkVerCheck")
+		StatsNumInc("http.Run.err", "http.Run.err.checkVerSDK")
 
 		t := http.StatusText(http.StatusBadRequest) +
-			fmt.Sprintf("Oops, that SDK version isn't supported here.\n"+
+			fmt.Sprintf("Oops, SDK version %s isn't supported here.\n"+
 				"------------------------\n"+
 				"HttpHandleRun, err: %v",
-				err)
+				r.FormValue("verSDK"), err)
+
+		EmitOutput(w, t, color)
+
+		return
+	}
+
+	err = CheckVerServer(r.FormValue("verServer"))
+	if err != nil {
+		StatsNumInc("http.Run.err", "http.Run.err.checkVerServer")
+
+		t := http.StatusText(http.StatusBadRequest) +
+			fmt.Sprintf("Oops, server version %s isn't supported here.\n"+
+				"------------------------\n"+
+				"HttpHandleRun, err: %v",
+				r.FormValue("verServer"), err)
 
 		EmitOutput(w, t, color)
 
@@ -703,8 +718,8 @@ func CodeFromFixup(code, program, lang, from string) string {
 
 // Returns true if the wanted SDK version is compatible with
 // the available SDK version.
-func SDKVerCheck(langIn, sdkVer string) error {
-	if langIn == "" || sdkVer == "" {
+func CheckVerSDK(langIn, verSDK string) error {
+	if langIn == "" || verSDK == "" {
 		return nil
 	}
 
@@ -713,24 +728,52 @@ func SDKVerCheck(langIn, sdkVer string) error {
 		lang = langIn
 	}
 
-	sdkVerCur, exists := VersionSDKsByName[lang]
+	verSDKCur, exists := VersionSDKsByName[lang]
 	if !exists {
-		return fmt.Errorf("SDKVerCheck, unknown lang: %s", lang)
+		return fmt.Errorf("CheckVerSDK, unknown lang: %s", lang)
 	}
 
-	sdkVer = "v" + sdkVer
-	sdkVerCur = "v" + sdkVerCur
+	verSDK = "v" + verSDK
+	verSDKCur = "v" + verSDKCur
 
-	if semver.Compare(semver.Major(sdkVer), semver.Major(sdkVerCur)) != 0 {
-		return fmt.Errorf("SDKVerCheck, lang: %s,"+
-			" wanted sdkVer: %s major version is incompatible with sdkVerCur: %s",
-			lang, sdkVer, sdkVerCur)
+	if semver.Compare(semver.Major(verSDK), semver.Major(verSDKCur)) != 0 {
+		return fmt.Errorf("CheckVerSDK, lang: %s,"+
+			" wanted verSDK: %s major version is incompatible with verSDKCur: %s",
+			lang, verSDK, verSDKCur)
 	}
 
-	if semver.Compare(semver.MajorMinor(sdkVer), semver.MajorMinor(sdkVerCur)) > 0 {
-		return fmt.Errorf("SDKVerCheck, lang: %s,"+
-			" wanted sdkVer: %s is incompatible with sdkVerCur: %s",
-			lang, sdkVer, sdkVerCur)
+	if semver.Compare(semver.MajorMinor(verSDK), semver.MajorMinor(verSDKCur)) > 0 {
+		return fmt.Errorf("CheckVerSDK, lang: %s,"+
+			" wanted verSDK: %s is incompatible with verSDKCur: %s",
+			lang, verSDK, verSDKCur)
+	}
+
+	return nil
+}
+
+// ------------------------------------------------
+
+// Returns true if the wanted server version is compatible.
+func CheckVerServer(verServer string) error {
+	if verServer == "" {
+		return nil
+	}
+
+	verServer = "v" + verServer
+
+	// Convert from "7.0.0-4602-enterprise" to "v7.0.0".
+	verServerCur := "v" + strings.Split(*version, "-")[0]
+
+	if semver.Compare(semver.Major(verServer), semver.Major(verServerCur)) != 0 {
+		return fmt.Errorf("CheckVerServer,"+
+			" wanted verServer: %s major version is incompatible with verServerCur: %s",
+			verServer, verServerCur)
+	}
+
+	if semver.Compare(semver.MajorMinor(verServer), semver.MajorMinor(verServerCur)) > 0 {
+		return fmt.Errorf("CheckVerServer,"+
+			" wanted verServer: %s is incompatible with verServerCur: %s",
+			verServer, verServerCur)
 	}
 
 	return nil
