@@ -54,6 +54,14 @@ var ExecPrefixes = map[string]string{
 
 // -----------------------------------
 
+// Map from lang to longer name.
+var LangLong = map[string]string{
+	"py": "python",
+	"rb": "ruby",
+}
+
+// -----------------------------------
+
 // Port mapping of container port # to listenPortBase + delta.
 var PortMapping = [][]int{
 	[]int{8091, 1}, // 8091 is exposed on port 10000 + 1.
@@ -91,6 +99,8 @@ func init() {
 
 var VersionSDKs = []map[string]string{}
 
+var VersionSDKsByName = map[string]string{}
+
 // ------------------------------------------------
 
 func main() {
@@ -125,10 +135,14 @@ func main() {
 					name = name[:len(name)-4]
 					name = name[len("VERSION-sdk-"):]
 
+					verStr := strings.TrimSpace(string(ver))
+
 					VersionSDKs = append(VersionSDKs, map[string]string{
 						"name": name,
-						"ver":  string(ver),
+						"ver":  verStr,
 					})
+
+					VersionSDKsByName[name] = verStr
 				}
 			}
 		}

@@ -13,6 +13,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"golang.org/x/mod/semver"
 )
 
 var Msgs = map[string]string{
@@ -118,7 +120,20 @@ func HttpHandleMain(w http.ResponseWriter, r *http.Request) {
 
 	code = CodeFromFixup(code, program, lang, r.FormValue("from"))
 
-	err := MainTemplateEmit(w, *staticDir, msg, *host, portApp,
+	err := SDKVerCheck(lang, r.FormValue("sdkVer"))
+	if err != nil {
+		StatsNumInc("http.Main.err", "http.Main.err.sdkVerCheck")
+
+		http.Error(w,
+			http.StatusText(http.StatusBadRequest),
+			http.StatusBadRequest)
+
+		log.Printf("ERROR: HttpHandleMain, err: %v", err)
+
+		return
+	}
+
+	err = MainTemplateEmit(w, *staticDir, msg, *host, portApp,
 		*version, VersionSDKs, session, *sessionsMaxAge, *sessionsMaxIdle,
 		*listenPortBase, *listenPortSpan, PortMapping,
 		examplesPath, name, r.FormValue("title"),
@@ -473,6 +488,21 @@ func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 
 	code = CodeFromFixup(code, r.FormValue("program"), lang, r.FormValue("from"))
 
+	err := SDKVerCheck(lang, r.FormValue("sdkVer"))
+	if err != nil {
+		StatsNumInc("http.Run.err", "http.Run.err.sdkVerCheck")
+
+		t := http.StatusText(http.StatusBadRequest) +
+			fmt.Sprintf("Oops, that SDK version isn't supported here.\n"+
+				"------------------------\n"+
+				"HttpHandleRun, err: %v",
+				err)
+
+		EmitOutput(w, t, color)
+
+		return
+	}
+
 	var result []byte
 
 	var req RunRequest
@@ -667,4 +697,41 @@ func CodeFromFixup(code, program, lang, from string) string {
 	}
 
 	return code
+}
+
+// ------------------------------------------------
+
+// Returns true if the wanted SDK version is compatible with
+// the available SDK version.
+func SDKVerCheck(langIn, sdkVer string) error {
+	if langIn == "" || sdkVer == "" {
+		return nil
+	}
+
+	lang := LangLong[langIn] // Convert "py" to "python".
+	if lang == "" {
+		lang = langIn
+	}
+
+	sdkVerCur, exists := VersionSDKsByName[lang]
+	if !exists {
+		return fmt.Errorf("SDKVerCheck, unknown lang: %s", lang)
+	}
+
+	sdkVer = "v" + sdkVer
+	sdkVerCur = "v" + sdkVerCur
+
+	if semver.Compare(semver.Major(sdkVer), semver.Major(sdkVerCur)) != 0 {
+		return fmt.Errorf("SDKVerCheck, lang: %s,"+
+			" wanted sdkVer: %s major version is incompatible with sdkVerCur: %s",
+			lang, sdkVer, sdkVerCur)
+	}
+
+	if semver.Compare(semver.MajorMinor(sdkVer), semver.MajorMinor(sdkVerCur)) > 0 {
+		return fmt.Errorf("SDKVerCheck, lang: %s,"+
+			" wanted sdkVer: %s is incompatible with sdkVerCur: %s",
+			lang, sdkVer, sdkVerCur)
+	}
+
+	return nil
 }
