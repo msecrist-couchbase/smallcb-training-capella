@@ -1,0 +1,21 @@
+name: Staging
+on:
+  push:
+  workflow_dispatch:
+jobs:
+  deploy:
+    name: Deploy to staging
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+    - uses: actions/checkout@v2
+    - name: Tunnel Docker port
+      run: ssh -L 2375:localhost:2375 $DEPLOY_TARGET
+    - uses: actions/setup-go@v2
+    - name: Build smallcb image
+      run: make build
+    - name: Build vol-snapshot image
+      run: make create
+    - name: Compile play-server
+      run: make play-server
+

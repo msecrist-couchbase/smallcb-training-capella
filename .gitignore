@@ -10,3 +10,4 @@ Dockerfile
 /tmp
 /tutorials-cbsh/CURRENT
 .DS_Store
+.vimspector.json
