@@ -1,28 +1,29 @@
-IMAGE_NAME = smallcb
+IMAGE_NAME ?= smallcb
 
-IMAGE_FROM = couchbase
+IMAGE_FROM ?= couchbase
 
-CONTAINER_NUM = 0
+CONTAINER_NUM ?= 0
 
-CONTAINER_PORTS = -p 8091-8096:8091-8096 -p 11210:11210
+CONTAINER_PORTS ?= -p 8091-8096:8091-8096 -p 11210:11210
 
 # To enable strace diagnostics during development, use...
 # CONTAINER_EXTRAS = --cap-add=SYS_PTRACE
-CONTAINER_EXTRAS =
+CONTAINER_EXTRAS ?=
 
-CREATE_EXTRAS =
+CREATE_EXTRAS ?=
 
-BUILD_EXTRAS =
+BUILD_EXTRAS ?=
 
-SERVICE_HOST = couchbase.live
+SERVICE_HOST ?= couchbase.live
 
-SNAPSHOT_SUFFIX =
+SNAPSHOT_SUFFIX ?=
 
-CB_ADMIN_PASSWORD = small-house-secret
+CB_ADMIN_PASSWORD ?= small-house-secret
 
 # -------------------------------------------------
 
 # Build the docker image.
+# Note: duplicated for CI in .github/workflows/staging.yaml
 build:
 	rm -rf vol-*
 	cat Dockerfile-args \
@@ -67,9 +68,11 @@ create:
 	sleep 3
 	docker rm $(IMAGE_NAME)-$(CONTAINER_NUM)
 	sleep 3
-	rm -rf vol-snapshot$(SNAPSHOT_SUFFIX)/lib/couchbase/logs/*
-	rm -rf vol-snapshot$(SNAPSHOT_SUFFIX)/lib/couchbase/stats/*
-	cp -R cmd/play-server/static vol-snapshot$(SNAPSHOT_SUFFIX)/
+	ls -la vol-snapshot$(SNAPSHOT_SUFFIX)/lib/couchbase/logs
+	whoami
+	rm -rf vol-snapshot$(SNAPSHOT_SUFFIX)/lib/couchbase/logs/* || echo "Failed to cleanup logs"
+	rm -rf vol-snapshot$(SNAPSHOT_SUFFIX)/lib/couchbase/stats/* || echo "Failed to cleanup stats"
+	cp -R cmd/play-server/static vol-snapshot$(SNAPSHOT_SUFFIX)/ || echo "Failed to copy static files"
 
 # -------------------------------------------------
 

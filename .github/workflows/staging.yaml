@@ -7,15 +7,62 @@ jobs:
     name: Deploy to staging
     runs-on: ubuntu-latest
     environment: staging
+    env:
+      DEPLOY_TARGET: ${{ secrets.DEPLOY_TARGET }}
+      TARGET_FINGERPRINT: ${{ secrets.TARGET_FINGERPRINT }}
+      DEPLOYMENT_KEY: ${{ secrets.DEPLOYMENT_KEY }}
+      TAG: ${{ secrets.DOCKER_REPO_URL }}:latest
     steps:
     - uses: actions/checkout@v2
-    - name: Tunnel Docker port
-      run: ssh -L 2375:localhost:2375 $DEPLOY_TARGET
-    - uses: actions/setup-go@v2
-    - name: Build smallcb image
-      run: make build
+    - name: Initialize ssh
+      run: |
+        mkdir ~/.ssh
+        echo "$TARGET_FINGERPRINT" >> ~/.ssh/known_hosts
+        echo "$DEPLOYMENT_KEY" > ~/.ssh/deployment.pem
+        echo "Host ${DEPLOY_TARGET}" >> ~/.ssh/config
+        echo "  User ubuntu" >> ~/.ssh/config
+        echo "  IdentityFile ~/.ssh/deployment.pem" >> ~/.ssh/config
+        chmod 600 ~/.ssh/*
+    - name: Verify SSH connection
+      run: ssh -vv "${DEPLOY_TARGET}" 'docker image ls'
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-west-1
+    - name: Create cache directory
+      run: mkdir /tmp/docker-cache
+    - name: Setup caching
+      uses: satackey/action-docker-layer-caching@v0.0.11
+      continue-on-error: true
+    - name: Login to ECR
+      uses: aws-actions/amazon-ecr-login@v1
+      id: login-ecr
+    - name: Build and push smallcb image
+      run: |
+        make BUILD_EXTRAS="--cache-from=\"$TAG\" -t \"$TAG\" " build
+        docker image ls
+        docker push "$TAG"
+        docker save smallcb:latest > /tmp/docker-cache/image
     - name: Build vol-snapshot image
-      run: make create
+      run: |
+        make create
+        sudo chown -R runner:runner vol-snapshot
+        rm -rf vol-snapshot/lib/couchbase/logs/*
+        rm -rf vol-snapshot/lib/couchbase/stats/*
+        cp -R cmd/play-server/static vol-snapshot$(SNAPSHOT_SUFFIX)/
+    - name: Install golang
+      run: sudo apt -y install golang
     - name: Compile play-server
       run: make play-server
-
+    - name: Copy files
+      run: rsync -rtu --delete `pwd` "ubuntu@${DEPLOY_TARGET}:~/smallcb"
+    - name: Pull smallcb image
+      run: |
+        ssh "${DEPLOY_TARGET}" "docker pull \"${TAG}\""
+        ssh "${DEPLOY_TARGET}" "docker tag \"${TAG}\" 'smallcb:latest'"
+    - name: Kill running instance
+      run: ssh "${DEPLOY_TARGET}" "killall play-server || echo 'Play-server was not running'"
+    - name: Start new play server
+      run: ssh "${DEPLOY_TARGET}" "cd smallcb; ./play-server -host 'beta.couchbase.live' < /dev/null &> nohup.out &"
