@@ -136,6 +136,9 @@ play-server-src = \
 play-server: $(play-server-src)
 	go build ./cmd/play-server
 
+image: 
+	docker build . -f Dockerfile-playserver -t play-server
+
 # Running the gen-examples program depends on other projects,
 # which need to be checked out as sibling directories
 # to this smallcb directory...

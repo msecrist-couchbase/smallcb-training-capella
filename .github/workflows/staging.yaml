@@ -65,4 +65,4 @@ jobs:
     - name: Kill running instance
       run: ssh "${DEPLOY_TARGET}" "killall play-server || echo 'Play-server was not running'"
     - name: Start new play server
-      run: ssh "${DEPLOY_TARGET}" "cd smallcb; ./play-server -host 'beta.couchbase.live' < /dev/null &> nohup.out &"
+      run: ssh "${DEPLOY_TARGET}" "cd smallcb; ./play-server -host 'beta.couchbase.live' < /dev/null &> nohup.out &; disown; exit 0"

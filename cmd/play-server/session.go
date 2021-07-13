@@ -47,7 +47,7 @@ type SessionInfo struct {
 	TouchedAtUnix int64
 }
 
-// For multi-session scenarios, sessions can be grouped
+// Foe multi-session scenarios, sessions can be grouped
 // together, where the first session in a group becomes
 // the main session that has a real name and email,
 // where a group can look like...
