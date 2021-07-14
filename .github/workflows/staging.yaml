@@ -57,7 +57,7 @@ jobs:
     - name: Compile play-server
       run: make play-server
     - name: Copy files
-      run: rsync -rtu --delete `pwd` "ubuntu@${DEPLOY_TARGET}:~/smallcb"
+      run: rsync -rtua --delete `pwd` "ubuntu@${DEPLOY_TARGET}:~/"
     - name: Pull smallcb image
       run: |
         ssh "${DEPLOY_TARGET}" "docker pull \"${TAG}\""
