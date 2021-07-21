@@ -1,31 +1,37 @@
 name: Staging
 on:
   push:
-    branches: develop
+    branches:
+    - develop
+    - master
   workflow_dispatch:
 jobs:
-  deploy:
-    name: Deploy to staging
+  detect_env:
+    name: Detect environment
     runs-on: ubuntu-latest
-    environment: staging
+    env:
+      ref: ${{ github.ref }}
+    outputs:
+      deploy_env: ${{ steps.detect.outputs.deploy_env }}
+    steps:
+    - id: detect
+      run: |
+        ref="${ref##*/}"
+        [ "develop" == "$ref" ] && ref=staging
+        [ "master" == "$ref" ] && ref=production
+        echo "::set-output name=deploy_env::${ref}"
+  build:
+    name: Build and upload ${{ needs.detect_env.outputs.deploy_env }}
+    needs: detect_env
+    runs-on: ubuntu-latest
+    environment: ${{ needs.detect_env.outputs.deploy_env}}
     env:
       DEPLOY_TARGET: ${{ secrets.DEPLOY_TARGET }}
-      TARGET_FINGERPRINT: ${{ secrets.TARGET_FINGERPRINT }}
       DEPLOYMENT_KEY: ${{ secrets.DEPLOYMENT_KEY }}
       TAG: ${{ secrets.DOCKER_REPO_URL }}:latest
+      ARTIFACT_NAME: smallcb-${{needs.detect_env.outputs.deploy_env}}.tar.gz
     steps:
     - uses: actions/checkout@v2
-    - name: Initialize ssh
-      run: |
-        mkdir ~/.ssh
-        echo "$TARGET_FINGERPRINT" >> ~/.ssh/known_hosts
-        echo "$DEPLOYMENT_KEY" > ~/.ssh/deployment.pem
-        echo "Host ${DEPLOY_TARGET}" >> ~/.ssh/config
-        echo "  User ubuntu" >> ~/.ssh/config
-        echo "  IdentityFile ~/.ssh/deployment.pem" >> ~/.ssh/config
-        chmod 600 ~/.ssh/*
-    - name: Verify SSH connection
-      run: ssh -vv "${DEPLOY_TARGET}" 'docker image ls'
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
@@ -57,13 +63,21 @@ jobs:
       run: sudo apt -y install golang
     - name: Compile play-server
       run: make play-server
-    - name: Copy files
-      run: rsync -rtua --delete `pwd` "ubuntu@${DEPLOY_TARGET}:~/"
-    - name: Pull smallcb image
-      run: |
-        ssh "${DEPLOY_TARGET}" "docker pull \"${TAG}\""
-        ssh "${DEPLOY_TARGET}" "docker tag \"${TAG}\" 'smallcb:latest'"
-    - name: Kill running instance
-      run: ssh "${DEPLOY_TARGET}" "killall play-server || echo 'Play-server was not running'"
-    - name: Start new play server
-      run: ssh "${DEPLOY_TARGET}" "cd smallcb; ./play-server -host 'beta.couchbase.live' < /dev/null &> nohup.out &"
+    - name: Create artifact
+      run: tar -czf /tmp/$ARTIFACT_NAME *
+    - name: Upload artifact
+      run: aws s3 cp /tmp/$ARTIFACT_NAME s3://smallcb-builds/
+  deploy:
+    name: Deploy to ec2 cluster
+    needs: [detect_env,build]
+    runs-on: ubuntu-latest
+    environment: ${{ needs.detect_env.outputs.deploy_env}}
+    steps:
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-west-1
+    - name: Trigger instance restart
+      run: aws ec2 reboot-instances --instance-ids "${{secrets.DEPLOY_TARGET}}" || aws start-instance-refresh --auto-scaling-group-name "${{secrets.DEPLOY_TARGET}}" 
