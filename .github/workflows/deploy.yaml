@@ -1,0 +1,83 @@
+name: Staging
+on:
+  push:
+    branches:
+    - develop
+    - master
+  workflow_dispatch:
+jobs:
+  detect_env:
+    name: Detect environment
+    runs-on: ubuntu-latest
+    env:
+      ref: ${{ github.ref }}
+    outputs:
+      deploy_env: ${{ steps.detect.outputs.deploy_env }}
+    steps:
+    - id: detect
+      run: |
+        ref="${ref##*/}"
+        [ "develop" == "$ref" ] && ref=staging
+        [ "master" == "$ref" ] && ref=production
+        echo "::set-output name=deploy_env::${ref}"
+  build:
+    name: Build and upload ${{ needs.detect_env.outputs.deploy_env }}
+    needs: detect_env
+    runs-on: ubuntu-latest
+    environment: ${{ needs.detect_env.outputs.deploy_env}}
+    env:
+      DEPLOY_TARGET: ${{ secrets.DEPLOY_TARGET }}
+      DEPLOYMENT_KEY: ${{ secrets.DEPLOYMENT_KEY }}
+      TAG: ${{ secrets.DOCKER_REPO_URL }}:latest
+      ARTIFACT_NAME: smallcb-${{needs.detect_env.outputs.deploy_env}}.tar.gz
+    steps:
+    - uses: actions/checkout@v2
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-west-1
+    - name: Create cache directory
+      run: mkdir /tmp/docker-cache
+    - name: Setup caching
+      uses: satackey/action-docker-layer-caching@v0.0.11
+      continue-on-error: true
+    - name: Login to ECR
+      uses: aws-actions/amazon-ecr-login@v1
+      id: login-ecr
+    - name: Build and push smallcb image
+      run: |
+        make BUILD_EXTRAS="--cache-from=\"$TAG\" -t \"$TAG\" " build
+        docker image ls
+        docker push "$TAG"
+        docker save smallcb:latest > /tmp/docker-cache/image
+    - name: Build vol-snapshot image
+      run: |
+        make create
+        sudo chown -R runner:runner vol-snapshot
+        rm -rf vol-snapshot/lib/couchbase/logs/*
+        rm -rf vol-snapshot/lib/couchbase/stats/*
+        cp -R cmd/play-server/static vol-snapshot$(SNAPSHOT_SUFFIX)/
+    - name: Install golang
+      run: sudo apt -y install golang
+    - name: Compile play-server
+      run: make play-server
+    - name: Create artifact
+      run: tar -czf /tmp/$ARTIFACT_NAME *
+    - name: Upload artifact
+      run: aws s3 cp /tmp/$ARTIFACT_NAME s3://smallcb-builds/
+  deploy:
+    name: Deploy to ec2 cluster
+    needs: [detect_env,build]
+    runs-on: ubuntu-latest
+    environment: ${{ needs.detect_env.outputs.deploy_env}}
+    steps:
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-west-1
+    - name: Trigger instance restart
+      run: aws ec2 reboot-instances --instance-ids "${{secrets.DEPLOY_TARGET}}" || aws start-instance-refresh --auto-scaling-group-name "${{secrets.DEPLOY_TARGET}}" 

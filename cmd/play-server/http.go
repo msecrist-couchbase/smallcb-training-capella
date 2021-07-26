@@ -444,6 +444,12 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 
 // ------------------------------------------------
 
+// Executes some code posted in request body
+// parameters: 
+// - s: session
+// - lang: language of the code
+// - code: code to run
+// - color: ???????
 func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 	StatsNumInc("http.Run")
 
@@ -453,6 +459,7 @@ func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 
 	session := sessions.SessionGet(s)
 	if session == nil && s != "" {
+    // if session key was passed by there was no session with such key
 		StatsNumInc("http.Run.err")
 
 		t := http.StatusText(http.StatusNotFound) +

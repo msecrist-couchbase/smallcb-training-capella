@@ -1,0 +1,11 @@
+FROM ubuntu:latest
+
+ENV DEBIAN_FRONTEND="noninteractive"
+ENV TZ="America/Los_Angeles"
+RUN apt -y update && apt -y upgrade 
+RUN apt -y install docker golang make ca-certificates
+
+COPY . /smallcb
+WORKDIR /smallcb
+RUN make play-server
+CMD ./play-server
