@@ -80,4 +80,4 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-west-1
     - name: Trigger instance restart
-      run: aws ec2 reboot-instances --instance-ids "${{secrets.DEPLOY_TARGET}}" || aws start-instance-refresh --auto-scaling-group-name "${{secrets.DEPLOY_TARGET}}" 
+      run: aws ec2 reboot-instances --instance-ids "${{secrets.DEPLOY_TARGET}}" || aws autoscaling start-instance-refresh --auto-scaling-group-name "${{secrets.DEPLOY_TARGET}}" 
