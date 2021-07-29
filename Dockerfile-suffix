@@ -50,6 +50,8 @@ COPY cmd/play-server/run-java-pom.xml /run-java-pom.xml
 
 COPY cmd/play-server/run-java-hello.java /home/play/hello/src/main/java/hello.java
 
+COPY cmd/play-server/java_logging.properties /home/play/hello/logging.properties
+
 RUN chown -R play:couchbase /home/play
 
 USER play
