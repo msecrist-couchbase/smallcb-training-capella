@@ -328,7 +328,6 @@ main .info-header .header-right code {
 .workspace .workspace-body .code-editor .sticky .empty-example-frame {
   display: flex;
   width: 95%;
-  height: 60vh;
 }
 
 .workspace
@@ -753,7 +752,7 @@ a.disable {
 }
 
 .example-row {
-  margin-bottom: 16px;
+  margin-bottom: 26px;
 }
 
 h2.home-header {
