@@ -49,6 +49,8 @@ func HttpMuxInit(mux *http.ServeMux) {
 	mux.HandleFunc("/run", HttpHandleRun)
 
 	mux.HandleFunc("/", HttpHandleMain)
+
+	mux.HandleFunc("/home", HttpHandleHome)
 }
 
 // ------------------------------------------------
@@ -139,7 +141,7 @@ func HttpHandleMain(w http.ResponseWriter, r *http.Request) {
 		examplesPath, name, r.FormValue("title"),
 		lang, code, r.FormValue("highlight"), view, bodyClass,
 		r.FormValue("infoBefore"),
-		r.FormValue("infoAfter"))
+		r.FormValue("infoAfter"), "main")
 	if err != nil {
 		StatsNumInc("http.Main.err", "http.Main.err.template")
 
@@ -445,7 +447,7 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 // ------------------------------------------------
 
 // Executes some code posted in request body
-// parameters: 
+// parameters:
 // - s: session
 // - lang: language of the code
 // - code: code to run
@@ -459,7 +461,7 @@ func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 
 	session := sessions.SessionGet(s)
 	if session == nil && s != "" {
-    // if session key was passed by there was no session with such key
+		// if session key was passed by there was no session with such key
 		StatsNumInc("http.Run.err")
 
 		t := http.StatusText(http.StatusNotFound) +
@@ -648,6 +650,102 @@ func HttpHandleStaticData(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	w.Write(j)
+}
+
+func HttpHandleHome(w http.ResponseWriter, r *http.Request) {
+	StatsNumInc("http.Home")
+
+	msg := r.FormValue("m")
+	if Msgs[msg] != "" {
+		msg = Msgs[msg]
+	}
+
+	s := r.FormValue("s")
+
+	session := sessions.SessionGet(s)
+	if session == nil && s != "" && msg == "" {
+		StatsNumInc("http.Home.err", "http.Home.err.session-timeout")
+
+		http.Redirect(w, r, "/?m=session-timeout",
+			http.StatusSeeOther)
+
+		return
+	}
+
+	examplesPath := "examples"
+
+	name := r.FormValue("name")
+
+	// Example URL.Path == "/examples/basic-py"
+	path := r.URL.Path
+
+	if strings.Index(path, "..") >= 0 {
+		StatsNumInc("http.Home.err", "http.Home.err.path")
+
+		http.Error(w,
+			http.StatusText(http.StatusBadRequest),
+			http.StatusBadRequest)
+
+		log.Printf("ERROR: HttpHandleHome, err: path has '..'")
+
+		return
+	}
+
+	for len(path) > 0 && strings.HasSuffix(path, "/") {
+		path = path[0 : len(path)-1]
+	}
+
+	parts := strings.Split(path, "/")
+	if len(parts) >= 3 {
+		// Ex: "examples" or "examples-more/foo/bar".
+		examplesPath = strings.Join(parts[1:len(parts)-1], "/")
+
+		// Ex: "basic-py".
+		name = parts[len(parts)-1]
+	}
+
+	lang := r.FormValue("lang")
+	code := r.FormValue("code")
+	view := r.FormValue("view")
+
+	portApp, _ := strconv.Atoi(strings.Split(*listen, ":")[1])
+
+	bodyClass := r.FormValue("bodyClass")
+	if bodyClass == "" {
+		bodyClass = "dark"
+	}
+
+	program := r.FormValue("program")
+
+	code = CodeFromFixup(code, program, lang, r.FormValue("from"))
+
+	err := CheckVerSDK(lang, r.FormValue("verSDK"))
+	if err != nil {
+		StatsNumInc("http.Home.err", "http.Home.err.checkVerSDK")
+
+		http.Error(w,
+			http.StatusText(http.StatusBadRequest),
+			http.StatusBadRequest)
+
+		log.Printf("ERROR: HttpHandleHome, err: %v", err)
+
+		return
+	}
+
+	err = MainTemplateEmit(w, *staticDir, msg, *host, portApp,
+		*version, VersionSDKs, session, *sessionsMaxAge, *sessionsMaxIdle,
+		*listenPortBase, *listenPortSpan, PortMapping,
+		examplesPath, name, r.FormValue("title"),
+		lang, code, r.FormValue("highlight"), view, bodyClass,
+		r.FormValue("infoBefore"),
+		r.FormValue("infoAfter"), "home")
+	if err != nil {
+		StatsNumInc("http.Home.err", "http.Home.err.template")
+
+		return
+	}
+
+	StatsNumInc("http.Home.ok")
 }
 
 // ------------------------------------------------

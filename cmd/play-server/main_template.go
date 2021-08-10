@@ -82,7 +82,7 @@ func MainTemplateEmit(w http.ResponseWriter,
 	containerPublishPortBase, containerPublishPortSpan int,
 	portMapping [][]int,
 	examplesPath, name, title, lang, code, highlight, view, bodyClass,
-	infoBefore, infoAfter string) error {
+	infoBefore, infoAfter string, templateToRender string) error {
 	host := hostIn
 	if session == nil {
 		host = "127.0.0.1"
@@ -206,7 +206,9 @@ func MainTemplateEmit(w http.ResponseWriter,
 		view = "-" + view
 	}
 
-	t, err := template.ParseFiles(staticDir + "/main" + view + ".html.tmpl")
+	// t, err := template.ParseFiles(staticDir + "/main" + view + ".html.tmpl")
+	t, err := template.ParseFiles(staticDir + "/" + templateToRender + view + ".html.tmpl")
+
 	if err != nil {
 		http.Error(w,
 			http.StatusText(http.StatusInternalServerError)+
