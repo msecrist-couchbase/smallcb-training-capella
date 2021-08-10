@@ -1,6 +1,12 @@
 title: Query w/ Positional Param
 page: page-05
 lang: dotnet
+infoBefore: |
+  <div>
+  <a href='basic-dotnet-query-named-param' class="prev-button">Previous Lesson</a>
+  <a href='basic-dotnet-subdoc-lookup' class="next-button">Next Lesson</a>
+  </div>
+  <br>
 code: |
   using System;
   using System.Threading.Tasks;

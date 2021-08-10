@@ -1,6 +1,12 @@
 title: Sub-document Mutate
 page: page-05
 lang: dotnet
+infoBefore: |
+  <div>
+  <a href='basic-dotnet-subdoc-lookup' class="prev-button">Previous Lesson</a>
+  <a href='basic-dotnet-upsert' class="next-button">Next Lesson</a>
+  </div>
+  <br>
 code: |
   using System;
   using System.Collections.Generic;

@@ -1,34 +1,40 @@
 title: Query w/ Named Param
 page: page-04
 lang: py
+infoBefore: |
+  <div>
+  <a href='basic-py-query-rows' class="prev-button">Previous Lesson</a>
+  <a href='basic-py-query-positional-param' class="next-button">Next Lesson</a>
+  </div>
+  <br>
 code: |
   #!/usr/bin/python3
-  
+
   import sys
-  
+
   from couchbase.cluster import Cluster, ClusterOptions
   from couchbase_core.cluster import PasswordAuthenticator
-  
+
   pa = PasswordAuthenticator('{{.CBUser}}', '{{.CBPswd}}')
-  
+
   cluster = Cluster('couchbase://{{.Host}}', ClusterOptions(pa))
   bucket = cluster.bucket('travel-sample')
-  
+
   query = """
     SELECT h.name, h.city, h.state 
     FROM `travel-sample` h 
     WHERE h.type = $type 
       AND h.city = $city LIMIT 5
   """
-  
+
   try:
     result = cluster.query(query, type='hotel', city='Malibu')
-  
+
     for row in result:
       name = row['name']
       city = row['city']
       print("Hotel: " + name + ", " + city)
-  
+
   except:
     print("exception:", sys.exc_info()[0])
 infoAfter: |

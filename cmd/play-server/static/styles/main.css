@@ -50,7 +50,7 @@
 }
 .session-info .shots a div img {
   position: absolute;
-  clip: rect(0px,120px,70px,0px);
+  clip: rect(0px, 120px, 70px, 0px);
   width: 120px;
 }
 
@@ -77,10 +77,10 @@ main .info-header .header-left a {
   cursor: pointer;
   cursor: hand;
 
-  -webkit-user-select: none;  /* Chrome all / Safari all */
-  -moz-user-select: none;     /* Firefox all */
-  -ms-user-select: none;      /* IE 10+ */
-  user-select: none;          /* Likely future */      
+  -webkit-user-select: none; /* Chrome all / Safari all */
+  -moz-user-select: none; /* Firefox all */
+  -ms-user-select: none; /* IE 10+ */
+  user-select: none; /* Likely future */
 
   text-decoration: none;
   font-size: 12px;
@@ -89,7 +89,7 @@ main .info-header .header-left a {
 main .info-header .header-right {
   padding-top: 9px;
   height: 25px;
-  font-family: 'Ubuntu Mono', monospace;
+  font-family: "Ubuntu Mono", monospace;
   font-size: 14px;
   white-space: nowrap;
 }
@@ -118,7 +118,10 @@ main .info-header .header-right code {
   font-weight: normal;
 }
 
-.workspace .workspace-body .code-examples input[type="checkbox"]#examplesToggle {
+.workspace
+  .workspace-body
+  .code-examples
+  input[type="checkbox"]#examplesToggle {
   display: none;
 }
 
@@ -130,7 +133,11 @@ main .info-header .header-right code {
   transition: all 0.2s;
 }
 
-.workspace .workspace-body .code-examples input[type="checkbox"]#examplesToggle:checked ~ h2 {
+.workspace
+  .workspace-body
+  .code-examples
+  input[type="checkbox"]#examplesToggle:checked
+  ~ h2 {
   max-width: auto;
   max-height: auto;
   margin-left: 15px;
@@ -145,7 +152,11 @@ main .info-header .header-right code {
   display: none;
 }
 
-.workspace .workspace-body .code-examples input[type="checkbox"]#examplesToggle:checked ~ .div-hr {
+.workspace
+  .workspace-body
+  .code-examples
+  input[type="checkbox"]#examplesToggle:checked
+  ~ .div-hr {
   display: block;
 }
 
@@ -157,7 +168,11 @@ main .info-header .header-right code {
   flex-wrap: wrap;
 }
 
-.workspace .workspace-body .code-examples input[type="checkbox"]#examplesToggle:checked ~ .pages {
+.workspace
+  .workspace-body
+  .code-examples
+  input[type="checkbox"]#examplesToggle:checked
+  ~ .pages {
   display: flex;
 }
 
@@ -181,7 +196,11 @@ main .info-header .header-right code {
   padding: 0 8px 0 9px;
 }
 
-.workspace .workspace-body .code-examples input[type="checkbox"]#examplesToggle:checked ~ .example-nav {
+.workspace
+  .workspace-body
+  .code-examples
+  input[type="checkbox"]#examplesToggle:checked
+  ~ .example-nav {
   display: block;
 }
 
@@ -205,7 +224,13 @@ main .info-header .header-right code {
   padding-left: 8px;
   font-size: large;
 }
-.workspace .workspace-body .code-examples .example-nav ul.examples li.category a {
+.workspace
+  .workspace-body
+  .code-examples
+  .example-nav
+  ul.examples
+  li.category
+  a {
   display: inline-block;
   float: right;
   font-size: 10pt;
@@ -306,7 +331,12 @@ main .info-header .header-right code {
   height: 60vh;
 }
 
-.workspace .workspace-body .code-editor .sticky .empty-example-frame .info-frame {
+.workspace
+  .workspace-body
+  .code-editor
+  .sticky
+  .empty-example-frame
+  .info-frame {
   justify-content: center;
   align-items: center;
   width: 80%;
@@ -314,12 +344,32 @@ main .info-header .header-right code {
   line-height: 1.5em;
 }
 
-.workspace .workspace-body .code-editor .sticky .empty-example-frame .info-frame a {
+.workspace
+  .workspace-body
+  .code-editor
+  .sticky
+  .empty-example-frame
+  .info-frame
+  a {
   display: inline-block;
 }
 
-.workspace .workspace-body .code-editor .sticky .empty-example-frame .info-frame a div,
-.workspace .workspace-body .code-editor .sticky .empty-example-frame .info-frame a img {
+.workspace
+  .workspace-body
+  .code-editor
+  .sticky
+  .empty-example-frame
+  .info-frame
+  a
+  div,
+.workspace
+  .workspace-body
+  .code-editor
+  .sticky
+  .empty-example-frame
+  .info-frame
+  a
+  img {
   width: 190px;
   border-width: 1px;
   border-style: solid;
@@ -328,13 +378,25 @@ main .info-header .header-right code {
   text-decoration: none;
 }
 
-.workspace .workspace-body .code-editor .sticky .empty-example-frame .info-frame a img {
+.workspace
+  .workspace-body
+  .code-editor
+  .sticky
+  .empty-example-frame
+  .info-frame
+  a
+  img {
   width: 190px;
   margin-top: 1em;
 }
 
 @media screen and (max-width: 750px) {
-  .workspace .workspace-body .code-editor .sticky .empty-example-frame .info-frame {
+  .workspace
+    .workspace-body
+    .code-editor
+    .sticky
+    .empty-example-frame
+    .info-frame {
     width: 70%;
     margin-top: 1em;
     line-height: 1.5em;
@@ -388,7 +450,7 @@ body.dark main .info-header a {
 }
 body.dark main .info-header a:hover,
 body.dark main .info-header a:focus {
-  color: #EFEFEF;
+  color: #efefef;
 }
 
 body.dark main .info-header .header-right .head-server {
@@ -422,32 +484,70 @@ body.dark .workspace .workspace-body .code-examples .pages a:hover {
   background-color: #333a32;
 }
 
-body.dark .workspace .workspace-body .code-examples .example-nav ul.examples li {
+body.dark
+  .workspace
+  .workspace-body
+  .code-examples
+  .example-nav
+  ul.examples
+  li {
   border-color: #1f282c;
   border-width: 1px;
   border-style: solid;
   border-top: none;
 }
 
-body.dark .workspace .workspace-body .code-examples .example-nav ul.examples li.category {
+body.dark
+  .workspace
+  .workspace-body
+  .code-examples
+  .example-nav
+  ul.examples
+  li.category {
   background-color: #262a35;
   color: rgba(159, 226, 100, 0.95);
   border-top: 1px solid #3a5552;
   border-bottom: 1px solid #3a4052;
 }
 
-body.dark .workspace .workspace-body .code-examples .example-nav ul.examples li.lang:hover, 
-body.dark .workspace .workspace-body .code-examples .example-nav ul.examples li.session:hover {
+body.dark
+  .workspace
+  .workspace-body
+  .code-examples
+  .example-nav
+  ul.examples
+  li.lang:hover,
+body.dark
+  .workspace
+  .workspace-body
+  .code-examples
+  .example-nav
+  ul.examples
+  li.session:hover {
   background-color: #526373;
 }
 
-body.dark .workspace .workspace-body .code-examples .example-nav ul.examples li.current {
+body.dark
+  .workspace
+  .workspace-body
+  .code-examples
+  .example-nav
+  ul.examples
+  li.current {
   color: #4c5863;
-  background-color: #3F4858;
+  background-color: #3f4858;
   border-left: 2px solid rgba(159, 226, 100, 0.95);
 }
 
-body.dark .workspace .workspace-body .code-examples .example-nav ul.examples li .links a {
+body.dark
+  .workspace
+  .workspace-body
+  .code-examples
+  .example-nav
+  ul.examples
+  li
+  .links
+  a {
   color: #bbb;
 }
 
@@ -457,29 +557,89 @@ body.dark .workspace .workspace-body .code-editor .sticky .empty-example-frame {
   border-style: solid;
 }
 
-body.dark .workspace .workspace-body .code-editor .sticky .empty-example-frame .info-frame a div,
-body.dark .workspace .workspace-body .code-editor .sticky .empty-example-frame .info-frame a img {
+body.dark
+  .workspace
+  .workspace-body
+  .code-editor
+  .sticky
+  .empty-example-frame
+  .info-frame
+  a
+  div,
+body.dark
+  .workspace
+  .workspace-body
+  .code-editor
+  .sticky
+  .empty-example-frame
+  .info-frame
+  a
+  img {
   background-color: #526373;
   border-color: #526373;
 }
 
-body.dark .workspace .workspace-body .code-editor .sticky .empty-example-frame .info-frame a:hover div,
-body.dark .workspace .workspace-body .code-editor .sticky .empty-example-frame .info-frame a:focus div,
-body.dark .workspace .workspace-body .code-editor .sticky .empty-example-frame .info-frame a:hover img,
-body.dark .workspace .workspace-body .code-editor .sticky .empty-example-frame .info-frame a:focus img {
+body.dark
+  .workspace
+  .workspace-body
+  .code-editor
+  .sticky
+  .empty-example-frame
+  .info-frame
+  a:hover
+  div,
+body.dark
+  .workspace
+  .workspace-body
+  .code-editor
+  .sticky
+  .empty-example-frame
+  .info-frame
+  a:focus
+  div,
+body.dark
+  .workspace
+  .workspace-body
+  .code-editor
+  .sticky
+  .empty-example-frame
+  .info-frame
+  a:hover
+  img,
+body.dark
+  .workspace
+  .workspace-body
+  .code-editor
+  .sticky
+  .empty-example-frame
+  .info-frame
+  a:focus
+  img {
   background-color: #778fa7;
 }
 
-body.dark .workspace .workspace-body .code-editor .example-frame .session-cta a {
+body.dark
+  .workspace
+  .workspace-body
+  .code-editor
+  .example-frame
+  .session-cta
+  a {
   border-color: #516374;
   background-color: #516374;
-  color: #FFFFFF;
+  color: #ffffff;
 }
 
-body.dark .workspace .workspace-body .code-editor .example-frame .session-cta a:hover {
+body.dark
+  .workspace
+  .workspace-body
+  .code-editor
+  .example-frame
+  .session-cta
+  a:hover {
   border-color: #516374;
   background-color: #778fa7;
-  color: #EFEFEF;
+  color: #efefef;
 }
 
 body.dark .workspace .workspace-body .code-editor div.code-ace {
@@ -487,12 +647,15 @@ body.dark .workspace .workspace-body .code-editor div.code-ace {
 }
 
 body.dark .workspace .workspace-body .code-editor input.run {
-  border-width: 1px;
+  /* border-width: 1px;
   border-style: solid;
   border-radius: 4px;
-  border-color: #516374;
+  border-color: #516374;*/
   background-color: #262a35;
   color: rgba(159, 226, 100, 0.95);
+  float: right;
+  text-align: right;
+  margin-bottom: 20px;
 }
 body.dark .workspace .workspace-body .code-editor input.run:hover {
   background-color: #333a32;
@@ -505,4 +668,55 @@ body.dark .workspace .workspace-body .code-editor form.run-submitted input.run {
 
 body.dark .workspace .workspace-body .code-output iframe.output {
   border-color: #516374;
+}
+
+a.prev-button {
+  -webkit-appearance: button;
+  -moz-appearance: button;
+  appearance: button;
+  padding: 7px 14px;
+
+  background-color: #262a35;
+  color: rgba(159, 226, 100, 0.95);
+  text-align: right;
+  margin-bottom: 20px;
+  margin-left: 20px;
+
+  float: left;
+  text-decoration: none;
+  color: initial;
+}
+
+a.next-button {
+  -webkit-appearance: button;
+  -moz-appearance: button;
+  appearance: button;
+  padding: 7px 14px;
+
+  background-color: #262a35;
+  color: rgba(159, 226, 100, 0.95);
+  text-align: right;
+  margin-bottom: 20px;
+  margin-right: 20px;
+
+  float: right;
+  text-decoration: none;
+  color: initial;
+}
+
+a.disable {
+  -webkit-appearance: button;
+  -moz-appearance: button;
+  appearance: button;
+  padding: 7px 14px;
+
+  background-color: #262a35;
+  color: rgba(159, 226, 100, 0.95);
+  text-align: right;
+  margin-bottom: 20px;
+
+  text-decoration: none;
+  color: initial;
+  pointer-events: none;
+  cursor: default;
 }

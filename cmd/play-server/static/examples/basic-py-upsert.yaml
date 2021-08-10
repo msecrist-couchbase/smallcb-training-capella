@@ -1,6 +1,12 @@
 title: Upsert
 page: page-04
 lang: py
+infoBefore: |
+  <div>
+  <a href='basic-py-subdoc-mutate' class="prev-button">Previous Lesson</a>
+  <a href='#' class="disable" style="float:right">Next Lesson</a>
+  </div>
+  <br>
 code: |
   #!/usr/bin/python3
   import sys

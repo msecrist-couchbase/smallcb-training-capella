@@ -1,22 +1,28 @@
-title:  Upsert 
+title: Upsert
 page: page-03
 lang: nodejs
+infoBefore: |
+  <div>
+  <a href='basic-nodejs-subdoc-mutate' class="prev-button dark-purple">Previous Lesson</a>
+  <a href='#' class="disable" style="float:right">Next Lesson</a>
+  </div>
+  <br>
 code: |
   const couchbase = require('couchbase')
-  
+
   const cluster = new couchbase.Cluster('couchbase://{{.Host}}', {
     username: '{{.CBUser}}', password: '{{.CBPswd}}'
   })
-  
+
   const bucket = cluster.bucket('travel-sample')
   const collection = bucket.defaultCollection()
-  
+
   const airline = {
     country: 'Iceland', callsign: 'ICEAIR',
     iata: 'FI', icao: 'ICE', id: 123,
     name: 'Icelandair', type: 'airline',
   }
-  
+
   const upsertDocument = async (type, id, doc) => {
     try {
       const upsertResult = await collection.upsert(`${type}_${id}`, doc);
@@ -26,24 +32,24 @@ code: |
       console.error(err)
     }
   }
-  
+
   const getSubDocument = async (key, field) => {
     try {
       var result = await collection.lookupIn(key, [
         couchbase.LookupInSpec.get(field),
       ])
       var fieldValue = result.content[0].value
-  
+
       console.log('LookupIn Result: ')
       console.log(result)
-  
+
       console.log('Field Value: ')
       console.log(fieldValue)
     } catch (error) {
       console.error(error)
     }
   }
-  
+
   upsertDocument(airline.type, airline.id, airline)
     .then(
       getSubDocument('airline_123', 'name')

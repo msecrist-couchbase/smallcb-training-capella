@@ -1,6 +1,12 @@
 title: Sub-document Lookup
 page: page-06
 lang: php
+infoBefore: |
+  <div>
+  <a href='basic-php-query-positional-param' class="prev-button">Previous Lesson</a>
+  <a href='basic-php-subdoc-mutate' class="next-button">Next Lesson</a>
+  </div>
+  <br>
 code: |
   <?php
     $connectionString = "couchbase://{{.Host}}";

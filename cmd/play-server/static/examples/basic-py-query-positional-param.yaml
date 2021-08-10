@@ -1,14 +1,20 @@
 title: Query w/ Positional Param
 page: page-04
 lang: py
+infoBefore: |
+  <div>
+  <a href='basic-py-query-named-param' class="prev-button">Previous Lesson</a>
+  <a href='basic-py-subdoc-lookup' class="next-button">Next Lesson</a>
+  </div>
+  <br>
 code: |
   #!/usr/bin/python3
-  
+
   import sys
-  
+
   from couchbase.cluster import Cluster, ClusterOptions
   from couchbase_core.cluster import PasswordAuthenticator
-  
+
   pa = PasswordAuthenticator('{{.CBUser}}', '{{.CBPswd}}')
 
   cluster = Cluster('couchbase://{{.Host}}', ClusterOptions(pa))
@@ -20,16 +26,16 @@ code: |
     WHERE h.type = $1
       AND h.city = $2 LIMIT 5
   """
-  
+
   try:
     result = cluster.query(query, 'hotel', 'Malibu')
-  
+
     for row in result:
       # each row is an instance of the query call
       name = row['name']
       city = row['city']
       print("Hotel: " + name + ", " + city)
-  
+
   except:
     print("exception:", sys.exc_info()[0])
 infoAfter: |

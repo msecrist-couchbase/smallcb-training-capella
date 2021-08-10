@@ -1,6 +1,12 @@
 title: Query w/ Positional Param
 page: page-07
 lang: rb
+infoBefore: |
+  <div>
+  <a href='basic-ruby-query-named-param' class="prev-button">Previous Lesson</a>
+  <a href='basic-ruby-subdoc-lookup' class="next-button">Next Lesson</a>
+  </div>
+  <br>
 code: |
 
   require "couchbase"
@@ -11,7 +17,7 @@ code: |
   cluster = Cluster.connect("couchbase://{{.Host}}", options)
 
   bucket = cluster.bucket("travel-sample")
-  
+
   begin
     options = Cluster::QueryOptions.new
     options.positional_parameters(["hotel"])

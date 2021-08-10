@@ -1,6 +1,12 @@
 title: Query Rows
 page: page-04
 lang: py
+infoBefore: |
+  <div>
+  <a href='basic-py-kv-get' class="prev-button">Previous Lesson</a>
+  <a href='basic-py-query-named-param' class="next-button">Next Lesson</a>
+  </div>
+  <br>
 code: |
   #!/usr/bin/python3
   

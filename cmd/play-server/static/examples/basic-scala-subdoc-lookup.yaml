@@ -1,6 +1,12 @@
 title: Sub-document Lookup
 page: page-08
 lang: scala
+infoBefore: |
+  <div>
+  <a href='basic-scala-query-positional-param' class="prev-button">Previous Lesson</a>
+  <a href='basic-scala-subdoc-mutate' class="next-button">Next Lesson</a>
+  </div>
+  <br>
 code: |
 
   package com.couchbase
@@ -13,7 +19,7 @@ code: |
   import com.couchbase.client.scala.kv.MutateInSpec._
   import com.couchbase.client.scala.kv.{LookupInResult, _}
   import scala.util.{Failure, Success, Try}
-  
+
   object Program extends App {
     val cluster = Cluster.connect("{{.Host}}", "{{.CBUser}}", "{{.CBPswd}}").get
     var bucket = cluster.bucket("travel-sample");
