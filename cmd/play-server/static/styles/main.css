@@ -679,7 +679,6 @@ a.prev-button {
   color: rgba(159, 226, 100, 0.95);
   text-align: right;
   margin-bottom: 20px;
-  margin-left: 20px;
 
   float: left;
   text-decoration: none;
@@ -696,7 +695,6 @@ a.next-button {
   color: rgba(159, 226, 100, 0.95);
   text-align: right;
   margin-bottom: 20px;
-  margin-right: 20px;
 
   float: right;
   text-decoration: none;
@@ -766,4 +764,43 @@ h2.home-header {
 
 .container {
   margin: 0 auto;
+}
+
+.run {
+  background-color: #262a35;
+  color: rgba(159, 226, 100, 0.95);
+  float: right;
+  text-align: right;
+  margin-bottom: 20px;
+}
+
+/* TODO: apply this to button and relocate button for start session*/
+.session-cta {
+  border-top: 1px solid white;
+  padding-top: 18px;
+  margin: 24px 0;
+}
+
+.session-cta > a{
+  border-color: #516374;
+  background-color: #516374;
+  color: #ffffff;
+
+  display: block;
+  margin-top: 7px;
+  width: 14rem;
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 4px;
+  padding: 0.5em;
+  text-align: center;
+  text-decoration: none !important;
+}
+
+
+
+h2.example-title {
+  margin-left: 0;
+  margin-right: 16px;
+  clear: left;
 }
