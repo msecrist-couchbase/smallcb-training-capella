@@ -232,9 +232,8 @@
           </div>
         </div>
 
-        {{/*TODO: prob fix this width thing*/}}
-        <div class="row" style="width: 75%">
-          <div class="col-xs-12 col-md-6" style="border: 1px solid white">
+        <div class="row example-row" style="width: 100%">
+          <div class="col-xs-12 col-md-5 example-info-column">
             <div class="example-heading">
               {{if .InfoBefore}}
                 <div class="info infoBefore">{{.InfoBefore}}</div>
@@ -245,7 +244,7 @@
                     <span class="lang">{{or .LangPretty .Lang}} - </span>
                   {{end}}
                 {{end}}
-                {{if .Title}}{{.Title}}{{else}}Code Editor{{end}}
+                {{if .Title}}{{.Title}}{{else}}Playground Editor{{end}}
               </h2>
 
 
@@ -263,11 +262,11 @@
             {{end}}
           </div>
 
-          <div class="col-xs-12 col-md-6" style="border: 1px solid blue">
+          <div class="col-xs-12 col-md-7">
             <div class="code-editor">
               <div class="sticky">
                 <form action="/run" method="post" target="output" id="form">
-
+                  <h2 class="editor-label">Code Editor</h2>
                   {{if ne .Code "NONE"}}
                     <input type="submit" value="run &gt;&gt;" class="run" id="run"
                            onclick="return onRunSubmit()"/>
@@ -275,9 +274,7 @@
 
                   {{if or .Name .Lang .Code}}
 
-
                   <div class="example-frame">
-
 
                     {{if .Session}}
                       <input name="s" type="hidden" value="{{.Session.SessionId}}"/>
@@ -293,9 +290,6 @@
                                 autocomplete="off" autocapitalize="off"
                                 spellcheck="false">{{.Code}}</textarea>
                     {{end}}
-
-
-
 
                   </div>
 
@@ -327,7 +321,7 @@
             <div class="code-output hidden" id="code-output">
               <div class="sticky">
                 {{if or .Name .Lang .Code}}
-                  <h2>Output</h2>
+                  <h2 class="editor-label">Output</h2>
                   <iframe name="output" id="output" class="output"></iframe>
                 {{end}}
               </div>
@@ -362,6 +356,8 @@
     {{if .LangAce}}
       codeAce.setOption("mode", "ace/mode/{{.LangAce}}");
     {{end}}
+
+    codeAce.renderer.setScrollMargin(24, 0, 0, 0)
 
     {{if .Highlight}}
     var highlight = "{{.Highlight}}";

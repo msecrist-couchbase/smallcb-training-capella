@@ -9,6 +9,7 @@
 
 .hidden {
   visibility: hidden;
+  display: none;
 }
 
 .session-info {
@@ -250,7 +251,7 @@ main .info-header .header-right code {
 .workspace .workspace-body .code-editor {
   flex-basis: 10rem;
   flex-grow: 100;
-  margin: 0 0 0 15px;
+  /*margin: 0 0 0 15px;*/
 }
 .workspace .workspace-body .code-editor textarea.code {
   display: none;
@@ -258,17 +259,17 @@ main .info-header .header-right code {
 .workspace .workspace-body .code-editor div.code-ace {
   margin-bottom: 15px;
   margin-right: 0;
-  width: 95%;
+  /*TODO: fix height*/
   height: 60vh;
-
+  width: 100%;
   border-width: 1px;
   border-style: solid;
 }
 .workspace .workspace-body .code-editor input.run {
   display: inline-block;
   float: right;
+  border-bottom-left-radius: 3px;
 
-  margin-right: 25px;
   border: 0;
   padding: 3px 40px 3px 40px;
   font-weight: bold;
@@ -293,12 +294,13 @@ main .info-header .header-right code {
   flex-grow: 100;
 }
 .workspace .workspace-body .code-output iframe.output {
-  width: 95%;
+  width: 100%;
   height: 60vh;
   margin-bottom: 15px;
 
   border-width: 1px;
   border-style: solid;
+  padding-top: 16px;
 }
 
 .workspace .workspace-body .code-editor .example-frame .info {
@@ -769,12 +771,12 @@ h2.home-header {
 .run {
   background-color: #262a35;
   color: rgba(159, 226, 100, 0.95);
-  float: right;
   text-align: right;
-  margin-bottom: 20px;
+  position: absolute;
+  z-index: 100;
+  right: -2px;
 }
 
-/* TODO: apply this to button and relocate button for start session*/
 .session-cta {
   border-top: 1px solid white;
   padding-top: 18px;
@@ -797,10 +799,51 @@ h2.home-header {
   text-decoration: none !important;
 }
 
-
-
 h2.example-title {
   margin-left: 0;
   margin-right: 16px;
   clear: left;
 }
+
+.example-row {
+  margin: 0 !important;
+}
+
+.editor-label {
+  position: absolute;
+  padding: 3px 6px;
+  background: #516374;
+  height: auto !important;
+  z-index: 100;
+  font-size: 12px !important;
+  border-bottom-right-radius: 3px;
+}
+
+div.example-heading > div > div > a {
+  text-decoration: none !important;
+}
+
+div.example-heading > div > div > a.disable {
+  opacity: 0.5;
+}
+
+/* TODO: add nicer icons? */
+div.example-heading > div > div > a:not(.next-button):before {
+  content: "< ";
+}
+
+div.example-heading > div > div > a.next-button:after {
+  content: " >";
+}
+
+div.example-heading > div {
+  font-size: 12px;
+}
+
+@media only screen and (min-width: 992px) {
+  .example-info-column {
+    border-right: 1px solid white; border-left: 1px solid white
+  }   
+}
+
+
