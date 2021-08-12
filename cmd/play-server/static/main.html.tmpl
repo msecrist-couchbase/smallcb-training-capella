@@ -266,15 +266,13 @@
             <div class="code-editor">
               <div class="sticky">
                 <form action="/run" method="post" target="output" id="form">
-                  <h2 class="editor-label">Code Editor</h2>
-
+                  
+                  {{if or .Name .Lang .Code}}
                   {{if ne .Code "NONE"}}
+                    <h2 class="editor-label">Code Editor</h2>
                     <input type="submit" value="run &gt;&gt;" class="run" id="run"
                            onclick="return onRunSubmit()"/>
                   {{end}}
-
-                  {{if or .Name .Lang .Code}}
-
                   <div class="example-frame">
 
                     {{if .Session}}
@@ -329,7 +327,7 @@
             </div>
           </div>
         </div>
-        
+
       </div>
     </div>
   </main>
@@ -358,6 +356,9 @@
     {{end}}
 
     codeAce.renderer.setScrollMargin(24, 0, 0, 0)
+    let numLines = codeAce.session.doc.getAllLines().length;
+    let editorHeight = (numLines * 18);
+    document.getElementById("code-ace").style.height = `${editorHeight}px`
 
     {{if .Highlight}}
     var highlight = "{{.Highlight}}";
