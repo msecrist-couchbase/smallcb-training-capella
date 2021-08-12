@@ -328,7 +328,6 @@ main .info-header .header-right code {
 
 .workspace .workspace-body .code-editor .sticky .empty-example-frame {
   display: flex;
-  width: 95%;
 }
 
 .workspace
@@ -722,7 +721,7 @@ a.disable {
 .example-button {
   border-radius: 6px;
   border: 2px solid #6c7a94;
-  display: flex;
+  display: flex !important;
   align-items: center;
   text-decoration: none !important;
   margin: 8px 0;
@@ -776,7 +775,7 @@ h2.home-header {
   right: -2px;
 }
 
-.session-cta {
+.example-info-column > .session-cta {
   border-top: 1px solid white;
   padding-top: 18px;
   margin: 24px 0;
@@ -796,6 +795,14 @@ h2.home-header {
   padding: 0.5em;
   text-align: center;
   text-decoration: none !important;
+}
+
+#form > div.empty-example-frame > div > div > a.example-button > img {
+  background: none;
+  width: 164px;
+  margin: 14px 14px;
+  padding: 0;
+  border: none;
 }
 
 h2.example-title {
