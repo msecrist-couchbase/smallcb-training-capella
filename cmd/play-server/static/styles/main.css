@@ -259,7 +259,6 @@ main .info-header .header-right code {
 .workspace .workspace-body .code-editor div.code-ace {
   margin-bottom: 15px;
   margin-right: 0;
-  /*TODO: fix height*/
   height: 60vh;
   width: 100%;
   border-width: 1px;
@@ -827,7 +826,6 @@ div.example-heading > div > div > a.disable {
   opacity: 0.5;
 }
 
-/* TODO: add nicer icons? */
 div.example-heading > div > div > a:not(.next-button):before {
   content: "< ";
 }
@@ -845,3 +843,4 @@ div.example-heading > div {
     border-right: 1px solid white; border-left: 1px solid white
   }
 }
+

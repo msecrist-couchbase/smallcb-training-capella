@@ -266,7 +266,7 @@
             <div class="code-editor">
               <div class="sticky">
                 <form action="/run" method="post" target="output" id="form">
-                  
+
                   {{if or .Name .Lang .Code}}
                   {{if ne .Code "NONE"}}
                     <h2 class="editor-label">Code Editor</h2>
@@ -289,7 +289,6 @@
                                 autocomplete="off" autocapitalize="off"
                                 spellcheck="false">{{.Code}}</textarea>
                     {{end}}
-
                   </div>
 
                   <input name="color" type="hidden" value="#FFF"/>
