@@ -775,7 +775,7 @@ h2.home-header {
 }
 
 .example-info-column > .session-cta {
-  border-top: 1px solid white;
+  border-top: 1px solid rgba(255, 255, 255, 0.6);
   padding-top: 18px;
   margin: 24px 0;
 }
@@ -846,7 +846,8 @@ div.example-heading > div {
 
 @media only screen and (min-width: 992px) {
   .example-info-column {
-    border-right: 1px solid white; border-left: 1px solid white
+    border-right: 1px solid rgba(255, 255, 255, 0.6);
+    border-left: 1px solid rgba(255, 255, 255, 0.6);
   }
 }
 
