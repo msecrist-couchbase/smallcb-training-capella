@@ -120,63 +120,63 @@
           <h2 class="home-header"><label for="examplesToggle">Experiment with Code Examples</label></h2>
           <div class="row example-row">
             <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-              <a href="examples/basic-java-kv-get{{if $.Session}}?s={{$.Session.SessionId}}{{end}}" class="example-button">
+              <a href="examples/basic-java-kv-get{{if $.Session}}?s={{$.Session.SessionId}}{{end}}" class="example-button"  onclick="return pageToggle('page-01')">
                 <object data="../static/icons/java.svg" width="14%" height="14%" class="example-icon"></object>
                 <h3 class="example-label">Java</h3>
               </a>
             </div>
 
             <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-              <a href="examples/basic-nodejs-kv-get{{if $.Session}}?s={{$.Session.SessionId}}{{end}}" class="example-button">
+              <a href="examples/basic-nodejs-kv-get{{if $.Session}}?s={{$.Session.SessionId}}{{end}}" class="example-button" onclick="return pageToggle('page-03')">
                 <object data="../static/icons/nodejs.svg" width="14%" height="14%" class="example-icon"></object>
                 <h3 class="example-label">Node.js</h3>
               </a>
             </div>
 
             <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-              <a href="examples/basic-py-kv-get{{if $.Session}}?s={{$.Session.SessionId}}{{end}}" class="example-button">
+              <a href="examples/basic-py-kv-get{{if $.Session}}?s={{$.Session.SessionId}}{{end}}" class="example-button" onclick="return pageToggle('page-04')">
                 <object data="../static/icons/python.svg" width="14%" height="14%" class="example-icon"></object>
                 <h3 class="example-label">Python</h3>
               </a>
             </div>
 
             <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-              <a href="examples/basic-dotnet-kv-get{{if $.Session}}?s={{$.Session.SessionId}}{{end}}" class="example-button">
+              <a href="examples/basic-dotnet-kv-get{{if $.Session}}?s={{$.Session.SessionId}}{{end}}" class="example-button" onclick="return pageToggle('page-05')">
                 <object data="../static/icons/dotnet.svg" width="14%" height="14%" class="example-icon"></object>
                 <h3 class="example-label">.NET</h3>
               </a>
             </div>
 
             <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-              <a href="examples/basic-php-kv-get{{if $.Session}}?s={{$.Session.SessionId}}{{end}}" class="example-button">
+              <a href="examples/basic-php-kv-get{{if $.Session}}?s={{$.Session.SessionId}}{{end}}" class="example-button" onclick="return pageToggle('page-06')">
                 <object data="../static/icons/php.svg" width="14%" height="14%" class="example-icon"></object>
                 <h3 class="example-label">PHP</h3>
               </a>
             </div>
 
             <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-              <a href="examples/basic-ruby-kv-get{{if $.Session}}?s={{$.Session.SessionId}}{{end}}" class="example-button">
+              <a href="examples/basic-ruby-kv-get{{if $.Session}}?s={{$.Session.SessionId}}{{end}}" class="example-button" onclick="return pageToggle('page-07')">
                 <object data="../static/icons/ruby.svg" width="14%" height="14%" class="example-icon"></object>
                 <h3 class="example-label">Ruby</h3>
               </a>
             </div>
 
             <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-              <a href="examples/basic-scala-kv-get{{if $.Session}}?s={{$.Session.SessionId}}{{end}}" class="example-button">
+              <a href="examples/basic-scala-kv-get{{if $.Session}}?s={{$.Session.SessionId}}{{end}}" class="example-button" onclick="return pageToggle('page-08')">
                 <object data="../static/icons/scala.svg" width="14%" height="14%" class="example-icon"></object>
                 <h3 class="example-label">Scala</h3>
               </a>
             </div>
 
             <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-              <a href="examples/basic-go-kv-get{{if $.Session}}?s={{$.Session.SessionId}}{{end}}" class="example-button">
+              <a href="examples/basic-go-kv-get{{if $.Session}}?s={{$.Session.SessionId}}{{end}}" class="example-button" onclick="return pageToggle('page-09')">
                 <object data="../static/icons/golang.svg" width="14%" height="14%" class="example-icon"></object>
                 <h3 class="example-label">Go</h3>
               </a>
             </div>
 
             <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-              <a href="examples/basic-cc-kv-get{{if $.Session}}?s={{$.Session.SessionId}}{{end}}" class="example-button">
+              <a href="examples/basic-cc-kv-get{{if $.Session}}?s={{$.Session.SessionId}}{{end}}" class="example-button" onclick="return pageToggle('page-10')">
                 <object data="../static/icons/cc.svg" width="14%" height="14%" class="example-icon"></object>
                 <h3 class="example-label">C++</h3>
               </a>
@@ -208,6 +208,13 @@
               </div>
               {{end}}
             </div>
+          </div>
+
+          <div class="online-tools">
+            <h2 class="home-header">Explore Online Tools to Learn More About N1QL</h2>
+            <a href="https://query-tutorial.couchbase.com/tutorial/#1" class="nowrap">Online N1QL Tutorial</a>
+            <a href="https://index-advisor.couchbase.com/indexadvisor/#1" class="nowrap">Online N1QL Index Advisor</a>
+            <a href="https://docs.couchbase.com/server/current/n1ql/n1ql-rest-api/index.html" class="nowrap">N1QL REST API Docs</a>
           </div>
 
 
@@ -250,7 +257,7 @@
   <script>
     function pageToggle(page) {
       var main = document.getElementById("main");
-
+      console.log(page);
       var wasPageFocused = main.className.indexOf("page-focus") >= 0;
 
       if (main.className != page + " page-focus") {

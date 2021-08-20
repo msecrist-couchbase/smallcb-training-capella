@@ -170,30 +170,6 @@
           <input name="examplesToggle" id="examplesToggle"
                  type="checkbox" checked/>
 
-          <h2><label for="examplesToggle"><span class="chevron down"></span></a>Code Examples</label></h2>
-
-          <div class="div-hr">
-            <hr/>
-          </div>
-
-          <div class="pages">
-            {{range $i, $v := .Examples}}
-              {{if not .code}}
-                <a class="{{if .className}}{{.className}} {{end}}{{.page}}"
-                   {{if .nameNext}}href="/{{$.ExamplesPath}}/{{.nameNext}}{{if $.Session}}?s={{$.Session.SessionId}}{{end}}"{{end}}
-                   onclick="return pageToggle('{{.page}}')">
-                  {{.title}}
-                </a>
-                <style>
-                  main.{{.page}} .workspace .workspace-body .code-examples .pages a.{{.page}} {
-                    border: 1px solid rgba(159, 226, 100, 0.95);
-                    background-color: #333a32;
-                  }
-                </style>
-              {{end}}
-            {{end}}
-          </div>
-
           <div class="example-nav">
             <ul class="examples">
               {{range $i, $v := .Examples}}
@@ -391,6 +367,7 @@
 
   <script>
     function pageToggle(page) {
+
       var main = document.getElementById("main");
 
       var wasPageFocused = main.className.indexOf("page-focus") >= 0;
@@ -398,8 +375,8 @@
       if (main.className != page + " page-focus") {
         main.className = page + " page-focus";
         localStorage.setItem('page', page);
-
-	return true;
+        console.log(page);
+        return true;
       }
 
       main.className = "";
