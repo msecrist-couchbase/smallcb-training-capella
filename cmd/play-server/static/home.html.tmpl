@@ -257,14 +257,13 @@
   <script>
     function pageToggle(page) {
       var main = document.getElementById("main");
-      console.log(page);
       var wasPageFocused = main.className.indexOf("page-focus") >= 0;
 
       if (main.className != page + " page-focus") {
         main.className = page + " page-focus";
         localStorage.setItem('page', page);
 
-	return true;
+	    return true;
       }
 
       main.className = "";
