@@ -9,6 +9,7 @@
 
 .hidden {
   visibility: hidden;
+  display: none;
 }
 
 .session-info {
@@ -218,7 +219,6 @@ main .info-header .header-right code {
   padding: 4px;
 }
 .workspace .workspace-body .code-examples .example-nav ul.examples li.category {
-  margin-top: 20px;
   list-style: none;
   padding-top: 0.25em;
   padding-left: 8px;
@@ -250,7 +250,7 @@ main .info-header .header-right code {
 .workspace .workspace-body .code-editor {
   flex-basis: 10rem;
   flex-grow: 100;
-  margin: 0 0 0 15px;
+  /*margin: 0 0 0 15px;*/
 }
 .workspace .workspace-body .code-editor textarea.code {
   display: none;
@@ -258,17 +258,16 @@ main .info-header .header-right code {
 .workspace .workspace-body .code-editor div.code-ace {
   margin-bottom: 15px;
   margin-right: 0;
-  width: 95%;
   height: 60vh;
-
+  width: 100%;
   border-width: 1px;
   border-style: solid;
 }
 .workspace .workspace-body .code-editor input.run {
   display: inline-block;
   float: right;
+  border-bottom-left-radius: 3px;
 
-  margin-right: 25px;
   border: 0;
   padding: 3px 40px 3px 40px;
   font-weight: bold;
@@ -293,12 +292,13 @@ main .info-header .header-right code {
   flex-grow: 100;
 }
 .workspace .workspace-body .code-output iframe.output {
-  width: 95%;
-  height: 60vh;
+  width: 100%;
+  height: 50vh;
   margin-bottom: 15px;
 
   border-width: 1px;
   border-style: solid;
+  padding-top: 16px;
 }
 
 .workspace .workspace-body .code-editor .example-frame .info {
@@ -327,8 +327,6 @@ main .info-header .header-right code {
 
 .workspace .workspace-body .code-editor .sticky .empty-example-frame {
   display: flex;
-  width: 95%;
-  height: 60vh;
 }
 
 .workspace
@@ -680,7 +678,6 @@ a.prev-button {
   color: rgba(159, 226, 100, 0.95);
   text-align: right;
   margin-bottom: 20px;
-  margin-left: 20px;
 
   float: left;
   text-decoration: none;
@@ -697,7 +694,6 @@ a.next-button {
   color: rgba(159, 226, 100, 0.95);
   text-align: right;
   margin-bottom: 20px;
-  margin-right: 20px;
 
   float: right;
   text-decoration: none;
@@ -720,3 +716,144 @@ a.disable {
   pointer-events: none;
   cursor: default;
 }
+
+.example-button {
+  border-radius: 6px;
+  border: 2px solid #6c7a94;
+  display: flex !important;
+  align-items: center;
+  text-decoration: none !important;
+  margin: 8px 0;
+
+  /* Fade Effect on Hover */
+  -o-transition:.3s;
+  -ms-transition:.3s;
+  -moz-transition:.3s;
+  -webkit-transition:.3s;
+  transition:.3s;
+}
+
+.example-button:hover {
+  background-color: #6c7a94;
+  border: 2px solid #b8efe7;
+}
+
+.example-label {
+  display: flex;
+  margin: 0;
+  text-decoration-line: none;
+}
+
+.example-icon {
+  padding: 8px 14px;
+}
+
+.example-row {
+  margin-bottom: 26px;
+}
+
+h2.home-header {
+  margin: 26px 0 18px 0;
+  font-size: 20px;
+}
+
+.start-session-home {
+  margin-left: 0 !important;
+}
+
+.container {
+  margin: 0 auto;
+}
+
+.run {
+  background-color: #262a35;
+  color: rgba(159, 226, 100, 0.95);
+  text-align: right;
+  position: absolute;
+  z-index: 100;
+  right: -2px;
+}
+
+.example-info-column > .session-cta {
+  border-top: 1px solid rgba(255, 255, 255, 0.6);
+  padding-top: 18px;
+  margin: 24px 0;
+}
+
+.session-cta > a{
+  border-color: #516374;
+  background-color: #516374;
+  color: #ffffff;
+
+  display: block;
+  margin-top: 7px;
+  width: 14rem;
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 4px;
+  padding: 0.5em;
+  text-align: center;
+  text-decoration: none !important;
+}
+
+#form > div.empty-example-frame > div > div > a.example-button > img {
+  background: none;
+  width: 164px;
+  margin: 14px 14px;
+  padding: 0;
+  border: none;
+}
+
+h2.example-title {
+  margin-left: 0;
+  margin-right: 16px;
+  clear: left;
+}
+
+.example-row {
+  margin: 0 !important;
+}
+
+.editor-label {
+  position: absolute;
+  padding: 3px 6px;
+  background: #516374;
+  height: auto !important;
+  z-index: 100;
+  font-size: 12px !important;
+  border-bottom-right-radius: 3px;
+}
+
+div.example-heading > div > div > a {
+  text-decoration: none !important;
+}
+
+div.example-heading > div > div > a.disable {
+  opacity: 0.5;
+}
+
+div.example-heading > div > div > a:not(.next-button):before {
+  content: "< ";
+}
+
+div.example-heading > div > div > a.next-button:after {
+  content: " >";
+}
+
+div.example-heading > div {
+  font-size: 12px;
+}
+
+@media only screen and (min-width: 992px) {
+  .example-info-column {
+    border-right: 1px solid rgba(255, 255, 255, 0.6);
+    border-left: 1px solid rgba(255, 255, 255, 0.6);
+  }
+}
+
+div.online-tools > a{
+  display: block;
+  margin-left: 16px;
+  margin-top: 8px;
+}
+

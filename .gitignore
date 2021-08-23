@@ -11,3 +11,4 @@ Dockerfile
 /tutorials-cbsh/CURRENT
 .DS_Store
 .vimspector.json
+.idea

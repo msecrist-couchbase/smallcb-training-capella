@@ -4,7 +4,7 @@ lang: cc
 infoBefore: |
   <div>
   <a href='basic-cc-subdoc-mutate' class="prev-button">Previous Lesson</a>
-  <a href='#' class="disable" style="float:right">Next Lesson</a>
+  <a href='#' class="disable next-button" style="float:right">Next Lesson</a>
   </div>
   <br>
 code: |
@@ -82,7 +82,7 @@ code: |
       std::string key{ "airline_123" };
       {
         std::string value{ R"({"country":"Iceland", "callsign":"ICEAIR", "iata":"FI", "icao":"ICE", "id":123, "name":"Icelandair", "type":"airline"})" };
-    
+
         lcb_CMDSTORE* cmd = nullptr;
         check(lcb_cmdstore_create(&cmd, LCB_STORE_UPSERT), "create UPSERT command");
         check(lcb_cmdstore_key(cmd, key.c_str(), key.size()), "assign ID for UPSERT command");
@@ -91,21 +91,21 @@ code: |
         check(lcb_cmdstore_destroy(cmd), "destroy UPSERT command");
         lcb_wait(instance, LCB_WAIT_DEFAULT);
       }
-      
+
       lcb_install_callback(instance, LCB_CALLBACK_SDLOOKUP, reinterpret_cast<lcb_RESPCALLBACK>(sdget_callback));
-    
+
       {
           SubdocResults results;
-    
+
           lcb_SUBDOCSPECS* specs = nullptr;
           check(lcb_subdocspecs_create(&specs, 1), "create SUBDOC operations container");
-    
+
           std::vector<std::string> paths{
               "name",
           };
-    
+
           check(lcb_subdocspecs_get(specs, 0, 0, paths[0].c_str(), paths[0].size()), "create SUBDOC-GET operation");
-    
+
           lcb_CMDSUBDOC* cmd = nullptr;
           check(lcb_cmdsubdoc_create(&cmd), "create SUBDOC command");
           check(lcb_cmdsubdoc_key(cmd, key.c_str(), key.size()), "assign ID to SUBDOC command");
@@ -113,9 +113,9 @@ code: |
           check(lcb_subdoc(instance, &results, cmd), "schedule SUBDOC command");
           check(lcb_cmdsubdoc_destroy(cmd), "destroy SUBDOC command");
           check(lcb_subdocspecs_destroy(specs), "destroy SUBDOC operations");
-    
+
           lcb_wait(instance, LCB_WAIT_DEFAULT);
-    
+
           check(results.status, "status of SUBDOC operation");
           std::size_t idx = 0;
           for (const auto& entry : results.entries) {
@@ -127,7 +127,7 @@ code: |
               ++idx;
           }
       }
-    
+
       lcb_destroy(instance);
       return 0;
   }

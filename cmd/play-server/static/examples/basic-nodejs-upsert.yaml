@@ -4,7 +4,7 @@ lang: nodejs
 infoBefore: |
   <div>
   <a href='basic-nodejs-subdoc-mutate' class="prev-button dark-purple">Previous Lesson</a>
-  <a href='#' class="disable" style="float:right">Next Lesson</a>
+  <a href='#' class="disable next-button " style="float:right">Next Lesson</a>
   </div>
   <br>
 code: |
