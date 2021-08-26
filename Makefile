@@ -80,7 +80,11 @@ create:
 
 # Restart the docker container instance and wait until its
 # couchbase-server is healthy.
-restart: restart-snapshot wait-healthy
+restart: pull-image restart-snapshot wait-healthy
+
+# Pull smallcb image (only if its remote)
+pull-image:
+	echo $(IMAGE_NAME) | grep '/' && docker pull $(IMAGE_NAME) || echo ignoring-err-docker-pull
 
 # Restart the docker container instance from the vol-snapshot.
 restart-snapshot: instance-stop snapshot-reset instance-start
