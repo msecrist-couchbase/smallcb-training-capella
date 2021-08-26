@@ -96,7 +96,7 @@ instance-stop:
 	docker rm --force $(CONTAINER_NAME)-$(CONTAINER_NUM) || echo ignoring-err-docker-rm
 
 instance-start:
-	docker run --name=$(CONTAINER_NAME)-$(CONTAINER_NUM) \
+	docker run --rm --name=$(CONTAINER_NAME)-$(CONTAINER_NUM) \
                $(CONTAINER_PORTS) $(CONTAINER_EXTRAS) \
                -v $(shell pwd)/vol-instances/vol-$(CONTAINER_NUM)/:/opt/couchbase/var \
                --add-host="$(SERVICE_HOST):127.0.0.1" \
