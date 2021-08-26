@@ -93,7 +93,7 @@ restart-snapshot: instance-stop snapshot-reset instance-start
 
 instance-stop:
 	docker stop $(CONTAINER_NAME)-$(CONTAINER_NUM) || echo ignoring-err-docker-stop
-	docker rm $(CONTAINER_NAME)-$(CONTAINER_NUM) || echo ignoring-err-docker-rm
+	docker rm --force $(CONTAINER_NAME)-$(CONTAINER_NUM) || echo ignoring-err-docker-rm
 
 instance-start:
 	docker run --name=$(CONTAINER_NAME)-$(CONTAINER_NUM) \
