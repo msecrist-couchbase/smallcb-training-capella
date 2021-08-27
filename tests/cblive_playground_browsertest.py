@@ -10,7 +10,22 @@ class CBLivePlaygroundTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(self):
-        self.browser = webdriver.Chrome()
+        driver_options = os.getenv("DRIVER_OPTIONS","ui")
+        if driver_options != "ui":
+            print("Setting chrome driver options={}".format(driver_options))
+            options = webdriver.ChromeOptions()
+            executable_path = ''
+            for driver_option in driver_options.split(','):
+                if "executable_path" in driver_option:
+                    executable_path = driver_option.split('=')[1]
+                print(driver_option)
+                options.add_argument(driver_option)
+            if executable_path:
+                self.browser = webdriver.Chrome(executable_path=executable_path, options=options)
+            else:
+                self.browser = webdriver.Chrome(options=options)
+        else:
+            self.browser = webdriver.Chrome()
         self.TIMEOUT = 10
         self.url = os.getenv("CBLIVE_URL","https://couchbase.live")
 

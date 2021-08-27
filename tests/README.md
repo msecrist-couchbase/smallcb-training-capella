@@ -20,4 +20,9 @@ Suite#1: Browser automated selenium tests, which runs all examples for all langu
      See the chrome browser automatically coming and running the clicks. At the end it will show the summary counts. F --> Fail and E --> Error. Errors are something on the test code need to be fixed. Fails are the issues. On the console, you can see the output extracted from code runtime.
 
     
+    Running in Headless mode (non GUI):
+     DRIVER_OPTIONS='-headless' python cblive_playground_browsertest.py
+
+    Running with other driver options settings including executable driver path:
+       DRIVER_OPTIONS='executable_path=/usr/local/bin/chromedriver,-headless' python cblive_playground_browsertest.py
 
