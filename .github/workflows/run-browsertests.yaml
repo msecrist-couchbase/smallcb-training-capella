@@ -22,8 +22,9 @@ jobs:
       run: |
         wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
         sudo apt -qq install ./google-chrome-stable_current_amd64.deb
+        google-chrome-stable --version
     - name: Run selenium tests
       run: |
         cd tests
         pip install -r requirements.txt
-        python cblive_playground_browsertest.py 
+        DRIVER_OPTIONS='-headless' python cblive_playground_browsertest.py 
