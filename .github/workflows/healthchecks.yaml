@@ -2,6 +2,7 @@ name: Playground health checks
 
 on:
   push:
+    branches:
     - master
   schedule:
     - cron: "0 */6 * * *"
@@ -30,5 +31,5 @@ jobs:
         DRIVER_OPTIONS='-headless' CBLIVE_URL='https://couchbase.live' python cblive_playground_browsertest.py  2>&1 | tee -a ./tests_run_log.txt
         env
         chmod a+x ../.github/workflows/send_pg_health.sh
-        ../.github/workflows/send_pg_health.sh ./tests_run_log.txt ${GITHUB_RUN_ID} ${{ secrets.SLACK_WEBHOOK_URL_TEST }} ${{ secrets.API_TOKEN_TO_GITHUB }}
+        ../.github/workflows/send_pg_health.sh ./tests_run_log.txt ${GITHUB_RUN_ID} ${{ secrets.SLACK_WEBHOOK_URL }} ${{ secrets.API_TOKEN_TO_GITHUB }}
         
