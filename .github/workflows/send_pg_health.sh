@@ -8,7 +8,7 @@ if [ "${LOG_FILE}" == "" ]; then
    exit 1
 fi
 
-cat ${LOG_FILE} | tail -3 > /tmp/attachment.txt
+cat ${LOG_FILE} | tail -5 |head -3 > /tmp/attachment.txt
 TEST_STATUS=`cat /tmp/attachment.txt|tail -1`
 TEST_TOTALS=`cat /tmp/attachment.txt|head -1`
 
