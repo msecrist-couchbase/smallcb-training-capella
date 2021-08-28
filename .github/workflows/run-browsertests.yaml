@@ -1,8 +1,9 @@
 name: Playground brower selenium CI
 
-on: [push]
+on:
+  push:
   schedule:
-      - cron: "* */6 * * *"
+    - cron: "* */6 * * *"
 
 jobs:
   build:
