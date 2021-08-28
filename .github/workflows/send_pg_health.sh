@@ -1,16 +1,18 @@
-#!/bin/bash
-SLACK_WEBHOOK_URL="$1"
+#!/bin/bash -x
+LOG_FILE=$1
 RUN_ID="$2"
-LOG_FILE=$3
+SLACK_WEBHOOK_URL="$3"
 
 if [ "${LOG_FILE}" == "" ]; then
-   echo "Usage: $0 SLACK_WEBHOOK_URL RUN_ID LOG_FILE"
+   echo "Usage: $0 LOG_FILE RUN_ID SLACK_WEBHOOK_URL"
    exit 1
 fi
 
 cat ${LOG_FILE} | tail -3 > /tmp/attachment.txt
 TEST_STATUS=`cat /tmp/attachment.txt|tail -1`
 TEST_TOTALS=`cat /tmp/attachment.txt|head -1`
+
+cat /tmp/attachment.txt
 
 TIME_STAMP="`date +%s`"
 
@@ -39,4 +41,5 @@ cat <<EOT > /tmp/slack_message.json
 }
 EOT
 
+cat /tmp/slack_message.json
 curl -X POST -H 'Content-type: application/json' --data @/tmp/slack_message.json ${SLACK_WEBHOOK_URL}

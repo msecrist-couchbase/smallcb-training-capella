@@ -1,6 +1,8 @@
 name: Playground brower selenium CI
 
 on: [push]
+  schedule:
+      - cron: "* */6 * * *"
 
 jobs:
   build:
@@ -28,7 +30,7 @@ jobs:
         cd tests
         pip install -r requirements.txt
         DRIVER_OPTIONS='-headless' python cblive_playground_browsertest.py | tee ./tests_run_log.txt
-        echo ${GITHUB_ACTION} ${GITHUB_JOB} ${GITHUB_RUN_ID}
+        env
         chmod a+x ../.github/workflows/send_pg_health.sh
-        ../.github/workflows/send_pg_health.sh ${{ secrets.SLACK_WEBHOOK_URL_TEST }} ${GITHUB_ACTION} ./tests_run_log.txt
+        ../.github/workflows/send_pg_health.sh ./tests_run_log.txt ${GITHUB_RUN_ID} ${{ secrets.SLACK_WEBHOOK_URL_TEST }} 
         
