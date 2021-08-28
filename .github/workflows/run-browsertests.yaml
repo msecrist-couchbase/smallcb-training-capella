@@ -28,7 +28,7 @@ jobs:
         cd tests
         pip install -r requirements.txt
         DRIVER_OPTIONS='-headless' python cblive_playground_browsertest.py | tee ./tests_run_log.txt
-        chmod a+x ./send_pg_health.sh
         echo ${GITHUB_ACTION} ${GITHUB_JOB} ${GITHUB_RUN_ID}
-        ./send_pg_health.sh ${{ secrets.SLACK_WEBHOOK_URL_TEST }} ${GITHUB_ACTION} ./tests_run_log.txt
+        chmod a+x ../.github/workflows/send_pg_health.sh
+        ../.github/workflows/send_pg_health.sh ${{ secrets.SLACK_WEBHOOK_URL_TEST }} ${GITHUB_ACTION} ./tests_run_log.txt
         
