@@ -139,8 +139,13 @@ play-server-src = \
         cmd/play-server/session.go \
         cmd/play-server/captcha.go
 
-play-server: $(play-server-src)
+play-server: test-play-server build-play-server
+
+build-play-server: $(play-server-src)
 	go build ./cmd/play-server
+
+test-play-server: $(play-server-src)
+	go test ./cmd/play-server
 
 image: 
 	docker build . -f Dockerfile-playserver -t play-server
