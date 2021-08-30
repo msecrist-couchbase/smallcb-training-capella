@@ -729,3 +729,9 @@ tours-multi/first-xdcr tour...
 
 http://localhost:8080/session?groupSize=2&bodyClass=normal&e=static/tours-multi/aaa.html%3Fname%3Dfirst-xdcr&title=Try+Data+Streaming+with+Couchbase...&init=tours-multi/shs&defaultBucket=NONE
 
+For example...
+
+http://couchbase.live/session?groupSize=2&bodyClass=normal&e=static/tours-multi/aaa.html%3Fname%3Dfirst-xdcr&title=Try+Data+Streaming+with+Couchbase...&init=tours-multi/shs&defaultBucket=NONE
+
+
+
