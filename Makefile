@@ -80,7 +80,11 @@ create:
 
 # Restart the docker container instance and wait until its
 # couchbase-server is healthy.
-restart: restart-snapshot wait-healthy
+restart: pull-image restart-snapshot wait-healthy
+
+# Pull smallcb image (only if its remote)
+pull-image:
+	echo $(IMAGE_NAME) | grep '/' && docker pull $(IMAGE_NAME) || echo ignoring-err-docker-pull
 
 # Restart the docker container instance from the vol-snapshot.
 restart-snapshot: instance-stop snapshot-reset instance-start
@@ -89,10 +93,10 @@ restart-snapshot: instance-stop snapshot-reset instance-start
 
 instance-stop:
 	docker stop $(CONTAINER_NAME)-$(CONTAINER_NUM) || echo ignoring-err-docker-stop
-	docker rm $(CONTAINER_NAME)-$(CONTAINER_NUM) || echo ignoring-err-docker-rm
+	docker rm --force $(CONTAINER_NAME)-$(CONTAINER_NUM) || echo ignoring-err-docker-rm
 
 instance-start:
-	docker run --name=$(CONTAINER_NAME)-$(CONTAINER_NUM) \
+	docker run --rm --name=$(CONTAINER_NAME)-$(CONTAINER_NUM) \
                $(CONTAINER_PORTS) $(CONTAINER_EXTRAS) \
                -v $(shell pwd)/vol-instances/vol-$(CONTAINER_NUM)/:/opt/couchbase/var \
                --add-host="$(SERVICE_HOST):127.0.0.1" \
