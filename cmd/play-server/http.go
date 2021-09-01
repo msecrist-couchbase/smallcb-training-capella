@@ -33,6 +33,8 @@ func HttpMuxInit(mux *http.ServeMux) {
 
 	mux.HandleFunc("/static-data", HttpHandleStaticData)
 
+  mux.HandleFunc("/admin/health", HttpHandleHealth)
+
 	mux.HandleFunc("/admin/dashboard", HttpHandleAdminDashboard)
 
 	mux.HandleFunc("/admin/stats", HttpHandleAdminStats) // Returns JSON.
