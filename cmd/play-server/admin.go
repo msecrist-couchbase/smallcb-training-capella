@@ -260,3 +260,23 @@ func HttpHandleAdminSessionsReleaseContainers(
 
 	w.Write(j)
 }
+
+// ------------------------------------------------
+// A dynamic healthcheck that fails if error ratio is > 10%
+// ------------------------------------------------
+
+func HttpHandleHealth(w http.ResponseWriter, r *http.Request) {
+	StatsRefresh()
+
+	statsM.Lock()
+
+  errRatio := float64(statsNums["http.Run.err"]) / float64(statsNums["http.Run"])
+
+  if errRatio > 0.1 {
+    w.WriteHeader(500)
+  } else {
+    w.WriteHeader(200)
+  }
+
+  statsM.Unlock()
+}

@@ -33,6 +33,8 @@ func HttpMuxInit(mux *http.ServeMux) {
 
 	mux.HandleFunc("/static-data", HttpHandleStaticData)
 
+  mux.HandleFunc("/admin/health", HttpHandleHealth)
+
 	mux.HandleFunc("/admin/dashboard", HttpHandleAdminDashboard)
 
 	mux.HandleFunc("/admin/stats", HttpHandleAdminStats) // Returns JSON.
@@ -494,8 +496,9 @@ func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 	}
 
 	code := strings.Join(codeVals, "")
+	from := r.FormValue("from")
 
-	code = CodeFromFixup(code, r.FormValue("program"), lang, r.FormValue("from"))
+	code = CodeFromFixup(code, r.FormValue("program"), lang, from)
 
 	err := CheckVerSDK(lang, r.FormValue("verSDK"))
 	if err != nil {
@@ -569,15 +572,18 @@ func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
-
+	var t string
 	if err != nil {
 		StatsNumInc("http.Run.err")
-
-		t := http.StatusText(http.StatusInternalServerError) +
-			fmt.Sprintf(", HttpHandleRun, err: %v\n"+
-				"------------------------\n%s\n",
-				err, result)
-
+		// If there is a run time error, hide it from the Documentation runs. Continue to log the error on the server.
+		if from == "docs" {
+			t = "Sorry, our servers are in maintenance.\nThese servers will be back soon.\n"
+		} else {
+			t = http.StatusText(http.StatusInternalServerError) +
+				fmt.Sprintf(", HttpHandleRun, err: %v\n"+
+					"------------------------\n%s\n",
+					err, result)
+		}
 		if strings.Index(t, "err: timeout") > 0 {
 			t = "Whoops, timeout error.\n" +
 				" -- perhaps try again later\n" +
