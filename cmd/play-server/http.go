@@ -447,7 +447,7 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 // ------------------------------------------------
 
 // Executes some code posted in request body
-// parameters: 
+// parameters:
 // - s: session
 // - lang: language of the code
 // - code: code to run
@@ -461,7 +461,7 @@ func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 
 	session := sessions.SessionGet(s)
 	if session == nil && s != "" {
-    // if session key was passed by there was no session with such key
+		// if session key was passed by there was no session with such key
 		StatsNumInc("http.Run.err")
 
 		t := http.StatusText(http.StatusNotFound) +
@@ -494,8 +494,9 @@ func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 	}
 
 	code := strings.Join(codeVals, "")
+	from := r.FormValue("from")
 
-	code = CodeFromFixup(code, r.FormValue("program"), lang, r.FormValue("from"))
+	code = CodeFromFixup(code, r.FormValue("program"), lang, from)
 
 	err := CheckVerSDK(lang, r.FormValue("verSDK"))
 	if err != nil {
@@ -569,15 +570,18 @@ func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
-
+	var t string
 	if err != nil {
 		StatsNumInc("http.Run.err")
-
-		t := http.StatusText(http.StatusInternalServerError) +
-			fmt.Sprintf(", HttpHandleRun, err: %v\n"+
-				"------------------------\n%s\n",
-				err, result)
-
+		// If there is a run time error, hide it from the Documentation runs. Continue to log the error on the server.
+		if from == "docs" {
+			t = "Sorry, our servers are in maintenance.\nThese servers will be back soon.\n"
+		} else {
+			t = http.StatusText(http.StatusInternalServerError) +
+				fmt.Sprintf(", HttpHandleRun, err: %v\n"+
+					"------------------------\n%s\n",
+					err, result)
+		}
 		if strings.Index(t, "err: timeout") > 0 {
 			t = "Whoops, timeout error.\n" +
 				" -- perhaps try again later\n" +
