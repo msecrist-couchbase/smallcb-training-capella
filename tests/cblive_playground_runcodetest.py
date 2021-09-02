@@ -12,8 +12,7 @@ class CBLivePlaygroundRunCodeTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(self):
-        self.TIMEOUT = 10
-        self.url = os.getenv("CBLIVE_URL","https://couchbase.live")
+        self.url = os.getenv("CBLIVE_URL","http://localhost:8080")
         self.code_dir = os.getenv("CODE_DIR", "../cmd/play-server/static/examples")
         self.cb_host = os.getenv("CB_HOST", "127.0.0.1")
         self.cb_user = os.getenv("CB_USER", "Administrator")
