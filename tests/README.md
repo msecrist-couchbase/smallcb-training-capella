@@ -35,8 +35,15 @@ Suite#2: Running all the examples code from the .yaml files using /run requests.
     
     $ pip3 install -r requirements.txt
     
-    $ CBLIVE_URL=https://couchbase.live CODE_DIR=cmd/play-server/static/examples CB_USER=Administrator CB_PWD=${CB_ADMIN_PASSWORD} \
-		python tests/cblive_playground_runcodetest.py
-		
     $ CBLIVE_URL=http://localhost:8080 CODE_DIR=cmd/play-server/static/examples \
 		python tests/cblive_playground_runcodetest.py
+    
+    (or) 
+    
+    $ CBLIVE_URL=https://couchbase.live CODE_DIR=cmd/play-server/static/examples \
+		python tests/cblive_playground_runcodetest.py
+	
+	(or)
+    $ CBLIVE_URL=https://couchbase.live CODE_DIR=cmd/play-server/static/examples CB_USER=xxxx CB_PWD=xxxx \
+		python tests/cblive_playground_runcodetest.py
+	
