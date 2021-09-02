@@ -573,7 +573,7 @@ func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 		StatsNumInc("http.Run.err")
 		// If there is a run time error, hide it from the Documentation runs. Continue to log the error on the server.
 		if from == "docs" {
-			t = "Sorry, our servers are in maintenance.\nThese servers will be back soon\n"
+			t = "Sorry, our servers are in maintenance.\nThese servers will be back soon.\n"
 		} else {
 			t = http.StatusText(http.StatusInternalServerError) +
 				fmt.Sprintf(", HttpHandleRun, err: %v\n"+
