@@ -5,10 +5,13 @@ Playground tests
 
 Suite#1: Browser automated selenium tests, which runs all examples for all languages.
 
-    Runtime Steps:
-   1) $ pip3 install -r requirements.txt
+    Runtime Steps: (~10-15mins)
+   1) pip3 install -r requirements.txt
+   
    2) Download Chrome browser webdriver ChromeDriver 92.0.4515.107 from https://sites.google.com/chromium.org/driver/downloads
+       
        $ mv chromedriver /usr/local/bin/ or cp chromedriver /usr/local/bin/
+   
    3) Run the tests
 
      To run on couchbase.live:
@@ -26,3 +29,21 @@ Suite#1: Browser automated selenium tests, which runs all examples for all langu
     Running with other driver options settings including executable driver path:
        DRIVER_OPTIONS='executable_path=/usr/local/bin/chromedriver,-headless' python cblive_playground_browsertest.py
 
+
+Suite#2: Running all the examples code from the .yaml files using /run requests.
+    Runtime steps:
+    
+    $ pip3 install -r requirements.txt
+    
+    $ CBLIVE_URL=http://localhost:8080 CODE_DIR=cmd/play-server/static/examples \
+		python tests/cblive_playground_runcodetest.py
+    
+    (or) 
+    
+    $ CBLIVE_URL=https://couchbase.live CODE_DIR=cmd/play-server/static/examples \
+		python tests/cblive_playground_runcodetest.py
+	
+	(or)
+    $ CBLIVE_URL=https://couchbase.live CODE_DIR=cmd/play-server/static/examples CB_USER=xxxx CB_PWD=xxxx \
+		python tests/cblive_playground_runcodetest.py
+	
