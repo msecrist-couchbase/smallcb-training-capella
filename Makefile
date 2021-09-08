@@ -146,6 +146,10 @@ build-play-server: $(play-server-src)
 
 test-play-server: $(play-server-src)
 	go test ./cmd/play-server
+	pip3 install -r tests/requirements.txt
+	CBLIVE_URL=http://localhost:8080 CODE_DIR=cmd/play-server/static/examples \
+		python3 tests/cblive_playground_runcodetest.py
+
 
 image: 
 	docker build . -f Dockerfile-playserver -t play-server
