@@ -1,6 +1,8 @@
 @startuml Playground
+title Playground process
 skinparam Style strict
-actor PlayServerOps #red
+actor DevOps #red
+actor Developer #blue
 participant Main
 participant Admin
 participant Restarter
@@ -12,10 +14,9 @@ participant MainTemplate
 participant HttpProxy
 participant Cookie
 participant httputil.ReverseProxy
-actor Developer #blue
 
 
-PlayServerOps -> Main : run play-server
+DevOps -> Main : run play-server
 activate Main
 Main -> Admin ++ : send StatsInfo - start time and args
 return ok
@@ -35,11 +36,10 @@ loop containers
 end
 Main -> Admin ++ : start stats history (StatsHistsRun) sample collection
 return ok
-PlayServerOps <-- Main : ready
+DevOps <-- Main : ready
 deactivate Main
 |||
 
-actor Developer #blue
 Developer -> Http ++:  request :8080/ url
 Http -> Developer : get form values - m (mesg), s (sessionId) 
 Http -> Session ++ : get session corresponding to sessionId (s)
@@ -134,6 +134,7 @@ else session is null
     end group
 end
 Developer <-- Http : Emit output
+
 
 |||
 Developer -> HttpProxy ++:  request CB :8091/ url

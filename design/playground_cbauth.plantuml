@@ -1,0 +1,31 @@
+@startuml Playground_cbauth
+title <font style="underscore">Playground user code auth process
+skinparam Style strict
+actor Developer
+participant Http
+participant HttpProxy
+participant AuthProxy
+
+Developer -> Http : get ET (Encrypted Text) for cburl,cbuser,cbpwd
+Http -> AuthProxy ++ : get ET string
+AuthProxy -> AuthProxy : create ET using internal symmetric key/secret salt
+note left
+ encrypt with internal key + base64 encode to get the encrypted text 
+ of cburl:cbuser:cbpwd:other
+ Example: https://play.golang.org/p/4FQBAeHgRs
+end note
+Http <-- AuthProxy : return ET string
+AuthProxy --
+Developer <-- Http : return ET string
+
+Developer -> Http : /run code having ET (github code run now)
+Http -> AuthProxy : get url, user, pwd
+note left
+    base64 decode + decrypt with internal key 
+    to get back clear text cburl:cbuser:cbpwd:other
+    Example: https://play.golang.org/p/4FQBAeHgRs
+end note
+return ok
+
+
+@enduml

@@ -1,0 +1,41 @@
+@startuml Playground_home
+title Playground home
+skinparam Style strict
+actor Developer #blue
+participant Session
+participant Http
+participant Run
+participant MainTemplate
+
+Developer -> Http ++:  request :8080/ url
+Http -> Developer : get form values - m (mesg), s (sessionId) 
+Http -> Session ++ : get session corresponding to sessionId (s)
+return session
+alt session is empty, s is not empty, and m is empty
+    Http -> Http : redirect to /?m=session-timeout
+end
+Http -> Developer : get form value - name
+alt url path has '..'
+    Developer <-- Http: <font color="red">set Bad request status,  err: path has '..'
+end
+Http -> Developer : get form values - code, lang, view, program, from, verSDK 
+Http -> Http : fix code, replace all code: Administrator with Developername
+alt lang is java
+   Http -> Http : replace all code "public class <program>" with "class Program"
+else lang is scala
+   Http -> Http : replace all code: "object <program>"  with "object Program"
+else lang is dotnet
+    Http -> Http : replace all code: "class <program>"  with "class Program"
+end
+Http -> Http : check for verSdk incompatible with current verSDKCur
+alt verSdk incompatible with current verSDKCur
+    Developer <-- Http :  <font color="red">set Bad request status, err: incompatible sdk
+end
+Http -> MainTemplate ++ : emit with form values - title, highlights, insertBefore, insertAfter
+Developer <-- MainTemplate : html response
+deactivate MainTemplate
+deactivate Http
+
+
+
+@enduml
