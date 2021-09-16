@@ -80,8 +80,15 @@ Changes to the static files (e.g., HTML templates, CSS, examples, etc)
 should not need a re-make and should be immediately visible in
 the next web browser page refresh.
 
-To run the tests (all examples on all languages), then execute the below.
-  make test-play-server
+To run the tests (all examples on all languages), then execute the below (which would start the playserver and run the tests).
+  make test-examples
+
+To start the play server:
+  make start-play-server
+
+To stop the play server:
+  make stop-play-server
+
 
 -------------------------
 Production usage should set the CB_ADMIN_PASSWORD env

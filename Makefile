@@ -146,6 +146,16 @@ build-play-server: $(play-server-src)
 
 test-play-server: $(play-server-src)
 	go test ./cmd/play-server
+
+start-play-server:
+	./play-server -sessionsMaxAge=60m -sessionsMaxIdle=60m -containers=2 -restarters=2 -codeDuration=3m -containerWaitDuration=1m &
+	sleep 10
+
+stop-play-server:
+	pkill play-server || true
+	docker rm $(shell docker ps -aq) --force || true
+
+test-examples: start-play-server
 	pip3 install -r tests/requirements.txt
 	CBLIVE_URL=http://localhost:8080 CODE_DIR=cmd/play-server/static/examples \
 		python3 tests/cblive_playground_runcodetest.py
