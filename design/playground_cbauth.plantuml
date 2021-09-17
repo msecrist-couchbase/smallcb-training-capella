@@ -1,31 +1,32 @@
 @startuml Playground_cbauth
-title <font style="underscore">Playground user code auth process
+title <font style="underscore">Playground encrypted password support
 skinparam Style strict
 actor Developer
 participant Http
-participant HttpProxy
-participant AuthProxy
+participant ET
 
-Developer -> Http : get ET (Encrypted Text) for cburl,cbuser,cbpwd
-Http -> AuthProxy ++ : get ET string
-AuthProxy -> AuthProxy : create ET using internal symmetric key/secret salt
+Developer -> Http ++ : 1. /et?ct=password \nto get ET (Encrypted Text)
+Http -> ET ++ : encrypt(internal key,cleartext)
 note left
- encrypt with internal key + base64 encode to get the encrypted text 
- of cburl:cbuser:cbpwd:other
- Example: https://play.golang.org/p/4FQBAeHgRs
+ Encrypt with internal key + base64 encode to get the encrypted text 
+ of cbpwd or other cbuser/cburl
+ Examples: https://play.golang.org/p/4FQBAeHgRs
+ https://www.melvinvivas.com/how-to-encrypt-and-decrypt-data-using-aes
 end note
-Http <-- AuthProxy : return ET string
-AuthProxy --
-Developer <-- Http : return ET string
+return ET string
+Developer <-- Http  --: return ET string
 
-Developer -> Http : /run code having ET (github code run now)
-Http -> AuthProxy : get url, user, pwd
+
+Developer -> Http ++ : 2. /run code having ET surround with %%%,\n like %%%<encryptedtext>%%% \n(in the github code to run now)
+Http -> ET ++: decrypt(internal key, encryptedtext)
 note left
-    base64 decode + decrypt with internal key 
-    to get back clear text cburl:cbuser:cbpwd:other
-    Example: https://play.golang.org/p/4FQBAeHgRs
+    Search for any %%%(.%)%%% in the code.
+    Decrypt with base64 decode + decrypt with internal key 
+    to get back clear text. 
+    Replace the code internally before execution.
 end note
-return ok
+return clear text string
+return result
 
 
 @enduml
