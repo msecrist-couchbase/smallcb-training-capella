@@ -9,7 +9,7 @@ var (
 	codeDuration = flag.Duration("codeDuration", 20*time.Second,
 		"duration that a client's request code may run on an assigned container instance")
 
-	codeMaxLen = flag.Int("codeMaxLen", 8000,
+	codeMaxLen = flag.Int("codeMaxLen", 10000,
 		"max length of a client's request code in bytes")
 
 	containerNamePrefix = flag.String("containerNamePrefix", "smallcb-",
