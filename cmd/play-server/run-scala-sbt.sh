@@ -11,4 +11,4 @@ if [ "${FILEPATH}" != "" ]; then
     fi
 fi
 cp /run-scala-build.sbt ./build.sbt
-sbt run
+sbt --batch -Dsbt.server.forcestart=true run

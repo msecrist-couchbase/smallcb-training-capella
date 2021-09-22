@@ -156,6 +156,9 @@ class CBLivePlaygroundTest(unittest.TestCase):
     def test_ex_basic_dotnet_query_rows(self):
         self.run_example_test(page = "page-05", ex_id = "ex-basic-dotnet-query-rows")
 
+    def test_basic_dotnet_query_named_param(self):
+        self.run_example_test(page = "page-05", ex_id = "ex-basic-dotnet-query-named-param")
+
     def test_basic_dotnet_query_positional_param(self):
         self.run_example_test(page = "page-05", ex_id = "ex-basic-dotnet-query-positional-param")
 
@@ -174,6 +177,9 @@ class CBLivePlaygroundTest(unittest.TestCase):
 
     def test_ex_basic_php_query_rows(self):
         self.run_example_test(page = "page-06", ex_id = "ex-basic-php-query-rows")
+
+    def test_basic_php_query_named_param(self):
+        self.run_example_test(page = "page-06", ex_id = "ex-basic-php-query-named-param")
 
     def test_basic_php_query_positional_param(self):
         self.run_example_test(page = "page-06", ex_id = "ex-basic-php-query-positional-param")
@@ -194,6 +200,9 @@ class CBLivePlaygroundTest(unittest.TestCase):
     def test_ex_basic_ruby_query_rows(self):
         self.run_example_test(page = "page-07", ex_id = "ex-basic-ruby-query-rows")
 
+    def test_basic_ruby_query_named_param(self):
+        self.run_example_test(page = "page-07", ex_id = "ex-basic-ruby-query-named-param")
+
     def test_basic_ruby_query_positional_param(self):
         self.run_example_test(page = "page-07", ex_id = "ex-basic-ruby-query-positional-param")
 
@@ -212,6 +221,9 @@ class CBLivePlaygroundTest(unittest.TestCase):
 
     def test_ex_basic_scala_query_rows(self):
         self.run_example_test(page = "page-08", ex_id = "ex-basic-scala-query-rows")
+
+    def test_basic_scala_query_named_param(self):
+        self.run_example_test(page = "page-08", ex_id = "ex-basic-scala-query-named-param")
 
     def test_basic_scala_query_positional_param(self):
         self.run_example_test(page = "page-08", ex_id = "ex-basic-scala-query-positional-param")
@@ -232,6 +244,9 @@ class CBLivePlaygroundTest(unittest.TestCase):
     def test_ex_basic_go_query_rows(self):
         self.run_example_test(page = "page-09", ex_id = "ex-basic-go-query-rows")
 
+    def test_basic_go_query_named_param(self):
+        self.run_example_test(page = "page-09", ex_id = "ex-basic-go-query-named-param")
+
     def test_basic_go_query_positional_param(self):
         self.run_example_test(page = "page-09", ex_id = "ex-basic-go-query-positional-param")
 
@@ -250,6 +265,9 @@ class CBLivePlaygroundTest(unittest.TestCase):
 
     def test_ex_basic_cc_query_rows(self):
         self.run_example_test(page = "page-10", ex_id = "ex-basic-cc-query-rows")
+
+    def test_basic_cc_query_named_param(self):
+        self.run_example_test(page = "page-10", ex_id = "ex-basic-cc-query-named-param")
 
     def test_basic_cc_query_positional_param(self):
         self.run_example_test(page = "page-10", ex_id = "ex-basic-cc-query-positional-param")
