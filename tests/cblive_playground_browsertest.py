@@ -74,6 +74,7 @@ class CBLivePlaygroundTest(unittest.TestCase):
         output = browser.find_element_by_xpath('//html/body/pre')
         run_output = output.text
         self.assertNotIn("Internal Server Error", run_output)
+        self.assertNotIn("Couchbase Error:", run_output)
         print("output=" + run_output)
         return run_output
 

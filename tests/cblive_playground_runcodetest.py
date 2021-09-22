@@ -37,6 +37,7 @@ class CBLivePlaygroundRunCodeTest(unittest.TestCase):
         request_url = "{0}/run?lang={1}".format(self.url, lang)
         run_output = requests.post(request_url, data=code, headers = headers).text
         self.assertNotIn("Internal Server Error", run_output)
+        self.assertNotIn("Couchbase Error:", run_output)
         output = unescape(run_output).split("<pre>")[1].split("</pre>")[0]
         print(output)
         return output
