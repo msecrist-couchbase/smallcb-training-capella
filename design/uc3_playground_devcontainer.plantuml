@@ -1,0 +1,24 @@
+@startuml CouchbaseDevContainer
+title \nUse Case#3. Couchbase Dev container - CB local\n
+skinparam Style strict
+skinparam lifelineStrategy solid
+
+actor Developer
+rectangle Client {
+    usecase (couchbase-dev-container \n gitrepo) as UC1
+usecase UC2 as "VS Code
+Remote containers 
+--
+Couchbase SDKs
+Playground Examples 
+--
+on developer machine"
+}
+rectangle "Data Layer" {
+    usecase (\n\nCouchbase Server - Community\n on developer machine\n\n) as UC3
+}
+Developer -> UC1
+UC1 -> UC2
+UC2 -> UC3
+
+@enduml

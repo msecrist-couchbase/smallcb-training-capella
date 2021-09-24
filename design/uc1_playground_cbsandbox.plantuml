@@ -1,0 +1,20 @@
+@startuml PlaygroundCBSandbox
+title \nUse Case#1. Playground with CB Sandbox\n
+skinparam Style strict
+skinparam lifelineStrategy solid
+
+actor Developer
+rectangle "Client" {
+    usecase "Browser\n" as UC1
+}
+rectangle "Middle Tier" {
+    usecase (Playground Middle tier\n on Sandbox) as UC2
+}
+rectangle "Data Layer" {
+    usecase (Couchbase Server - Enterprise\n on Sandbox) as UC3
+}
+Developer -> UC1
+UC1 -> UC2
+UC2 -> UC3
+
+@enduml

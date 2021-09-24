@@ -1,0 +1,26 @@
+@startuml PlaygroundDeveloperCLI
+title \nUse Case#20. Developer CLI\n
+skinparam Style strict
+skinparam lifelineStrategy solid
+
+actor Developer
+rectangle Client {
+    usecase Cbsh as UC1
+    usecase Capellashell as UC2
+}
+rectangle "Data Layer" {
+    usecase (Couchbase Cluster - Enterprise\n on Capella) as UC3
+}
+rectangle "Data Layer" {
+    usecase (Couchbase Server - Community\n on developer machine) as UC4
+}
+rectangle "Data Layer" {
+    usecase (Couchbase cluster\n onpremise) as UC5
+}
+Developer --> UC1 : cli
+Developer --> UC2 : cli
+UC2 --> UC3
+UC1 --> UC4
+UC1 --> UC5
+
+@enduml
