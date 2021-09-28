@@ -796,6 +796,10 @@ h2.home-header {
   text-decoration: none !important;
 }
 
+.example-info-column {
+  position: relative;
+}
+
 #form > div.empty-example-frame > div > div > a.example-button > img {
   background: none;
   width: 164px;
@@ -866,8 +870,10 @@ div.online-tools > a{
   margin-top: 35px !important;
 }
 
-.back-button {
-  margin-top: 40px;
+.return-home-button {
+  /*margin-top: 140px;*/
+  position: absolute;
+  bottom: 0;
   padding: 8px 16px;
   width: fit-content;
 }
@@ -877,7 +883,3 @@ div.online-tools > a{
   margin: 45px auto 30px;
 }
 
-.bottom-wrapper {
-  width: 98%;
-  margin: 45px auto 30px;
-}
