@@ -107,84 +107,122 @@
       <ul class="progress-indicator">
         {{/* Determine If KV Get Completed */}}
         {{if or
-        (eq .Title "Key Value Get")
-        (eq .Title "Query Rows")
-        (eq .Title "Query w/ Named Param")
-        (eq .Title "Query w/ Positional Param")
-        (eq .Title "Sub-document Lookup")
-        (eq .Title "Sub-document Mutate")
-        (eq .Title "Upsert")
+          (eq .Title "Key Value Get")
+          (eq .Title "Query Rows")
+          (eq .Title "Query w/ Named Param")
+          (eq .Title "Query w/ Positional Param")
+          (eq .Title "Sub-document Lookup")
+          (eq .Title "Sub-document Mutate")
+          (eq .Title "Transactions KV Mutate")
+          (eq .Title "Transactions N1QL")
+          (eq .Title "Upsert")
         }}
-          <li class="completed"> <span class="bubble"></span> K/V Get </li>
+          <li class="completed"><span class="bubble"></span> K/V Get</li>
         {{else}}
-          <li> <span class="bubble"></span> K/V Get </li>
+          <li><span class="bubble"></span> K/V Get</li>
         {{end}}
 
         {{/* Determine If Query Rows Completed */}}
         {{if or
-        (eq .Title "Query Rows")
-        (eq .Title "Query w/ Named Param")
-        (eq .Title "Query w/ Positional Param")
-        (eq .Title "Sub-document Lookup")
-        (eq .Title "Sub-document Mutate")
-        (eq .Title "Upsert")
+          (eq .Title "Query Rows")
+          (eq .Title "Query w/ Named Param")
+          (eq .Title "Query w/ Positional Param")
+          (eq .Title "Sub-document Lookup")
+          (eq .Title "Sub-document Mutate")
+          (eq .Title "Transactions KV Mutate")
+          (eq .Title "Transactions N1QL")
+          (eq .Title "Upsert")
         }}
-          <li class="completed"> <span class="bubble"></span> Query Rows </li>
+          <li class="completed"><span class="bubble"></span> Query Rows</li>
         {{else}}
-          <li> <span class="bubble"></span> Query Rows </li>
+          <li><span class="bubble"></span> Query Rows</li>
         {{end}}
 
         {{/* Determine If Query w/ Named Param Completed */}}
         {{if or
-        (eq .Title "Query w/ Named Param")
-        (eq .Title "Query w/ Positional Param")
-        (eq .Title "Sub-document Lookup")
-        (eq .Title "Sub-document Mutate")
-        (eq .Title "Upsert")
+          (eq .Title "Query w/ Named Param")
+          (eq .Title "Query w/ Positional Param")
+          (eq .Title "Sub-document Lookup")
+          (eq .Title "Sub-document Mutate")
+          (eq .Title "Transactions KV Mutate")
+          (eq .Title "Transactions N1QL")
+          (eq .Title "Upsert")
         }}
-          <li class="completed"> <span class="bubble"></span> Query w/ Named Param </li>
+          <li class="completed"><span class="bubble"></span> Query w/ Named Param</li>
         {{else}}
-          <li> <span class="bubble"></span> Query w/ Named Param </li>
+          <li><span class="bubble"></span> Query w/ Named Param</li>
         {{end}}
 
         {{/* Determine If Query w/ Positional Param Completed */}}
         {{if or
-        (eq .Title "Query w/ Positional Param")
-        (eq .Title "Sub-document Lookup")
-        (eq .Title "Sub-document Mutate")
-        (eq .Title "Upsert")
+          (eq .Title "Query w/ Positional Param")
+          (eq .Title "Sub-document Lookup")
+          (eq .Title "Sub-document Mutate")
+          (eq .Title "Transactions KV Mutate")
+          (eq .Title "Transactions N1QL")
+          (eq .Title "Upsert")
         }}
-          <li class="completed"> <span class="bubble"></span> Query w/ Positional Param </li>
+          <li class="completed"><span class="bubble"></span> Query w/ Positional Param</li>
         {{else}}
-          <li> <span class="bubble"></span> Query w/ Positional Param </li>
+          <li><span class="bubble"></span> Query w/ Positional Param</li>
         {{end}}
 
         {{/* Determine If Sub Document Lookup Completed */}}
         {{if or
-        (eq .Title "Sub-document Lookup")
-        (eq .Title "Sub-document Mutate")
-        (eq .Title "Upsert")
+          (eq .Title "Sub-document Lookup")
+          (eq .Title "Sub-document Mutate")
+          (eq .Title "Transactions KV Mutate")
+          (eq .Title "Transactions N1QL")
+          (eq .Title "Upsert")
         }}
-          <li class="completed"> <span class="bubble"></span> Sub-Document Lookup </li>
+          <li class="completed"><span class="bubble"></span> Sub-Document Lookup</li>
         {{else}}
-          <li> <span class="bubble"></span> Sub-Document Lookup </li>
+          <li><span class="bubble"></span> Sub-Document Lookup</li>
         {{end}}
 
         {{/* Determine If Sub Document Mutate Completed */}}
         {{if or
-        (eq .Title "Sub-document Mutate")
-        (eq .Title "Upsert")
+          (eq .Title "Sub-document Mutate")
+          (eq .Title "Transactions KV Mutate")
+          (eq .Title "Transactions N1QL")
+          (eq .Title "Upsert")
         }}
-          <li class="completed"> <span class="bubble"></span> Sub-Document Mutate </li>
+          <li class="completed"><span class="bubble"></span> Sub-Document Mutate</li>
         {{else}}
-          <li> <span class="bubble"></span> Sub-Document Mutate </li>
+          <li><span class="bubble"></span> Sub-Document Mutate</li>
         {{end}}
+
+
+        {{/* Show/Hide Java Transactions Steps */}}
+        {{if eq .Lang "java"}}
+          {{/* Determine If JAVA Transactions KV Mutate Completed */}}
+          {{if or
+            (eq .Title "Transactions KV Mutate")
+            (eq .Title "Transactions N1QL")
+            (eq .Title "Upsert")
+          }}
+            <li class="completed"><span class="bubble"></span> Transactions KV Mutate</li>
+          {{else}}
+            <li><span class="bubble"></span> Transactions KV Mutate </li>
+          {{end}}
+
+          {{/* Determine If JAVA Transactions N1QL Completed */}}
+          {{if or
+            (eq .Title "Transactions N1QL")
+            (eq .Title "Upsert")
+          }}
+            <li class="completed"><span class="bubble"></span> Transactions N1QL </li>
+          {{else}}
+            <li><span class="bubble"></span> Transactions N1QL </li>
+          {{end}}
+        {{end}}
+
 
         {{/* Determine If Upsert Completed */}}
         {{if (eq .Title "Upsert")}}
-          <li class="completed"> <span class="bubble"></span> Upsert </li>
+          <li class="completed"><span class="bubble"></span> Upsert</li>
         {{else}}
-          <li> <span class="bubble"></span> Upsert </li>
+          <li><span class="bubble"></span> Upsert</li>
         {{end}}
       </ul>
     </div>
