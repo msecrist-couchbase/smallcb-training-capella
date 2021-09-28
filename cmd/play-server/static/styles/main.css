@@ -871,7 +871,6 @@ div.online-tools > a{
 }
 
 .return-home-button {
-  /*margin-top: 140px;*/
   position: absolute;
   bottom: 0;
   padding: 8px 16px;
@@ -880,6 +879,6 @@ div.online-tools > a{
 
 .progress-wrapper {
   width: 95%;
-  margin: 45px auto 30px;
+  margin: 35px auto;
 }
 
