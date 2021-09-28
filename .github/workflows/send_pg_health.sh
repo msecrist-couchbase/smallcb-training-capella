@@ -47,4 +47,14 @@ cat <<EOT > /tmp/slack_message.json
 EOT
 
 cat /tmp/slack_message.json
-curl -s -X POST -H 'Content-type: application/json' --data @/tmp/slack_message.json ${SLACK_WEBHOOK_URL}
+
+# Send to different channels/webhooks based on tests success or failures
+SLACK_WEBHOOK_URL_SUCCESS="`echo ${SLACK_WEBHOOK_URL}|cut -f1 -d','`"
+SLACK_WEBHOOK_URL_FAILURES="`echo ${SLACK_WEBHOOK_URL}|cut -f2 -d','`"
+
+if [ "${TEST_STATUS}" == "OK" ]; then
+  SLACK_WEBHOOK_URL_MSG="${SLACK_WEBHOOK_URL_SUCCESS}"
+else
+  SLACK_WEBHOOK_URL_MSG="${SLACK_WEBHOOK_URL_FAILURES}"
+fi
+curl -s -X POST -H 'Content-type: application/json' --data @/tmp/slack_message.json ${SLACK_WEBHOOK_URL_MSG}
