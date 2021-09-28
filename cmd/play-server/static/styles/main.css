@@ -856,3 +856,23 @@ div.online-tools > a{
   margin-top: 8px;
 }
 
+.progress-indicator>li {
+  padding-left: 2% !important;
+  padding-right: 2% !important;
+}
+
+.progress-indicator {
+  text-transform: none !important;
+  margin-top: 35px !important;
+}
+
+.back-button {
+  margin-top: 40px;
+  padding: 8px 16px;
+  width: fit-content;
+}
+
+.progress-wrapper {
+  width: 95%;
+  margin: 45px auto 30px;
+}
