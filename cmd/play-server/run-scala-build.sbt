@@ -4,5 +4,5 @@ ThisBuild / organization := "com.couchbase"
 lazy val example = (project in file("."))
   .settings(
     name := "Example",
-    libraryDependencies += "com.couchbase.client" %% "scala-client" % "1.2.0",
+    libraryDependencies += "com.couchbase.client" %% "scala-client" % "1.2.1",
   )

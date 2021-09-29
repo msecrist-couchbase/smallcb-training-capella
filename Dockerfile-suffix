@@ -9,7 +9,7 @@ RUN chmod +x /init-couchbase/*.sh && \
 
 RUN if [ ! -d /opt/couchbase/etc/couchbase ]; then mkdir -p /opt/couchbase/etc/couchbase; fi \
     && cat /init-couchbase/init-static-config.txt >> \
-        /opt/couchbase/etc/couchbase/static_config
+    /opt/couchbase/etc/couchbase/static_config
 
 # ------------------------------------------------
 # Copy play-server's run-*.sh files into image.
@@ -49,8 +49,6 @@ RUN ln -s /usr/share/maven/bin/mvn /usr/bin/mvn
 COPY cmd/play-server/run-java-pom.xml /run-java-pom.xml
 
 COPY cmd/play-server/run-java-hello.java /home/play/hello/src/main/java/hello.java
-
-COPY cmd/play-server/java_logging.properties /home/play/hello/logging.properties
 
 RUN chown -R play:couchbase /home/play
 

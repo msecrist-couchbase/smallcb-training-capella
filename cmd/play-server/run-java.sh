@@ -8,4 +8,4 @@ cd $(dirname ${1})
 
 javac -cp .:`cat /home/play/hello/classpath.txt` code.java
 
-java -cp .:`cat /home/play/hello/classpath.txt`  -Djava.util.logging.config.file="/home/play/hello/java-logging.properties" Program
+java -cp .:`cat /home/play/hello/classpath.txt` Program
