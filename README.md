@@ -28,6 +28,7 @@ he used to have golang work properly for him...
     go get github.com/google/uuid
     go get gopkg.in/yaml.v2
 
+* python 3
 -------------------------
 Instructions to build and run...
 
@@ -78,6 +79,16 @@ have to run `make play-server` again.
 Changes to the static files (e.g., HTML templates, CSS, examples, etc)
 should not need a re-make and should be immediately visible in
 the next web browser page refresh.
+
+To run the tests (all examples on all languages), then execute the below (which would start the playserver and run the tests).
+  make test-examples
+
+To start the play server:
+  make start-play-server
+
+To stop the play server:
+  make stop-play-server
+
 
 -------------------------
 Production usage should set the CB_ADMIN_PASSWORD env
@@ -728,4 +739,10 @@ To play with a multi-container playground tour, such as the
 tours-multi/first-xdcr tour...
 
 http://localhost:8080/session?groupSize=2&bodyClass=normal&e=static/tours-multi/aaa.html%3Fname%3Dfirst-xdcr&title=Try+Data+Streaming+with+Couchbase...&init=tours-multi/shs&defaultBucket=NONE
+
+For example...
+
+http://couchbase.live/session?groupSize=2&bodyClass=normal&e=static/tours-multi/aaa.html%3Fname%3Dfirst-xdcr&title=Try+Data+Streaming+with+Couchbase...&init=tours-multi/shs&defaultBucket=NONE
+
+
 

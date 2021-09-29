@@ -2,6 +2,8 @@ IMAGE_NAME ?= smallcb
 
 IMAGE_FROM ?= couchbase
 
+CONTAINER_NAME ?= smallcb
+
 CONTAINER_NUM ?= 0
 
 CONTAINER_PORTS ?= -p 8091-8096:8091-8096 -p 11210:11210
@@ -45,28 +47,28 @@ create:
 	rm -rf vol-*
 	mkdir -p vol-snapshot$(SNAPSHOT_SUFFIX)
 	mkdir -p tmp
-	docker run --name=$(IMAGE_NAME)-$(CONTAINER_NUM) \
+	docker run --name=$(CONTAINER_NAME)-$(CONTAINER_NUM) \
                $(CONTAINER_PORTS) $(CONTAINER_EXTRAS) \
                -v $(shell pwd)/vol-snapshot$(SNAPSHOT_SUFFIX)/:/opt/couchbase/var \
                -d $(IMAGE_NAME)
 	sleep 3
-	docker exec -u root $(IMAGE_NAME)-$(CONTAINER_NUM) bash -c "${CREATE_EXTRAS} /init-couchbase/init.sh"
+	docker exec -u root $(CONTAINER_NAME)-$(CONTAINER_NUM) bash -c "${CREATE_EXTRAS} /init-couchbase/init.sh"
 	sleep 3
-	docker exec -u root $(IMAGE_NAME)-$(CONTAINER_NUM) /init-couchbase/init-buckets.sh
+	docker exec -u root $(CONTAINER_NAME)-$(CONTAINER_NUM) /init-couchbase/init-buckets.sh
 	sleep 3
-	docker exec -u root $(IMAGE_NAME)-$(CONTAINER_NUM) /opt/couchbase/bin/couchbase-cli \
+	docker exec -u root $(CONTAINER_NAME)-$(CONTAINER_NUM) /opt/couchbase/bin/couchbase-cli \
                reset-admin-password --new-password $(CB_ADMIN_PASSWORD)
 	sleep 3
-	docker cp $(IMAGE_NAME)-$(CONTAINER_NUM):/opt/couchbase/VERSION.txt ./tmp/VERSION.txt
-	docker exec -u root $(IMAGE_NAME)-$(CONTAINER_NUM) \
+	docker cp $(CONTAINER_NAME)-$(CONTAINER_NUM):/opt/couchbase/VERSION.txt ./tmp/VERSION.txt
+	docker exec -u root $(CONTAINER_NAME)-$(CONTAINER_NUM) \
                grep vsn /opt/couchbase/lib/ns_server/erlang/lib/ns_server/ebin/ns_server.app | \
                cut -d '"' -f 2 > ./tmp/ns_server.app.vsn
-	for f in `docker exec $(IMAGE_NAME)-$(CONTAINER_NUM) /bin/sh -c 'ls /opt/couchbase/VERSION-sdk*.ver'`; \
-               do docker cp $(IMAGE_NAME)-$(CONTAINER_NUM):$${f} ./tmp/; done
+	for f in `docker exec $(CONTAINER_NAME)-$(CONTAINER_NUM) /bin/sh -c 'ls /opt/couchbase/VERSION-sdk*.ver'`; \
+               do docker cp $(CONTAINER_NAME)-$(CONTAINER_NUM):$${f} ./tmp/; done
 	sleep 3
-	docker stop $(IMAGE_NAME)-$(CONTAINER_NUM)
+	docker stop $(CONTAINER_NAME)-$(CONTAINER_NUM)
 	sleep 3
-	docker rm $(IMAGE_NAME)-$(CONTAINER_NUM)
+	docker rm $(CONTAINER_NAME)-$(CONTAINER_NUM)
 	sleep 3
 	ls -la vol-snapshot$(SNAPSHOT_SUFFIX)/lib/couchbase/logs
 	whoami
@@ -78,7 +80,11 @@ create:
 
 # Restart the docker container instance and wait until its
 # couchbase-server is healthy.
-restart: restart-snapshot wait-healthy
+restart: pull-image restart-snapshot wait-healthy
+
+# Pull smallcb image (only if its remote)
+pull-image:
+	echo $(IMAGE_NAME) | grep '/' && docker pull $(IMAGE_NAME) || echo ignoring-err-docker-pull
 
 # Restart the docker container instance from the vol-snapshot.
 restart-snapshot: instance-stop snapshot-reset instance-start
@@ -86,21 +92,21 @@ restart-snapshot: instance-stop snapshot-reset instance-start
 # -------------------------------------------------
 
 instance-stop:
-	docker stop $(IMAGE_NAME)-$(CONTAINER_NUM) || echo ignoring-err-docker-stop
-	docker rm $(IMAGE_NAME)-$(CONTAINER_NUM) || echo ignoring-err-docker-rm
+	docker stop $(CONTAINER_NAME)-$(CONTAINER_NUM) || echo ignoring-err-docker-stop
+	docker rm --force $(CONTAINER_NAME)-$(CONTAINER_NUM) || echo ignoring-err-docker-rm
 
 instance-start:
-	docker run --name=$(IMAGE_NAME)-$(CONTAINER_NUM) \
+	docker run --rm --name=$(CONTAINER_NAME)-$(CONTAINER_NUM) \
                $(CONTAINER_PORTS) $(CONTAINER_EXTRAS) \
                -v $(shell pwd)/vol-instances/vol-$(CONTAINER_NUM)/:/opt/couchbase/var \
                --add-host="$(SERVICE_HOST):127.0.0.1" \
                -d $(IMAGE_NAME)
 
 instance-pause:
-	docker pause $(IMAGE_NAME)-$(CONTAINER_NUM)
+	docker pause $(CONTAINER_NAME)-$(CONTAINER_NUM)
 
 instance-unpause:
-	docker unpause $(IMAGE_NAME)-$(CONTAINER_NUM) || echo ignoring-err-docker-unpause
+	docker unpause $(CONTAINER_NAME)-$(CONTAINER_NUM) || echo ignoring-err-docker-unpause
 
 # -------------------------------------------------
 
@@ -114,7 +120,7 @@ snapshot-reset:
 wait-healthy:
 	echo "Waiting until couchbase-server is healthy..."
 	time docker exec -e CB_PSWD=$(CB_ADMIN_PASSWORD) \
-                    $(IMAGE_NAME)-$(CONTAINER_NUM) /init-couchbase/wait-healthy.sh
+                    $(CONTAINER_NAME)-$(CONTAINER_NUM) /init-couchbase/wait-healthy.sh
 
 # -------------------------------------------------
 
@@ -133,8 +139,27 @@ play-server-src = \
         cmd/play-server/session.go \
         cmd/play-server/captcha.go
 
-play-server: $(play-server-src)
+play-server: test-play-server build-play-server
+
+build-play-server: $(play-server-src)
 	go build ./cmd/play-server
+
+test-play-server: $(play-server-src)
+	go test ./cmd/play-server
+
+start-play-server:
+	./play-server -sessionsMaxAge=60m -sessionsMaxIdle=60m -containers=2 -restarters=2 -codeDuration=3m -containerWaitDuration=1m &
+	sleep 10
+
+stop-play-server:
+	pkill play-server || true
+	docker rm $(shell docker ps -aq) --force || true
+
+test-examples: start-play-server
+	pip3 install -r tests/requirements.txt
+	CBLIVE_URL=http://localhost:8080 CODE_DIR=cmd/play-server/static/examples \
+		python3 tests/cblive_playground_runcodetest.py
+
 
 image: 
 	docker build . -f Dockerfile-playserver -t play-server
