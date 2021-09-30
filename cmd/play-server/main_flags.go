@@ -79,4 +79,7 @@ var (
 
 	version = flag.String("version", "tmp/ns_server.app.vsn",
 		"version string or filename that holds version string")
+	
+	encryptKey = flag.String("encryptKey", "12345678901234567890123456789012",
+		"secret key for encrypted text")
 )
