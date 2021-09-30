@@ -20,6 +20,11 @@ ARG COUCHBASE_SDK_PYTHON_VERSION
 
 ARG COUCHBASE_SDK_C_VERSION
 
+ARG COUCHBASE_SDK_JAVA_VERSION
+ARG COUCHBASE_SDK_JAVA_TRANSACTIONS_VERSION
+
+ARG COUCHBASE_SDK_DOTNET_VERSION
+
 # Create couchbase user with UID 1000, which is necessary to match
 # the default boot2docker UID.
 RUN groupadd -g 1000 couchbase && useradd couchbase -u 1000 -g couchbase -M

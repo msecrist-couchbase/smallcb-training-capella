@@ -3,11 +3,11 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 RUN apt-get update && \
     apt-get install -y \
-	git curl wget jq unzip zip \
-	build-essential cmake libssl-dev libevent-dev libev-dev \
-	lsb-release software-properties-common apt-transport-https gnupg2 \
-	atop htop psmisc strace time \
-	emacs vim
+    git curl wget jq unzip zip \
+    build-essential cmake libssl-dev libevent-dev libev-dev \
+    lsb-release software-properties-common apt-transport-https gnupg2 \
+    atop htop psmisc strace time \
+    emacs vim
 
 # ------------------------------------------------------
 
@@ -24,7 +24,7 @@ ENV PATH="$PATH:/usr/local/go/bin:$GOPATH/bin"
 RUN go version && \
     go mod init test && \
     go get github.com/couchbase/gocb/v2
-    
+
 COPY --from=adoptopenjdk /opt/java /opt/java
 
 ENV JAVA_HOME=/opt/java/openjdk
