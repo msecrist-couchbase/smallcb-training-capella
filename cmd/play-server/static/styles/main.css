@@ -777,7 +777,7 @@ h2.home-header {
 .example-info-column > .session-cta {
   border-top: 1px solid rgba(255, 255, 255, 0.6);
   padding-top: 18px;
-  margin: 24px 0;
+  margin: 24px 0 80px;
 }
 
 .session-cta > a{
@@ -868,6 +868,7 @@ div.online-tools > a{
 .progress-indicator {
   text-transform: none !important;
   margin-top: 35px !important;
+  overflow-x: scroll;
 }
 
 .return-home-button {
@@ -875,6 +876,7 @@ div.online-tools > a{
   bottom: 0;
   padding: 8px 16px;
   width: fit-content;
+  margin-bottom: 16px;
 }
 
 .progress-wrapper {
