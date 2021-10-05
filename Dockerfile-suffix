@@ -9,7 +9,7 @@ RUN chmod +x /init-couchbase/*.sh && \
 
 RUN if [ ! -d /opt/couchbase/etc/couchbase ]; then mkdir -p /opt/couchbase/etc/couchbase; fi \
     && cat /init-couchbase/init-static-config.txt >> \
-        /opt/couchbase/etc/couchbase/static_config
+    /opt/couchbase/etc/couchbase/static_config
 
 # ------------------------------------------------
 # Copy play-server's run-*.sh files into image.
@@ -47,6 +47,7 @@ COPY --from=maven /usr/share/maven /usr/share/maven
 RUN ln -s /usr/share/maven/bin/mvn /usr/bin/mvn
 
 COPY cmd/play-server/run-java-pom.xml /run-java-pom.xml
+RUN sed -i -e "s/3.1.3/${COUCHBASE_SDK_JAVA_VERSION}/g" -e "s/1.1.6/${COUCHBASE_SDK_JAVA_TRANSACTIONS_VERSION}/g" /run-java-pom.xml
 
 COPY cmd/play-server/run-java-hello.java /home/play/hello/src/main/java/hello.java
 
@@ -69,6 +70,9 @@ RUN cat /run-java-pom.xml | grep 'version>3' | cut -f 2 -d '>' | cut -f 1 -d '<'
 COPY cmd/play-server/run-csharp-hello.csproj /home/play/hellodotnet/run-csharp-hello.csproj
 
 COPY cmd/play-server/run-csharp-hello.cs /home/play/hellodotnet/run-csharp-hello.cs
+
+RUN sed -i -e "s/3.1.3/${COUCHBASE_SDK_DOTNET_VERSION}/g" /home/play/hellodotnet/run-csharp-hello.csproj
+RUN sed -i -e "s/3.1.3/${COUCHBASE_SDK_DOTNET_VERSION}/g" /run-dotnet.sh
 
 RUN chown -R play:couchbase /home/play
 
