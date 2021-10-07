@@ -800,12 +800,14 @@ h2.home-header {
   position: relative;
 }
 
-#form > div.empty-example-frame > div > div > a.example-button > img {
-  background: none;
+a.example-button > img {
+  background: none !important;
+  border: none !important;
+  border-radius: 12px !important;
   width: 164px;
   margin: 14px 14px;
   padding: 0;
-  border: none;
+
 }
 
 h2.example-title {
