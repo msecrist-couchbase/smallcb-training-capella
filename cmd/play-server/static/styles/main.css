@@ -827,6 +827,7 @@ h2.example-title {
   height: auto !important;
   z-index: 100;
   font-size: 12px !important;
+  color: #bbb;
   border-bottom-right-radius: 3px;
 }
 
