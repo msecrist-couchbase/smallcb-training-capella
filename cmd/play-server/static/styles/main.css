@@ -894,3 +894,11 @@ div.online-tools > a{
 iframe#output {
   background-color: #262a34;
 }
+
+.example-title {
+  font-size: 24px;
+}
+
+.example-heading {
+  margin-bottom: 32px;
+}
