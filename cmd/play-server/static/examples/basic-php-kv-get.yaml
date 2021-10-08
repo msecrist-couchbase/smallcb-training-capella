@@ -4,7 +4,7 @@ lang: php
 infoBefore: |
   <div>
   <a href='#' class="disable" style="float:left">Previous Lesson</a>
-  <a href='basic-php-query-rows' class="next-button">Next Lesson</a>
+  <a href='/examples/basic-php-query-rows' class="next-button">Next Lesson</a>
   </div>
   <br>
 code: |
