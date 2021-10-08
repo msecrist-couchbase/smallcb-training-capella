@@ -73,11 +73,15 @@
 </head>
 <body class="{{.BodyClass}}">
 <header>
+
   <div class="logo">
     <a href="/{{if .Session}}?s={{.Session.SessionId}}{{end}}">
-      <h1><img src="/static/cb.png"/>Couchbase Playground</h1>
+      <h1>
+        <img src="/static/cb-rww.svg"/>Playground
+      </h1>
     </a>
   </div>
+
   <nav>
     <ul>
       <li>
@@ -100,6 +104,7 @@
       </li>
     </ul>
   </nav>
+
 </header>
 
 <main id="main">

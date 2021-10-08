@@ -902,3 +902,11 @@ iframe#output {
 .example-heading {
   margin-bottom: 32px;
 }
+
+body > header > div > a {
+  text-decoration: none !important;
+}
+
+.logo {
+  padding-top: 4px;
+}
