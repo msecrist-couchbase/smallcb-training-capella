@@ -700,6 +700,19 @@ func OptanonHTML(host string) string {
 }
 
 // ------------------------------------------------
+// Add the session info to the navigation URLs in code samples
+// Replace the end of the URL with ?s=session_id
+func AddSessionInfo(session *Session, infoBefore string) string {
+	if session != nil {
+		sIDNext := fmt.Sprintf("?s=%s' class=\"next-button\"", session.SessionId)
+		sIDPrev := fmt.Sprintf("?s=%s' class=\"previous-button\"", session.SessionId)
+		infoBefore = strings.ReplaceAll(infoBefore, "' class=\"next-button\"", sIDNext)
+		infoBefore = strings.ReplaceAll(infoBefore, "' class=\"prev-button\"", sIDPrev)
+	}
+	return infoBefore
+}
+
+// ------------------------------------------------
 
 func CodeFromFixup(code, program, lang, from string) string {
 	if from == "docs" {
