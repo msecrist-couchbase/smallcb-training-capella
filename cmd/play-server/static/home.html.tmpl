@@ -291,14 +291,14 @@
                   (eq .Title "Upsert")
                   }}
                     <li class="completed">
-                      <a href="/examples/basic-{{.Lang}}-kv-get">
+                      <a href="/examples/basic-{{.Lang}}-kv-get{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                         <span class="bubble"></span>
                         Key Value Get
                       </a>
                     </li>
                   {{else}}
                     <li>
-                      <a href="/examples/basic-{{.Lang}}-kv-get">
+                      <a href="/examples/basic-{{.Lang}}-kv-get{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                         <span class="bubble"></span>
                         Key Value Get
                       </a>
@@ -317,14 +317,14 @@
                   (eq .Title "Upsert")
                   }}
                     <li class="completed">
-                      <a href="/examples/basic-{{.Lang}}-query-rows">
+                      <a href="/examples/basic-{{.Lang}}-query-rows{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                         <span class="bubble"></span>
                         Query Rows
                       </a>
                     </li>
                   {{else}}
                     <li>
-                      <a href="/examples/basic-{{.Lang}}-query-rows">
+                      <a href="/examples/basic-{{.Lang}}-query-rows{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                         <span class="bubble"></span>
                         Query Rows
                       </a>
@@ -342,14 +342,14 @@
                   (eq .Title "Upsert")
                   }}
                     <li class="completed">
-                      <a href="/examples/basic-{{.Lang}}-query-named-param">
+                      <a href="/examples/basic-{{.Lang}}-query-named-param{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                         <span class="bubble"></span>
                         Query w/ Named Param
                       </a>
                     </li>
                   {{else}}
                     <li>
-                      <a href="/examples/basic-{{.Lang}}-query-named-param">
+                      <a href="/examples/basic-{{.Lang}}-query-named-param{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                         <span class="bubble"></span>
                         Query w/ Named Param
                       </a>
@@ -366,14 +366,14 @@
                   (eq .Title "Upsert")
                   }}
                     <li class="completed">
-                      <a href="/examples/basic-{{.Lang}}-query-positional-param">
+                      <a href="/examples/basic-{{.Lang}}-query-positional-param{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                         <span class="bubble"></span>
                         Query w/ Positional Param
                       </a>
                     </li>
                   {{else}}
                     <li>
-                      <a href="/examples/basic-{{.Lang}}-query-positional-param">
+                      <a href="/examples/basic-{{.Lang}}-query-positional-param{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                         <span class="bubble"></span>
                         Query w/ Positional Param
                       </a>
@@ -389,14 +389,14 @@
                   (eq .Title "Upsert")
                   }}
                     <li class="completed">
-                      <a href="/examples/basic-{{.Lang}}-subdoc-lookup">
+                      <a href="/examples/basic-{{.Lang}}-subdoc-lookup{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                         <span class="bubble"></span>
                         Sub-Document Lookup
                       </a>
                     </li>
                   {{else}}
                     <li>
-                      <a href="/examples/basic-{{.Lang}}-subdoc-lookup">
+                      <a href="/examples/basic-{{.Lang}}-subdoc-lookup{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                         <span class="bubble"></span>
                         Sub-Document Lookup
                       </a>
@@ -411,14 +411,14 @@
                   (eq .Title "Upsert")
                   }}
                     <li class="completed">
-                      <a href="/examples/basic-{{.Lang}}-subdoc-mutate">
+                      <a href="/examples/basic-{{.Lang}}-subdoc-mutate{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                         <span class="bubble"></span>
                         Sub-Document Mutate
                       </a>
                     </li>
                   {{else}}
                     <li>
-                      <a href="/examples/basic-{{.Lang}}-subdoc-mutate">
+                      <a href="/examples/basic-{{.Lang}}-subdoc-mutate{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                         <span class="bubble"></span>
                         Sub-Document Mutate
                       </a>
@@ -434,14 +434,14 @@
                       (eq .Title "Upsert")
                       }}
                         <li class="completed">
-                          <a href="/examples/basic-{{.Lang}}-txn-kv-mutate">
+                          <a href="/examples/basic-{{.Lang}}-txn-kv-mutate{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                             <span class="bubble"></span>
                             Transactions KV Mutate
                           </a>
                         </li>
                       {{else}}
                         <li>
-                          <a href="/examples/basic-{{.Lang}}-txn-kv-mutate">
+                          <a href="/examples/basic-{{.Lang}}-txn-kv-mutate{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                             <span class="bubble"></span>
                             Transactions KV Mutate
                           </a>
@@ -454,14 +454,14 @@
                       (eq .Title "Upsert")
                       }}
                         <li class="completed">
-                          <a href="/examples/basic-{{.Lang}}-txn-n1ql">
+                          <a href="/examples/basic-{{.Lang}}-txn-n1ql{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                             <span class="bubble"></span>
                             Transactions N1QL
                           </a>
                         </li>
                       {{else}}
                         <li>
-                          <a href="/examples/basic-{{.Lang}}-txn-n1ql">
+                          <a href="/examples/basic-{{.Lang}}-txn-n1ql{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                             <span class="bubble"></span>
                             Transactions N1QL
                           </a>
@@ -473,14 +473,14 @@
                   {{/* Determine If Upsert Completed */}}
                   {{if (eq .Title "Upsert")}}
                     <li class="completed">
-                      <a href="/examples/basic-{{.Lang}}-upsert">
+                      <a href="/examples/basic-{{.Lang}}-upsert{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                         <span class="bubble"></span>
                         Upsert
                       </a>
                     </li>
                   {{else}}
                     <li>
-                      <a href="/examples/basic-{{.Lang}}-upsert">
+                      <a href="/examples/basic-{{.Lang}}-upsert{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                         <span class="bubble"></span>
                         Upsert
                       </a>
