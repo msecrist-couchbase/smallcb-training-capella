@@ -886,3 +886,10 @@ div.online-tools > a{
   margin: 35px auto;
 }
 
+.ace-nord-dark {
+  background-color: #262a34;
+}
+
+iframe#output {
+  background-color: #262a34;
+}
