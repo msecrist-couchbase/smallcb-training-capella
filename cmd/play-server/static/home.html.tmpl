@@ -85,23 +85,39 @@
   <nav>
     <ul>
       <li>
+        <a href="/{{if .Session}}?s={{.Session.SessionId}}{{end}}" class="menu-button">
+          <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+               width="14" height="14"
+               viewBox="0 -3 25 25"
+               style=" fill:#ffffff;">
+            <path d="M 12 2 A 1 1 0 0 0 11.289062 2.296875 L 1.203125 11.097656 A 0.5 0.5 0 0 0 1 11.5 A 0.5 0.5 0 0 0 1.5 12 L 4 12 L 4 20 C 4 20.552 4.448 21 5 21 L 9 21 C 9.552 21 10 20.552 10 20 L 10 14 L 14 14 L 14 20 C 14 20.552 14.448 21 15 21 L 19 21 C 19.552 21 20 20.552 20 20 L 20 12 L 22.5 12 A 0.5 0.5 0 0 0 23 11.5 A 0.5 0.5 0 0 0 22.796875 11.097656 L 12.716797 2.3027344 A 1 1 0 0 0 12.710938 2.296875 A 1 1 0 0 0 12 2 z"></path>
+          </svg>
+          &nbsp
+          Playground Home
+        </a>
+      </li>
+      <li>
           {{if .Session}}
             <a href="/session-exit?s={{.Session.SessionId}}"
-               onclick="localStorage.setItem('infoPanel', 'show');" class="session">
-              stop playground session
+               onclick="localStorage.setItem('infoPanel', 'show');" class="session menu-button">
+              Stop Playground Session
             </a>
           {{else}}
-            <a href="/session">
-              start playground session
+            <a href="/session" class="menu-button">
+              Start a Playground Session
             </a>
           {{end}}
       </li>
       <li>
-        <a target="_blank" href="https://docs.couchbase.com">docs</a>
+        <a target="_blank" href="https://docs.couchbase.com" class="menu-button">Docs</a>
       </li>
       <li>
-        <a target="_blank" href="https://www.couchbase.com">couchbase.com</a>
+        <a target="_blank" href="https://developer.couchbase.com" class="menu-button">Couchbase Developer Portal</a>
       </li>
+
+{{/*      <li>*/}}
+{{/*        <a target="_blank" href="https://www.couchbase.com" class="menu-button">Couchbase.com</a>*/}}
+{{/*      </li>*/}}
     </ul>
   </nav>
 
@@ -274,9 +290,19 @@
                   (eq .Title "Transactions N1QL")
                   (eq .Title "Upsert")
                   }}
-                    <li class="completed"><span class="bubble"></span> Key Value Get</li>
+                    <li class="completed">
+                      <a href="/examples/basic-{{.Lang}}-kv-get">
+                        <span class="bubble"></span>
+                        Key Value Get
+                      </a>
+                    </li>
                   {{else}}
-                    <li><span class="bubble"></span> Key Value Get</li>
+                    <li>
+                      <a href="/examples/basic-{{.Lang}}-kv-get">
+                        <span class="bubble"></span>
+                        Key Value Get
+                      </a>
+                    </li>
                   {{end}}
 
                   {{/* Determine If Query Rows Completed */}}
@@ -290,9 +316,19 @@
                   (eq .Title "Transactions N1QL")
                   (eq .Title "Upsert")
                   }}
-                    <li class="completed"><span class="bubble"></span> Query Rows</li>
+                    <li class="completed">
+                      <a href="/examples/basic-{{.Lang}}-query-rows">
+                        <span class="bubble"></span>
+                        Query Rows
+                      </a>
+                    </li>
                   {{else}}
-                    <li><span class="bubble"></span> Query Rows</li>
+                    <li>
+                      <a href="/examples/basic-{{.Lang}}-query-rows">
+                        <span class="bubble"></span>
+                        Query Rows
+                      </a>
+                    </li>
                   {{end}}
 
                   {{/* Determine If Query w/ Named Param Completed */}}
@@ -305,9 +341,19 @@
                   (eq .Title "Transactions N1QL")
                   (eq .Title "Upsert")
                   }}
-                    <li class="completed"><span class="bubble"></span> Query w/ Named Param</li>
+                    <li class="completed">
+                      <a href="/examples/basic-{{.Lang}}-query-named-param">
+                        <span class="bubble"></span>
+                        Query w/ Named Param
+                      </a>
+                    </li>
                   {{else}}
-                    <li><span class="bubble"></span> Query w/ Named Param</li>
+                    <li>
+                      <a href="/examples/basic-{{.Lang}}-query-named-param">
+                        <span class="bubble"></span>
+                        Query w/ Named Param
+                      </a>
+                    </li>
                   {{end}}
 
                   {{/* Determine If Query w/ Positional Param Completed */}}
@@ -319,9 +365,19 @@
                   (eq .Title "Transactions N1QL")
                   (eq .Title "Upsert")
                   }}
-                    <li class="completed"><span class="bubble"></span> Query w/ Positional Param</li>
+                    <li class="completed">
+                      <a href="/examples/basic-{{.Lang}}-query-positional-param">
+                        <span class="bubble"></span>
+                        Query w/ Positional Param
+                      </a>
+                    </li>
                   {{else}}
-                    <li><span class="bubble"></span> Query w/ Positional Param</li>
+                    <li>
+                      <a href="/examples/basic-{{.Lang}}-query-positional-param">
+                        <span class="bubble"></span>
+                        Query w/ Positional Param
+                      </a>
+                    </li>
                   {{end}}
 
                   {{/* Determine If Sub Document Lookup Completed */}}
@@ -332,9 +388,19 @@
                   (eq .Title "Transactions N1QL")
                   (eq .Title "Upsert")
                   }}
-                    <li class="completed"><span class="bubble"></span> Sub-Document Lookup</li>
+                    <li class="completed">
+                      <a href="/examples/basic-{{.Lang}}-subdoc-lookup">
+                        <span class="bubble"></span>
+                        Sub-Document Lookup
+                      </a>
+                    </li>
                   {{else}}
-                    <li><span class="bubble"></span> Sub-Document Lookup</li>
+                    <li>
+                      <a href="/examples/basic-{{.Lang}}-subdoc-lookup">
+                        <span class="bubble"></span>
+                        Sub-Document Lookup
+                      </a>
+                    </li>
                   {{end}}
 
                   {{/* Determine If Sub Document Mutate Completed */}}
@@ -344,9 +410,19 @@
                   (eq .Title "Transactions N1QL")
                   (eq .Title "Upsert")
                   }}
-                    <li class="completed"><span class="bubble"></span> Sub-Document Mutate</li>
+                    <li class="completed">
+                      <a href="/examples/basic-{{.Lang}}-subdoc-mutate">
+                        <span class="bubble"></span>
+                        Sub-Document Mutate
+                      </a>
+                    </li>
                   {{else}}
-                    <li><span class="bubble"></span> Sub-Document Mutate</li>
+                    <li>
+                      <a href="/examples/basic-{{.Lang}}-subdoc-mutate">
+                        <span class="bubble"></span>
+                        Sub-Document Mutate
+                      </a>
+                    </li>
                   {{end}}
 
                   {{/* Show/Hide Java Transactions Steps */}}
@@ -357,9 +433,19 @@
                       (eq .Title "Transactions N1QL")
                       (eq .Title "Upsert")
                       }}
-                        <li class="completed"><span class="bubble"></span> Transactions KV Mutate</li>
+                        <li class="completed">
+                          <a href="/examples/basic-{{.Lang}}-txn-kv-mutate">
+                            <span class="bubble"></span>
+                            Transactions KV Mutate
+                          </a>
+                        </li>
                       {{else}}
-                        <li><span class="bubble"></span> Transactions KV Mutate</li>
+                        <li>
+                          <a href="/examples/basic-{{.Lang}}-txn-kv-mutate">
+                            <span class="bubble"></span>
+                            Transactions KV Mutate
+                          </a>
+                        </li>
                       {{end}}
 
                       {{/* Determine If JAVA Transactions N1QL Completed */}}
@@ -367,18 +453,38 @@
                       (eq .Title "Transactions N1QL")
                       (eq .Title "Upsert")
                       }}
-                        <li class="completed"><span class="bubble"></span> Transactions N1QL</li>
+                        <li class="completed">
+                          <a href="/examples/basic-{{.Lang}}-txn-n1ql">
+                            <span class="bubble"></span>
+                            Transactions N1QL
+                          </a>
+                        </li>
                       {{else}}
-                        <li><span class="bubble"></span> Transactions N1QL</li>
+                        <li>
+                          <a href="/examples/basic-{{.Lang}}-txn-n1ql">
+                            <span class="bubble"></span>
+                            Transactions N1QL
+                          </a>
+                        </li>
                       {{end}}
                   {{end}}
 
 
                   {{/* Determine If Upsert Completed */}}
                   {{if (eq .Title "Upsert")}}
-                    <li class="completed"><span class="bubble"></span> Upsert</li>
+                    <li class="completed">
+                      <a href="/examples/basic-{{.Lang}}-upsert">
+                        <span class="bubble"></span>
+                        Upsert
+                      </a>
+                    </li>
                   {{else}}
-                    <li><span class="bubble"></span> Upsert</li>
+                    <li>
+                      <a href="/examples/basic-{{.Lang}}-upsert">
+                        <span class="bubble"></span>
+                        Upsert
+                      </a>
+                    </li>
                   {{end}}
               </ul>
             </div>

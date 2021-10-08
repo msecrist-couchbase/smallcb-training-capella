@@ -226,7 +226,7 @@ body.dark a {
 /* Dark Mode Menu Links */
 body.dark header nav ul > li a {
   color: #FFF;
-  background-image: linear-gradient(currentColor, currentColor);
+  background: none;
 }
 body.dark header nav ul > li a.session:hover {
   color: red;
