@@ -97,22 +97,22 @@
         </a>
       </li>
       <li>
-          {{if .Session}}
-            <a href="/session-exit?s={{.Session.SessionId}}"
-               onclick="localStorage.setItem('infoPanel', 'show');" class="session menu-button">
-              Stop Playground Session
-            </a>
-          {{else}}
-            <a href="/session" class="menu-button">
-              Start a Playground Session
-            </a>
-          {{end}}
-      </li>
-      <li>
         <a target="_blank" href="https://docs.couchbase.com" class="menu-button">Docs</a>
       </li>
       <li>
         <a target="_blank" href="https://developer.couchbase.com" class="menu-button">Couchbase Developer Portal</a>
+      </li>
+      <li>
+          {{if .Session}}
+            <a href="/session-exit?s={{.Session.SessionId}}"
+               onclick="localStorage.setItem('infoPanel', 'show');" class="session menu-button red-button">
+              Stop Playground Session
+            </a>
+          {{else}}
+            <a href="/session" class="menu-button red-button">
+              Start a Playground Session
+            </a>
+          {{end}}
       </li>
 
 {{/*      <li>*/}}
@@ -518,30 +518,30 @@
                       <a href="/session" class="nowrap">Start Playground Session</a>
                     </div>
                   {{end}}
-                {{ if not .Session}}
-                <a class="return-home-button example-button" href="/"><i class="fa fa-check"></i>
-                  <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
-                       width="24" height="24"
-                       viewBox="0 0 24 24"
-                       style=" fill:#ffffff;">
-                    <path d="M 12 2 A 1 1 0 0 0 11.289062 2.296875 L 1.203125 11.097656 A 0.5 0.5 0 0 0 1 11.5 A 0.5 0.5 0 0 0 1.5 12 L 4 12 L 4 20 C 4 20.552 4.448 21 5 21 L 9 21 C 9.552 21 10 20.552 10 20 L 10 14 L 14 14 L 14 20 C 14 20.552 14.448 21 15 21 L 19 21 C 19.552 21 20 20.552 20 20 L 20 12 L 22.5 12 A 0.5 0.5 0 0 0 23 11.5 A 0.5 0.5 0 0 0 22.796875 11.097656 L 12.716797 2.3027344 A 1 1 0 0 0 12.710938 2.296875 A 1 1 0 0 0 12 2 z"></path>
-                  </svg>
-                  &nbsp&nbsp
-                  Return to Homepage
-                </a>
-                {{end}}
-                {{ if .Session}}
-                <a class="return-home-button example-button" href="/?s={{.Session.SessionId}}"><i class="fa fa-check"></i>
-                  <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
-                       width="24" height="24"
-                       viewBox="0 0 24 24"
-                       style=" fill:#ffffff;">
-                    <path d="M 12 2 A 1 1 0 0 0 11.289062 2.296875 L 1.203125 11.097656 A 0.5 0.5 0 0 0 1 11.5 A 0.5 0.5 0 0 0 1.5 12 L 4 12 L 4 20 C 4 20.552 4.448 21 5 21 L 9 21 C 9.552 21 10 20.552 10 20 L 10 14 L 14 14 L 14 20 C 14 20.552 14.448 21 15 21 L 19 21 C 19.552 21 20 20.552 20 20 L 20 12 L 22.5 12 A 0.5 0.5 0 0 0 23 11.5 A 0.5 0.5 0 0 0 22.796875 11.097656 L 12.716797 2.3027344 A 1 1 0 0 0 12.710938 2.296875 A 1 1 0 0 0 12 2 z"></path>
-                  </svg>
-                  &nbsp&nbsp
-                  Return to Homepage
-                </a>
-                {{end}}
+{{/*                {{ if not .Session}}*/}}
+{{/*                <a class="return-home-button example-button" href="/"><i class="fa fa-check"></i>*/}}
+{{/*                  <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"*/}}
+{{/*                       width="24" height="24"*/}}
+{{/*                       viewBox="0 0 24 24"*/}}
+{{/*                       style=" fill:#ffffff;">*/}}
+{{/*                    <path d="M 12 2 A 1 1 0 0 0 11.289062 2.296875 L 1.203125 11.097656 A 0.5 0.5 0 0 0 1 11.5 A 0.5 0.5 0 0 0 1.5 12 L 4 12 L 4 20 C 4 20.552 4.448 21 5 21 L 9 21 C 9.552 21 10 20.552 10 20 L 10 14 L 14 14 L 14 20 C 14 20.552 14.448 21 15 21 L 19 21 C 19.552 21 20 20.552 20 20 L 20 12 L 22.5 12 A 0.5 0.5 0 0 0 23 11.5 A 0.5 0.5 0 0 0 22.796875 11.097656 L 12.716797 2.3027344 A 1 1 0 0 0 12.710938 2.296875 A 1 1 0 0 0 12 2 z"></path>*/}}
+{{/*                  </svg>*/}}
+{{/*                  &nbsp&nbsp*/}}
+{{/*                  Return to Homepage*/}}
+{{/*                </a>*/}}
+{{/*                {{end}}*/}}
+{{/*                {{ if .Session}}*/}}
+{{/*                <a class="return-home-button example-button" href="/?s={{.Session.SessionId}}"><i class="fa fa-check"></i>*/}}
+{{/*                  <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"*/}}
+{{/*                       width="24" height="24"*/}}
+{{/*                       viewBox="0 0 24 24"*/}}
+{{/*                       style=" fill:#ffffff;">*/}}
+{{/*                    <path d="M 12 2 A 1 1 0 0 0 11.289062 2.296875 L 1.203125 11.097656 A 0.5 0.5 0 0 0 1 11.5 A 0.5 0.5 0 0 0 1.5 12 L 4 12 L 4 20 C 4 20.552 4.448 21 5 21 L 9 21 C 9.552 21 10 20.552 10 20 L 10 14 L 14 14 L 14 20 C 14 20.552 14.448 21 15 21 L 19 21 C 19.552 21 20 20.552 20 20 L 20 12 L 22.5 12 A 0.5 0.5 0 0 0 23 11.5 A 0.5 0.5 0 0 0 22.796875 11.097656 L 12.716797 2.3027344 A 1 1 0 0 0 12.710938 2.296875 A 1 1 0 0 0 12 2 z"></path>*/}}
+{{/*                  </svg>*/}}
+{{/*                  &nbsp&nbsp*/}}
+{{/*                  Return to Homepage*/}}
+{{/*                </a>*/}}
+{{/*                {{end}}*/}}
 
               </div>
             {{end}}

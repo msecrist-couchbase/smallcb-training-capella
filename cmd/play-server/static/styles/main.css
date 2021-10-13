@@ -930,6 +930,15 @@ body > header > div > a {
   border: 2px solid #b8efe7;
 }
 
+.red-button {
+  border: 2px solid #cd575a;
+}
+
+.red-button:hover {
+  border: 2px solid #ea2328;
+  background: rgba(237, 117, 117, 0.8);
+}
+
 div.progress-wrapper > ul > li > a {
   text-decoration: none;
   color: #bbb;
