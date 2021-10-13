@@ -5,6 +5,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;1,300&display=swap" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="/static/styles/site.css">
   <link rel="stylesheet" type="text/css" href="/static/styles/session.css">
+  <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
   {{.AnalyticsHTML}}
 </head>
 <body class="{{.bodyClass}}">
@@ -137,6 +138,20 @@
   </main>
 
   <footer>
+    <div class="feedback">
+      <form id="feedback" action="/feedback">
+      Was this page helpful?
+      <label for="liked"> <input type="radio" value="yes" name="liked" required/>yes </label>
+      <label for="liked"> <input type="radio" value="no" name="liked" required/>no </label>
+      <br>
+      <input type="text" placeholder="How can we make it better?" size=100 name="message" required></input>
+      <input type="hidden" name="src_url" id="src_url" value=""></input>
+      <br>
+      <input type="submit"></input>
+      </form>
+    <div id="result"></div>
+    </div>
+    <hr>
     <div>© 2021 Couchbase Labs</div>
   </footer>
 </body>
@@ -149,6 +164,32 @@ function submitted() {
   }, 100);
 }
 </script>
+
+<script>
+  // set form's source url
+  document.getElementById('src_url').value = window.location.href;
+
+  // submit feedback
+  $("#feedback").submit(function(e) {
+
+    e.preventDefault(); // avoid to execute the actual submit of the form.
+
+    var form = $(this);
+    var url = form.attr('action');
+    
+    $.ajax({
+          type: "POST",
+          url: url,
+          data: form.serialize(), // serializes the form's elements.
+          success: function(data)
+          {
+            $( "#result" ).empty().append( "Thanks for the Feedback!" );
+            $( "#feedback" ).toggle();
+          }
+        });    
+  });
+</script>
+
 <style>
 .loading:after {
   overflow: hidden;

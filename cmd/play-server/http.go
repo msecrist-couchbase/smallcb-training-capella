@@ -1,10 +1,12 @@
 package main
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
 	"html/template"
+	"io/ioutil"
 	"log"
 	"math/rand"
 	"net/http"
@@ -51,6 +53,8 @@ func HttpMuxInit(mux *http.ServeMux) {
 	mux.HandleFunc("/run", HttpHandleRun)
 
 	mux.HandleFunc("/", HttpHandleMain)
+
+	mux.HandleFunc("/feedback", HttpHandleFeedback)
 }
 
 // ------------------------------------------------
@@ -652,6 +656,47 @@ func HttpHandleStaticData(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	w.Write(j)
+}
+
+// ------------------------------------------------
+
+func HttpHandleFeedback(w http.ResponseWriter, r *http.Request) {
+	StatsNumInc("http.FeedbackSent")
+	src_url := r.FormValue("src_url")
+	liked := r.FormValue("liked")
+	message := r.FormValue("message")
+	user := "anonymous"
+	// timeNow := fmt.Sprintf(time.Now().Format(time.RFC3339))
+	// log.Print(src_url)
+	// log.Print(liked)
+	// log.Print(message)
+	// log.Print(*feedbackURL)
+
+	requestBodyStr := fmt.Sprintf(`{"created": "%s", "page": "%s", "comment": "%s", "helpful": "%s", "user": "%s"}`, time.Now().Format(time.RFC3339), src_url, message, liked, user)
+	bodyBytes := []byte(requestBodyStr)
+	// log.Print(requestBodyStr)
+	// log.Print(bytes.NewBuffer(bodyBytes))
+
+	req, err := http.NewRequest("POST", *feedbackURL, bytes.NewBuffer(bodyBytes))
+	if err != nil {
+		log.Print(err)
+	}
+	req.Header.Set("mode", "cors")
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Accept", "application/json")
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		panic(err)
+	}
+	defer resp.Body.Close()
+
+	fmt.Println("response Status:", resp.Status)
+	fmt.Println("response Headers:", resp.Header)
+	body, _ := ioutil.ReadAll(resp.Body)
+	fmt.Println("response Body:", string(body))
+	return
 }
 
 // ------------------------------------------------

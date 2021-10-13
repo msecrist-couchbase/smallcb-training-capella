@@ -1,7 +1,9 @@
 package main
 
-import "flag"
-import "time"
+import (
+	"flag"
+	"time"
+)
 
 var (
 	h = flag.Bool("h", false, "print help/usage and exit")
@@ -29,6 +31,9 @@ var (
 
 	containersSingleUse = flag.Int("containersSingleUse", 0,
 		"# of container instances to keep as single use or session-less")
+
+	feedbackURL = flag.String("feedbackURL", "https://staging-devportal-api.couchbase.live/pageLikes",
+		"URL to send the feedback from pages")
 
 	host = flag.String("host", "127.0.0.1",
 		"host that the service will be publically available as")
