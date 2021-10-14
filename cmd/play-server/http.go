@@ -661,7 +661,7 @@ func HttpHandleStaticData(w http.ResponseWriter, r *http.Request) {
 // ------------------------------------------------
 
 func HttpHandleFeedback(w http.ResponseWriter, r *http.Request) {
-	StatsNumInc("http.FeedbackSent")
+	StatsNumInc("http.Feedback")
 	src_url := r.FormValue("src_url")
 	liked := r.FormValue("liked")
 	message := r.FormValue("message")
@@ -679,7 +679,8 @@ func HttpHandleFeedback(w http.ResponseWriter, r *http.Request) {
 
 	req, err := http.NewRequest("POST", *feedbackURL, bytes.NewBuffer(bodyBytes))
 	if err != nil {
-		log.Print(err)
+		StatsNumInc("http.Feedback.err")
+		log.Printf("ERROR: HttpHandleFeedback, err: %v", err)
 	}
 	req.Header.Set("mode", "cors")
 	req.Header.Set("Content-Type", "application/json")
@@ -688,14 +689,21 @@ func HttpHandleFeedback(w http.ResponseWriter, r *http.Request) {
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		panic(err)
+		StatsNumInc("http.Feedback.err")
+		log.Printf("ERROR: HttpHandleFeedback, err: %v", err)
 	}
 	defer resp.Body.Close()
-
-	fmt.Println("response Status:", resp.Status)
-	fmt.Println("response Headers:", resp.Header)
-	body, _ := ioutil.ReadAll(resp.Body)
-	fmt.Println("response Body:", string(body))
+	if resp.StatusCode == http.StatusOK {
+		StatsNumInc("http.Feedback.ok")
+	} else {
+		StatsNumInc("http.Feedback.err")
+		body, _ := ioutil.ReadAll(resp.Body)
+		log.Printf("ERROR: HttpHandleFeedback, response Body: %s", string(body))
+	}
+	// fmt.Println("response Status:", resp.Status)
+	// fmt.Println("response Headers:", resp.Header)
+	// body, _ := ioutil.ReadAll(resp.Body)
+	// fmt.Println("response Body:", string(body))
 	return
 }
 

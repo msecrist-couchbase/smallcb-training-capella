@@ -32,7 +32,7 @@ var (
 	containersSingleUse = flag.Int("containersSingleUse", 0,
 		"# of container instances to keep as single use or session-less")
 
-	feedbackURL = flag.String("feedbackURL", "https://staging-devportal-api.couchbase.live/pageLikes",
+	feedbackURL = flag.String("feedbackURL", "https://devportal-api.couchbase.live/pageLikes",
 		"URL to send the feedback from pages")
 
 	host = flag.String("host", "127.0.0.1",
