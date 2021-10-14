@@ -3,8 +3,8 @@ page: page-09
 lang: go
 infoBefore: |
   <div>
-  <a href='basic-go-query-named-param' class="prev-button">Previous Lesson</a>
-  <a href='basic-go-subdoc-lookup' class="next-button">Next Lesson</a>
+  <a href='/examples/basic-go-query-named-param' class="prev-button">Previous Lesson</a>
+  <a href='/examples/basic-go-subdoc-lookup' class="next-button">Next Lesson</a>
   </div>
   <br>
 code: |

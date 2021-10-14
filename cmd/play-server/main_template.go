@@ -82,7 +82,7 @@ func MainTemplateEmit(w http.ResponseWriter,
 	containerPublishPortBase, containerPublishPortSpan int,
 	portMapping [][]int,
 	examplesPath, name, title, lang, code, highlight, view, bodyClass,
-	infoBefore, infoAfter string, templateToRender string) error {
+	infoBefore, infoAfter string) error {
 	host := hostIn
 	if session == nil {
 		host = "127.0.0.1"
@@ -99,14 +99,15 @@ func MainTemplateEmit(w http.ResponseWriter,
 		return err
 	}
 
-	if session != nil && name == "" && lang == "" && code == "" {
-		for _, example := range examplesArr {
-			if code, exists := example["code"]; exists && code != "" {
-				name = example["name"].(string)
-				break
-			}
-		}
-	}
+	// Disable loading the code samples on session to align with new homepage
+	// if session != nil && name == "" && lang == "" && code == "" {
+	// 	for _, example := range examplesArr {
+	// 		if code, exists := example["code"]; exists && code != "" {
+	// 			name = example["name"].(string)
+	// 			break
+	// 		}
+	// 	}
+	// }
 
 	example, exists := examples[name]
 	if exists && example != nil {
@@ -170,7 +171,7 @@ func MainTemplateEmit(w http.ResponseWriter,
 		LangPretty: LangPretty[lang],
 		Code:       code,
 		Highlight:  highlight,
-		InfoBefore: template.HTML(infoBefore),
+		InfoBefore: template.HTML(AddSessionInfo(session, infoBefore)),
 		InfoAfter:  template.HTML(infoAfter),
 
 		AnalyticsHTML: template.HTML(AnalyticsHTML(hostIn)),
@@ -207,7 +208,7 @@ func MainTemplateEmit(w http.ResponseWriter,
 	}
 
 	// t, err := template.ParseFiles(staticDir + "/main" + view + ".html.tmpl")
-	t, err := template.ParseFiles(staticDir + "/" + templateToRender + view + ".html.tmpl")
+	t, err := template.ParseFiles(staticDir + "/home" + view + ".html.tmpl")
 
 	if err != nil {
 		http.Error(w,

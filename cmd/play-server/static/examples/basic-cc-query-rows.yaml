@@ -3,8 +3,8 @@ page: page-10
 lang: cc
 infoBefore: |
   <div>
-  <a href='basic-cc-kv-get' class="prev-button">Previous Lesson</a>
-  <a href='basic-cc-query-named-param' class="next-button">Next Lesson</a>
+  <a href='/examples/basic-cc-kv-get' class="prev-button">Previous Lesson</a>
+  <a href='/examples/basic-cc-query-named-param' class="next-button">Next Lesson</a>
   </div>
   <br>
 code: |

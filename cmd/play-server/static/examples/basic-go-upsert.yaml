@@ -3,7 +3,7 @@ page: page-09
 lang: go
 infoBefore: |
   <div>
-  <a href='basic-go-subdoc-mutate' class="prev-button">Previous Lesson</a>
+  <a href='/examples/basic-go-subdoc-mutate' class="prev-button">Previous Lesson</a>
   <a href='#' class="disable next-button" style="float:right">Next Lesson</a>
   </div>
   <br>

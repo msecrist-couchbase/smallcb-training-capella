@@ -3,7 +3,7 @@ page: page-06
 lang: php
 infoBefore: |
   <div>
-  <a href='basic-php-subdoc-mutate' class="prev-button">Previous Lesson</a>
+  <a href='/examples/basic-php-subdoc-mutate' class="prev-button">Previous Lesson</a>
   <a href='#' class="disable next-button" style="float:right">Next Lesson</a>
   </div>
   <br>

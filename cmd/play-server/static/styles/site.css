@@ -40,6 +40,8 @@ header .logo h1 img {
   position: relative;
   top: 8px;
   margin-right: 10px;
+  padding-right: 10px;
+  border-right: 1px solid white;
 }
 
 header nav {
@@ -122,7 +124,7 @@ footer {
   padding: 14px 14px;
 }
 
-footer div { 
+footer div {
   margin: 0.25em 0 0.25em 0;
 }
 
@@ -190,7 +192,7 @@ body.dark > header {
 }
 
 body.dark > header h1 {
-  color: #eee;
+  color:#fff;
 }
 
 body > header > nav > ul > li > a {
@@ -211,12 +213,12 @@ body.dark > main > .info-panel > .message-info {
 
 body.dark > footer {
   background-color: #232831;
-  border-top: 1px solid #414a5a; 
+  border-top: 1px solid #414a5a;
   color: #EFEFEF;
 }
 
 /* Dark Mode Links */
-body.dark a { 
+body.dark a {
   color: #FFF;
   text-decoration: underline;
 }
@@ -224,7 +226,7 @@ body.dark a {
 /* Dark Mode Menu Links */
 body.dark header nav ul > li a {
   color: #FFF;
-  background-image: linear-gradient(currentColor, currentColor);
+  background: none;
 }
 body.dark header nav ul > li a.session:hover {
   color: red;
