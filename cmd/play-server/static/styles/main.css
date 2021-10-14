@@ -269,7 +269,7 @@ main .info-header .header-right code {
   border-bottom-left-radius: 3px;
 
   border: 0;
-  padding: 3px 40px 3px 40px;
+  padding: 3px 24px;
   font-weight: bold;
   cursor: pointer;
 
@@ -293,7 +293,7 @@ main .info-header .header-right code {
 }
 .workspace .workspace-body .code-output iframe.output {
   width: 100%;
-  height: 50vh;
+  height: 16vh;
   margin-bottom: 15px;
 
   border-width: 1px;
@@ -786,7 +786,7 @@ h2.home-header {
   color: #ffffff;
 
   display: block;
-  margin-top: 7px;
+  margin-top: 24px;
   width: 14rem;
   border-width: 1px;
   border-style: solid;
@@ -823,7 +823,8 @@ h2.example-title {
 .editor-label {
   position: absolute;
   padding: 3px 6px;
-  background: #516374;
+  background: rgba(86, 107, 127, 0.2);
+  border: 1px solid #516374;
   height: auto !important;
   z-index: 100;
   font-size: 12px !important;
