@@ -9,7 +9,7 @@ var (
 	codeDuration = flag.Duration("codeDuration", 20*time.Second,
 		"duration that a client's request code may run on an assigned container instance")
 
-	codeMaxLen = flag.Int("codeMaxLen", 8000,
+	codeMaxLen = flag.Int("codeMaxLen", 10000,
 		"max length of a client's request code in bytes")
 
 	containerNamePrefix = flag.String("containerNamePrefix", "smallcb-",
@@ -79,4 +79,7 @@ var (
 
 	version = flag.String("version", "tmp/ns_server.app.vsn",
 		"version string or filename that holds version string")
+	
+	encryptKey = flag.String("encryptKey", "12345678901234567890123456789012",
+		"secret key for encrypted text")
 )

@@ -50,6 +50,8 @@ func HttpMuxInit(mux *http.ServeMux) {
 
 	mux.HandleFunc("/run", HttpHandleRun)
 
+	mux.HandleFunc("/et", HttpHandleET)
+
 	mux.HandleFunc("/", HttpHandleMain)
 }
 
@@ -718,7 +720,7 @@ func CodeFromFixup(code, program, lang, from string) string {
 	if from == "docs" {
 		code = strings.ReplaceAll(code, "\"Administrator\"", "\"username\"")
 		code = strings.ReplaceAll(code, "'Administrator'", "'username'")
-
+		
 		if lang == "java" {
 			code = strings.ReplaceAll(code,
 				"public class "+program, "class Program")
@@ -733,6 +735,14 @@ func CodeFromFixup(code, program, lang, from string) string {
 			code = strings.ReplaceAll(code,
 				"class "+program, "class Program")
 		}
+	}
+	// replace if encrypted text used %%%<ET>%%%
+	for strings.Contains(code, "%%%") {
+		re := regexp.MustCompile("%%%(.*?)%%%")
+		match := re.FindStringSubmatch(code)
+		et := strings.Split(match[0],"%%%")
+		ct := Decrypt(*encryptKey, et[1])
+		code = strings.ReplaceAll(code, "%%%"+match[1]+"%%%", ct)
 	}
 
 	return code
@@ -802,3 +812,26 @@ func CheckVerServer(verServer string) error {
 
 	return nil
 }
+
+
+// Get Encrypted Text
+func HttpHandleET(w http.ResponseWriter, r *http.Request) {
+	StatsNumInc("http.ET")
+
+	cleartext := r.FormValue("ct")
+	etext := r.FormValue("et")
+	result := ""
+	if cleartext != "" {
+		result = Encrypt(*encryptKey, cleartext)
+	}
+	if etext != "" {
+		result = Decrypt(*encryptKey, etext)
+	}
+    
+	StatsNumInc("http.ET.ok")
+
+	w.Header().Set("Content-Type", "application/json")
+
+	w.Write([]byte(result))
+}
+
