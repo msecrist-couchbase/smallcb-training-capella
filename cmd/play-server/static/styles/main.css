@@ -966,3 +966,10 @@ div.progress-wrapper > ul > li > a:hover {
   -webkit-transition:.3s;
   transition:.3s;
 }
+
+@media only screen and (min-width: 85em) {
+  .container {
+    width: 90% !important;
+    max-width: 128rem;
+  }
+}
