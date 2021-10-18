@@ -266,18 +266,18 @@ main .info-header .header-right code {
 .workspace .workspace-body .code-editor input.run {
   display: inline-block;
   float: right;
-  border-bottom-left-radius: 3px;
+  border-bottom-left-radius: 6px;
 
   border: 0;
   padding: 3px 24px;
   font-weight: bold;
   cursor: pointer;
 
-  border-width: 1px;
+  border-width: 2px;
   border-style: solid;
 }
 .workspace .workspace-body .code-editor input.run:hover {
-  border-width: 1px;
+  border-width: 2px;
   border-style: solid;
 }
 .workspace .workspace-body .code-editor input.run:focus {
@@ -656,7 +656,7 @@ body.dark .workspace .workspace-body .code-editor input.run {
   margin-bottom: 20px;
 }
 body.dark .workspace .workspace-body .code-editor input.run:hover {
-  background-color: #333a32;
+  background-color: #445e41;
 }
 
 body.dark .workspace .workspace-body .code-editor form.run-submitted input.run {
@@ -965,4 +965,11 @@ div.progress-wrapper > ul > li > a:hover {
   -moz-transition:.3s;
   -webkit-transition:.3s;
   transition:.3s;
+}
+
+@media only screen and (min-width: 85em) {
+  .container-example {
+    width: 90% !important;
+    max-width: 128rem;
+  }
 }
