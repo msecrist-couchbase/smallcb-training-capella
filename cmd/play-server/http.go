@@ -33,7 +33,7 @@ func HttpMuxInit(mux *http.ServeMux) {
 
 	mux.HandleFunc("/static-data", HttpHandleStaticData)
 
-  mux.HandleFunc("/admin/health", HttpHandleHealth)
+	mux.HandleFunc("/admin/health", HttpHandleHealth)
 
 	mux.HandleFunc("/admin/dashboard", HttpHandleAdminDashboard)
 
@@ -449,7 +449,7 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 // ------------------------------------------------
 
 // Executes some code posted in request body
-// parameters: 
+// parameters:
 // - s: session
 // - lang: language of the code
 // - code: code to run
@@ -463,7 +463,7 @@ func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 
 	session := sessions.SessionGet(s)
 	if session == nil && s != "" {
-    // if session key was passed by there was no session with such key
+		// if session key was passed by there was no session with such key
 		StatsNumInc("http.Run.err")
 
 		t := http.StatusText(http.StatusNotFound) +
@@ -496,8 +496,9 @@ func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 	}
 
 	code := strings.Join(codeVals, "")
+	from := r.FormValue("from")
 
-	code = CodeFromFixup(code, r.FormValue("program"), lang, r.FormValue("from"))
+	code = CodeFromFixup(code, r.FormValue("program"), lang, from)
 
 	err := CheckVerSDK(lang, r.FormValue("verSDK"))
 	if err != nil {
@@ -571,15 +572,18 @@ func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
-
+	var t string
 	if err != nil {
 		StatsNumInc("http.Run.err")
-
-		t := http.StatusText(http.StatusInternalServerError) +
-			fmt.Sprintf(", HttpHandleRun, err: %v\n"+
-				"------------------------\n%s\n",
-				err, result)
-
+		// If there is a run time error, hide it from the Documentation runs. Continue to log the error on the server.
+		if from == "docs" {
+			t = "Sorry, our servers are in maintenance.\nThese servers will be back soon.\n"
+		} else {
+			t = http.StatusText(http.StatusInternalServerError) +
+				fmt.Sprintf(", HttpHandleRun, err: %v\n"+
+					"------------------------\n%s\n",
+					err, result)
+		}
 		if strings.Index(t, "err: timeout") > 0 {
 			t = "Whoops, timeout error.\n" +
 				" -- perhaps try again later\n" +
@@ -609,8 +613,6 @@ func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 
 	EmitOutput(w, string(result), color)
 }
-
-// ------------------------------------------------
 
 func HttpHandleStaticData(w http.ResponseWriter, r *http.Request) {
 	path := r.FormValue("path")
@@ -697,6 +699,19 @@ func OptanonHTML(host string) string {
 	return `<link type="text/css" rel="stylesheet" href="https://cdn.cookielaw.org/skins/4.3.3/default_flat_bottom_two_button_black/v2/css/optanon.css"/>
 <script src="https://cdn.cookielaw.org/scripttemplates/otSDKStub.js" type="text/javascript" charset="UTF-8" data-domain-script="589e23c3-a7c6-4ff3-a948-b7d86b33b846"></script>
 <script>function OptanonWrapper(){}</script>`
+}
+
+// ------------------------------------------------
+// Add the session info to the navigation URLs in code samples
+// Replace the end of the URL with ?s=session_id
+func AddSessionInfo(session *Session, infoBefore string) string {
+	if session != nil {
+		sIDNext := fmt.Sprintf("?s=%s' class=\"next-button\"", session.SessionId)
+		sIDPrev := fmt.Sprintf("?s=%s' class=\"previous-button\"", session.SessionId)
+		infoBefore = strings.ReplaceAll(infoBefore, "' class=\"next-button\"", sIDNext)
+		infoBefore = strings.ReplaceAll(infoBefore, "' class=\"prev-button\"", sIDPrev)
+	}
+	return infoBefore
 }
 
 // ------------------------------------------------

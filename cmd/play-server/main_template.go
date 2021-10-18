@@ -99,14 +99,15 @@ func MainTemplateEmit(w http.ResponseWriter,
 		return err
 	}
 
-	if session != nil && name == "" && lang == "" && code == "" {
-		for _, example := range examplesArr {
-			if code, exists := example["code"]; exists && code != "" {
-				name = example["name"].(string)
-				break
-			}
-		}
-	}
+	// Disable loading the code samples on session to align with new homepage
+	// if session != nil && name == "" && lang == "" && code == "" {
+	// 	for _, example := range examplesArr {
+	// 		if code, exists := example["code"]; exists && code != "" {
+	// 			name = example["name"].(string)
+	// 			break
+	// 		}
+	// 	}
+	// }
 
 	example, exists := examples[name]
 	if exists && example != nil {
@@ -170,7 +171,7 @@ func MainTemplateEmit(w http.ResponseWriter,
 		LangPretty: LangPretty[lang],
 		Code:       code,
 		Highlight:  highlight,
-		InfoBefore: template.HTML(infoBefore),
+		InfoBefore: template.HTML(AddSessionInfo(session, infoBefore)),
 		InfoAfter:  template.HTML(infoAfter),
 
 		AnalyticsHTML: template.HTML(AnalyticsHTML(hostIn)),
@@ -206,7 +207,9 @@ func MainTemplateEmit(w http.ResponseWriter,
 		view = "-" + view
 	}
 
-	t, err := template.ParseFiles(staticDir + "/main" + view + ".html.tmpl")
+	// t, err := template.ParseFiles(staticDir + "/main" + view + ".html.tmpl")
+	t, err := template.ParseFiles(staticDir + "/home" + view + ".html.tmpl")
+
 	if err != nil {
 		http.Error(w,
 			http.StatusText(http.StatusInternalServerError)+

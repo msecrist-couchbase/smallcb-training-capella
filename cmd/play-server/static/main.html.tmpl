@@ -6,6 +6,10 @@
   <link rel="stylesheet" type="text/css" href="/static/styles/site.css">
   <link rel="stylesheet" type="text/css" href="/static/styles/main.css">
   <link rel="stylesheet" type="text/css" href="/static/styles/icons.css">
+  <link rel="stylesheet" type="text/css" href="/static/styles/flexboxgrid.min.css">
+  <link rel="stylesheet" type="text/css" href="/static/styles/progress-wizard.min.css">
+
+
   <style>
     {{if not .Session}}
     body .needs-session {
@@ -99,6 +103,129 @@
   </header>
 
   <main id="main">
+    <div class="progress-wrapper">
+      <ul class="progress-indicator">
+        {{/* Determine If KV Get Completed */}}
+        {{if or
+          (eq .Title "Key Value Get")
+          (eq .Title "Query Rows")
+          (eq .Title "Query w/ Named Param")
+          (eq .Title "Query w/ Positional Param")
+          (eq .Title "Sub-document Lookup")
+          (eq .Title "Sub-document Mutate")
+          (eq .Title "Transactions KV Mutate")
+          (eq .Title "Transactions N1QL")
+          (eq .Title "Upsert")
+        }}
+          <li class="completed"><span class="bubble"></span> Key Value Get</li>
+        {{else}}
+          <li><span class="bubble"></span> Key Value Get</li>
+        {{end}}
+
+        {{/* Determine If Query Rows Completed */}}
+        {{if or
+          (eq .Title "Query Rows")
+          (eq .Title "Query w/ Named Param")
+          (eq .Title "Query w/ Positional Param")
+          (eq .Title "Sub-document Lookup")
+          (eq .Title "Sub-document Mutate")
+          (eq .Title "Transactions KV Mutate")
+          (eq .Title "Transactions N1QL")
+          (eq .Title "Upsert")
+        }}
+          <li class="completed"><span class="bubble"></span> Query Rows</li>
+        {{else}}
+          <li><span class="bubble"></span> Query Rows</li>
+        {{end}}
+
+        {{/* Determine If Query w/ Named Param Completed */}}
+        {{if or
+          (eq .Title "Query w/ Named Param")
+          (eq .Title "Query w/ Positional Param")
+          (eq .Title "Sub-document Lookup")
+          (eq .Title "Sub-document Mutate")
+          (eq .Title "Transactions KV Mutate")
+          (eq .Title "Transactions N1QL")
+          (eq .Title "Upsert")
+        }}
+          <li class="completed"><span class="bubble"></span> Query w/ Named Param</li>
+        {{else}}
+          <li><span class="bubble"></span> Query w/ Named Param</li>
+        {{end}}
+
+        {{/* Determine If Query w/ Positional Param Completed */}}
+        {{if or
+          (eq .Title "Query w/ Positional Param")
+          (eq .Title "Sub-document Lookup")
+          (eq .Title "Sub-document Mutate")
+          (eq .Title "Transactions KV Mutate")
+          (eq .Title "Transactions N1QL")
+          (eq .Title "Upsert")
+        }}
+          <li class="completed"><span class="bubble"></span> Query w/ Positional Param</li>
+        {{else}}
+          <li><span class="bubble"></span> Query w/ Positional Param</li>
+        {{end}}
+
+        {{/* Determine If Sub Document Lookup Completed */}}
+        {{if or
+          (eq .Title "Sub-document Lookup")
+          (eq .Title "Sub-document Mutate")
+          (eq .Title "Transactions KV Mutate")
+          (eq .Title "Transactions N1QL")
+          (eq .Title "Upsert")
+        }}
+          <li class="completed"><span class="bubble"></span> Sub-Document Lookup</li>
+        {{else}}
+          <li><span class="bubble"></span> Sub-Document Lookup</li>
+        {{end}}
+
+        {{/* Determine If Sub Document Mutate Completed */}}
+        {{if or
+          (eq .Title "Sub-document Mutate")
+          (eq .Title "Transactions KV Mutate")
+          (eq .Title "Transactions N1QL")
+          (eq .Title "Upsert")
+        }}
+          <li class="completed"><span class="bubble"></span> Sub-Document Mutate</li>
+        {{else}}
+          <li><span class="bubble"></span> Sub-Document Mutate</li>
+        {{end}}
+
+
+        {{/* Show/Hide Java Transactions Steps */}}
+        {{if eq .Lang "java"}}
+          {{/* Determine If JAVA Transactions KV Mutate Completed */}}
+          {{if or
+            (eq .Title "Transactions KV Mutate")
+            (eq .Title "Transactions N1QL")
+            (eq .Title "Upsert")
+          }}
+            <li class="completed"><span class="bubble"></span> Transactions KV Mutate</li>
+          {{else}}
+            <li><span class="bubble"></span> Transactions KV Mutate </li>
+          {{end}}
+
+          {{/* Determine If JAVA Transactions N1QL Completed */}}
+          {{if or
+            (eq .Title "Transactions N1QL")
+            (eq .Title "Upsert")
+          }}
+            <li class="completed"><span class="bubble"></span> Transactions N1QL </li>
+          {{else}}
+            <li><span class="bubble"></span> Transactions N1QL </li>
+          {{end}}
+        {{end}}
+
+
+        {{/* Determine If Upsert Completed */}}
+        {{if (eq .Title "Upsert")}}
+          <li class="completed"><span class="bubble"></span> Upsert</li>
+        {{else}}
+          <li><span class="bubble"></span> Upsert</li>
+        {{end}}
+      </ul>
+    </div>
     {{if .Session}}
       <div class="info-header">
         <div class="header-left">
@@ -164,157 +291,114 @@
 
     <div class="workspace" id="workspace">
       <div class="workspace-body">
-        <div class="code-examples">
-          <input name="examplesToggle" id="examplesToggle"
-                 type="checkbox" checked/>
+        <div class="row example-row" style="width: 100%">
+          <div class="col-xs-12 col-md-5 example-info-column">
 
-          <h2><label for="examplesToggle"><span class="chevron down"></span></a>Code Examples</label></h2>
-
-          <div class="div-hr">
-            <hr/>
-          </div>
-
-          <div class="pages">
-            {{range $i, $v := .Examples}}
-              {{if not .code}}
-                <a class="{{if .className}}{{.className}} {{end}}{{.page}}"
-                   {{if .nameNext}}href="/{{$.ExamplesPath}}/{{.nameNext}}{{if $.Session}}?s={{$.Session.SessionId}}{{end}}"{{end}}
-                   onclick="return pageToggle('{{.page}}')">
-                  {{.title}}
-                </a>
-                <style>
-                  main.{{.page}} .workspace .workspace-body .code-examples .pages a.{{.page}} {
-                    border: 1px solid rgba(159, 226, 100, 0.95);
-                    background-color: #333a32;
-                  }
-                </style>
+            <div class="example-heading">
+              {{if .InfoBefore}}
+                <div class="info infoBefore">{{.InfoBefore}}</div>
               {{end}}
-            {{end}}
-          </div>
 
-          <div class="example-nav">
-            <ul class="examples">
-              {{range $i, $v := .Examples}}
-              <li class="{{if .className}}{{.className}} {{end}}{{if .lang}}lang {{.lang}}{{else}}category{{end}} {{.page}}{{if eq .name $.Name}} current{{end}}">
-                {{if .code}}
-                  <a href="/{{$.ExamplesPath}}/{{.name}}{{if $.Session}}?s={{$.Session.SessionId}}{{end}}"
-                     id="ex-{{.name}}">
-                    {{.title}}
-                  </a>
-                {{else}}
-                  {{.title}}
-                  {{if .links}}
-                    <span class="links">
-                      {{range .links}}
-                        <a href="{{.url}}" target="_blank" class="{{.class}}">{{.title}}</a>
-                      {{end}}
-                    </span>
-                  {{end}}
-                {{end}}
-              </li>
-
-              <style>
-                main .workspace .workspace-body .code-examples .example-nav .examples li.{{.page}} {
-                  background-color: #{{call $.PageColor .page}};
-                }
-                main.page-focus .workspace .workspace-body .code-examples .example-nav .examples li.{{.page}} {
-                  display: none;
-                }
-                main.page-focus.{{.page}} .workspace .workspace-body .code-examples .example-nav .examples li.{{.page}} {
-                  display: block;
-                }
-              </style>
-
-              {{end}}
-            </ul>
-          </div>
-        </div>
-
-        <div class="code-editor">
-          <div class="sticky">
-            <form action="/run" method="post" target="output" id="form">
-              {{if or .Name .Lang .Code}}
-              <h2>
+              <h2 class="example-title">
                 {{if .Lang}}
                   {{if ne .Lang "NONE"}}
                     <span class="lang">{{or .LangPretty .Lang}} - </span>
                   {{end}}
                 {{end}}
-                {{if .Title}}{{.Title}}{{else}}Code Editor{{end}}
-
-                {{if ne .Code "NONE"}}
-                  <input type="submit" value="run &gt;&gt;" class="run" id="run"
-                         onclick="return onRunSubmit()"/>
-                {{end}}
+                {{if .Title}}{{.Title}}{{else}}Playground Editor{{end}}
               </h2>
+            </div>
 
-              <div class="example-frame">
-                {{if .InfoBefore}}
-                  <div class="info infoBefore">{{.InfoBefore}}</div>
-                {{end}}
+            {{if .InfoAfter}}
+              <div class="info infoAfter">{{.InfoAfter}}</div>
+            {{end}}
 
-                {{if .Session}}
-                  <input name="s" type="hidden" value="{{.Session.SessionId}}"/>
-                {{end}}
+            {{if not .Session}}
+              <div class="session-cta">
+                Also try Couchbase Server in an online playground:
+                <a href="/session" class="nowrap">Start Playground Session</a>
+              </div>
+            {{end}}
+            <a class="return-home-button example-button" href="/home"><i class="fa fa-check"></i>
+              <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+                   width="24" height="24"
+                   viewBox="0 0 24 24"
+                   style=" fill:#ffffff;">
+                <path d="M 12 2 A 1 1 0 0 0 11.289062 2.296875 L 1.203125 11.097656 A 0.5 0.5 0 0 0 1 11.5 A 0.5 0.5 0 0 0 1.5 12 L 4 12 L 4 20 C 4 20.552 4.448 21 5 21 L 9 21 C 9.552 21 10 20.552 10 20 L 10 14 L 14 14 L 14 20 C 14 20.552 14.448 21 15 21 L 19 21 C 19.552 21 20 20.552 20 20 L 20 12 L 22.5 12 A 0.5 0.5 0 0 0 23 11.5 A 0.5 0.5 0 0 0 22.796875 11.097656 L 12.716797 2.3027344 A 1 1 0 0 0 12.710938 2.296875 A 1 1 0 0 0 12 2 z"></path>
+              </svg>
+              &nbsp&nbsp
+              Return to Homepage
+            </a>
+          </div>
 
-                <input name="lang" type="hidden" value="{{.Lang}}" id="lang"/>
+          <div class="col-xs-12 col-md-7">
+            <div class="code-editor">
+              <div class="sticky">
+                <form action="/run" method="post" target="output" id="form">
 
-                {{if ne .Code "NONE"}}
-                  <div id="code-ace" class="code-ace"></div>
+                  {{if or .Name .Lang .Code}}
+                  {{if ne .Code "NONE"}}
+                    <h2 class="editor-label">Code Editor</h2>
+                    <input type="submit" value="run &gt;&gt;" class="run" id="run"
+                           onclick="return onRunSubmit()"/>
+                  {{end}}
+                  <div class="example-frame">
 
-                  <textarea id="code" name="code" class="code"
-                    wrap="off" autocorrect="off"
-                    autocomplete="off" autocapitalize="off"
-                    spellcheck="false">{{.Code}}</textarea>
-                {{end}}
+                    {{if .Session}}
+                      <input name="s" type="hidden" value="{{.Session.SessionId}}"/>
+                    {{end}}
 
-                {{if .InfoAfter}}
-                  <div class="info infoAfter">{{.InfoAfter}}</div>
-                {{end}}
+                    <input name="lang" type="hidden" value="{{.Lang}}" id="lang"/>
 
-                {{if not .Session}}
-                  <div class="session-cta">
-                    Also try Couchbase Server in an online playground:
-                    <a href="/session" class="nowrap">Start Playground Session</a>
+                    {{if ne .Code "NONE"}}
+                      <div id="code-ace" class="code-ace"></div>
+
+                      <textarea id="code" name="code" class="code"
+                                wrap="off" autocorrect="off"
+                                autocomplete="off" autocapitalize="off"
+                                spellcheck="false">{{.Code}}</textarea>
+                    {{end}}
+                  </div>
+
+                  <input name="color" type="hidden" value="#FFF"/>
+                </form>
+                {{else}}
+                  <div class="no-session">
+                    <h2>
+                      Try Couchbase in an online playground
+                    </h2>
+                  </div>
+                  <div class="empty-example-frame">
+                    <div class="info-frame session-cta">
+                      {{if not .Session}}
+                        <div>
+                          <a href="/session" class="nowrap">
+                            <div class="example-button">Start Playground Session</div>
+
+                            <img src="/static/shots/shot-documents.png"/>
+                          </a>
+                        </div>
+                      {{end}}
+                    </div>
                   </div>
                 {{end}}
               </div>
-
-              <input name="color" type="hidden" value="#FFF"/>
-            </form>
-            {{else}}
-            <div class="no-session">
-              <h2>
-                Try Couchbase in an online playground
-              </h2>
             </div>
-            <div class="empty-example-frame">
-              <div class="info-frame session-cta">
-                {{if not .Session}}
-                  <div>
-                    <a href="/session" class="nowrap">
-                      <div>Start Playground Session</div>
 
-                      <img src="/static/shots/shot-documents.png"/>
-                    </a>
-                  </div>
+            <div class="code-output hidden" id="code-output">
+              <div class="sticky">
+                {{if or .Name .Lang .Code}}
+                  <h2 class="editor-label">Output</h2>
+                  <iframe name="output" id="output" class="output"></iframe>
                 {{end}}
               </div>
             </div>
-            {{end}}
           </div>
         </div>
 
-        <div class="code-output hidden" id="code-output">
-          <div class="sticky">
-            {{if or .Name .Lang .Code}}
-              <h2>Output</h2>
-              <iframe name="output" id="output" class="output"></iframe>
-            {{end}}
-          </div>
-        </div>
       </div>
     </div>
+
   </main>
 
   <footer>
@@ -339,6 +423,11 @@
     {{if .LangAce}}
       codeAce.setOption("mode", "ace/mode/{{.LangAce}}");
     {{end}}
+
+    codeAce.renderer.setScrollMargin(24, 0, 0, 0)
+    let numLines = codeAce.session.doc.getAllLines().length;
+    let editorHeight = (numLines * 18);
+    document.getElementById("code-ace").style.height = `${editorHeight}px`
 
     {{if .Highlight}}
     var highlight = "{{.Highlight}}";
@@ -372,6 +461,7 @@
 
   <script>
     function pageToggle(page) {
+
       var main = document.getElementById("main");
 
       var wasPageFocused = main.className.indexOf("page-focus") >= 0;
@@ -380,7 +470,7 @@
         main.className = page + " page-focus";
         localStorage.setItem('page', page);
 
-	return true;
+        return true;
       }
 
       main.className = "";

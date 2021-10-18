@@ -1,6 +1,12 @@
 title: Query w/ Named Param
 page: page-07
 lang: rb
+infoBefore: |
+  <div>
+  <a href='/examples/basic-ruby-query-rows' class="prev-button">Previous Lesson</a>
+  <a href='/examples/basic-ruby-query-positional-param' class="next-button">Next Lesson</a>
+  </div>
+  <br>
 code: |
 
   require "couchbase"
@@ -11,7 +17,7 @@ code: |
   cluster = Cluster.connect("couchbase://{{.Host}}", options)
 
   bucket = cluster.bucket("travel-sample")
-  
+
   begin
     options = Cluster::QueryOptions.new
     options.named_parameters({"type" => "hotel"})

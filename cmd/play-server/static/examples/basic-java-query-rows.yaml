@@ -1,13 +1,19 @@
 title: Query Rows
 page: page-01
 lang: java
+infoBefore: |
+  <div>
+  <a href='/examples/basic-java-kv-get' class="prev-button">Previous Lesson</a>
+  <a href='/examples/basic-java-query-named-param' class="next-button">Next Lesson</a>
+  </div>
+  <br>
 code: |
   import com.couchbase.client.core.error.DocumentNotFoundException;
   import com.couchbase.client.java.*;
   import com.couchbase.client.java.kv.*;
   import com.couchbase.client.java.json.JsonObject;
   import com.couchbase.client.java.query.QueryResult;
-  
+
   class Program {
     public static void main(String[] args) {
       var cluster = Cluster.connect(

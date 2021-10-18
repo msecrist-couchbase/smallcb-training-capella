@@ -1,6 +1,12 @@
 title: Query w/ Named Param
 page: page-10
 lang: cc
+infoBefore: |
+  <div>
+  <a href='/examples/basic-cc-query-rows' class="prev-button">Previous Lesson</a>
+  <a href='/examples/basic-cc-query-positional-param' class="next-button">Next Lesson</a>
+  </div>
+  <br>
 code: |
   #include <vector>
   #include <string>
@@ -110,7 +116,7 @@ code: |
       query_type(instance, bucket_name, "type", "hotel");
       
       lcb_destroy(instance);
-  } 
+  }
 infoAfter: |
   This example shows how to use named parameters with the cluster.query() method.
   <br/><br/>
