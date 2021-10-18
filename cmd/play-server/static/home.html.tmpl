@@ -64,7 +64,8 @@
 
       stepNext(0);
 
-      document.getElementById("code-output").className = "code-output";
+      document.getElementById("code-output").classList.add("code-output");
+      document.getElementById("code-output").classList.remove("hidden");
 
       return true;
     }
@@ -490,7 +491,7 @@
 
         <div class="row example-row" style="width: 100%">
             {{if and .Lang .Title}}
-              <div class="col-xs-12 col-md-5 example-info-column">
+              <div class="col-xs-12 col-md-5 example-info-column" id="infoColumn">
                 <div class="example-heading">
                     {{if .InfoBefore}}
                       <div class="info infoBefore">{{.InfoBefore}}</div>
@@ -526,50 +527,58 @@
               </div>
             {{end}}
             {{if .Lang}}
-              <div class="col-xs-12 col-md-7">
+              <div class="col-xs-12 col-md-7" id="editorColumn">
 
-                <div class="code-editor">
-                  <div class="sticky">
-                    <form action="/run" method="post" target="output" id="form">
+                <button onclick="toggleEditorView();">Toggle View</button>
 
-                        {{if or .Name .Lang .Code}}
-                        {{if ne .Code "NONE"}}
-                          <h2 class="editor-label">Code Editor</h2>
-                          <input type="submit" value="run example &nbsp &gt&gt;" class="run" id="run"
-                                 onclick="return onRunSubmit()"/>
-                        {{end}}
-                      <div class="example-frame">
+                <div id="editorWrapper" class="">
 
-                          {{if .Session}}
-                            <input name="s" type="hidden" value="{{.Session.SessionId}}"/>
-                          {{end}}
+                  <div id="editorDiv" class="code-editor">
+                    <div class="sticky">
+                      <form action="/run" method="post" target="output" id="form">
 
-                        <input name="lang" type="hidden" value="{{.Lang}}" id="lang"/>
-
+                          {{if or .Name .Lang .Code}}
                           {{if ne .Code "NONE"}}
-                            <div id="code-ace" class="code-ace"></div>
-
-                            <textarea id="code" name="code" class="code"
-                                      wrap="off" autocorrect="off"
-                                      autocomplete="off" autocapitalize="off"
-                                      spellcheck="false">{{.Code}}</textarea>
+                            <h2 class="editor-label">Code Editor</h2>
+                            <input type="submit" value="run example &nbsp &gt&gt;" class="run" id="run"
+                                   onclick="return onRunSubmit()"/>
                           {{end}}
-                      </div>
+                        <div class="example-frame">
 
-                      <input name="color" type="hidden" value="#FFF"/>
-                    </form>
-                      {{end}}
+                            {{if .Session}}
+                              <input name="s" type="hidden" value="{{.Session.SessionId}}"/>
+                            {{end}}
+
+                          <input name="lang" type="hidden" value="{{.Lang}}" id="lang"/>
+
+                            {{if ne .Code "NONE"}}
+                              <div id="code-ace" class="code-ace"></div>
+
+                              <textarea id="code" name="code" class="code"
+                                        wrap="off" autocorrect="off"
+                                        autocomplete="off" autocapitalize="off"
+                                        spellcheck="false">{{.Code}}</textarea>
+                            {{end}}
+                        </div>
+
+                        <input name="color" type="hidden" value="#FFF"/>
+                      </form>
+                        {{end}}
+                    </div>
+                  </div>
+
+                  <div class="code-output hidden" id="code-output">
+                    <div class="sticky">
+                        {{if or .Name .Lang .Code}}
+                          <h2 class="editor-label">Output</h2>
+                          <iframe name="output" id="output" class="output"></iframe>
+                        {{end}}
+                    </div>
                   </div>
                 </div>
 
-                <div class="code-output hidden" id="code-output">
-                  <div class="sticky">
-                      {{if or .Name .Lang .Code}}
-                        <h2 class="editor-label">Output</h2>
-                        <iframe name="output" id="output" class="output"></iframe>
-                      {{end}}
-                  </div>
-                </div>
+
+
 
               </div>
             {{end}}
@@ -670,6 +679,54 @@
 </script>
 
 <script>
+  function toggleEditorView() {
+    let isSideBySide = document.getElementById("editorWrapper").classList.contains('row');
+    let iframe = document.getElementById("code-output").childNodes[1].querySelector("iframe");
+    let innerDoc = iframe.contentDocument || iframe.contentWindow.document;
+
+    adjustOuterColumns(isSideBySide);
+
+    if (isSideBySide) {
+      // swap to vertically stacked editor/output
+      document.getElementById("editorWrapper").classList.remove('row')
+      document.getElementById("editorDiv").classList.remove('col-md-7')
+      document.getElementById("code-output").classList.remove('col-md-5')
+
+      // check if any output is rendered before hiding the output on swap
+      if (innerDoc.getElementsByTagName("body")[0].childNodes.length === 0) {
+        document.getElementById("code-output").classList.add('hidden')
+      }
+
+    } else {
+      // swap to side by side editor/output
+      document.getElementById("editorWrapper").classList.add('row')
+      document.getElementById("editorDiv").classList.add('col-md-7')
+      document.getElementById("code-output").classList.add('col-md-5')
+
+      if (document.getElementById("code-output").classList.contains('hidden')) {
+        document.getElementById("code-output").classList.remove('hidden')
+      }
+    }
+
+  }
+
+  // Helper to adjust the main info and editor columns for side by side mode
+  function adjustOuterColumns(isSideBySide) {
+    if (isSideBySide) {
+      document.getElementById("editorColumn").classList.remove('col-md-9')
+      document.getElementById("editorColumn").classList.add('col-md-7')
+      document.getElementById("infoColumn").classList.remove('col-md-3')
+      document.getElementById("infoColumn").classList.add('col-md-5')
+    } else {
+      document.getElementById("editorColumn").classList.add('col-md-9')
+      document.getElementById("editorColumn").classList.remove('col-md-7')
+      document.getElementById("infoColumn").classList.add('col-md-3')
+      document.getElementById("infoColumn").classList.remove('col-md-5')
+    }
+  }
+
+
+
   function pageToggle(page) {
     var main = document.getElementById("main");
     var wasPageFocused = main.className.indexOf("page-focus") >= 0;
