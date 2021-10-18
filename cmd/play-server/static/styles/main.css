@@ -973,3 +973,14 @@ div.progress-wrapper > ul > li > a:hover {
     max-width: 128rem;
   }
 }
+
+@media only screen and (max-width: 992px) {
+  #editorWrapper {
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  #editorDiv {
+    padding-right: 16px;
+  }
+}
