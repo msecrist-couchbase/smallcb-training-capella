@@ -510,12 +510,15 @@
                     <div class="info infoAfter">{{.InfoAfter}}</div>
                   {{end}}
 
+                  <br>
+                  <em>To run this example, click the button in the top right corner of the code editor.</em>
+
                   {{if not .Session}}
                     <div class="session-cta">
-                      To experience everything Couchbase has to offer, try Couchbase Server in an online playground session.
+                      To experience everything Couchbase has to offer, try Couchbase Server in a playground session.
                       <br>
                       <br>
-                      We'll automatically provision a web-based Couchbase instance for you to use and experiment with for the next {{.SessionsMaxAge}}!
+                      We'll automatically provision a web-based Couchbase instance with access to the Web Console for you to use and experiment with!
                       <a href="/session" class="nowrap">Start a Playground Session</a>
                     </div>
                   {{end}}
@@ -532,7 +535,7 @@
                         {{if or .Name .Lang .Code}}
                         {{if ne .Code "NONE"}}
                           <h2 class="editor-label">Code Editor</h2>
-                          <input type="submit" value="run &nbsp &gt&gt;" class="run" id="run"
+                          <input type="submit" value="run example &nbsp &gt&gt;" class="run" id="run"
                                  onclick="return onRunSubmit()"/>
                         {{end}}
                       <div class="example-frame">
