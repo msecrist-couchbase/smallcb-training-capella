@@ -9,6 +9,11 @@
   <link rel="stylesheet" type="text/css" href="/static/styles/icons.css">
   <link rel="stylesheet" type="text/css" href="/static/styles/flexboxgrid.min.css">
   <link rel="stylesheet" type="text/css" href="/static/styles/progress-wizard.min.css">
+
+  <!-- Development CDN -- Switch for PROD -->
+  <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
+  <script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/themes/material.css"/>
   <style>
     {{if not .Session}}
     body .needs-session {
@@ -529,7 +534,7 @@
             {{if .Lang}}
               <div class="col-xs-12 col-md-7" id="editorColumn">
 
-                <button onclick="toggleEditorView();">Toggle View</button>
+                <button id='viewToggleButton' onclick="toggleEditorView();">Toggle View</button>
 
                 <div id="editorWrapper" class="">
 
@@ -679,6 +684,20 @@
 </script>
 
 <script>
+{{/*  Script for Tooltips  */}}
+  tippy('#viewToggleButton', {
+    content: 'Switch code editor view to side by side',
+  });
+
+  tippy('#run', {
+    content: 'Run this example!',
+    placement: 'bottom-start'
+  })
+
+
+</script>
+
+<script>
   function toggleEditorView() {
     let isSideBySide = document.getElementById("editorWrapper").classList.contains('row');
     let iframe = document.getElementById("code-output").childNodes[1].querySelector("iframe");
@@ -687,7 +706,7 @@
     adjustOuterColumns(isSideBySide);
 
     if (isSideBySide) {
-      // swap to vertically stacked editor/output
+      // swap to VERTICAL STACK editor/output
       document.getElementById("editorWrapper").classList.remove('row')
       document.getElementById("editorDiv").classList.remove('col-md-7')
       document.getElementById("code-output").classList.remove('col-md-5')
@@ -696,9 +715,10 @@
       if (innerDoc.getElementsByTagName("body")[0].childNodes.length === 0) {
         document.getElementById("code-output").classList.add('hidden')
       }
+      document.getElementById("viewToggleButton")._tippy.setContent('Switch code editor/output view to side by side')
 
     } else {
-      // swap to side by side editor/output
+      // swap to SIDE BY SIDE editor/output
       document.getElementById("editorWrapper").classList.add('row')
       document.getElementById("editorDiv").classList.add('col-md-7')
       document.getElementById("code-output").classList.add('col-md-5')
@@ -706,6 +726,7 @@
       if (document.getElementById("code-output").classList.contains('hidden')) {
         document.getElementById("code-output").classList.remove('hidden')
       }
+      document.getElementById("viewToggleButton")._tippy.setContent('Switch code editor/output view to vertical stack')
     }
 
   }
@@ -713,19 +734,19 @@
   // Helper to adjust the main info and editor columns for side by side mode
   function adjustOuterColumns(isSideBySide) {
     if (isSideBySide) {
-      document.getElementById("editorColumn").classList.remove('col-md-9')
+      // to VERTICAL STACK view
+      document.getElementById("editorColumn").classList.remove('col-md-8')
       document.getElementById("editorColumn").classList.add('col-md-7')
-      document.getElementById("infoColumn").classList.remove('col-md-3')
+      document.getElementById("infoColumn").classList.remove('col-md-4')
       document.getElementById("infoColumn").classList.add('col-md-5')
     } else {
-      document.getElementById("editorColumn").classList.add('col-md-9')
+      // to SIDE BY SIDE view
+      document.getElementById("editorColumn").classList.add('col-md-8')
       document.getElementById("editorColumn").classList.remove('col-md-7')
-      document.getElementById("infoColumn").classList.add('col-md-3')
+      document.getElementById("infoColumn").classList.add('col-md-4')
       document.getElementById("infoColumn").classList.remove('col-md-5')
     }
   }
-
-
 
   function pageToggle(page) {
     var main = document.getElementById("main");
