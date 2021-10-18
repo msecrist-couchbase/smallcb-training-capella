@@ -192,7 +192,7 @@
 
   <div class="workspace" id="workspace">
     <div class="workspace-body">
-      <div class="container">
+      <div class="container {{if .Lang}}container-example{{end}}">
           {{if not .Lang}}
             <h2 class="home-header"><label for="examplesToggle">Experiment with Code Examples</label></h2>
             <div class="row example-row">
@@ -532,7 +532,7 @@
                         {{if or .Name .Lang .Code}}
                         {{if ne .Code "NONE"}}
                           <h2 class="editor-label">Code Editor</h2>
-                          <input type="submit" value="Run &nbsp &gt&gt;" class="run" id="run"
+                          <input type="submit" value="run &nbsp &gt&gt;" class="run" id="run"
                                  onclick="return onRunSubmit()"/>
                         {{end}}
                       <div class="example-frame">
