@@ -41,11 +41,6 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-west-1
-      - name: Create cache directory
-        run: mkdir /tmp/docker-cache
-      - name: Setup caching
-        uses: satackey/action-docker-layer-caching@v0.0.11
-        continue-on-error: true
       - name: Login to ECR
         uses: aws-actions/amazon-ecr-login@v1
         id: login-ecr
@@ -54,7 +49,6 @@ jobs:
           make BUILD_EXTRAS="--cache-from=\"$TAG\" -t \"$TAG\" " build
           docker image ls
           docker push "$TAG"
-          docker save smallcb:latest > /tmp/docker-cache/image
       - name: Build vol-snapshot image
         run: |
           make create
@@ -71,7 +65,7 @@ jobs:
         run: make play-server
       - name: Create artifact
         run: tar -czf /tmp/$ARTIFACT_NAME *
-      - name: Check Disk Usage After Creating Artifacts
+      - name: Check Disk Usage After Build
         run: |
           sudo df -h
       - name: Upload artifact
