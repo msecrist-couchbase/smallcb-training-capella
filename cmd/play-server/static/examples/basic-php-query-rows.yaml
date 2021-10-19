@@ -1,6 +1,12 @@
 title: Query Rows
 page: page-06
 lang: php
+infoBefore: |
+  <div>
+  <a href='/examples/basic-php-kv-get' class="prev-button">Previous Lesson</a>
+  <a href='/examples/basic-php-query-named-param' class="next-button">Next Lesson</a>
+  </div>
+  <br>
 code: |
   <?php
     $connectionString = "couchbase://{{.Host}}";

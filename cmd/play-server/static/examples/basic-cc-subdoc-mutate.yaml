@@ -1,6 +1,12 @@
 title: Sub-document Mutate
 page: page-10
 lang: cc
+infoBefore: |
+  <div>
+  <a href='/examples/basic-cc-subdoc-lookup' class="prev-button">Previous Lesson</a>
+  <a href='/examples/basic-cc-upsert' class="next-button">Next Lesson</a>
+  </div>
+  <br>
 code: |
   #include <string>
   #include <vector>

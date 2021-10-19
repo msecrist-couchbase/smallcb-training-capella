@@ -1,6 +1,12 @@
 title: Query w/ Named Param
 page: page-09
 lang: go
+infoBefore: |
+  <div>
+  <a href='/examples/basic-go-query-rows' class="prev-button">Previous Lesson</a>
+  <a href='/examples/basic-go-query-positional-param' class="next-button">Next Lesson</a>
+  </div>
+  <br>
 code: |
 
   package main

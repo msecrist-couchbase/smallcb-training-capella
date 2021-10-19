@@ -1,9 +1,15 @@
 title: Sub-document Mutate
 page: page-04
 lang: py
+infoBefore: |
+  <div>
+  <a href='/examples/basic-py-subdoc-lookup' class="prev-button">Previous Lesson</a>
+  <a href='/examples/basic-py-upsert' class="next-button">Next Lesson</a>
+  </div>
+  <br>
 code: |
   #!/usr/bin/python3
-  
+
   import sys
   import couchbase.collection
   import couchbase.subdocument as SD

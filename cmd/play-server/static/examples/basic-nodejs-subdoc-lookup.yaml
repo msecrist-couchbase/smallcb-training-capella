@@ -1,32 +1,38 @@
-title:  Sub-document Lookup
+title: Sub-document Lookup
 page: page-03
 lang: nodejs
+infoBefore: |
+  <div>
+  <a href='/examples/basic-nodejs-query-positional-param' class="prev-button">Previous Lesson</a>
+  <a href='/examples/basic-nodejs-subdoc-mutate' class="next-button">Next Lesson</a>
+  </div>
+  <br>
 code: |
   const couchbase = require('couchbase')
-  
+
   const cluster = new couchbase.Cluster('couchbase://{{.Host}}', {
     username: '{{.CBUser}}', password: '{{.CBPswd}}'
   })
   const bucket = cluster.bucket('travel-sample')
   const collection = bucket.defaultCollection()
-  
+
   const getSubDocument = async (key, field) => {
     try {
       var result = await collection.lookupIn(key, [
         couchbase.LookupInSpec.get(field),
       ])
       var fieldValue = result.content[0].value 
-  
+
       console.log('LookupIn Result: ')
       console.log(result)
-  
+
       console.log(`Field Value: `)
       console.log(fieldValue)
     } catch (error) {
       console.error(error)
     }
   }
-  
+
   getSubDocument('airline_10', 'country')
     .then(() => process.exit(0))
 infoAfter: |

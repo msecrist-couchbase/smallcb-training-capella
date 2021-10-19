@@ -1,6 +1,12 @@
 title: Query w/ Named Param
 page: page-08
 lang: scala
+infoBefore: |
+  <div>
+  <a href='/examples/basic-scala-query-rows' class="prev-button">Previous Lesson</a>
+  <a href='/examples/basic-scala-query-positional-param' class="next-button">Next Lesson</a>
+  </div>
+  <br>
 code: |
 
   package com.couchbase

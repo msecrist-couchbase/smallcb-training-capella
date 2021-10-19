@@ -1,6 +1,12 @@
 title: Upsert
 page: page-06
 lang: php
+infoBefore: |
+  <div>
+  <a href='/examples/basic-php-subdoc-mutate' class="prev-button">Previous Lesson</a>
+  <a href='#' class="disable next-button" style="float:right">Next Lesson</a>
+  </div>
+  <br>
 code: |
   <?php
     $connectionString = "couchbase://{{.Host}}";
@@ -11,7 +17,7 @@ code: |
     $bucket = $cluster->bucket("travel-sample");
     $collection = $bucket->defaultCollection();
 
-    $content = ["country" => "Iceland", 
+    $content = ["country" => "Iceland",
                 "callsign" => "ICEAIR",
                 "iata" => "FI",
                 "icao" => "ICE",

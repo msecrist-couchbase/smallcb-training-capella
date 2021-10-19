@@ -33,7 +33,7 @@ func HttpMuxInit(mux *http.ServeMux) {
 
 	mux.HandleFunc("/static-data", HttpHandleStaticData)
 
-  mux.HandleFunc("/admin/health", HttpHandleHealth)
+	mux.HandleFunc("/admin/health", HttpHandleHealth)
 
 	mux.HandleFunc("/admin/dashboard", HttpHandleAdminDashboard)
 
@@ -47,6 +47,10 @@ func HttpMuxInit(mux *http.ServeMux) {
 	mux.HandleFunc("/session-info", HttpHandleSessionInfo)
 
 	mux.HandleFunc("/session", HttpHandleSession)
+
+	mux.HandleFunc("/target", HttpHandleTarget)
+
+	mux.HandleFunc("/target-exit", HttpHandleTargetExit)
 
 	mux.HandleFunc("/run", HttpHandleRun)
 
@@ -75,6 +79,21 @@ func HttpHandleMain(w http.ResponseWriter, r *http.Request) {
 			http.StatusSeeOther)
 
 		return
+	}
+
+	targetCookie, terr := r.Cookie(*targetsCookieName)
+	Target := target{}
+	if terr == nil && targetCookie != nil {
+		targetCookieValue := DecryptText(targetCookie.Value)
+		targetTuple := strings.Split(targetCookieValue, "::")
+		Target.DBurl = targetTuple[0]
+		Target.DBuser = targetTuple[1]
+		Target.DBpwd = targetTuple[2]
+		if len(targetTuple) >= 4 {
+			Target.ExpiryTime = targetTuple[3]
+		} else {
+			Target.ExpiryTime = ""
+		}
 	}
 
 	examplesPath := "examples"
@@ -139,6 +158,7 @@ func HttpHandleMain(w http.ResponseWriter, r *http.Request) {
 
 	err = MainTemplateEmit(w, *staticDir, msg, *host, portApp,
 		*version, VersionSDKs, session, *sessionsMaxAge, *sessionsMaxIdle,
+		Target,
 		*listenPortBase, *listenPortSpan, PortMapping,
 		examplesPath, name, r.FormValue("title"),
 		lang, code, r.FormValue("highlight"), view, bodyClass,
@@ -151,6 +171,26 @@ func HttpHandleMain(w http.ResponseWriter, r *http.Request) {
 	}
 
 	StatsNumInc("http.Main.ok")
+}
+
+func EncryptText(cleartext string) (outputText string) {
+	defer func() {
+		if err := recover(); err != nil {
+			fmt.Println("Error while doing encrypt!")
+			outputText = cleartext
+		}
+	}()
+	return Encrypt(*encryptKey, cleartext)
+}
+
+func DecryptText(ettext string) (outputText string) {
+	defer func() {
+		if err := recover(); err != nil {
+			fmt.Println("Error while doing decrypt!")
+			outputText = ettext
+		}
+	}()
+	return Decrypt(*encryptKey, ettext)
 }
 
 // ------------------------------------------------
@@ -174,6 +214,28 @@ func HttpHandleSessionExit(w http.ResponseWriter, r *http.Request) {
 		url += "?m=session-exit"
 	} else {
 		url += "&m=session-exit"
+	}
+
+	http.Redirect(w, r, url, http.StatusSeeOther)
+}
+
+func HttpHandleTargetExit(w http.ResponseWriter, r *http.Request) {
+	StatsNumInc("http.TargetExit")
+
+	targetsCookie := &http.Cookie{
+		Name:   *targetsCookieName,
+		MaxAge: -1,
+	}
+	http.SetCookie(w, targetsCookie)
+
+	url := r.FormValue("ebase")
+	if url == "" {
+		url = "/"
+	}
+
+	e := r.FormValue("e")
+	if e != "" {
+		url = url + e
 	}
 
 	http.Redirect(w, r, url, http.StatusSeeOther)
@@ -446,6 +508,169 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 		*staticDir+"/session.html.tmpl")).Execute(w, data)
 }
 
+func HttpHandleTarget(w http.ResponseWriter, r *http.Request) {
+	StatsNumInc("http.Target")
+
+	if *host != "127.0.0.1" && *host != "localhost" &&
+		strings.Split(r.Host, ":")[0] != *host {
+		StatsNumInc("http.Target.redirect.host")
+
+		var suffix string
+
+		if r.ParseForm() == nil {
+			suffix = r.Form.Encode()
+			if len(suffix) > 0 {
+				suffix = "?" + suffix
+			}
+		}
+
+		http.Redirect(w, r, "http://"+*host+"/target"+suffix, http.StatusSeeOther)
+
+		log.Printf("INFO: Target redirect, from host: %v, to host: %s, suffix: %s", r.Host, *host, suffix)
+
+		return
+	}
+
+	// Optional extra URL suffix for redirect on success,
+	// used to target a particular code example or tour.
+	e := r.FormValue("e")
+	if !regexpE.MatchString(e) || strings.Index(e, "..") >= 0 {
+		StatsNumInc("http.Session.err", "http.Session.err.bad-e")
+
+		http.Error(w,
+			http.StatusText(http.StatusBadRequest),
+			http.StatusBadRequest)
+
+		log.Printf("ERROR: HttpHandleMain, e: %s, err: e unmatched", e)
+
+		return
+	}
+
+	bodyClass := r.FormValue("bodyClass")
+	if bodyClass == "" {
+		bodyClass = "dark"
+	}
+
+	targetCookie, terr := r.Cookie(*targetsCookieName)
+	Target := target{}
+	if terr == nil && targetCookie != nil {
+		targetCookieValue := DecryptText(targetCookie.Value)
+		targetTuple := strings.Split(targetCookieValue, "::")
+		Target.DBurl = targetTuple[0]
+		Target.DBuser = targetTuple[1]
+		Target.DBpwd = targetTuple[2]
+		if len(targetTuple) >= 4 {
+			Target.ExpiryTime = targetTuple[3]
+		} else {
+			Target.ExpiryTime = ""
+		}
+	}
+	data := map[string]interface{}{
+		"AnalyticsHTML": template.HTML(AnalyticsHTML(*host)),
+		"OptanonHTML":   template.HTML(OptanonHTML(*host)),
+		"TargetsMaxAge": ((*targetsMaxAge).Hours() / 24),
+		"title":         r.FormValue("title"),
+		"intro":         r.FormValue("intro"),
+		"dburlc":        r.FormValue("dburlc"),
+		"dbuserc":       r.FormValue("dbuserc"),
+		"dbpwdc":        r.FormValue("dbpwdc"),
+		"dburl":         Target.DBurl,
+		"dbuser":        Target.DBuser,
+		"dbpwd":         Target.DBpwd,
+		"bodyClass":     bodyClass,
+	}
+
+	if r.Method == "POST" {
+		StatsNumInc("http.Target.post")
+
+		gen := fmt.Sprintf("gen!%s-%d",
+			time.Now().Format("2006/01/02-15:04:05"),
+			rand.Intn(1000000))
+
+		errs := 0
+
+		dburl := strings.TrimSpace(r.FormValue("dburl"))
+		if r.FormValue("dburlc") == "skip" {
+			dburl = gen
+		}
+		if dburl == "" {
+			StatsNumInc("http.Target.post.err.dburl")
+
+			data["errDBurl"] = "db URL required"
+			errs += 1
+		}
+
+		if !strings.HasPrefix(dburl, "couchbase:") && !strings.HasPrefix(dburl, "couchbases:") && strings.Contains(dburl, "dp.cloud.couchbase.com") {
+			dburl = "couchbases://" + dburl
+		}
+		if strings.HasPrefix(dburl, "couchbases:") && !strings.Contains(dburl, "ssl=no_verify") {
+			if !strings.Contains(dburl, "?") {
+				dburl += "?ssl=no_verify"
+			} else {
+				dburl += "&ssl=no_verify"
+			}
+		}
+
+		data["dburl"] = dburl
+
+		dbuser := strings.TrimSpace(r.FormValue("dbuser"))
+		if r.FormValue("dbuserc") == "skip" {
+			dbuser = gen
+		}
+		if dbuser == "" {
+			StatsNumInc("http.Target.post.err.dbuser")
+
+			data["errDBuser"] = "db user required"
+			errs += 1
+		}
+		data["dbuser"] = dbuser
+
+		dbpwd := strings.TrimSpace(r.FormValue("dbpwd"))
+		if r.FormValue("dbpwdc") == "skip" {
+			dbpwd = gen
+		}
+		if dbpwd == "" {
+			StatsNumInc("http.Target.post.err.dbpwd")
+
+			data["errDBpwd"] = "db user password required"
+			errs += 1
+		}
+		data["dbpwd"] = dbpwd
+
+		// Encrypt and Set cookie
+		fmt.Println(data)
+		time.FixedZone("PDT", 8*60*60)
+		age := time.Now().Add(*targetsMaxAge)
+		cookieValue := dburl + "::" + dbuser + "::" + dbpwd + "::" + age.Format(time.RFC3339Nano)
+		etCookieValue := EncryptText(cookieValue)
+		fmt.Println("etCookieValue=" + etCookieValue)
+		targetsCookie := &http.Cookie{
+			Name:   *targetsCookieName,
+			Value:  etCookieValue,
+			MaxAge: int((*targetsMaxAge).Seconds()),
+		}
+		http.SetCookie(w, targetsCookie)
+		url := r.FormValue("ebase")
+		if url == "" {
+			url = "/"
+		}
+
+		if e != "" {
+			url = url + e
+		}
+
+		http.Redirect(w, r, url, http.StatusSeeOther)
+		StatsNumInc("http.Target.post.ok", "http.Target.post.create.ok")
+		return
+
+	} else {
+		StatsNumInc("http.Target.get")
+	}
+
+	template.Must(template.ParseFiles(
+		*staticDir+"/target.html.tmpl")).Execute(w, data)
+}
+
 // ------------------------------------------------
 
 // Executes some code posted in request body
@@ -614,8 +839,6 @@ func HttpHandleRun(w http.ResponseWriter, r *http.Request) {
 	EmitOutput(w, string(result), color)
 }
 
-// ------------------------------------------------
-
 func HttpHandleStaticData(w http.ResponseWriter, r *http.Request) {
 	path := r.FormValue("path")
 
@@ -704,12 +927,25 @@ func OptanonHTML(host string) string {
 }
 
 // ------------------------------------------------
+// Add the session info to the navigation URLs in code samples
+// Replace the end of the URL with ?s=session_id
+func AddSessionInfo(session *Session, infoBefore string) string {
+	if session != nil {
+		sIDNext := fmt.Sprintf("?s=%s' class=\"next-button\"", session.SessionId)
+		sIDPrev := fmt.Sprintf("?s=%s' class=\"previous-button\"", session.SessionId)
+		infoBefore = strings.ReplaceAll(infoBefore, "' class=\"next-button\"", sIDNext)
+		infoBefore = strings.ReplaceAll(infoBefore, "' class=\"prev-button\"", sIDPrev)
+	}
+	return infoBefore
+}
+
+// ------------------------------------------------
 
 func CodeFromFixup(code, program, lang, from string) string {
 	if from == "docs" {
 		code = strings.ReplaceAll(code, "\"Administrator\"", "\"username\"")
 		code = strings.ReplaceAll(code, "'Administrator'", "'username'")
-		
+
 		if lang == "java" {
 			code = strings.ReplaceAll(code,
 				"public class "+program, "class Program")
@@ -729,7 +965,7 @@ func CodeFromFixup(code, program, lang, from string) string {
 	for strings.Contains(code, "%%%") {
 		re := regexp.MustCompile("%%%(.*?)%%%")
 		match := re.FindStringSubmatch(code)
-		et := strings.Split(match[0],"%%%")
+		et := strings.Split(match[0], "%%%")
 		ct := Decrypt(*encryptKey, et[1])
 		code = strings.ReplaceAll(code, "%%%"+match[1]+"%%%", ct)
 	}
@@ -802,7 +1038,6 @@ func CheckVerServer(verServer string) error {
 	return nil
 }
 
-
 // Get Encrypted Text
 func HttpHandleET(w http.ResponseWriter, r *http.Request) {
 	StatsNumInc("http.ET")
@@ -816,11 +1051,10 @@ func HttpHandleET(w http.ResponseWriter, r *http.Request) {
 	if etext != "" {
 		result = Decrypt(*encryptKey, etext)
 	}
-    
+
 	StatsNumInc("http.ET.ok")
 
 	w.Header().Set("Content-Type", "application/json")
 
 	w.Write([]byte(result))
 }
-

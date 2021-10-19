@@ -1,13 +1,19 @@
-title:  Query Rows
+title: Query Rows
 page: page-03
 lang: nodejs
+infoBefore: |
+  <div>
+  <a href='/examples/basic-nodejs-kv-get' class="prev-button">Previous Lesson</a>
+  <a href='/examples/basic-nodejs-query-named-param' class="next-button">Next Lesson</a>
+  </div>
+  <br>
 code: |
   const couchbase = require('couchbase')
-  
+
   const cluster = new couchbase.Cluster('couchbase://{{.Host}}', {
     username: '{{.CBUser}}', password: '{{.CBPswd}}'
   })
-  
+
   cluster.bucket('travel-sample')
 
   const getHotelsByCity = async (city) => {
@@ -32,7 +38,7 @@ code: |
       console.error(err)
     }
   }
-  
+
   getHotelsByCity('Malibu')
     .then(() => process.exit(0))
 infoAfter: |

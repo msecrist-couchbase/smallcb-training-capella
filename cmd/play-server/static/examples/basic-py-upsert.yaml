@@ -1,6 +1,12 @@
 title: Upsert
 page: page-04
 lang: py
+infoBefore: |
+  <div>
+  <a href='/examples/basic-py-subdoc-mutate' class="prev-button">Previous Lesson</a>
+  <a href='#' class="disable next-button" style="float:right">Next Lesson</a>
+  </div>
+  <br>
 code: |
   #!/usr/bin/python3
   import sys
@@ -18,12 +24,12 @@ code: |
 
   try:
     document = dict(
-      country="Iceland", callsign="ICEAIR", iata="FI", icao="ICE", 
+      country="Iceland", callsign="ICEAIR", iata="FI", icao="ICE",
       id=123, name="Icelandair", type="airline"
     )
     result = collection.upsert(
-      'airline_123', 
-      document, 
+      'airline_123',
+      document,
       expiry=timedelta(minutes=1),
       durability=ServerDurability(Durability.MAJORITY)
     )
@@ -31,7 +37,7 @@ code: |
     print("cas result:", result.cas)
   except:
     print("exception:", sys.exc_info())
-    
+
   try:
     result = collection.lookup_in('airline_123', [SD.get('name')])
     name = result.content_as[str](0) # "United Kingdom"
