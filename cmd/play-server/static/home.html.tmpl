@@ -347,17 +347,7 @@
             <div class="progress-wrapper">
               <ul class="progress-indicator">
                   {{/* Determine If KV Get Completed */}}
-                  {{if or
-                  (eq .Title "Key Value Get")
-                  (eq .Title "Query Rows")
-                  (eq .Title "Query w/ Named Param")
-                  (eq .Title "Query w/ Positional Param")
-                  (eq .Title "Sub-document Lookup")
-                  (eq .Title "Sub-document Mutate")
-                  (eq .Title "Transactions KV Mutate")
-                  (eq .Title "Transactions N1QL")
-                  (eq .Title "Upsert")
-                  }}
+                  {{if or (eq .Title "Key Value Get") (eq .Title "Query Rows") (eq .Title "Query w/ Named Param") (eq .Title "Query w/ Positional Param") (eq .Title "Sub-document Lookup") (eq .Title "Sub-document Mutate") (eq .Title "Transactions KV Mutate") (eq .Title "Transactions N1QL") (eq .Title "Upsert")}}
                     <li class="completed">
                       <a href="/examples/basic-{{.Lang}}-kv-get{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                         <span class="bubble"></span>
@@ -374,16 +364,7 @@
                   {{end}}
 
                   {{/* Determine If Query Rows Completed */}}
-                  {{if or
-                  (eq .Title "Query Rows")
-                  (eq .Title "Query w/ Named Param")
-                  (eq .Title "Query w/ Positional Param")
-                  (eq .Title "Sub-document Lookup")
-                  (eq .Title "Sub-document Mutate")
-                  (eq .Title "Transactions KV Mutate")
-                  (eq .Title "Transactions N1QL")
-                  (eq .Title "Upsert")
-                  }}
+                  {{if or (eq .Title "Query Rows") (eq .Title "Query w/ Named Param") (eq .Title "Query w/ Positional Param") (eq .Title "Sub-document Lookup") (eq .Title "Sub-document Mutate") (eq .Title "Transactions KV Mutate") (eq .Title "Transactions N1QL") (eq .Title "Upsert")}}
                     <li class="completed">
                       <a href="/examples/basic-{{.Lang}}-query-rows{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                         <span class="bubble"></span>
@@ -400,15 +381,7 @@
                   {{end}}
 
                   {{/* Determine If Query w/ Named Param Completed */}}
-                  {{if or
-                  (eq .Title "Query w/ Named Param")
-                  (eq .Title "Query w/ Positional Param")
-                  (eq .Title "Sub-document Lookup")
-                  (eq .Title "Sub-document Mutate")
-                  (eq .Title "Transactions KV Mutate")
-                  (eq .Title "Transactions N1QL")
-                  (eq .Title "Upsert")
-                  }}
+                  {{if or (eq .Title "Query w/ Named Param") (eq .Title "Query w/ Positional Param") (eq .Title "Sub-document Lookup") (eq .Title "Sub-document Mutate") (eq .Title "Transactions KV Mutate") (eq .Title "Transactions N1QL") (eq .Title "Upsert")}}
                     <li class="completed">
                       <a href="/examples/basic-{{.Lang}}-query-named-param{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                         <span class="bubble"></span>
@@ -425,14 +398,7 @@
                   {{end}}
 
                   {{/* Determine If Query w/ Positional Param Completed */}}
-                  {{if or
-                  (eq .Title "Query w/ Positional Param")
-                  (eq .Title "Sub-document Lookup")
-                  (eq .Title "Sub-document Mutate")
-                  (eq .Title "Transactions KV Mutate")
-                  (eq .Title "Transactions N1QL")
-                  (eq .Title "Upsert")
-                  }}
+                  {{if or (eq .Title "Query w/ Positional Param") (eq .Title "Sub-document Lookup") (eq .Title "Sub-document Mutate") (eq .Title "Transactions KV Mutate") (eq .Title "Transactions N1QL") (eq .Title "Upsert")}}
                     <li class="completed">
                       <a href="/examples/basic-{{.Lang}}-query-positional-param{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                         <span class="bubble"></span>
@@ -449,13 +415,7 @@
                   {{end}}
 
                   {{/* Determine If Sub Document Lookup Completed */}}
-                  {{if or
-                  (eq .Title "Sub-document Lookup")
-                  (eq .Title "Sub-document Mutate")
-                  (eq .Title "Transactions KV Mutate")
-                  (eq .Title "Transactions N1QL")
-                  (eq .Title "Upsert")
-                  }}
+                  {{if or (eq .Title "Sub-document Lookup") (eq .Title "Sub-document Mutate") (eq .Title "Transactions KV Mutate") (eq .Title "Transactions N1QL") (eq .Title "Upsert")}}
                     <li class="completed">
                       <a href="/examples/basic-{{.Lang}}-subdoc-lookup{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                         <span class="bubble"></span>
@@ -472,12 +432,7 @@
                   {{end}}
 
                   {{/* Determine If Sub Document Mutate Completed */}}
-                  {{if or
-                  (eq .Title "Sub-document Mutate")
-                  (eq .Title "Transactions KV Mutate")
-                  (eq .Title "Transactions N1QL")
-                  (eq .Title "Upsert")
-                  }}
+                  {{if or (eq .Title "Sub-document Mutate") (eq .Title "Transactions KV Mutate") (eq .Title "Transactions N1QL") (eq .Title "Upsert")}}
                     <li class="completed">
                       <a href="/examples/basic-{{.Lang}}-subdoc-mutate{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                         <span class="bubble"></span>
@@ -496,11 +451,7 @@
                   {{/* Show/Hide Java Transactions Steps */}}
                   {{if eq .Lang "java"}}
                       {{/* Determine If JAVA Transactions KV Mutate Completed */}}
-                      {{if or
-                      (eq .Title "Transactions KV Mutate")
-                      (eq .Title "Transactions N1QL")
-                      (eq .Title "Upsert")
-                      }}
+                      {{if or (eq .Title "Transactions KV Mutate") (eq .Title "Transactions N1QL") (eq .Title "Upsert")}}
                         <li class="completed">
                           <a href="/examples/basic-{{.Lang}}-txn-kv-mutate{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                             <span class="bubble"></span>
@@ -517,10 +468,7 @@
                       {{end}}
 
                       {{/* Determine If JAVA Transactions N1QL Completed */}}
-                      {{if or
-                      (eq .Title "Transactions N1QL")
-                      (eq .Title "Upsert")
-                      }}
+                      {{if or (eq .Title "Transactions N1QL") (eq .Title "Upsert")}}
                         <li class="completed">
                           <a href="/examples/basic-{{.Lang}}-txn-n1ql{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                             <span class="bubble"></span>
