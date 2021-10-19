@@ -1,0 +1,133 @@
+<!doctype html>
+<html>
+<head>
+  <title>Couchbase Playground</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;1,300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="/static/styles/site.css">
+  <link rel="stylesheet" type="text/css" href="/static/styles/target.css">
+  {{.AnalyticsHTML}}
+</head>
+<body class="{{.bodyClass}}">
+  <header>
+    <div class="logo">
+      <a href="/">
+        <h1><img src="/static/cb.png"/>Couchbase Playground</h1>
+      </a>
+    </div>
+    <nav>
+      <ul>
+        <li>
+          <a href="https://docs.couchbase.com">docs</a>
+        </li>
+        <li>
+          <a href="https://www.couchbase.com">couchbase.com</a>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <article>
+      <header>
+        <h2>
+          {{if .title}}
+            {{.title}}
+          {{else}}
+            Bring Your Own Couchbase
+          {{end}}
+        </h2>
+      </header>
+      <section>
+        {{if .intro}}
+          <p>{{.intro}}</p>
+        {{end}}
+
+        <p>
+          Attaching your own couchbase cluster to the playground examples. Please note that travel-sample data should be imported before running the examples.
+        </p>
+       <p>
+          Don't have a couchbase? Get a free cluster from Couchbase Capella for 45 days. Please visit <a target="_blank" href="https://cloud.couchbase.com/">https://cloud.couchbase.com/</a>
+        </p>
+        <p>
+          Your new session will expire after {{.TargetsMaxAge}} days.
+        </p>
+            <form action="/target" method="post" autocomplete="off">
+              <label {{if .dburlc}}class="{{.dburlc}}"{{end}}> Database URL ( Example: c156a2b2-7ebd-4216-bbe7-7ca0bbb69490.dp.cloud.couchbase.com ):
+                <span class="error">{{.errDBurl}}</span>
+                <input type="text" name="dburl" value="{{.dburl}}" autofocus/>
+              </label>
+              {{if .dburlc}}
+                <input type="hidden" name="dburlc" value="{{.dburlc}}"/>
+              {{end}}
+
+              <label {{if .dbuserc}}class="{{.dbuserc}}"{{end}}> Database Username ( Example: username1 ):
+                <span class="error">{{.errDBuser}}</span>
+                <input type="text" name="dbuser" value="{{.dbuser}}"  autofocus/>
+              </label>
+              {{if .dbuserc}}
+                <input type="hidden" name="dbuserc" value="{{.dbuserc}}"/>
+              {{end}}
+
+              <label {{if .dbpwdc}}class="{{.dbpwdc}}"{{end}}> Database User Password ( Example: Password1! ):
+                <span class="error">{{.errDBpwd}}</span>
+                <input type="text" name="dbpwd" value="{{.dbpwd}}" autofocus/>
+              </label>
+              {{if .dbuserc}}
+                <input type="hidden" name="dbpwdc" value="{{.dbpwdc}}"/>
+              {{end}}
+
+              <div class="actions">
+                <input type="submit" name="target-start"
+                      value="Bring Your Own Couchbase"
+                      onclick="submitted(); return true"/>
+                <div class="cancel">
+                  or <a href="/">cancel</a>
+                </div>
+              </div>
+
+            </form>
+        
+        <p>
+          Playground examples are intended for "tire-kicking" and learning by developers.
+        </p>
+        
+      </section>
+    </article>
+  </main>
+
+  <footer>
+    <div>© 2021 Couchbase Labs</div>
+  </footer>
+</body>
+<script>
+function submitted() {
+  setTimeout(function() {
+    document.querySelector("form .actions input[type=submit]").disabled = true;
+    document.querySelector("form .actions .cancel").innerHTML =
+      `launching containers<span class="loading"></span>`;
+  }, 100);
+}
+</script>
+<style>
+.loading:after {
+  overflow: hidden;
+  display: inline-block;
+  vertical-align: text-bottom;
+  animation: ellipsis steps(5,end) 1.5s infinite;
+  content: "\2026\2026\2026\2026"; /* ascii code for the ellipsis character */
+  width: 0px;
+}
+
+@keyframes ellipsis {
+  to {
+    width: 30px;
+  }
+}
+
+@-webkit-keyframes ellipsis {
+  to {
+    width: 30px;
+  }
+}
+</style>
+</html>
