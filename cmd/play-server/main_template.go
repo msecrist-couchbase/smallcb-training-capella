@@ -54,6 +54,8 @@ type MainTemplateData struct {
 	SessionsMaxAge  string
 	SessionsMaxIdle string
 
+	Target target // targeted couchbase
+
 	ExamplesPath string
 	Examples     []map[string]interface{} // Sorted.
 
@@ -79,7 +81,7 @@ func MainTemplateEmit(w http.ResponseWriter,
 	staticDir, msg, hostIn string, portApp int,
 	version string, versionSDKs []map[string]string,
 	session *Session, sessionsMaxAge, sessionsMaxIdle time.Duration,
-	containerPublishPortBase, containerPublishPortSpan int,
+	Target target, containerPublishPortBase, containerPublishPortSpan int,
 	portMapping [][]int,
 	examplesPath, name, title, lang, code, highlight, view, bodyClass,
 	infoBefore, infoAfter string) error {
@@ -128,9 +130,19 @@ func MainTemplateEmit(w http.ResponseWriter,
 			// there's a session or not.
 			codeHost := "127.0.0.1" // host.
 
-			code = SessionTemplateExecute(codeHost, portApp, session,
-				containerPublishPortBase, containerPublishPortSpan,
-				portMapping, code)
+			if session != nil {
+				// session couchbase
+				code = SessionTemplateExecute(codeHost, portApp, session,
+					containerPublishPortBase, containerPublishPortSpan,
+					portMapping, code)
+			} else if &Target != nil {
+				// target couchbase
+				code = TargetTemplateExecute(Target, code, lang)
+			} else {
+				// default non-session couchbase
+				code = DefaultTemplateExecute(code)
+			}
+
 		}
 
 		if infoBefore == "" {
@@ -160,6 +172,8 @@ func MainTemplateEmit(w http.ResponseWriter,
 
 		SessionsMaxIdle: strings.Replace(
 			sessionsMaxIdle.String(), "m0s", " min", 1),
+
+		Target: Target,
 
 		ExamplesPath: examplesPath,
 		Examples:     examplesArr,
@@ -284,6 +298,139 @@ func SessionTemplateData(host string, portApp int,
 		data["ContainerIP"] = session.ContainerIP
 	}
 
+	return data
+}
+
+func TargetTemplateExecute(Target target, t string, lang string) string {
+	data := TargetTemplateData(Target)
+
+	var b bytes.Buffer
+	//TBD: better way to get the new code template with couchbases (tls/ssl)
+	if &Target != nil && Target.DBurl != "" {
+		t = strings.ReplaceAll(t, "couchbase://", "")
+		if strings.HasPrefix(Target.DBurl, "couchbases://") {
+			if lang == "java" {
+				replaceCode := `class Program {`
+				secureCode := `
+import com.couchbase.client.java.env.ClusterEnvironment;
+import com.couchbase.client.core.deps.io.netty.handler.ssl.util.InsecureTrustManagerFactory;
+import com.couchbase.client.core.env.IoConfig;
+import com.couchbase.client.core.env.SecurityConfig;
+import com.couchbase.client.java.ClusterOptions;
+			
+class Program {`
+				t = strings.ReplaceAll(t, replaceCode, secureCode)
+				replaceCode = `var cluster = Cluster.connect(`
+				secureCode = `ClusterEnvironment env = ClusterEnvironment.builder()
+				.securityConfig(SecurityConfig.enableTls(true)
+						.trustManagerFactory(InsecureTrustManagerFactory.INSTANCE))
+				.ioConfig(IoConfig.enableDnsSrv(true))
+				.build();
+	Cluster cluster = Cluster.connect("{{.Host}}",`
+				t = strings.ReplaceAll(t, replaceCode, secureCode)
+				replaceCode = `"{{.Host}}", "{{.CBUser}}", "{{.CBPswd}}"`
+				secureCode = `ClusterOptions.clusterOptions("{{.CBUser}}", "{{.CBPswd}}").environment(env)`
+				t = strings.ReplaceAll(t, replaceCode, secureCode)
+				data["Host"] = strings.Split(data["Host"].(string), "?")[0] // no ?ssl=no_verify
+
+			} else if lang == "dotnet" {
+				replaceCode := `var cluster = await Cluster.ConnectAsync(`
+				secureCode := `
+	  var opts = new ClusterOptions().WithCredentials("{{.CBUser}}", "{{.CBPswd}}");
+	  opts.IgnoreRemoteCertificateNameMismatch = true; // opts.KvIgnoreRemoteCertificateNameMismatch = true; for KV operations
+	  var cluster = await Cluster.ConnectAsync(`
+				t = strings.ReplaceAll(t, replaceCode, secureCode)
+				replaceCode = `"{{.Host}}", "{{.CBUser}}", "{{.CBPswd}}"`
+				secureCode = `"{{.Host}}", opts`
+				t = strings.ReplaceAll(t, replaceCode, secureCode)
+				data["Host"] = strings.Split(data["Host"].(string), "?")[0] // no ?ssl=no_verify
+
+			} else if lang == "scala" {
+				replaceCode := `object Program extends App {`
+				secureCode := `
+import com.couchbase.client.scala.env.ClusterEnvironment
+import com.couchbase.client.core.deps.io.netty.handler.ssl.util.InsecureTrustManagerFactory
+import com.couchbase.client.scala.env.{IoConfig, SecurityConfig, PasswordAuthenticator}
+import com.couchbase.client.scala.ClusterOptions
+
+object Program extends App {`
+				t = strings.ReplaceAll(t, replaceCode, secureCode)
+				replaceCode = `val cluster = Cluster.connect("{{.Host}}", "{{.CBUser}}", "{{.CBPswd}}").get`
+				secureCode = `
+  System.setProperty("com.couchbase.env.security.enableTls", "true")
+  val env: ClusterEnvironment = ClusterEnvironment.builder
+									.securityConfig(SecurityConfig()
+									.trustManagerFactory(InsecureTrustManagerFactory.INSTANCE))
+									.build
+									.get
+  val cluster = Cluster.connect("{{.Host}}", 
+		ClusterOptions(PasswordAuthenticator("{{.CBUser}}", "{{.CBPswd}}")).environment(env)).get`
+				t = strings.ReplaceAll(t, replaceCode, secureCode)
+				replaceCode = `"{{.Host}}", "{{.CBUser}}", "{{.CBPswd}}"`
+				secureCode = `ClusterOptions.clusterOptions("{{.CBUser}}", "{{.CBPswd}}").environment(env)`
+				t = strings.ReplaceAll(t, replaceCode, secureCode)
+				data["Host"] = strings.Split(data["Host"].(string), "?")[0] // no ?ssl=no_verify
+				data["Host"] = strings.Split(data["Host"].(string), "//")[1]
+
+			} else if lang == "sh" {
+				replaceCode := `http://{{.CBUser}}:{{.CBPswd}}@{{.Host}}:8093/`
+				secureCode := ` -k https://{{.CBUser}}:{{.CBPswd}}@{{.Host}}:18093/`
+				t = strings.ReplaceAll(t, replaceCode, secureCode)
+				data["Host"] = strings.Split(data["Host"].(string), "?")[0] // no ?ssl=no_verify
+				data["Host"] = "cb-0000." + strings.Split(data["Host"].(string), "//")[1]
+			}
+		}
+	}
+
+	err := textTemplate.Must(textTemplate.New("t").Parse(t)).
+		Execute(&b, data)
+	if err != nil {
+		log.Printf("ERROR: TargetTemplateExecute, err: %v", err)
+
+		return t
+	}
+
+	return b.String()
+}
+
+func TargetTemplateData(Target target) map[string]interface{} {
+	data := map[string]interface{}{
+		"Host":   host,
+		"CBUser": "username",
+		"CBPswd": "password",
+	}
+
+	if &Target != nil && Target.DBurl != "" && Target.DBuser != "" && Target.DBpwd != "" {
+		data["Host"] = Target.DBurl
+		data["CBUser"] = Target.DBuser
+		data["CBPswd"] = Target.DBpwd
+	}
+
+	return data
+}
+
+func DefaultTemplateExecute(t string) string {
+	data := DefaultTemplateData()
+
+	var b bytes.Buffer
+
+	err := textTemplate.Must(textTemplate.New("t").Parse(t)).
+		Execute(&b, data)
+	if err != nil {
+		log.Printf("ERROR: DefaultTemplateExecute, err: %v", err)
+
+		return t
+	}
+
+	return b.String()
+}
+
+func DefaultTemplateData() map[string]interface{} {
+	data := map[string]interface{}{
+		"Host":   host,
+		"CBUser": "username",
+		"CBPswd": "password",
+	}
 	return data
 }
 

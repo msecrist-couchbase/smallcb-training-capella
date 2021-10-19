@@ -195,6 +195,9 @@ body.dark > header h1 {
   color:#fff;
 }
 
+body > header > nav > ul > li {
+  color: #FFF;
+}
 body > header > nav > ul > li > a {
   color: #FFF;
   background-image: linear-gradient(currentColor, currentColor);

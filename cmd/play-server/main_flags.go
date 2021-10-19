@@ -1,7 +1,9 @@
 package main
 
-import "flag"
-import "time"
+import (
+	"flag"
+	"time"
+)
 
 var (
 	h = flag.Bool("h", false, "print help/usage and exit")
@@ -77,9 +79,17 @@ var (
 		20*time.Second,
 		"duration or interval between grabbing another sample of stats")
 
+	targetsCookieName = flag.String("targetsCookieName",
+		"capella",
+		"cookie name to store couchbase targets information")
+
+	targetsMaxAge = flag.Duration("targetsMaxAge",
+		45*24*time.Hour,
+		"duration by age for which couchbase targets are automatically not used")
+
 	version = flag.String("version", "tmp/ns_server.app.vsn",
 		"version string or filename that holds version string")
-	
+
 	encryptKey = flag.String("encryptKey", "12345678901234567890123456789012",
 		"secret key for encrypted text")
 )
