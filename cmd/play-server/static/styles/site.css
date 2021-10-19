@@ -229,7 +229,7 @@ body.dark header nav ul > li a {
   background: none;
 }
 body.dark header nav ul > li a.session:hover {
-  color: red;
+  color: #eec4c4;
 }
 
 /* Dark Mode hr */
@@ -242,4 +242,40 @@ body.dark header nav ul > li a.session:hover {
 body.dark input, body.dark pre {
   border-color: #888;
   color: #FFF;
+}
+
+body > header > div > a {
+  text-decoration: none !important;
+}
+
+.logo {
+  padding-top: 4px;
+}
+
+.menu-button {
+  text-decoration: none !important;
+  border: 2px solid #6c7a94;
+  padding: 8px 14px;
+  border-radius: 6px;
+  /* Fade Effect on Hover */
+  -o-transition:.3s;
+  -ms-transition:.3s;
+  -moz-transition:.3s;
+  -webkit-transition:.3s;
+  transition:.3s;
+}
+
+.menu-button:hover {
+  text-decoration: none !important;
+  background-color: #6c7a94;
+  border: 2px solid #b8efe7;
+}
+
+.red-button {
+  border: 2px solid #cd575a;
+}
+
+.red-button:hover {
+  border: 2px solid #ea2328;
+  background: rgba(237, 117, 117, 0.8);
 }
