@@ -111,7 +111,7 @@
       <li>
           {{if .Session}}
             <a href="/session-exit?s={{.Session.SessionId}}"
-               onclick="localStorage.setItem('infoPanel', 'show');" class="session menu-button red-button">
+               onclick="localStorage.setItem('infoPanel', 'show');" class="session menu-button red-button" id="stopSessionButton">
               Stop Playground Session
             </a>
           {{else}}
@@ -702,6 +702,10 @@
   tippy('#startSessionButtonInfo', {
     content: 'Starting an online session will allow you to explore the Couchbase Web Console and experiment with your own cluster.',
     placement: 'bottom-start'
+  })
+
+  tippy('#stopSessionButton', {
+    content: 'Warning: all data created in your instance\'s cluster will be deleted.'
   })
 </script>
 
