@@ -534,7 +534,7 @@
             {{if .Lang}}
               <div class="col-xs-12 col-md-7" id="editorColumn">
 
-                <button id='viewToggleButton' onclick="toggleEditorView();">Toggle View</button>
+                <button id='viewToggleButton' class="col-btn toggle-btn" onclick="toggleEditorView();"></button>
 
                 <div id="editorWrapper" class="">
 
@@ -686,7 +686,7 @@
 <script>
 {{/*  Script for Tooltips  */}}
   tippy('#viewToggleButton', {
-    content: 'Switch code editor view to side by side',
+    content: 'Switch code editor view to 3 column',
   });
 
   tippy('#run', {
@@ -727,8 +727,11 @@
       if (innerDoc.getElementsByTagName("body")[0].childNodes.length === 0) {
         document.getElementById("code-output").classList.add('hidden')
       }
-      document.getElementById("viewToggleButton")._tippy.setContent('Switch code editor/output view to side by side')
+      document.getElementById("viewToggleButton")._tippy.setContent('Switch code editor view to 3 column')
 
+      // swap out toggle button icon
+      document.getElementById("viewToggleButton").classList.add('col-btn')
+      document.getElementById("viewToggleButton").classList.remove('stacked-btn')
     } else {
       // swap to SIDE BY SIDE editor/output
       document.getElementById("editorWrapper").classList.add('row')
@@ -738,7 +741,11 @@
       if (document.getElementById("code-output").classList.contains('hidden')) {
         document.getElementById("code-output").classList.remove('hidden')
       }
-      document.getElementById("viewToggleButton")._tippy.setContent('Switch code editor/output view to vertical stack')
+      document.getElementById("viewToggleButton")._tippy.setContent('Switch code editor view to vertical stack')
+
+      // swap out toggle button icon
+      document.getElementById("viewToggleButton").classList.add('stacked-btn')
+      document.getElementById("viewToggleButton").classList.remove('col-btn')
     }
 
   }
