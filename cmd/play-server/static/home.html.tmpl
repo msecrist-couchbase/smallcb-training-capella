@@ -134,7 +134,7 @@
 </header>
 
 <main id="main">
-{{if .Target.DBurl}}
+    {{if .Target.DBurl}}
       <div class="info-header">
         <div class="header-left">
           <a onclick="toggleInfoPanel();"><span id="toggleIcon" class="chevron down"></span></a>
@@ -686,6 +686,11 @@
 {{if .Session}}
   <script src="/static/scripts/infoPanel.js"></script>
 {{end}}
+
+{{if .Target.DBurl}}
+  <script src="/static/scripts/infoPanel.js"></script>
+{{end}}
+
 
 <script>
   var codeAce = ace.edit("code-ace");

@@ -4,7 +4,7 @@
   <title>Couchbase Playground</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;1,300&display=swap" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="/static/styles/site.css">
-  <link rel="stylesheet" type="text/css" href="/static/styles/target.css">
+  <link rel="stylesheet" type="text/css" href="/static/styles/session.css">
   {{.AnalyticsHTML}}
 </head>
 <body class="{{.bodyClass}}">
@@ -26,7 +26,7 @@
     </nav>
   </header>
 
-  <main>
+   <main>
     <article>
       <header>
         <h2>
@@ -52,6 +52,7 @@
           Your new session will expire after {{.TargetsMaxAge}} days.
         </p>
             <form action="/target" method="post" autocomplete="off">
+              
               <label {{if .dburlc}}class="{{.dburlc}}"{{end}}> Database URL ( Example: c156a2b2-7ebd-4216-bbe7-7ca0bbb69490.dp.cloud.couchbase.com ):
                 <span class="error">{{.errDBurl}}</span>
                 <input type="text" name="dburl" value="{{.dburl}}" autofocus/>
@@ -76,6 +77,10 @@
                 <input type="hidden" name="dbpwdc" value="{{.dbpwdc}}"/>
               {{end}}
 
+              {{if .bodyClass}}
+                <input type="hidden" name="bodyClass" value="{{.bodyClass}}"/>
+              {{end}}
+              
               <div class="actions">
                 <input type="submit" name="target-start"
                       value="Bring Your Own Couchbase"
@@ -85,6 +90,7 @@
                 </div>
               </div>
 
+              
             </form>
         
         <p>
