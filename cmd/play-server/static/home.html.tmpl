@@ -269,25 +269,26 @@
             <h2 class="home-header"><label for="modeSelector">How would you like to use Couchbase Playground?</label></h2>
             <div class="row example-row">
               <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-                <a href="/examples/basic-java-kv-get{{if $.Session}}?s={{$.Session.SessionId}}{{end}}"
+                <a href=""
                    class="mode-button example-button" onclick="">
                   <h3 class="example-label">Use Without Logging In</h3>
                 </a>
               </div>
               <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-                <a href="/examples/basic-java-kv-get{{if $.Session}}?s={{$.Session.SessionId}}{{end}}"
+                <a href=""
                    class="mode-button example-button" onclick="">
                   <h3 class="example-label">Use a Provisioned Session</h3>
                 </a>
               </div>
               <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-                <a href="/examples/basic-java-kv-get{{if $.Session}}?s={{$.Session.SessionId}}{{end}}"
+                <a href=""
                    class="mode-button example-button" onclick="">
                   <h3 class="example-label">Use With Couchbase Capella</h3>
                 </a>
               </div>
             </div>
 
+{{/*  ROW FOR SELECTING LANGUAGE/EXAMPLE */}}
             <h2 class="home-header"><label for="examplesToggle">Experiment with Code Examples</label></h2>
             <div class="row example-row">
               <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
@@ -554,31 +555,6 @@
 
                   <br>
                   <em>To run this example, click the button in the top right corner of the code editor.</em>
-
-                  {{if not .Session}}
-                    {{if not .Target.DBurl}}
-                    <div class="session-cta">
-                      To experience everything Couchbase has to offer, try Couchbase Server in a playground session.
-                      <br>
-                      <br>
-                      We'll automatically provision a web-based Couchbase instance with access to the Web Console for you to use and experiment with!
-                      <a href="/session" class="nowrap">Start a Playground Session</a>
-                    </div>
-                    {{end}}
-                  {{end}}
-
-                  {{if not .Target.DBurl}}
-                   {{if not .Session}}
-                    <div class="session-cta">
-                      To experience everything Couchbase has to offer, try on your Couchbase Server as a playground session.
-                      <br>
-                      <br>
-                      We'll automatically update the examples with your Couchbase for you to use and experiment with!
-                      <a href="/target" class="nowrap">Bring Your Own Couchbase</a>
-                    </div>
-                    {{end}}
-                  {{end}}
-
 
               </div>
             {{end}}
