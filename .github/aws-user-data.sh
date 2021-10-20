@@ -55,4 +55,4 @@ aa-remove-unknown
 make build create
 
 #Start SmallCb
-./play-server -host "$SUBDOMAIN"  -containers=10 -sessionsMaxAge=35m0s -codeDuration=3m -containersSingleUse=2 -restarters=5 &> nohup.out &
+./play-server -host "$SUBDOMAIN"  -containers=10 -sessionsMaxAge=35m0s -codeDuration=3m -containersSingleUse=2 -restarters=5 -containerWaitDuration=1m &> nohup.out &

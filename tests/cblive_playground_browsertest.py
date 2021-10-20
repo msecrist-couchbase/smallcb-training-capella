@@ -20,6 +20,10 @@ class CBLivePlaygroundTest(unittest.TestCase):
                     executable_path = driver_option.split("=")[1]
                 print(driver_option)
                 options.add_argument(driver_option)
+
+            # need a larger window for Node.js examples to work in headless mode
+            options.add_argument("--window-size=1920x1080")
+
             if executable_path:
                 self.browser = webdriver.Chrome(
                     executable_path=executable_path, options=options
@@ -65,6 +69,7 @@ class CBLivePlaygroundTest(unittest.TestCase):
             pass
 
         # Load the example in the language examples
+        # browser.get_screenshot_as_file(f"screenshot_{ex_id}.png")
         browser.find_element_by_css_selector(f"a[href$='{ex_id}']").click()
         # browser.find_element_by_css_selector("#" + ex_id).click()
         WebDriverWait(browser, self.TIMEOUT).until(
