@@ -264,9 +264,18 @@
     <div class="workspace-body">
       <div class="container {{if .Lang}}container-example{{end}}">
           {{if not .Lang}}
-
+{{/*  INFO DESCRIBING WHAT PLAYGROUND IS */}}
+            <h2 class="home-header"><label for="playgroundIntro">Welcome to the Couchbase Playground!</label></h2>
+            <p style="line-height: 24px">
+              Playground empowers developers to experiment with Couchbase using a several code examples in a variety of
+              languages. You can use playground to edit and test code examples against a real Couchbase instance, all
+              from the comfort of your browser. <strong>Developers can chose to use playground without logging in</strong>, leveraging a
+              pre-populated cluster, or can opt to <strong>start a playground session</strong>, enabling ephemeral access
+              to their own provisioned cluster and Couchbase's powerful web console. Finally, developers can also chose
+              to <strong>use playground with their Couchbase Capella clusters </strong> by simply providing a URI, Username, and Password.
+            </p>
 {{/*  ROW FOR SELECTING ANON SESSION VS HOSTED SESSION VS CLOUD SESSION */}}
-            <h2 class="home-header"><label for="modeSelector">How would you like to use Couchbase Playground?</label></h2>
+            <h2 class="home-header"><label for="modeSelector">How would you like to use Playground?</label></h2>
             <div class="row example-row">
               <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
                 <a href=""
