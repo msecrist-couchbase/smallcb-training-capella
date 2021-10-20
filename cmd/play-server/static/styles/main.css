@@ -752,6 +752,10 @@ a.disable {
   margin-bottom: 26px;
 }
 
+.mode-button {
+  padding: 1.5rem 1rem;
+}
+
 h2.home-header {
   margin: 26px 0 18px 0;
   font-size: 20px;
@@ -972,4 +976,9 @@ div.progress-wrapper > ul > li > a:hover {
     width: 90% !important;
     max-width: 128rem;
   }
+}
+
+.noclick:hover {
+  background-color: transparent;
+  border: 2px solid #6c7a94;
 }

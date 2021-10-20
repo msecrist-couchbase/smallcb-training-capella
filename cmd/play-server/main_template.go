@@ -135,12 +135,12 @@ func MainTemplateEmit(w http.ResponseWriter,
 				code = SessionTemplateExecute(codeHost, portApp, session,
 					containerPublishPortBase, containerPublishPortSpan,
 					portMapping, code)
-			} else if &Target != nil {
+			} else if Target.DBurl != "" {
 				// target couchbase
 				code = TargetTemplateExecute(Target, code, lang)
 			} else {
 				// default non-session couchbase
-				code = DefaultTemplateExecute(code)
+				code = DefaultTemplateExecute(codeHost, code)
 			}
 
 		}
@@ -409,8 +409,8 @@ func TargetTemplateData(Target target) map[string]interface{} {
 	return data
 }
 
-func DefaultTemplateExecute(t string) string {
-	data := DefaultTemplateData()
+func DefaultTemplateExecute(codeHost string, t string) string {
+	data := DefaultTemplateData(codeHost)
 
 	var b bytes.Buffer
 
@@ -425,9 +425,9 @@ func DefaultTemplateExecute(t string) string {
 	return b.String()
 }
 
-func DefaultTemplateData() map[string]interface{} {
+func DefaultTemplateData(codeHost string) map[string]interface{} {
 	data := map[string]interface{}{
-		"Host":   host,
+		"Host":   codeHost,
 		"CBUser": "username",
 		"CBPswd": "password",
 	}
