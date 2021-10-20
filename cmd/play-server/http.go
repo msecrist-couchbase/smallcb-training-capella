@@ -600,7 +600,7 @@ func HttpHandleTarget(w http.ResponseWriter, r *http.Request) {
 			errs += 1
 		}
 
-		if !strings.HasPrefix(dburl, "couchbase:") && !strings.HasPrefix(dburl, "couchbases:") && strings.Contains(dburl, "dp.cloud.couchbase.com") {
+		if !strings.HasPrefix(dburl, "couchbase:") && !strings.HasPrefix(dburl, "couchbases:") && strings.Contains(dburl, "cloud.couchbase.com") {
 			dburl = "couchbases://" + dburl
 		}
 		if strings.HasPrefix(dburl, "couchbases:") && !strings.Contains(dburl, "ssl=no_verify") {
