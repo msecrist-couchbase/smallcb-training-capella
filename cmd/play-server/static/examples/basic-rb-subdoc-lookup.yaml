@@ -1,13 +1,14 @@
-title: Sub-document Mutate
+title: Sub-document Lookup
 page: page-07
 lang: rb
 infoBefore: |
   <div>
-  <a href='/examples/basic-ruby-subdoc-lookup' class="prev-button">Previous Lesson</a>
-  <a href='/examples/basic-ruby-upsert' class="next-button">Next Lesson</a>
+  <a href='/examples/basic-rb-query-positional-param' class="prev-button">Previous Lesson</a>
+  <a href='/examples/basic-rb-subdoc-mutate' class="next-button">Next Lesson</a>
   </div>
   <br>
 code: |
+
   require "couchbase"
   include Couchbase
 
@@ -19,25 +20,9 @@ code: |
   collection = bucket.default_collection
 
   begin
-    result = collection.lookup_in("airline_10", [ LookupInSpec.get("country")])
-    puts "Sub-doc before: #{result.content(0)}"
-  rescue Couchbase::Error::PathNotFound => pnfe
-    puts "Sub-doc path not found!"
-  rescue Couchbase::Error::CouchbaseError => ex
-    puts "Couchbase Error: #{ex}"
-  end
-
-  begin
-    result = collection.mutate_in("airline_10", [ MutateInSpec.upsert("country", "Canada")])
-  rescue Couchbase::Error::PathExists => pnfe
-    puts "Sub-doc path exists!"
-  rescue Couchbase::Error::CouchbaseError => ex
-    puts "Couchbase Error: #{ex}"
-  end
-
-  begin
-    result = collection.lookup_in("airline_10", [ LookupInSpec.get("country")])
-    puts "Sub-doc after: #{result.content(0)}"
+    result = collection.lookup_in("airport_1254", 
+                                  [LookupInSpec.get("geo.alt")])
+    puts "Altitude = #{result.content(0)}"
   rescue Couchbase::Error::PathNotFound => pnfe
     puts "Sub-doc path not found!"
   rescue Couchbase::Error::CouchbaseError => ex

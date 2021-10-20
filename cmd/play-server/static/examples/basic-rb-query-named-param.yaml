@@ -1,10 +1,10 @@
-title: Query w/ Positional Param
+title: Query w/ Named Param
 page: page-07
 lang: rb
 infoBefore: |
   <div>
-  <a href='/examples/basic-ruby-query-named-param' class="prev-button">Previous Lesson</a>
-  <a href='/examples/basic-ruby-subdoc-lookup' class="next-button">Next Lesson</a>
+  <a href='/examples/basic-rb-query-rows' class="prev-button">Previous Lesson</a>
+  <a href='/examples/basic-rb-query-positional-param' class="next-button">Next Lesson</a>
   </div>
   <br>
 code: |
@@ -20,8 +20,8 @@ code: |
 
   begin
     options = Cluster::QueryOptions.new
-    options.positional_parameters(["hotel"])
-    result = cluster.query('SELECT x.* FROM `travel-sample` x WHERE x.`type`=$1 LIMIT 10;', options)
+    options.named_parameters({"type" => "hotel"})
+    result = cluster.query('SELECT x.* FROM `travel-sample` x WHERE x.`type`=$type LIMIT 10;', options)
     result.rows.each do |row|
       puts row
     end
@@ -29,7 +29,7 @@ code: |
     puts "Couchbase Error: #{ex}"
   end
 infoAfter: |
-  This example shows how to use positional parameters with the cluster.query() method.
+  This example shows how to use named parameters with the cluster.query() method.
   <br/><br/>
   Visit the docs to learn more about
   <a target="_blank" href="https://docs.couchbase.com/ruby-sdk/current/howtos/n1ql-queries-with-sdk.html">N1QL Queries with Ruby</a>.
