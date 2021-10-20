@@ -280,38 +280,38 @@ class CBLivePlaygroundTest(unittest.TestCase):
             page="/examples/basic-php-kv-get", ex_id="basic-php-upsert"
         )
 
-    # # 6. Ruby examples
-    # def test_basic_ruby_kv_get(self):
-    #     self.run_example_test(page="/examples/basic-rb-kv-get", ex_id="basic-rb-kv-get")
+    # 6. Ruby examples
+    def test_basic_ruby_kv_get(self):
+        self.run_example_test(page="/examples/basic-rb-kv-get", ex_id="basic-rb-kv-get")
 
-    # def test_ex_basic_ruby_query_rows(self):
-    #     self.run_example_test(
-    #         page="/examples/basic-rb-kv-get", ex_id="basic-rb-query-rows"
-    #     )
+    def test_ex_basic_ruby_query_rows(self):
+        self.run_example_test(
+            page="/examples/basic-rb-kv-get", ex_id="basic-rb-query-rows"
+        )
 
-    # def test_basic_ruby_query_named_param(self):
-    #     self.run_example_test(
-    #         page="/examples/basic-rb-kv-get", ex_id="basic-rb-query-named-param"
-    #     )
+    def test_basic_ruby_query_named_param(self):
+        self.run_example_test(
+            page="/examples/basic-rb-kv-get", ex_id="basic-rb-query-named-param"
+        )
 
-    # def test_basic_ruby_query_positional_param(self):
-    #     self.run_example_test(
-    #         page="/examples/basic-rb-kv-get",
-    #         ex_id="basic-rb-query-positional-param",
-    #     )
+    def test_basic_ruby_query_positional_param(self):
+        self.run_example_test(
+            page="/examples/basic-rb-kv-get",
+            ex_id="basic-rb-query-positional-param",
+        )
 
-    # def test_basic_ruby_subdoc_lookup(self):
-    #     self.run_example_test(
-    #         page="/examples/basic-rb-kv-get", ex_id="basic-rb-subdoc-lookup"
-    #     )
+    def test_basic_ruby_subdoc_lookup(self):
+        self.run_example_test(
+            page="/examples/basic-rb-kv-get", ex_id="basic-rb-subdoc-lookup"
+        )
 
-    # def test_basic_ruby_subdoc_mutate(self):
-    #     self.run_example_test(
-    #         page="/examples/basic-rb-kv-get", ex_id="basic-rb-subdoc-mutate"
-    #     )
+    def test_basic_ruby_subdoc_mutate(self):
+        self.run_example_test(
+            page="/examples/basic-rb-kv-get", ex_id="basic-rb-subdoc-mutate"
+        )
 
-    # def test_basic_ruby_upsert(self):
-    # self.run_example_test(page="/examples/basic-rb-kv-get", ex_id="basic-rb-upsert")
+    def test_basic_ruby_upsert(self):
+        self.run_example_test(page="/examples/basic-rb-kv-get", ex_id="basic-rb-upsert")
 
     # 7. Scala examples
     def test_basic_scala_kv_get(self):
