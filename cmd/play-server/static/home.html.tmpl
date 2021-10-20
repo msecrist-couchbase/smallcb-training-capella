@@ -139,7 +139,7 @@
         <div class="header-left">
           <a onclick="toggleInfoPanel();"><span id="toggleIcon" class="chevron down"></span></a>
         </div>
-        
+
         <div class="header-right">
           <div>
             <span class="head-server">Your Own Couchbase:</span>
@@ -156,7 +156,7 @@
           <div class="header-right">
             <span class="head-server">Your playground session will end after </span>
             <code> <span id='ct'/><code/>
-            <script type="text/javascript"> 
+            <script type="text/javascript">
               function get_time_diff( datetime )
               {
                   var datetime = typeof datetime !== 'undefined' ? datetime : "2021-10-10 01:02:03.123456";
@@ -187,7 +187,7 @@
                 display_c();
               }
               display_ct();
-            </script>  
+            </script>
           </div>
       </div>
     {{end}}
@@ -264,6 +264,30 @@
     <div class="workspace-body">
       <div class="container {{if .Lang}}container-example{{end}}">
           {{if not .Lang}}
+
+{{/*  ROW FOR SELECTING ANON SESSION VS HOSTED SESSION VS CLOUD SESSION */}}
+            <h2 class="home-header"><label for="modeSelector">How would you like to use Couchbase Playground?</label></h2>
+            <div class="row example-row">
+              <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                <a href="/examples/basic-java-kv-get{{if $.Session}}?s={{$.Session.SessionId}}{{end}}"
+                   class="mode-button example-button" onclick="">
+                  <h3 class="example-label">Use Without Logging In</h3>
+                </a>
+              </div>
+              <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                <a href="/examples/basic-java-kv-get{{if $.Session}}?s={{$.Session.SessionId}}{{end}}"
+                   class="mode-button example-button" onclick="">
+                  <h3 class="example-label">Use a Provisioned Session</h3>
+                </a>
+              </div>
+              <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                <a href="/examples/basic-java-kv-get{{if $.Session}}?s={{$.Session.SessionId}}{{end}}"
+                   class="mode-button example-button" onclick="">
+                  <h3 class="example-label">Use With Couchbase Capella</h3>
+                </a>
+              </div>
+            </div>
+
             <h2 class="home-header"><label for="examplesToggle">Experiment with Code Examples</label></h2>
             <div class="row example-row">
               <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
@@ -554,7 +578,7 @@
                     </div>
                     {{end}}
                   {{end}}
-                  
+
 
               </div>
             {{end}}
