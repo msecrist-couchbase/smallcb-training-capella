@@ -908,7 +908,7 @@ iframe#output {
   margin-bottom: 32px;
 }
 
-body > header > div > a {
+body > header > div > h1 > a {
   text-decoration: none !important;
 }
 
