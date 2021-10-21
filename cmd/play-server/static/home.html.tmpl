@@ -112,8 +112,8 @@
               Stop Playground with Couchbase Capella
             </a>
           {{else if not .Session}}
-            <a href="/target" class="menu-button red-button">
-              Playground with Couchbase Capella
+            <a href="#" class="menu-button red-button noclick faded">
+              Capella Playground coming soon
             </a>
           {{end}}
       </li>
@@ -282,9 +282,9 @@
             <h2 class="home-header"><label for="modeSelector">How would you like to use Playground?</label></h2>
             <div class="row example-row">
               <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-                <a href="/target"
-                   class="mode-button example-button red-button" onclick="">
-                  <h3 class="example-label">Playground with Couchbase Capella</h3>
+                <a href="#"
+                   class="mode-button example-button red-button noclick faded" onclick="">
+                  <h3 class="example-label">Playground with Capella Coming Soon</h3>
                 </a>
               </div>
               <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
@@ -703,6 +703,7 @@
 <script>
   function pageToggle(page) {
     var main = document.getElementById("main");
+    main.className = "";
     var wasPageFocused = main.className.indexOf("page-focus") >= 0;
 
     if (main.className != page + " page-focus") {

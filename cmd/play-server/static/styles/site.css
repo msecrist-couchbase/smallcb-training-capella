@@ -277,10 +277,24 @@ body > header > div > h1 > a {
 }
 
 .red-button {
-  border: 2px solid #cd575a;
+  border: 2px solid #cd575a !important;
 }
 
 .red-button:hover {
-  border: 2px solid #ea2328;
-  background: rgba(237, 117, 117, 0.8);
+  border: 2px solid #ea2328 !important;
+  background: rgba(237, 117, 117, 0.8) !important;
+}
+
+.noclick:hover {
+  background-color: transparent !important;
+  border: 2px solid #6c7a94;
+  cursor: default;
+}
+
+.noclick.red-button:hover {
+  border: 2px solid #cd575a !important;
+}
+
+.faded {
+  filter: opacity(60%);
 }
