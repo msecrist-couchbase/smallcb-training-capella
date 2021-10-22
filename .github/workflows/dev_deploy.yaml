@@ -1,0 +1,64 @@
+name: SmallcbDev
+on:
+  workflow_dispatch:
+jobs:
+  build:
+    name: Build and upload dev
+    runs-on: ubuntu-latest
+    env:
+      TAG: ${{ secrets.DOCKER_REPO_URL }}:latest
+      ARTIFACT_NAME: smallcb-dev.tar.gz
+    steps:
+      - name: Check Disk Usage before starting job
+        run: |
+          sudo df -h
+      - uses: actions/checkout@v2
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-west-1
+      - name: Login to ECR
+        uses: aws-actions/amazon-ecr-login@v1
+        id: login-ecr
+      - name: Build the artifact
+        run: |
+          make BUILD_EXTRAS="--cache-from=\"$TAG\" -t \"$TAG\" " build
+      - name: Build vol-snapshot image
+        run: |
+          make create
+          sudo chown -R runner:runner vol-snapshot
+          rm -rf vol-snapshot/lib/couchbase/logs/*
+          rm -rf vol-snapshot/lib/couchbase/stats/*
+          cp -R cmd/play-server/static vol-snapshot$(SNAPSHOT_SUFFIX)/
+      - name: Check Disk Usage After Building Image
+        run: |
+          sudo df -h
+      - name: Install golang
+        run: sudo apt -y install golang
+      - name: Compile play-server
+        run: make play-server
+      - name: Create artifact
+        run: tar -czf /tmp/$ARTIFACT_NAME *
+      - name: Check Disk Usage After Build
+        run: |
+          sudo df -h
+      - name: Upload artifact
+        run: aws s3 cp /tmp/$ARTIFACT_NAME s3://smallcb-builds/
+  deploy:
+    name: Deploy to ec2 cluster
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-west-1
+      - name: Trigger instance restart
+        run: |
+        INSTANCE_ID="`aws ec2 describe-instances --filters Name=tag-value,Values=smallcb-dev --query 'Reservations[*].Instances[*].[InstanceId,State.Name]' --output text |egrep running |xargs -n 2 | cut -f1 -d' '`"
+        mssh ubuntu@${INSTANCE_ID} -c /home/ubuntu/dev_update.sh
+        
