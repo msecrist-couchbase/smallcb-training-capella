@@ -51,6 +51,7 @@ jobs:
     name: Deploy to ec2 cluster
     needs: [build]
     runs-on: ubuntu-latest
+    environment: dev
     steps:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
