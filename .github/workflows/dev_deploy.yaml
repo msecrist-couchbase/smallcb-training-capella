@@ -5,7 +5,7 @@ jobs:
   build:
     name: Build and upload dev
     runs-on: ubuntu-latest
-    environment: staging
+    environment: dev
     env:
       TAG: ${{ secrets.DOCKER_REPO_URL }}:latest
       ARTIFACT_NAME: smallcb-dev.tar.gz
