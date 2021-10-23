@@ -59,6 +59,7 @@ jobs:
           aws-region: us-west-1
       - name: Trigger instance restart
         run: |
-        INSTANCE_ID="`aws ec2 describe-instances --filters Name=tag-value,Values=smallcb-dev --query 'Reservations[*].Instances[*].[InstanceId,State.Name]' --output text |egrep running |xargs -n 2 | cut -f1 -d' '`"
-        mssh ubuntu@${INSTANCE_ID} -c /home/ubuntu/dev_update.sh
+          INSTANCE_ID="`aws ec2 describe-instances --filters Name=tag-value,Values=smallcb-dev --query 'Reservations[*].Instances[*].[InstanceId,State.Name]' --output text |egrep running |xargs -n 2 | cut -f1 -d' '`"
+          pip install ec2instanceconnectcli
+          mssh ubuntu@${INSTANCE_ID} -c /home/ubuntu/dev_update.sh
         
