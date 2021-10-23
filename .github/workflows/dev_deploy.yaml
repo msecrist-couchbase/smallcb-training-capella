@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: dev
     env:
-      TAG: ${{ secrets.DOCKER_REPO_URL }}:latest
+      TAG: smallcb:latest
       ARTIFACT_NAME: smallcb-dev.tar.gz
     steps:
       - name: Check Disk Usage before starting job
