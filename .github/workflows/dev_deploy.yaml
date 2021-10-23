@@ -12,8 +12,8 @@ on:
 jobs:
   build:
     if: |
-      contains(github.event.inputs.action, "build") ||
-      contains(github.event.inputs.action, "all")
+      ${{ github.event.inputs.action == "build" }} ||
+      ${{ github.event.inputs.action == "all" }}
     name: Build and upload dev
     runs-on: ubuntu-latest
     environment: dev
@@ -60,8 +60,8 @@ jobs:
         run: aws s3 cp /tmp/$ARTIFACT_NAME s3://smallcb-builds/
   deploy:
     if: |
-      contains(github.event.inputs.action, "deploy") ||
-      contains(github.event.inputs.action, "all")
+      ${{ github.event.inputs.action == "deploy" }} ||
+      ${{ github.event.inputs.action == "all" }}
     name: Deploy to ec2 cluster
     needs: [build]
     runs-on: ubuntu-latest
@@ -77,5 +77,5 @@ jobs:
         run: |
           INSTANCE_ID="`aws ec2 describe-instances --filters Name=tag-value,Values=smallcb-dev --query 'Reservations[*].Instances[*].[InstanceId,State.Name]' --output text |egrep running |xargs -n 2 | cut -f1 -d' '`"
           pip install ec2instanceconnectcli
-          mssh ubuntu@${INSTANCE_ID} -c /home/ubuntu/dev_update.sh ${github.event.inputs.is_build_image_on_server}
+          mssh ubuntu@${INSTANCE_ID} -c /home/ubuntu/dev_update.sh ${{ github.event.inputs.is_build_image_on_server }}
         
