@@ -77,5 +77,5 @@ jobs:
         run: |
           INSTANCE_ID="`aws ec2 describe-instances --filters Name=tag-value,Values=smallcb-dev --query 'Reservations[*].Instances[*].[InstanceId,State.Name]' --output text |egrep running |xargs -n 2 | cut -f1 -d' '`"
           pip install ec2instanceconnectcli
-          mssh ubuntu@${INSTANCE_ID} -C /home/ubuntu/dev_update.sh ${{ github.event.inputs.is_build_image_on_server }}
+          mssh -o StrictHostKeyChecking=no ubuntu@${INSTANCE_ID} -C /home/ubuntu/dev_update.sh ${{ github.event.inputs.is_build_image_on_server }}
         
