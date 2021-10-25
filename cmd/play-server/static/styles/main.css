@@ -956,7 +956,6 @@ div.progress-wrapper > ul > li > a:hover {
   width: 30px;
   height: 30px;
   border: none;
-
   /* Fade Effect on Hover */
   -o-transition:.3s;
   -ms-transition:.3s;
@@ -978,4 +977,8 @@ div.progress-wrapper > ul > li > a:hover {
 .col-btn {
   background: url('../icons/col_view.svg') no-repeat;
   background-size: cover;
+}
+
+#editorColumn {
+  text-align: right;
 }
