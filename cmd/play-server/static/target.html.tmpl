@@ -1,0 +1,168 @@
+<!doctype html>
+<html>
+<head>
+  <title>Couchbase Playground</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;1,300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="/static/styles/site.css">
+  <link rel="stylesheet" type="text/css" href="/static/styles/session.css">
+  {{.AnalyticsHTML}}
+</head>
+<body class="{{.bodyClass}}">
+  <header>
+    <div class="logo">
+      <h1>
+        <a href="https://www.couchbase.com/">
+          <img src="/static/cb-rww.svg"/>
+        </a>
+        <a href="/">
+          Playground
+        </a>
+      </h1>
+    </div>
+
+    <nav>
+      <ul>
+        <li>
+          <a target="_blank" href="https://docs.couchbase.com" class="menu-button">Documentation</a>
+        </li>
+        <li>
+          <a target="_blank" href="https://developer.couchbase.com" class="menu-button">Developers</a>
+        </li>
+        <li>
+          <a href="/{{if .Session}}?s={{.Session.SessionId}}{{end}}" class="menu-button">
+            <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+                 width="14" height="14"
+                 viewBox="0 -3 25 25"
+                 style=" fill:#ffffff;">
+              <path d="M 12 2 A 1 1 0 0 0 11.289062 2.296875 L 1.203125 11.097656 A 0.5 0.5 0 0 0 1 11.5 A 0.5 0.5 0 0 0 1.5 12 L 4 12 L 4 20 C 4 20.552 4.448 21 5 21 L 9 21 C 9.552 21 10 20.552 10 20 L 10 14 L 14 14 L 14 20 C 14 20.552 14.448 21 15 21 L 19 21 C 19.552 21 20 20.552 20 20 L 20 12 L 22.5 12 A 0.5 0.5 0 0 0 23 11.5 A 0.5 0.5 0 0 0 22.796875 11.097656 L 12.716797 2.3027344 A 1 1 0 0 0 12.710938 2.296875 A 1 1 0 0 0 12 2 z"></path>
+            </svg>
+            &nbsp
+            SDK Languages
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+   <main>
+    <article>
+      <header>
+        <h2>
+          {{if .title}}
+            {{.title}}
+          {{else}}
+            Playground with Couchbase Capella
+          {{end}}
+        </h2>
+      </header>
+      <section>
+        {{if .intro}}
+          <p>{{.intro}}</p>
+        {{end}}
+
+        <p>
+          Attaching your own couchbase cluster to the playground examples. Please note that travel-sample data should be imported before running the examples.
+        </p>
+       <p>
+          Don't have a couchbase? Get a free cluster from Couchbase Capella for 45 days. Please visit <a target="_blank" href="https://cloud.couchbase.com/">https://cloud.couchbase.com/</a>
+        </p>
+        <p>
+          Your new session will expire after {{.TargetsMaxAge}} days.
+        </p>
+            <form action="/target" method="post" autocomplete="off">
+
+              <label {{if .dburlc}}class="{{.dburlc}}"{{end}}> Database URL ( Example: cb.gyvwo11dxgbw6st3.cloud.couchbase.com ):
+                <span class="error">{{.errDBurl}}</span>
+                <input type="text" name="dburl" value="{{.dburl}}" autofocus/>
+              </label>
+              {{if .dburlc}}
+                <input type="hidden" name="dburlc" value="{{.dburlc}}"/>
+              {{end}}
+
+              <label {{if .dbuserc}}class="{{.dbuserc}}"{{end}}> Database Username ( Example: username1 ):
+                <span class="error">{{.errDBuser}}</span>
+                <input type="text" name="dbuser" value="{{.dbuser}}"  autofocus/>
+              </label>
+              {{if .dbuserc}}
+                <input type="hidden" name="dbuserc" value="{{.dbuserc}}"/>
+              {{end}}
+
+              <label {{if .dbpwdc}}class="{{.dbpwdc}}"{{end}}> Database User Password ( Example: Password1! ):
+                <span class="error">{{.errDBpwd}}</span>
+                <input type="text" name="dbpwd" value="{{.dbpwd}}" autofocus/>
+              </label>
+              {{if .dbuserc}}
+                <input type="hidden" name="dbpwdc" value="{{.dbpwdc}}"/>
+              {{end}}
+
+              {{if .bodyClass}}
+                <input type="hidden" name="bodyClass" value="{{.bodyClass}}"/>
+              {{end}}
+
+              <div class="actions">
+                <input type="submit" name="target-start"
+                      value="Playground with Couchbase Capella"
+                      onclick="submitted(); return true"/>
+                <div class="cancel">
+                  or <a href="/">cancel</a>
+                </div>
+              </div>
+
+
+            </form>
+
+            <p>
+              Are you new to Couchbase Capella?
+              <br>
+              <br>If yes, execute the below 3 required steps on Couchbase Capella UI console. Otherwise the code examples might not work properly.
+            </p>
+            <ol>
+              <li>  Click Add/View Allowed IPs (Use  cidr: 0.0.0.0/0 permanently) (Nav: Clusters → Trial-Cluster → Connect tab → Manage Allowed IP)
+              <li>  Import travel-sample bucket (Nav: Clusters → Trial-Cluster →  Tools tab → Import )
+              <li>  Create a new database user (say: username1/Password1! ) with all buckets Read/Write permissions (Nav: Clusters → Trial-Cluster → Connect tab → Manage Credentials -->Create Database Credentials)
+            </ol>
+
+        <p>
+          Playground examples are intended for "tire-kicking" and learning by developers.
+        </p>
+
+      </section>
+    </article>
+  </main>
+
+  <footer>
+    <div>© 2021 Couchbase Labs</div>
+  </footer>
+</body>
+<script>
+function submitted() {
+  setTimeout(function() {
+    document.querySelector("form .actions input[type=submit]").disabled = true;
+    document.querySelector("form .actions .cancel").innerHTML =
+      `launching containers<span class="loading"></span>`;
+  }, 100);
+}
+</script>
+<style>
+.loading:after {
+  overflow: hidden;
+  display: inline-block;
+  vertical-align: text-bottom;
+  animation: ellipsis steps(5,end) 1.5s infinite;
+  content: "\2026\2026\2026\2026"; /* ascii code for the ellipsis character */
+  width: 0px;
+}
+
+@keyframes ellipsis {
+  to {
+    width: 30px;
+  }
+}
+
+@-webkit-keyframes ellipsis {
+  to {
+    width: 30px;
+  }
+}
+</style>
+</html>

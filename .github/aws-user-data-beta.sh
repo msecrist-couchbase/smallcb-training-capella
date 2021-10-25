@@ -21,12 +21,8 @@ export GOCACHE="/home/ubuntu/.cache/go-build"
 export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
 source ~/.profile
 
-#Without this command, couchbase will fail to restart during make create 
-# sudo docker system prune -a -f
-
-# Pull smallcb runner image
-export IMAGE_NAME='598307997273.dkr.ecr.us-west-1.amazonaws.com/smallcb-beta:latest'
-docker pull "$IMAGE_NAME"
+# Duplicate docker config for root
+cp -r /home/ubuntu/.docker ~/
 
 #Forward port 80 to 8080 
 sudo iptables -t nat -I PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 8080
@@ -52,5 +48,11 @@ IFS='.' read -r -a array <<< "$IP"
 SUBDOMAIN="cb-${array[2]}${array[3]}.couchbase.live"
 echo "Subdomain of this node = $SUBDOMAIN"
 
+# Added below for resolving cannot kill Docker container - permission denied
+# aa-remove-unknown
+
+# build the container
+make build create
+
 #Start SmallCb
-./play-server -host "$SUBDOMAIN"  -containers=10 -sessionsMaxAge=35m0s -codeDuration=60s -containersSingleUse=2 -restarters=5 &> nohup.out &
+./play-server -host "$SUBDOMAIN"  -containers=10 -sessionsMaxAge=35m0s -codeDuration=3m -containersSingleUse=2 -restarters=5 -containerWaitDuration=1m &> nohup.out &
