@@ -72,6 +72,12 @@ header {
     display: none !important;
     visibility: hidden !important;
   }
+
+  .example-info-column {
+    padding-bottom: 0.5rem;
+    margin-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.6);
+  }
 }
 
 @media (min-width: 768px) {
@@ -114,6 +120,10 @@ header {
   .red-button:hover {
     border: 2px solid #ea2328 !important;
     background: rgba(237, 117, 117, 0.8) !important;
+  }
+
+  .toggle-btn {
+    margin-bottom: 1rem;
   }
 }
 

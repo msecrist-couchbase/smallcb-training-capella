@@ -953,8 +953,8 @@ div.progress-wrapper > ul > li > a:hover {
 }
 
 .toggle-btn {
-  width: 42px;
-  height: 42px;
+  width: 30px;
+  height: 30px;
   border: none;
 
   /* Fade Effect on Hover */
