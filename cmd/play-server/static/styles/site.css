@@ -352,7 +352,7 @@ body.dark header nav ul > li a {
   background: none;
 }
 body.dark header nav ul > li a.session:hover {
-  color: red;
+  color: #eec4c4;
 }
 
 /* Dark Mode hr */
@@ -367,6 +367,18 @@ body.dark input, body.dark pre {
   color: #FFF;
 }
 
+
+body > header > div > a {
+  text-decoration: none !important;
+}
+
+.logo {
+  padding-top: 4px;
+}
+
+.menu-button {
+
+  
 body > header > div > div> h1 > a {
   text-decoration: none !important;
 }
@@ -383,6 +395,7 @@ body > header > div > div> h1 > a {
   -webkit-transition:.3s;
   transition:.3s;
 }
+
 
 .start-button:hover {
   text-decoration: none !important;
