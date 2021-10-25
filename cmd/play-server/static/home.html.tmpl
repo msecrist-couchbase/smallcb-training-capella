@@ -69,70 +69,94 @@
       return true;
     }
   </script>
+{{/*    TODO: look into how AnalyticsHTML works and see if we can do this for the nav too  */}}
     {{.AnalyticsHTML}}
 </head>
 <body class="{{.BodyClass}}">
 <header>
+  <div class="header-flex-container">
+    <div class="logo">
+      <h1>
+        <a href="https://www.couchbase.com/">
+          <img src="/static/cb-rww.svg"/>
+        </a>
+  {{/* the href below is set by a javascript function that checks if we are on couchbase.live or not */}}
+        <a href="#" id="homeLink">
+          Playground
+        </a>
+      </h1>
+    </div>
 
-  <div class="logo">
-    <h1>
-      <a href="https://www.couchbase.com/">
-        <img src="/static/cb-rww.svg"/>
-      </a>
-      <a href="/">
-        Playground
-      </a>
-    </h1>
+    <nav>
+      <ul>
+{{/*        <li>*/}}
+{{/*          <a target="_blank" href="https://docs.couchbase.com" class="menu-button">Documentation</a>*/}}
+{{/*        </li>*/}}
+{{/*        <li>*/}}
+{{/*          <a target="_blank" href="https://developer.couchbase.com" class="menu-button">Developers</a>*/}}
+{{/*        </li>*/}}
+{{/*        <li>*/}}
+{{/*          <a href="/{{if .Session}}?s={{.Session.SessionId}}{{end}}" class="menu-button">*/}}
+{{/*            <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"*/}}
+{{/*                 width="14" height="14"*/}}
+{{/*                 viewBox="0 -3 25 25"*/}}
+{{/*                 style=" fill:#ffffff;">*/}}
+{{/*              <path d="M 12 2 A 1 1 0 0 0 11.289062 2.296875 L 1.203125 11.097656 A 0.5 0.5 0 0 0 1 11.5 A 0.5 0.5 0 0 0 1.5 12 L 4 12 L 4 20 C 4 20.552 4.448 21 5 21 L 9 21 C 9.552 21 10 20.552 10 20 L 10 14 L 14 14 L 14 20 C 14 20.552 14.448 21 15 21 L 19 21 C 19.552 21 20 20.552 20 20 L 20 12 L 22.5 12 A 0.5 0.5 0 0 0 23 11.5 A 0.5 0.5 0 0 0 22.796875 11.097656 L 12.716797 2.3027344 A 1 1 0 0 0 12.710938 2.296875 A 1 1 0 0 0 12 2 z"></path>*/}}
+{{/*            </svg>*/}}
+{{/*            &nbsp*/}}
+{{/*            SDK Languages*/}}
+{{/*          </a>*/}}
+{{/*        </li>*/}}
+  {{/*      TODO; figure out how to ensure this LI doesnt render if we dont display this item*/}}
+  {{/*      But for now, comment it out as we do not want to enable this feature yet */}}
+  {{/*      <li>*/}}
+  {{/*          {{if .Target.DBurl}}*/}}
+  {{/*            <a href="/target-exit"*/}}
+  {{/*               onclick="localStorage.setItem('infoPanel', 'show');" class="session menu-button red-button">*/}}
+  {{/*              Stop Playground with Couchbase Capella*/}}
+  {{/*            </a>*/}}
+  {{/*          {{else if not .Session}}*/}}
+  {{/*            <a href="/target" class="menu-button red-button">*/}}
+  {{/*              Playground with Couchbase Capella*/}}
+  {{/*            </a>*/}}
+  {{/*          {{end}}*/}}
+  {{/*      </li>*/}}
+
+        <li>
+            {{if .Session}}
+              <a href="/session-exit?s={{.Session.SessionId}}"
+                 onclick="localStorage.setItem('infoPanel', 'show');" class="session menu-button red-button">
+                Stop Playground with a Provisioned Couchbase
+              </a>
+            {{else if not .Target.DBurl}}
+              <a href="/session" class="menu-button red-button">
+                <svg fill="#fff" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 -3 25 25"><path d="M24 21v-6h-18v6h18zm-3-4c.553 0 1 .448 1 1s-.447 1-1 1c-.552 0-1-.448-1-1s.448-1 1-1zm-7.806 0h1.275l-.864 2h-1.274l.863-2zm-2.141 0h1.275l-.863 2h-1.275l.863-2zm-2.19 0h1.275l-.863 2h-1.275l.863-2zm-4.863.941c-2.253-.29-4-2.194-4-4.524 0-2.252 1.626-4.121 3.767-4.506.177-3.294 2.895-5.911 6.233-5.911s6.056 2.617 6.233 5.911c2.005.361 3.541 2.029 3.729 4.089h-1.991c-.279-2.105-2.674-2.333-3.65-2.401.117-1.958-.555-5.599-4.321-5.599-4.438 0-4.359 4.75-4.321 5.599-.945-.037-3.679.341-3.679 2.818 0 1.223.856 2.245 2 2.511v2.013z"/></svg>
+                &nbsp
+                Playground with a Provisioned Couchbase
+              </a>
+            {{end}}
+        </li>
+      </ul>
+    </nav>
   </div>
 
-  <nav>
-    <ul>
+  <div class="subheader-container">
+    <ul id="secondaryNav">
       <li>
-        <a target="_blank" href="https://docs.couchbase.com" class="menu-button">Documentation</a>
+        <a href="" class="middle">Documentation</a>
       </li>
       <li>
-        <a target="_blank" href="https://developer.couchbase.com" class="menu-button">Developers</a>
+        <a href="">Developers</a>
       </li>
       <li>
-        <a href="/{{if .Session}}?s={{.Session.SessionId}}{{end}}" class="menu-button">
-          <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
-               width="14" height="14"
-               viewBox="0 -3 25 25"
-               style=" fill:#ffffff;">
-            <path d="M 12 2 A 1 1 0 0 0 11.289062 2.296875 L 1.203125 11.097656 A 0.5 0.5 0 0 0 1 11.5 A 0.5 0.5 0 0 0 1.5 12 L 4 12 L 4 20 C 4 20.552 4.448 21 5 21 L 9 21 C 9.552 21 10 20.552 10 20 L 10 14 L 14 14 L 14 20 C 14 20.552 14.448 21 15 21 L 19 21 C 19.552 21 20 20.552 20 20 L 20 12 L 22.5 12 A 0.5 0.5 0 0 0 23 11.5 A 0.5 0.5 0 0 0 22.796875 11.097656 L 12.716797 2.3027344 A 1 1 0 0 0 12.710938 2.296875 A 1 1 0 0 0 12 2 z"></path>
-          </svg>
-          &nbsp
-          SDK Languages
-        </a>
-      </li>
-      <li>
-          {{if .Target.DBurl}}
-            <a href="/target-exit"
-               onclick="localStorage.setItem('infoPanel', 'show');" class="session menu-button red-button">
-              Stop Playground with Couchbase Capella
-            </a>
-          {{else if not .Session}}
-            <a href="/target" class="menu-button red-button">
-              Playground with Couchbase Capella
-            </a>
-          {{end}}
-      </li>
-      <li>
-          {{if .Session}}
-            <a href="/session-exit?s={{.Session.SessionId}}"
-               onclick="localStorage.setItem('infoPanel', 'show');" class="session menu-button red-button">
-              Stop Playground with a Provisioned Couchbase
-            </a>
-          {{else if not .Target.DBurl}}
-            <a href="/session" class="menu-button red-button">
-              <svg fill="#fff" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 -3 25 25"><path d="M24 21v-6h-18v6h18zm-3-4c.553 0 1 .448 1 1s-.447 1-1 1c-.552 0-1-.448-1-1s.448-1 1-1zm-7.806 0h1.275l-.864 2h-1.274l.863-2zm-2.141 0h1.275l-.863 2h-1.275l.863-2zm-2.19 0h1.275l-.863 2h-1.275l.863-2zm-4.863.941c-2.253-.29-4-2.194-4-4.524 0-2.252 1.626-4.121 3.767-4.506.177-3.294 2.895-5.911 6.233-5.911s6.056 2.617 6.233 5.911c2.005.361 3.541 2.029 3.729 4.089h-1.991c-.279-2.105-2.674-2.333-3.65-2.401.117-1.958-.555-5.599-4.321-5.599-4.438 0-4.359 4.75-4.321 5.599-.945-.037-3.679.341-3.679 2.818 0 1.223.856 2.245 2 2.511v2.013z"/></svg>
-              &nbsp
-              Playground with a Provisioned Couchbase
-            </a>
-          {{end}}
+        <a href="">SDK Languages</a>
       </li>
     </ul>
-  </nav>
+    <span id="menuToggle" onclick="handleMenuToggle()">
+      <svg id="hamburgerIcon" fill="#fff" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 18v1h-24v-1h24zm0-6v1h-24v-1h24zm0-6v1h-24v-1h24z" fill="#1040e2"/><path d="M24 19h-24v-1h24v1zm0-6h-24v-1h24v1zm0-6h-24v-1h24v1z"/></svg>
+      <svg id="exitIcon" class="hidden" fill="#fff" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M12 11.293l10.293-10.293.707.707-10.293 10.293 10.293 10.293-.707.707-10.293-10.293-10.293 10.293-.707-.707 10.293-10.293-10.293-10.293.707-.707 10.293 10.293z"/></svg>
+    </span>
+  </div>
 
 </header>
 
@@ -215,6 +239,7 @@
 
   <div class="info-panel" id="infoPanel">
       {{if .Msg}}
+{{/*        TODO: this is where the mesage bar with 'thanks for test-driving couchbase!' goes  */}}
         <div class="message-info">{{.Msg}}</div>
       {{end}}
 
@@ -273,37 +298,15 @@
             <p style="line-height: 24px">
               Playground empowers developers to experiment with Couchbase using a several code examples in a variety of
               languages. You can use playground to edit and test code examples against a real Couchbase instance, all
-              from the comfort of your browser. <strong>Developers can chose to use playground without logging in</strong>, leveraging a
-              pre-populated cluster, or can opt to <strong>start a playground session</strong>, enabling ephemeral access
-              to their own provisioned cluster and Couchbase's powerful web console. Finally, developers can also chose
-              to <strong>use playground with their Couchbase Capella clusters </strong> by simply providing a URI, Username, and Password.
+              from the comfort of your browser. <strong>Developers can chose to use playground without logging in</strong>,
+              leveraging a pre-populated cluster, or can opt to <strong>start a playground session</strong>, enabling
+              ephemeral access to their own provisioned cluster and Couchbase's powerful web console. The capability to
+              <strong>use playground with Couchbase Capella </strong>is <strong>COMING SOON!</strong>
             </p>
-{{/*  ROW FOR SELECTING ANON SESSION VS HOSTED SESSION VS CLOUD SESSION */}}
-            <h2 class="home-header"><label for="modeSelector">How would you like to use Playground?</label></h2>
-            <div class="row example-row">
-              <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-                <a href="/target"
-                   class="mode-button example-button red-button" onclick="">
-                  <h3 class="example-label">Playground with Couchbase Capella</h3>
-                </a>
-              </div>
-              <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-                <a href="/session"
-                   class="mode-button example-button red-button" onclick="">
-                  <h3 class="example-label">Playground with a Provisioned Couchbase</h3>
-                </a>
-              </div>
-              <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-                <a href=""
-                   class="mode-button example-button" onclick="return false">
-                  <h3 class="example-label">Playground without Logging In (Click the code examples below) </h3>
-                </a>
-              </div>
-            </div>
             {{end}}
 
 {{/*  ROW FOR SELECTING LANGUAGE/EXAMPLE */}}
-            <h2 class="home-header"><label for="examplesToggle">Play with Couchbase Client SDK Code Examples</label></h2>
+            <h2 class="home-header"><label for="examplesToggle">Play with Couchbase SDK Code Examples Without Logging In</label></h2>
             <div class="row example-row">
               <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
                 <a href="/examples/basic-java-kv-get{{if $.Session}}?s={{$.Session.SessionId}}{{end}}"
@@ -381,6 +384,19 @@
                 </a>
               </div>
             </div>
+
+          {{if and (not .Session) (not .Target.DBurl)}}
+              {{/*  ROW FOR SELECTING ANON SESSION VS HOSTED SESSION VS CLOUD SESSION */}}
+              <h2 class="home-header"><label for="modeSelector">Start a Provisioned Playground Session</label></h2>
+              <div class="row example-row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                  <a href="/session"
+                     class="mode-button example-button red-button" onclick="">
+                    <h3 class="example-label">Playground with a Provisioned Couchbase</h3>
+                  </a>
+                </div>
+              </div>
+          {{end}}
 
           {{end}}
           {{if and .Lang .Title}}
@@ -701,6 +717,22 @@
 </script>
 
 <script>
+  function handleMenuToggle() {
+    let elements = document.getElementById('menuToggle').childNodes;
+    let secondaryNav = document.getElementById('secondaryNav');
+    if (elements[1].classList.contains('hidden')) {
+      elements[1].classList.remove('hidden');
+      elements[3].classList.add('hidden');
+      secondaryNav.style.display = "none";
+    } else if (elements[3].classList.contains('hidden')) {
+      elements[1].classList.add('hidden');
+      elements[3].classList.remove('hidden');
+      secondaryNav.style.display = "block";
+    }
+  }
+</script>
+
+<script>
   function pageToggle(page) {
     var main = document.getElementById("main");
     main.className = "";
@@ -723,6 +755,17 @@
   if (page) {
     pageToggle(page);
   }
+</script>
+
+<script>
+  function setHomeLink() {
+    if (window.location.origin === 'https://couchbase.live/') {
+      document.getElementById("homeLink").href = "https://couchbase.live/"
+    } else {
+      document.getElementById("homeLink").href = "/"
+    }
+  }
+  setHomeLink()
 </script>
 
 <script>

@@ -112,9 +112,6 @@ main .info-header .header-right code {
   flex-direction: row;
 }
 
-.workspace .workspace-body h2 {
-  height: 23px;
-}
 .workspace .workspace-body h2 .lang {
   font-weight: normal;
 }
@@ -759,6 +756,7 @@ a.disable {
 h2.home-header {
   margin: 26px 0 18px 0;
   font-size: 20px;
+  white-space: normal;
 }
 
 .start-session-home {
@@ -766,6 +764,7 @@ h2.home-header {
 }
 
 .container {
+  width: 95%;
   margin: 0 auto;
 }
 
