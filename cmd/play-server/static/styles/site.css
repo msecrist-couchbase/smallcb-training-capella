@@ -101,6 +101,10 @@ header {
     margin-bottom: 0.10em;
     margin-top: 0.5em;
   }
+
+  .container {
+    width: 80% !important;
+  }
 }
 
 @media (max-width: 991px) {
