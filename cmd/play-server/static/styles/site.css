@@ -67,6 +67,15 @@ header {
     visibility: hidden;
     display: none !important;
   }
+
+  #onetrust-policy-text {
+    margin-bottom: 0 !important;
+  }
+
+  #onetrust-policy {
+    margin-bottom: 0.10em;
+    margin-top: 0.5em;
+  }
 }
 
 @media (min-width: 521px) {
