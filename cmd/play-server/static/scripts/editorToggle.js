@@ -3,7 +3,8 @@ function toggleEditorView() {
   let iframe = document.getElementById("code-output").childNodes[1].querySelector("iframe");
   let innerDoc = iframe.contentDocument || iframe.contentWindow.document;
 
-  getOutputHeight()
+
+  getOutputHeight(document.getElementById("code-ace").style.height, isSideBySide)
 
   adjustOuterColumns(isSideBySide);
   if (isSideBySide) {
@@ -56,12 +57,22 @@ function adjustOuterColumns(isSideBySide) {
   }
 }
 
-function getOutputHeight() {
+function getOutputHeight(editorHeight, isSideBySide) {
   let iframe = document.getElementById("code-output").childNodes[1].querySelector("iframe");
   let innerDoc = iframe.contentDocument || iframe.contentWindow.document;
 
-  if (innerDoc.getElementsByTagName("body")[0].childNodes.length === 3 && innerDoc.getElementsByTagName("body")[0].childNodes[1].tagName === 'PRE') {
-    let updatedHeight = Math.max(innerDoc.getElementsByTagName("body")[0].childNodes[1].offsetHeight + 24, 488)
-    iframe.style.height = `${updatedHeight}px`
+  if (!isSideBySide) {
+    iframe.style.height = `${parseInt(editorHeight, 10) - 16}px`
+  } else {
+    if (innerDoc.getElementsByTagName("body")[0].childNodes.length === 3 && innerDoc.getElementsByTagName("body")[0].childNodes[1].tagName === 'PRE') {
+      let updatedHeight = innerDoc.getElementsByTagName("body")[0].childNodes[1].offsetHeight + 28;
+      console.log(updatedHeight);
+      iframe.style.height = `${updatedHeight}px`
+    } else {
+      iframe.style.height = `350px`
+    }
   }
+
+
+
 }

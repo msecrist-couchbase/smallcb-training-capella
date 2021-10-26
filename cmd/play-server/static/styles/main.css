@@ -282,7 +282,7 @@ main .info-header .header-right code {
 }
 .workspace .workspace-body .code-output iframe.output {
   width: 100%;
-  min-height: 450px;
+  height: 350px;
   margin-bottom: 15px;
 
   border-width: 1px;
@@ -808,6 +808,7 @@ h2.example-title {
   margin-left: 0;
   margin-right: 16px;
   clear: left;
+  white-space: normal;
 }
 
 .example-row {
