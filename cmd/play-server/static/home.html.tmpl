@@ -257,8 +257,11 @@
             <code><a href="http://{{.Host}}:8091/ui/index.html?lu={{.Session.CBUser}}&lp={{.Session.CBPswd}}"
                      target="_blank">http://{{.Host}}:8091</a>
             </code>
+            <br class="hidden-lg">
             <span class="head-user">username:</span> <code>{{.Session.CBUser}}</code>
+            <br class="hidden-lg">
             <span class="head-pass">password:</span> <code>*****</code>
+            <br class="hidden-lg">
           </div>
         </div>
       </div>
@@ -266,7 +269,6 @@
 
   <div class="info-panel" id="infoPanel">
       {{if .Msg}}
-{{/*        TODO: this is where the mesage bar with 'thanks for test-driving couchbase!' goes  */}}
         <div class="message-info">{{.Msg}}</div>
       {{end}}
 

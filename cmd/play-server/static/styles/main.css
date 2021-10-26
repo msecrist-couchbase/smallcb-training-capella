@@ -29,8 +29,7 @@
 }
 .session-info .shots {
   display: flex;
-  flex-wrap: nowrap;
-  align-items: flex-start;
+  flex-wrap: wrap;
   margin: 0 0 20px 50px;
   padding: 0 0 0 0;
 }
@@ -89,7 +88,6 @@ main .info-header .header-left a {
 
 main .info-header .header-right {
   padding-top: 9px;
-  height: 25px;
   font-family: "Ubuntu Mono", monospace;
   font-size: 14px;
   white-space: nowrap;
@@ -419,7 +417,6 @@ body.dark .session-info .shots a:hover div {
 }
 body.dark .session-info .shots a.start-here div {
   border-color: rgba(159, 226, 100, 0.95);
-  margin-right: 50px;
 }
 body.dark .session-info .shots a.start-here:hover div {
   background-color: #333a32;
