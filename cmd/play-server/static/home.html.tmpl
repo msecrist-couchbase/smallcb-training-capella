@@ -575,7 +575,7 @@
             {{if .Lang}}
               <div class="col-xs-12 col-md-7" id="editorColumn">
 
-                <button id='viewToggleButton' class="col-btn toggle-btn hidden-mobile" onclick="toggleEditorView();"></button>
+                <button id='viewToggleButton' class="col-btn toggle-btn hidden-md" onclick="toggleEditorView();"></button>
 
                 <div id="editorWrapper" class="">
 
@@ -617,7 +617,7 @@
                     <div class="sticky">
                         {{if or .Name .Lang .Code}}
                           <h2 class="editor-label">Output</h2>
-                          <iframe name="output" id="output" class="output"></iframe>
+                          <iframe name="output" id="output" class="output" onload="setOutputHeight()"></iframe>
                         {{end}}
                     </div>
                   </div>

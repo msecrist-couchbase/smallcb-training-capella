@@ -78,10 +78,17 @@ header {
     display: none !important;
     visibility: hidden !important;
   }
+}
+
+@media (max-width: 991px) {
+  .hidden-md {
+    display: none !important;
+    visibility: hidden !important;
+  }
 
   .example-info-column {
-    padding-bottom: 0.5rem;
-    margin-bottom: 0.5rem;
+    padding-bottom: 1em;
+    margin-bottom: 1em;
     border-bottom: 1px solid rgba(255, 255, 255, 0.6);
   }
 }

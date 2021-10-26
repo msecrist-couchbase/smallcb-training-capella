@@ -938,10 +938,6 @@ div.progress-wrapper > ul > li > a:hover {
     width: 100%;
     margin: 0 auto;
   }
-
-  #editorDiv {
-    padding-right: 16px;
-  }
 }
 
 .toggle-btn {

@@ -1,10 +1,12 @@
+
 function toggleEditorView() {
   let isSideBySide = document.getElementById("editorWrapper").classList.contains('row');
   let iframe = document.getElementById("code-output").childNodes[1].querySelector("iframe");
   let innerDoc = iframe.contentDocument || iframe.contentWindow.document;
 
 
-  getOutputHeight(document.getElementById("code-ace").style.height, isSideBySide)
+  updateOutputHeightOnToggle(document.getElementById("code-ace").style.height, isSideBySide)
+  // setOutputHeight()
 
   adjustOuterColumns(isSideBySide);
   if (isSideBySide) {
@@ -57,22 +59,38 @@ function adjustOuterColumns(isSideBySide) {
   }
 }
 
-function getOutputHeight(editorHeight, isSideBySide) {
+function setOutputHeight() {
+  let editorHeight = document.getElementById("code-ace").style.height;
+  let isSideBySide = document.getElementById("editorWrapper").classList.contains('row');
+
   let iframe = document.getElementById("code-output").childNodes[1].querySelector("iframe");
   let innerDoc = iframe.contentDocument || iframe.contentWindow.document;
 
-  if (!isSideBySide) {
+  if (isSideBySide) {
     iframe.style.height = `${parseInt(editorHeight, 10) - 16}px`
   } else {
     if (innerDoc.getElementsByTagName("body")[0].childNodes.length === 3 && innerDoc.getElementsByTagName("body")[0].childNodes[1].tagName === 'PRE') {
       let updatedHeight = innerDoc.getElementsByTagName("body")[0].childNodes[1].offsetHeight + 28;
-      console.log(updatedHeight);
       iframe.style.height = `${updatedHeight}px`
     } else {
       iframe.style.height = `350px`
     }
   }
+}
 
+function updateOutputHeightOnToggle(editorHeight, isSideBySide) {
+  let iframe = document.getElementById("code-output").childNodes[1].querySelector("iframe");
+  let innerDoc = iframe.contentDocument || iframe.contentWindow.document;
 
+  if (!isSideBySide) {
+    iframe.style.height = `${parseInt(editorHeight, 10) - 16}px`
 
+  } else {
+    if (innerDoc.getElementsByTagName("body")[0].childNodes.length === 3 && innerDoc.getElementsByTagName("body")[0].childNodes[1].tagName === 'PRE') {
+      let updatedHeight = innerDoc.getElementsByTagName("body")[0].childNodes[1].offsetHeight + 28;
+      iframe.style.height = `${updatedHeight}px`
+    } else {
+      iframe.style.height = `350px`
+    }
+  }
 }
