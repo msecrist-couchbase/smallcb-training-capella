@@ -19,11 +19,17 @@ help()
 
 checkout()
 {
-  if [ -f smallcb ]; then
+  if [ "$BRANCH" == "" ];then
+    echo "WARNING: BRANCH is not specified"
+    help
+    exit 1
+  fi
+  if [ -d smallcb ]; then
     mv smallcb smallcb_`date +%m%d%y_%H%M`
   fi
   git clone -b ${BRANCH} http://github.com/couchbaselabs/smallcb.git
   cd smallcb
+  make play-server
 }
 
 artifacts()
