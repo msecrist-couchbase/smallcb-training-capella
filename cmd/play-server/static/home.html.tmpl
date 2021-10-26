@@ -13,7 +13,10 @@
   <!-- Development CDN -- Switch for PROD -->
   <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
   <script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
-  <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/themes/material.css"/>
+
+  <script src="../static/scripts/menu.js"></script>
+  <script src="../static/scripts/editorToggle.js"></script>
+
   <style>
     {{if not .Session}}
     body .needs-session {
@@ -79,14 +82,14 @@
     {{.AnalyticsHTML}}
 </head>
 <body class="{{.BodyClass}}">
-<header>
+<header onclick="setHomeLink()">
   <div class="header-flex-container">
     <div class="logo">
       <h1>
         <a href="https://www.couchbase.com/">
           <img src="/static/cb-rww.svg"/>
         </a>
-  {{/* the href below is set by a javascript function that checks if we are on couchbase.live or not */}}
+          {{/* the href below is set by a javascript function that checks if we are on couchbase.live or not */}}
         <a href="#" id="homeLink">
           Playground
         </a>
@@ -95,39 +98,6 @@
 
     <nav>
       <ul>
-{{/*        <li>*/}}
-{{/*          <a target="_blank" href="https://docs.couchbase.com" class="menu-button">Documentation</a>*/}}
-{{/*        </li>*/}}
-{{/*        <li>*/}}
-{{/*          <a target="_blank" href="https://developer.couchbase.com" class="menu-button">Developers</a>*/}}
-{{/*        </li>*/}}
-{{/*        <li>*/}}
-{{/*          <a href="/{{if .Session}}?s={{.Session.SessionId}}{{end}}" class="menu-button">*/}}
-{{/*            <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"*/}}
-{{/*                 width="14" height="14"*/}}
-{{/*                 viewBox="0 -3 25 25"*/}}
-{{/*                 style=" fill:#ffffff;">*/}}
-{{/*              <path d="M 12 2 A 1 1 0 0 0 11.289062 2.296875 L 1.203125 11.097656 A 0.5 0.5 0 0 0 1 11.5 A 0.5 0.5 0 0 0 1.5 12 L 4 12 L 4 20 C 4 20.552 4.448 21 5 21 L 9 21 C 9.552 21 10 20.552 10 20 L 10 14 L 14 14 L 14 20 C 14 20.552 14.448 21 15 21 L 19 21 C 19.552 21 20 20.552 20 20 L 20 12 L 22.5 12 A 0.5 0.5 0 0 0 23 11.5 A 0.5 0.5 0 0 0 22.796875 11.097656 L 12.716797 2.3027344 A 1 1 0 0 0 12.710938 2.296875 A 1 1 0 0 0 12 2 z"></path>*/}}
-{{/*            </svg>*/}}
-{{/*            &nbsp*/}}
-{{/*            SDK Languages*/}}
-{{/*          </a>*/}}
-{{/*        </li>*/}}
-  {{/*      TODO; figure out how to ensure this LI doesnt render if we dont display this item*/}}
-  {{/*      But for now, comment it out as we do not want to enable this feature yet */}}
-  {{/*      <li>*/}}
-  {{/*          {{if .Target.DBurl}}*/}}
-  {{/*            <a href="/target-exit"*/}}
-  {{/*               onclick="localStorage.setItem('infoPanel', 'show');" class="session menu-button red-button">*/}}
-  {{/*              Stop Playground with Couchbase Capella*/}}
-  {{/*            </a>*/}}
-  {{/*          {{else if not .Session}}*/}}
-  {{/*            <a href="/target" class="menu-button red-button">*/}}
-  {{/*              Playground with Couchbase Capella*/}}
-  {{/*            </a>*/}}
-  {{/*          {{end}}*/}}
-  {{/*      </li>*/}}
-
         <li>
             {{if .Session}}
               <a href="/session-exit?s={{.Session.SessionId}}"
@@ -321,7 +291,6 @@
     <div class="workspace-body">
       <div class="container {{if .Lang}}container-example{{end}}">
           {{if not .Lang}}
-{{/*  ROW FOR SELECTING LANGUAGE/EXAMPLE */}}
             <h2 class="home-header"><label for="examplesToggle">{{if not .Session}}Play with Couchbase SDK Code Examples (Login not Required){{else}}Play with Couchbase SDK Code Examples{{end}}</label></h2>
             <div class="row example-row">
               <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
@@ -402,7 +371,6 @@
             </div>
 
           {{if and (not .Session) (not .Target.DBurl)}}
-              {{/*  ROW FOR SELECTING ANON SESSION VS HOSTED SESSION VS CLOUD SESSION */}}
               <h2 class="home-header"><label for="modeSelector">Play with Couchbase SDK Code Examples (Requires Login)</label></h2>
               <div class="row example-row">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -768,79 +736,6 @@
 </script>
 
 <script>
-  function toggleEditorView() {
-    let isSideBySide = document.getElementById("editorWrapper").classList.contains('row');
-    let iframe = document.getElementById("code-output").childNodes[1].querySelector("iframe");
-    let innerDoc = iframe.contentDocument || iframe.contentWindow.document;
-
-    adjustOuterColumns(isSideBySide);
-
-    if (isSideBySide) {
-      // swap to VERTICAL STACK editor/output
-      document.getElementById("editorWrapper").classList.remove('row')
-      document.getElementById("editorDiv").classList.remove('col-md-7')
-      document.getElementById("code-output").classList.remove('col-md-5')
-
-      // check if any output is rendered before hiding the output on swap
-      if (innerDoc.getElementsByTagName("body")[0].childNodes.length === 0) {
-        document.getElementById("code-output").classList.add('hidden')
-      }
-      document.getElementById("viewToggleButton")._tippy.setContent('Switch code editor view to 3 column')
-
-      // swap out toggle button icon
-      document.getElementById("viewToggleButton").classList.add('col-btn')
-      document.getElementById("viewToggleButton").classList.remove('stacked-btn')
-    } else {
-      // swap to SIDE BY SIDE editor/output
-      document.getElementById("editorWrapper").classList.add('row')
-      document.getElementById("editorDiv").classList.add('col-md-7')
-      document.getElementById("code-output").classList.add('col-md-5')
-
-      if (document.getElementById("code-output").classList.contains('hidden')) {
-        document.getElementById("code-output").classList.remove('hidden')
-      }
-      document.getElementById("viewToggleButton")._tippy.setContent('Switch code editor view to vertical stack')
-
-      // swap out toggle button icon
-      document.getElementById("viewToggleButton").classList.add('stacked-btn')
-      document.getElementById("viewToggleButton").classList.remove('col-btn')
-    }
-
-  }
-
-  // Helper to adjust the main info and editor columns for side by side mode
-  function adjustOuterColumns(isSideBySide) {
-    if (isSideBySide) {
-      // to VERTICAL STACK view
-      document.getElementById("editorColumn").classList.remove('col-md-8')
-      document.getElementById("editorColumn").classList.add('col-md-7')
-      document.getElementById("infoColumn").classList.remove('col-md-4')
-      document.getElementById("infoColumn").classList.add('col-md-5')
-    } else {
-      // to SIDE BY SIDE view
-      document.getElementById("editorColumn").classList.add('col-md-8')
-      document.getElementById("editorColumn").classList.remove('col-md-7')
-      document.getElementById("infoColumn").classList.add('col-md-4')
-      document.getElementById("infoColumn").classList.remove('col-md-5')
-    }
-  }
-
-  function handleMenuToggle() {
-    let elements = document.getElementById('menuToggle').childNodes;
-    let secondaryNav = document.getElementById('secondaryNav');
-    if (elements[1].classList.contains('hidden')) {
-      elements[1].classList.remove('hidden');
-      elements[3].classList.add('hidden');
-      secondaryNav.style.display = "none";
-    } else if (elements[3].classList.contains('hidden')) {
-      elements[1].classList.add('hidden');
-      elements[3].classList.remove('hidden');
-      secondaryNav.style.display = "block";
-    }
-  }
-</script>
-
-<script>
   function pageToggle(page) {
     var main = document.getElementById("main");
     main.className = "";
@@ -863,17 +758,6 @@
   if (page) {
     pageToggle(page);
   }
-</script>
-
-<script>
-  function setHomeLink() {
-    if (window.location.origin === 'https://couchbase.live/') {
-      document.getElementById("homeLink").href = "https://couchbase.live/"
-    } else {
-      document.getElementById("homeLink").href = "/"
-    }
-  }
-  setHomeLink()
 </script>
 
 <script>

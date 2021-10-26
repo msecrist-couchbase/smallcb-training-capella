@@ -7,11 +7,6 @@
   display: none;
 }
 
-.hidden {
-  visibility: hidden;
-  display: none;
-}
-
 .session-info {
   padding-top: 1em;
   padding-bottom: 10px;

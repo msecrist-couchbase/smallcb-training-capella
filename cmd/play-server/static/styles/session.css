@@ -1,7 +1,7 @@
 article {
   flex-basis: 40rem;
-  margin-left: 47px;
-  margin-bottom: 2em;
+  width: 95vw;
+  margin: 0 auto 2em auto;
 }
 article form {
   margin-top: 30px;
@@ -42,7 +42,7 @@ article > section {
   padding-left: 17px;
 }
 article > header {
-  margin-top: 1em;
+  padding-top: 2em;
   height: 1.8em;
 }
 
@@ -96,4 +96,8 @@ body.dark form .error {
 
 body.dark form .captcha-bg {
   background-color: #bfd4e7;
+}
+
+h2 {
+  font-size: 20px;
 }

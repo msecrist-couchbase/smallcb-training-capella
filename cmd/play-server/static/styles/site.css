@@ -40,6 +40,7 @@ header {
 }
 
 .subheader-container {
+  background-color: #282e38;
   z-index: 101;
   display: flex;
   border-top: 1px solid #e39191;
@@ -54,6 +55,11 @@ header {
   /*  TODO: margin left auto rule is for pushing it to right side */
   margin-left: auto;
   margin-right: 6px;
+}
+
+.hidden {
+  visibility: hidden;
+  display: none;
 }
 
 @media (max-width: 767px) {
@@ -124,6 +130,7 @@ header {
   position: absolute;
   right: 18px;
   margin-top: 8px;
+  cursor: pointer;
 }
 
 header .logo {
