@@ -13,11 +13,15 @@ function handleMenuToggle() {
 }
 
 
-function setHomeLink() {
+function setHomeLink(sessionId) {
+  let sessionExitExtension = '';
+  if (sessionId !== null) {
+    sessionExitExtension = `session-exit?s=${sessionId}`
+  }
   if (window.location.origin === 'https://couchbase.live/') {
-    document.getElementById("homeLink").href = "https://couchbase.live/"
+    document.getElementById("homeLink").href = `https://couchbase.live/${sessionExitExtension}`
   } else {
-    document.getElementById("homeLink").href = "/"
+    document.getElementById("homeLink").href = `/${sessionExitExtension}`
   }
 }
 

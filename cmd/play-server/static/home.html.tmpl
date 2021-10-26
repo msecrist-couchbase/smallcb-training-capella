@@ -81,8 +81,8 @@
 {{/*    TODO: look into how AnalyticsHTML works and see if we can do this for the nav too  */}}
     {{.AnalyticsHTML}}
 </head>
-<body class="{{.BodyClass}}">
-<header onclick="setHomeLink()">
+<body class="{{.BodyClass}}" onload="setHomeLink({{if .Session}}{{.Session.SessionId}}{{else}}null{{end}})">
+<header>
   <div class="header-flex-container">
     <div class="logo">
       <h1>
