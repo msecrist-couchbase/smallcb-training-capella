@@ -3,13 +3,14 @@ function toggleEditorView() {
   let iframe = document.getElementById("code-output").childNodes[1].querySelector("iframe");
   let innerDoc = iframe.contentDocument || iframe.contentWindow.document;
 
-  adjustOuterColumns(isSideBySide);
+  getOutputHeight()
 
+  adjustOuterColumns(isSideBySide);
   if (isSideBySide) {
     // swap to VERTICAL STACK editor/output
     document.getElementById("editorWrapper").classList.remove('row')
-    document.getElementById("editorDiv").classList.remove('col-md-7')
-    document.getElementById("code-output").classList.remove('col-md-5')
+    document.getElementById("editorDiv").classList.remove('col-md-6')
+    document.getElementById("code-output").classList.remove('col-md-6')
 
     // check if any output is rendered before hiding the output on swap
     if (innerDoc.getElementsByTagName("body")[0].childNodes.length === 0) {
@@ -23,8 +24,8 @@ function toggleEditorView() {
   } else {
     // swap to SIDE BY SIDE editor/output
     document.getElementById("editorWrapper").classList.add('row')
-    document.getElementById("editorDiv").classList.add('col-md-7')
-    document.getElementById("code-output").classList.add('col-md-5')
+    document.getElementById("editorDiv").classList.add('col-md-6')
+    document.getElementById("code-output").classList.add('col-md-6')
 
     if (document.getElementById("code-output").classList.contains('hidden')) {
       document.getElementById("code-output").classList.remove('hidden')
@@ -52,5 +53,15 @@ function adjustOuterColumns(isSideBySide) {
     document.getElementById("editorColumn").classList.remove('col-md-7')
     document.getElementById("infoColumn").classList.add('col-md-4')
     document.getElementById("infoColumn").classList.remove('col-md-5')
+  }
+}
+
+function getOutputHeight() {
+  let iframe = document.getElementById("code-output").childNodes[1].querySelector("iframe");
+  let innerDoc = iframe.contentDocument || iframe.contentWindow.document;
+
+  if (innerDoc.getElementsByTagName("body")[0].childNodes.length === 3 && innerDoc.getElementsByTagName("body")[0].childNodes[1].tagName === 'PRE') {
+    let updatedHeight = Math.max(innerDoc.getElementsByTagName("body")[0].childNodes[1].offsetHeight + 24, 488)
+    iframe.style.height = `${updatedHeight}px`
   }
 }
