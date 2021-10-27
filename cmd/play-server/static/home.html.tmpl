@@ -676,7 +676,7 @@
   codeAce.setOption("mode", "ace/mode/{{.LangAce}}");
   {{end}}
 
-  codeAce.renderer.setScrollMargin(24, 0, 0, 0)
+  codeAce.renderer.setScrollMargin(26, 0, 0, 0)
   let numLines = codeAce.session.doc.getAllLines().length;
   let editorHeight = (numLines * 18);
   document.getElementById("code-ace").style.height = `${editorHeight}px`
@@ -700,14 +700,18 @@
   {{end}}
 </script>
 <script>
-  // var scrollTop = parseInt(localStorage.getItem('scrollTop')) || 0;
-  // if (scrollTop > 0) {
-  //   document.scrollingElement.scrollTo(0, scrollTop);
-  // }
-  //
-  // window.addEventListener('unload', function () {
-  //   localStorage.setItem('scrollTop', document.scrollingElement.scrollTop || 0);
-  // });
+  // Commenting out this scrolltop code for now as it doesnt appear to be working properly for mobile, but could be re-enabled in the future
+  var scrollTop = parseInt(localStorage.getItem('scrollTop')) || 0;
+  console.log(scrollTop);
+  if (scrollTop > 0) {
+    document.scrollingElement.scrollTo(0, scrollTop);
+  }
+
+  window.addEventListener('unload', function () {
+    localStorage.setItem('scrollTop', document.scrollingElement.scrollTop || 0);
+  });
+  // console.log("scrollin");
+  // window.scrollTo(100,100);
 </script>
 
 <script>
