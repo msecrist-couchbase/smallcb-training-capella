@@ -126,6 +126,7 @@
       <li>
         <a href="https://developer.couchbase.com">Developers</a>
       </li>
+      {{if .Lang}}
       <li>
         <a href="/{{if .Session}}?s={{.Session.SessionId}}{{end}}">
           <svg class="hidden-mobile" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
@@ -149,6 +150,7 @@
           </svg>
         </a>
       </li>
+      {{end}}
     </ul>
     <span id="menuToggle" onclick="handleMenuToggle()">
       <svg id="hamburgerIcon" fill="#fff" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 18v1h-24v-1h24zm0-6v1h-24v-1h24zm0-6v1h-24v-1h24z" fill="#1040e2"/><path d="M24 19h-24v-1h24v1zm0-6h-24v-1h24v1zm0-6h-24v-1h24v1z"/></svg>
