@@ -264,6 +264,10 @@ main .info-header .header-right code {
 
   border-width: 2px;
   border-style: solid;
+
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
 }
 .workspace .workspace-body .code-editor input.run:hover {
   border-width: 2px;
@@ -657,9 +661,6 @@ body.dark .workspace .workspace-body .code-output iframe.output {
 }
 
 a.prev-button {
-  -webkit-appearance: button;
-  -moz-appearance: button;
-  appearance: button;
   padding: 7px 14px;
 
   background-color: #262a35;
@@ -673,9 +674,6 @@ a.prev-button {
 }
 
 a.next-button {
-  -webkit-appearance: button;
-  -moz-appearance: button;
-  appearance: button;
   padding: 7px 14px;
 
   background-color: #262a35;
@@ -689,9 +687,6 @@ a.next-button {
 }
 
 a.disable {
-  -webkit-appearance: button;
-  -moz-appearance: button;
-  appearance: button;
   padding: 7px 14px;
 
   background-color: #262a35;

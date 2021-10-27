@@ -97,8 +97,8 @@ header {
   }
 
   #onetrust-policy {
-    margin-bottom: 0.10em;
-    margin-top: 0.5em;
+    margin-bottom: 0.10em !important;
+    margin-top: 0.5em !important;
   }
 
   .container:not(.container-example) {
@@ -450,4 +450,8 @@ body > header > div > div> h1 > a {
 
 .faded {
   filter: opacity(60%);
+}
+
+#onetrust-pc-btn-handler {
+  color: #EA2328 !important;
 }
