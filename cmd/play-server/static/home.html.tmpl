@@ -78,6 +78,9 @@
       return true;
     }
   </script>
+  <script>
+    window.scrollTo({top: 0, behavior: "smooth"})
+  </script>
 {{/*    TODO: look into how AnalyticsHTML works and see if we can do this for the nav too  */}}
     {{.AnalyticsHTML}}
 </head>
@@ -700,7 +703,6 @@
   {{end}}
 </script>
 <script>
-  // Commenting out this scrolltop code for now as it doesnt appear to be working properly for mobile, but could be re-enabled in the future
   var scrollTop = parseInt(localStorage.getItem('scrollTop')) || 0;
   console.log(scrollTop);
   if (scrollTop > 0) {
@@ -710,8 +712,6 @@
   window.addEventListener('unload', function () {
     localStorage.setItem('scrollTop', document.scrollingElement.scrollTop || 0);
   });
-  // console.log("scrollin");
-  // window.scrollTo(100,100);
 </script>
 
 <script>
