@@ -13,8 +13,8 @@
 
   {{.AnalyticsHTML}}
 </head>
-<body class="{{.bodyClass}}">
-<header onclick="setHomeLink(null)">
+<body class="{{.bodyClass}}" onload="setHomeLinkSession()">
+<header>
   <div class="header-flex-container">
     <div class="logo">
       <h1>
