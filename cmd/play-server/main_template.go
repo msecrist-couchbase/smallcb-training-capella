@@ -395,15 +395,17 @@ object Program extends App {`
 
 func TargetTemplateData(Target target) map[string]interface{} {
 	data := map[string]interface{}{
-		"Host":   host,
-		"CBUser": "username",
-		"CBPswd": "password",
+		"Host":        host,
+		"CBUser":      "username",
+		"CBPswd":      "password",
+		"NatPublicIP": *natPublicIP,
 	}
 
 	if &Target != nil && Target.DBurl != "" && Target.DBuser != "" && Target.DBpwd != "" {
 		data["Host"] = Target.DBurl
 		data["CBUser"] = Target.DBuser
 		data["CBPswd"] = Target.DBpwd
+		data["NatPublicIP"] = *natPublicIP
 	}
 
 	return data

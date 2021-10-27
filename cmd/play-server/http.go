@@ -7,8 +7,10 @@ import (
 	"html/template"
 	"log"
 	"math/rand"
+	"net"
 	"net/http"
 	"regexp"
+	"runtime"
 	"sort"
 	"strconv"
 	"strings"
@@ -94,6 +96,13 @@ func HttpHandleMain(w http.ResponseWriter, r *http.Request) {
 		} else {
 			Target.ExpiryTime = ""
 		}
+		if runtime.GOOS == "linux" {
+			addSrvRoute(Target.DBurl)
+		} else {
+			*natPublicIP = "YourHostIP"
+			Target.NatPublicIP = *natPublicIP
+		}
+		Target.Status, Target.Version, Target.IPv4 = CheckDBAccess(Target.DBurl)
 	}
 
 	examplesPath := "examples"
@@ -222,6 +231,21 @@ func HttpHandleSessionExit(w http.ResponseWriter, r *http.Request) {
 func HttpHandleTargetExit(w http.ResponseWriter, r *http.Request) {
 	StatsNumInc("http.TargetExit")
 
+	//delete route before exit
+	targetCookie, terr := r.Cookie(*targetsCookieName)
+	Target := target{}
+	if terr == nil && targetCookie != nil {
+		targetCookieValue := DecryptText(targetCookie.Value)
+		targetTuple := strings.Split(targetCookieValue, "::")
+		Target.DBurl = targetTuple[0]
+		if runtime.GOOS == "linux" {
+			delSrvRoute(Target.DBurl)
+		} else {
+			*natPublicIP = "YourHostIP"
+			Target.NatPublicIP = *natPublicIP
+		}
+	}
+	//set cookie expire time to -1
 	targetsCookie := &http.Cookie{
 		Name:   *targetsCookieName,
 		MaxAge: -1,
@@ -564,6 +588,13 @@ func HttpHandleTarget(w http.ResponseWriter, r *http.Request) {
 		} else {
 			Target.ExpiryTime = ""
 		}
+		if runtime.GOOS == "linux" {
+			addSrvRoute(Target.DBurl)
+		} else {
+			*natPublicIP = "YourHostIP"
+			Target.NatPublicIP = *natPublicIP
+		}
+		Target.Status, Target.Version, Target.IPv4 = CheckDBAccess(Target.DBurl)
 	}
 	data := map[string]interface{}{
 		"AnalyticsHTML": template.HTML(AnalyticsHTML(*host)),
@@ -574,10 +605,16 @@ func HttpHandleTarget(w http.ResponseWriter, r *http.Request) {
 		"dburlc":        r.FormValue("dburlc"),
 		"dbuserc":       r.FormValue("dbuserc"),
 		"dbpwdc":        r.FormValue("dbpwdc"),
-		"dburl":         Target.DBurl,
-		"dbuser":        Target.DBuser,
-		"dbpwd":         Target.DBpwd,
+		"dburl":         r.FormValue("dburl"),
+		"dbuser":        r.FormValue("dbuser"),
+		"dbpwd":         r.FormValue("dbpwd"),
+		"natpublicip":   *natPublicIP,
 		"bodyClass":     bodyClass,
+	}
+
+	if runtime.GOOS != "linux" {
+		*natPublicIP = "YourHostIP"
+		data["natpublicip"] = *natPublicIP
 	}
 
 	if r.Method == "POST" {
@@ -598,8 +635,15 @@ func HttpHandleTarget(w http.ResponseWriter, r *http.Request) {
 
 			data["errDBurl"] = "db URL required"
 			errs += 1
+		} else {
+			_, _, err := net.LookupSRV("couchbases", "tcp", dburl)
+			if err != nil {
+				data["errDBurl"] = "db URL invalid or not reachable"
+				errs += 1
+			}
 		}
 
+		dbHost := dburl
 		if !strings.HasPrefix(dburl, "couchbase:") && !strings.HasPrefix(dburl, "couchbases:") && strings.Contains(dburl, "cloud.couchbase.com") {
 			dburl = "couchbases://" + dburl
 		}
@@ -637,31 +681,41 @@ func HttpHandleTarget(w http.ResponseWriter, r *http.Request) {
 		}
 		data["dbpwd"] = dbpwd
 
-		// Encrypt and Set cookie
-		fmt.Println(data)
-		time.FixedZone("PDT", 8*60*60)
-		age := time.Now().Add(*targetsMaxAge)
-		cookieValue := dburl + "::" + dbuser + "::" + dbpwd + "::" + age.Format(time.RFC3339Nano)
-		etCookieValue := EncryptText(cookieValue)
-		fmt.Println("etCookieValue=" + etCookieValue)
-		targetsCookie := &http.Cookie{
-			Name:   *targetsCookieName,
-			Value:  etCookieValue,
-			MaxAge: int((*targetsMaxAge).Seconds()),
-		}
-		http.SetCookie(w, targetsCookie)
-		url := r.FormValue("ebase")
-		if url == "" {
-			url = "/"
-		}
+		//fmt.Printf("INFO: Target POST, dburl: %s, dbuser: %s, dbpwd: %s, errs: %v\n", dburl, dbuser, dbpwd, errs)
+		if errs <= 0 {
+			// Encrypt and Set cookie
+			//fmt.Println(data)
+			time.FixedZone("PDT", 8*60*60)
+			age := time.Now().Add(*targetsMaxAge)
+			cookieValue := dburl + "::" + dbuser + "::" + dbpwd + "::" + age.Format(time.RFC3339Nano)
+			etCookieValue := EncryptText(cookieValue)
+			//fmt.Println("etCookieValue=" + etCookieValue)
+			targetsCookie := &http.Cookie{
+				Name:   *targetsCookieName,
+				Value:  etCookieValue,
+				MaxAge: int((*targetsMaxAge).Seconds()),
+			}
+			if runtime.GOOS == "linux" {
+				addSrvRoute(dbHost)
+			} else {
+				*natPublicIP = "YourHostIP"
+				data["natpublicip"] = *natPublicIP
+			}
+			http.SetCookie(w, targetsCookie)
+			url := r.FormValue("ebase")
+			if url == "" {
+				url = "/"
+			}
 
-		if e != "" {
-			url = url + e
-		}
+			if e != "" {
+				url = url + e
+			}
 
-		http.Redirect(w, r, url, http.StatusSeeOther)
-		StatsNumInc("http.Target.post.ok", "http.Target.post.create.ok")
-		return
+			http.Redirect(w, r, url, http.StatusSeeOther)
+			StatsNumInc("http.Target.post.ok", "http.Target.post.create.ok")
+			return
+		}
+		StatsNumInc("http.Target.post.err")
 
 	} else {
 		StatsNumInc("http.Target.get")

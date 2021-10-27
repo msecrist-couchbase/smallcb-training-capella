@@ -13,7 +13,7 @@ article .details {
   font-weight: normal;
   font-size: 9pt;
 }
-article input[type=text] {
+article input[type=text], input[type=password] {
   width: 20rem;
   margin: 5px 0 10px 0;
   background-color: #f8f8f8;

@@ -145,10 +145,23 @@
 
         <div class="header-right">
           <div>
-            <span class="head-server">Your Own Couchbase:</span>
+            <span class="head-server">Your Couchbase:</span>
             <span class="head-user">url:</span> <code>{{.Target.DBurl}}</code>
-            <span class="head-user">username:</span> <code>{{.Target.DBuser}}</code>
-            <span class="head-pass">password:</span> <code>*****</code>
+            <span class="head-user">ip:</span> <code>{{.Target.IPv4}}</code>
+            <span class="head-user">status:</span>
+            {{if eq .Target.Status "OK"}}
+              <code style="color: green">{{.Target.Status}}</code>
+              <span class="head-user">version:</span> <code>{{.Target.Version}}</code>
+            {{else}}
+              <code style="color: red">{{.Target.Status}}</code>
+              <span class="head-user">allowlist cidr: </span><code>
+                {{if eq .Target.NatPublicIP "YourHostIP"}}
+                  <a target="_blank" href="http://www.whatismyipaddress.com">{{.Target.NatPublicIP}}</a>
+                {{else}}
+                  {{.Target.NatPublicIP}}
+                {{end}}/32 (add from Capella UI)</code>
+            {{end}} 
+            
           </div>
         </div>
       </div>
