@@ -40,11 +40,10 @@ header {
 }
 
 .subheader-container {
-  background-color: #282e38;
+  background-color: #100F14;
   z-index: 101;
   display: flex;
-  border-top: 1px solid #e39191;
-  border-bottom: 1px solid #e39191;
+  border-bottom: 1px solid #706b84;
   flex-basis: 100%;
   min-height: 40px;
 }
