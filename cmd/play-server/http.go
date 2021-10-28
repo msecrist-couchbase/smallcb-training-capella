@@ -15,7 +15,6 @@ import (
 	"time"
 
 	"golang.org/x/mod/semver"
-	"net"
 )
 
 var Msgs = map[string]string{
@@ -281,9 +280,6 @@ var regexpE = regexp.MustCompile(`^[a-zA-Z0-9_#=/\-\?\.]*$`)
 func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 	StatsNumInc("http.Session")
 
-  portApp, _ := strconv.Atoi(strings.Split(*listen, ":")[1])
-  hostName, err := net.LookupAddr(*host)
-
 	if *host != "127.0.0.1" && *host != "localhost" &&
 		strings.Split(r.Host, ":")[0] != *host {
 		StatsNumInc("http.Session.redirect.host")
@@ -341,8 +337,6 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 		"init":          r.FormValue("init"),
 		"e":             e,
 		"bodyClass":     bodyClass,
-		"PortApp": portApp,
-		"HostName": hostName[0],
 	}
 
 	if r.Method == "POST" {

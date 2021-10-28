@@ -84,8 +84,7 @@
 {{/*    TODO: look into how AnalyticsHTML works and see if we can do this for the nav too  */}}
     {{.AnalyticsHTML}}
 </head>
-{{/*setHomeLink({{if .Session}}{{.Session.SessionId}}{{else}}null{{end}})*/}}
-<body class="{{.BodyClass}}">
+<body class="{{.BodyClass}}" onload="setHomeLink({{if .Session}}{{.Session.SessionId}}{{else}}null{{end}})">
 <header>
   <div class="header-flex-container">
     <div class="logo">
@@ -95,7 +94,7 @@
           <img src="/static/cb.png" class="hidden-sm hidden-lg"/>
         </a>
           {{/* the href below is set by a javascript function that checks if we are on couchbase.live or not */}}
-        <a href="//{{if and .HostName .PortApp}}{{.HostName}}:{{.PortApp}}{{else}}couchbase.live{{end}}" id="homeLink">
+        <a href="#" id="homeLink">
           Playground
         </a>
       </h1>
