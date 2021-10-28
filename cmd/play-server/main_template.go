@@ -11,6 +11,7 @@ import (
 	"strings"
 	textTemplate "text/template"
 	"time"
+	"net"
 )
 
 // Map from lang suffix to name that ACE editor recognizes.
@@ -75,6 +76,8 @@ type MainTemplateData struct {
 	PageColor func(string) string
 
 	BodyClass string
+	HostName string
+	PortApp int
 }
 
 func MainTemplateEmit(w http.ResponseWriter,
@@ -89,6 +92,8 @@ func MainTemplateEmit(w http.ResponseWriter,
 	if session == nil {
 		host = "127.0.0.1"
 	}
+
+  hostName, err := net.LookupAddr(host)
 
 	examples, examplesArr, err :=
 		ReadExamples(staticDir + "/" + examplesPath)
@@ -215,6 +220,8 @@ func MainTemplateEmit(w http.ResponseWriter,
 		},
 
 		BodyClass: bodyClass,
+		HostName: hostName[0],
+		PortApp: portApp,
 	}
 
 	if view != "" {
@@ -317,7 +324,7 @@ import com.couchbase.client.core.deps.io.netty.handler.ssl.util.InsecureTrustMan
 import com.couchbase.client.core.env.IoConfig;
 import com.couchbase.client.core.env.SecurityConfig;
 import com.couchbase.client.java.ClusterOptions;
-			
+
 class Program {`
 				t = strings.ReplaceAll(t, replaceCode, secureCode)
 				replaceCode = `var cluster = Cluster.connect(`
@@ -363,7 +370,7 @@ object Program extends App {`
 									.trustManagerFactory(InsecureTrustManagerFactory.INSTANCE))
 									.build
 									.get
-  val cluster = Cluster.connect("{{.Host}}", 
+  val cluster = Cluster.connect("{{.Host}}",
 		ClusterOptions(PasswordAuthenticator("{{.CBUser}}", "{{.CBPswd}}")).environment(env)).get`
 				t = strings.ReplaceAll(t, replaceCode, secureCode)
 				replaceCode = `"{{.Host}}", "{{.CBUser}}", "{{.CBPswd}}"`

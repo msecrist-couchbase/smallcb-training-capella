@@ -13,7 +13,7 @@
 
   {{.AnalyticsHTML}}
 </head>
-<body class="{{.bodyClass}}" onload="setHomeLinkSession()">
+<body class="{{.bodyClass}}">
 <header>
   <div class="header-flex-container">
     <div class="logo">
@@ -23,7 +23,7 @@
           <img src="/static/cb.png" class="hidden-sm hidden-lg"/>
         </a>
           {{/* the href below is set by a javascript function that checks if we are on couchbase.live or not */}}
-        <a href="#" id="homeLink">
+        <a href="//{{if and .HostName .PortApp}}{{.HostName}}:{{.PortApp}}{{else}}couchbase.live{{end}}" id="homeLink">
           Playground
         </a>
       </h1>
@@ -186,7 +186,6 @@
             <input type="hidden" name="intro" value="{{.intro}}"/>
           {{end}}
         </form>
-
         <p>
           We won't sell your contact info to spammers, etc.
         </p>
