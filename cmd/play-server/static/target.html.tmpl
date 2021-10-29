@@ -107,7 +107,7 @@
               <label {{if .dbpwdc}}class="{{.dbpwdc}}"{{end}}> Database Password:
                 <span class="error">{{.errDBpwd}}</span>
                 <input type="password" name="dbpwd" value="{{.dbpwd}}" id="dbpwd" autofocus/>
-                <i class="fal fa-eye" id="togglePassword">view password</i>
+                <i class="fal fa-eye" id="togglePassword">Show password</i>
               </label>
               <script>
                   const togglePassword = document.querySelector('#togglePassword');
