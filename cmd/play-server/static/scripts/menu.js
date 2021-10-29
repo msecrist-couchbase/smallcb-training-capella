@@ -11,26 +11,3 @@ function handleMenuToggle() {
     secondaryNav.style.display = "block";
   }
 }
-
-
-function setHomeLink(sessionId) {
-  let sessionExitExtension = '';
-  if (sessionId !== null) {
-    sessionExitExtension = `session-exit?s=${sessionId}`
-  }
-  if (window.location.origin === 'https://couchbase.live/') {
-    localStorage.setItem('homeUrl', 'https://couchbase.live/')
-    document.getElementById("homeLink").href = `${window.location.origin}${sessionExitExtension}`
-  } else {
-    localStorage.setItem('homeUrl', window.location.origin)
-    document.getElementById("homeLink").href = `/${sessionExitExtension}`
-  }
-}
-
-function setHomeLinkSession() {
-  console.log(localStorage.getItem('homeUrl'));
-  document.getElementById("homeLink").href = localStorage.getItem('homeUrl') !== null ?  localStorage.getItem('homeUrl') : 'https://couchbase.live/';
-  console.log(document.getElementById("homeLink").href);
-  console.log(document.getElementById("homeLink"));
-}
-
