@@ -749,11 +749,6 @@ h2.home-header {
   margin-left: 0 !important;
 }
 
-.container {
-  width: 95%;
-  margin: 0 auto;
-}
-
 .run {
   background-color: #262a35;
   color: rgba(159, 226, 100, 0.95);
