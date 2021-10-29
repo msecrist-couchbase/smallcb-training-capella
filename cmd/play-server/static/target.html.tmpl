@@ -6,6 +6,7 @@
   <link rel="stylesheet" type="text/css" href="/static/styles/site.css">
   <link rel="stylesheet" type="text/css" href="/static/styles/session.css">
   {{.AnalyticsHTML}}
+  <link rel="stylesheet" type="text/css" href="/static/styles/font-awesome.css">
 </head>
 <body class="{{.bodyClass}}">
   <header>
@@ -42,6 +43,7 @@
         </li>
       </ul>
     </nav>
+
   </header>
 
    <main>
@@ -61,7 +63,7 @@
         {{end}}
 
         <p>
-          Attaching your own couchbase cluster to the playground examples. Please note that travel-sample data should be imported before running the examples.
+          Attaching your couchbase capella cluster to the playground examples. 
         </p>
        <p>
           Don't have a couchbase? Get a free cluster from Couchbase Capella for 45 days. Please visit <a target="_blank" href="https://cloud.couchbase.com/">https://cloud.couchbase.com/</a>
@@ -70,6 +72,7 @@
             <br>Please check the below required checks on Couchbase Capella UI console so that the SDK code examples can work directly.
             </p>
             <ol>
+              <li> Copy the Capella cluster host (Nav: Clusters → Trial-Cluster → Connect tab → Connection)
               <li>  Allowed IP cidr:
               {{if eq .natpublicip "YourHostIP"}}
                 <a target="_blank" href="http://www.whatismyipaddress.com">{{.natpublicip}}</a>/32
@@ -103,8 +106,19 @@
 
               <label {{if .dbpwdc}}class="{{.dbpwdc}}"{{end}}> Database Password:
                 <span class="error">{{.errDBpwd}}</span>
-                <input type="password" name="dbpwd" value="{{.dbpwd}}" autofocus/>
+                <input type="password" name="dbpwd" value="{{.dbpwd}}" id="dbpwd" autofocus/>
+                <i class="fal fa-eye" id="togglePassword">view password</i>
               </label>
+              <script>
+                  const togglePassword = document.querySelector('#togglePassword');
+                  const password = document.querySelector('#dbpwd');
+                
+                  togglePassword.addEventListener('click', function (e) {
+                    const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+                    password.setAttribute('type', type);
+                    this.classList.toggle('fa-eye-slash');
+                });
+              </script>
               {{if .dbuserc}}
                 <input type="hidden" name="dbpwdc" value="{{.dbpwdc}}"/>
               {{end}}

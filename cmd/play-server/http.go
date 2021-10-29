@@ -91,6 +91,7 @@ func HttpHandleMain(w http.ResponseWriter, r *http.Request) {
 		Target.DBurl = targetTuple[0]
 		Target.DBuser = targetTuple[1]
 		Target.DBpwd = targetTuple[2]
+		Target.DBHost = GetDBHostFromURL(Target.DBurl)
 		if len(targetTuple) >= 4 {
 			Target.ExpiryTime = targetTuple[3]
 		} else {
@@ -100,9 +101,18 @@ func HttpHandleMain(w http.ResponseWriter, r *http.Request) {
 			addSrvRoute(Target.DBurl)
 		} else {
 			*natPublicIP = "YourHostIP"
-			Target.NatPublicIP = *natPublicIP
 		}
-		Target.Status, Target.Version, Target.IPv4 = CheckDBAccess(Target.DBurl)
+		Target.NatPublicIP = *natPublicIP
+		Target.NetworkStatus, Target.Version, Target.IPv4 = CheckDBAccess(Target.DBurl)
+		Target.Status = Target.NetworkStatus
+		if Target.NetworkStatus == "OK" {
+			Target.UserAccessStatus = CheckDBUserAccess(Target.IPv4, Target.DBuser, Target.DBpwd)
+			Target.Status = Target.UserAccessStatus
+			if Target.UserAccessStatus == "OK" {
+				Target.SampleAccessStatus = CheckDBUserSampleAccess(Target.IPv4, Target.DBuser, Target.DBpwd, "travel-sample")
+				Target.Status = Target.SampleAccessStatus
+			}
+		}
 	}
 
 	examplesPath := "examples"
@@ -583,6 +593,7 @@ func HttpHandleTarget(w http.ResponseWriter, r *http.Request) {
 		Target.DBurl = targetTuple[0]
 		Target.DBuser = targetTuple[1]
 		Target.DBpwd = targetTuple[2]
+		Target.DBHost = GetDBHostFromURL(Target.DBurl)
 		if len(targetTuple) >= 4 {
 			Target.ExpiryTime = targetTuple[3]
 		} else {
@@ -592,9 +603,19 @@ func HttpHandleTarget(w http.ResponseWriter, r *http.Request) {
 			addSrvRoute(Target.DBurl)
 		} else {
 			*natPublicIP = "YourHostIP"
-			Target.NatPublicIP = *natPublicIP
 		}
-		Target.Status, Target.Version, Target.IPv4 = CheckDBAccess(Target.DBurl)
+		Target.NatPublicIP = *natPublicIP
+		Target.NetworkStatus, Target.Version, Target.IPv4 = CheckDBAccess(Target.DBurl)
+		Target.Status = Target.NetworkStatus
+		if Target.NetworkStatus == "OK" {
+			Target.UserAccessStatus = CheckDBUserAccess(Target.IPv4, Target.DBuser, Target.DBpwd)
+			Target.Status = Target.UserAccessStatus
+			if Target.UserAccessStatus == "OK" {
+				Target.SampleAccessStatus = CheckDBUserSampleAccess(Target.IPv4, Target.DBuser, Target.DBpwd, "travel-sample")
+				Target.Status = Target.SampleAccessStatus
+			}
+		}
+
 	}
 	data := map[string]interface{}{
 		"AnalyticsHTML": template.HTML(AnalyticsHTML(*host)),
@@ -701,6 +722,7 @@ func HttpHandleTarget(w http.ResponseWriter, r *http.Request) {
 				*natPublicIP = "YourHostIP"
 				data["natpublicip"] = *natPublicIP
 			}
+			Target.NatPublicIP = *natPublicIP
 			http.SetCookie(w, targetsCookie)
 			url := r.FormValue("ebase")
 			if url == "" {

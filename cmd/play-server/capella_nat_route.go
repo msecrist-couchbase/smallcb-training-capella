@@ -116,11 +116,15 @@ type compVersions struct {
 	Kernel     string `json:"kernel"`
 }
 
-func CheckDBAccess(dburl string) (string, string, string) {
+func GetDBHostFromURL(dburl string) string {
 	sHost := strings.ReplaceAll(dburl, "couchbase://", "")
 	sHost = strings.ReplaceAll(sHost, "couchbases://", "")
 	hostName := strings.Split(sHost, ":")[0]
 	hostName = strings.Split(hostName, "?")[0]
+	return hostName
+}
+func CheckDBAccess(dburl string) (string, string, string) {
+	hostName := GetDBHostFromURL(dburl)
 	Status := "not accessible"
 	Version := ""
 	IPv4 := ""
@@ -158,6 +162,58 @@ func CheckDBAccess(dburl string) (string, string, string) {
 	}
 	log.Printf("Status=%s, Version=%s, IP=%s", Status, Version, IPv4)
 	return Status, Version, IPv4
+}
+
+func CheckDBUserAccess(dbHost string, dbUser string, dbPwd string) string {
+	Status := "not accessible"
+	httpClient := http.Client{
+		Timeout: 3 * time.Second,
+	}
+	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
+
+	resp, err := httpClient.Get("https://" + dbUser + ":" + dbPwd + "@" + dbHost + ":18091/pools")
+	if err != nil {
+		Status = "not accessible"
+		log.Printf("err=%v", err)
+		return Status
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode != http.StatusOK {
+		Status = "not accessible"
+	} else {
+		Status = "OK"
+	}
+	return Status
+}
+
+func CheckDBUserSampleAccess(dbHost string, dbUser string, dbPwd string, sample string) string {
+	Status := "not accessible"
+	httpClient := http.Client{
+		Timeout: 3 * time.Second,
+	}
+	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
+
+	resp, err := httpClient.Get("https://" + dbUser + ":" + dbPwd + "@" + dbHost + ":18091/pools/default/buckets/" + sample)
+	if err != nil {
+		Status = "not accessible"
+		log.Printf("err=%v", err)
+		return Status
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode != http.StatusOK {
+		Status = "not accessible"
+	} else {
+		body, err := ioutil.ReadAll(resp.Body)
+		if err != nil {
+			log.Printf("err=%v", err)
+		}
+		if strings.Contains(string(body), "resource not found") {
+			Status = "not accessible"
+		} else {
+			Status = "OK"
+		}
+	}
+	return Status
 }
 
 // Get preferred outbound ip of this machine

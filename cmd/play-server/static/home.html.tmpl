@@ -146,7 +146,7 @@
         <div class="header-right">
           <div>
             <span class="head-server">Your Couchbase:</span>
-            <span class="head-user">url:</span> <code>{{.Target.DBurl}}</code>
+            <span class="head-user">url:</span> <code>{{.Target.DBHost}}</code>
             <span class="head-user">ip:</span> <code>{{.Target.IPv4}}</code>
             <span class="head-user">status:</span>
             {{if eq .Target.Status "OK"}}
@@ -154,12 +154,32 @@
               <span class="head-user">version:</span> <code>{{.Target.Version}}</code>
             {{else}}
               <code style="color: red">{{.Target.Status}}</code>
-              <span class="head-user">allowlist cidr: </span><code>
-                {{if eq .Target.NatPublicIP "YourHostIP"}}
-                  <a target="_blank" href="http://www.whatismyipaddress.com">{{.Target.NatPublicIP}}</a>
+              <span class="head-user">network:</span>
+              {{if eq .Target.NetworkStatus "OK"}}
+                <code style="color: green">{{.Target.NetworkStatus}}</code>
+                <span class="head-user">user:</span>
+                {{if eq .Target.UserAccessStatus "OK"}}
+                  <code style="color: green">{{.Target.UserAccessStatus}}</code>
+                  <span class="head-user">travel-sample:</span>
+                  {{if eq .Target.SampleAccessStatus "OK"}}
+                    <code style="color: green">{{.Target.SampleAccessStatus}}</code>
+                  {{else}}
+                    <code style="color: red">{{.Target.SampleAccessStatus}}</code>
+                    <span class="head-user">-->Check travel-sample import in Capella UI</span>
+                  {{end}}
                 {{else}}
-                  {{.Target.NatPublicIP}}
-                {{end}}/32 (add from Capella UI)</code>
+                  <code style="color: red">{{.Target.UserAccessStatus}}</code>
+                  <span class="head-user">-->Check db user credentials</span>
+                {{end}}
+              {{else}}
+                <code style="color: red">{{.Target.NetworkStatus}}</code>
+                <span class="head-user">-->add playground gateway cidr:</span><code>
+                  {{if eq .Target.NatPublicIP "YourHostIP"}}
+                    <a target="_blank" href="http://www.whatismyipaddress.com">{{.Target.NatPublicIP}}</a>
+                  {{else}}
+                    {{.Target.NatPublicIP}}
+                  {{end}}/32 (to your cluster allowlist from Capella UI)</code>
+              {{end}}
             {{end}} 
             
           </div>
@@ -171,39 +191,8 @@
           </div>
           <div class="header-right">
             <span class="head-server">Your playground session will end after </span>
-            <code> <span id='ct'/><code/>
-            <script type="text/javascript">
-              function get_time_diff( datetime )
-              {
-                  var datetime = typeof datetime !== 'undefined' ? datetime : "2021-10-10 01:02:03.123456";
-                  var datetime = new Date( datetime ).getTime();
-                  var now = new Date().getTime();
-                  if( isNaN(datetime) )
-                  {
-                      return "";
-                  }
-                  if (datetime < now) {
-                      var milisec_diff = now - datetime;
-                  }else{
-                      var milisec_diff = datetime - now;
-                  }
-
-                  var days = Math.floor(milisec_diff / 1000 / 60 / (60 * 24));
-                  var date_diff = new Date( milisec_diff );
-                  offset = date_diff.getTimezoneOffset()/60;
-                  return days + " Days "+ (date_diff.getHours()+offset) + " Hours " + date_diff.getMinutes() + " Minutes " + date_diff.getSeconds() + " Seconds";
-              }
-              function display_c(){
-                var refresh=1000; // Refresh rate in milli seconds
-                mytime=setTimeout('display_ct()',refresh)
-              }
-
-              function display_ct() {
-                document.getElementById('ct').innerHTML = get_time_diff("{{.Target.ExpiryTime}}");
-                display_c();
-              }
-              display_ct();
-            </script>
+            <code> {{.Target.ExpiryTime}}<code/>
+            
           </div>
       </div>
     {{end}}
