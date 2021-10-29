@@ -92,4 +92,7 @@ var (
 
 	encryptKey = flag.String("encryptKey", "12345678901234567890123456789012",
 		"secret key for encrypted text")
+
+	baseUrl = flag.String("baseUrl", "couchbase.live",
+	  "base url to use as the link to homepage")
 )

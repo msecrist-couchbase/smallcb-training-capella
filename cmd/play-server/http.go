@@ -337,6 +337,7 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 		"init":          r.FormValue("init"),
 		"e":             e,
 		"bodyClass":     bodyClass,
+		"baseUrl": *baseUrl,
 	}
 
 	if r.Method == "POST" {
