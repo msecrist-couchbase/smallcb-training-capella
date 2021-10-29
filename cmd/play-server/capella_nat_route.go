@@ -56,7 +56,8 @@ func updateSrvRoute(host string, operation string) {
 	hostName = strings.Split(hostName, "?")[0]
 	cname, srvs, err := net.LookupSRV("couchbases", "tcp", hostName)
 	if err != nil {
-		panic(err)
+		log.Printf("err=%v", err)
+		return
 	}
 
 	fmt.Printf("\ncname: %s \n\n", cname)
