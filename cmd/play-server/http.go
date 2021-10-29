@@ -709,7 +709,7 @@ func HttpHandleTarget(w http.ResponseWriter, r *http.Request) {
 			//fmt.Println(data)
 			time.FixedZone("PDT", 8*60*60)
 			age := time.Now().Add(*targetsMaxAge)
-			cookieValue := dburl + "::" + dbuser + "::" + dbpwd + "::" + age.Format(time.RFC3339Nano)
+			cookieValue := dburl + "::" + dbuser + "::" + dbpwd + "::" + age.Format(time.RFC3339)
 			etCookieValue := EncryptText(cookieValue)
 			//fmt.Println("etCookieValue=" + etCookieValue)
 			targetsCookie := &http.Cookie{
