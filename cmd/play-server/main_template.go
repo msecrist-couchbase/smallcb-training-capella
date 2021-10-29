@@ -337,7 +337,8 @@ class Program {`
 				replaceCode := `var cluster = await Cluster.ConnectAsync(`
 				secureCode := `
 	  var opts = new ClusterOptions().WithCredentials("{{.CBUser}}", "{{.CBPswd}}");
-	  opts.IgnoreRemoteCertificateNameMismatch = true; // opts.KvIgnoreRemoteCertificateNameMismatch = true; for KV operations
+	  opts.KvIgnoreRemoteCertificateNameMismatch = true;
+	  opts.HttpIgnoreRemoteCertificateMismatch = true;
 	  var cluster = await Cluster.ConnectAsync(`
 				t = strings.ReplaceAll(t, replaceCode, secureCode)
 				replaceCode = `"{{.Host}}", "{{.CBUser}}", "{{.CBPswd}}"`
