@@ -657,7 +657,8 @@ func HttpHandleTarget(w http.ResponseWriter, r *http.Request) {
 			data["errDBurl"] = "db URL required"
 			errs += 1
 		} else {
-			_, _, err := net.LookupSRV("couchbases", "tcp", dburl)
+			dbHostName := GetDBHostFromURL(dburl)
+			_, _, err := net.LookupSRV("couchbases", "tcp", dbHostName)
 			if err != nil {
 				data["errDBurl"] = "db URL invalid or not reachable"
 				errs += 1
