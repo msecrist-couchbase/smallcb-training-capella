@@ -98,6 +98,7 @@ RUN echo ${COUCHBASE_SDK_PHP_VERSION} > /opt/couchbase/VERSION-sdk-php.ver
 COPY cmd/play-server/run-scala-build.sbt /home/play/helloscala/build.sbt
 COPY cmd/play-server/run-scala-build.sbt /run-scala-build.sbt
 COPY cmd/play-server/run-scala-pom.xml /home/play/helloscala/run-scala-pom.xml
+COPY cmd/play-server/run-scala-log4j.properties /run-scala-log4j.properties
 
 RUN mkdir /scala && \
     sed -i -e "s/1.1.2/${COUCHBASE_SDK_SCALA_VERSION}/g" -e "s/2.12.12/${SCALA_VERSION}/g" /home/play/helloscala/build.sbt && \
