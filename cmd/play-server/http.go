@@ -50,6 +50,8 @@ func HttpMuxInit(mux *http.ServeMux) {
 
 	mux.HandleFunc("/session", HttpHandleSession)
 
+	mux.HandleFunc("/session-cbshell", HttpHandleSessionCBShell)
+
 	mux.HandleFunc("/target", HttpHandleTarget)
 
 	mux.HandleFunc("/target-exit", HttpHandleTargetExit)
@@ -314,6 +316,8 @@ var regexpE = regexp.MustCompile(`^[a-zA-Z0-9_#=/\-\?\.]*$`)
 func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 	StatsNumInc("http.Session")
 
+	Target := target{}
+
 	if *host != "127.0.0.1" && *host != "localhost" &&
 		strings.Split(r.Host, ":")[0] != *host {
 		StatsNumInc("http.Session.redirect.host")
@@ -439,7 +443,7 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 		if errs <= 0 {
 			StatsNumInc("http.Session.post.create")
 
-			session, err := sessions.SessionCreate("", name, email)
+			session, err := sessions.SessionCreate("", name, email, Target)
 			if err == nil && session != nil && session.SessionId != "" {
 				StatsNumInc("http.Session.post.ok", "http.Session.post.create.assign")
 
@@ -472,7 +476,7 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 					childSession, err = sessions.SessionCreate(
 						session.SessionId,
 						fmt.Sprintf("~%s-%d", session.SessionId, i),
-						"~")
+						"~", Target)
 					if err != nil {
 						break
 					}
@@ -540,6 +544,254 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 
 	template.Must(template.ParseFiles(
 		*staticDir+"/session.html.tmpl")).Execute(w, data)
+}
+
+func HttpHandleSessionCBShell(w http.ResponseWriter, r *http.Request) {
+	StatsNumInc("http.Session")
+
+	Target := target{}
+
+	if *host != "127.0.0.1" && *host != "localhost" &&
+		strings.Split(r.Host, ":")[0] != *host {
+		StatsNumInc("http.Session.redirect.host")
+
+		var suffix string
+
+		if r.ParseForm() == nil {
+			suffix = r.Form.Encode()
+			if len(suffix) > 0 {
+				suffix = "?" + suffix
+			}
+		}
+
+		http.Redirect(w, r, "http://"+*host+"/session"+suffix, http.StatusSeeOther)
+
+		log.Printf("INFO: Session redirect, from host: %v, to host: %s, suffix: %s", r.Host, *host, suffix)
+
+		return
+	}
+
+	// Optional extra URL suffix for redirect on success,
+	// used to target a particular code example or tour.
+	e := r.FormValue("e")
+	if !regexpE.MatchString(e) || strings.Index(e, "..") >= 0 {
+		StatsNumInc("http.Session.err", "http.Session.err.bad-e")
+
+		http.Error(w,
+			http.StatusText(http.StatusBadRequest),
+			http.StatusBadRequest)
+
+		log.Printf("ERROR: HttpHandleMain, e: %s, err: e unmatched", e)
+
+		return
+	}
+
+	bodyClass := r.FormValue("bodyClass")
+	if bodyClass == "" {
+		bodyClass = "dark"
+	}
+
+	data := map[string]interface{}{
+		"AnalyticsHTML": template.HTML(AnalyticsHTML(*host)),
+		"OptanonHTML":   template.HTML(OptanonHTML(*host)),
+		"SessionsMaxAge": strings.Replace(
+			sessionsMaxAge.String(), "m0s", " min", 1),
+		"SessionsMaxIdle": strings.Replace(
+			sessionsMaxIdle.String(), "m0s", " min", 1),
+		"title":         r.FormValue("title"),
+		"intro":         r.FormValue("intro"),
+		"namec":         r.FormValue("namec"),
+		"emailc":        r.FormValue("emailc"),
+		"captchac":      r.FormValue("captchac"),
+		"defaultBucket": r.FormValue("defaultBucket"),
+		"groupSize":     r.FormValue("groupSize"),
+		"init":          r.FormValue("init"),
+		"e":             e,
+		"bodyClass":     bodyClass,
+	}
+
+	if r.Method == "POST" {
+		StatsNumInc("http.Session.post")
+
+		gen := fmt.Sprintf("gen!%s-%d",
+			time.Now().Format("2006/01/02-15:04:05"),
+			rand.Intn(1000000))
+
+		errs := 0
+
+		name := strings.TrimSpace(r.FormValue("name"))
+		if r.FormValue("namec") == "skip" {
+			name = gen
+		}
+		if name == "" {
+			StatsNumInc("http.Session.post.err.name")
+
+			data["errName"] = "name required"
+			errs += 1
+		}
+		data["name"] = name
+
+		email := strings.TrimSpace(r.FormValue("email"))
+		if r.FormValue("emailc") == "skip" {
+			email = gen
+		}
+		if email == "" {
+			StatsNumInc("http.Session.post.err.email")
+
+			data["errEmail"] = "email required"
+			errs += 1
+		}
+		data["email"] = email
+
+		captcha := strings.TrimSpace(r.FormValue("captcha"))
+		if r.FormValue("captchac") != "skip" {
+			if captcha == "" {
+				data["errCaptcha"] = "guess required"
+				errs += 1
+			} else if !CaptchaCheck(captcha) {
+				StatsNumInc("http.Session.post.err.captcha")
+
+				time.Sleep(WrongCaptchaSleepTime)
+
+				data["errCaptcha"] = "please guess again"
+				errs += 1
+			}
+		}
+
+		groupSize, err := strconv.Atoi(strings.TrimSpace(r.FormValue("groupSize")))
+		if err != nil || groupSize < 1 {
+			groupSize = 1
+		}
+
+		// Racy-y check to see if there's enough containers available,
+		// where it's cheaper to check this early rather than trying
+		// to allocate containers and fail partway through.
+		_, sessionsCountWithContainer := sessions.Count()
+		if *containers-int(sessionsCountWithContainer)-groupSize < *containersSingleUse {
+			data["err"] = fmt.Sprintf("Not enough resources right now - " +
+				"please try again later.")
+			errs += 1
+		}
+
+		if errs <= 0 {
+			StatsNumInc("http.Session.post.create")
+
+			session, err := sessions.SessionCreate("", name, email, Target)
+			if err == nil && session != nil && session.SessionId != "" {
+				StatsNumInc("http.Session.post.ok", "http.Session.post.create.assign")
+
+				req := RunRequest{
+					ctx:                 context.Background(),
+					execPrefix:          "",
+					lang:                "n/a",
+					code:                "n/a",
+					codeDuration:        *codeDuration,
+					containerNamePrefix: *containerNamePrefix,
+					containerVolPrefix:  *containerVolPrefix,
+					cbAdminPassword:     CBAdminPassword,
+				}
+
+				defaultBucket := r.FormValue("defaultBucket")
+				if defaultBucket == "" {
+					defaultBucket = "travel-sample"
+				}
+
+				targetCookie, terr := r.Cookie(*targetsCookieName)
+				if terr == nil && targetCookie != nil {
+					targetCookieValue := DecryptText(targetCookie.Value)
+					targetTuple := strings.Split(targetCookieValue, "::")
+					Target.DBurl = targetTuple[0]
+					Target.DBuser = targetTuple[1]
+					Target.DBpwd = targetTuple[2]
+					if len(targetTuple) >= 4 {
+						Target.ExpiryTime = targetTuple[3]
+					} else {
+						Target.ExpiryTime = ""
+					}
+				}
+				_, err = SessionAssignContainerCbsh(
+					session, req, readyCh,
+					*containerWaitDuration, restartCh,
+					*containers, *containersSingleUse,
+					r.FormValue("init"), "0",
+					defaultBucket, Target)
+
+				for i := 1; err == nil && i < groupSize; i++ {
+					var childSession *Session
+
+					childSession, err = sessions.SessionCreate(
+						session.SessionId,
+						fmt.Sprintf("~%s-%d", session.SessionId, i),
+						"~", Target)
+					if err != nil {
+						break
+					}
+
+					_, err = SessionAssignContainerCbsh(
+						childSession, req, readyCh,
+						*containerWaitDuration, restartCh,
+						*containers, *containersSingleUse,
+						r.FormValue("init"), fmt.Sprintf("%d", i),
+						defaultBucket, Target)
+				}
+
+				if err == nil {
+					StatsNumInc("http.Session.post.ok", "http.Session.post.create.assign.ok")
+
+					url := r.FormValue("ebase")
+					if url == "" {
+						url = "/"
+					}
+
+					if e != "" {
+						url = url + e
+					}
+
+					if strings.Index(url, "?") < 0 {
+						url += "?s=" + session.SessionId
+					} else {
+						url += "&s=" + session.SessionId
+					}
+
+					http.Redirect(w, r, url, http.StatusSeeOther)
+
+					StatsNumInc("http.Session.post.ok", "http.Session.post.create.ok")
+
+					return
+				}
+
+				StatsNumInc("http.Session.post.ok", "http.Session.post.create.assign.err")
+
+				sessions.SessionExit(session.SessionId)
+			}
+
+			StatsNumInc("http.Session.post.create.err")
+
+			data["err"] = fmt.Sprintf("Could not create session - "+
+				"please try again later. (%v)", err)
+		}
+
+		StatsNumInc("http.Session.post.err")
+	} else {
+		StatsNumInc("http.Session.get")
+	}
+
+	captchaURL, err := CaptchaGenerateBase64ImageDataURL(240, 80, *maxCaptchas)
+	if err != nil {
+		http.Error(w,
+			http.StatusText(http.StatusInternalServerError)+
+				fmt.Sprintf(", CaptchaGenerate, err: %v", err),
+			http.StatusInternalServerError)
+		log.Printf("ERROR: CaptchaGenerate, err: %v", err)
+		return
+	}
+
+	data["captchaSrc"] = template.HTMLAttr("src=\"" + captchaURL + "\"")
+
+	tFileName := "/session-cbshell.html.tmpl"
+	template.Must(template.ParseFiles(
+		*staticDir+tFileName)).Execute(w, data)
+
 }
 
 func HttpHandleTarget(w http.ResponseWriter, r *http.Request) {

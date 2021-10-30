@@ -132,9 +132,15 @@ func MainTemplateEmit(w http.ResponseWriter,
 
 			if session != nil {
 				// session couchbase
-				code = SessionTemplateExecute(codeHost, portApp, session,
-					containerPublishPortBase, containerPublishPortSpan,
-					portMapping, code)
+				if Target.DBurl == "" {
+					log.Printf("Session data is getting populated. Target.DBurl is empty")
+					code = SessionTemplateExecute(codeHost, portApp, session,
+						containerPublishPortBase, containerPublishPortSpan,
+						portMapping, code)
+				} else {
+					log.Println("CBShell only session..no code change should be done.")
+					code = TargetTemplateExecute(Target, code, lang)
+				}
 			} else if Target.DBurl != "" {
 				// target couchbase
 				code = TargetTemplateExecute(Target, code, lang)
