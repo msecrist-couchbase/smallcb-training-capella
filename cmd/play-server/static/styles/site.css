@@ -444,3 +444,8 @@ body > header > div > div> h1 > a {
 #onetrust-pc-btn-handler {
   color: #EA2328 !important;
 }
+
+.disabled {
+  filter: opacity(0.4);
+  pointer-events: none;
+}

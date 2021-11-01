@@ -70,7 +70,7 @@ function setOutputHeight() {
     iframe.style.height = `${parseInt(editorHeight, 10) - 16}px`
   } else {
     if (innerDoc.getElementsByTagName("body")[0].childNodes.length === 3 && innerDoc.getElementsByTagName("body")[0].childNodes[1].tagName === 'PRE') {
-      console.log("completed running");
+      enableRunButton();
       let updatedHeight = innerDoc.getElementsByTagName("body")[0].childNodes[1].offsetHeight + 28;
       iframe.style.height = `${updatedHeight}px`
     } else {
@@ -80,34 +80,39 @@ function setOutputHeight() {
 }
 
 function updateRunButtonState() {
-  console.log("Update run button state");
-  // disable the button here
-  enableRunButtonAfterTimeout(5000);
+  disableRunButton();
+  enableRunButtonAfterTimeout(50000);
+}
+
+function disableRunButton() {
+  if (!document.getElementById("run").classList.contains("disabled")) {
+    document.getElementById("run").classList.add("disabled");
+  }
+}
+
+function enableRunButton() {
+  if (document.getElementById("run").classList.contains("disabled")) {
+    document.getElementById("run").classList.remove("disabled");
+  }
 }
 
 function enableRunButtonAfterTimeout(timeout) {
   setTimeout(() => {
-    console.log("inside timeout");
-    // remove the disabled class here if it is present
+    enableRunButton();
   }, timeout)
 }
 
 function updateOutputHeightOnToggle(editorHeight, isSideBySide) {
-  console.log("YO");
   let iframe = document.getElementById("code-output").childNodes[1].querySelector("iframe");
   let innerDoc = iframe.contentDocument || iframe.contentWindow.document;
 
   if (!isSideBySide) {
     iframe.style.height = `${parseInt(editorHeight, 10) - 16}px`
-    console.log("hello");
   } else {
     if (innerDoc.getElementsByTagName("body")[0].childNodes.length === 3 && innerDoc.getElementsByTagName("body")[0].childNodes[1].tagName === 'PRE') {
-      console.log("done");
-      // remove disabled class here
       let updatedHeight = innerDoc.getElementsByTagName("body")[0].childNodes[1].offsetHeight + 28;
       iframe.style.height = `${updatedHeight}px`
     } else {
-      console.log("err");
       iframe.style.height = `350px`
     }
   }
