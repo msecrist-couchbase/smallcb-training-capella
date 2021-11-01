@@ -703,15 +703,9 @@
   {{end}}
 </script>
 <script>
-  var scrollTop = parseInt(localStorage.getItem('scrollTop')) || 0;
-  console.log(scrollTop);
-  if (scrollTop > 0) {
-    document.scrollingElement.scrollTo(0, scrollTop);
+  window.onbeforeunload = function() {
+    window.scrollTo(0,0);
   }
-
-  window.addEventListener('unload', function () {
-    localStorage.setItem('scrollTop', document.scrollingElement.scrollTop || 0);
-  });
 </script>
 
 <script>
