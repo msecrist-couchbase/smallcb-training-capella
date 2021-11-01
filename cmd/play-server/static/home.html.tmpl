@@ -248,8 +248,8 @@
                     {{.Target.NatPublicIP}}
                   {{end}}/32 (to your cluster allowlist from Capella UI)</code>
               {{end}}
-            {{end}} 
-            
+            {{end}}
+
           </div>
         </div>
       </div>
@@ -260,7 +260,7 @@
           <div class="header-right">
             <span class="head-server">Your playground session will end after </span>
             <code> {{.Target.ExpiryTime}}<code/>
-            
+
           </div>
       </div>
     {{end}}
@@ -392,7 +392,8 @@
                 <a href="/examples/basic-nodejs-kv-get{{if $.Session}}?s={{$.Session.SessionId}}{{end}}"
                    class="example-button" onclick="return pageToggle('page-03')">
                   <object data="../static/icons/nodejs.svg" width="14%" height="14%" class="example-icon"></object>
-                  <h3 class="example-label">Node.js</h3>
+                  <h3 class="example-label hidden-xs">Node.js</h3>
+                  <h3 class="example-label hidden-sm hidden-lg">Node</h3>
                 </a>
               </div>
 
