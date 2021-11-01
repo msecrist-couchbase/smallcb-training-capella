@@ -30,8 +30,7 @@ code: |
     result = collection.upsert(
       'airline_123',
       document,
-      expiry=timedelta(minutes=1),
-      durability=ServerDurability(Durability.MAJORITY)
+      expiry=timedelta(minutes=1)
     )
     print("UPSERT SUCCESS")
     print("cas result:", result.cas)

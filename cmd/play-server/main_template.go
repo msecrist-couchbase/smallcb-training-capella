@@ -379,6 +379,8 @@ object Program extends App {`
 				data["Host"] = strings.Split(data["Host"].(string), "?")[0] // no ?ssl=no_verify
 				data["Host"] = strings.Split(data["Host"].(string), "//")[1]
 
+			} else if lang == "rb" {
+				data["Host"] = strings.Split(data["Host"].(string), "?")[0] // no ?ssl=no_verify
 			} else if lang == "sh" {
 				replaceCode := `http://{{.CBUser}}:{{.CBPswd}}@{{.Host}}:8093/`
 				secureCode := ` -k https://{{.CBUser}}:{{.CBPswd}}@{{.Host}}:18093/`
