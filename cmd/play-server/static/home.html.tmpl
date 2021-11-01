@@ -29,6 +29,11 @@
   <script src="/static/ace/src-min/ace.js"></script>
   <script>
     function onRunSubmit() {
+      setTimeout(() => {
+        document.getElementById("output").scrollIntoView({behavior: "smooth"});
+      }, 100)
+
+
       document.getElementById("form").className = "run-submitted";
 
       document.getElementById("code").value = codeAce.getSession().getValue();
