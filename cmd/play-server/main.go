@@ -47,7 +47,7 @@ var ExecPrefixes = map[string]string{
 	"dotnet": "/run-dotnet.sh",
 	"php":    "/run-php.sh",
 	"rb":     "/run-ruby.sh",
-	"scala":  "/run-scala-sbt.sh",
+	"scala":  "/run-scala.sh",
 	"c":      "/run-cc.sh",
 	"cc":     "/run-cc.sh",
 }
