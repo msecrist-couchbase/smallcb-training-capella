@@ -39,8 +39,10 @@ type SessionInfo struct {
 	Name  string
 	Email string
 
-	CBUser string
-	CBPswd string
+	CBHost     string
+	CBUser     string
+	CBPswd     string
+	TargetType string
 
 	CreatedAt     string
 	CreatedAtUnix int64
@@ -214,7 +216,7 @@ func (sessions *Sessions) SessionInfo(sessionId string) (map[string]interface{},
 
 // ------------------------------------------------
 
-func (s *Sessions) SessionCreate(sessionIdMain, name, email string) (
+func (s *Sessions) SessionCreate(sessionIdMain, name, email string, Target target) (
 	session *Session, err error) {
 	StatsNumInc("sessions.SessionCreate")
 
@@ -267,14 +269,26 @@ func (s *Sessions) SessionCreate(sessionIdMain, name, email string) (
 
 	now := time.Now()
 
+	CBHost := "127.0.0.1"
+	CBUser := sessionId[:16]
+	CBPswd := sessionId[16:]
+	TargetType := "capella"
+	if &Target != nil && Target.DBurl != "" {
+		CBHost = Target.DBurl
+		CBUser = Target.DBuser
+		CBPswd = Target.DBpwd
+		TargetType = "capella"
+	}
 	session = &Session{
 		SessionInfo: SessionInfo{
 			SessionId:     sessionId,
 			SessionIdMain: sessionIdMain,
 			Name:          name,
 			Email:         email,
-			CBUser:        sessionId[:16],
-			CBPswd:        sessionId[16:],
+			CBHost:        CBHost,
+			CBUser:        CBUser,
+			CBPswd:        CBPswd,
+			TargetType:    TargetType,
 
 			CreatedAt:     now.Format("2006-01-02T15:04:05.000-07:00"),
 			CreatedAtUnix: now.Unix(),

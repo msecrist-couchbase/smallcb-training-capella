@@ -133,9 +133,15 @@ func MainTemplateEmit(w http.ResponseWriter,
 
 			if session != nil {
 				// session couchbase
-				code = SessionTemplateExecute(codeHost, portApp, session,
-					containerPublishPortBase, containerPublishPortSpan,
-					portMapping, code)
+				if Target.DBurl == "" {
+					log.Printf("Session data is getting populated. Target.DBurl is empty")
+					code = SessionTemplateExecute(codeHost, portApp, session,
+						containerPublishPortBase, containerPublishPortSpan,
+						portMapping, code)
+				} else {
+					log.Println("CBShell only session..no code change should be done.")
+					code = TargetTemplateExecute(Target, code, lang)
+				}
 			} else if Target.DBurl != "" {
 				// target couchbase
 				code = TargetTemplateExecute(Target, code, lang)
@@ -339,7 +345,8 @@ class Program {`
 				replaceCode := `var cluster = await Cluster.ConnectAsync(`
 				secureCode := `
 	  var opts = new ClusterOptions().WithCredentials("{{.CBUser}}", "{{.CBPswd}}");
-	  opts.IgnoreRemoteCertificateNameMismatch = true; // opts.KvIgnoreRemoteCertificateNameMismatch = true; for KV operations
+	  opts.KvIgnoreRemoteCertificateNameMismatch = true;
+	  opts.HttpIgnoreRemoteCertificateMismatch = true;
 	  var cluster = await Cluster.ConnectAsync(`
 				t = strings.ReplaceAll(t, replaceCode, secureCode)
 				replaceCode = `"{{.Host}}", "{{.CBUser}}", "{{.CBPswd}}"`
@@ -374,6 +381,8 @@ object Program extends App {`
 				data["Host"] = strings.Split(data["Host"].(string), "?")[0] // no ?ssl=no_verify
 				data["Host"] = strings.Split(data["Host"].(string), "//")[1]
 
+			} else if lang == "rb" {
+				data["Host"] = strings.Split(data["Host"].(string), "?")[0] // no ?ssl=no_verify
 			} else if lang == "sh" {
 				replaceCode := `http://{{.CBUser}}:{{.CBPswd}}@{{.Host}}:8093/`
 				secureCode := ` -k https://{{.CBUser}}:{{.CBPswd}}@{{.Host}}:18093/`
@@ -397,15 +406,17 @@ object Program extends App {`
 
 func TargetTemplateData(Target target) map[string]interface{} {
 	data := map[string]interface{}{
-		"Host":   host,
-		"CBUser": "username",
-		"CBPswd": "password",
+		"Host":        host,
+		"CBUser":      "username",
+		"CBPswd":      "password",
+		"NatPublicIP": *natPublicIP,
 	}
 
 	if &Target != nil && Target.DBurl != "" && Target.DBuser != "" && Target.DBpwd != "" {
 		data["Host"] = Target.DBurl
 		data["CBUser"] = Target.DBuser
 		data["CBPswd"] = Target.DBpwd
+		data["NatPublicIP"] = *natPublicIP
 	}
 
 	return data

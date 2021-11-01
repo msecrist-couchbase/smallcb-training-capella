@@ -8,9 +8,9 @@ import (
 	"math/rand"
 	"sync"
 	"time"
-)
 
-import "github.com/go-macaron/captcha"
+	"github.com/go-macaron/captcha"
+)
 
 var (
 	// Protects the map of active captcha answers.
@@ -35,6 +35,7 @@ func CaptchaGenerateBase64ImageDataURL(width, height, maxCaptchas int) (
 
 func CaptchaGenerate(width, height, maxCaptchas int) (
 	[]byte, error) {
+	rand.Seed(time.Now().UnixNano())
 	answerI := rand.Int() % 1000000
 	for answerI < 100000 {
 		answerI += 100000

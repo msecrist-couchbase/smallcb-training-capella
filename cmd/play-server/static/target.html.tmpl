@@ -12,6 +12,7 @@
   <script src="../static/scripts/menu.js"></script>
 
   {{.AnalyticsHTML}}
+  <link rel="stylesheet" type="text/css" href="/static/styles/font-awesome.css">
 </head>
 <body class="{{.bodyClass}}">
   <header>
@@ -122,17 +123,32 @@
         {{end}}
 
         <p>
-          Attaching your own couchbase cluster to the playground examples. Please note that travel-sample data should be imported before running the examples.
+          Attaching your couchbase capella cluster to the playground examples. 
         </p>
        <p>
           Don't have a couchbase? Get a free cluster from Couchbase Capella for 45 days. Please visit <a target="_blank" href="https://cloud.couchbase.com/">https://cloud.couchbase.com/</a>
         </p>
         <p>
+            <br>Please check the below required checks on Couchbase Capella UI console so that the SDK code examples can work directly.
+            </p>
+            <ol>
+              <li> Copy the Capella cluster host (Nav: Clusters → Trial-Cluster → Connect tab → Connection)
+              <li>  Allowed IP cidr:
+              {{if eq .natpublicip "YourHostIP"}}
+                <a target="_blank" href="http://www.whatismyipaddress.com">{{.natpublicip}}</a>/32
+              {{else}}
+                {{.natpublicip}}/32
+              {{end}}
+              (Nav: Clusters → Trial-Cluster → Connect tab → Manage Allowed IP)
+              <li>  Create database user for the Playground with all buckets Read/Write permissions (Nav: Clusters → Trial-Cluster → Connect tab → Manage Credentials -->Create Database Credentials)
+              <li>  Check if travel-sample bucket has been already imported (Nav: Clusters → Trial-Cluster →  Tools tab → Import )
+            </ol>
+        <p>
           Your new session will expire after {{.TargetsMaxAge}} days.
         </p>
             <form action="/target" method="post" autocomplete="off">
 
-              <label {{if .dburlc}}class="{{.dburlc}}"{{end}}> Database URL ( Example: cb.gyvwo11dxgbw6st3.cloud.couchbase.com ):
+              <label {{if .dburlc}}class="{{.dburlc}}"{{end}}> Database Host/URL ( Example: cb.gyvwo11dxgbw6st3.cloud.couchbase.com ):
                 <span class="error">{{.errDBurl}}</span>
                 <input type="text" name="dburl" value="{{.dburl}}" autofocus/>
               </label>
@@ -140,7 +156,7 @@
                 <input type="hidden" name="dburlc" value="{{.dburlc}}"/>
               {{end}}
 
-              <label {{if .dbuserc}}class="{{.dbuserc}}"{{end}}> Database Username ( Example: username1 ):
+              <label {{if .dbuserc}}class="{{.dbuserc}}"{{end}}> Database Username:
                 <span class="error">{{.errDBuser}}</span>
                 <input type="text" name="dbuser" value="{{.dbuser}}"  autofocus/>
               </label>
@@ -148,10 +164,21 @@
                 <input type="hidden" name="dbuserc" value="{{.dbuserc}}"/>
               {{end}}
 
-              <label {{if .dbpwdc}}class="{{.dbpwdc}}"{{end}}> Database User Password ( Example: Password1! ):
+              <label {{if .dbpwdc}}class="{{.dbpwdc}}"{{end}}> Database Password:
                 <span class="error">{{.errDBpwd}}</span>
-                <input type="text" name="dbpwd" value="{{.dbpwd}}" autofocus/>
+                <input type="password" name="dbpwd" value="{{.dbpwd}}" id="dbpwd" autofocus/>
+                <i class="fal fa-eye" id="togglePassword">Show password</i>
               </label>
+              <script>
+                  const togglePassword = document.querySelector('#togglePassword');
+                  const password = document.querySelector('#dbpwd');
+                
+                  togglePassword.addEventListener('click', function (e) {
+                    const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+                    password.setAttribute('type', type);
+                    this.classList.toggle('fa-eye-slash');
+                });
+              </script>
               {{if .dbuserc}}
                 <input type="hidden" name="dbpwdc" value="{{.dbpwdc}}"/>
               {{end}}
@@ -161,7 +188,7 @@
               {{end}}
 
               <div class="actions">
-                <input type="submit" name="target-start"
+                <input type="submit" name="session-start"
                       value="Playground with Couchbase Capella"
                       onclick="submitted(); return true"/>
                 <div class="cancel">
@@ -169,24 +196,36 @@
                 </div>
               </div>
 
+              {{if .err}}
+                <div class="error">{{.err}}</div>
+              {{end}}
+
+              {{if .e}}
+                <input type="hidden" name="e" value="{{.e}}"/>
+              {{end}}
+
+              {{if .bodyClass}}
+                <input type="hidden" name="bodyClass" value="{{.bodyClass}}"/>
+              {{end}}
+
+              {{if .title}}
+                <input type="hidden" name="title" value="{{.title}}"/>
+              {{end}}
+
+              {{if .intro}}
+                <input type="hidden" name="intro" value="{{.intro}}"/>
+              {{end}}
 
             </form>
-
             <p>
-              Are you new to Couchbase Capella?
-              <br>
-              <br>If yes, execute the below 3 required steps on Couchbase Capella UI console. Otherwise the code examples might not work properly.
+              We won't sell your contact info to spammers, etc.
             </p>
-            <ol>
-              <li>  Click Add/View Allowed IPs (Use  cidr: 0.0.0.0/0 permanently) (Nav: Clusters → Trial-Cluster → Connect tab → Manage Allowed IP)
-              <li>  Import travel-sample bucket (Nav: Clusters → Trial-Cluster →  Tools tab → Import )
-              <li>  Create a new database user (say: username1/Password1! ) with all buckets Read/Write permissions (Nav: Clusters → Trial-Cluster → Connect tab → Manage Credentials -->Create Database Credentials)
-            </ol>
-
-        <p>
-          Playground examples are intended for "tire-kicking" and learning by developers.
-        </p>
-
+            <p>
+              A playground session is intended for "tire-kicking" and learning by developers.
+            </p>
+            <p>
+              Do NOT put important data into a playground session.
+            </p>
       </section>
     </article>
   </main>
