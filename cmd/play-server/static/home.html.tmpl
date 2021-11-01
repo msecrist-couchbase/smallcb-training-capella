@@ -16,7 +16,7 @@
 
   <script src="../static/scripts/menu.js"></script>
   <script src="../static/scripts/editorToggle.js"></script>
-
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     {{if not .Session}}
     body .needs-session {
@@ -32,7 +32,7 @@
       setTimeout(() => {
         document.getElementById("output").scrollIntoView({behavior: "smooth"});
       }, 100)
-
+      updateRunButtonState();
 
       document.getElementById("form").className = "run-submitted";
 
