@@ -75,6 +75,7 @@ type MainTemplateData struct {
 	PageColor func(string) string
 
 	BodyClass string
+	BaseUrl string
 }
 
 func MainTemplateEmit(w http.ResponseWriter,
@@ -221,6 +222,7 @@ func MainTemplateEmit(w http.ResponseWriter,
 		},
 
 		BodyClass: bodyClass,
+		BaseUrl: *baseUrl,
 	}
 
 	if view != "" {
@@ -323,7 +325,7 @@ import com.couchbase.client.core.deps.io.netty.handler.ssl.util.InsecureTrustMan
 import com.couchbase.client.core.env.IoConfig;
 import com.couchbase.client.core.env.SecurityConfig;
 import com.couchbase.client.java.ClusterOptions;
-			
+
 class Program {`
 				t = strings.ReplaceAll(t, replaceCode, secureCode)
 				replaceCode = `var cluster = Cluster.connect(`
@@ -370,7 +372,7 @@ object Program extends App {`
 									.trustManagerFactory(InsecureTrustManagerFactory.INSTANCE))
 									.build
 									.get
-  val cluster = Cluster.connect("{{.Host}}", 
+  val cluster = Cluster.connect("{{.Host}}",
 		ClusterOptions(PasswordAuthenticator("{{.CBUser}}", "{{.CBPswd}}")).environment(env)).get`
 				t = strings.ReplaceAll(t, replaceCode, secureCode)
 				replaceCode = `"{{.Host}}", "{{.CBUser}}", "{{.CBPswd}}"`
