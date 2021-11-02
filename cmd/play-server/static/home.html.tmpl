@@ -123,6 +123,23 @@
             {{end}}
         </li>
       </ul>
+      <ul>
+        <li>
+            {{if .Target.DBurl}}
+              <a href="/target-exit"
+                 onclick="localStorage.setItem('infoPanel', 'show');" class="session menu-button red-button" id="stopCapellaSessionButton">
+                Stop Session
+              </a>
+            {{else if not .Target.DBurl}}
+              <a href="/target" class="menu-button red-button" id="startSessionButtonMenu">
+                <svg fill="#fff" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 -3 25 25"><path d="M24 21v-6h-18v6h18zm-3-4c.553 0 1 .448 1 1s-.447 1-1 1c-.552 0-1-.448-1-1s.448-1 1-1zm-7.806 0h1.275l-.864 2h-1.274l.863-2zm-2.141 0h1.275l-.863 2h-1.275l.863-2zm-2.19 0h1.275l-.863 2h-1.275l.863-2zm-4.863.941c-2.253-.29-4-2.194-4-4.524 0-2.252 1.626-4.121 3.767-4.506.177-3.294 2.895-5.911 6.233-5.911s6.056 2.617 6.233 5.911c2.005.361 3.541 2.029 3.729 4.089h-1.991c-.279-2.105-2.674-2.333-3.65-2.401.117-1.958-.555-5.599-4.321-5.599-4.438 0-4.359 4.75-4.321 5.599-.945-.037-3.679.341-3.679 2.818 0 1.223.856 2.245 2 2.511v2.013z"/></svg>
+                  {{/*                TODO: in future we can make this a dropdown to support starting other types of sessions */}}
+                &nbsp
+                Start a Capella Session
+              </a>
+            {{end}}
+        </li>
+      </ul>
     </nav>
   </div>
 
@@ -215,13 +232,12 @@
           <div>
             <span class="head-server">Your Couchbase:</span>
             <span class="head-user">url:</span> <code>{{.Target.DBHost}}</code>
-            <span class="head-user">ip:</span> <code>{{.Target.IPv4}}</code>
-            <span class="head-user">status:</span>
+            <span class="head-user">ip:</span> <code>{{.Target.IPv4}}</code>     
             {{if eq .Target.Status "OK"}}
-              <code style="color: green">{{.Target.Status}}</code>
               <span class="head-user">version:</span> <code>{{.Target.Version}}</code>
+              <span class="head-user">status:</span> <code style="color: green; font-weight: bold">{{.Target.Status}}</code> 
             {{else}}
-              <code style="color: red">{{.Target.Status}}</code>
+              <span class="head-user">status:</span> <code style="color: red; font-weight: bold">{{.Target.Status}}</code>
               <span class="head-user">network:</span>
               {{if eq .Target.NetworkStatus "OK"}}
                 <code style="color: green">{{.Target.NetworkStatus}}</code>
@@ -291,13 +307,6 @@
           <div class="header-right">
             <div>
               <span class="head-server">Your Couchbase Shell session:</span>
-              <code><a href="http://{{.Host}}:8091/ui/index.html?lu={{.Session.CBUser}}&lp={{.Session.CBPswd}}"
-                       target="_blank">http://{{.Host}}:8091</a>
-              </code>
-              <br class="hidden-lg">
-              <span class="head-user">username:</span> <code>{{.Session.CBUser}}</code>
-              <br class="hidden-lg">
-              <span class="head-pass">password:</span> <code>*****</code>
               <br class="hidden-lg">
             </div>
         </div>
@@ -467,6 +476,16 @@
                   </a>
                 </div>
               </div>
+              <h2 class="home-header"><label for="modeSelector">Play with the Couchbase Capella</label></h2>
+              <div class="row example-row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                  <a href="/target"
+                     class="mode-button example-button red-button" onclick="" id="startCapellaSessionButtonInfo">
+                    <h3 class="example-label">Start a Capella Session</h3>
+                  </a>
+                </div>
+              </div>
+          
           {{end}}
 
           {{end}}
@@ -811,8 +830,17 @@
     placement: 'top'
   })
 
+  tippy('#startCapellaSessionButtonInfo', {
+    content: 'Starting an online Couchbase Capella session will allow you to experiment with your own cluster.',
+    placement: 'top'
+  })
+
   tippy('#stopSessionButton', {
     content: 'WARNING: all data created in your cluster will be deleted.',
+    placement: 'bottom-end'
+  })
+  tippy('#stopCapellaSessionButton', {
+    content: 'WARNING: disconnects the examples to your Capella cluster.',
     placement: 'bottom-end'
   })
 </script>
