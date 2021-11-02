@@ -455,10 +455,16 @@
           {{if and (not .Session) (not .Target.DBurl)}}
               <h2 class="home-header"><label for="modeSelector">Play with the Couchbase Web Console and more</label></h2>
               <div class="row example-row">
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                   <a href="/session"
-                     class="mode-button example-button red-button" onclick="" id="startSessionButtonInfo">
-                    <h3 class="example-label">Start a Session</h3>
+                     class="mode-button example-button red-button" onclick="" id="provisionedDropdownButtonTop">
+                    <h3 class="example-label">Start a Provisioned Session</h3>
+                  </a>
+                </div>
+                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                  <a href="/session"
+                     class="mode-button example-button red-button" onclick="" id="capellaDropdownButtonTop">
+                    <h3 class="example-label">Start a Capella Session</h3>
                   </a>
                 </div>
               </div>
@@ -804,6 +810,16 @@
   tippy('#capellaDropdownButton', {
     content: 'Starting a Capella session will allow you to run the SDK examples against your own Couchbase Capella database.',
     placement: 'left'
+  })
+
+  tippy('#provisionedDropdownButtonTop', {
+    content: 'Starting a provisioned session will allow you to explore the Couchbase Web Console and experiment with your own cluster.',
+    placement: 'top'
+  })
+
+  tippy('#capellaDropdownButtonTop', {
+    content: 'Starting a Capella session will allow you to run the SDK examples against your own Couchbase Capella database.',
+    placement: 'top'
   })
 
   tippy('#startSessionButtonInfo', {
