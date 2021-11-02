@@ -99,8 +99,7 @@
           <img src="/static/cb-rww.svg" class="hidden-xs"/>
           <img src="/static/cb.png" class="hidden-sm hidden-lg"/>
         </a>
-
-        <a href="//{{if .BaseUrl}}{{.BaseUrl}}{{else}}couchbase.live{{end}}{{if .Session}}/session-exit?s={{.Session.SessionId}}{{end}}" id="homeLink">
+        <a href="//{{if .BaseUrl}}{{.BaseUrl}}{{else}}couchbase.live{{end}}{{if and (.Session) (not .Target.DBurl)}}/session-exit?s={{.Session.SessionId}}{{ else if and (.Target.DBurl) (not .Session)}}/target-exit{{end}}" id="homeLink">
           Playground
         </a>
       </h1>
@@ -120,21 +119,21 @@
                 Stop Capella Session
               </a>
             {{else if not .Target.DBurl}}
-              <a href="/session" class="menu-button red-button" id="startSessionButtonMenu">
+              <a href="#" class="menu-button red-button" id="startSessionButtonMenu">
                 Start a Session
                 &nbsp
                 <i class="fa fa-caret-down" aria-hidden="true"></i>
               </a>
               <ul class="dropdown-content">
                 <li>
-                  <a href="/session">
+                  <a href="/session" id="provisionedDropdownButton">
                     <i class="fa fa-server" aria-hidden="true"></i>
                     &nbsp
                     With a Provisioned Couchbase
                   </a>
                 </li>
                 <li>
-                  <a href="/target">
+                  <a href="/target" id="capellaDropdownButton">
                     <i class="fa fa-cloud" aria-hidden="true"></i>
                     &nbsp
                     With Couchbase Capella
@@ -797,10 +796,15 @@
     placement: 'bottom-start'
   })
 
-  // tippy('#startSessionButtonMenu', {
-  //   content: 'Starting an online session will allow you to explore the Couchbase Web Console and experiment with your own cluster.',
-  //   placement: 'left'
-  // })
+  tippy('#provisionedDropdownButton', {
+    content: 'Starting a provisioned session will allow you to explore the Couchbase Web Console and experiment with your own cluster.',
+    placement: 'left'
+  })
+
+  tippy('#capellaDropdownButton', {
+    content: 'Starting a Capella session will allow you to run the SDK examples against your own Couchbase Capella database.',
+    placement: 'left'
+  })
 
   tippy('#startSessionButtonInfo', {
     content: 'Starting an online session will allow you to explore the Couchbase Web Console and experiment with your own cluster.',
@@ -812,7 +816,14 @@
     placement: 'bottom-end'
   })
 </script>
-
+{{if or (.Session) (.Target.DBurl)}}
+<script>
+  tippy('#homeLink', {
+    content: 'WARNING: Returning to playground home will terminate your current session',
+    placement: 'bottom'
+  })
+</script>
+{{end}}
 <script>
   function pageToggle(page) {
     var main = document.getElementById("main");
