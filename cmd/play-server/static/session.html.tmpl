@@ -45,7 +45,7 @@
                 Stop Capella Session
               </a>
             {{else if not .Target.DBurl}}
-              <a href="/session" class="menu-button red-button" id="startSessionButtonMenu">
+              <a href="#" class="menu-button red-button cursor-default" id="startSessionButtonMenu">
                 Start a Session
                 &nbsp
                 <i class="fa fa-caret-down" aria-hidden="true"></i>
@@ -248,14 +248,7 @@ function submitted() {
   }, 100);
 }
 </script>
-<script>
-    {{/*  Script for Tooltips  */}}
-    tippy('#startSessionButtonMenu', {
-      content: 'Sign in using the form below to start a session',
-      placement: 'bottom-end'
-    })
 
-</script>
 <style>
 .loading:after {
   overflow: hidden;
