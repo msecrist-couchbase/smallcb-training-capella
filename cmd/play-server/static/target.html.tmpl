@@ -119,19 +119,18 @@
         {{end}}
 
         <p>
-          Please visit https://cloud.couchbase.com to get a free Couchbase Capella cluster.
-
-          <br>
-          <br>
-          <br>
-          Enter the following information for your Couchbase Capella cluster instance.
-          <br>(add  
+          Please visit <a href="https://cloud.couchbase.com">https://cloud.couchbase.com</a> to get a free Couchbase Capella cluster if you don't have already.
+          <br>(NOTE: add  
               {{if eq .natpublicip "YourHostIP"}}
                 <a target="_blank" href="http://www.whatismyipaddress.com">{{.natpublicip}}</a>/32
               {{else}}
                 {{.natpublicip}}/32
               {{end}}
-              network cidr to the Allow List to your cluster from Capella UI) 
+              network cidr to the Allow List) 
+        </p>
+          <br>
+          <p>
+          Enter the following information for your Couchbase Capella cluster instance. 
         </p>
             <form action="/target" method="post" autocomplete="on">
 
