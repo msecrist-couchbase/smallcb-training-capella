@@ -64,15 +64,15 @@ function toggleEditorView() {
 function adjustOuterColumns(isSideBySide) {
   if (isSideBySide) {
     // to VERTICAL STACK view
-    document.getElementById("editorColumn").classList.remove('col-md-8')
+    document.getElementById("editorColumn").classList.remove('col-md-9')
     document.getElementById("editorColumn").classList.add('col-md-7')
-    document.getElementById("infoColumn").classList.remove('col-md-4')
+    document.getElementById("infoColumn").classList.remove('col-md-3')
     document.getElementById("infoColumn").classList.add('col-md-5')
   } else {
     // to SIDE BY SIDE view
-    document.getElementById("editorColumn").classList.add('col-md-8')
+    document.getElementById("editorColumn").classList.add('col-md-9')
     document.getElementById("editorColumn").classList.remove('col-md-7')
-    document.getElementById("infoColumn").classList.add('col-md-4')
+    document.getElementById("infoColumn").classList.add('col-md-3')
     document.getElementById("infoColumn").classList.remove('col-md-5')
   }
 }
