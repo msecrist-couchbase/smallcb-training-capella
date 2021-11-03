@@ -3,8 +3,8 @@ page: page-05
 lang: dotnet
 infoBefore: |
   <div>
-  <a href='/examples/basic-dotnet-query-rows' class="prev-button">Previous Lesson</a>
-  <a href='/examples/basic-dotnet-query-positional-param' class="next-button">Next Lesson</a>
+  <a href='/examples/basic-dotnet-query-rows' class="prev-button">Previous</a>
+  <a href='/examples/basic-dotnet-query-positional-param' class="next-button">Next</a>
   </div>
   <br>
 code: |
@@ -26,11 +26,11 @@ code: |
         var bucket = await cluster.BucketAsync("travel-sample");
 
         var query =
-          "SELECT h.name, h.city, h.state " + 
+          "SELECT h.name, h.city, h.state " +
           "FROM `travel-sample` h " +
           "WHERE h.type = $type " +
             "AND h.city = $city LIMIT 5";
-          
+
         var result = await cluster.QueryAsync<dynamic>(
           query, options => options
             .Parameter("type", "hotel")

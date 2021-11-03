@@ -3,8 +3,8 @@ page: page-01
 lang: java
 infoBefore: |
   <div>
-  <a href='/examples/basic-java-kv-get' class="prev-button">Previous Lesson</a>
-  <a href='/examples/basic-java-query-named-param' class="next-button">Next Lesson</a>
+  <a href='/examples/basic-java-kv-get' class="prev-button">Previous</a>
+  <a href='/examples/basic-java-query-named-param' class="next-button">Next</a>
   </div>
   <br>
 code: |
@@ -22,7 +22,7 @@ code: |
       var bucket = cluster.bucket("travel-sample");
 
       try {
-        var query = 
+        var query =
           "SELECT h.name, h.city, h.state " +
           "FROM `travel-sample` h " +
           "WHERE h.type = 'hotel' " +
@@ -32,7 +32,7 @@ code: |
         for (JsonObject row : result.rowsAsObject()) {
           System.out.println("Hotel: " + row);
         }
-        
+
       } catch (DocumentNotFoundException ex) {
         System.out.println("Document not found!");
       }

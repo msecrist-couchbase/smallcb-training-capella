@@ -3,8 +3,8 @@ page: page-04
 lang: py
 infoBefore: |
   <div>
-  <a href='/examples/basic-py-query-rows' class="prev-button">Previous Lesson</a>
-  <a href='/examples/basic-py-query-positional-param' class="next-button">Next Lesson</a>
+  <a href='/examples/basic-py-query-rows' class="prev-button">Previous</a>
+  <a href='/examples/basic-py-query-positional-param' class="next-button">Next</a>
   </div>
   <br>
 code: |
@@ -21,9 +21,9 @@ code: |
   bucket = cluster.bucket('travel-sample')
 
   query = """
-    SELECT h.name, h.city, h.state 
-    FROM `travel-sample` h 
-    WHERE h.type = $type 
+    SELECT h.name, h.city, h.state
+    FROM `travel-sample` h
+    WHERE h.type = $type
       AND h.city = $city LIMIT 5
   """
 
