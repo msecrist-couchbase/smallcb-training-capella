@@ -470,23 +470,27 @@ body > header > div > div> h1 > a {
 }
 
 .dropdown-content {
-  display: none;
+  display: block;
+  visibility: hidden;
   position: absolute;
   right: 0;
   top: 28px;
   background-color: #f9f9f9;
-  min-width: 160px;
+  min-width: 159px;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
   padding: 8px 0;
   z-index: 103;
   background: #cd575a;
-  border-top-left-radius: 6px;
   border-bottom-left-radius: 6px;
   border-bottom-right-radius: 6px;
+  transition: visibility 0s, opacity 0.3s linear;
+  opacity: 0;
 }
 
 .dropdown:hover .dropdown-content {
-  display: block;
+
+  visibility: visible;
+  opacity: 1;
 }
 
 .dropdown:hover #startSessionButtonMenu {
@@ -497,13 +501,12 @@ body > header > div > div> h1 > a {
 }
 
 .dropdown-content > li {
-  /*border-bottom: 1px solid white;*/
   width: 100%;
 }
 
 .dropdown-content > li > a {
   text-decoration: none !important;
-  padding: 10px 18px;
+  padding: 10px 24px;
   display: block;
 }
 
