@@ -3,8 +3,8 @@ page: page-03
 lang: nodejs
 infoBefore: |
   <div>
-  <a href='/examples/basic-nodejs-query-named-param' class="prev-button">Previous Lesson</a>
-  <a href='/examples/basic-nodejs-subdoc-lookup' class="next-button">Next Lesson</a>
+  <a href='/examples/basic-nodejs-query-named-param' class="prev-button">Previous</a>
+  <a href='/examples/basic-nodejs-subdoc-lookup' class="next-button">Next</a>
   </div>
   <br>
 code: |
@@ -18,7 +18,7 @@ code: |
   const getHotelsByCity = async (city) => {
     try {
       const query = `
-        SELECT h.name, h.city, h.state 
+        SELECT h.name, h.city, h.state
         FROM \`travel-sample\` h
         WHERE h.type = $1
           AND h.city = $2 LIMIT 5;

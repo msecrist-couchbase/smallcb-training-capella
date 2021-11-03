@@ -3,8 +3,8 @@ page: page-08
 lang: scala
 infoBefore: |
   <div>
-  <a href='/examples/basic-scala-subdoc-lookup' class="prev-button">Previous Lesson</a>
-  <a href='/examples/basic-scala-upsert' class="next-button">Next Lesson</a>
+  <a href='/examples/basic-scala-subdoc-lookup' class="prev-button">Previous</a>
+  <a href='/examples/basic-scala-upsert' class="next-button">Next</a>
   </div>
   <br>
 code: |
@@ -44,7 +44,7 @@ code: |
                                                     upsert("country", "Canada")
                                                   ))
     mutationresult match {
-      case Success(_) => 
+      case Success(_) =>
       case Failure(err: PathExistsException) => println("Sub-doc path exists!")
       case Failure(err: CouchbaseException) => println("Couchbase error: " + err)
       case Failure(err) => println("Error: " + err)

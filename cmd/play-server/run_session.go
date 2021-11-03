@@ -213,8 +213,8 @@ func StartCbsh(session *Session, req RunRequest, containerId int, defaultBucket 
 	cbshConfigBytes := []byte(
 		"version = 1\n\n" +
 			"[[cluster]]\n" +
-			"identifier = \"default\"\n" +
-			"hostnames = [\"127.0.0.1\"]\n" +
+			"identifier = \"" + session.CBHost + "\"\n" +
+			"hostnames = [\"" + session.CBHost + "\"]\n" +
 			"username = \"" + session.CBUser + "\"\n" +
 			"password = \"" + session.CBPswd + "\"\n")
 

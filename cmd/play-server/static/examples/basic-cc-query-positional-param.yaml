@@ -3,8 +3,8 @@ page: page-10
 lang: cc
 infoBefore: |
   <div>
-  <a href='/examples/basic-cc-query-named-param' class="prev-button">Previous Lesson</a>
-  <a href='/examples/basic-cc-subdoc-lookup' class="next-button">Next Lesson</a>
+  <a href='/examples/basic-cc-query-named-param' class="prev-button">Previous</a>
+  <a href='/examples/basic-cc-subdoc-lookup' class="next-button">Next</a>
   </div>
   <br>
 code: |
@@ -113,7 +113,7 @@ code: |
       check(lcb_get_bootstrap_status(instance), "check bootstrap status");
 
       query_type(instance, bucket_name, "hotel");
-      
+
       lcb_destroy(instance);
   }
 infoAfter: |

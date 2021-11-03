@@ -3,8 +3,8 @@ page: page-08
 lang: scala
 infoBefore: |
   <div>
-  <a href='/examples/basic-scala-query-positional-param' class="prev-button">Previous Lesson</a>
-  <a href='/examples/basic-scala-subdoc-mutate' class="next-button">Next Lesson</a>
+  <a href='/examples/basic-scala-query-positional-param' class="prev-button">Previous</a>
+  <a href='/examples/basic-scala-subdoc-mutate' class="next-button">Next</a>
   </div>
   <br>
 code: |
