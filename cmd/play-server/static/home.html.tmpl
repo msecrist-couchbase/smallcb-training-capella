@@ -118,6 +118,11 @@
                  onclick="localStorage.setItem('infoPanel', 'show');" class="session menu-button red-button">
                 Stop Capella Session
               </a>
+            {{else if and (.Target.DBurl) (.Session)}}
+              <a href="/session-exit?s={{.Session.SessionId}}"
+                 onclick="localStorage.setItem('infoPanel', 'show');" class="session menu-button red-button">
+                Stop CB Shell Session
+              </a>
             {{else if not .Target.DBurl}}
               <a href="#" class="menu-button red-button cursor-default" id="startSessionButtonMenu">
                 Start a Session
@@ -210,12 +215,11 @@
             <span class="head-server">Your Couchbase:</span>
             <span class="head-user">url:</span> <code>{{.Target.DBHost}}</code>
             <span class="head-user">ip:</span> <code>{{.Target.IPv4}}</code>
-            <span class="head-user">status:</span>
             {{if eq .Target.Status "OK"}}
-              <code style="color: green">{{.Target.Status}}</code>
               <span class="head-user">version:</span> <code>{{.Target.Version}}</code>
+              <span class="head-user">status:</span> <code style="color: green; font-weight: bold">{{.Target.Status}}</code>
             {{else}}
-              <code style="color: red">{{.Target.Status}}</code>
+              <span class="head-user">status:</span> <code style="color: red; font-weight: bold">{{.Target.Status}}</code>
               <span class="head-user">network:</span>
               {{if eq .Target.NetworkStatus "OK"}}
                 <code style="color: green">{{.Target.NetworkStatus}}</code>
@@ -285,19 +289,11 @@
           <div class="header-right">
             <div>
               <span class="head-server">Your Couchbase Shell session:</span>
-              <code><a href="http://{{.Host}}:8091/ui/index.html?lu={{.Session.CBUser}}&lp={{.Session.CBPswd}}"
-                       target="_blank">http://{{.Host}}:8091</a>
-              </code>
-              <br class="hidden-lg">
-              <span class="head-user">username:</span> <code>{{.Session.CBUser}}</code>
-              <br class="hidden-lg">
-              <span class="head-pass">password:</span> <code>*****</code>
               <br class="hidden-lg">
             </div>
         </div>
       {{end}}
     {{end}}
-
   <div class="info-panel" id="infoPanel">
       {{if and (.Msg) (not .Target.DBurl)}}
         <div class="message-info">{{.Msg}}</div>
@@ -468,6 +464,16 @@
                   </a>
                 </div>
               </div>
+              <h2 class="home-header"><label for="modeSelector">Play with the Couchbase Capella</label></h2>
+              <div class="row example-row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                  <a href="/target"
+                     class="mode-button example-button red-button" onclick="" id="startCapellaSessionButtonInfo">
+                    <h3 class="example-label">Start a Capella Session</h3>
+                  </a>
+                </div>
+              </div>
+
           {{end}}
 
           {{end}}
@@ -827,8 +833,17 @@
     placement: 'top'
   })
 
+  tippy('#startCapellaSessionButtonInfo', {
+    content: 'Starting an online Couchbase Capella session will allow you to experiment with your own cluster.',
+    placement: 'top'
+  })
+
   tippy('#stopSessionButton', {
     content: 'WARNING: all data created in your cluster will be deleted.',
+    placement: 'bottom-end'
+  })
+  tippy('#stopCapellaSessionButton', {
+    content: 'WARNING: disconnects the examples to your Capella cluster.',
     placement: 'bottom-end'
   })
 </script>

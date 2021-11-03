@@ -184,7 +184,7 @@
               <label class="{{if .dbpwdc}}{{.dbpwdc}}{{end}} cursor-pointer"> Database Password:
                 <span class="error">{{.errDBpwd}}</span>
                 <input type="password" name="dbpwd" value="{{.dbpwd}}" id="dbpwd" autofocus/>
-                <i class="fa fa-eye" id="togglePassword">&nbsp; Show password</i>
+                <i class="fa fa-eye" id="togglePassword">&nbsp; Show Password</i>
               </label>
               <script>
                   const togglePassword = document.querySelector('#togglePassword');
@@ -196,6 +196,36 @@
                     this.classList.toggle('fa-eye-slash');
                 });
               </script>
+              <br>
+              <br>
+              <label {{if .namec}}class="{{.namec}}"{{end}}> Your Name:
+                <span class="error">{{.errName}}</span>
+                <input type="text" name="name" value="{{.name}}" autofocus/>
+              </label>
+              {{if .namec}}
+                <input type="hidden" name="namec" value="{{.namec}}"/>
+              {{end}}
+
+              <label {{if .emailc}}class="{{.emailc}}"{{end}}> Your Email:
+                <span class="error">{{.errEmail}}</span>
+                <input type="text" name="email" value="{{.email}}"/>
+              </label>
+              {{if .emailc}}
+                <input type="hidden" name="emailc" value="{{.emailc}}"/>
+              {{end}}
+
+              <div class="captcha-bg {{if .captchac}}{{.captchac}}{{end}}">
+                <img class="captcha" {{.captchaSrc}}/>
+              </div>
+
+              <label {{if .captchac}}class="{{.captchac}}"{{end}}>Enter Captcha:
+                <span class="error">{{.errCaptcha}}</span>
+                <input type="text" name="captcha"/>
+              </label>
+              {{if .captchac}}
+                <input type="hidden" name="captchac" value="{{.captchac}}"/>
+              {{end}}
+
               {{if .dbuserc}}
                 <input type="hidden" name="dbpwdc" value="{{.dbpwdc}}"/>
               {{end}}
@@ -206,7 +236,7 @@
 
               <div class="actions">
                 <input type="submit" name="session-start"
-                      value="Playground with Couchbase Capella"
+                      value="Start a Session"
                       onclick="submitted(); return true"/>
                 <div class="cancel">
                   or <a href="/">cancel</a>

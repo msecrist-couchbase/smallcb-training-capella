@@ -13,4 +13,6 @@ type target struct {
 	NetworkStatus      string
 	UserAccessStatus   string
 	SampleAccessStatus string
+	Name               string
+	Email              string
 }
