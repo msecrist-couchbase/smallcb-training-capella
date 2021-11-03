@@ -3,8 +3,8 @@ page: page-01
 lang: java
 infoBefore: |
   <div>
-  <a href='/examples/basic-java-txn-kv-mutate' class="prev-button">Previous Lesson</a>
-  <a href='/examples/basic-java-upsert' class="next-button">Next Lesson</a>
+  <a href='/examples/basic-java-txn-kv-mutate' class="prev-button">Previous</a>
+  <a href='/examples/basic-java-upsert' class="next-button">Next</a>
   </div>
   <br>
 code: |

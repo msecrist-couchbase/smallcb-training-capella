@@ -3,8 +3,8 @@ page: page-09
 lang: go
 infoBefore: |
   <div>
-  <a href='/examples/basic-go-kv-get' class="prev-button">Previous Lesson</a>
-  <a href='/examples/basic-go-query-named-param' class="next-button">Next Lesson</a>
+  <a href='/examples/basic-go-kv-get' class="prev-button">Previous</a>
+  <a href='/examples/basic-go-query-named-param' class="next-button">Next</a>
   </div>
   <br>
 code: |
@@ -36,7 +36,7 @@ code: |
     if err != nil {
       log.Fatal(err)
     }
-    
+
     results, err := cluster.Query(
       "SELECT x.* FROM `travel-sample` x " +
       "WHERE x.`type`=\"hotel\" AND x.name LIKE \"%hotel%\" LIMIT 10", nil)

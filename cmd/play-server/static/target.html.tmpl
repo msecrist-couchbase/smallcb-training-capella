@@ -43,7 +43,7 @@
                  onclick="localStorage.setItem('infoPanel', 'show');" class="session menu-button red-button">
                 Stop Capella Session
               </a>
-            
+
             {{end}}
         </li>
       </ul>
@@ -119,24 +119,27 @@
         {{end}}
 
         <p>
-          Please visit <a href="https://cloud.couchbase.com">https://cloud.couchbase.com</a> to get a free Couchbase Capella cluster if you don't have already.
-          <br>(NOTE: add  
-              {{if eq .natpublicip "YourHostIP"}}
-                <a target="_blank" href="http://www.whatismyipaddress.com">{{.natpublicip}}</a>/32
-              {{else}}
-                {{.natpublicip}}/32
-              {{end}}
-              network cidr to the Allow List) 
-        </p>
+          If you don't already have a Couchbase Capella cluster, please visit <a href="https://cloud.couchbase.com">https://cloud.couchbase.com</a> to get a free one!
           <br>
-          <p>
-          Enter the following information for your Couchbase Capella cluster instance. 
+          (NOTE: you'll need to add
+            {{if eq .natpublicip "YourHostIP"}}
+              <a target="_blank" href="http://www.whatismyipaddress.com">{{.natpublicip}}</a>/32
+            {{else}}
+                {{.natpublicip}}/32
+            {{end}}
+          to the IP Address/CIDR allow list on the 'Connect' tab in your Capella Cluster)
+          <br>
+          <br>
+          Enter the following information for your Couchbase Capella cluster.
         </p>
             <form action="/target" method="post" autocomplete="on">
 
               <label {{if .dburlc}}class="{{.dburlc}}"{{end}}> Database Host/URL (Ex: cb.gyvwo11dxgbw6st3.cloud.couchbase.com):
                 <span class="error">{{.errDBurl}}</span>
-                <input type="text" name="dburl" value="{{.dburl}}" autofocus autocomplete/>
+                <div class="input-wrapper">
+                  <input type="text" name="dburl" value="{{.dburl}}" autofocus autocomplete/>
+                  <i class="fa fa-question-circle cursor-pointer" aria-hidden="true" id="dbUrlInfo"></i>
+                </div>
               </label>
               {{if .dburlc}}
                 <input type="hidden" name="dburlc" value="{{.dburlc}}"/>
@@ -144,7 +147,10 @@
 
               <label {{if .dbuserc}}class="{{.dbuserc}}"{{end}}> Database Username:
                 <span class="error">{{.errDBuser}}</span>
-                <input type="text" name="dbuser" value="{{.dbuser}}"  autofocus autocomplete/>
+                <div class="input-wrapper">
+                  <input type="text" name="dbuser" value="{{.dbuser}}"  autofocus autocomplete/>
+                  <i class="fa fa-question-circle cursor-pointer" aria-hidden="true" id="dbUserInfo"></i>
+                </div>
               </label>
               {{if .dbuserc}}
                 <input type="hidden" name="dbuserc" value="{{.dbuserc}}"/>
@@ -152,7 +158,10 @@
 
               <label class="{{if .dbpwdc}}{{.dbpwdc}}{{end}} cursor-pointer"> Database Password:
                 <span class="error">{{.errDBpwd}}</span>
-                <input type="password" name="dbpwd" value="{{.dbpwd}}" id="dbpwd" autofocus autocomplete/>
+                <div class="input-wrapper">
+                  <input type="password" name="dbpwd" value="{{.dbpwd}}" id="dbpwd" autofocus autocomplete/>
+                  <i class="fa fa-question-circle cursor-pointer" aria-hidden="true" id="dbPassInfo"></i>
+                </div>
                 <i class="fa fa-eye" id="togglePassword">&nbsp; Show Password</i>
               </label>
               <script>
@@ -250,6 +259,22 @@
     <div>© 2021 Couchbase Labs</div>
   </footer>
 </body>
+<script>
+  tippy('#dbUrlInfo', {
+    content: 'Clusters → Trial-Cluster → Connect tab → Connection → Copy Wide Area Network URL',
+    placement: 'right'
+  });
+
+  tippy('#dbUserInfo', {
+    content: 'Clusters → Trial-Cluster → Connect tab → Database Access → Manage Credentials (create one if you haven\'t already)',
+    placement: 'right'
+  });
+
+  tippy('#dbPassInfo', {
+    content: 'Clusters → Trial-Cluster → Connect tab → Database Access → Manage Credentials (create one if you haven\'t already)',
+    placement: 'right'
+  });
+</script>
 <script>
 function submitted() {
   setTimeout(function() {

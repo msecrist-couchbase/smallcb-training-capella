@@ -90,7 +90,7 @@
 {{/*    TODO: look into how AnalyticsHTML works and see if we can do this for the nav too  */}}
     {{.AnalyticsHTML}}
 </head>
-<body class="{{.BodyClass}}">
+<body class="{{.BodyClass}}" {{if .Lang}} onload="setEditorView()"{{end}}>
 <header>
   <div class="header-flex-container">
     <div class="logo">
@@ -217,7 +217,7 @@
             <span class="head-user">ip:</span> <code>{{.Target.IPv4}}</code>
             {{if eq .Target.Status "OK"}}
               <span class="head-user">version:</span> <code>{{.Target.Version}}</code>
-              <span class="head-user">status:</span> <code style="color: green; font-weight: bold">{{.Target.Status}}</code>
+              <span class="head-user"><strong>status:</strong></span> <code style="color: green; font-weight: bold">{{.Target.Status}}</code>
             {{else}}
               <span class="head-user">status:</span> <code style="color: red; font-weight: bold">{{.Target.Status}}</code>
               <span class="head-user">network:</span>
@@ -330,7 +330,7 @@
               {{end}}
           </div>
         </div>
-        
+
         {{end}}
       {{end}}
   </div>
@@ -421,8 +421,8 @@
 
           {{if and (not .Session) (not .Target.DBurl)}}
               <br>
-              <br>
               <hr>
+              <br>
               <div class="row example-row">
                 <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                   <a href="/session"
@@ -688,15 +688,15 @@
 
 
         </div>
-          <div>
+          <div class="online-tools">
             {{if .Target.DBurl}}
               <h2 class="home-header">Explore interactive shell</h2>
             {{end}}
               {{if and (not .Session) (.Target.DBurl)}}
-                <br>
                       <a href="/session-cbshell" {{if eq .Target.Status "not accessible"}}class="disabled"{{end}} class="nowrap">
                         <u>Couchbase Shell</u></a>
               {{else if ge .SessionData.ContainerId 0}}
+
                 <script>
                   var iscbshell_open = localStorage.getItem("cbshell_window");
                   if (iscbshell_open != "opened") {
@@ -705,12 +705,11 @@
                     localStorage.setItem("cbshell_window", "new");
                   }
                 </script>
-                
-                <a target="_blank"
+
+                <p><a target="_blank"
                   href="/static/shell.html?t=http://{{.Host}}:{{.SessionData.port_1337}}" class="nowrap">
-                    <u>Couchbase Shell</u></a>
-                (opens a new tab and the session ends after {{.SessionsMaxAge}} 
-                or until {{.SessionsMaxIdle}} of inactivity.)
+                    <u>Couchbase Shell</u></a> (opens a new tab and the session ends after {{.SessionsMaxAge}}
+                or until {{.SessionsMaxIdle}} of inactivity.)</p>
                 <script>
                   localStorage.setItem("cbshell_window", "opened");
                 </script>
@@ -718,18 +717,17 @@
                 <script>
                   localStorage.setItem("cbshell_window", "closed");
                 </script>
-                
-              {{end}}   
-              
+
+              {{end}}
+
           </div>
           {{if not .Lang}}
             <div class="online-tools">
               <h2 class="home-header">Explore Online Tools to Learn More About N1QL</h2>
               <a href="https://query-tutorial.couchbase.com/tutorial/#1" class="nowrap">Online N1QL Tutorial</a>
               <a href="https://index-advisor.couchbase.com/indexadvisor/#1" class="nowrap">Online N1QL Index Advisor</a>
-              <a href="https://docs.couchbase.com/server/current/n1ql/n1ql-rest-api/index.html" class="nowrap">N1QL REST
-                API
-                Docs</a>
+              <a href="https://docs.couchbase.com/server/current/n1ql/n1ql-rest-api/index.html" class="nowrap">N1QL REST API Docs</a>
+              <a href="https://sqlplusplus-tutorial.couchbase.com/tutorial/#1">SQL++ Tutorial – N1QL for Analytics Query Language</a>
             </div>
           {{end}}
       </div>

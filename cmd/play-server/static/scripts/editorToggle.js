@@ -1,3 +1,19 @@
+function setEditorView() {
+  // check local storage, if no local storage default to 3 col
+  let savedEditorMode = localStorage.getItem('editorMode')
+  console.log(savedEditorMode); // null if not set
+
+  let isSideBySide = document.getElementById("editorWrapper").classList.contains('row');
+  let isSmallScreen = window.innerWidth < 991;
+
+  if (!isSmallScreen && (savedEditorMode === "sideBySide" || savedEditorMode === null) && !isSideBySide) {
+    // set to side by side
+    toggleEditorView()
+  } else if (isSideBySide) {
+    // set to stacked
+    toggleEditorView()
+  }
+}
 
 function toggleEditorView() {
   let isSideBySide = document.getElementById("editorWrapper").classList.contains('row');
@@ -24,6 +40,8 @@ function toggleEditorView() {
     // swap out toggle button icon
     document.getElementById("viewToggleButton").classList.add('col-btn')
     document.getElementById("viewToggleButton").classList.remove('stacked-btn')
+
+    localStorage.setItem('editorMode', 'stacked')
   } else {
     // swap to SIDE BY SIDE editor/output
     document.getElementById("editorWrapper").classList.add('row')
@@ -38,6 +56,8 @@ function toggleEditorView() {
     // swap out toggle button icon
     document.getElementById("viewToggleButton").classList.add('stacked-btn')
     document.getElementById("viewToggleButton").classList.remove('col-btn')
+
+    localStorage.setItem('editorMode', 'sideBySide')
   }
 
 }
@@ -46,15 +66,15 @@ function toggleEditorView() {
 function adjustOuterColumns(isSideBySide) {
   if (isSideBySide) {
     // to VERTICAL STACK view
-    document.getElementById("editorColumn").classList.remove('col-md-8')
+    document.getElementById("editorColumn").classList.remove('col-md-9')
     document.getElementById("editorColumn").classList.add('col-md-7')
-    document.getElementById("infoColumn").classList.remove('col-md-4')
+    document.getElementById("infoColumn").classList.remove('col-md-3')
     document.getElementById("infoColumn").classList.add('col-md-5')
   } else {
     // to SIDE BY SIDE view
-    document.getElementById("editorColumn").classList.add('col-md-8')
+    document.getElementById("editorColumn").classList.add('col-md-9')
     document.getElementById("editorColumn").classList.remove('col-md-7')
-    document.getElementById("infoColumn").classList.add('col-md-4')
+    document.getElementById("infoColumn").classList.add('col-md-3')
     document.getElementById("infoColumn").classList.remove('col-md-5')
   }
 }
