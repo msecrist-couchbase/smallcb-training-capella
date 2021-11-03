@@ -99,7 +99,7 @@
           <img src="/static/cb-rww.svg" class="hidden-xs"/>
           <img src="/static/cb.png" class="hidden-sm hidden-lg"/>
         </a>
-        <a href="//{{if .BaseUrl}}{{.BaseUrl}}{{else}}couchbase.live{{end}}{{if and (.Session) (not .Target.DBurl)}}/session-exit?s={{.Session.SessionId}}{{ else if and (.Target.DBurl) (not .Session)}}/target-exit{{end}}" id="homeLink">
+        <a href="//{{if .BaseUrl}}{{.BaseUrl}}{{else}}couchbase.live{{end}}{{if and (.Session)}}/session-exit?s={{.Session.SessionId}}{{ else if and (.Target.DBurl) (not .Session)}}/target-exit{{end}}" id="homeLink">
           Playground
         </a>
       </h1>
@@ -187,7 +187,7 @@
 
       {{if and (not .Session) (.Target.DBurl)}}
       <li>
-          <a href="/session-cbshell">
+          <a href="/session-cbshell" {{if eq .Target.Status "not accessible"}}class="disabled"{{end}}>
             &nbsp
             Start CBshell with Capella
           </a>
@@ -850,7 +850,7 @@
 {{if or (.Session) (.Target.DBurl)}}
 <script>
   tippy('#homeLink', {
-    content: 'WARNING: Returning to playground home will terminate your current session',
+    content: 'WARNING: Returning to playground home will end your current session',
     placement: 'bottom'
   })
 </script>

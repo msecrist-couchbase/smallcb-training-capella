@@ -617,6 +617,7 @@ func HttpHandleSessionCBShell(w http.ResponseWriter, r *http.Request) {
 		"init":          r.FormValue("init"),
 		"e":             e,
 		"bodyClass":     bodyClass,
+		"BaseUrl":       *baseUrl,
 	}
 
 	errs := 0
@@ -848,6 +849,7 @@ func HttpHandleTarget(w http.ResponseWriter, r *http.Request) {
 		"captchac":      r.FormValue("captchac"),
 		"natpublicip":   *natPublicIP,
 		"bodyClass":     bodyClass,
+		"BaseUrl":       *baseUrl,
 	}
 
 	if runtime.GOOS != "linux" {
