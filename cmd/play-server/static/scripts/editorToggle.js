@@ -88,6 +88,7 @@ function setOutputHeight() {
 
   if (isSideBySide) {
     iframe.style.height = `${parseInt(editorHeight, 10) - 16}px`
+    enableRunButton();
   } else {
     if (innerDoc.getElementsByTagName("body")[0].childNodes.length === 3 && innerDoc.getElementsByTagName("body")[0].childNodes[1].tagName === 'PRE') {
       enableRunButton();
