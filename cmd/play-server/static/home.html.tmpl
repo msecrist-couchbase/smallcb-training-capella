@@ -724,10 +724,10 @@
           {{if not .Lang}}
             <div class="online-tools">
               <h2 class="home-header">Explore Online Tools to Learn More About N1QL</h2>
-              <a href="https://query-tutorial.couchbase.com/tutorial/#1" class="nowrap">Online N1QL Tutorial</a>
-              <a href="https://index-advisor.couchbase.com/indexadvisor/#1" class="nowrap">Online N1QL Index Advisor</a>
-              <a href="https://docs.couchbase.com/server/current/n1ql/n1ql-rest-api/index.html" class="nowrap">N1QL REST API Docs</a>
-              <a href="https://sqlplusplus-tutorial.couchbase.com/tutorial/#1">SQL++ Tutorial – N1QL for Analytics Query Language</a>
+              <a href="https://query-tutorial.couchbase.com/tutorial/#1" class="nowrap" target="_blank">Online N1QL Tutorial</a>
+              <a href="https://index-advisor.couchbase.com/indexadvisor/#1" class="nowrap" target="_blank">Online N1QL Index Advisor</a>
+              <a href="https://docs.couchbase.com/server/current/n1ql/n1ql-rest-api/index.html" class="nowrap" target="_blank">N1QL REST API Docs</a>
+              <a href="https://sqlplusplus-tutorial.couchbase.com/tutorial/#1" target="_blank">SQL++ Tutorial – N1QL for Analytics Query Language</a>
             </div>
           {{end}}
       </div>
@@ -793,61 +793,65 @@
 
 <script>
 {{/*  Script for Tooltips  */}}
-  tippy('#viewToggleButton', {
-    content: 'Switch code editor view to 3 column',
-    placement: 'top-end'
-  });
+  if (window.innerWidth >= 767) {
+    tippy('#viewToggleButton', {
+      content: 'Switch code editor view to 3 column',
+      placement: 'top-end'
+    });
 
-  tippy('#run', {
-    content: 'Run this example!',
-    placement: 'bottom-start'
-  })
+    tippy('#run', {
+      content: 'Run this example!',
+      placement: 'bottom-start'
+    })
 
-  tippy('#provisionedDropdownButton', {
-    content: 'Starting a sandbox session will allow you to explore the Couchbase Web Console and experiment with your own cluster.',
-    placement: 'left'
-  })
+    tippy('#provisionedDropdownButton', {
+      content: 'Starting a sandbox session will allow you to explore the Couchbase Web Console and experiment with your own cluster.',
+      placement: 'left'
+    })
 
-  tippy('#capellaDropdownButton', {
-    content: 'Starting a Capella session will allow you to run the SDK examples against your own Couchbase Capella database.',
-    placement: 'left'
-  })
+    tippy('#capellaDropdownButton', {
+      content: 'Starting a Capella session will allow you to run the SDK examples against your own Couchbase Capella database.',
+      placement: 'left'
+    })
 
-  tippy('#provisionedDropdownButtonTop', {
-    content: 'Starting a sandbox session will allow you to explore the Couchbase Web Console and experiment with your own cluster.',
-    placement: 'top'
-  })
+    tippy('#provisionedDropdownButtonTop', {
+      content: 'Starting a sandbox session will allow you to explore the Couchbase Web Console and experiment with your own cluster.',
+      placement: 'top'
+    })
 
-  tippy('#capellaDropdownButtonTop', {
-    content: 'Starting a Capella session will allow you to run the SDK examples against your own Couchbase Capella database.',
-    placement: 'top'
-  })
+    tippy('#capellaDropdownButtonTop', {
+      content: 'Starting a Capella session will allow you to run the SDK examples against your own Couchbase Capella database.',
+      placement: 'top'
+    })
 
-  tippy('#startSessionButtonInfo', {
-    content: 'Starting an online session will allow you to explore the Couchbase Web Console and experiment with your own cluster.',
-    placement: 'top'
-  })
+    tippy('#startSessionButtonInfo', {
+      content: 'Starting an online session will allow you to explore the Couchbase Web Console and experiment with your own cluster.',
+      placement: 'top'
+    })
 
-  tippy('#startCapellaSessionButtonInfo', {
-    content: 'Starting an online Couchbase Capella session will allow you to experiment with your own cluster.',
-    placement: 'top'
-  })
+    tippy('#startCapellaSessionButtonInfo', {
+      content: 'Starting an online Couchbase Capella session will allow you to experiment with your own cluster.',
+      placement: 'top'
+    })
 
-  tippy('#stopSessionButton', {
-    content: 'WARNING: all data created in your cluster will be deleted.',
-    placement: 'bottom-end'
-  })
-  tippy('#stopCapellaSessionButton', {
-    content: 'WARNING: disconnects the examples to your Capella cluster.',
-    placement: 'bottom-end'
-  })
+    tippy('#stopSessionButton', {
+      content: 'WARNING: all data created in your cluster will be deleted.',
+      placement: 'bottom-end'
+    })
+    tippy('#stopCapellaSessionButton', {
+      content: 'WARNING: disconnects the examples to your Capella cluster.',
+      placement: 'bottom-end'
+    })
+  }
 </script>
 {{if or (.Session) (.Target.DBurl)}}
 <script>
-  tippy('#homeLink', {
-    content: 'WARNING: Returning to playground home will end your current session',
-    placement: 'bottom'
-  })
+  if (window.innerWidth >= 767) {
+    tippy('#homeLink', {
+      content: 'WARNING: Returning to playground home will end your current session',
+      placement: 'bottom'
+    })
+  }
 </script>
 {{end}}
 <script>
