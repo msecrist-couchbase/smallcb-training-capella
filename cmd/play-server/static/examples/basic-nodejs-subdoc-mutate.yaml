@@ -3,8 +3,8 @@ page: page-03
 lang: nodejs
 infoBefore: |
   <div>
-  <a href='/examples/basic-nodejs-subdoc-lookup' class="prev-button">Previous Lesson</a>
-  <a href='/examples/basic-nodejs-upsert' class="next-button">Next Lesson</a>
+  <a href='/examples/basic-nodejs-subdoc-lookup' class="prev-button">Previous</a>
+  <a href='/examples/basic-nodejs-upsert' class="next-button">Next</a>
   </div>
   <br>
 code: |
@@ -12,7 +12,7 @@ code: |
 
   const cluster = new couchbase.Cluster('couchbase://{{.Host}}', {
     username: '{{.CBUser}}', password: '{{.CBPswd}}'
-  }) 
+  })
   const bucket = cluster.bucket('travel-sample')
   const collection = bucket.defaultCollection()
 

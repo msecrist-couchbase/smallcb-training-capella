@@ -3,8 +3,8 @@ page: page-10
 lang: cc
 infoBefore: |
   <div>
-  <a href='/examples/basic-cc-query-rows' class="prev-button">Previous Lesson</a>
-  <a href='/examples/basic-cc-query-positional-param' class="next-button">Next Lesson</a>
+  <a href='/examples/basic-cc-query-rows' class="prev-button">Previous</a>
+  <a href='/examples/basic-cc-query-positional-param' class="next-button">Next</a>
   </div>
   <br>
 code: |
@@ -66,7 +66,7 @@ code: |
   }
 
   static void
-  query_type(lcb_INSTANCE* instance, const std::string& bucket_name, 
+  query_type(lcb_INSTANCE* instance, const std::string& bucket_name,
       const std::string& name, const std::string& type)
   {
       Rows result{};
@@ -114,7 +114,7 @@ code: |
       check(lcb_get_bootstrap_status(instance), "check bootstrap status");
 
       query_type(instance, bucket_name, "type", "hotel");
-      
+
       lcb_destroy(instance);
   }
 infoAfter: |

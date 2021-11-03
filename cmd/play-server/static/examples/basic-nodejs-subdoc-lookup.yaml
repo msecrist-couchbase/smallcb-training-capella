@@ -3,8 +3,8 @@ page: page-03
 lang: nodejs
 infoBefore: |
   <div>
-  <a href='/examples/basic-nodejs-query-positional-param' class="prev-button">Previous Lesson</a>
-  <a href='/examples/basic-nodejs-subdoc-mutate' class="next-button">Next Lesson</a>
+  <a href='/examples/basic-nodejs-query-positional-param' class="prev-button">Previous</a>
+  <a href='/examples/basic-nodejs-subdoc-mutate' class="next-button">Next</a>
   </div>
   <br>
 code: |
@@ -21,7 +21,7 @@ code: |
       var result = await collection.lookupIn(key, [
         couchbase.LookupInSpec.get(field),
       ])
-      var fieldValue = result.content[0].value 
+      var fieldValue = result.content[0].value
 
       console.log('LookupIn Result: ')
       console.log(result)

@@ -92,4 +92,12 @@ var (
 
 	encryptKey = flag.String("encryptKey", "12345678901234567890123456789012",
 		"secret key for encrypted text")
+
+	natPublicIP = flag.String("natPublicIP", "50.18.183.235", "NAT public IP")
+
+	natPrivateIP = flag.String("natPrivateIP", "10.0.1.111", "NAT private IP")
+
+	baseUrl = flag.String("baseUrl", "couchbase.live",
+	  "base url to use as the link to homepage")
+
 )
