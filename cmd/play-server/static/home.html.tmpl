@@ -111,17 +111,16 @@
             {{if and (.Session) (not .Target.DBurl)}}
               <a href="/session-exit?s={{.Session.SessionId}}"
                  onclick="localStorage.setItem('infoPanel', 'show');" class="session menu-button red-button" id="stopSessionButton">
-                Stop Provisioned Session
+                Stop Sandbox Session
               </a>
-            {{ else if and (.Target.DBurl) (not .Session)}}
-              <a href="/target-exit"
+            {{ else if .Target.DBurl}}
+              {{if .Session}}
+                <a href="/target-exit?s={{.Session.SessionId}}"
+              {{else}}
+                <a href="/target-exit"
+              {{end}}
                  onclick="localStorage.setItem('infoPanel', 'show');" class="session menu-button red-button">
                 Stop Capella Session
-              </a>
-            {{else if and (.Target.DBurl) (.Session)}}
-              <a href="/session-exit?s={{.Session.SessionId}}"
-                 onclick="localStorage.setItem('infoPanel', 'show');" class="session menu-button red-button">
-                Stop CB Shell Session
               </a>
             {{else if not .Target.DBurl}}
               <a href="#" class="menu-button red-button cursor-default" id="startSessionButtonMenu">
@@ -134,14 +133,14 @@
                   <a href="/session" id="provisionedDropdownButton">
                     <i class="fa fa-server" aria-hidden="true"></i>
                     &nbsp
-                    With a Provisioned Couchbase
+                    Sandbox
                   </a>
                 </li>
                 <li>
                   <a href="/target" id="capellaDropdownButton">
                     <i class="fa fa-cloud" aria-hidden="true"></i>
                     &nbsp
-                    With Couchbase Capella
+                    Capella
                   </a>
                 </li>
               </ul>
@@ -194,14 +193,6 @@
       </li>
       {{end}}
 
-      {{if and (not .Session) (.Target.DBurl)}}
-      <li>
-          <a href="/session-cbshell" {{if eq .Target.Status "not accessible"}}class="disabled"{{end}}>
-            &nbsp
-            Start CBshell with Capella
-          </a>
-      </li>
-      {{end}}
     </ul>
 
     <span id="menuToggle" onclick="handleMenuToggle()">
@@ -265,7 +256,7 @@
             <a onclick="toggleInfoPanel();"><span id="toggleIcon" class="chevron down"></span></a>
           </div>
           <div class="header-right">
-            <span class="head-server">Your playground session will end after </span>
+            <span class="head-server">Your playground Capella session will expire after </span>
             <code> {{.Target.ExpiryTime}}<code/>
 
           </div>
@@ -288,18 +279,6 @@
               <span class="head-pass">password:</span> <code>*****</code>
             </div>
           </div>
-        </div>
-
-      {{else if .Target.DBurl}}
-        <div class="info-header">
-          <div class="header-left">
-            <a onclick="toggleInfoPanel();"><span id="toggleIcon" class="chevron down"></span></a>
-          </div>
-          <div class="header-right">
-            <div>
-              <span class="head-server">Your Couchbase Shell session:</span>
-              <br class="hidden-lg">
-            </div>
         </div>
       {{end}}
     {{end}}
@@ -351,24 +330,7 @@
               {{end}}
           </div>
         </div>
-        {{else if .Target.DBurl}}
-          <div class="session-info">
-            <div>
-              Your Couchbase Shell session will end after {{.SessionsMaxAge}}
-              or until there's {{.SessionsMaxIdle}} of inactivity.
-              <br>
-              <br>
-              <strong>WARNING: Upon expiration, all data stored in this Couchbase instance will be lost.</strong>
-            </div>
-            <div class="shots">
-              {{if ge .SessionData.ContainerId 0}}
-                <a target="_blank"
-                    href="/static/shell.html?t=http://{{.Host}}:{{.SessionData.port_1337}}">
-                  <u>Couchbase Shell</u>
-                  <div><img src="/static/shots/shot-cbsh.png"/></div>
-                </a>
-              {{end}}
-            </div>
+        
         {{end}}
       {{end}}
   </div>
@@ -458,21 +420,25 @@
             </div>
 
           {{if and (not .Session) (not .Target.DBurl)}}
-              <h2 class="home-header"><label for="modeSelector">Play with the Couchbase Web Console and more</label></h2>
+              <br>
+              <br>
+              <hr>
               <div class="row example-row">
                 <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                   <a href="/session"
                      class="mode-button example-button red-button" onclick="" id="provisionedDropdownButtonTop">
-                    <h3 class="example-label">Start a Provisioned Session</h3>
+                    <h3 class="example-label">Sandbox Session</h3>
                   </a>
                 </div>
                 <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                   <a href="/target"
                      class="mode-button example-button red-button" onclick="" id="capellaDropdownButtonTop">
-                    <h3 class="example-label">Start a Capella Session</h3>
+                    <h3 class="example-label">Capella Session</h3>
                   </a>
                 </div>
               </div>
+              <br>
+              <hr>
 
           {{end}}
 
@@ -717,14 +683,30 @@
                   </div>
                 </div>
 
-
-
-
               </div>
             {{end}}
 
 
         </div>
+          <div>
+            {{if .Target.DBurl}}
+              <h2 class="home-header">Explore interactive shell</h2>
+            {{end}}
+              {{if and (not .Session) (.Target.DBurl)}}
+                <br>
+                      <a href="/session-cbshell" {{if eq .Target.Status "not accessible"}}class="disabled"{{end}}>
+                      &nbsp<u>Couchbase Shell</u></a>
+              {{else if ge .SessionData.ContainerId 0}}
+                
+                <a target="_blank"
+                  href="/static/shell.html?t=http://{{.Host}}:{{.SessionData.port_1337}}">
+                  <u>Couchbase Shell</u></a>
+                (this will expire after {{.SessionsMaxAge}} 
+                or until there's {{.SessionsMaxIdle}} of inactivity.)
+                
+              {{end}}   
+              
+          </div>
           {{if not .Lang}}
             <div class="online-tools">
               <h2 class="home-header">Explore Online Tools to Learn More About N1QL</h2>
@@ -809,7 +791,7 @@
   })
 
   tippy('#provisionedDropdownButton', {
-    content: 'Starting a provisioned session will allow you to explore the Couchbase Web Console and experiment with your own cluster.',
+    content: 'Starting a sandbox session will allow you to explore the Couchbase Web Console and experiment with your own cluster.',
     placement: 'left'
   })
 
@@ -819,7 +801,7 @@
   })
 
   tippy('#provisionedDropdownButtonTop', {
-    content: 'Starting a provisioned session will allow you to explore the Couchbase Web Console and experiment with your own cluster.',
+    content: 'Starting a sandbox session will allow you to explore the Couchbase Web Console and experiment with your own cluster.',
     placement: 'top'
   })
 

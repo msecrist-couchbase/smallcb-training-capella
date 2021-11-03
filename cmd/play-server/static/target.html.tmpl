@@ -43,28 +43,7 @@
                  onclick="localStorage.setItem('infoPanel', 'show');" class="session menu-button red-button">
                 Stop Capella Session
               </a>
-            {{else if not .Target.DBurl}}
-              <a href="#" class="menu-button red-button cursor-default" id="startSessionButtonMenu">
-                Start a Session
-                &nbsp
-                <i class="fa fa-caret-down" aria-hidden="true"></i>
-              </a>
-              <ul class="dropdown-content">
-                <li>
-                  <a href="/session">
-                    <i class="fa fa-server" aria-hidden="true"></i>
-                    &nbsp
-                    With a Provisioned Couchbase
-                  </a>
-                </li>
-                <li>
-                  <a href="/target">
-                    <i class="fa fa-cloud" aria-hidden="true"></i>
-                    &nbsp
-                    With Couchbase Capella
-                  </a>
-                </li>
-              </ul>
+            
             {{end}}
         </li>
       </ul>
@@ -140,34 +119,25 @@
         {{end}}
 
         <p>
-          Attaching your Couchbase Capella cluster to the playground examples.
-        </p>
-       <p>
-          Don't have a Couchbase? Get a free cluster from Couchbase Capella for 45 days. Please visit <a target="_blank" href="https://cloud.couchbase.com/">https://cloud.couchbase.com/</a>
-        </p>
-        <p>
-            <br>Please check the below required checks on Couchbase Capella UI console so that the SDK code examples can work directly.
-            </p>
-            <ol>
-              <li> Copy the Capella cluster host (Nav: Clusters → Trial-Cluster → Connect tab → Connection)
-              <li> Add the proper IP/CIDR to the allow list:
+          Please visit https://cloud.couchbase.com to get a free Couchbase Capella cluster.
+
+          <br>
+          <br>
+          <br>
+          Enter the following information for your Couchbase Capella cluster instance.
+          <br>(add  
               {{if eq .natpublicip "YourHostIP"}}
                 <a target="_blank" href="http://www.whatismyipaddress.com">{{.natpublicip}}</a>/32
               {{else}}
                 {{.natpublicip}}/32
               {{end}}
-              (Nav: Clusters → Trial-Cluster → Connect tab → Manage Allowed IP)
-              <li>  Create database user for the Playground with read/write access to all buckets (Nav: Clusters → Trial-Cluster → Connect tab → Manage Credentials → Create Database Credentials)
-              <li>  Ensure the travel-sample bucket has been already imported (Nav: Clusters → Trial-Cluster →  Tools tab → Import)
-            </ol>
-        <p>
-          Your new session will expire after {{.TargetsMaxAge}} days.
+              network cidr to the Allow List to your cluster from Capella UI) 
         </p>
-            <form action="/target" method="post" autocomplete="off">
+            <form action="/target" method="post" autocomplete="on">
 
               <label {{if .dburlc}}class="{{.dburlc}}"{{end}}> Database Host/URL (Ex: cb.gyvwo11dxgbw6st3.cloud.couchbase.com):
                 <span class="error">{{.errDBurl}}</span>
-                <input type="text" name="dburl" value="{{.dburl}}" autofocus/>
+                <input type="text" name="dburl" value="{{.dburl}}" autofocus autocomplete/>
               </label>
               {{if .dburlc}}
                 <input type="hidden" name="dburlc" value="{{.dburlc}}"/>
@@ -175,7 +145,7 @@
 
               <label {{if .dbuserc}}class="{{.dbuserc}}"{{end}}> Database Username:
                 <span class="error">{{.errDBuser}}</span>
-                <input type="text" name="dbuser" value="{{.dbuser}}"  autofocus/>
+                <input type="text" name="dbuser" value="{{.dbuser}}"  autofocus autocomplete/>
               </label>
               {{if .dbuserc}}
                 <input type="hidden" name="dbuserc" value="{{.dbuserc}}"/>
@@ -183,7 +153,7 @@
 
               <label class="{{if .dbpwdc}}{{.dbpwdc}}{{end}} cursor-pointer"> Database Password:
                 <span class="error">{{.errDBpwd}}</span>
-                <input type="password" name="dbpwd" value="{{.dbpwd}}" id="dbpwd" autofocus/>
+                <input type="password" name="dbpwd" value="{{.dbpwd}}" id="dbpwd" autofocus autocomplete/>
                 <i class="fa fa-eye" id="togglePassword">&nbsp; Show Password</i>
               </label>
               <script>

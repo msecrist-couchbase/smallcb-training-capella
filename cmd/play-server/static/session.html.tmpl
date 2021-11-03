@@ -37,35 +37,14 @@
             {{if and (.Session) (not .Target.DBurl)}}
               <a href="/session-exit?s={{.Session.SessionId}}"
                  onclick="localStorage.setItem('infoPanel', 'show');" class="session menu-button red-button" id="stopSessionButton">
-                Stop Provisioned Session
+                Stop Sandbox Session
               </a>
             {{ else if and (.Target.DBurl) (not .Session)}}
               <a href="/target-exit"
                  onclick="localStorage.setItem('infoPanel', 'show');" class="session menu-button red-button">
                 Stop Capella Session
               </a>
-            {{else if not .Target.DBurl}}
-              <a href="#" class="menu-button red-button cursor-default" id="startSessionButtonMenu">
-                Start a Session
-                &nbsp
-                <i class="fa fa-caret-down" aria-hidden="true"></i>
-              </a>
-              <ul class="dropdown-content">
-                <li>
-                  <a href="/session">
-                    <i class="fa fa-server" aria-hidden="true"></i>
-                    &nbsp
-                    With a Provisioned Couchbase
-                  </a>
-                </li>
-                <li>
-                  <a href="/target">
-                    <i class="fa fa-cloud" aria-hidden="true"></i>
-                    &nbsp
-                    With Couchbase Capella
-                  </a>
-                </li>
-              </ul>
+            
             {{end}}
         </li>
       </ul>

@@ -272,6 +272,9 @@ func HttpHandleTargetExit(w http.ResponseWriter, r *http.Request) {
 	}
 	http.SetCookie(w, targetsCookie)
 
+	// Remove cbshell session too
+	sessions.SessionExit(r.FormValue("s"))
+
 	url := r.FormValue("ebase")
 	if url == "" {
 		url = "/"
