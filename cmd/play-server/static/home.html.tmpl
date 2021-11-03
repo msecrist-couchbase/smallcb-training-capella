@@ -152,6 +152,15 @@
   </div>
 
   <div class="subheader-container">
+    {{if .Target.DBurl}}
+    <div class="greeting">
+      Hello, {{.Target.Name}}
+    </div>
+    {{else if .Session}}
+      <div class="greeting">
+        Hello, {{.Session.Name}}
+      </div>
+    {{end}}
     <ul id="secondaryNav">
       <li>
         <a href="https://docs.couchbase.com">Documentation</a>
