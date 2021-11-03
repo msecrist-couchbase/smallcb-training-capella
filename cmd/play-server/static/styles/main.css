@@ -746,6 +746,7 @@ a.disable {
 }
 
 .mode-button {
+  justify-content: center;
   padding: 1.5rem 1rem;
 }
 
