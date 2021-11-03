@@ -23,7 +23,7 @@ var (
 
 func CaptchaGenerateBase64ImageDataURL(width, height, maxCaptchas int) (
 	string, error) {
-	png, err := CaptchaGenerate(width, height, maxCaptchas)
+	png, err := CaptchaGeneratePanic(width, height, maxCaptchas)
 	if err != nil {
 		return "", nil
 	}
@@ -31,6 +31,15 @@ func CaptchaGenerateBase64ImageDataURL(width, height, maxCaptchas int) (
 	s := base64.StdEncoding.EncodeToString(png)
 
 	return "data:image/png;base64," + s, nil
+}
+
+func CaptchaGeneratePanic(width, height, maxCaptchas int) ([]byte, error) {
+	defer func() {
+		if err := recover(); err != nil {
+			fmt.Println("CaptchaGeneratePanic:", err)
+		}
+	}()
+	return CaptchaGenerate(width, height, maxCaptchas)
 }
 
 func CaptchaGenerate(width, height, maxCaptchas int) (
