@@ -90,7 +90,7 @@
 {{/*    TODO: look into how AnalyticsHTML works and see if we can do this for the nav too  */}}
     {{.AnalyticsHTML}}
 </head>
-<body class="{{.BodyClass}}">
+<body class="{{.BodyClass}}" {{if .Lang}} onload="setEditorView('sideBySide')"{{end}}>
 <header>
   <div class="header-flex-container">
     <div class="logo">
