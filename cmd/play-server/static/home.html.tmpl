@@ -217,7 +217,7 @@
             <span class="head-user">ip:</span> <code>{{.Target.IPv4}}</code>
             {{if eq .Target.Status "OK"}}
               <span class="head-user">version:</span> <code>{{.Target.Version}}</code>
-              <span class="head-user">status:</span> <code style="color: green; font-weight: bold">{{.Target.Status}}</code>
+              <span class="head-user"><strong>status:</strong></span> <code style="color: green; font-weight: bold">{{.Target.Status}}</code>
             {{else}}
               <span class="head-user">status:</span> <code style="color: red; font-weight: bold">{{.Target.Status}}</code>
               <span class="head-user">network:</span>
@@ -701,7 +701,7 @@
                 <a target="_blank"
                   href="/static/shell.html?t=http://{{.Host}}:{{.SessionData.port_1337}}">
                   <u>Couchbase Shell</u></a>
-                (this will expire after {{.SessionsMaxAge}}
+                (opens shell session in a new tab, session will expire after {{.SessionsMaxAge}}
                 or until there's {{.SessionsMaxIdle}} of inactivity.)
 
               {{end}}
