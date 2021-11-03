@@ -531,5 +531,5 @@ body > header > div > div> h1 > a {
 }
 
 .tippy-box[data-theme~='custom'] {
-  font-size: 10px;
+  font-size: 12px;
 }
