@@ -330,7 +330,7 @@
               {{end}}
           </div>
         </div>
-        
+
         {{end}}
       {{end}}
   </div>
@@ -421,8 +421,8 @@
 
           {{if and (not .Session) (not .Target.DBurl)}}
               <br>
-              <br>
               <hr>
+              <br>
               <div class="row example-row">
                 <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                   <a href="/session"
@@ -697,15 +697,15 @@
                       <a href="/session-cbshell" {{if eq .Target.Status "not accessible"}}class="disabled"{{end}}>
                       &nbsp<u>Couchbase Shell</u></a>
               {{else if ge .SessionData.ContainerId 0}}
-                
+
                 <a target="_blank"
                   href="/static/shell.html?t=http://{{.Host}}:{{.SessionData.port_1337}}">
                   <u>Couchbase Shell</u></a>
-                (this will expire after {{.SessionsMaxAge}} 
+                (this will expire after {{.SessionsMaxAge}}
                 or until there's {{.SessionsMaxIdle}} of inactivity.)
-                
-              {{end}}   
-              
+
+              {{end}}
+
           </div>
           {{if not .Lang}}
             <div class="online-tools">
