@@ -43,7 +43,7 @@
                  onclick="localStorage.setItem('infoPanel', 'show');" class="session menu-button red-button">
                 Stop Capella Session
               </a>
-            
+
             {{end}}
         </li>
       </ul>
@@ -119,19 +119,18 @@
         {{end}}
 
         <p>
-          Please visit https://cloud.couchbase.com to get a free Couchbase Capella cluster.
-
+          If you don't already have a Couchbase Capella cluster, please visit <a href="https://cloud.couchbase.com">https://cloud.couchbase.com</a> to get a free one!
           <br>
-          <br>
-          <br>
-          Enter the following information for your Couchbase Capella cluster instance.
-          <br>(add  
-              {{if eq .natpublicip "YourHostIP"}}
-                <a target="_blank" href="http://www.whatismyipaddress.com">{{.natpublicip}}</a>/32
-              {{else}}
+          (you'll need to add
+            {{if eq .natpublicip "YourHostIP"}}
+              <a target="_blank" href="http://www.whatismyipaddress.com">{{.natpublicip}}</a>/32
+            {{else}}
                 {{.natpublicip}}/32
-              {{end}}
-              network cidr to the Allow List to your cluster from Capella UI) 
+            {{end}}
+          to the IP Address/CIDR allow list on the 'Connect' tab in your Capella Cluster)
+          <br>
+          <br>
+          Enter the following information for your Couchbase Capella cluster.
         </p>
             <form action="/target" method="post" autocomplete="on">
 
