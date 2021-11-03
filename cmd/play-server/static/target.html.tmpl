@@ -13,7 +13,6 @@
   <script src="../static/scripts/menu.js"></script>
 
   {{.AnalyticsHTML}}
-  <link rel="stylesheet" type="text/css" href="/static/styles/font-awesome.css">
 </head>
 <body class="{{.bodyClass}}">
 <header>
@@ -182,10 +181,10 @@
                 <input type="hidden" name="dbuserc" value="{{.dbuserc}}"/>
               {{end}}
 
-              <label {{if .dbpwdc}}class="{{.dbpwdc}}"{{end}}> Database Password:
+              <label class="{{if .dbpwdc}}{{.dbpwdc}}{{end}} cursor-pointer"> Database Password:
                 <span class="error">{{.errDBpwd}}</span>
                 <input type="password" name="dbpwd" value="{{.dbpwd}}" id="dbpwd" autofocus/>
-                <i class="fal fa-eye" id="togglePassword">Show password</i>
+                <i class="fa fa-eye" id="togglePassword">&nbsp; Show password</i>
               </label>
               <script>
                   const togglePassword = document.querySelector('#togglePassword');

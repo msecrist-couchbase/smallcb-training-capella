@@ -514,3 +514,7 @@ body > header > div > div> h1 > a {
 .cursor-default {
   cursor: default;
 }
+
+.cursor-pointer {
+  cursor: pointer;
+}
