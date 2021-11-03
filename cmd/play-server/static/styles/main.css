@@ -662,28 +662,38 @@ body.dark .workspace .workspace-body .code-output iframe.output {
 
 a.prev-button {
   padding: 7px 14px;
-
   background-color: #262a35;
   color: rgba(159, 226, 100, 0.95);
   text-align: right;
   margin-bottom: 20px;
-
   float: left;
   text-decoration: none;
   color: initial;
+
+  border: 1px solid #cd575a;
+  border-radius: 6px;
+}
+
+a.prev-button:hover {
+  background-color: rgba(86, 107, 127, 0.2);
 }
 
 a.next-button {
   padding: 7px 14px;
-
   background-color: #262a35;
   color: rgba(159, 226, 100, 0.95);
   text-align: right;
   margin-bottom: 20px;
-
   float: right;
   text-decoration: none;
   color: initial;
+
+  border: 1px solid #cd575a;
+  border-radius: 6px;
+}
+
+a.next-button:hover {
+  background-color: rgba(86, 107, 127, 0.2);
 }
 
 a.disable {
