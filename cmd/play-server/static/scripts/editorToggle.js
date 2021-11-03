@@ -1,10 +1,12 @@
-function setEditorView(mode) {
+function setEditorView() {
   // check local storage, if no local storage default to 3 col
   let savedEditorMode = localStorage.getItem('editorMode')
   console.log(savedEditorMode); // null if not set
 
   let isSideBySide = document.getElementById("editorWrapper").classList.contains('row');
-  if (savedEditorMode === "sideBySide" || savedEditorMode === null && !isSideBySide) {
+  let isSmallScreen = window.innerWidth < 991;
+
+  if (!isSmallScreen && (savedEditorMode === "sideBySide" || savedEditorMode === null) && !isSideBySide) {
     // set to side by side
     toggleEditorView()
   } else if (isSideBySide) {
