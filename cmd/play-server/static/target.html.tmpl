@@ -140,32 +140,32 @@
         {{end}}
 
         <p>
-          Attaching your couchbase capella cluster to the playground examples.
+          Attaching your Couchbase Capella cluster to the playground examples.
         </p>
        <p>
-          Don't have a couchbase? Get a free cluster from Couchbase Capella for 45 days. Please visit <a target="_blank" href="https://cloud.couchbase.com/">https://cloud.couchbase.com/</a>
+          Don't have a Couchbase? Get a free cluster from Couchbase Capella for 45 days. Please visit <a target="_blank" href="https://cloud.couchbase.com/">https://cloud.couchbase.com/</a>
         </p>
         <p>
             <br>Please check the below required checks on Couchbase Capella UI console so that the SDK code examples can work directly.
             </p>
             <ol>
               <li> Copy the Capella cluster host (Nav: Clusters → Trial-Cluster → Connect tab → Connection)
-              <li>  Allowed IP cidr:
+              <li> Add the proper IP/CIDR to the allow list:
               {{if eq .natpublicip "YourHostIP"}}
                 <a target="_blank" href="http://www.whatismyipaddress.com">{{.natpublicip}}</a>/32
               {{else}}
                 {{.natpublicip}}/32
               {{end}}
               (Nav: Clusters → Trial-Cluster → Connect tab → Manage Allowed IP)
-              <li>  Create database user for the Playground with all buckets Read/Write permissions (Nav: Clusters → Trial-Cluster → Connect tab → Manage Credentials -->Create Database Credentials)
-              <li>  Check if travel-sample bucket has been already imported (Nav: Clusters → Trial-Cluster →  Tools tab → Import )
+              <li>  Create database user for the Playground with read/write access to all buckets (Nav: Clusters → Trial-Cluster → Connect tab → Manage Credentials → Create Database Credentials)
+              <li>  Ensure the travel-sample bucket has been already imported (Nav: Clusters → Trial-Cluster →  Tools tab → Import)
             </ol>
         <p>
           Your new session will expire after {{.TargetsMaxAge}} days.
         </p>
             <form action="/target" method="post" autocomplete="off">
 
-              <label {{if .dburlc}}class="{{.dburlc}}"{{end}}> Database Host/URL ( Example: cb.gyvwo11dxgbw6st3.cloud.couchbase.com ):
+              <label {{if .dburlc}}class="{{.dburlc}}"{{end}}> Database Host/URL (Ex: cb.gyvwo11dxgbw6st3.cloud.couchbase.com):
                 <span class="error">{{.errDBurl}}</span>
                 <input type="text" name="dburl" value="{{.dburl}}" autofocus/>
               </label>
