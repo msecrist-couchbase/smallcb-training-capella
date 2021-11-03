@@ -688,12 +688,11 @@
 
 
         </div>
-          <div>
+          <div class="online-tools">
             {{if .Target.DBurl}}
               <h2 class="home-header">Explore interactive shell</h2>
             {{end}}
               {{if and (not .Session) (.Target.DBurl)}}
-                <br>
                       <a href="/session-cbshell" {{if eq .Target.Status "not accessible"}}class="disabled"{{end}} class="nowrap">
                         <u>Couchbase Shell</u></a>
               {{else if ge .SessionData.ContainerId 0}}
@@ -707,11 +706,10 @@
                   }
                 </script>
 
-                <a target="_blank"
+                <p><a target="_blank"
                   href="/static/shell.html?t=http://{{.Host}}:{{.SessionData.port_1337}}" class="nowrap">
-                    <u>Couchbase Shell</u></a>
-                (opens a new tab and the session ends after {{.SessionsMaxAge}}
-                or until {{.SessionsMaxIdle}} of inactivity.)
+                    <u>Couchbase Shell</u></a> (opens a new tab and the session ends after {{.SessionsMaxAge}}
+                or until {{.SessionsMaxIdle}} of inactivity.)</p>
                 <script>
                   localStorage.setItem("cbshell_window", "opened");
                 </script>

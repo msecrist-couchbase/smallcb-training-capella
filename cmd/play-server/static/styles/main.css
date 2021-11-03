@@ -859,6 +859,12 @@ div.online-tools > a{
   margin-top: 8px;
 }
 
+div.online-tools > p{
+  display: block;
+  margin-left: 16px;
+  margin-top: 8px;
+}
+
 .progress-indicator>li {
   padding-left: 2% !important;
   padding-right: 2% !important;
