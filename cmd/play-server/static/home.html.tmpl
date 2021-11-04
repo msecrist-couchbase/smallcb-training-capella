@@ -216,10 +216,7 @@
 <main id="main">
     {{if .Target.DBurl}}
       <div class="info-header">
-        <div class="header-left">
-          <a onclick="toggleInfoPanel();"><span id="toggleIcon" class="chevron down"></span></a>
-        </div>
-
+    
         <div class="header-right">
           <div>
             <span class="head-server">Your Couchbase:</span>
@@ -262,9 +259,6 @@
         </div>
       </div>
       <div class="info-header">
-          <div class="header-left">
-            <a onclick="toggleInfoPanel();"><span id="toggleIcon" class="chevron down"></span></a>
-          </div>
           <div class="header-right">
             <span class="head-server">Your playground Capella session will expire after </span>
             <code> {{.Target.ExpiryTime}}<code/>
@@ -336,6 +330,11 @@
                    href="/static/shell.html?t=http://{{.Host}}:{{.SessionData.port_1337}}">
                   <u>Couchbase Shell</u>
                   <div><img src="/static/shots/shot-cbsh.png"/></div>
+                </a>
+                <a target="_blank"
+                   href="/static/shell-cbq.html?t=http://{{.Host}}:{{.SessionData.port_1338}}">
+                  <u>Command Line Shell for N1QL</u>
+                  <div><img src="/static/shots/shot-cbq.png"/></div>
                 </a>
               {{end}}
           </div>
@@ -705,7 +704,7 @@
               {{if and (not .Session) (.Target.DBurl)}}
                       <a href="/session-cbshell" {{if eq .Target.Status "not accessible"}}class="disabled"{{end}} class="nowrap shell-button">
                         <u>Couchbase Shell</u></a>
-              {{else if ge .SessionData.ContainerId 0}}
+              {{else if and (.Target.DBurl) (ge .SessionData.ContainerId 0)}}
 
                 <script>
                   var iscbshell_open = localStorage.getItem("cbshell_window");
@@ -718,7 +717,7 @@
 
                 <p><a target="_blank"
                   href="/static/shell.html?t=http://{{.Host}}:{{.SessionData.port_1337}}" class="nowrap shell-button">
-                    <u>Couchbase Shell</u></a> (opens a new tab and the session ends after {{.SessionsMaxAge}}
+                    <u>Couchbase Shell</u></a> (opens a new tab and the session expire after {{.SessionsMaxAge}}
                 or until {{.SessionsMaxIdle}} of inactivity.)</p>
                 <script>
                   localStorage.setItem("cbshell_window", "opened");

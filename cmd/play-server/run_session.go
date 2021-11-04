@@ -98,6 +98,11 @@ func SessionAssignContainer(session *Session, req RunRequest,
 		return nil, err
 	}
 
+	err = StartCbq(session, req, containerId, defaultBucket)
+	if err != nil {
+		return nil, err
+	}
+
 	containerIP, err := RetrieveIP(req, containerId)
 	if err != nil {
 		return nil, err
@@ -259,4 +264,33 @@ func RetrieveIP(req RunRequest, containerId int) (string, error) {
 	}
 
 	return strings.Trim(string(out), " \n"), nil
+}
+
+func StartCbq(session *Session, req RunRequest, containerId int, defaultBucket string) error {
+	containerName := fmt.Sprintf("%s%d",
+		req.containerNamePrefix, containerId)
+
+	// Ex: "vol-instances/vol-0".
+	dir := fmt.Sprintf("%s%d",
+		req.containerVolPrefix, containerId)
+
+	err := os.MkdirAll(dir+DirCode, 0777)
+	if err != nil {
+		return err
+	}
+
+	cmd := exec.Command("docker", "exec",
+		"-detach", "-it", "-u", "play", "-w", "/home/play", containerName,
+		"/bin/sh", "-c",
+		"cd /opt/couchbase/bin; while true; do /home/play/npm_packages/bin/gritty --command './cbq -u "+
+			session.CBUser+" -p "+session.CBPswd+" -e "+session.CBHost+
+			"' --port 1338; sleep 3; done")
+
+	out, err := ExecCmd(req.ctx, cmd, req.codeDuration)
+	if err != nil {
+		return fmt.Errorf("StartCbq,"+
+			" out: %s, err: %v", out, err)
+	}
+
+	return nil
 }
