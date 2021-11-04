@@ -206,10 +206,7 @@
 <main id="main">
     {{if .Target.DBurl}}
       <div class="info-header">
-        <div class="header-left">
-          <a onclick="toggleInfoPanel();"><span id="toggleIcon" class="chevron down"></span></a>
-        </div>
-
+    
         <div class="header-right">
           <div>
             <span class="head-server">Your Couchbase:</span>
@@ -252,9 +249,6 @@
         </div>
       </div>
       <div class="info-header">
-          <div class="header-left">
-            <a onclick="toggleInfoPanel();"><span id="toggleIcon" class="chevron down"></span></a>
-          </div>
           <div class="header-right">
             <span class="head-server">Your playground Capella session will expire after </span>
             <code> {{.Target.ExpiryTime}}<code/>
