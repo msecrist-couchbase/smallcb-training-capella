@@ -86,7 +86,6 @@
   </script>
   <script>
     window.scrollTo({top: 0, behavior: "smooth"})
-
     function disableSafariButtons() {
           let isIos = /iP(ad|od|hone)/i.test(window.navigator.userAgent);
           let isSafari = /constructor/i.test(window.HTMLElement) || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] || (typeof safari !== 'undefined' && window['safari'].pushNotification));
@@ -102,7 +101,7 @@
 {{/*    TODO: look into how AnalyticsHTML works and see if we can do this for the nav too  */}}
     {{.AnalyticsHTML}}
 </head>
-<body class="{{.BodyClass}}" {{if .Lang}} onload="setEditorView()"{{end}}>
+<body class="{{.BodyClass}}" onload="{{if .Lang}}setEditorView();{{end}} disableSafariButtons();">
 <header>
   <div class="header-flex-container">
     <div class="logo">
@@ -218,9 +217,6 @@
 <main id="main">
     {{if .Target.DBurl}}
       <div class="info-header">
-        <div class="header-left">
-          <a onclick="toggleInfoPanel();"><span id="toggleIcon" class="chevron down"></span></a>
-        </div>
 
         <div class="header-right">
           <div>
@@ -264,9 +260,6 @@
         </div>
       </div>
       <div class="info-header">
-          <div class="header-left">
-            <a onclick="toggleInfoPanel();"><span id="toggleIcon" class="chevron down"></span></a>
-          </div>
           <div class="header-right">
             <span class="head-server">Your playground Capella session will expire after </span>
             <code> {{.Target.ExpiryTime}}<code/>
@@ -334,10 +327,15 @@
               <div><img src="/static/shots/shot-documents.png"/></div>
             </a>
               {{if ge .SessionData.ContainerId 0}}
-                <a target="_blank"
+                <a target="_blank" class="shell-button"
                    href="/static/shell.html?t=http://{{.Host}}:{{.SessionData.port_1337}}">
                   <u>Couchbase Shell</u>
                   <div><img src="/static/shots/shot-cbsh.png"/></div>
+                </a>
+                <a target="_blank" class="shell-button"
+                   href="/static/shell-cbq.html?t=http://{{.Host}}:{{.SessionData.port_1338}}">
+                  <u>Query Shell</u>
+                  <div><img src="/static/shots/shot-cbq.png"/></div>
                 </a>
               {{end}}
           </div>
@@ -702,12 +700,12 @@
         </div>
           <div class="online-tools">
             {{if .Target.DBurl}}
-              <h2 class="home-header">Explore interactive shell</h2>
+              <h2 class="home-header shell-button">Explore interactive shell</h2>
             {{end}}
               {{if and (not .Session) (.Target.DBurl)}}
-                      <a href="/session-cbshell" {{if eq .Target.Status "not accessible"}}class="disabled"{{end}} class="nowrap">
+                      <a href="/session-cbshell" {{if eq .Target.Status "not accessible"}}class="disabled"{{end}} class="nowrap shell-button">
                         <u>Couchbase Shell</u></a>
-              {{else if ge .SessionData.ContainerId 0}}
+              {{else if and (.Target.DBurl) (ge .SessionData.ContainerId 0)}}
 
                 <script>
                   var iscbshell_open = localStorage.getItem("cbshell_window");
@@ -719,8 +717,8 @@
                 </script>
 
                 <p><a target="_blank"
-                  href="/static/shell.html?t=http://{{.Host}}:{{.SessionData.port_1337}}" class="nowrap">
-                    <u>Couchbase Shell</u></a> (opens a new tab and the session ends after {{.SessionsMaxAge}}
+                  href="/static/shell.html?t=http://{{.Host}}:{{.SessionData.port_1337}}" class="nowrap shell-button">
+                    <u>Couchbase Shell</u></a> (opens a new tab and the session expire after {{.SessionsMaxAge}}
                 or until {{.SessionsMaxIdle}} of inactivity.)</p>
                 <script>
                   localStorage.setItem("cbshell_window", "opened");
@@ -736,10 +734,10 @@
           {{if not .Lang}}
             <div class="online-tools">
               <h2 class="home-header">Explore Online Tools to Learn More About N1QL</h2>
-              <a href="https://query-tutorial.couchbase.com/tutorial/#1" class="nowrap">Online N1QL Tutorial</a>
-              <a href="https://index-advisor.couchbase.com/indexadvisor/#1" class="nowrap">Online N1QL Index Advisor</a>
-              <a href="https://docs.couchbase.com/server/current/n1ql/n1ql-rest-api/index.html" class="nowrap">N1QL REST API Docs</a>
-              <a href="https://sqlplusplus-tutorial.couchbase.com/tutorial/#1">SQL++ Tutorial – N1QL for Analytics Query Language</a>
+              <a href="https://query-tutorial.couchbase.com/tutorial/#1" class="nowrap" target="_blank">Online N1QL Tutorial</a>
+              <a href="https://index-advisor.couchbase.com/indexadvisor/#1" class="nowrap" target="_blank">Online N1QL Index Advisor</a>
+              <a href="https://docs.couchbase.com/server/current/n1ql/n1ql-rest-api/index.html" class="nowrap" target="_blank">N1QL REST API Docs</a>
+              <a href="https://sqlplusplus-tutorial.couchbase.com/tutorial/#1" target="_blank">SQL++ Tutorial – N1QL for Analytics Query Language</a>
             </div>
           {{end}}
       </div>
@@ -775,9 +773,11 @@
   {{end}}
 
   codeAce.renderer.setScrollMargin(26, 0, 0, 0)
+
   let numLines = codeAce.session.doc.getAllLines().length;
-  let editorHeight = (numLines * 18);
-  document.getElementById("code-ace").style.height = `${editorHeight}px`
+  codeAce.setOptions({
+    maxLines: numLines + 1
+  })
 
   {{if .Highlight}}
   var highlight = "{{.Highlight}}";
@@ -805,61 +805,70 @@
 
 <script>
 {{/*  Script for Tooltips  */}}
-  tippy('#viewToggleButton', {
-    content: 'Switch code editor view to 3 column',
-    placement: 'top-end'
-  });
+  if (window.innerWidth >= 767) {
+    tippy('#viewToggleButton', {
+      content: 'Switch code editor view to 3 column',
+      placement: 'top-end',
+      theme: 'custom'
+    });
 
-  tippy('#run', {
-    content: 'Run this example!',
-    placement: 'bottom-start'
-  })
+    tippy('#provisionedDropdownButton', {
+      content: 'Starting a sandbox session will allow you to explore the Couchbase Web Console and experiment with your own cluster.',
+      placement: 'left',
+      theme: 'custom'
+    })
 
-  tippy('#provisionedDropdownButton', {
-    content: 'Starting a sandbox session will allow you to explore the Couchbase Web Console and experiment with your own cluster.',
-    placement: 'left'
-  })
+    tippy('#capellaDropdownButton', {
+      content: 'Starting a Capella session will allow you to run the SDK examples against your own Couchbase Capella database.',
+      placement: 'left',
+      theme: 'custom'
+    })
 
-  tippy('#capellaDropdownButton', {
-    content: 'Starting a Capella session will allow you to run the SDK examples against your own Couchbase Capella database.',
-    placement: 'left'
-  })
+    tippy('#provisionedDropdownButtonTop', {
+      content: 'Starting a sandbox session will allow you to explore the Couchbase Web Console and experiment with your own cluster.',
+      placement: 'top',
+      theme: 'custom'
+    })
 
-  tippy('#provisionedDropdownButtonTop', {
-    content: 'Starting a sandbox session will allow you to explore the Couchbase Web Console and experiment with your own cluster.',
-    placement: 'top'
-  })
+    tippy('#capellaDropdownButtonTop', {
+      content: 'Starting a Capella session will allow you to run the SDK examples against your own Couchbase Capella database.',
+      placement: 'top',
+      theme: 'custom'
+    })
 
-  tippy('#capellaDropdownButtonTop', {
-    content: 'Starting a Capella session will allow you to run the SDK examples against your own Couchbase Capella database.',
-    placement: 'top'
-  })
+    tippy('#startSessionButtonInfo', {
+      content: 'Starting an online session will allow you to explore the Couchbase Web Console and experiment with your own cluster.',
+      placement: 'top',
+      theme: 'custom'
+    })
 
-  tippy('#startSessionButtonInfo', {
-    content: 'Starting an online session will allow you to explore the Couchbase Web Console and experiment with your own cluster.',
-    placement: 'top'
-  })
+    tippy('#startCapellaSessionButtonInfo', {
+      content: 'Starting an online Couchbase Capella session will allow you to experiment with your own cluster.',
+      placement: 'top',
+      theme: 'custom'
+    })
 
-  tippy('#startCapellaSessionButtonInfo', {
-    content: 'Starting an online Couchbase Capella session will allow you to experiment with your own cluster.',
-    placement: 'top'
-  })
-
-  tippy('#stopSessionButton', {
-    content: 'WARNING: all data created in your cluster will be deleted.',
-    placement: 'bottom-end'
-  })
-  tippy('#stopCapellaSessionButton', {
-    content: 'WARNING: disconnects the examples to your Capella cluster.',
-    placement: 'bottom-end'
-  })
+    tippy('#stopSessionButton', {
+      content: 'WARNING: all data created in your cluster will be deleted.',
+      placement: 'bottom-end',
+      theme: 'custom'
+    })
+    tippy('#stopCapellaSessionButton', {
+      content: 'WARNING: disconnects the examples to your Capella cluster.',
+      placement: 'bottom-end',
+      theme: 'custom'
+    })
+  }
 </script>
 {{if or (.Session) (.Target.DBurl)}}
 <script>
-  tippy('#homeLink', {
-    content: 'WARNING: Returning to playground home will end your current session',
-    placement: 'bottom'
-  })
+  if (window.innerWidth >= 767) {
+    tippy('#homeLink', {
+      content: 'WARNING: Returning to playground home will end your current session',
+      placement: 'bottom',
+      theme: 'custom'
+    })
+  }
 </script>
 {{end}}
 <script>
