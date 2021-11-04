@@ -22,10 +22,11 @@ function disableSafariButtons() {
     for (let i = 0; i < toDisable.length; i++) {
       toDisable[i].classList.add("disabled")
     }
-    document.getElementById('iosCompatNotice').classList.remove('hidden')
+
     let toHide = document.getElementsByClassName("hidden-ios")
     for (let i = 0; i < toHide.length; i++) {
       toHide[i].classList.add('hidden')
+      toHide[i].classList.add('disabled')
     }
   }
 }
