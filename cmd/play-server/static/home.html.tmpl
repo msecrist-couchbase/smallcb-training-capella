@@ -328,7 +328,7 @@
                   <u>Query Shell</u>
                   <div><img src="/static/shots/shot-cbq.png"/></div>
                 </a>
-                <p id="iosCompatNotice" class="hidden">Note: Couchbase Shell and Query Shell are not currently supported on iOS. Please use a different device to access these features.</p>
+                <p id="iosCompatNotice" class="hidden"><em>Note:</em> Couchbase Shell and Query Shell are not currently supported on mobile devices. Please use a different device to access these features.</p>
               {{end}}
           </div>
         </div>
@@ -692,11 +692,12 @@
         </div>
           <div class="online-tools">
             {{if .Target.DBurl}}
-              <h2 class="home-header disabled-safari disabled-ios">Explore interactive shell</h2>
+              <h2 class="home-header">Explore interactive shell</h2>
             {{end}}
               {{if and (not .Session) (.Target.DBurl)}}
                       <a href="/session-cbshell" {{if eq .Target.Status "not accessible"}}class="disabled"{{end}} class="nowrap disabled-safari disabled-ios">
                         <u>Couchbase Shell</u></a>
+              <p id="iosCompatNoticeCapella" class="hidden"><em>Note:</em> Couchbase Shell is not currently supported on mobile devices. Please use a different device to access these features.</p>
               {{else if and (.Target.DBurl) (ge .SessionData.ContainerId 0)}}
 
                 <script>

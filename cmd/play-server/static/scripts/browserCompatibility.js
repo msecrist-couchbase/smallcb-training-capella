@@ -12,7 +12,7 @@ function disableSafariButtons() {
 
     tippy('.disabled-tooltip', {
       content: 'This feature is not currently supported in Safari. Please use a different browser for access.',
-      placement: 'top',
+      placement: 'top-start',
       theme: 'custom'
     });
   }
@@ -23,5 +23,6 @@ function disableSafariButtons() {
       toDisable[i].classList.add("disabled")
     }
     document.getElementById('iosCompatNotice').classList.remove('hidden')
+    document.getElementById('iosCompatNoticeCapella').classList.remove('hidden')
   }
 }
