@@ -286,7 +286,7 @@ main .info-header .header-right code {
 }
 .workspace .workspace-body .code-output iframe.output {
   width: 100%;
-  height: 350px;
+  height: 500px;
   margin-bottom: 15px;
 
   border-width: 1px;
@@ -971,4 +971,12 @@ div.progress-wrapper > ul > li > a:hover {
   -moz-transition: all 0.5s ease-in-out, left 1.5s ease-in-out;
   -o-transition: all 0.5s ease-in-out, left 1.5s ease-in-out;
   transition: all 0.5s ease-in-out, left 1.5s ease-in-out;
+}
+
+#output {
+  -moz-transition: all 0.2s ease-in-out;
+  -webkit-transition: all 0.2s ease-in-out;
+  -moz-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
 }

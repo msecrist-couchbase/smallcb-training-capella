@@ -1,11 +1,12 @@
 function setEditorView() {
+  setOutputHeight()
   // check local storage, if no local storage default to 3 col
   let savedEditorMode = localStorage.getItem('editorMode')
 
   let isSideBySide = document.getElementById("editorWrapper").classList.contains('row');
   let isSmallScreen = window.innerWidth < 991;
 
-  setOutputHeight()
+
 
   if (isSmallScreen && isSideBySide) {
     toggleEditorView()
