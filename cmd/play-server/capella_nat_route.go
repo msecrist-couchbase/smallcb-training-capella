@@ -8,6 +8,7 @@ import (
 	"log"
 	"net"
 	"net/http"
+	"net/url"
 	"os/exec"
 	"strings"
 	"time"
@@ -172,7 +173,7 @@ func CheckDBUserAccess(dbHost string, dbUser string, dbPwd string) string {
 	}
 	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
 
-	resp, err := httpClient.Get("https://" + dbUser + ":" + dbPwd + "@" + dbHost + ":18091/pools")
+	resp, err := httpClient.Get("https://" + dbUser + ":" + url.QueryEscape(dbPwd) + "@" + dbHost + ":18091/pools")
 	if err != nil {
 		Status = "not accessible"
 		log.Printf("err=%v", err)
@@ -194,7 +195,7 @@ func CheckDBUserSampleAccess(dbHost string, dbUser string, dbPwd string, sample 
 	}
 	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
 
-	resp, err := httpClient.Get("https://" + dbUser + ":" + dbPwd + "@" + dbHost + ":18091/pools/default/buckets/" + sample)
+	resp, err := httpClient.Get("https://" + dbUser + ":" + url.QueryEscape(dbPwd) + "@" + dbHost + ":18091/pools/default/buckets/" + sample)
 	if err != nil {
 		Status = "not accessible"
 		log.Printf("err=%v", err)
