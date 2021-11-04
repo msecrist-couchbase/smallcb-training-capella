@@ -464,6 +464,11 @@ body > header > div > div> h1 > a {
   pointer-events: none;
 }
 
+.disabled-tooltip {
+  filter: opacity(0.4);
+  cursor: default;
+}
+
 .dropdown {
   position: relative;
   display: inline-block;
@@ -473,7 +478,6 @@ body > header > div > div> h1 > a {
   display: block;
   visibility: hidden;
   position: absolute;
-  right: 0;
   top: 28px;
   background-color: #f9f9f9;
   min-width: 159px;
@@ -528,4 +532,8 @@ body > header > div > div> h1 > a {
   margin-left: 24px;
   font-weight: 800;
   font-size: 18px;
+}
+
+.tippy-box[data-theme~='custom'] {
+  font-size: 12px;
 }

@@ -65,7 +65,7 @@ var (
 		"duration by age for which sessions are automatically exited")
 
 	sessionsMaxIdle = flag.Duration("sessionsMaxIdle",
-		5*time.Minute,
+		15*time.Minute,
 		"duration by inactivity for which sessions are automatically exited")
 
 	sessionsCheckEvery = flag.Duration("sessionsCheckEvery",
@@ -98,6 +98,5 @@ var (
 	natPrivateIP = flag.String("natPrivateIP", "10.0.1.111", "NAT private IP")
 
 	baseUrl = flag.String("baseUrl", "couchbase.live",
-	  "base url to use as the link to homepage")
-
+		"base url to use as the link to homepage")
 )
