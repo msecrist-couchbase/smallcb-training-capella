@@ -695,7 +695,7 @@
               {{if and (not .Session) (.Target.DBurl)}}
                       <a href="/session-cbshell" {{if eq .Target.Status "not accessible"}}class="disabled"{{end}} class="nowrap">
                         <u>Couchbase Shell</u></a>
-              {{else if ge .SessionData.ContainerId 0}}
+              {{else if and (.Target.DBurl) (ge .SessionData.ContainerId 0)}}
 
                 <script>
                   var iscbshell_open = localStorage.getItem("cbshell_window");
@@ -708,7 +708,7 @@
 
                 <p><a target="_blank"
                   href="/static/shell.html?t=http://{{.Host}}:{{.SessionData.port_1337}}" class="nowrap">
-                    <u>Couchbase Shell</u></a> (opens a new tab and the session ends after {{.SessionsMaxAge}}
+                    <u>Couchbase Shell</u></a> (opens a new tab and the session expire after {{.SessionsMaxAge}}
                 or until {{.SessionsMaxIdle}} of inactivity.)</p>
                 <script>
                   localStorage.setItem("cbshell_window", "opened");
