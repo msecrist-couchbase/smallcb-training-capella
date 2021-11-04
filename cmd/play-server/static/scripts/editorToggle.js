@@ -19,7 +19,6 @@ function toggleEditorView() {
   let iframe = document.getElementById("code-output").childNodes[1].querySelector("iframe");
   let innerDoc = iframe.contentDocument || iframe.contentWindow.document;
 
-  console.log("toggle");
   updateOutputHeightOnToggle(document.getElementById("code-ace").style.height, isSideBySide)
 
   adjustOuterColumns(isSideBySide);
