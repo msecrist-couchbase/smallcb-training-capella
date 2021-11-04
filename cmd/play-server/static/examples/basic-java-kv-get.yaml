@@ -3,7 +3,7 @@ page: page-01
 lang: java
 infoBefore: |
   <div>
-  <a href='#' class="disable" style="float:left">Previous</a>
+  <a href='#' class="disable prev-button" style="float:left">Previous</a>
   <a href='/examples/basic-java-query-rows' class="next-button">Next</a>
   </div>
   <br>

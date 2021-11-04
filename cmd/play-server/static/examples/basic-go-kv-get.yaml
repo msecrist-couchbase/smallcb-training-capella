@@ -3,7 +3,7 @@ page: page-09
 lang: go
 infoBefore: |
   <div>
-  <a href='#' class="disable" style="float:left">Previous</a>
+  <a href='#' class="disable prev-button" style="float:left">Previous</a>
   <a href='/examples/basic-go-query-rows' class="next-button">Next</a>
   </div>
   <br>
