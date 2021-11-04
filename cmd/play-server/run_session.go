@@ -282,7 +282,7 @@ func StartCbq(session *Session, req RunRequest, containerId int, defaultBucket s
 	cmd := exec.Command("docker", "exec",
 		"-detach", "-it", "-u", "play", "-w", "/home/play", containerName,
 		"/bin/sh", "-c",
-		"cd /opt/couchbase/bin; while true; do /home/play/npm_packages/bin/gritty --command './cbq -u "+
+		"cd /opt/couchbase/bin; while true; do /home/play/npm_packages/bin/gritty --command './cbq -q -u "+
 			session.CBUser+" -p "+session.CBPswd+" -e "+session.CBHost+
 			"' --port 1338; sleep 3; done")
 
