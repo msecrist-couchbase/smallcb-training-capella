@@ -17,6 +17,7 @@
 
   <script src="../static/scripts/menu.js"></script>
   <script src="../static/scripts/editorToggle.js"></script>
+  <script src="../static/scripts/browserCompatibility.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     {{if not .Session}}
@@ -86,17 +87,6 @@
   </script>
   <script>
     window.scrollTo({top: 0, behavior: "smooth"})
-    function disableSafariButtons() {
-          let isIos = /iP(ad|od|hone)/i.test(window.navigator.userAgent);
-          let isSafari = /constructor/i.test(window.HTMLElement) || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] || (typeof safari !== 'undefined' && window['safari'].pushNotification));
-      if (isSafari || isIos) {
-        let shellBtns = document.getElementsByClassName("shell-button");
-        for (let i = 0; i < shellBtns.length; i++) {
-          shellBtns[i].classList.add("hidden")
-        }
-      }
-    }
-
   </script>
 {{/*    TODO: look into how AnalyticsHTML works and see if we can do this for the nav too  */}}
     {{.AnalyticsHTML}}
@@ -327,12 +317,12 @@
               <div><img src="/static/shots/shot-documents.png"/></div>
             </a>
               {{if ge .SessionData.ContainerId 0}}
-                <a target="_blank" class="shell-button"
+                <a target="_blank" class="disabled-safari disabled-ios"
                    href="/static/shell.html?t=http://{{.Host}}:{{.SessionData.port_1337}}">
                   <u>Couchbase Shell</u>
                   <div><img src="/static/shots/shot-cbsh.png"/></div>
                 </a>
-                <a target="_blank" class="shell-button"
+                <a target="_blank" class="disabled-safari disabled-ios"
                    href="/static/shell-cbq.html?t=http://{{.Host}}:{{.SessionData.port_1338}}">
                   <u>Query Shell</u>
                   <div><img src="/static/shots/shot-cbq.png"/></div>
@@ -700,10 +690,10 @@
         </div>
           <div class="online-tools">
             {{if .Target.DBurl}}
-              <h2 class="home-header shell-button">Explore interactive shell</h2>
+              <h2 class="home-header disabled-safari disabled-ios">Explore interactive shell</h2>
             {{end}}
               {{if and (not .Session) (.Target.DBurl)}}
-                      <a href="/session-cbshell" {{if eq .Target.Status "not accessible"}}class="disabled"{{end}} class="nowrap shell-button">
+                      <a href="/session-cbshell" {{if eq .Target.Status "not accessible"}}class="disabled"{{end}} class="nowrap disabled-safari disabled-ios">
                         <u>Couchbase Shell</u></a>
               {{else if and (.Target.DBurl) (ge .SessionData.ContainerId 0)}}
 
@@ -717,7 +707,7 @@
                 </script>
 
                 <p><a target="_blank"
-                  href="/static/shell.html?t=http://{{.Host}}:{{.SessionData.port_1337}}" class="nowrap shell-button">
+                  href="/static/shell.html?t=http://{{.Host}}:{{.SessionData.port_1337}}" class="nowrap disabled-safari disabled-ios">
                     <u>Couchbase Shell</u></a> (opens a new tab and the session expire after {{.SessionsMaxAge}}
                 or until {{.SessionsMaxIdle}} of inactivity.)</p>
                 <script>
