@@ -130,7 +130,7 @@
           to the IP Address/CIDR allow list on the 'Connect' tab in your Capella Cluster)
           <br>
           <br>
-          Enter the following information for your Couchbase Capella cluster.
+          Enter the following information from your Couchbase Capella cluster's connection tab.
         </p>
             <form action="/target" method="post" autocomplete="on">
 
@@ -138,7 +138,7 @@
                 <span class="error">{{.errDBurl}}</span>
                 <div class="input-wrapper">
                   <input type="text" name="dburl" value="{{.dburl}}" autofocus autocomplete/>
-                  <i class="fa fa-question-circle cursor-pointer" aria-hidden="true" id="dbUrlInfo"></i>
+                  <i class="fa fa-question-circle cursor-pointer hidden-mobile" aria-hidden="true" id="dbUrlInfo"></i>
                 </div>
               </label>
               {{if .dburlc}}
@@ -149,7 +149,7 @@
                 <span class="error">{{.errDBuser}}</span>
                 <div class="input-wrapper">
                   <input type="text" name="dbuser" value="{{.dbuser}}"  autofocus autocomplete/>
-                  <i class="fa fa-question-circle cursor-pointer" aria-hidden="true" id="dbUserInfo"></i>
+                  <i class="fa fa-question-circle cursor-pointer hidden-mobile" aria-hidden="true" id="dbUserInfo"></i>
                 </div>
               </label>
               {{if .dbuserc}}
@@ -160,7 +160,7 @@
                 <span class="error">{{.errDBpwd}}</span>
                 <div class="input-wrapper">
                   <input type="password" name="dbpwd" value="{{.dbpwd}}" id="dbpwd" autofocus autocomplete/>
-                  <i class="fa fa-question-circle cursor-pointer" aria-hidden="true" id="dbPassInfo"></i>
+                  <i class="fa fa-question-circle cursor-pointer hidden-mobile" aria-hidden="true" id="dbPassInfo"></i>
                 </div>
                 <i class="fa fa-eye" id="togglePassword">&nbsp; Show Password</i>
               </label>
@@ -260,20 +260,25 @@
   </footer>
 </body>
 <script>
-  tippy('#dbUrlInfo', {
-    content: 'Clusters → Trial-Cluster → Connect tab → Connection → Copy Wide Area Network URL',
-    placement: 'right'
-  });
+  if (window.innerWidth >= 767) {
+    tippy('#dbUrlInfo', {
+      content: 'Clusters → Trial-Cluster → Connect tab → Connection → Copy Wide Area Network URL',
+      placement: 'right',
+      theme: 'custom'
+    });
 
-  tippy('#dbUserInfo', {
-    content: 'Clusters → Trial-Cluster → Connect tab → Database Access → Manage Credentials (create one if you haven\'t already)',
-    placement: 'right'
-  });
+    tippy('#dbUserInfo', {
+      content: 'Clusters → Trial-Cluster → Connect tab → Database Access → Manage Credentials (create one if you haven\'t already)',
+      placement: 'right',
+      theme: 'custom'
+    });
 
-  tippy('#dbPassInfo', {
-    content: 'Clusters → Trial-Cluster → Connect tab → Database Access → Manage Credentials (create one if you haven\'t already)',
-    placement: 'right'
-  });
+    tippy('#dbPassInfo', {
+      content: 'Clusters → Trial-Cluster → Connect tab → Database Access → Manage Credentials (create one if you haven\'t already)',
+      placement: 'right',
+      theme: 'custom'
+    });
+  }
 </script>
 <script>
 function submitted() {

@@ -3,7 +3,7 @@ page: page-06
 lang: php
 infoBefore: |
   <div>
-  <a href='#' class="disable" style="float:left">Previous</a>
+  <a href='#' class="disable prev-button" style="float:left">Previous</a>
   <a href='/examples/basic-php-query-rows' class="next-button">Next</a>
   </div>
   <br>
