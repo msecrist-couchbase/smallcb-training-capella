@@ -692,10 +692,10 @@
         </div>
           <div class="online-tools">
             {{if .Target.DBurl}}
-              <h2 class="home-header">Explore interactive shell</h2>
+              <h2 class="home-header hidden-ios">Explore interactive shell</h2>
             {{end}}
               {{if and (not .Session) (.Target.DBurl)}}
-                      <a href="/session-cbshell" {{if eq .Target.Status "not accessible"}}class="disabled"{{end}} class="nowrap disabled-safari disabled-ios">
+                      <a href="/session-cbshell" {{if eq .Target.Status "not accessible"}}class="disabled"{{end}} class="nowrap disabled-safari hidden-ios">
                         <u>Couchbase Shell</u></a>
               {{else if and (.Target.DBurl) (ge .SessionData.ContainerId 0)}}
 
@@ -709,7 +709,7 @@
                 </script>
 
                 <p><a target="_blank"
-                  href="/static/shell.html?t=http://{{.Host}}:{{.SessionData.port_1337}}" class="nowrap disabled-safari disabled-ios">
+                  href="/static/shell.html?t=http://{{.Host}}:{{.SessionData.port_1337}}" class="nowrap disabled-safari hidden-ios">
                     <u>Couchbase Shell</u></a> (opens a new tab and the session expire after {{.SessionsMaxAge}}
                 or until {{.SessionsMaxIdle}} of inactivity.)</p>
                 <script>
@@ -721,7 +721,6 @@
                 </script>
 
               {{end}}
-            <p id="iosCompatNoticeCapella" class="hidden"><em>Note:</em> Couchbase Shell is not currently supported on mobile devices. Please use a different device to access these features.</p>
 
           </div>
           {{if not .Lang}}
