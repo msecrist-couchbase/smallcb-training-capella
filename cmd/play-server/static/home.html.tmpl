@@ -697,7 +697,6 @@
               {{if and (not .Session) (.Target.DBurl)}}
                       <a href="/session-cbshell" {{if eq .Target.Status "not accessible"}}class="disabled"{{end}} class="nowrap disabled-safari disabled-ios">
                         <u>Couchbase Shell</u></a>
-              <p id="iosCompatNoticeCapella" class="hidden"><em>Note:</em> Couchbase Shell is not currently supported on mobile devices. Please use a different device to access these features.</p>
               {{else if and (.Target.DBurl) (ge .SessionData.ContainerId 0)}}
 
                 <script>
@@ -722,6 +721,7 @@
                 </script>
 
               {{end}}
+            <p id="iosCompatNoticeCapella" class="hidden"><em>Note:</em> Couchbase Shell is not currently supported on mobile devices. Please use a different device to access these features.</p>
 
           </div>
           {{if not .Lang}}
