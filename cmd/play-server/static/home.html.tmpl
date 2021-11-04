@@ -91,8 +91,7 @@
       if (isSafari) {
         let shellBtns = document.getElementsByClassName("shell-button");
         for (let i = 0; i < shellBtns.length; i++) {
-          shellBtns[i].classList.add("disabled")
-          shellBtns[i].classList.add("noclick")
+          shellBtns[i].classList.add("hidden")
         }
       }
     }
@@ -701,7 +700,7 @@
         </div>
           <div class="online-tools">
             {{if .Target.DBurl}}
-              <h2 class="home-header">Explore interactive shell</h2>
+              <h2 class="home-header shell-button">Explore interactive shell</h2>
             {{end}}
               {{if and (not .Session) (.Target.DBurl)}}
                       <a href="/session-cbshell" {{if eq .Target.Status "not accessible"}}class="disabled"{{end}} class="nowrap shell-button">

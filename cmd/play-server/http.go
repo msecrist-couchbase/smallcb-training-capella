@@ -1282,7 +1282,7 @@ func OptanonHTML(host string) string {
 func AddSessionInfo(session *Session, infoBefore string) string {
 	if session != nil {
 		sIDNext := fmt.Sprintf("?s=%s' class=\"next-button\"", session.SessionId)
-		sIDPrev := fmt.Sprintf("?s=%s' class=\"previous-button\"", session.SessionId)
+		sIDPrev := fmt.Sprintf("?s=%s' class=\"prev-button\"", session.SessionId)
 		infoBefore = strings.ReplaceAll(infoBefore, "' class=\"next-button\"", sIDNext)
 		infoBefore = strings.ReplaceAll(infoBefore, "' class=\"prev-button\"", sIDPrev)
 	}
