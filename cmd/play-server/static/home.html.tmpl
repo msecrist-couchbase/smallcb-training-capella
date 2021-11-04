@@ -317,7 +317,7 @@
               <div><img src="/static/shots/shot-documents.png"/></div>
             </a>
               {{if ge .SessionData.ContainerId 0}}
-                <a target="_blank" class="disabled-safari disabled-ios"
+                <a target="_blank" class="disabled-safari disabled-ios" id="shellBtn"
                    href="/static/shell.html?t=http://{{.Host}}:{{.SessionData.port_1337}}">
                   <u>Couchbase Shell</u>
                   <div><img src="/static/shots/shot-cbsh.png"/></div>
