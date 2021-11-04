@@ -1,0 +1,136 @@
+<!doctype html>
+<html>
+<head>
+  <title>Couchbase Playground</title>
+  <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;1,300&Ubuntu+Mono&display=swap">
+</head>
+<body class="hide">
+  <h1>Command Line Shell for N1QL on Playground</h1>
+  <main>
+    <div class="col docs">
+      <div>
+        <about>
+          <a href="https://docs.couchbase.com/server/current/tools/cbq-shell.html">Documentation</a>:
+          <button class="hide" onclick="showHide()">hide docs</button>
+          <button class="show" onclick="showHide()">show docs</button>
+        </about>
+      </div>
+      <iframe src="https://docs.couchbase.com/server/current/tools/cbq-shell.html" height="200">loading...</iframe>
+    </div>
+    <div class="col shell">
+      <div>
+        <about>
+          <span class="hint">
+          Start typing <code>\HELP;</code> or <code>\HELP command-name;</code> or <code>SELECT version();</code>
+          </span>
+        </about>
+      </div>
+      <iframe id="shell">loading...</iframe>
+    </div>
+  </main>
+</body>
+<style>
+body {
+  height: 100%;
+  margin: 0 0;
+  padding: 10px 10px;
+  background-color: #232831;
+  font-family: Montserrat, Arial, Helvetica, sans-serif;
+  font-size: 11pt;
+  color: #ddd;
+}
+a, a:visited {
+  color: #999;
+}
+h1 {
+  font-size: 12pt;
+  color: #ddd;
+}
+about {
+  font-size: 9pt;
+}
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+.col {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+
+  margin-top: 5px;
+}
+.col.docs {
+  flex-grow: 10;
+  flex-basis: 50vh;
+}
+.col.shell {
+  flex-grow: 5;
+  flex-basis: 40vh;
+}
+.col iframe {
+  margin-top: 5px;
+  flex-grow: 10;
+  flex-basis: 100%;
+  padding: 5px 5px 5px 5px;
+}
+
+.hint {
+  margin-left: 20px;
+  color: #fff;
+}
+.hint code {
+  margin-left: 2px;
+  background-color: #111;
+  padding-left: 2px;
+  padding-right: 2px;
+  font-family: Menlo, Consolas, "Liberation Mono", Monaco, "Lucida Console", monospace;
+  color: #696;
+}
+
+body button.show {
+  display: none;
+}
+body.hide button.show {
+  display: inline;
+}
+body.hide button.hide {
+  display: none;
+}
+body button.show,
+body button.hide {
+  cursor: pointer;
+}
+
+body.hide .col.docs {
+  flex-grow: 1;
+  flex-basis: 1em;
+}
+body.hide .col.docs iframe {
+  display: none;
+  flex-grow: 1;
+  flex-basis: 1px;
+}
+body.hide .col.shell {
+  flex-grow: 1;
+  flex-basis: 80vh;
+}
+</style>
+<script>
+  function showHide() {
+    if (document.body.className == "") {
+      document.body.className = "hide";
+    } else {
+      document.body.className = "";
+    }
+  }
+
+  let params = new URLSearchParams(document.location.search.substring(1));
+  let t = params.get("t");
+  if (t) {
+    document.getElementById("shell").src = t;
+  }
+</script>
+</html>
