@@ -618,7 +618,7 @@
 
         <div class="row example-row" style="width: 100%">
             {{if and .Lang .Title}}
-              <div class="col-xs-12 col-md-5 example-info-column" id="infoColumn">
+              <div class="col-xs-12 col-md-3 example-info-column" id="infoColumn">
                 <div class="example-heading">
                     {{if .InfoBefore}}
                       <div class="info infoBefore">{{.InfoBefore}}</div>
@@ -643,13 +643,13 @@
               </div>
             {{end}}
             {{if .Lang}}
-              <div class="col-xs-12 col-md-7" id="editorColumn">
+              <div class="col-xs-12 col-md-9" id="editorColumn">
 
-                <button id='viewToggleButton' class="col-btn toggle-btn hidden-md" onclick="toggleEditorView();"></button>
+                <button id='viewToggleButton' class="stacked-btn toggle-btn hidden-md" onclick="toggleEditorView();"></button>
 
-                <div id="editorWrapper" class="">
+                <div id="editorWrapper" class="row">
 
-                  <div id="editorDiv" class="code-editor">
+                  <div id="editorDiv" class="code-editor col-md-6">
                     <div class="sticky">
                       <form action="/run" method="post" target="output" id="form">
 
@@ -683,7 +683,7 @@
                     </div>
                   </div>
 
-                  <div class="code-output hidden" id="code-output">
+                  <div class="code-output col-md-6" id="code-output">
                     <div class="sticky">
                         {{if or .Name .Lang .Code}}
                           <h2 class="editor-label">Output</h2>
