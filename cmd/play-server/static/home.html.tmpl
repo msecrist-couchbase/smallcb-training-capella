@@ -86,11 +86,22 @@
   </script>
   <script>
     window.scrollTo({top: 0, behavior: "smooth"})
+    function disableSafariButtons() {
+      let isSafari = /constructor/i.test(window.HTMLElement) || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] || (typeof safari !== 'undefined' && window['safari'].pushNotification));
+      if (isSafari) {
+        let shellBtns = document.getElementsByClassName("shell-button");
+        for (let i = 0; i < shellBtns.length; i++) {
+          shellBtns[i].classList.add("disabled")
+          shellBtns[i].classList.add("noclick")
+        }
+      }
+    }
+
   </script>
 {{/*    TODO: look into how AnalyticsHTML works and see if we can do this for the nav too  */}}
     {{.AnalyticsHTML}}
 </head>
-<body class="{{.BodyClass}}" {{if .Lang}} onload="setEditorView()"{{end}}>
+<body class="{{.BodyClass}}" onload="{{if .Lang}}setEditorView();{{end}} disableSafariButtons();">
 <header>
   <div class="header-flex-container">
     <div class="logo">
@@ -322,7 +333,7 @@
               <div><img src="/static/shots/shot-documents.png"/></div>
             </a>
               {{if ge .SessionData.ContainerId 0}}
-                <a target="_blank"
+                <a target="_blank" class="shell-button"
                    href="/static/shell.html?t=http://{{.Host}}:{{.SessionData.port_1337}}">
                   <u>Couchbase Shell</u>
                   <div><img src="/static/shots/shot-cbsh.png"/></div>
@@ -693,7 +704,7 @@
               <h2 class="home-header">Explore interactive shell</h2>
             {{end}}
               {{if and (not .Session) (.Target.DBurl)}}
-                      <a href="/session-cbshell" {{if eq .Target.Status "not accessible"}}class="disabled"{{end}} class="nowrap">
+                      <a href="/session-cbshell" {{if eq .Target.Status "not accessible"}}class="disabled"{{end}} class="nowrap shell-button">
                         <u>Couchbase Shell</u></a>
               {{else if ge .SessionData.ContainerId 0}}
 
@@ -707,7 +718,7 @@
                 </script>
 
                 <p><a target="_blank"
-                  href="/static/shell.html?t=http://{{.Host}}:{{.SessionData.port_1337}}" class="nowrap">
+                  href="/static/shell.html?t=http://{{.Host}}:{{.SessionData.port_1337}}" class="nowrap shell-button">
                     <u>Couchbase Shell</u></a> (opens a new tab and the session ends after {{.SessionsMaxAge}}
                 or until {{.SessionsMaxIdle}} of inactivity.)</p>
                 <script>
@@ -763,9 +774,11 @@
   {{end}}
 
   codeAce.renderer.setScrollMargin(26, 0, 0, 0)
+
   let numLines = codeAce.session.doc.getAllLines().length;
-  let editorHeight = (numLines * 18);
-  document.getElementById("code-ace").style.height = `${editorHeight}px`
+  codeAce.setOptions({
+    maxLines: numLines + 1
+  })
 
   {{if .Highlight}}
   var highlight = "{{.Highlight}}";
@@ -799,12 +812,6 @@
       placement: 'top-end',
       theme: 'custom'
     });
-
-    tippy('#run', {
-      content: 'Run this example!',
-      placement: 'bottom-start',
-      theme: 'custom'
-    })
 
     tippy('#provisionedDropdownButton', {
       content: 'Starting a sandbox session will allow you to explore the Couchbase Web Console and experiment with your own cluster.',

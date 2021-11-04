@@ -1,7 +1,6 @@
 function setEditorView() {
   // check local storage, if no local storage default to 3 col
   let savedEditorMode = localStorage.getItem('editorMode')
-  console.log(savedEditorMode); // null if not set
 
   let isSideBySide = document.getElementById("editorWrapper").classList.contains('row');
   let isSmallScreen = window.innerWidth < 991;
@@ -22,7 +21,6 @@ function toggleEditorView() {
 
 
   updateOutputHeightOnToggle(document.getElementById("code-ace").style.height, isSideBySide)
-  // setOutputHeight()
 
   adjustOuterColumns(isSideBySide);
   if (isSideBySide) {
