@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"crypto/tls"
 	"encoding/json"
 	"fmt"
@@ -8,6 +9,7 @@ import (
 	"log"
 	"net"
 	"net/http"
+	"net/url"
 	"os/exec"
 	"strings"
 	"time"
@@ -227,4 +229,133 @@ func GetOutboundIP() net.IP {
 	localAddr := conn.LocalAddr().(*net.UDPAddr)
 	log.Println(localAddr.String())
 	return localAddr.IP
+}
+
+func CheckAndCreateFtsIndex(indexName string, dbHost string, dbUser string, dbPwd string) {
+	if CheckFtsIndex(indexName, dbHost, dbUser, dbPwd) != "OK" {
+		CreateFtsIndex(indexName, dbHost, dbUser, dbPwd)
+	}
+}
+
+// Create FTS search index
+func CreateFtsIndex(indexName string, dbHost string, dbUser string, dbPwd string) string {
+
+	Status := "fts index"
+	httpClient := http.Client{
+		Timeout: 60 * time.Second,
+	}
+	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
+
+	fts_index_json := `{
+		"name": "` + indexName + `",
+		"type": "fulltext-index",
+		"params": {
+		 "mapping": {
+		  "default_mapping": {
+		   "enabled": true,
+		   "dynamic": true
+		  },
+		  "default_type": "_default",
+		  "default_analyzer": "standard",
+		  "default_datetime_parser": "dateTimeOptional",
+		  "default_field": "_all",
+		  "store_dynamic": false,
+		  "index_dynamic": true,
+		  "docvalues_dynamic": false
+		 },
+		 "store": {
+		  "indexType": "scorch",
+		  "kvStoreName": ""
+		 },
+		 "doc_config": {
+		  "mode": "type_field",
+		  "type_field": "type",
+		  "docid_prefix_delim": "",
+		  "docid_regexp": ""
+		 }
+		},
+		"sourceType": "couchbase",
+		"sourceName": "travel-sample",
+		"sourceUUID": "",
+		"sourceParams": {},
+		"planParams": {
+		 "maxPartitionsPerPIndex": 1,
+		 "numReplicas": 0,
+		 "indexPartitions": 1
+		},
+		"uuid": ""
+	   }`
+	//fmt.Println("Running --- PUT https://" +
+	//	url.QueryEscape(dbUser) + ":" + url.QueryEscape(dbPwd) + "@" + dbHost + ":18094/api/index/" + indexName)
+	req, err := http.NewRequest(http.MethodPut, "https://"+
+		url.QueryEscape(dbUser)+":"+url.QueryEscape(dbPwd)+"@"+dbHost+":18094/api/index/"+indexName,
+		bytes.NewBuffer([]byte(fts_index_json)))
+	if err != nil {
+		Status = "fts index creation failed"
+		log.Printf("err=%v", err)
+		return Status
+	}
+	req.Header.Set("Content-Type", "application/json")
+	if err != nil {
+		log.Printf("err=%v", err)
+	}
+	resp, err := httpClient.Do(req)
+	if err != nil {
+		log.Printf("err=%v", err)
+	}
+
+	defer resp.Body.Close()
+	if resp.StatusCode != http.StatusOK {
+		Status = "not able to create fts index"
+	} else {
+		body, err := ioutil.ReadAll(resp.Body)
+		if err != nil {
+			log.Printf("err=%v", err)
+		}
+		if !strings.Contains(string(body), "\"status\":\"ok\"") {
+			Status = "not able to create fts index"
+		} else {
+			Status = "OK"
+		}
+	}
+	// TBD: yet to determine when fts index is going to be finished.
+	time.Sleep(10 * time.Second)
+	return Status
+
+}
+
+// Create FTS search index
+func CheckFtsIndex(indexName string, dbHost string, dbUser string, dbPwd string) string {
+	Status := "fts index"
+	httpClient := http.Client{
+		Timeout: 60 * time.Second,
+	}
+	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
+
+	//fmt.Println("Running --- GET https://" +
+	//	url.QueryEscape(dbUser) + ":" + url.QueryEscape(dbPwd) + "@" + dbHost + ":18094/api/index/" + indexName)
+	resp, err := httpClient.Get("https://" +
+		url.QueryEscape(dbUser) + ":" + url.QueryEscape(dbPwd) + "@" + dbHost + ":18094/api/index/" + indexName)
+	if err != nil {
+		Status = "fts index get failed"
+		log.Printf("err=%v", err)
+		return Status
+	}
+
+	defer resp.Body.Close()
+	if resp.StatusCode != http.StatusOK {
+		Status = "not able to get fts index"
+	} else {
+		body, err := ioutil.ReadAll(resp.Body)
+		if err != nil {
+			log.Printf("err=%v", err)
+		}
+		if !strings.Contains(string(body), "\"status\":\"ok\"") {
+			Status = "No fts index found! " + indexName
+		} else {
+			Status = "OK"
+		}
+	}
+	return Status
+
 }

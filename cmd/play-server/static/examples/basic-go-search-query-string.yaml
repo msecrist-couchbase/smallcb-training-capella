@@ -1,0 +1,59 @@
+title: Search Query String
+page: page-09
+lang: go
+code: |
+  package main
+
+    import (
+      "fmt"
+      "log"
+      "encoding/json"
+      "github.com/couchbase/gocb/v2"
+      "github.com/couchbase/gocb/v2/search"
+    )
+
+    func main() {
+      cluster, err := gocb.Connect("couchbase://{{.Host}}", gocb.ClusterOptions{
+        Authenticator: gocb.PasswordAuthenticator{
+          Username: "{{.CBUser}}",
+          Password: "{{.CBPswd}}",
+        },
+      })
+      if err != nil {
+        log.Fatal(err)
+      }
+
+      results, err := cluster.SearchQuery(
+        "travel-fts-index",
+        search.NewQueryStringQuery("swanky"),
+        &gocb.SearchOptions{
+          Limit:  10,
+        },
+      )
+      if err != nil {
+        log.Fatal(err)
+      }
+
+      var content interface{}
+      for results.Next() {
+        content = results.Row()
+        prettyJSON, err := json.MarshalIndent(content, "", "    ")
+        if err != nil {
+            log.Fatal("Failed to generate json", err)
+        }
+        fmt.Printf("Found row: %s\n", string(prettyJSON))
+      }
+      metadata, err := results.MetaData()
+      fmt.Printf("Reported total rows: %d\n",metadata.Metrics.TotalRows)
+
+      err = results.Err()
+      if err != nil {
+        log.Fatal(err)
+      }
+    }
+infoAfter: |
+  Basic Search query string,
+  with looping through each returned row.
+  <br/><br/>
+  Visit the docs to learn more about
+  <a target="_blank" href="https://docs.couchbase.com/go-sdk/current/howtos/full-text-searching-with-sdk.html">Full Text Search in Go</a>.

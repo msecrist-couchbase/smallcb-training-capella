@@ -1,0 +1,97 @@
+title: Search Query String
+page: page-10
+lang: cc
+code: |
+  #include <vector>
+  #include <string>
+  #include <iostream>
+
+  #include <libcouchbase/couchbase.h>
+
+  static void
+  check(lcb_STATUS err, const char* msg)
+  {
+      if (err != LCB_SUCCESS) {
+          std::cerr << "[ERROR] " << msg << ": " << lcb_strerror_short(err) << "\n";
+          exit(EXIT_FAILURE);
+      }
+  }
+
+  struct Rows {
+      std::vector<std::string> rows{};
+      std::string metadata{};
+  };
+
+  static void
+  query_callback(lcb_INSTANCE*, int, const lcb_RESPSEARCH* resp)
+  {
+      lcb_STATUS status = lcb_respsearch_status(resp);
+      if (status != LCB_SUCCESS) {
+          return;
+      }
+
+      const char* buf = nullptr;
+      std::size_t buf_len = 0;
+      lcb_respsearch_row(resp, &buf, &buf_len);
+      if (buf_len > 0) {
+          Rows* result = nullptr;
+          lcb_respsearch_cookie(resp, reinterpret_cast<void**>(&result));
+          if (lcb_respsearch_is_final(resp)) {
+              result->metadata.assign(buf, buf_len);
+          } else {
+              result->rows.emplace_back(std::string(buf, buf_len));
+          }
+      }
+  }
+
+  static void
+  search_query(lcb_INSTANCE* instance, const std::string& index, const std::string& query_string)
+  {
+      Rows result{};
+
+      std::string statement = "{\"query\":{\"index\":\"travel-fts-index\"}";
+
+      lcb_CMDSEARCH* cmd = nullptr;
+      check(lcb_cmdsearch_create(&cmd), "create SEARCH command");
+      check(lcb_cmdsearch_callback(cmd, query_callback), "assign callback for SEARCH command");
+      std::string encodedQuery("{\"query\":{\"match\":\"" + query_string +"\"},\"indexName\":\"" + index + "\",\"size\":10}");
+      check(lcb_cmdsearch_payload(cmd, encodedQuery.c_str(), encodedQuery.size()), "payload for SEARCH command");
+      check(lcb_search(instance, &result, cmd), "schedule SEARCH command");
+      check(lcb_cmdsearch_destroy(cmd), "destroy SEARCH command");
+      lcb_wait(instance, LCB_WAIT_DEFAULT);
+      for (const auto& row : result.rows) {
+          std::cout << row << "\n";
+      }
+      std::cout << "\nReported total rows: " << result.rows.size() << std::endl;
+  }
+
+  int
+  main(int, char**)
+  {
+      std::string username{ "{{.CBUser}}" };
+      std::string password{ "{{.CBPswd}}" };
+      std::string connection_string{ "couchbase://{{.Host}}" };
+      std::string bucket_name{ "travel-sample" };
+
+      lcb_CREATEOPTS* create_options = nullptr;
+      check(lcb_createopts_create(&create_options, LCB_TYPE_BUCKET), "build options object for lcb_create");
+      check(lcb_createopts_credentials(create_options, username.c_str(), username.size(), password.c_str(), password.size()),
+            "assign credentials");
+      check(lcb_createopts_connstr(create_options, connection_string.c_str(), connection_string.size()), "assign connection string");
+      check(lcb_createopts_bucket(create_options, bucket_name.c_str(), bucket_name.size()), "assign bucket name");
+
+      lcb_INSTANCE* instance = nullptr;
+      check(lcb_create(&instance, create_options), "create lcb_INSTANCE");
+      check(lcb_createopts_destroy(create_options), "destroy options object");
+      check(lcb_connect(instance), "schedule connection");
+      check(lcb_wait(instance, LCB_WAIT_DEFAULT), "wait for connection");
+      check(lcb_get_bootstrap_status(instance), "check bootstrap status");
+      search_query(instance, "travel-fts-index", "swanky");
+      lcb_destroy(instance);
+  }
+infoAfter: |
+  Basic Search query string,
+  with looping through each returned row.
+  <br/><br/>
+  Visit the docs to learn more about
+  <a target="_blank" href="https://docs.couchbase.com/c-sdk/current/howtos/full-text-searching-with-sdk.html">Full Text Search in C/C++</a>.

@@ -1,0 +1,30 @@
+title: Search Query String
+page: page-06
+lang: php
+code: |
+  <?php
+    $connectionString = "couchbase://{{.Host}}";
+    $options = new \Couchbase\ClusterOptions();
+    $options->credentials("{{.CBUser}}", "{{.CBPswd}}");
+    $cluster = new \Couchbase\Cluster($connectionString, $options);
+
+    try {
+      $query = new \Couchbase\QueryStringSearchQuery("swanky");
+      $opts = new \Couchbase\SearchOptions();
+      $opts->limit(10);
+      $res = $cluster->searchQuery("travel-fts-index", $query, $opts);
+      foreach ($res->rows() as $row) {
+          print("Found row: ");
+          print_r($row);
+      }
+      print("Reported total rows: " . $res->metaData()->totalHits());
+    } catch (\Couchbase\BaseException $ex) {
+        print("Exception $ex\n");
+    }
+  ?>
+infoAfter: |
+  Basic Search query string,
+  with looping through each returned row.
+  <br/><br/>
+  Visit the docs to learn more about
+  <a target="_blank" href="https://docs.couchbase.com/php-sdk/current/howtos/full-text-searching-with-sdk.html">Full Text Search in PHP</a>.
