@@ -3,8 +3,8 @@ page: page-04
 lang: py
 infoBefore: |
   <div>
-  <a href='/examples/basic-py-kv-get' class="prev-button">Previous Lesson</a>
-  <a href='/examples/basic-py-query-named-param' class="next-button">Next Lesson</a>
+  <a href='/examples/basic-py-kv-get' class="prev-button">Previous</a>
+  <a href='/examples/basic-py-query-named-param' class="next-button">Next</a>
   </div>
   <br>
 code: |
@@ -20,7 +20,7 @@ code: |
   bucket = cluster.bucket('travel-sample')
 
   query = """
-    SELECT h.name, h.city, h.state 
+    SELECT h.name, h.city, h.state
     FROM `travel-sample` h
     WHERE h.type = 'hotel'
       AND h.city = 'Malibu' LIMIT 5

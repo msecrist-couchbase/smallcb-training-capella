@@ -11,4 +11,5 @@ if [ "${FILEPATH}" != "" ]; then
     fi
 fi
 cp /run-scala-build.sbt ./build.sbt
-sbt run
+cp /run-scala-log4j.properties ./log4j.properties
+sbt --error --batch -Dsbt.server.forcestart=true -J-Dlog4j.configuration=file:./log4j.properties run

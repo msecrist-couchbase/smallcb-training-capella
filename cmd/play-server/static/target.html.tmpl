@@ -1,0 +1,314 @@
+<!doctype html>
+<html>
+<head>
+  <title>Couchbase Playground</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;1,300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="/static/styles/site.css">
+  <link rel="stylesheet" type="text/css" href="/static/styles/session.css">
+  <link rel="stylesheet" type="text/css" href="/static/styles/font-awesome/css/font-awesome.min.css">
+
+  <script src="https://unpkg.com/@popperjs/core@2"></script>
+  <script src="https://unpkg.com/tippy.js@6"></script>
+
+  <script src="../static/scripts/menu.js"></script>
+
+  {{.AnalyticsHTML}}
+</head>
+<body class="{{.bodyClass}}">
+<header>
+  <div class="header-flex-container">
+    <div class="logo">
+      <h1>
+        <a href="https://www.couchbase.com/">
+          <img src="/static/cb-rww.svg" class="hidden-xs"/>
+          <img src="/static/cb.png" class="hidden-sm hidden-lg"/>
+        </a>
+
+        <a href="//{{if .BaseUrl}}{{.BaseUrl}}{{else}}couchbase.live{{end}}{{if .Session}}/session-exit?s={{.Session.SessionId}}{{end}}" id="homeLink">
+          Playground
+        </a>
+      </h1>
+    </div>
+
+    <nav>
+      <ul>
+        <li class="dropdown">
+            {{if and (.Session) (not .Target.DBurl)}}
+              <a href="/session-exit?s={{.Session.SessionId}}"
+                 onclick="localStorage.setItem('infoPanel', 'show');" class="session menu-button red-button" id="stopSessionButton">
+                Stop Provisioned Session
+              </a>
+            {{ else if and (.Target.DBurl) (not .Session)}}
+              <a href="/target-exit"
+                 onclick="localStorage.setItem('infoPanel', 'show');" class="session menu-button red-button">
+                Stop Capella Session
+              </a>
+
+            {{end}}
+        </li>
+      </ul>
+    </nav>
+  </div>
+
+  <div class="subheader-container">
+    <ul id="secondaryNav">
+      <li>
+        <a href="https://docs.couchbase.com">Documentation</a>
+      </li>
+      <li>
+        <a href="https://developer.couchbase.com">Developers</a>
+      </li>
+        {{if .Lang}}
+          <li>
+            <a href="/{{if .Session}}?s={{.Session.SessionId}}{{end}}">
+              <svg class="hidden-mobile" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+                   width="14" height="14"
+                   viewBox="0 -3 25 25"
+                   style=" fill:#ffffff;">
+                <path d="M 12 2 A 1 1 0 0 0 11.289062 2.296875 L 1.203125 11.097656 A 0.5 0.5 0 0 0 1 11.5 A 0.5 0.5 0 0 0 1.5 12 L 4 12 L 4 20 C 4 20.552 4.448 21 5 21 L 9 21 C 9.552 21 10 20.552 10 20 L 10 14 L 14 14 L 14 20 C 14 20.552 14.448 21 15 21 L 19 21 C 19.552 21 20 20.552 20 20 L 20 12 L 22.5 12 A 0.5 0.5 0 0 0 23 11.5 A 0.5 0.5 0 0 0 22.796875 11.097656 L 12.716797 2.3027344 A 1 1 0 0 0 12.710938 2.296875 A 1 1 0 0 0 12 2 z"></path>
+              </svg>
+              <span class="hidden-mobile">
+            &nbsp
+          </span>
+              Return to SDKs
+              <span class="hidden-lg">
+            &nbsp
+          </span>
+              <svg class="hidden-lg" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+                   width="14" height="14"
+                   viewBox="0 -3 25 25"
+                   style=" fill:#ffffff;">
+                <path d="M 12 2 A 1 1 0 0 0 11.289062 2.296875 L 1.203125 11.097656 A 0.5 0.5 0 0 0 1 11.5 A 0.5 0.5 0 0 0 1.5 12 L 4 12 L 4 20 C 4 20.552 4.448 21 5 21 L 9 21 C 9.552 21 10 20.552 10 20 L 10 14 L 14 14 L 14 20 C 14 20.552 14.448 21 15 21 L 19 21 C 19.552 21 20 20.552 20 20 L 20 12 L 22.5 12 A 0.5 0.5 0 0 0 23 11.5 A 0.5 0.5 0 0 0 22.796875 11.097656 L 12.716797 2.3027344 A 1 1 0 0 0 12.710938 2.296875 A 1 1 0 0 0 12 2 z"></path>
+              </svg>
+            </a>
+          </li>
+        {{end}}
+
+        {{if and (not .Session) (.Target.DBurl)}}
+          <li>
+            <a href="/session-cbshell">
+              &nbsp
+              Start CBshell with Capella
+            </a>
+          </li>
+        {{end}}
+    </ul>
+
+    <span id="menuToggle" onclick="handleMenuToggle()">
+      <svg id="hamburgerIcon" fill="#fff" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 18v1h-24v-1h24zm0-6v1h-24v-1h24zm0-6v1h-24v-1h24z" fill="#1040e2"/><path d="M24 19h-24v-1h24v1zm0-6h-24v-1h24v1zm0-6h-24v-1h24v1z"/></svg>
+      <svg id="exitIcon" class="hidden" fill="#fff" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M12 11.293l10.293-10.293.707.707-10.293 10.293 10.293 10.293-.707.707-10.293-10.293-10.293 10.293-.707-.707 10.293-10.293-10.293-10.293.707-.707 10.293 10.293z"/></svg>
+    </span>
+  </div>
+
+</header>
+
+   <main>
+    <article>
+      <header>
+        <h2>
+          {{if .title}}
+            {{.title}}
+          {{else}}
+            Playground with Couchbase Capella
+          {{end}}
+        </h2>
+      </header>
+      <section>
+        {{if .intro}}
+          <p>{{.intro}}</p>
+        {{end}}
+
+        <p>
+          If you don't already have a Couchbase Capella cluster, please visit <a href="https://cloud.couchbase.com">https://cloud.couchbase.com</a> to get a free one!
+          <br>
+          (NOTE: you'll need to add
+            {{if eq .natpublicip "YourHostIP"}}
+              <a target="_blank" href="http://www.whatismyipaddress.com">{{.natpublicip}}</a>/32
+            {{else}}
+                {{.natpublicip}}/32
+            {{end}}
+          to the IP Address/CIDR allow list on the 'Connect' tab in your Capella Cluster)
+          <br>
+          <br>
+          Enter the following information from your Couchbase Capella cluster's connection tab.
+        </p>
+            <form action="/target" method="post" autocomplete="on">
+
+              <label {{if .dburlc}}class="{{.dburlc}}"{{end}}> Database Host/URL (Ex: cb.gyvwo11dxgbw6st3.cloud.couchbase.com):
+                <span class="error">{{.errDBurl}}</span>
+                <div class="input-wrapper">
+                  <input type="text" name="dburl" value="{{.dburl}}" autofocus autocomplete/>
+                  <i class="fa fa-question-circle cursor-pointer hidden-mobile" aria-hidden="true" id="dbUrlInfo"></i>
+                </div>
+              </label>
+              {{if .dburlc}}
+                <input type="hidden" name="dburlc" value="{{.dburlc}}"/>
+              {{end}}
+
+              <label {{if .dbuserc}}class="{{.dbuserc}}"{{end}}> Database Username:
+                <span class="error">{{.errDBuser}}</span>
+                <div class="input-wrapper">
+                  <input type="text" name="dbuser" value="{{.dbuser}}"  autofocus autocomplete/>
+                  <i class="fa fa-question-circle cursor-pointer hidden-mobile" aria-hidden="true" id="dbUserInfo"></i>
+                </div>
+              </label>
+              {{if .dbuserc}}
+                <input type="hidden" name="dbuserc" value="{{.dbuserc}}"/>
+              {{end}}
+
+              <label class="{{if .dbpwdc}}{{.dbpwdc}}{{end}} cursor-pointer"> Database Password:
+                <span class="error">{{.errDBpwd}}</span>
+                <div class="input-wrapper">
+                  <input type="password" name="dbpwd" value="{{.dbpwd}}" id="dbpwd" autofocus autocomplete/>
+                  <i class="fa fa-question-circle cursor-pointer hidden-mobile" aria-hidden="true" id="dbPassInfo"></i>
+                </div>
+                <i class="fa fa-eye" id="togglePassword">&nbsp; Show Password</i>
+              </label>
+              <script>
+                  const togglePassword = document.querySelector('#togglePassword');
+                  const password = document.querySelector('#dbpwd');
+
+                  togglePassword.addEventListener('click', function (e) {
+                    const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+                    password.setAttribute('type', type);
+                    this.classList.toggle('fa-eye-slash');
+                });
+              </script>
+              <br>
+              <br>
+              <label {{if .namec}}class="{{.namec}}"{{end}}> Your Name:
+                <span class="error">{{.errName}}</span>
+                <input type="text" name="name" value="{{.name}}" autofocus/>
+              </label>
+              {{if .namec}}
+                <input type="hidden" name="namec" value="{{.namec}}"/>
+              {{end}}
+
+              <label {{if .emailc}}class="{{.emailc}}"{{end}}> Your Email:
+                <span class="error">{{.errEmail}}</span>
+                <input type="text" name="email" value="{{.email}}"/>
+              </label>
+              {{if .emailc}}
+                <input type="hidden" name="emailc" value="{{.emailc}}"/>
+              {{end}}
+
+              <div class="captcha-bg {{if .captchac}}{{.captchac}}{{end}}">
+                <img class="captcha" {{.captchaSrc}}/>
+              </div>
+
+              <label {{if .captchac}}class="{{.captchac}}"{{end}}>Enter Captcha:
+                <span class="error">{{.errCaptcha}}</span>
+                <input type="text" name="captcha"/>
+              </label>
+              {{if .captchac}}
+                <input type="hidden" name="captchac" value="{{.captchac}}"/>
+              {{end}}
+
+              {{if .dbuserc}}
+                <input type="hidden" name="dbpwdc" value="{{.dbpwdc}}"/>
+              {{end}}
+
+              {{if .bodyClass}}
+                <input type="hidden" name="bodyClass" value="{{.bodyClass}}"/>
+              {{end}}
+
+              <div class="actions">
+                <input type="submit" name="session-start"
+                      value="Start a Session"
+                      onclick="submitted(); return true"/>
+                <div class="cancel">
+                  or <a href="/">cancel</a>
+                </div>
+              </div>
+
+              {{if .err}}
+                <div class="error">{{.err}}</div>
+              {{end}}
+
+              {{if .e}}
+                <input type="hidden" name="e" value="{{.e}}"/>
+              {{end}}
+
+              {{if .bodyClass}}
+                <input type="hidden" name="bodyClass" value="{{.bodyClass}}"/>
+              {{end}}
+
+              {{if .title}}
+                <input type="hidden" name="title" value="{{.title}}"/>
+              {{end}}
+
+              {{if .intro}}
+                <input type="hidden" name="intro" value="{{.intro}}"/>
+              {{end}}
+
+            </form>
+            <p>
+              We won't sell your contact info to spammers, etc.
+            </p>
+            <p>
+              A playground session is intended for "tire-kicking" and learning by developers.
+            </p>
+            <p>
+              Do NOT put important data into a playground session.
+            </p>
+      </section>
+    </article>
+  </main>
+
+  <footer>
+    <div>© 2021 Couchbase Labs</div>
+  </footer>
+</body>
+<script>
+  if (window.innerWidth >= 767) {
+    tippy('#dbUrlInfo', {
+      content: 'Clusters → Trial-Cluster → Connect tab → Connection → Copy Wide Area Network URL',
+      placement: 'right',
+      theme: 'custom'
+    });
+
+    tippy('#dbUserInfo', {
+      content: 'Clusters → Trial-Cluster → Connect tab → Database Access → Manage Credentials (create one if you haven\'t already)',
+      placement: 'right',
+      theme: 'custom'
+    });
+
+    tippy('#dbPassInfo', {
+      content: 'Clusters → Trial-Cluster → Connect tab → Database Access → Manage Credentials (create one if you haven\'t already)',
+      placement: 'right',
+      theme: 'custom'
+    });
+  }
+</script>
+<script>
+function submitted() {
+  setTimeout(function() {
+    document.querySelector("form .actions input[type=submit]").disabled = true;
+    document.querySelector("form .actions .cancel").innerHTML =
+      `launching containers<span class="loading"></span>`;
+  }, 100);
+}
+</script>
+<style>
+.loading:after {
+  overflow: hidden;
+  display: inline-block;
+  vertical-align: text-bottom;
+  animation: ellipsis steps(5,end) 1.5s infinite;
+  content: "\2026\2026\2026\2026"; /* ascii code for the ellipsis character */
+  width: 0px;
+}
+
+@keyframes ellipsis {
+  to {
+    width: 30px;
+  }
+}
+
+@-webkit-keyframes ellipsis {
+  to {
+    width: 30px;
+  }
+}
+</style>
+</html>

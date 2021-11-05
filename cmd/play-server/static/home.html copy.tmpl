@@ -1,0 +1,745 @@
+<!doctype html>
+<html>
+<head>
+  <title>Couchbase Playground</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;1,300&Ubuntu+Mono&display=swap"
+        rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="/static/styles/site.css">
+  <link rel="stylesheet" type="text/css" href="/static/styles/main.css">
+  <link rel="stylesheet" type="text/css" href="/static/styles/icons.css">
+  <link rel="stylesheet" type="text/css" href="/static/styles/flexboxgrid.min.css">
+  <link rel="stylesheet" type="text/css" href="/static/styles/progress-wizard.min.css">
+  <style>
+    {{if not .Session}}
+    body .needs-session {
+        display: none !important;
+    }
+
+    {{end}}
+  </style>
+    {{.OptanonHTML}}
+  <script src="/static/ace/src-min/ace.js"></script>
+  <script>
+    function onRunSubmit() {
+      document.getElementById("form").className = "run-submitted";
+
+      document.getElementById("code").value = codeAce.getSession().getValue();
+
+      document.getElementsByTagName("body")[0].style.color = "#fff";
+
+      var steps = ["waiting for container", "preparing container"];
+
+      var lang = document.getElementById("lang").value;
+      if (lang == "java" || lang == "dotnet" || lang == "scala") {
+        steps.push("compiling code");
+      }
+
+      steps.push("running");
+
+      function stepHTML(x) {
+        var s = "";
+        for (var i = 0; i <= x; i++) {
+          s = s + '<div style="color:white">' + steps[i] + '...</div>';
+        }
+        return s;
+      }
+
+      var outputBody = document.getElementById("output").contentDocument.body;
+
+      function stepNext(x) {
+        if (x >= steps.length) {
+          return;
+        }
+
+        outputBody.innerHTML = stepHTML(x);
+
+        setTimeout(function () {
+          if (outputBody.innerHTML == stepHTML(x)) {
+            stepNext(x + 1);
+          }
+
+          document.getElementById("form").className = "";
+        }, (x + 1) * 3000);
+      }
+
+      stepNext(0);
+
+      document.getElementById("code-output").className = "code-output";
+
+      return true;
+    }
+  </script>
+    {{.AnalyticsHTML}}
+</head>
+<body class="{{.BodyClass}}">
+<header>
+
+  <div class="logo">
+    <h1>
+      <a href="https://www.couchbase.com/">
+        <img src="/static/cb-rww.svg"/>
+      </a>
+      <a href="/">
+        Playground
+      </a>
+    </h1>
+  </div>
+
+  <nav>
+    <ul>
+      <li>
+        <a target="_blank" href="https://docs.couchbase.com" class="menu-button">Documentation</a>
+      </li>
+      <li>
+        <a target="_blank" href="https://developer.couchbase.com" class="menu-button">Developers</a>
+      </li>
+      <li>
+        <a href="/{{if .Session}}?s={{.Session.SessionId}}{{end}}" class="menu-button">
+          <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+               width="14" height="14"
+               viewBox="0 -3 25 25"
+               style=" fill:#ffffff;">
+            <path d="M 12 2 A 1 1 0 0 0 11.289062 2.296875 L 1.203125 11.097656 A 0.5 0.5 0 0 0 1 11.5 A 0.5 0.5 0 0 0 1.5 12 L 4 12 L 4 20 C 4 20.552 4.448 21 5 21 L 9 21 C 9.552 21 10 20.552 10 20 L 10 14 L 14 14 L 14 20 C 14 20.552 14.448 21 15 21 L 19 21 C 19.552 21 20 20.552 20 20 L 20 12 L 22.5 12 A 0.5 0.5 0 0 0 23 11.5 A 0.5 0.5 0 0 0 22.796875 11.097656 L 12.716797 2.3027344 A 1 1 0 0 0 12.710938 2.296875 A 1 1 0 0 0 12 2 z"></path>
+          </svg>
+          &nbsp
+          SDK Languages
+        </a>
+      </li>
+      <li>
+          {{if .Target.DBurl}}
+            <a href="/target-exit"
+               onclick="localStorage.setItem('infoPanel', 'show');" class="session menu-button red-button">
+              Stop Playground with Couchbase Capella
+            </a>
+          {{else if not .Session}}
+            <a href="#" class="menu-button red-button noclick faded">
+              Capella Playground coming soon
+            </a>
+          {{end}}
+      </li>
+      <li>
+          {{if .Session}}
+            <a href="/session-exit?s={{.Session.SessionId}}"
+               onclick="localStorage.setItem('infoPanel', 'show');" class="session menu-button red-button">
+              Stop Playground with a Provisioned Couchbase
+            </a>
+          {{else if not .Target.DBurl}}
+            <a href="/session" class="menu-button red-button">
+              <svg fill="#fff" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 -3 25 25"><path d="M24 21v-6h-18v6h18zm-3-4c.553 0 1 .448 1 1s-.447 1-1 1c-.552 0-1-.448-1-1s.448-1 1-1zm-7.806 0h1.275l-.864 2h-1.274l.863-2zm-2.141 0h1.275l-.863 2h-1.275l.863-2zm-2.19 0h1.275l-.863 2h-1.275l.863-2zm-4.863.941c-2.253-.29-4-2.194-4-4.524 0-2.252 1.626-4.121 3.767-4.506.177-3.294 2.895-5.911 6.233-5.911s6.056 2.617 6.233 5.911c2.005.361 3.541 2.029 3.729 4.089h-1.991c-.279-2.105-2.674-2.333-3.65-2.401.117-1.958-.555-5.599-4.321-5.599-4.438 0-4.359 4.75-4.321 5.599-.945-.037-3.679.341-3.679 2.818 0 1.223.856 2.245 2 2.511v2.013z"/></svg>
+              &nbsp
+              Playground with a Provisioned Couchbase
+            </a>
+          {{end}}
+      </li>
+    </ul>
+  </nav>
+
+</header>
+
+<main id="main">
+    {{if .Target.DBurl}}
+      <div class="info-header">
+        <div class="header-left">
+          <a onclick="toggleInfoPanel();"><span id="toggleIcon" class="chevron down"></span></a>
+        </div>
+
+        <div class="header-right">
+          <div>
+            <span class="head-server">Your Own Couchbase:</span>
+            <span class="head-user">url:</span> <code>{{.Target.DBurl}}</code>
+            <span class="head-user">username:</span> <code>{{.Target.DBuser}}</code>
+            <span class="head-pass">password:</span> <code>*****</code>
+          </div>
+        </div>
+      </div>
+      <div class="info-header">
+          <div class="header-left">
+            <a onclick="toggleInfoPanel();"><span id="toggleIcon" class="chevron down"></span></a>
+          </div>
+          <div class="header-right">
+            <span class="head-server">Your playground session will end after </span>
+            <code> <span id='ct'/><code/>
+            <script type="text/javascript">
+              function get_time_diff( datetime )
+              {
+                  var datetime = typeof datetime !== 'undefined' ? datetime : "2021-10-10 01:02:03.123456";
+                  var datetime = new Date( datetime ).getTime();
+                  var now = new Date().getTime();
+                  if( isNaN(datetime) )
+                  {
+                      return "";
+                  }
+                  if (datetime < now) {
+                      var milisec_diff = now - datetime;
+                  }else{
+                      var milisec_diff = datetime - now;
+                  }
+
+                  var days = Math.floor(milisec_diff / 1000 / 60 / (60 * 24));
+                  var date_diff = new Date( milisec_diff );
+                  offset = date_diff.getTimezoneOffset()/60;
+                  return days + " Days "+ (date_diff.getHours()+offset) + " Hours " + date_diff.getMinutes() + " Minutes " + date_diff.getSeconds() + " Seconds";
+              }
+              function display_c(){
+                var refresh=1000; // Refresh rate in milli seconds
+                mytime=setTimeout('display_ct()',refresh)
+              }
+
+              function display_ct() {
+                document.getElementById('ct').innerHTML = get_time_diff("{{.Target.ExpiryTime}}");
+                display_c();
+              }
+              display_ct();
+            </script>
+          </div>
+      </div>
+    {{end}}
+
+    {{if .Session}}
+      <div class="info-header">
+        <div class="header-left">
+          <a onclick="toggleInfoPanel();"><span id="toggleIcon" class="chevron down"></span></a>
+        </div>
+        <div class="header-right">
+          <div>
+            <span class="head-server">Your Couchbase instance:</span>
+            <code><a href="http://{{.Host}}:8091/ui/index.html?lu={{.Session.CBUser}}&lp={{.Session.CBPswd}}"
+                     target="_blank">http://{{.Host}}:8091</a>
+            </code>
+            <span class="head-user">username:</span> <code>{{.Session.CBUser}}</code>
+            <span class="head-pass">password:</span> <code>*****</code>
+          </div>
+        </div>
+      </div>
+    {{end}}
+
+  <div class="info-panel" id="infoPanel">
+      {{if .Msg}}
+        <div class="message-info">{{.Msg}}</div>
+      {{end}}
+
+      {{if .Session}}
+        <div class="session-info">
+          <div>
+            Your playground session will end after {{.SessionsMaxAge}}
+            or until there's {{.SessionsMaxIdle}} of inactivity.
+            <br>
+            <br>
+            <strong>WARNING: Upon expiration, all data stored in this Couchbase instance will be lost.</strong>
+          </div>
+          <div class="shots">
+            <a target="_blank"
+               href="http://{{.Host}}:8091/ui/index.html?lu={{.Session.CBUser}}&lp={{.Session.CBPswd}}&playgTour=welcome"
+               class="start-here">
+              <u>Guided Tour</u>
+              <div><br/><b>
+                  <center><u><code>start here</code></u></center>
+                </b></div>
+            </a>
+            <a target="_blank"
+               href="http://{{.Host}}:8091/ui/index.html?lu={{.Session.CBUser}}&lp={{.Session.CBPswd}}">
+              <u>Dashboard</u>
+              <div><img src="/static/shots/shot-dashboard.png"/></div>
+            </a>
+            <a target="_blank"
+               href="http://{{.Host}}:8091/ui/index.html?lu={{.Session.CBUser}}&lp={{.Session.CBPswd}}#/query/workbench?query=SELECT%20%2A%20FROM%20system%3Akeyspaces">
+              <u>Query Workbench</u>
+              <div><img src="/static/shots/shot-query-workbench.png"/></div>
+            </a>
+            <a target="_blank"
+               href="http://{{.Host}}:8091/ui/index.html?lu={{.Session.CBUser}}&lp={{.Session.CBPswd}}#/docs/editor">
+              <u>Docs Workbench</u>
+              <div><img src="/static/shots/shot-documents.png"/></div>
+            </a>
+              {{if ge .SessionData.ContainerId 0}}
+                <a target="_blank"
+                   href="/static/shell.html?t=http://{{.Host}}:{{.SessionData.port_1337}}">
+                  <u>Couchbase Shell</u>
+                  <div><img src="/static/shots/shot-cbsh.png"/></div>
+                </a>
+              {{end}}
+          </div>
+        </div>
+      {{end}}
+  </div>
+
+  <div class="workspace" id="workspace">
+    <div class="workspace-body">
+      <div class="container {{if .Lang}}container-example{{end}}">
+          {{if not .Lang}}
+{{/*  INFO DESCRIBING WHAT PLAYGROUND IS */}}
+            {{if and (not .Session) (not .Target.DBurl)}}
+            <h2 class="home-header"><label for="playgroundIntro">Welcome to the Couchbase Playground!</label></h2>
+            <p style="line-height: 24px">
+              Playground empowers developers to experiment with Couchbase using a several code examples in a variety of
+              languages. You can use playground to edit and test code examples against a real Couchbase instance, all
+              from the comfort of your browser. <strong>Developers can chose to use playground without logging in</strong>, leveraging a
+              pre-populated cluster, or can opt to <strong>start a playground session</strong>, enabling ephemeral access
+              to their own provisioned cluster and Couchbase's powerful web console. Finally, developers can also chose
+              to <strong>use playground with their Couchbase Capella clusters </strong> by simply providing a URI, Username, and Password.
+            </p>
+{{/*  ROW FOR SELECTING ANON SESSION VS HOSTED SESSION VS CLOUD SESSION */}}
+            <h2 class="home-header"><label for="modeSelector">How would you like to use Playground?</label></h2>
+            <div class="row example-row">
+              <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                <a href="#"
+                   class="mode-button example-button red-button noclick faded" onclick="">
+                  <h3 class="example-label">Playground with Capella Coming Soon</h3>
+                </a>
+              </div>
+              <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                <a href="/session"
+                   class="mode-button example-button red-button" onclick="">
+                  <h3 class="example-label">Playground with a Provisioned Couchbase</h3>
+                </a>
+              </div>
+              <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                <a href=""
+                   class="mode-button example-button" onclick="return false">
+                  <h3 class="example-label">Playground without Logging In (Click the code examples below) </h3>
+                </a>
+              </div>
+            </div>
+            {{end}}
+
+{{/*  ROW FOR SELECTING LANGUAGE/EXAMPLE */}}
+            <h2 class="home-header"><label for="examplesToggle">Play with Couchbase Client SDK Code Examples</label></h2>
+            <div class="row example-row">
+              <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                <a href="/examples/basic-java-kv-get{{if $.Session}}?s={{$.Session.SessionId}}{{end}}"
+                   class="example-button" onclick="return pageToggle('page-01')">
+                  <object data="../static/icons/java.svg" width="14%" height="14%" class="example-icon"></object>
+                  <h3 class="example-label">Java</h3>
+                </a>
+              </div>
+
+              <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                <a href="/examples/basic-nodejs-kv-get{{if $.Session}}?s={{$.Session.SessionId}}{{end}}"
+                   class="example-button" onclick="return pageToggle('page-03')">
+                  <object data="../static/icons/nodejs.svg" width="14%" height="14%" class="example-icon"></object>
+                  <h3 class="example-label">Node.js</h3>
+                </a>
+              </div>
+
+              <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                <a href="/examples/basic-py-kv-get{{if $.Session}}?s={{$.Session.SessionId}}{{end}}"
+                   class="example-button"
+                   onclick="return pageToggle('page-04')">
+                  <object data="../static/icons/python.svg" width="14%" height="14%" class="example-icon"></object>
+                  <h3 class="example-label">Python</h3>
+                </a>
+              </div>
+
+              <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                <a href="/examples/basic-dotnet-kv-get{{if $.Session}}?s={{$.Session.SessionId}}{{end}}"
+                   class="example-button" onclick="return pageToggle('page-05')">
+                  <object data="../static/icons/dotnet.svg" width="14%" height="14%" class="example-icon"></object>
+                  <h3 class="example-label">.NET</h3>
+                </a>
+              </div>
+
+              <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                <a href="/examples/basic-php-kv-get{{if $.Session}}?s={{$.Session.SessionId}}{{end}}"
+                   class="example-button"
+                   onclick="return pageToggle('page-06')">
+                  <object data="../static/icons/php.svg" width="14%" height="14%" class="example-icon"></object>
+                  <h3 class="example-label">PHP</h3>
+                </a>
+              </div>
+
+              <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                <a href="/examples/basic-rb-kv-get{{if $.Session}}?s={{$.Session.SessionId}}{{end}}"
+                   class="example-button" onclick="return pageToggle('page-07')">
+                  <object data="../static/icons/ruby.svg" width="14%" height="14%" class="example-icon"></object>
+                  <h3 class="example-label">Ruby</h3>
+                </a>
+              </div>
+
+              <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                <a href="/examples/basic-scala-kv-get{{if $.Session}}?s={{$.Session.SessionId}}{{end}}"
+                   class="example-button" onclick="return pageToggle('page-08')">
+                  <object data="../static/icons/scala.svg" width="14%" height="14%" class="example-icon"></object>
+                  <h3 class="example-label">Scala</h3>
+                </a>
+              </div>
+
+              <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                <a href="/examples/basic-go-kv-get{{if $.Session}}?s={{$.Session.SessionId}}{{end}}"
+                   class="example-button"
+                   onclick="return pageToggle('page-09')">
+                  <object data="../static/icons/golang.svg" width="14%" height="14%" class="example-icon"></object>
+                  <h3 class="example-label">Go</h3>
+                </a>
+              </div>
+
+              <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                <a href="/examples/basic-cc-kv-get{{if $.Session}}?s={{$.Session.SessionId}}{{end}}"
+                   class="example-button"
+                   onclick="return pageToggle('page-10')">
+                  <object data="../static/icons/cc.svg" width="14%" height="14%" class="example-icon"></object>
+                  <h3 class="example-label">C++</h3>
+                </a>
+              </div>
+            </div>
+
+          {{end}}
+          {{if and .Lang .Title}}
+            <div class="progress-wrapper">
+              <ul class="progress-indicator">
+                  {{/* Determine If KV Get Completed */}}
+                  {{if or (eq .Title "Key Value Get") (eq .Title "Query Rows") (eq .Title "Query w/ Named Param") (eq .Title "Query w/ Positional Param") (eq .Title "Sub-document Lookup") (eq .Title "Sub-document Mutate") (eq .Title "Transactions KV Mutate") (eq .Title "Transactions N1QL") (eq .Title "Upsert")}}
+                    <li class="completed">
+                      <a href="/examples/basic-{{.Lang}}-kv-get{{if .Session}}?s={{.Session.SessionId}}{{end}}">
+                        <span class="bubble"></span>
+                        Key Value Get
+                      </a>
+                    </li>
+                  {{else}}
+                    <li>
+                      <a href="/examples/basic-{{.Lang}}-kv-get{{if .Session}}?s={{.Session.SessionId}}{{end}}">
+                        <span class="bubble"></span>
+                        Key Value Get
+                      </a>
+                    </li>
+                  {{end}}
+
+                  {{/* Determine If Query Rows Completed */}}
+                  {{if or (eq .Title "Query Rows") (eq .Title "Query w/ Named Param") (eq .Title "Query w/ Positional Param") (eq .Title "Sub-document Lookup") (eq .Title "Sub-document Mutate") (eq .Title "Transactions KV Mutate") (eq .Title "Transactions N1QL") (eq .Title "Upsert")}}
+                    <li class="completed">
+                      <a href="/examples/basic-{{.Lang}}-query-rows{{if .Session}}?s={{.Session.SessionId}}{{end}}">
+                        <span class="bubble"></span>
+                        Query Rows
+                      </a>
+                    </li>
+                  {{else}}
+                    <li>
+                      <a href="/examples/basic-{{.Lang}}-query-rows{{if .Session}}?s={{.Session.SessionId}}{{end}}">
+                        <span class="bubble"></span>
+                        Query Rows
+                      </a>
+                    </li>
+                  {{end}}
+
+                  {{/* Determine If Query w/ Named Param Completed */}}
+                  {{if or (eq .Title "Query w/ Named Param") (eq .Title "Query w/ Positional Param") (eq .Title "Sub-document Lookup") (eq .Title "Sub-document Mutate") (eq .Title "Transactions KV Mutate") (eq .Title "Transactions N1QL") (eq .Title "Upsert")}}
+                    <li class="completed">
+                      <a href="/examples/basic-{{.Lang}}-query-named-param{{if .Session}}?s={{.Session.SessionId}}{{end}}">
+                        <span class="bubble"></span>
+                        Query w/ Named Param
+                      </a>
+                    </li>
+                  {{else}}
+                    <li>
+                      <a href="/examples/basic-{{.Lang}}-query-named-param{{if .Session}}?s={{.Session.SessionId}}{{end}}">
+                        <span class="bubble"></span>
+                        Query w/ Named Param
+                      </a>
+                    </li>
+                  {{end}}
+
+                  {{/* Determine If Query w/ Positional Param Completed */}}
+                  {{if or (eq .Title "Query w/ Positional Param") (eq .Title "Sub-document Lookup") (eq .Title "Sub-document Mutate") (eq .Title "Transactions KV Mutate") (eq .Title "Transactions N1QL") (eq .Title "Upsert")}}
+                    <li class="completed">
+                      <a href="/examples/basic-{{.Lang}}-query-positional-param{{if .Session}}?s={{.Session.SessionId}}{{end}}">
+                        <span class="bubble"></span>
+                        Query w/ Positional Param
+                      </a>
+                    </li>
+                  {{else}}
+                    <li>
+                      <a href="/examples/basic-{{.Lang}}-query-positional-param{{if .Session}}?s={{.Session.SessionId}}{{end}}">
+                        <span class="bubble"></span>
+                        Query w/ Positional Param
+                      </a>
+                    </li>
+                  {{end}}
+
+                  {{/* Determine If Sub Document Lookup Completed */}}
+                  {{if or (eq .Title "Sub-document Lookup") (eq .Title "Sub-document Mutate") (eq .Title "Transactions KV Mutate") (eq .Title "Transactions N1QL") (eq .Title "Upsert")}}
+                    <li class="completed">
+                      <a href="/examples/basic-{{.Lang}}-subdoc-lookup{{if .Session}}?s={{.Session.SessionId}}{{end}}">
+                        <span class="bubble"></span>
+                        Sub-Document Lookup
+                      </a>
+                    </li>
+                  {{else}}
+                    <li>
+                      <a href="/examples/basic-{{.Lang}}-subdoc-lookup{{if .Session}}?s={{.Session.SessionId}}{{end}}">
+                        <span class="bubble"></span>
+                        Sub-Document Lookup
+                      </a>
+                    </li>
+                  {{end}}
+
+                  {{/* Determine If Sub Document Mutate Completed */}}
+                  {{if or (eq .Title "Sub-document Mutate") (eq .Title "Transactions KV Mutate") (eq .Title "Transactions N1QL") (eq .Title "Upsert")}}
+                    <li class="completed">
+                      <a href="/examples/basic-{{.Lang}}-subdoc-mutate{{if .Session}}?s={{.Session.SessionId}}{{end}}">
+                        <span class="bubble"></span>
+                        Sub-Document Mutate
+                      </a>
+                    </li>
+                  {{else}}
+                    <li>
+                      <a href="/examples/basic-{{.Lang}}-subdoc-mutate{{if .Session}}?s={{.Session.SessionId}}{{end}}">
+                        <span class="bubble"></span>
+                        Sub-Document Mutate
+                      </a>
+                    </li>
+                  {{end}}
+
+                  {{/* Show/Hide Java Transactions Steps */}}
+                  {{if eq .Lang "java"}}
+                      {{/* Determine If JAVA Transactions KV Mutate Completed */}}
+                      {{if or (eq .Title "Transactions KV Mutate") (eq .Title "Transactions N1QL") (eq .Title "Upsert")}}
+                        <li class="completed">
+                          <a href="/examples/basic-{{.Lang}}-txn-kv-mutate{{if .Session}}?s={{.Session.SessionId}}{{end}}">
+                            <span class="bubble"></span>
+                            Transactions KV Mutate
+                          </a>
+                        </li>
+                      {{else}}
+                        <li>
+                          <a href="/examples/basic-{{.Lang}}-txn-kv-mutate{{if .Session}}?s={{.Session.SessionId}}{{end}}">
+                            <span class="bubble"></span>
+                            Transactions KV Mutate
+                          </a>
+                        </li>
+                      {{end}}
+
+                      {{/* Determine If JAVA Transactions N1QL Completed */}}
+                      {{if or (eq .Title "Transactions N1QL") (eq .Title "Upsert")}}
+                        <li class="completed">
+                          <a href="/examples/basic-{{.Lang}}-txn-n1ql{{if .Session}}?s={{.Session.SessionId}}{{end}}">
+                            <span class="bubble"></span>
+                            Transactions N1QL
+                          </a>
+                        </li>
+                      {{else}}
+                        <li>
+                          <a href="/examples/basic-{{.Lang}}-txn-n1ql{{if .Session}}?s={{.Session.SessionId}}{{end}}">
+                            <span class="bubble"></span>
+                            Transactions N1QL
+                          </a>
+                        </li>
+                      {{end}}
+                  {{end}}
+
+
+                  {{/* Determine If Upsert Completed */}}
+                  {{if (eq .Title "Upsert")}}
+                    <li class="completed">
+                      <a href="/examples/basic-{{.Lang}}-upsert{{if .Session}}?s={{.Session.SessionId}}{{end}}">
+                        <span class="bubble"></span>
+                        Upsert
+                      </a>
+                    </li>
+                  {{else}}
+                    <li>
+                      <a href="/examples/basic-{{.Lang}}-upsert{{if .Session}}?s={{.Session.SessionId}}{{end}}">
+                        <span class="bubble"></span>
+                        Upsert
+                      </a>
+                    </li>
+                  {{end}}
+              </ul>
+            </div>
+          {{end}}
+
+        <div class="row example-row" style="width: 100%">
+            {{if and .Lang .Title}}
+              <div class="col-xs-12 col-md-5 example-info-column">
+                <div class="example-heading">
+                    {{if .InfoBefore}}
+                      <div class="info infoBefore">{{.InfoBefore}}</div>
+                    {{end}}
+
+                  <h2 class="example-title">
+                      {{if .Lang}}
+                          {{if ne .Lang "NONE"}}
+                            <span class="lang">{{or .LangPretty .Lang}} - </span>
+                          {{end}}
+                      {{end}}
+                      {{if .Title}}{{.Title}}{{else}}Playground Editor{{end}}
+                  </h2>
+                </div>
+
+                  {{if .InfoAfter}}
+                    <div class="info infoAfter">{{.InfoAfter}}</div>
+                  {{end}}
+
+                  <br>
+                  <em>To run this example, click the button in the top right corner of the code editor.</em>
+
+              </div>
+            {{end}}
+            {{if .Lang}}
+              <div class="col-xs-12 col-md-7">
+
+                <div class="code-editor">
+                  <div class="sticky">
+                    <form action="/run" method="post" target="output" id="form">
+
+                        {{if or .Name .Lang .Code}}
+                        {{if ne .Code "NONE"}}
+                          <h2 class="editor-label">Code Editor</h2>
+                          <input type="submit" value="run example &nbsp &gt&gt;" class="run" id="run"
+                                 onclick="return onRunSubmit()"/>
+                        {{end}}
+                      <div class="example-frame">
+
+                          {{if .Session}}
+                            <input name="s" type="hidden" value="{{.Session.SessionId}}"/>
+                          {{end}}
+
+                        <input name="lang" type="hidden" value="{{.Lang}}" id="lang"/>
+
+                          {{if ne .Code "NONE"}}
+                            <div id="code-ace" class="code-ace"></div>
+
+                            <textarea id="code" name="code" class="code"
+                                      wrap="off" autocorrect="off"
+                                      autocomplete="off" autocapitalize="off"
+                                      spellcheck="false">{{.Code}}</textarea>
+                          {{end}}
+                      </div>
+
+                      <input name="color" type="hidden" value="#FFF"/>
+                    </form>
+                      {{end}}
+                  </div>
+                </div>
+
+                <div class="code-output hidden" id="code-output">
+                  <div class="sticky">
+                      {{if or .Name .Lang .Code}}
+                        <h2 class="editor-label">Output</h2>
+                        <iframe name="output" id="output" class="output"></iframe>
+                      {{end}}
+                  </div>
+                </div>
+
+              </div>
+            {{end}}
+
+
+        </div>
+          {{if not .Lang}}
+            <div class="online-tools">
+              <h2 class="home-header">Explore Online Tools to Learn More About N1QL</h2>
+              <a href="https://query-tutorial.couchbase.com/tutorial/#1" class="nowrap">Online N1QL Tutorial</a>
+              <a href="https://index-advisor.couchbase.com/indexadvisor/#1" class="nowrap">Online N1QL Index Advisor</a>
+              <a href="https://docs.couchbase.com/server/current/n1ql/n1ql-rest-api/index.html" class="nowrap">N1QL REST
+                API
+                Docs</a>
+            </div>
+          {{end}}
+      </div>
+    </div>
+</main>
+
+<footer>
+  <div>© 2021 Couchbase Labs -
+    <span class="ver">Couchbase Server {{.Version}}</span>
+      {{range $v := .VersionSDKs}}
+        <span class="ver-sdk">{{$v.name}} SDK: {{$v.ver}}</span>
+      {{end}}
+  </div>
+</footer>
+
+{{if .Session}}
+  <script src="/static/scripts/infoPanel.js"></script>
+{{end}}
+
+{{if .Target.DBurl}}
+  <script src="/static/scripts/infoPanel.js"></script>
+{{end}}
+
+
+<script>
+  var codeAce = ace.edit("code-ace");
+  codeAce.getSession().setValue(document.getElementById("code").value);
+  codeAce.setTheme("ace/theme/nord_dark");
+  codeAce.setOption("useWorker", false); // No syntax checking.
+
+  {{if .LangAce}}
+  codeAce.setOption("mode", "ace/mode/{{.LangAce}}");
+  {{end}}
+
+  codeAce.renderer.setScrollMargin(24, 0, 0, 0)
+  let numLines = codeAce.session.doc.getAllLines().length;
+  let editorHeight = (numLines * 18);
+  document.getElementById("code-ace").style.height = `${editorHeight}px`
+
+  {{if .Highlight}}
+  var highlight = "{{.Highlight}}";
+  if (highlight) {
+    var beg = highlight.split('-')[0];
+    if (beg) {
+      var begN = parseInt(beg) - 1; // 1-based.
+
+      setTimeout(function () {
+        codeAce.navigateTo(begN, 0);
+
+        if (begN > 5) {
+          codeAce.scrollToRow(begN - 2);
+        }
+      }, 100);
+    }
+  }
+  {{end}}
+</script>
+<script>
+  var scrollTop = parseInt(localStorage.getItem('scrollTop')) || 0;
+  if (scrollTop > 0) {
+    document.scrollingElement.scrollTo(0, scrollTop);
+  }
+
+  window.addEventListener('unload', function () {
+    localStorage.setItem('scrollTop', document.scrollingElement.scrollTop || 0);
+  });
+</script>
+
+<script>
+  function pageToggle(page) {
+    var main = document.getElementById("main");
+    main.className = "";
+    var wasPageFocused = main.className.indexOf("page-focus") >= 0;
+
+    if (main.className != page + " page-focus") {
+      main.className = page + " page-focus";
+      localStorage.setItem('page', page);
+
+      return true;
+    }
+
+    main.className = "";
+    localStorage.setItem('page', '');
+
+    return false;
+  }
+
+  var page = localStorage.getItem('page');
+  if (page) {
+    pageToggle(page);
+  }
+</script>
+
+<script>
+  var otfixN = 0;
+
+  function otfix() {
+    var el = document.getElementsByClassName("onetrust-pc-dark-filter").item(0);
+    if (el != null) {
+      el.style = "z-index: -1;";
+    } else if (otfixN < 100) {
+      otfixN += 1;
+
+      setTimeout(otfix, 100);
+    }
+  }
+
+  otfix();
+</script>
+</body>
+</html>

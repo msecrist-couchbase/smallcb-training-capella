@@ -3,8 +3,8 @@ page: page-05
 lang: dotnet
 infoBefore: |
   <div>
-  <a href='#' class="disable" style="float:left">Previous Lesson</a>
-  <a href='/examples/basic-dotnet-query-rows' class="next-button">Next Lesson</a>
+  <a href='#' class="disable prev-button" style="float:left">Previous</a>
+  <a href='/examples/basic-dotnet-query-rows' class="next-button">Next</a>
   </div>
   <br>
 code: |

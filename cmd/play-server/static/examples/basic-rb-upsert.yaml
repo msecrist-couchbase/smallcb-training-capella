@@ -3,8 +3,8 @@ page: page-07
 lang: rb
 infoBefore: |
   <div>
-  <a href='/examples/basic-ruby-subdoc-mutate' class="prev-button">Previous Lesson</a>
-  <a href='#' class="disable next-button" style="float:right">Next Lesson</a>
+  <a href='/examples/basic-rb-subdoc-mutate' class="prev-button">Previous</a>
+  <a href='/examples/basic-rb-search-query-string' class="next-button" style="float:right">Next</a>
   </div>
   <br>
 code: |

@@ -9,8 +9,10 @@ import (
 	"io/ioutil"
 	"log"
 	"math/rand"
+	"net"
 	"net/http"
 	"regexp"
+	"runtime"
 	"sort"
 	"strconv"
 	"strings"
@@ -50,7 +52,15 @@ func HttpMuxInit(mux *http.ServeMux) {
 
 	mux.HandleFunc("/session", HttpHandleSession)
 
+	mux.HandleFunc("/session-cbshell", HttpHandleSessionCBShell)
+
+	mux.HandleFunc("/target", HttpHandleTarget)
+
+	mux.HandleFunc("/target-exit", HttpHandleTargetExit)
+
 	mux.HandleFunc("/run", HttpHandleRun)
+
+	mux.HandleFunc("/et", HttpHandleET)
 
 	mux.HandleFunc("/", HttpHandleMain)
 
@@ -82,6 +92,46 @@ func HttpHandleMain(w http.ResponseWriter, r *http.Request) {
 	examplesPath := "examples"
 
 	name := r.FormValue("name")
+
+	targetCookie, terr := r.Cookie(*targetsCookieName)
+	Target := target{}
+	if terr == nil && targetCookie != nil {
+		targetCookieValue := DecryptText(targetCookie.Value)
+		targetTuple := strings.Split(targetCookieValue, "::")
+		Target.DBurl = targetTuple[0]
+		Target.DBuser = targetTuple[1]
+		Target.DBpwd = targetTuple[2]
+		Target.DBHost = GetDBHostFromURL(Target.DBurl)
+		if len(targetTuple) >= 4 {
+			Target.ExpiryTime = targetTuple[3]
+			if len(targetTuple) >= 5 {
+				Target.Name = targetTuple[4]
+				name = Target.Name
+				if len(targetTuple) >= 6 {
+					Target.Email = targetTuple[5]
+				}
+			}
+
+		} else {
+			Target.ExpiryTime = ""
+		}
+		if runtime.GOOS == "linux" {
+			addSrvRoute(Target.DBurl)
+		} else {
+			*natPublicIP = "YourHostIP"
+		}
+		Target.NatPublicIP = *natPublicIP
+		Target.NetworkStatus, Target.Version, Target.IPv4 = CheckDBAccess(Target.DBurl)
+		Target.Status = Target.NetworkStatus
+		if Target.NetworkStatus == "OK" {
+			Target.UserAccessStatus = CheckDBUserAccess(Target.IPv4, Target.DBuser, Target.DBpwd)
+			Target.Status = Target.UserAccessStatus
+			if Target.UserAccessStatus == "OK" {
+				Target.SampleAccessStatus = CheckDBUserSampleAccess(Target.IPv4, Target.DBuser, Target.DBpwd, "travel-sample")
+				Target.Status = Target.SampleAccessStatus
+			}
+		}
+	}
 
 	// Example URL.Path == "/examples/basic-py"
 	path := r.URL.Path
@@ -141,6 +191,7 @@ func HttpHandleMain(w http.ResponseWriter, r *http.Request) {
 
 	err = MainTemplateEmit(w, *staticDir, msg, *host, portApp,
 		*version, VersionSDKs, session, *sessionsMaxAge, *sessionsMaxIdle,
+		Target,
 		*listenPortBase, *listenPortSpan, PortMapping,
 		examplesPath, name, r.FormValue("title"),
 		lang, code, r.FormValue("highlight"), view, bodyClass,
@@ -153,6 +204,26 @@ func HttpHandleMain(w http.ResponseWriter, r *http.Request) {
 	}
 
 	StatsNumInc("http.Main.ok")
+}
+
+func EncryptText(cleartext string) (outputText string) {
+	defer func() {
+		if err := recover(); err != nil {
+			fmt.Println("Error while doing encrypt!")
+			outputText = cleartext
+		}
+	}()
+	return Encrypt(*encryptKey, cleartext)
+}
+
+func DecryptText(ettext string) (outputText string) {
+	defer func() {
+		if err := recover(); err != nil {
+			fmt.Println("Error while doing decrypt!")
+			outputText = ettext
+		}
+	}()
+	return Decrypt(*encryptKey, ettext)
 }
 
 // ------------------------------------------------
@@ -176,6 +247,46 @@ func HttpHandleSessionExit(w http.ResponseWriter, r *http.Request) {
 		url += "?m=session-exit"
 	} else {
 		url += "&m=session-exit"
+	}
+
+	http.Redirect(w, r, url, http.StatusSeeOther)
+}
+
+func HttpHandleTargetExit(w http.ResponseWriter, r *http.Request) {
+	StatsNumInc("http.TargetExit")
+
+	//delete route before exit
+	targetCookie, terr := r.Cookie(*targetsCookieName)
+	Target := target{}
+	if terr == nil && targetCookie != nil {
+		targetCookieValue := DecryptText(targetCookie.Value)
+		targetTuple := strings.Split(targetCookieValue, "::")
+		Target.DBurl = targetTuple[0]
+		if runtime.GOOS == "linux" {
+			delSrvRoute(Target.DBurl)
+		} else {
+			*natPublicIP = "YourHostIP"
+			Target.NatPublicIP = *natPublicIP
+		}
+	}
+	//set cookie expire time to -1
+	targetsCookie := &http.Cookie{
+		Name:   *targetsCookieName,
+		MaxAge: -1,
+	}
+	http.SetCookie(w, targetsCookie)
+
+	// Remove cbshell session too
+	sessions.SessionExit(r.FormValue("s"))
+
+	url := r.FormValue("ebase")
+	if url == "" {
+		url = "/"
+	}
+
+	e := r.FormValue("e")
+	if e != "" {
+		url = url + e
 	}
 
 	http.Redirect(w, r, url, http.StatusSeeOther)
@@ -219,6 +330,8 @@ var regexpE = regexp.MustCompile(`^[a-zA-Z0-9_#=/\-\?\.]*$`)
 
 func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 	StatsNumInc("http.Session")
+
+	Target := target{}
 
 	if *host != "127.0.0.1" && *host != "localhost" &&
 		strings.Split(r.Host, ":")[0] != *host {
@@ -277,6 +390,7 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 		"init":          r.FormValue("init"),
 		"e":             e,
 		"bodyClass":     bodyClass,
+		"BaseUrl":       *baseUrl,
 	}
 
 	if r.Method == "POST" {
@@ -345,7 +459,7 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 		if errs <= 0 {
 			StatsNumInc("http.Session.post.create")
 
-			session, err := sessions.SessionCreate("", name, email)
+			session, err := sessions.SessionCreate("", name, email, Target)
 			if err == nil && session != nil && session.SessionId != "" {
 				StatsNumInc("http.Session.post.ok", "http.Session.post.create.assign")
 
@@ -378,7 +492,7 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 					childSession, err = sessions.SessionCreate(
 						session.SessionId,
 						fmt.Sprintf("~%s-%d", session.SessionId, i),
-						"~")
+						"~", Target)
 					if err != nil {
 						break
 					}
@@ -446,6 +560,469 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 
 	template.Must(template.ParseFiles(
 		*staticDir+"/session.html.tmpl")).Execute(w, data)
+}
+
+func HttpHandleSessionCBShell(w http.ResponseWriter, r *http.Request) {
+	StatsNumInc("http.Session")
+
+	Target := target{}
+
+	if *host != "127.0.0.1" && *host != "localhost" &&
+		strings.Split(r.Host, ":")[0] != *host {
+		StatsNumInc("http.Session.redirect.host")
+
+		var suffix string
+
+		if r.ParseForm() == nil {
+			suffix = r.Form.Encode()
+			if len(suffix) > 0 {
+				suffix = "?" + suffix
+			}
+		}
+
+		http.Redirect(w, r, "http://"+*host+"/session"+suffix, http.StatusSeeOther)
+
+		log.Printf("INFO: Session redirect, from host: %v, to host: %s, suffix: %s", r.Host, *host, suffix)
+
+		return
+	}
+
+	// Optional extra URL suffix for redirect on success,
+	// used to target a particular code example or tour.
+	e := r.FormValue("e")
+	if !regexpE.MatchString(e) || strings.Index(e, "..") >= 0 {
+		StatsNumInc("http.Session.err", "http.Session.err.bad-e")
+
+		http.Error(w,
+			http.StatusText(http.StatusBadRequest),
+			http.StatusBadRequest)
+
+		log.Printf("ERROR: HttpHandleMain, e: %s, err: e unmatched", e)
+
+		return
+	}
+
+	bodyClass := r.FormValue("bodyClass")
+	if bodyClass == "" {
+		bodyClass = "dark"
+	}
+
+	data := map[string]interface{}{
+		"AnalyticsHTML": template.HTML(AnalyticsHTML(*host)),
+		"OptanonHTML":   template.HTML(OptanonHTML(*host)),
+		"SessionsMaxAge": strings.Replace(
+			sessionsMaxAge.String(), "m0s", " min", 1),
+		"SessionsMaxIdle": strings.Replace(
+			sessionsMaxIdle.String(), "m0s", " min", 1),
+		"title":         r.FormValue("title"),
+		"intro":         r.FormValue("intro"),
+		"namec":         "",
+		"emailc":        "",
+		"captchac":      "",
+		"defaultBucket": "travel-sample",
+		"groupSize":     1,
+		"init":          r.FormValue("init"),
+		"e":             e,
+		"bodyClass":     bodyClass,
+		"BaseUrl":       *baseUrl,
+	}
+
+	errs := 0
+
+	groupSize, err := strconv.Atoi(strings.TrimSpace("1"))
+	if err != nil || groupSize < 1 {
+		groupSize = 1
+	}
+
+	// Racy-y check to see if there's enough containers available,
+	// where it's cheaper to check this early rather than trying
+	// to allocate containers and fail partway through.
+	_, sessionsCountWithContainer := sessions.Count()
+	if *containers-int(sessionsCountWithContainer)-groupSize < *containersSingleUse {
+		data["err"] = fmt.Sprintf("Not enough resources right now - " +
+			"please try again later.")
+		errs += 1
+	}
+
+	if errs <= 0 {
+		log.Printf("Creating cbshell session...")
+		StatsNumInc("http.Session.cbshell.create")
+
+		name, email := "", ""
+		targetCookie, terr := r.Cookie(*targetsCookieName)
+		if terr == nil && targetCookie != nil {
+			targetCookieValue := DecryptText(targetCookie.Value)
+			targetTuple := strings.Split(targetCookieValue, "::")
+			Target.DBurl = targetTuple[0]
+			Target.DBuser = targetTuple[1]
+			Target.DBpwd = targetTuple[2]
+			if len(targetTuple) >= 4 {
+				Target.ExpiryTime = targetTuple[3]
+				if len(targetTuple) >= 5 {
+					name = targetTuple[4]
+					Target.Name = name
+				}
+				if len(targetTuple) >= 6 {
+					email = targetTuple[5]
+					Target.Email = email
+				}
+			} else {
+				Target.ExpiryTime = ""
+			}
+		}
+
+		session, err := sessions.SessionCreate("", name, email, Target)
+		if err == nil && session != nil && session.SessionId != "" {
+			StatsNumInc("http.Session.cbshell.ok", "http.Session.cbshell.create.assign")
+
+			req := RunRequest{
+				ctx:                 context.Background(),
+				execPrefix:          "",
+				lang:                "n/a",
+				code:                "n/a",
+				codeDuration:        *codeDuration,
+				containerNamePrefix: *containerNamePrefix,
+				containerVolPrefix:  *containerVolPrefix,
+				cbAdminPassword:     CBAdminPassword,
+			}
+
+			defaultBucket := r.FormValue("defaultBucket")
+			if defaultBucket == "" {
+				defaultBucket = "travel-sample"
+			}
+
+			_, err = SessionAssignContainerCbsh(
+				session, req, readyCh,
+				*containerWaitDuration, restartCh,
+				*containers, *containersSingleUse,
+				r.FormValue("init"), "0",
+				defaultBucket, Target)
+
+			for i := 1; err == nil && i < groupSize; i++ {
+				var childSession *Session
+
+				childSession, err = sessions.SessionCreate(
+					session.SessionId,
+					fmt.Sprintf("~%s-%d", session.SessionId, i),
+					"~", Target)
+				if err != nil {
+					break
+				}
+
+				_, err = SessionAssignContainerCbsh(
+					childSession, req, readyCh,
+					*containerWaitDuration, restartCh,
+					*containers, *containersSingleUse,
+					r.FormValue("init"), fmt.Sprintf("%d", i),
+					defaultBucket, Target)
+			}
+
+			if err == nil {
+				StatsNumInc("http.Session.cbshell.ok", "http.Session.cbshell.create.assign.ok")
+
+				url := r.FormValue("ebase")
+				if url == "" {
+					url = "/"
+				}
+
+				if e != "" {
+					url = url + e
+				}
+
+				if strings.Index(url, "?") < 0 {
+					url += "?s=" + session.SessionId
+				} else {
+					url += "&s=" + session.SessionId
+				}
+
+				log.Printf("Redirecting to %s\n", url)
+				http.Redirect(w, r, url, http.StatusSeeOther)
+
+				StatsNumInc("http.Session.cbshell.ok", "http.Session.cbshell.create.ok")
+
+				return
+			}
+
+			StatsNumInc("http.Session.cbshell.ok", "http.Session.cbshell.create.assign.err")
+
+			sessions.SessionExit(session.SessionId)
+		}
+
+		StatsNumInc("http.Session.cbshell.create.err")
+
+		data["err"] = fmt.Sprintf("Could not create couchbase shell session - "+
+			"please try again later. (%v)", err)
+		fmt.Println(data["err"])
+	}
+
+}
+
+func HttpHandleTarget(w http.ResponseWriter, r *http.Request) {
+	StatsNumInc("http.Target")
+
+	if *host != "127.0.0.1" && *host != "localhost" &&
+		strings.Split(r.Host, ":")[0] != *host {
+		StatsNumInc("http.Target.redirect.host")
+
+		var suffix string
+
+		if r.ParseForm() == nil {
+			suffix = r.Form.Encode()
+			if len(suffix) > 0 {
+				suffix = "?" + suffix
+			}
+		}
+
+		http.Redirect(w, r, "http://"+*host+"/target"+suffix, http.StatusSeeOther)
+
+		log.Printf("INFO: Target redirect, from host: %v, to host: %s, suffix: %s", r.Host, *host, suffix)
+
+		return
+	}
+
+	// Optional extra URL suffix for redirect on success,
+	// used to target a particular code example or tour.
+	e := r.FormValue("e")
+	if !regexpE.MatchString(e) || strings.Index(e, "..") >= 0 {
+		StatsNumInc("http.Session.err", "http.Session.err.bad-e")
+
+		http.Error(w,
+			http.StatusText(http.StatusBadRequest),
+			http.StatusBadRequest)
+
+		log.Printf("ERROR: HttpHandleMain, e: %s, err: e unmatched", e)
+
+		return
+	}
+
+	bodyClass := r.FormValue("bodyClass")
+	if bodyClass == "" {
+		bodyClass = "dark"
+	}
+
+	targetCookie, terr := r.Cookie(*targetsCookieName)
+	Target := target{}
+	if terr == nil && targetCookie != nil {
+		targetCookieValue := DecryptText(targetCookie.Value)
+		targetTuple := strings.Split(targetCookieValue, "::")
+		Target.DBurl = targetTuple[0]
+		Target.DBuser = targetTuple[1]
+		Target.DBpwd = targetTuple[2]
+		Target.DBHost = GetDBHostFromURL(Target.DBurl)
+		if len(targetTuple) >= 4 {
+			Target.ExpiryTime = targetTuple[3]
+			if len(targetTuple) >= 5 {
+				Target.Name = targetTuple[4]
+				if len(targetTuple) >= 6 {
+					Target.Email = targetTuple[5]
+				}
+			}
+
+		} else {
+			Target.ExpiryTime = ""
+		}
+		if runtime.GOOS == "linux" {
+			addSrvRoute(Target.DBurl)
+		} else {
+			*natPublicIP = "YourHostIP"
+		}
+		Target.NatPublicIP = *natPublicIP
+		Target.NetworkStatus, Target.Version, Target.IPv4 = CheckDBAccess(Target.DBurl)
+		Target.Status = Target.NetworkStatus
+		if Target.NetworkStatus == "OK" {
+			Target.UserAccessStatus = CheckDBUserAccess(Target.IPv4, Target.DBuser, Target.DBpwd)
+			Target.Status = Target.UserAccessStatus
+			if Target.UserAccessStatus == "OK" {
+				Target.SampleAccessStatus = CheckDBUserSampleAccess(Target.IPv4, Target.DBuser, Target.DBpwd, "travel-sample")
+				Target.Status = Target.SampleAccessStatus
+			}
+		}
+
+	}
+	data := map[string]interface{}{
+		"AnalyticsHTML": template.HTML(AnalyticsHTML(*host)),
+		"OptanonHTML":   template.HTML(OptanonHTML(*host)),
+		"TargetsMaxAge": ((*targetsMaxAge).Hours() / 24),
+		"title":         r.FormValue("title"),
+		"intro":         r.FormValue("intro"),
+		"dburlc":        r.FormValue("dburlc"),
+		"dbuserc":       r.FormValue("dbuserc"),
+		"dbpwdc":        r.FormValue("dbpwdc"),
+		"dburl":         r.FormValue("dburl"),
+		"dbuser":        r.FormValue("dbuser"),
+		"dbpwd":         r.FormValue("dbpwd"),
+		"namec":         r.FormValue("namec"),
+		"emailc":        r.FormValue("emailc"),
+		"captchac":      r.FormValue("captchac"),
+		"natpublicip":   *natPublicIP,
+		"bodyClass":     bodyClass,
+		"BaseUrl":       *baseUrl,
+	}
+
+	if runtime.GOOS != "linux" {
+		*natPublicIP = "YourHostIP"
+		data["natpublicip"] = *natPublicIP
+	}
+
+	if r.Method == "POST" {
+		StatsNumInc("http.Target.post")
+
+		gen := fmt.Sprintf("gen!%s-%d",
+			time.Now().Format("2006/01/02-15:04:05"),
+			rand.Intn(1000000))
+
+		errs := 0
+
+		dburl := strings.TrimSpace(r.FormValue("dburl"))
+		if r.FormValue("dburlc") == "skip" {
+			dburl = gen
+		}
+		if dburl == "" {
+			StatsNumInc("http.Target.post.err.dburl")
+
+			data["errDBurl"] = "db URL required"
+			errs += 1
+		} else {
+			dbHostName := GetDBHostFromURL(dburl)
+			_, _, err := net.LookupSRV("couchbases", "tcp", dbHostName)
+			if err != nil {
+				data["errDBurl"] = "db URL invalid or not reachable"
+				errs += 1
+			}
+		}
+
+		dbHost := dburl
+		if !strings.HasPrefix(dburl, "couchbase:") && !strings.HasPrefix(dburl, "couchbases:") && strings.Contains(dburl, "cloud.couchbase.com") {
+			dburl = "couchbases://" + dburl
+		}
+		if strings.HasPrefix(dburl, "couchbases:") && !strings.Contains(dburl, "ssl=no_verify") {
+			if !strings.Contains(dburl, "?") {
+				dburl += "?ssl=no_verify"
+			} else {
+				dburl += "&ssl=no_verify"
+			}
+		}
+
+		data["dburl"] = dburl
+
+		dbuser := strings.TrimSpace(r.FormValue("dbuser"))
+		if r.FormValue("dbuserc") == "skip" {
+			dbuser = gen
+		}
+		if dbuser == "" {
+			StatsNumInc("http.Target.post.err.dbuser")
+
+			data["errDBuser"] = "db user required"
+			errs += 1
+		}
+		data["dbuser"] = dbuser
+
+		dbpwd := strings.TrimSpace(r.FormValue("dbpwd"))
+		if r.FormValue("dbpwdc") == "skip" {
+			dbpwd = gen
+		}
+		if dbpwd == "" {
+			StatsNumInc("http.Target.post.err.dbpwd")
+
+			data["errDBpwd"] = "db user password required"
+			errs += 1
+		}
+		data["dbpwd"] = dbpwd
+
+		name := strings.TrimSpace(r.FormValue("name"))
+		if r.FormValue("namec") == "skip" {
+			name = gen
+		}
+		if name == "" {
+			StatsNumInc("http.Session.post.err.name")
+
+			data["errName"] = "name required"
+			errs += 1
+		}
+		data["name"] = name
+
+		email := strings.TrimSpace(r.FormValue("email"))
+		if r.FormValue("emailc") == "skip" {
+			email = gen
+		}
+		if email == "" {
+			StatsNumInc("http.Session.post.err.email")
+
+			data["errEmail"] = "email required"
+			errs += 1
+		}
+		data["email"] = email
+
+		captcha := strings.TrimSpace(r.FormValue("captcha"))
+		if r.FormValue("captchac") != "skip" {
+			if captcha == "" {
+				data["errCaptcha"] = "guess required"
+				errs += 1
+			} else if !CaptchaCheck(captcha) {
+				StatsNumInc("http.Session.post.err.captcha")
+
+				time.Sleep(WrongCaptchaSleepTime)
+
+				data["errCaptcha"] = "please guess again"
+				errs += 1
+			}
+		}
+
+		//fmt.Printf("INFO: Target POST, dburl: %s, dbuser: %s, dbpwd: %s, errs: %v\n", dburl, dbuser, dbpwd, errs)
+		if errs <= 0 {
+			// Encrypt and Set cookie
+			//fmt.Println(data)
+			time.FixedZone("PDT", 8*60*60)
+			age := time.Now().Add(*targetsMaxAge)
+			cookieValue := dburl + "::" + dbuser + "::" + dbpwd + "::" + age.Format(time.RFC3339) + "::" + name + "::" + email
+			etCookieValue := EncryptText(cookieValue)
+			//fmt.Println("etCookieValue=" + etCookieValue)
+			targetsCookie := &http.Cookie{
+				Name:   *targetsCookieName,
+				Value:  etCookieValue,
+				MaxAge: int((*targetsMaxAge).Seconds()),
+			}
+			if runtime.GOOS == "linux" {
+				addSrvRoute(dbHost)
+			} else {
+				*natPublicIP = "YourHostIP"
+				data["natpublicip"] = *natPublicIP
+			}
+			Target.NatPublicIP = *natPublicIP
+			http.SetCookie(w, targetsCookie)
+			url := r.FormValue("ebase")
+			if url == "" {
+				url = "/"
+			}
+
+			if e != "" {
+				url = url + e
+			}
+
+			http.Redirect(w, r, url, http.StatusSeeOther)
+			StatsNumInc("http.Target.post.ok", "http.Target.post.create.ok")
+			return
+		}
+		StatsNumInc("http.Target.post.err")
+
+	} else {
+		StatsNumInc("http.Target.get")
+	}
+
+	captchaURL, err := CaptchaGenerateBase64ImageDataURL(240, 80, *maxCaptchas)
+	if err != nil {
+		http.Error(w,
+			http.StatusText(http.StatusInternalServerError)+
+				fmt.Sprintf(", CaptchaGenerate, err: %v", err),
+			http.StatusInternalServerError)
+		log.Printf("ERROR: CaptchaGenerate, err: %v", err)
+		return
+	}
+
+	data["captchaSrc"] = template.HTMLAttr("src=\"" + captchaURL + "\"")
+
+	template.Must(template.ParseFiles(
+		*staticDir+"/target.html.tmpl")).Execute(w, data)
 }
 
 // ------------------------------------------------
@@ -758,7 +1335,7 @@ func OptanonHTML(host string) string {
 func AddSessionInfo(session *Session, infoBefore string) string {
 	if session != nil {
 		sIDNext := fmt.Sprintf("?s=%s' class=\"next-button\"", session.SessionId)
-		sIDPrev := fmt.Sprintf("?s=%s' class=\"previous-button\"", session.SessionId)
+		sIDPrev := fmt.Sprintf("?s=%s' class=\"prev-button\"", session.SessionId)
 		infoBefore = strings.ReplaceAll(infoBefore, "' class=\"next-button\"", sIDNext)
 		infoBefore = strings.ReplaceAll(infoBefore, "' class=\"prev-button\"", sIDPrev)
 	}
@@ -786,6 +1363,14 @@ func CodeFromFixup(code, program, lang, from string) string {
 			code = strings.ReplaceAll(code,
 				"class "+program, "class Program")
 		}
+	}
+	// replace if encrypted text used %%%<ET>%%%
+	for strings.Contains(code, "%%%") {
+		re := regexp.MustCompile("%%%(.*?)%%%")
+		match := re.FindStringSubmatch(code)
+		et := strings.Split(match[0], "%%%")
+		ct := Decrypt(*encryptKey, et[1])
+		code = strings.ReplaceAll(code, "%%%"+match[1]+"%%%", ct)
 	}
 
 	return code
@@ -854,4 +1439,25 @@ func CheckVerServer(verServer string) error {
 	}
 
 	return nil
+}
+
+// Get Encrypted Text
+func HttpHandleET(w http.ResponseWriter, r *http.Request) {
+	StatsNumInc("http.ET")
+
+	cleartext := r.FormValue("ct")
+	etext := r.FormValue("et")
+	result := ""
+	if cleartext != "" {
+		result = Encrypt(*encryptKey, cleartext)
+	}
+	if etext != "" {
+		result = Decrypt(*encryptKey, etext)
+	}
+
+	StatsNumInc("http.ET.ok")
+
+	w.Header().Set("Content-Type", "application/json")
+
+	w.Write([]byte(result))
 }

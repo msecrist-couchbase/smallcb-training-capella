@@ -3,8 +3,8 @@ page: page-01
 lang: java
 infoBefore: |
   <div>
-  <a href='/examples/basic-java-txn-kv-mutate' class="prev-button">Previous Lesson</a>
-  <a href='/examples/basic-java-upsert' class="next-button">Next Lesson</a>
+  <a href='/examples/basic-java-txn-kv-mutate' class="prev-button">Previous</a>
+  <a href='/examples/basic-java-upsert' class="next-button">Next</a>
   </div>
   <br>
 code: |
@@ -27,18 +27,11 @@ code: |
   import java.util.UUID;
   import java.util.concurrent.atomic.AtomicReference;
 
-  class NoRouteFound extends RuntimeException {
-    private static final long serialVersionUID = 1L;
-  }
-
   class Program {
     public static void main(String[] args) {
-      var clusterName = "couchbase://{{.Host}}";
-      var username = "{{.CBUser}}";
-      var password = "{{.CBPswd}}";
       var bucketName = "travel-sample";
 
-      Cluster cluster = Cluster.connect(clusterName, username, password);
+      var cluster = Cluster.connect("couchbase://{{.Host}}", "{{.CBUser}}", "{{.CBPswd}}");
       Bucket bucket = cluster.bucket(bucketName);
       bucket.waitUntilReady(Duration.ofSeconds(30));
 
@@ -166,6 +159,10 @@ code: |
 
       return null;
     }
+  }
+
+  class NoRouteFound extends RuntimeException {
+    private static final long serialVersionUID = 1L;
   }
 infoAfter: |
   This example shows an example of distributed transactions with N1QL Queries.

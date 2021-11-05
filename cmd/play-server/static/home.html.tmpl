@@ -9,7 +9,20 @@
   <link rel="stylesheet" type="text/css" href="/static/styles/icons.css">
   <link rel="stylesheet" type="text/css" href="/static/styles/flexboxgrid.min.css">
   <link rel="stylesheet" type="text/css" href="/static/styles/progress-wizard.min.css">
+
   <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+
+  <link rel="stylesheet" type="text/css" href="/static/styles/font-awesome/css/font-awesome.min.css">
+
+  <!-- Development CDN -- Switch for PROD -->
+  <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
+  <script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
+
+  <script src="../static/scripts/menu.js"></script>
+  <script src="../static/scripts/editorToggle.js"></script>
+  <script src="../static/scripts/browserCompatibility.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
   <style>
     {{if not .Session}}
     body .needs-session {
@@ -20,8 +33,14 @@
   </style>
     {{.OptanonHTML}}
   <script src="/static/ace/src-min/ace.js"></script>
+  <script src="/static/ace/src-min/theme-nord_dark.js"></script>
   <script>
     function onRunSubmit() {
+      setTimeout(() => {
+        document.getElementById("output").scrollIntoView({behavior: "smooth"});
+      }, 100)
+      updateRunButtonState();
+
       document.getElementById("form").className = "run-submitted";
 
       document.getElementById("code").value = codeAce.getSession().getValue();
@@ -65,90 +84,211 @@
 
       stepNext(0);
 
-      document.getElementById("code-output").className = "code-output";
+      document.getElementById("code-output").classList.add("code-output");
+      document.getElementById("code-output").classList.remove("hidden");
 
       return true;
     }
   </script>
+  <script>
+    window.scrollTo({top: 0, behavior: "smooth"})
+  </script>
+{{/*    TODO: look into how AnalyticsHTML works and see if we can do this for the nav too  */}}
     {{.AnalyticsHTML}}
 </head>
-<body class="{{.BodyClass}}">
+<body class="{{.BodyClass}}" onload="{{if .Lang}}setEditorView();{{end}} disableSafariButtons();">
 <header>
-
-  <div class="logo">
-    <a href="/{{if .Session}}?s={{.Session.SessionId}}{{end}}">
+  <div class="header-flex-container">
+    <div class="logo">
       <h1>
-        <img src="/static/cb-rww.svg"/>Playground
+        <a href="https://www.couchbase.com/">
+          <img src="/static/cb-rww.svg" class="hidden-xs"/>
+          <img src="/static/cb.png" class="hidden-sm hidden-lg"/>
+        </a>
+        <a href="//{{if .BaseUrl}}{{.BaseUrl}}{{else}}couchbase.live{{end}}{{if and (.Session)}}/session-exit?s={{.Session.SessionId}}{{ else if and (.Target.DBurl) (not .Session)}}/target-exit{{end}}" id="homeLink">
+          Playground
+        </a>
       </h1>
-    </a>
+    </div>
+
+    <nav>
+      <ul>
+        <li class="dropdown">
+            {{if and (.Session) (not .Target.DBurl)}}
+              <a href="/session-exit?s={{.Session.SessionId}}"
+                 onclick="localStorage.setItem('infoPanel', 'show');" class="session menu-button red-button" id="stopSessionButton">
+                Stop Sandbox Session
+              </a>
+            {{ else if .Target.DBurl}}
+              {{if .Session}}
+                <a href="/target-exit?s={{.Session.SessionId}}"
+              {{else}}
+                <a href="/target-exit"
+              {{end}}
+                 onclick="localStorage.setItem('infoPanel', 'show');" class="session menu-button red-button">
+                Stop Capella Session
+              </a>
+            {{else if not .Target.DBurl}}
+              <a href="#" class="menu-button red-button cursor-default" id="startSessionButtonMenu">
+                Start a Session
+                &nbsp
+                <i class="fa fa-caret-down" aria-hidden="true"></i>
+              </a>
+              <ul class="dropdown-content">
+                <li>
+                  <a href="/session" id="provisionedDropdownButton">
+                    <i class="fa fa-server" aria-hidden="true"></i>
+                    &nbsp
+                    Sandbox
+                  </a>
+                </li>
+                <li>
+                  <a href="/target" id="capellaDropdownButton">
+                    <i class="fa fa-cloud" aria-hidden="true"></i>
+                    &nbsp
+                    Capella
+                  </a>
+                </li>
+              </ul>
+            {{end}}
+        </li>
+      </ul>
+    </nav>
   </div>
 
-  <nav>
-    <ul>
+  <div class="subheader-container">
+    {{if .Target.DBurl}}
+    <div class="greeting">
+      Hello, {{.Target.Name}}
+    </div>
+    {{else if .Session}}
+      <div class="greeting">
+        Hello, {{.Session.Name}}
+      </div>
+    {{end}}
+    <ul id="secondaryNav">
       <li>
-        <a href="/{{if .Session}}?s={{.Session.SessionId}}{{end}}" class="menu-button">
-          <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+        <a href="https://docs.couchbase.com">Documentation</a>
+      </li>
+      <li>
+        <a href="https://developer.couchbase.com">Developers</a>
+      </li>
+      {{if .Lang}}
+      <li>
+        <a href="/{{if .Session}}?s={{.Session.SessionId}}{{end}}">
+          <svg class="hidden-mobile" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
                width="14" height="14"
                viewBox="0 -3 25 25"
                style=" fill:#ffffff;">
             <path d="M 12 2 A 1 1 0 0 0 11.289062 2.296875 L 1.203125 11.097656 A 0.5 0.5 0 0 0 1 11.5 A 0.5 0.5 0 0 0 1.5 12 L 4 12 L 4 20 C 4 20.552 4.448 21 5 21 L 9 21 C 9.552 21 10 20.552 10 20 L 10 14 L 14 14 L 14 20 C 14 20.552 14.448 21 15 21 L 19 21 C 19.552 21 20 20.552 20 20 L 20 12 L 22.5 12 A 0.5 0.5 0 0 0 23 11.5 A 0.5 0.5 0 0 0 22.796875 11.097656 L 12.716797 2.3027344 A 1 1 0 0 0 12.710938 2.296875 A 1 1 0 0 0 12 2 z"></path>
           </svg>
-          &nbsp
-          Playground Home
+          <span class="hidden-mobile">
+            &nbsp
+          </span>
+          Return to SDKs
+          <span class="hidden-lg">
+            &nbsp
+          </span>
+          <svg class="hidden-lg" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+               width="14" height="14"
+               viewBox="0 -3 25 25"
+               style=" fill:#ffffff;">
+            <path d="M 12 2 A 1 1 0 0 0 11.289062 2.296875 L 1.203125 11.097656 A 0.5 0.5 0 0 0 1 11.5 A 0.5 0.5 0 0 0 1.5 12 L 4 12 L 4 20 C 4 20.552 4.448 21 5 21 L 9 21 C 9.552 21 10 20.552 10 20 L 10 14 L 14 14 L 14 20 C 14 20.552 14.448 21 15 21 L 19 21 C 19.552 21 20 20.552 20 20 L 20 12 L 22.5 12 A 0.5 0.5 0 0 0 23 11.5 A 0.5 0.5 0 0 0 22.796875 11.097656 L 12.716797 2.3027344 A 1 1 0 0 0 12.710938 2.296875 A 1 1 0 0 0 12 2 z"></path>
+          </svg>
         </a>
       </li>
-      <li>
-          {{if .Session}}
-            <a href="/session-exit?s={{.Session.SessionId}}"
-               onclick="localStorage.setItem('infoPanel', 'show');" class="session menu-button">
-              Stop Playground Session
-            </a>
-          {{else}}
-            <a href="/session" class="menu-button">
-              Start a Playground Session
-            </a>
-          {{end}}
-      </li>
-      <li>
-        <a target="_blank" href="https://docs.couchbase.com" class="menu-button">Docs</a>
-      </li>
-      <li>
-        <a target="_blank" href="https://developer.couchbase.com" class="menu-button">Couchbase Developer Portal</a>
-      </li>
+      {{end}}
 
-{{/*      <li>*/}}
-{{/*        <a target="_blank" href="https://www.couchbase.com" class="menu-button">Couchbase.com</a>*/}}
-{{/*      </li>*/}}
     </ul>
-  </nav>
+
+    <span id="menuToggle" onclick="handleMenuToggle()">
+      <svg id="hamburgerIcon" fill="#fff" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M24 18v1h-24v-1h24zm0-6v1h-24v-1h24zm0-6v1h-24v-1h24z" fill="#1040e2"/><path d="M24 19h-24v-1h24v1zm0-6h-24v-1h24v1zm0-6h-24v-1h24v1z"/></svg>
+      <svg id="exitIcon" class="hidden" fill="#fff" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M12 11.293l10.293-10.293.707.707-10.293 10.293 10.293 10.293-.707.707-10.293-10.293-10.293 10.293-.707-.707 10.293-10.293-10.293-10.293.707-.707 10.293 10.293z"/></svg>
+    </span>
+  </div>
 
 </header>
 
 <main id="main">
-    {{if .Session}}
+    {{if .Target.DBurl}}
       <div class="info-header">
-        <div class="header-left">
-          <a onclick="toggleInfoPanel();"><span id="toggleIcon" class="chevron down"></span></a>
-        </div>
+
         <div class="header-right">
           <div>
-            <span class="head-server">Your Couchbase instance:</span>
-            <code><a href="http://{{.Host}}:8091/ui/index.html?lu={{.Session.CBUser}}&lp={{.Session.CBPswd}}"
-                     target="_blank">http://{{.Host}}:8091</a>
-            </code>
-            <span class="head-user">username:</span> <code>{{.Session.CBUser}}</code>
-            <span class="head-pass">password:</span> <code>{{.Session.CBPswd}}</code>
+            <span class="head-server">Your Couchbase:</span>
+            <span class="head-user">url:</span> <code>{{.Target.DBHost}}</code>
+            <span class="head-user">ip:</span> <code>{{.Target.IPv4}}</code>
+            {{if eq .Target.Status "OK"}}
+              <span class="head-user">version:</span> <code>{{.Target.Version}}</code>
+              <span class="head-user"><strong>status:</strong></span> <code style="color: green; font-weight: bold">{{.Target.Status}}</code>
+            {{else}}
+              <span class="head-user">status:</span> <code style="color: red; font-weight: bold">{{.Target.Status}}</code>
+              <span class="head-user">network:</span>
+              {{if eq .Target.NetworkStatus "OK"}}
+                <code style="color: green">{{.Target.NetworkStatus}}</code>
+                <span class="head-user">user:</span>
+                {{if eq .Target.UserAccessStatus "OK"}}
+                  <code style="color: green">{{.Target.UserAccessStatus}}</code>
+                  <span class="head-user">travel-sample:</span>
+                  {{if eq .Target.SampleAccessStatus "OK"}}
+                    <code style="color: green">{{.Target.SampleAccessStatus}}</code>
+                  {{else}}
+                    <code style="color: red">{{.Target.SampleAccessStatus}}</code>
+                    <span class="head-user">-->Check travel-sample import in Capella UI</span>
+                  {{end}}
+                {{else}}
+                  <code style="color: red">{{.Target.UserAccessStatus}}</code>
+                  <span class="head-user">-->Check db user credentials</span>
+                {{end}}
+              {{else}}
+                <code style="color: red">{{.Target.NetworkStatus}}</code>
+                <span class="head-user">-->add playground gateway cidr:</span><code>
+                  {{if eq .Target.NatPublicIP "YourHostIP"}}
+                    <a target="_blank" href="http://www.whatismyipaddress.com">{{.Target.NatPublicIP}}</a>
+                  {{else}}
+                    {{.Target.NatPublicIP}}
+                  {{end}}/32 (to your cluster allowlist from Capella UI)</code>
+              {{end}}
+            {{end}}
+
           </div>
         </div>
       </div>
+      <div class="info-header">
+          <div class="header-right">
+            <span class="head-server">Your playground Capella session will expire after </span>
+            <code> {{.Target.ExpiryTime}}<code/>
+
+          </div>
+      </div>
     {{end}}
 
+    {{if .Session}}
+      {{if not .Target.DBurl}}
+        <div class="info-header">
+          <div class="header-left">
+            <a onclick="toggleInfoPanel();"><span id="toggleIcon" class="chevron down"></span></a>
+          </div>
+          <div class="header-right">
+            <div>
+              <span class="head-server">Your Couchbase instance:</span>
+              <code><a href="http://{{.Host}}:8091/ui/index.html?lu={{.Session.CBUser}}&lp={{.Session.CBPswd}}"
+                      target="_blank">http://{{.Host}}:8091</a>
+              </code>
+              <span class="head-user">username:</span> <code>{{.Session.CBUser}}</code>
+              <span class="head-pass">password:</span> <code>*****</code>
+            </div>
+          </div>
+        </div>
+      {{end}}
+    {{end}}
   <div class="info-panel" id="infoPanel">
-      {{if .Msg}}
+      {{if and (.Msg) (not .Target.DBurl)}}
         <div class="message-info">{{.Msg}}</div>
       {{end}}
 
       {{if .Session}}
+       {{if not .Target.DBurl}}
         <div class="session-info">
           <div>
             Your playground session will end after {{.SessionsMaxAge}}
@@ -182,24 +322,32 @@
               <div><img src="/static/shots/shot-documents.png"/></div>
             </a>
               {{if ge .SessionData.ContainerId 0}}
-                <a target="_blank"
+                <a target="_blank" class="disabled-safari disabled-ios" id="shellBtn"
                    href="/static/shell.html?t=http://{{.Host}}:{{.SessionData.port_1337}}">
                   <u>Couchbase Shell</u>
                   <div><img src="/static/shots/shot-cbsh.png"/></div>
                 </a>
+                <a target="_blank" class="disabled-safari disabled-ios"
+                   href="/static/shell-cbq.html?t=http://{{.Host}}:{{.SessionData.port_1338}}">
+                  <u>Query Shell</u>
+                  <div><img src="/static/shots/shot-cbq.png"/></div>
+                </a>
+                <p id="iosCompatNotice" class="hidden"><em>Note:</em> Couchbase Shell and Query Shell are not currently supported on mobile devices. Please use a different device to access these features.</p>
               {{end}}
           </div>
         </div>
+
+        {{end}}
       {{end}}
   </div>
 
   <div class="workspace" id="workspace">
     <div class="workspace-body">
-      <div class="container">
+      <div class="container {{if .Lang}}container-example{{end}}">
           {{if not .Lang}}
-            <h2 class="home-header"><label for="examplesToggle">Experiment with Code Examples</label></h2>
+            <h2 class="home-header"><label for="examplesToggle">Play with Couchbase SDK Code Examples</label></h2>
             <div class="row example-row">
-              <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+              <div class="col-xs-6 col-sm-6 col-md-4 col-lg-4">
                 <a href="/examples/basic-java-kv-get{{if $.Session}}?s={{$.Session.SessionId}}{{end}}"
                    class="example-button" onclick="return pageToggle('page-01')">
                   <object data="../static/icons/java.svg" width="14%" height="14%" class="example-icon"></object>
@@ -207,15 +355,16 @@
                 </a>
               </div>
 
-              <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+              <div class="col-xs-6 col-sm-6 col-md-4 col-lg-4">
                 <a href="/examples/basic-nodejs-kv-get{{if $.Session}}?s={{$.Session.SessionId}}{{end}}"
                    class="example-button" onclick="return pageToggle('page-03')">
                   <object data="../static/icons/nodejs.svg" width="14%" height="14%" class="example-icon"></object>
-                  <h3 class="example-label">Node.js</h3>
+                  <h3 class="example-label hidden-xs">Node.js</h3>
+                  <h3 class="example-label hidden-sm hidden-lg">Node</h3>
                 </a>
               </div>
 
-              <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+              <div class="col-xs-6 col-sm-6 col-md-4 col-lg-4">
                 <a href="/examples/basic-py-kv-get{{if $.Session}}?s={{$.Session.SessionId}}{{end}}"
                    class="example-button"
                    onclick="return pageToggle('page-04')">
@@ -224,7 +373,7 @@
                 </a>
               </div>
 
-              <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+              <div class="col-xs-6 col-sm-6 col-md-4 col-lg-4">
                 <a href="/examples/basic-dotnet-kv-get{{if $.Session}}?s={{$.Session.SessionId}}{{end}}"
                    class="example-button" onclick="return pageToggle('page-05')">
                   <object data="../static/icons/dotnet.svg" width="14%" height="14%" class="example-icon"></object>
@@ -232,7 +381,7 @@
                 </a>
               </div>
 
-              <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+              <div class="col-xs-6 col-sm-6 col-md-4 col-lg-4">
                 <a href="/examples/basic-php-kv-get{{if $.Session}}?s={{$.Session.SessionId}}{{end}}"
                    class="example-button"
                    onclick="return pageToggle('page-06')">
@@ -241,15 +390,15 @@
                 </a>
               </div>
 
-              <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-                <a href="/examples/basic-ruby-kv-get{{if $.Session}}?s={{$.Session.SessionId}}{{end}}"
+              <div class="col-xs-6 col-sm-6 col-md-4 col-lg-4">
+                <a href="/examples/basic-rb-kv-get{{if $.Session}}?s={{$.Session.SessionId}}{{end}}"
                    class="example-button" onclick="return pageToggle('page-07')">
                   <object data="../static/icons/ruby.svg" width="14%" height="14%" class="example-icon"></object>
                   <h3 class="example-label">Ruby</h3>
                 </a>
               </div>
 
-              <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+              <div class="col-xs-6 col-sm-6 col-md-4 col-lg-4">
                 <a href="/examples/basic-scala-kv-get{{if $.Session}}?s={{$.Session.SessionId}}{{end}}"
                    class="example-button" onclick="return pageToggle('page-08')">
                   <object data="../static/icons/scala.svg" width="14%" height="14%" class="example-icon"></object>
@@ -257,7 +406,7 @@
                 </a>
               </div>
 
-              <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+              <div class="col-xs-6 col-sm-6 col-md-4 col-lg-4">
                 <a href="/examples/basic-go-kv-get{{if $.Session}}?s={{$.Session.SessionId}}{{end}}"
                    class="example-button"
                    onclick="return pageToggle('page-09')">
@@ -266,7 +415,7 @@
                 </a>
               </div>
 
-              <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+              <div class="col-xs-6 col-sm-6 col-md-4 col-lg-4">
                 <a href="/examples/basic-cc-kv-get{{if $.Session}}?s={{$.Session.SessionId}}{{end}}"
                    class="example-button"
                    onclick="return pageToggle('page-10')">
@@ -275,22 +424,36 @@
                 </a>
               </div>
             </div>
+
+          {{if and (not .Session) (not .Target.DBurl)}}
+              <br>
+              <hr>
+              <br>
+              <div class="row example-row">
+                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                  <a href="/session"
+                     class="mode-button example-button red-button" onclick="" id="provisionedDropdownButtonTop">
+                    <h3 class="example-label">Sandbox Session</h3>
+                  </a>
+                </div>
+                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                  <a href="/target"
+                     class="mode-button example-button red-button" onclick="" id="capellaDropdownButtonTop">
+                    <h3 class="example-label">Capella Session</h3>
+                  </a>
+                </div>
+              </div>
+              <br>
+              <hr>
+
+          {{end}}
+
           {{end}}
           {{if and .Lang .Title}}
             <div class="progress-wrapper">
               <ul class="progress-indicator">
                   {{/* Determine If KV Get Completed */}}
-                  {{if or
-                  (eq .Title "Key Value Get")
-                  (eq .Title "Query Rows")
-                  (eq .Title "Query w/ Named Param")
-                  (eq .Title "Query w/ Positional Param")
-                  (eq .Title "Sub-document Lookup")
-                  (eq .Title "Sub-document Mutate")
-                  (eq .Title "Transactions KV Mutate")
-                  (eq .Title "Transactions N1QL")
-                  (eq .Title "Upsert")
-                  }}
+                  {{if or (eq .Title "Key Value Get") (eq .Title "Query Rows") (eq .Title "Query w/ Named Param") (eq .Title "Query w/ Positional Param") (eq .Title "Sub-document Lookup") (eq .Title "Sub-document Mutate") (eq .Title "Transactions KV Mutate") (eq .Title "Transactions N1QL") (eq .Title "Upsert") (eq .Title "Search Query String")}}
                     <li class="completed">
                       <a href="/examples/basic-{{.Lang}}-kv-get{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                         <span class="bubble"></span>
@@ -307,16 +470,7 @@
                   {{end}}
 
                   {{/* Determine If Query Rows Completed */}}
-                  {{if or
-                  (eq .Title "Query Rows")
-                  (eq .Title "Query w/ Named Param")
-                  (eq .Title "Query w/ Positional Param")
-                  (eq .Title "Sub-document Lookup")
-                  (eq .Title "Sub-document Mutate")
-                  (eq .Title "Transactions KV Mutate")
-                  (eq .Title "Transactions N1QL")
-                  (eq .Title "Upsert")
-                  }}
+                  {{if or (eq .Title "Query Rows") (eq .Title "Query w/ Named Param") (eq .Title "Query w/ Positional Param") (eq .Title "Sub-document Lookup") (eq .Title "Sub-document Mutate") (eq .Title "Transactions KV Mutate") (eq .Title "Transactions N1QL") (eq .Title "Upsert") (eq .Title "Search Query String")}}
                     <li class="completed">
                       <a href="/examples/basic-{{.Lang}}-query-rows{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                         <span class="bubble"></span>
@@ -333,15 +487,7 @@
                   {{end}}
 
                   {{/* Determine If Query w/ Named Param Completed */}}
-                  {{if or
-                  (eq .Title "Query w/ Named Param")
-                  (eq .Title "Query w/ Positional Param")
-                  (eq .Title "Sub-document Lookup")
-                  (eq .Title "Sub-document Mutate")
-                  (eq .Title "Transactions KV Mutate")
-                  (eq .Title "Transactions N1QL")
-                  (eq .Title "Upsert")
-                  }}
+                  {{if or (eq .Title "Query w/ Named Param") (eq .Title "Query w/ Positional Param") (eq .Title "Sub-document Lookup") (eq .Title "Sub-document Mutate") (eq .Title "Transactions KV Mutate") (eq .Title "Transactions N1QL") (eq .Title "Upsert") (eq .Title "Search Query String")}}
                     <li class="completed">
                       <a href="/examples/basic-{{.Lang}}-query-named-param{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                         <span class="bubble"></span>
@@ -358,14 +504,7 @@
                   {{end}}
 
                   {{/* Determine If Query w/ Positional Param Completed */}}
-                  {{if or
-                  (eq .Title "Query w/ Positional Param")
-                  (eq .Title "Sub-document Lookup")
-                  (eq .Title "Sub-document Mutate")
-                  (eq .Title "Transactions KV Mutate")
-                  (eq .Title "Transactions N1QL")
-                  (eq .Title "Upsert")
-                  }}
+                  {{if or (eq .Title "Query w/ Positional Param") (eq .Title "Sub-document Lookup") (eq .Title "Sub-document Mutate") (eq .Title "Transactions KV Mutate") (eq .Title "Transactions N1QL") (eq .Title "Upsert")  (eq .Title "Search Query String")}}
                     <li class="completed">
                       <a href="/examples/basic-{{.Lang}}-query-positional-param{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                         <span class="bubble"></span>
@@ -382,13 +521,7 @@
                   {{end}}
 
                   {{/* Determine If Sub Document Lookup Completed */}}
-                  {{if or
-                  (eq .Title "Sub-document Lookup")
-                  (eq .Title "Sub-document Mutate")
-                  (eq .Title "Transactions KV Mutate")
-                  (eq .Title "Transactions N1QL")
-                  (eq .Title "Upsert")
-                  }}
+                  {{if or (eq .Title "Sub-document Lookup") (eq .Title "Sub-document Mutate") (eq .Title "Transactions KV Mutate") (eq .Title "Transactions N1QL") (eq .Title "Upsert") (eq .Title "Search Query String")}}
                     <li class="completed">
                       <a href="/examples/basic-{{.Lang}}-subdoc-lookup{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                         <span class="bubble"></span>
@@ -405,12 +538,7 @@
                   {{end}}
 
                   {{/* Determine If Sub Document Mutate Completed */}}
-                  {{if or
-                  (eq .Title "Sub-document Mutate")
-                  (eq .Title "Transactions KV Mutate")
-                  (eq .Title "Transactions N1QL")
-                  (eq .Title "Upsert")
-                  }}
+                  {{if or (eq .Title "Sub-document Mutate") (eq .Title "Transactions KV Mutate") (eq .Title "Transactions N1QL") (eq .Title "Upsert") (eq .Title "Search Query String")}}
                     <li class="completed">
                       <a href="/examples/basic-{{.Lang}}-subdoc-mutate{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                         <span class="bubble"></span>
@@ -429,11 +557,7 @@
                   {{/* Show/Hide Java Transactions Steps */}}
                   {{if eq .Lang "java"}}
                       {{/* Determine If JAVA Transactions KV Mutate Completed */}}
-                      {{if or
-                      (eq .Title "Transactions KV Mutate")
-                      (eq .Title "Transactions N1QL")
-                      (eq .Title "Upsert")
-                      }}
+                      {{if or (eq .Title "Transactions KV Mutate") (eq .Title "Transactions N1QL") (eq .Title "Upsert") (eq .Title "Search Query String")}}
                         <li class="completed">
                           <a href="/examples/basic-{{.Lang}}-txn-kv-mutate{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                             <span class="bubble"></span>
@@ -450,10 +574,7 @@
                       {{end}}
 
                       {{/* Determine If JAVA Transactions N1QL Completed */}}
-                      {{if or
-                      (eq .Title "Transactions N1QL")
-                      (eq .Title "Upsert")
-                      }}
+                      {{if or (eq .Title "Transactions N1QL") (eq .Title "Upsert") (eq .Title "Search Query String")}}
                         <li class="completed">
                           <a href="/examples/basic-{{.Lang}}-txn-n1ql{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                             <span class="bubble"></span>
@@ -472,7 +593,7 @@
 
 
                   {{/* Determine If Upsert Completed */}}
-                  {{if (eq .Title "Upsert")}}
+                  {{if or (eq .Title "Upsert") (eq .Title "Search Query String")}}
                     <li class="completed">
                       <a href="/examples/basic-{{.Lang}}-upsert{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                         <span class="bubble"></span>
@@ -487,13 +608,32 @@
                       </a>
                     </li>
                   {{end}}
+
+
+                  {{/* Determine If New Example Completed */}}
+                  {{if (eq .Title "Search Query String")}}
+                    <li class="completed">
+                      <a href="/examples/basic-{{.Lang}}-search-query-string{{if .Session}}?s={{.Session.SessionId}}{{end}}">
+                        <span class="bubble"></span>
+                        Search Query String
+                      </a>
+                    </li>
+                  {{else}}
+                    <li>
+                      <a href="/examples/basic-{{.Lang}}-search-query-string{{if .Session}}?s={{.Session.SessionId}}{{end}}">
+                        <span class="bubble"></span>
+                        Search Query String
+                      </a>
+                    </li>
+                  {{end}}
+
               </ul>
             </div>
           {{end}}
 
         <div class="row example-row" style="width: 100%">
             {{if and .Lang .Title}}
-              <div class="col-xs-12 col-md-5 example-info-column">
+              <div class="col-xs-12 col-md-3 example-info-column" id="infoColumn">
                 <div class="example-heading">
                     {{if .InfoBefore}}
                       <div class="info infoBefore">{{.InfoBefore}}</div>
@@ -513,120 +653,106 @@
                     <div class="info infoAfter">{{.InfoAfter}}</div>
                   {{end}}
 
-                  {{if not .Session}}
-                    <div class="session-cta">
-                      Also try Couchbase Server in an online playground:
-                      <a href="/session" class="nowrap">Start Playground Session</a>
-                    </div>
-                  {{end}}
-                {{ if not .Session}}
-                <a class="return-home-button example-button" href="/"><i class="fa fa-check"></i>
-                  <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
-                       width="24" height="24"
-                       viewBox="0 0 24 24"
-                       style=" fill:#ffffff;">
-                    <path d="M 12 2 A 1 1 0 0 0 11.289062 2.296875 L 1.203125 11.097656 A 0.5 0.5 0 0 0 1 11.5 A 0.5 0.5 0 0 0 1.5 12 L 4 12 L 4 20 C 4 20.552 4.448 21 5 21 L 9 21 C 9.552 21 10 20.552 10 20 L 10 14 L 14 14 L 14 20 C 14 20.552 14.448 21 15 21 L 19 21 C 19.552 21 20 20.552 20 20 L 20 12 L 22.5 12 A 0.5 0.5 0 0 0 23 11.5 A 0.5 0.5 0 0 0 22.796875 11.097656 L 12.716797 2.3027344 A 1 1 0 0 0 12.710938 2.296875 A 1 1 0 0 0 12 2 z"></path>
-                  </svg>
-                  &nbsp&nbsp
-                  Return to Homepage
-                </a>
-                {{end}}
-                {{ if .Session}}
-                <a class="return-home-button example-button" href="/?s={{.Session.SessionId}}"><i class="fa fa-check"></i>
-                  <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
-                       width="24" height="24"
-                       viewBox="0 0 24 24"
-                       style=" fill:#ffffff;">
-                    <path d="M 12 2 A 1 1 0 0 0 11.289062 2.296875 L 1.203125 11.097656 A 0.5 0.5 0 0 0 1 11.5 A 0.5 0.5 0 0 0 1.5 12 L 4 12 L 4 20 C 4 20.552 4.448 21 5 21 L 9 21 C 9.552 21 10 20.552 10 20 L 10 14 L 14 14 L 14 20 C 14 20.552 14.448 21 15 21 L 19 21 C 19.552 21 20 20.552 20 20 L 20 12 L 22.5 12 A 0.5 0.5 0 0 0 23 11.5 A 0.5 0.5 0 0 0 22.796875 11.097656 L 12.716797 2.3027344 A 1 1 0 0 0 12.710938 2.296875 A 1 1 0 0 0 12 2 z"></path>
-                  </svg>
-                  &nbsp&nbsp
-                  Return to Homepage
-                </a>
-                {{end}}
-
+                  <br>
+                  <em>To run this example, click the button in the top right corner of the code editor.</em>
               </div>
             {{end}}
             {{if .Lang}}
-              <div class="col-xs-12 col-md-7">
+              <div class="col-xs-12 col-md-9" id="editorColumn">
 
-                <div class="code-editor">
-                  <div class="sticky">
-                    <form action="/run" method="post" target="output" id="form">
+                <button id='viewToggleButton' class="stacked-btn toggle-btn hidden-md" onclick="toggleEditorView();"></button>
 
-                        {{if or .Name .Lang .Code}}
-                        {{if ne .Code "NONE"}}
-                          <h2 class="editor-label">Code Editor</h2>
-                          <input type="submit" value="run &gt;&gt;" class="run" id="run"
-                                 onclick="return onRunSubmit()"/>
-                        {{end}}
-                      <div class="example-frame">
+                <div id="editorWrapper" class="row">
 
-                          {{if .Session}}
-                            <input name="s" type="hidden" value="{{.Session.SessionId}}"/>
-                          {{end}}
+                  <div id="editorDiv" class="code-editor col-md-6">
+                    <div class="sticky">
+                      <form action="/run" method="post" target="output" id="form">
 
-                        <input name="lang" type="hidden" value="{{.Lang}}" id="lang"/>
-
+                          {{if or .Name .Lang .Code}}
                           {{if ne .Code "NONE"}}
-                            <div id="code-ace" class="code-ace"></div>
-
-                            <textarea id="code" name="code" class="code"
-                                      wrap="off" autocorrect="off"
-                                      autocomplete="off" autocapitalize="off"
-                                      spellcheck="false">{{.Code}}</textarea>
+                            <h2 class="editor-label">Code Editor</h2>
+                            <input type="submit" value="run example &nbsp &gt&gt;" class="run" id="run"
+                                   onclick="return onRunSubmit()"/>
                           {{end}}
-                      </div>
+                        <div class="example-frame">
 
-                      <input name="color" type="hidden" value="#FFF"/>
-                    </form>
-                      {{end}}
+                            {{if .Session}}
+                              <input name="s" type="hidden" value="{{.Session.SessionId}}"/>
+                            {{end}}
+
+                          <input name="lang" type="hidden" value="{{.Lang}}" id="lang"/>
+
+                            {{if ne .Code "NONE"}}
+                              <div id="code-ace" class="code-ace"></div>
+
+                              <textarea id="code" name="code" class="code"
+                                        wrap="off" autocorrect="off"
+                                        autocomplete="off" autocapitalize="off"
+                                        spellcheck="false">{{.Code}}</textarea>
+                            {{end}}
+                        </div>
+
+                        <input name="color" type="hidden" value="#FFF"/>
+                      </form>
+                        {{end}}
+                    </div>
                   </div>
-                </div>
 
-                <div class="code-output hidden" id="code-output">
-                  <div class="sticky">
-                      {{if or .Name .Lang .Code}}
-                        <h2 class="editor-label">Output</h2>
-                        <iframe name="output" id="output" class="output"></iframe>
-                      {{end}}
+                  <div class="code-output col-md-6" id="code-output">
+                    <div class="sticky">
+                        {{if or .Name .Lang .Code}}
+                          <h2 class="editor-label">Output</h2>
+                          <iframe name="output" id="output" class="output" onload="setOutputHeight()"></iframe>
+                        {{end}}
+                    </div>
                   </div>
                 </div>
 
               </div>
             {{end}}
-          {{if not .Lang}}
-          <div class="code-editor">
-            <div class="sticky">
-            {{if not .Session}}
-              <div class="no-session">
-                <h2 class="home-header">Try Couchbase in an Online Playground</h2>
-              </div>
-            {{end}}
-              <div class="empty-example-frame">
-                <div class="info-frame session-cta">
-                    {{if not .Session}}
-                      <div style="padding-left: 1rem">
-                        <a href="/session" class="nowrap example-button">
-                          <img src="/static/shots/shot-documents.png"/>
-                          <h3>Start Playground Session</h3>
-                        </a>
-                      </div>
-                    {{end}}
-                </div>
-              </div>
-            </div>
-          </div>
-          {{end}}
+
 
         </div>
+          <div class="online-tools">
+            {{if .Target.DBurl}}
+              <h2 class="home-header hidden-ios">Explore interactive shell</h2>
+            {{end}}
+              {{if and (not .Session) (.Target.DBurl)}}
+                      <a href="/session-cbshell" {{if eq .Target.Status "not accessible"}}class="disabled"{{end}} class="nowrap disabled-safari hidden-ios">
+                        <u>Couchbase Shell</u></a>
+              {{else if and (.Target.DBurl) (ge .SessionData.ContainerId 0)}}
+
+                <script>
+                  var iscbshell_open = localStorage.getItem("cbshell_window");
+                  if (iscbshell_open != "opened") {
+                    var newTab = window.open('/static/shell.html?t=http://{{.Host}}:{{.SessionData.port_1337}}', '_blank');
+                    newTab.location;
+                    localStorage.setItem("cbshell_window", "new");
+                  }
+                </script>
+
+                <p><a target="_blank"
+                  href="/static/shell.html?t=http://{{.Host}}:{{.SessionData.port_1337}}" class="nowrap disabled-safari hidden-ios">
+                    <u>Couchbase Shell</u></a> (opens a new tab and the session expire after {{.SessionsMaxAge}}
+                or until {{.SessionsMaxIdle}} of inactivity.)</p>
+                <script>
+                  localStorage.setItem("cbshell_window", "opened");
+                </script>
+              {{else}}
+                <script>
+                  localStorage.setItem("cbshell_window", "closed");
+                </script>
+
+              {{end}}
+
+          </div>
           {{if not .Lang}}
             <div class="online-tools">
               <h2 class="home-header">Explore Online Tools to Learn More About N1QL</h2>
-              <a href="https://query-tutorial.couchbase.com/tutorial/#1" class="nowrap">Online N1QL Tutorial</a>
-              <a href="https://index-advisor.couchbase.com/indexadvisor/#1" class="nowrap">Online N1QL Index Advisor</a>
-              <a href="https://docs.couchbase.com/server/current/n1ql/n1ql-rest-api/index.html" class="nowrap">N1QL REST
-                API
-                Docs</a>
+              <a href="https://query-tutorial.couchbase.com/tutorial/#1" class="nowrap" target="_blank">Online N1QL Tutorial</a>
+              <a href="https://index-advisor.couchbase.com/indexadvisor/#1" class="nowrap" target="_blank">Online N1QL Index Advisor</a>
+              <a href="https://docs.couchbase.com/server/current/n1ql/n1ql-rest-api/index.html" class="nowrap" target="_blank">N1QL REST API Docs</a>
+              <a href="https://sqlplusplus-tutorial.couchbase.com/tutorial/#1" target="_blank">SQL++ Tutorial – N1QL for Analytics Query Language</a>
             </div>
           {{end}}
       </div>
@@ -662,6 +788,11 @@
   <script src="/static/scripts/infoPanel.js"></script>
 {{end}}
 
+{{if .Target.DBurl}}
+  <script src="/static/scripts/infoPanel.js"></script>
+{{end}}
+
+
 <script>
   var codeAce = ace.edit("code-ace");
   codeAce.getSession().setValue(document.getElementById("code").value);
@@ -672,10 +803,12 @@
   codeAce.setOption("mode", "ace/mode/{{.LangAce}}");
   {{end}}
 
-  codeAce.renderer.setScrollMargin(24, 0, 0, 0)
+  codeAce.renderer.setScrollMargin(26, 0, 0, 0)
+
   let numLines = codeAce.session.doc.getAllLines().length;
-  let editorHeight = (numLines * 18);
-  document.getElementById("code-ace").style.height = `${editorHeight}px`
+  codeAce.setOptions({
+    maxLines: numLines + 1
+  })
 
   {{if .Highlight}}
   var highlight = "{{.Highlight}}";
@@ -696,19 +829,83 @@
   {{end}}
 </script>
 <script>
-  var scrollTop = parseInt(localStorage.getItem('scrollTop')) || 0;
-  if (scrollTop > 0) {
-    document.scrollingElement.scrollTo(0, scrollTop);
+  window.onbeforeunload = function() {
+    window.scrollTo(0,0);
   }
-
-  window.addEventListener('unload', function () {
-    localStorage.setItem('scrollTop', document.scrollingElement.scrollTop || 0);
-  });
 </script>
 
 <script>
+{{/*  Script for Tooltips  */}}
+  if (window.innerWidth >= 767) {
+    tippy('#viewToggleButton', {
+      content: 'Switch code editor view to 3 column',
+      placement: 'top-end',
+      theme: 'custom'
+    });
+
+    tippy('#provisionedDropdownButton', {
+      content: 'Starting a sandbox session will allow you to explore the Couchbase Web Console and experiment with your own cluster.',
+      placement: 'left',
+      theme: 'custom'
+    })
+
+    tippy('#capellaDropdownButton', {
+      content: 'Starting a Capella session will allow you to run the SDK examples against your own Couchbase Capella database.',
+      placement: 'left',
+      theme: 'custom'
+    })
+
+    tippy('#provisionedDropdownButtonTop', {
+      content: 'Starting a sandbox session will allow you to explore the Couchbase Web Console and experiment with your own cluster.',
+      placement: 'top',
+      theme: 'custom'
+    })
+
+    tippy('#capellaDropdownButtonTop', {
+      content: 'Starting a Capella session will allow you to run the SDK examples against your own Couchbase Capella database.',
+      placement: 'top',
+      theme: 'custom'
+    })
+
+    tippy('#startSessionButtonInfo', {
+      content: 'Starting an online session will allow you to explore the Couchbase Web Console and experiment with your own cluster.',
+      placement: 'top',
+      theme: 'custom'
+    })
+
+    tippy('#startCapellaSessionButtonInfo', {
+      content: 'Starting an online Couchbase Capella session will allow you to experiment with your own cluster.',
+      placement: 'top',
+      theme: 'custom'
+    })
+
+    tippy('#stopSessionButton', {
+      content: 'WARNING: all data created in your cluster will be deleted.',
+      placement: 'bottom-end',
+      theme: 'custom'
+    })
+    tippy('#stopCapellaSessionButton', {
+      content: 'WARNING: disconnects the examples to your Capella cluster.',
+      placement: 'bottom-end',
+      theme: 'custom'
+    })
+  }
+</script>
+{{if or (.Session) (.Target.DBurl)}}
+<script>
+  if (window.innerWidth >= 767) {
+    tippy('#homeLink', {
+      content: 'WARNING: Returning to playground home will end your current session',
+      placement: 'bottom',
+      theme: 'custom'
+    })
+  }
+</script>
+{{end}}
+<script>
   function pageToggle(page) {
     var main = document.getElementById("main");
+    main.className = "";
     var wasPageFocused = main.className.indexOf("page-focus") >= 0;
 
     if (main.className != page + " page-focus") {

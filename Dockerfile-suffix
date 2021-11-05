@@ -9,7 +9,7 @@ RUN chmod +x /init-couchbase/*.sh && \
 
 RUN if [ ! -d /opt/couchbase/etc/couchbase ]; then mkdir -p /opt/couchbase/etc/couchbase; fi \
     && cat /init-couchbase/init-static-config.txt >> \
-        /opt/couchbase/etc/couchbase/static_config
+    /opt/couchbase/etc/couchbase/static_config
 
 # ------------------------------------------------
 # Copy play-server's run-*.sh files into image.
@@ -47,6 +47,7 @@ COPY --from=maven /usr/share/maven /usr/share/maven
 RUN ln -s /usr/share/maven/bin/mvn /usr/bin/mvn
 
 COPY cmd/play-server/run-java-pom.xml /run-java-pom.xml
+RUN sed -i -e "s/3.1.3/${COUCHBASE_SDK_JAVA_VERSION}/g" -e "s/1.1.6/${COUCHBASE_SDK_JAVA_TRANSACTIONS_VERSION}/g" /run-java-pom.xml
 
 COPY cmd/play-server/run-java-hello.java /home/play/hello/src/main/java/hello.java
 
@@ -69,6 +70,9 @@ RUN cat /run-java-pom.xml | grep 'version>3' | cut -f 2 -d '>' | cut -f 1 -d '<'
 COPY cmd/play-server/run-csharp-hello.csproj /home/play/hellodotnet/run-csharp-hello.csproj
 
 COPY cmd/play-server/run-csharp-hello.cs /home/play/hellodotnet/run-csharp-hello.cs
+
+RUN sed -i -e "s/3.1.3/${COUCHBASE_SDK_DOTNET_VERSION}/g" /home/play/hellodotnet/run-csharp-hello.csproj
+RUN sed -i -e "s/3.1.3/${COUCHBASE_SDK_DOTNET_VERSION}/g" /run-dotnet.sh
 
 RUN chown -R play:couchbase /home/play
 
@@ -94,6 +98,8 @@ RUN echo ${COUCHBASE_SDK_PHP_VERSION} > /opt/couchbase/VERSION-sdk-php.ver
 COPY cmd/play-server/run-scala-build.sbt /home/play/helloscala/build.sbt
 COPY cmd/play-server/run-scala-build.sbt /run-scala-build.sbt
 COPY cmd/play-server/run-scala-pom.xml /home/play/helloscala/run-scala-pom.xml
+COPY cmd/play-server/run-scala-pom.xml /run-scala-pom.xml
+COPY cmd/play-server/run-scala-log4j.properties /run-scala-log4j.properties
 
 RUN mkdir /scala && \
     sed -i -e "s/1.1.2/${COUCHBASE_SDK_SCALA_VERSION}/g" -e "s/2.12.12/${SCALA_VERSION}/g" /home/play/helloscala/build.sbt && \
@@ -111,6 +117,11 @@ USER play
 
 RUN cd /home/play/helloscala && \
     sbt run
+
+RUN cp /run-scala-pom.xml /home/play/helloscala/pom.xml && \
+    cd /home/play/helloscala && \
+    mvn package && \
+    mvn dependency:build-classpath -Dmdep.outputFile=scala-classpath.txt
 
 USER root
 
@@ -147,14 +158,13 @@ RUN useradd -u 1002 -g couchbase -m cbsh
 
 USER cbsh
 
-ENV CBSH_VERSION 0.4.0
+ENV CBSH_VERSION 1.0.0-beta.2
 
 RUN mkdir -p /home/cbsh && \
     cd /home/cbsh && \
-    wget https://github.com/couchbaselabs/couchbase-shell/releases/download/v${CBSH_VERSION}/cbsh-${CBSH_VERSION}-linux.zip && \
-    unzip cbsh-*-linux.zip && \
-    tar -xzvf cbsh-linux-x86_64.tar.gz && \
-    rm *.zip && rm *.gz
+    wget https://github.com/couchbaselabs/couchbase-shell/releases/download/v${CBSH_VERSION}/cbsh-${CBSH_VERSION}-linux.tar.gz && \
+    tar -xzf cbsh-${CBSH_VERSION}-linux.tar.gz && \
+    rm *.gz
 
 COPY tutorials-cbsh /home/cbsh/tutorials-cbsh/
 

@@ -7,11 +7,6 @@
   display: none;
 }
 
-.hidden {
-  visibility: hidden;
-  display: none;
-}
-
 .session-info {
   padding-top: 1em;
   padding-bottom: 10px;
@@ -29,8 +24,7 @@
 }
 .session-info .shots {
   display: flex;
-  flex-wrap: nowrap;
-  align-items: flex-start;
+  flex-wrap: wrap;
   margin: 0 0 20px 50px;
   padding: 0 0 0 0;
 }
@@ -89,10 +83,8 @@ main .info-header .header-left a {
 
 main .info-header .header-right {
   padding-top: 9px;
-  height: 25px;
   font-family: "Ubuntu Mono", monospace;
   font-size: 14px;
-  white-space: nowrap;
 }
 main .info-header .header-right .head-server {
   font-size: 16px;
@@ -112,9 +104,6 @@ main .info-header .header-right code {
   flex-direction: row;
 }
 
-.workspace .workspace-body h2 {
-  height: 23px;
-}
 .workspace .workspace-body h2 .lang {
   font-weight: normal;
 }
@@ -266,25 +255,29 @@ main .info-header .header-right code {
 .workspace .workspace-body .code-editor input.run {
   display: inline-block;
   float: right;
-  border-bottom-left-radius: 3px;
+  border-bottom-left-radius: 6px;
 
   border: 0;
-  padding: 3px 40px 3px 40px;
+  padding: 3px 24px;
   font-weight: bold;
   cursor: pointer;
 
-  border-width: 1px;
+  border-width: 2px;
   border-style: solid;
+
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
 }
 .workspace .workspace-body .code-editor input.run:hover {
-  border-width: 1px;
+  border-width: 2px;
   border-style: solid;
 }
 .workspace .workspace-body .code-editor input.run:focus {
   outline-style: auto;
   outline-width: 0px;
 
-  border-width: 1px;
+  border-width: 2px;
   border-style: solid;
 }
 .workspace .workspace-body .code-output {
@@ -293,7 +286,7 @@ main .info-header .header-right code {
 }
 .workspace .workspace-body .code-output iframe.output {
   width: 100%;
-  height: 50vh;
+  height: 500px;
   margin-bottom: 15px;
 
   border-width: 1px;
@@ -422,7 +415,6 @@ body.dark .session-info .shots a:hover div {
 }
 body.dark .session-info .shots a.start-here div {
   border-color: rgba(159, 226, 100, 0.95);
-  margin-right: 50px;
 }
 body.dark .session-info .shots a.start-here:hover div {
   background-color: #333a32;
@@ -656,7 +648,7 @@ body.dark .workspace .workspace-body .code-editor input.run {
   margin-bottom: 20px;
 }
 body.dark .workspace .workspace-body .code-editor input.run:hover {
-  background-color: #333a32;
+  background-color: #445e41;
 }
 
 body.dark .workspace .workspace-body .code-editor form.run-submitted input.run {
@@ -669,41 +661,42 @@ body.dark .workspace .workspace-body .code-output iframe.output {
 }
 
 a.prev-button {
-  -webkit-appearance: button;
-  -moz-appearance: button;
-  appearance: button;
   padding: 7px 14px;
-
   background-color: #262a35;
   color: rgba(159, 226, 100, 0.95);
   text-align: right;
   margin-bottom: 20px;
-
   float: left;
   text-decoration: none;
   color: initial;
+
+  border: 1px solid #cd575a;
+  border-radius: 6px;
+}
+
+a.prev-button:hover {
+  background-color: rgba(86, 107, 127, 0.2);
 }
 
 a.next-button {
-  -webkit-appearance: button;
-  -moz-appearance: button;
-  appearance: button;
   padding: 7px 14px;
-
   background-color: #262a35;
   color: rgba(159, 226, 100, 0.95);
   text-align: right;
   margin-bottom: 20px;
-
   float: right;
   text-decoration: none;
   color: initial;
+
+  border: 1px solid #cd575a;
+  border-radius: 6px;
+}
+
+a.next-button:hover {
+  background-color: rgba(86, 107, 127, 0.2);
 }
 
 a.disable {
-  -webkit-appearance: button;
-  -moz-appearance: button;
-  appearance: button;
   padding: 7px 14px;
 
   background-color: #262a35;
@@ -752,17 +745,19 @@ a.disable {
   margin-bottom: 26px;
 }
 
+.mode-button {
+  justify-content: center;
+  padding: 1.5rem 1rem;
+}
+
 h2.home-header {
   margin: 26px 0 18px 0;
   font-size: 20px;
+  white-space: normal;
 }
 
 .start-session-home {
   margin-left: 0 !important;
-}
-
-.container {
-  margin: 0 auto;
 }
 
 .run {
@@ -786,7 +781,7 @@ h2.home-header {
   color: #ffffff;
 
   display: block;
-  margin-top: 7px;
+  margin-top: 24px;
   width: 14rem;
   border-width: 1px;
   border-style: solid;
@@ -814,6 +809,7 @@ h2.example-title {
   margin-left: 0;
   margin-right: 16px;
   clear: left;
+  white-space: normal;
 }
 
 .example-row {
@@ -823,7 +819,8 @@ h2.example-title {
 .editor-label {
   position: absolute;
   padding: 3px 6px;
-  background: #516374;
+  background: rgba(86, 107, 127, 0.2);
+  border: 1px solid #516374;
   height: auto !important;
   z-index: 100;
   font-size: 12px !important;
@@ -863,9 +860,15 @@ div.online-tools > a{
   margin-top: 8px;
 }
 
+div.online-tools > p{
+  display: block;
+  margin-left: 16px;
+  margin-top: 8px;
+}
+
 .progress-indicator>li {
-  padding-left: 2% !important;
-  padding-right: 2% !important;
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
 }
 
 .progress-indicator {
@@ -903,43 +906,9 @@ iframe#output {
   margin-bottom: 32px;
 }
 
-body > header > div > a {
-  text-decoration: none !important;
-}
-
-.logo {
-  padding-top: 4px;
-}
-
-.menu-button {
-  text-decoration: none !important;
-  border: 2px solid #6c7a94;
-  padding: 8px 14px;
-  border-radius: 6px;
-  /* Fade Effect on Hover */
-  -o-transition:.3s;
-  -ms-transition:.3s;
-  -moz-transition:.3s;
-  -webkit-transition:.3s;
-  transition:.3s;
-}
-
-.menu-button:hover {
-  text-decoration: none !important;
-  background-color: #6c7a94;
-  border: 2px solid #b8efe7;
-}
-
 div.progress-wrapper > ul > li > a {
   text-decoration: none;
   color: #bbb;
-
-  /* Fade Effect on Hover */
-  -o-transition:.3s;
-  -ms-transition:.3s;
-  -moz-transition:.3s;
-  -webkit-transition:.3s;
-  transition:.3s;
 }
 
 div.progress-wrapper > ul > li > a:hover {
@@ -955,4 +924,59 @@ div.progress-wrapper > ul > li > a:hover {
   -moz-transition:.3s;
   -webkit-transition:.3s;
   transition:.3s;
+}
+
+@media only screen and (min-width: 85em) {
+  .container-example {
+    width: 90% !important;
+    max-width: 128rem;
+  }
+}
+
+@media only screen and (max-width: 992px) {
+  #editorWrapper {
+    width: 100%;
+    margin: 0 auto;
+  }
+}
+
+.toggle-btn {
+  width: 30px;
+  height: 30px;
+  border: none;
+}
+
+.toggle-btn:hover {
+  filter: opacity(60%);
+  cursor: pointer;
+}
+
+.stacked-btn {
+  background: url('../icons/stacked_view.svg') no-repeat;
+  background-size: cover;
+}
+
+.col-btn {
+  background: url('../icons/col_view.svg') no-repeat;
+  background-size: cover;
+}
+
+#editorColumn {
+  text-align: right;
+}
+
+#editorColumn, #infoColumn {
+  -moz-transition: all 0.5s ease-in-out, left 1.5s ease-in-out;
+  -webkit-transition: all 0.5s ease-in-out, left 1.5s ease-in-out;
+  -moz-transition: all 0.5s ease-in-out, left 1.5s ease-in-out;
+  -o-transition: all 0.5s ease-in-out, left 1.5s ease-in-out;
+  transition: all 0.5s ease-in-out, left 1.5s ease-in-out;
+}
+
+#output {
+  -moz-transition: all 0.2s ease-in-out;
+  -webkit-transition: all 0.2s ease-in-out;
+  -moz-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
 }

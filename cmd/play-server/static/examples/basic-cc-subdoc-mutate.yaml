@@ -3,8 +3,8 @@ page: page-10
 lang: cc
 infoBefore: |
   <div>
-  <a href='/examples/basic-cc-subdoc-lookup' class="prev-button">Previous Lesson</a>
-  <a href='/examples/basic-cc-upsert' class="next-button">Next Lesson</a>
+  <a href='/examples/basic-cc-subdoc-lookup' class="prev-button">Previous</a>
+  <a href='/examples/basic-cc-upsert' class="next-button">Next</a>
   </div>
   <br>
 code: |
@@ -58,11 +58,11 @@ code: |
   }
 
   static void
-  subdoc_query_key(lcb_INSTANCE* instance, const std::string& bucket_name, 
+  subdoc_query_key(lcb_INSTANCE* instance, const std::string& bucket_name,
     const std::string& key, const std::string& msgprefix)
   {
     lcb_install_callback(instance, LCB_CALLBACK_SDLOOKUP, reinterpret_cast<lcb_RESPCALLBACK>(sdget_callback));
-    
+
     SubdocResults results;
 
     lcb_SUBDOCSPECS* specs = nullptr;
@@ -120,9 +120,9 @@ code: |
     check(lcb_get_bootstrap_status(instance), "check bootstrap status");
 
     std::string key{ "airline_10" };
-    
+
     subdoc_query_key(instance, bucket_name, key, "Sub-doc before: ");
-    
+
     {
       std::string value{ R"({"country":"Canada"})" };
 

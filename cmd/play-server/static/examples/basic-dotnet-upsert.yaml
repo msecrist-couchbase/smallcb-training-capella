@@ -3,8 +3,8 @@ page: page-05
 lang: dotnet
 infoBefore: |
   <div>
-  <a href='/examples/basic-dotnet-subdoc-mutate' class="prev-button">Previous Lesson</a>
-  <a href='#' class="disable next-button" style="float:right">Next Lesson</a>
+  <a href='/examples/basic-dotnet-subdoc-mutate' class="prev-button">Previous</a>
+  <a href='/examples/basic-dotnet-search-query-string' class="next-button" style="float:right">Next</a>
   </div>
   <br>
 code: |

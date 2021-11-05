@@ -3,8 +3,8 @@ page: page-04
 lang: py
 infoBefore: |
   <div>
-  <a href='/examples/basic-py-subdoc-mutate' class="prev-button">Previous Lesson</a>
-  <a href='#' class="disable next-button" style="float:right">Next Lesson</a>
+  <a href='/examples/basic-py-subdoc-mutate' class="prev-button">Previous</a>
+  <a href='/examples/basic-py-search-query-string' class="next-button" style="float:right">Next</a>
   </div>
   <br>
 code: |
@@ -30,8 +30,7 @@ code: |
     result = collection.upsert(
       'airline_123',
       document,
-      expiry=timedelta(minutes=1),
-      durability=ServerDurability(Durability.MAJORITY)
+      expiry=timedelta(minutes=1)
     )
     print("UPSERT SUCCESS")
     print("cas result:", result.cas)

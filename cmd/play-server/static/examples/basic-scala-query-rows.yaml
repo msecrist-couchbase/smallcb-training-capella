@@ -3,8 +3,8 @@ page: page-08
 lang: scala
 infoBefore: |
   <div>
-  <a href='/examples/basic-scala-kv-get' class="prev-button">Previous Lesson</a>
-  <a href='/examples/basic-scala-query-named-param' class="next-button">Next Lesson</a>
+  <a href='/examples/basic-scala-kv-get' class="prev-button">Previous</a>
+  <a href='/examples/basic-scala-query-named-param' class="next-button">Next</a>
   </div>
   <br>
 code: |
@@ -22,7 +22,7 @@ code: |
     var bucket = cluster.bucket("travel-sample");
     val collection = bucket.defaultCollection
 
-    val result: Try[QueryResult] = cluster.query("""SELECT x.* FROM `travel-sample` x 
+    val result: Try[QueryResult] = cluster.query("""SELECT x.* FROM `travel-sample` x
                           WHERE x.`type`="hotel" AND x.name LIKE "%hotel%" LIMIT 10""")
     result match {
       case Success(result: QueryResult) =>

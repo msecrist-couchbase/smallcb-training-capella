@@ -11,7 +11,7 @@ var (
 	codeDuration = flag.Duration("codeDuration", 20*time.Second,
 		"duration that a client's request code may run on an assigned container instance")
 
-	codeMaxLen = flag.Int("codeMaxLen", 8000,
+	codeMaxLen = flag.Int("codeMaxLen", 10000,
 		"max length of a client's request code in bytes")
 
 	containerNamePrefix = flag.String("containerNamePrefix", "smallcb-",
@@ -68,7 +68,7 @@ var (
 		"duration by age for which sessions are automatically exited")
 
 	sessionsMaxIdle = flag.Duration("sessionsMaxIdle",
-		5*time.Minute,
+		15*time.Minute,
 		"duration by inactivity for which sessions are automatically exited")
 
 	sessionsCheckEvery = flag.Duration("sessionsCheckEvery",
@@ -82,6 +82,24 @@ var (
 		20*time.Second,
 		"duration or interval between grabbing another sample of stats")
 
+	targetsCookieName = flag.String("targetsCookieName",
+		"capella",
+		"cookie name to store couchbase targets information")
+
+	targetsMaxAge = flag.Duration("targetsMaxAge",
+		45*24*time.Hour,
+		"duration by age for which couchbase targets are automatically not used")
+
 	version = flag.String("version", "tmp/ns_server.app.vsn",
 		"version string or filename that holds version string")
+
+	encryptKey = flag.String("encryptKey", "12345678901234567890123456789012",
+		"secret key for encrypted text")
+
+	natPublicIP = flag.String("natPublicIP", "50.18.183.235", "NAT public IP")
+
+	natPrivateIP = flag.String("natPrivateIP", "10.0.1.111", "NAT private IP")
+
+	baseUrl = flag.String("baseUrl", "couchbase.live",
+		"base url to use as the link to homepage")
 )

@@ -37,6 +37,7 @@ class CBLivePlaygroundRunCodeTest(unittest.TestCase):
         request_url = "{0}/run?lang={1}".format(self.url, lang)
         run_output = requests.post(request_url, data=code, headers = headers).text
         self.assertNotIn("Internal Server Error", run_output)
+        self.assertNotIn("Couchbase Error:", run_output)
         output = unescape(run_output).split("<pre>")[1].split("</pre>")[0]
         print(output)
         return output
@@ -120,6 +121,9 @@ class CBLivePlaygroundRunCodeTest(unittest.TestCase):
     def test_ex_basic_dotnet_query_rows(self):
         self.run_example_test(ex_id = "basic-dotnet-query-rows")
 
+    def test_basic_dotnet_query_named_param(self):
+        self.run_example_test(ex_id = "basic-dotnet-query-named-param")
+
     def test_basic_dotnet_query_positional_param(self):
         self.run_example_test(ex_id = "basic-dotnet-query-positional-param")
 
@@ -138,6 +142,9 @@ class CBLivePlaygroundRunCodeTest(unittest.TestCase):
 
     def test_ex_basic_php_query_rows(self):
         self.run_example_test(ex_id = "basic-php-query-rows")
+
+    def test_basic_php_query_named_param(self):
+        self.run_example_test(ex_id = "basic-php-query-named-param")
 
     def test_basic_php_query_positional_param(self):
         self.run_example_test(ex_id = "basic-php-query-positional-param")
@@ -158,6 +165,9 @@ class CBLivePlaygroundRunCodeTest(unittest.TestCase):
     def test_ex_basic_ruby_query_rows(self):
         self.run_example_test(ex_id = "basic-ruby-query-rows")
 
+    def test_basic_ruby_query_named_param(self):
+        self.run_example_test(ex_id = "basic-ruby-query-named-param")
+
     def test_basic_ruby_query_positional_param(self):
         self.run_example_test(ex_id = "basic-ruby-query-positional-param")
 
@@ -176,6 +186,9 @@ class CBLivePlaygroundRunCodeTest(unittest.TestCase):
 
     def test_ex_basic_scala_query_rows(self):
         self.run_example_test(ex_id = "basic-scala-query-rows")
+
+    def test_basic_scala_query_named_param(self):
+        self.run_example_test(ex_id = "basic-scala-query-named-param")
 
     def test_basic_scala_query_positional_param(self):
         self.run_example_test(ex_id = "basic-scala-query-positional-param")
@@ -196,6 +209,9 @@ class CBLivePlaygroundRunCodeTest(unittest.TestCase):
     def test_ex_basic_go_query_rows(self):
         self.run_example_test(ex_id = "basic-go-query-rows")
 
+    def test_basic_go_query_named_param(self):
+        self.run_example_test(ex_id = "basic-go-query-named-param")
+
     def test_basic_go_query_positional_param(self):
         self.run_example_test(ex_id = "basic-go-query-positional-param")
 
@@ -214,6 +230,9 @@ class CBLivePlaygroundRunCodeTest(unittest.TestCase):
 
     def test_ex_basic_cc_query_rows(self):
         self.run_example_test(ex_id = "basic-cc-query-rows")
+
+    def test_basic_cc_query_named_param(self):
+        self.run_example_test(ex_id = "basic-cc-query-named-param")
 
     def test_basic_cc_query_positional_param(self):
         self.run_example_test(ex_id = "basic-cc-query-positional-param")
