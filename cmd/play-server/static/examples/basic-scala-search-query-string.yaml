@@ -1,8 +1,14 @@
 title: Search Query String
 page: page-08
 lang: scala
+infoBefore: |
+  <div>
+  <a href='/examples/basic-scala-upsert' class="prev-button">Previous</a>
+  <a href='#' class="disable next-button" style="float:right">Next</a>
+  </div>
+  <br>
 code: |
-  
+
   package com.couchbase
 
   import com.couchbase.client.core.error.{CouchbaseException, DocumentNotFoundException}
@@ -15,7 +21,7 @@ code: |
 
   object Program extends App {
     val cluster = Cluster.connect("{{.Host}}", "{{.CBUser}}", "{{.CBPswd}}").get
-    
+
     val result: Try[SearchResult] = cluster.searchQuery("travel-fts-index",
                                       QueryStringQuery("swanky"),
                                       SearchOptions().limit(10))

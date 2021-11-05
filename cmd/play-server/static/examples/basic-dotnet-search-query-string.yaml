@@ -1,6 +1,12 @@
 title: Search Query String
 page: page-05
 lang: dotnet
+infoBefore: |
+  <div>
+  <a href='/examples/basic-dotnet-upsert' class="prev-button">Previous</a>
+  <a href='#' class="disable next-button" style="float:right">Next</a>
+  </div>
+  <br>
 code: |
   using System;
   using System.Threading.Tasks;
@@ -8,7 +14,7 @@ code: |
   using Couchbase;
   using Couchbase.Search;
   using Couchbase.Search.Queries.Simple;
-  
+
   namespace CouchbaseDotNetExample
   {
     class Program
@@ -18,10 +24,10 @@ code: |
         var cluster = await Cluster.ConnectAsync(
           "couchbase://{{.Host}}","{{.CBUser}}","{{.CBPswd}}"
         );
-        
+
         var result = await cluster.SearchQueryAsync(
             "travel-fts-index",
-            new QueryStringQuery("swanky"), 
+            new QueryStringQuery("swanky"),
             options => {
                   options.Limit(10);
             }
@@ -35,7 +41,7 @@ code: |
                 object value=descriptor.GetValue(row);
                 Console.WriteLine("  {0} : {1}",name,value);
             }
-          Console.WriteLine("}");    
+          Console.WriteLine("}");
         }
         Console.WriteLine($"Reported total rows: {result.MetaData.TotalHits}");
         await cluster.DisposeAsync();

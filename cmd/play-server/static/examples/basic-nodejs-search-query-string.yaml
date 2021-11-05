@@ -1,13 +1,19 @@
 title: Search Query String
 page: page-03
 lang: nodejs
+infoBefore: |
+  <div>
+  <a href='/examples/basic-nodejs-upsert' class="prev-button">Previous</a>
+  <a href='#' class="disable next-button" style="float:right">Next</a>
+  </div>
+  <br>
 code: |
   const couchbase = require('couchbase')
-  
+
   const cluster = new couchbase.Cluster('couchbase://{{.Host}}', {
     username: '{{.CBUser}}', password: '{{.CBPswd}}'
   })
-  
+
   cluster.bucket('travel-sample')
 
   async function ftsMatchWord(term) {
