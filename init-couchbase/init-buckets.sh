@@ -115,6 +115,50 @@ curl http://${CB_USER}:${CB_PSWD}@localhost:8093/query/service \
 curl http://${CB_USER}:${CB_PSWD}@localhost:8093/query/service \
     -d 'statement=DROP INDEX def_type ON `travel-sample`'
 
+# FTS search index
+curl -XPUT  http://${CB_USER}:${CB_PSWD}@localhost:8094/api/index/travel-fts-index \
+  -H 'cache-control: no-cache' \
+  -H 'content-type: application/json' \
+  -d '{
+ "name": "travel-fts-index",
+ "type": "fulltext-index",
+ "params": {
+  "mapping": {
+   "default_mapping": {
+    "enabled": true,
+    "dynamic": true
+   },
+   "default_type": "_default",
+   "default_analyzer": "standard",
+   "default_datetime_parser": "dateTimeOptional",
+   "default_field": "_all",
+   "store_dynamic": false,
+   "index_dynamic": true,
+   "docvalues_dynamic": false
+  },
+  "store": {
+   "indexType": "scorch",
+   "kvStoreName": ""
+  },
+  "doc_config": {
+   "mode": "type_field",
+   "type_field": "type",
+   "docid_prefix_delim": "",
+   "docid_regexp": ""
+  }
+ },
+ "sourceType": "couchbase",
+ "sourceName": "travel-sample",
+ "sourceUUID": "",
+ "sourceParams": {},
+ "planParams": {
+  "maxPartitionsPerPIndex": 1,
+  "numReplicas": 0,
+  "indexPartitions": 1
+ },
+ "uuid": ""
+}'
+
 echo "sleep 10 to allow stabilization..."
 sleep 10
 

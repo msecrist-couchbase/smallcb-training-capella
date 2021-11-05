@@ -17,6 +17,7 @@
 
   <script src="../static/scripts/menu.js"></script>
   <script src="../static/scripts/editorToggle.js"></script>
+  <script src="../static/scripts/browserCompatibility.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     {{if not .Session}}
@@ -28,6 +29,7 @@
   </style>
     {{.OptanonHTML}}
   <script src="/static/ace/src-min/ace.js"></script>
+  <script src="/static/ace/src-min/theme-nord_dark.js"></script>
   <script>
     function onRunSubmit() {
       setTimeout(() => {
@@ -86,16 +88,6 @@
   </script>
   <script>
     window.scrollTo({top: 0, behavior: "smooth"})
-    function disableSafariButtons() {
-      let isSafari = /constructor/i.test(window.HTMLElement) || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] || (typeof safari !== 'undefined' && window['safari'].pushNotification));
-      if (isSafari) {
-        let shellBtns = document.getElementsByClassName("shell-button");
-        for (let i = 0; i < shellBtns.length; i++) {
-          shellBtns[i].classList.add("hidden")
-        }
-      }
-    }
-
   </script>
 {{/*    TODO: look into how AnalyticsHTML works and see if we can do this for the nav too  */}}
     {{.AnalyticsHTML}}
@@ -326,16 +318,17 @@
               <div><img src="/static/shots/shot-documents.png"/></div>
             </a>
               {{if ge .SessionData.ContainerId 0}}
-                <a target="_blank" class="shell-button"
+                <a target="_blank" class="disabled-safari disabled-ios" id="shellBtn"
                    href="/static/shell.html?t=http://{{.Host}}:{{.SessionData.port_1337}}">
                   <u>Couchbase Shell</u>
                   <div><img src="/static/shots/shot-cbsh.png"/></div>
                 </a>
-                <a target="_blank" class="shell-button"
+                <a target="_blank" class="disabled-safari disabled-ios"
                    href="/static/shell-cbq.html?t=http://{{.Host}}:{{.SessionData.port_1338}}">
                   <u>Query Shell</u>
                   <div><img src="/static/shots/shot-cbq.png"/></div>
                 </a>
+                <p id="iosCompatNotice" class="hidden"><em>Note:</em> Couchbase Shell and Query Shell are not currently supported on mobile devices. Please use a different device to access these features.</p>
               {{end}}
           </div>
         </div>
@@ -456,7 +449,7 @@
             <div class="progress-wrapper">
               <ul class="progress-indicator">
                   {{/* Determine If KV Get Completed */}}
-                  {{if or (eq .Title "Key Value Get") (eq .Title "Query Rows") (eq .Title "Query w/ Named Param") (eq .Title "Query w/ Positional Param") (eq .Title "Sub-document Lookup") (eq .Title "Sub-document Mutate") (eq .Title "Transactions KV Mutate") (eq .Title "Transactions N1QL") (eq .Title "Upsert")}}
+                  {{if or (eq .Title "Key Value Get") (eq .Title "Query Rows") (eq .Title "Query w/ Named Param") (eq .Title "Query w/ Positional Param") (eq .Title "Sub-document Lookup") (eq .Title "Sub-document Mutate") (eq .Title "Transactions KV Mutate") (eq .Title "Transactions N1QL") (eq .Title "Upsert") (eq .Title "Search Query String")}}
                     <li class="completed">
                       <a href="/examples/basic-{{.Lang}}-kv-get{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                         <span class="bubble"></span>
@@ -473,7 +466,7 @@
                   {{end}}
 
                   {{/* Determine If Query Rows Completed */}}
-                  {{if or (eq .Title "Query Rows") (eq .Title "Query w/ Named Param") (eq .Title "Query w/ Positional Param") (eq .Title "Sub-document Lookup") (eq .Title "Sub-document Mutate") (eq .Title "Transactions KV Mutate") (eq .Title "Transactions N1QL") (eq .Title "Upsert")}}
+                  {{if or (eq .Title "Query Rows") (eq .Title "Query w/ Named Param") (eq .Title "Query w/ Positional Param") (eq .Title "Sub-document Lookup") (eq .Title "Sub-document Mutate") (eq .Title "Transactions KV Mutate") (eq .Title "Transactions N1QL") (eq .Title "Upsert") (eq .Title "Search Query String")}}
                     <li class="completed">
                       <a href="/examples/basic-{{.Lang}}-query-rows{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                         <span class="bubble"></span>
@@ -490,7 +483,7 @@
                   {{end}}
 
                   {{/* Determine If Query w/ Named Param Completed */}}
-                  {{if or (eq .Title "Query w/ Named Param") (eq .Title "Query w/ Positional Param") (eq .Title "Sub-document Lookup") (eq .Title "Sub-document Mutate") (eq .Title "Transactions KV Mutate") (eq .Title "Transactions N1QL") (eq .Title "Upsert")}}
+                  {{if or (eq .Title "Query w/ Named Param") (eq .Title "Query w/ Positional Param") (eq .Title "Sub-document Lookup") (eq .Title "Sub-document Mutate") (eq .Title "Transactions KV Mutate") (eq .Title "Transactions N1QL") (eq .Title "Upsert") (eq .Title "Search Query String")}}
                     <li class="completed">
                       <a href="/examples/basic-{{.Lang}}-query-named-param{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                         <span class="bubble"></span>
@@ -507,7 +500,7 @@
                   {{end}}
 
                   {{/* Determine If Query w/ Positional Param Completed */}}
-                  {{if or (eq .Title "Query w/ Positional Param") (eq .Title "Sub-document Lookup") (eq .Title "Sub-document Mutate") (eq .Title "Transactions KV Mutate") (eq .Title "Transactions N1QL") (eq .Title "Upsert")}}
+                  {{if or (eq .Title "Query w/ Positional Param") (eq .Title "Sub-document Lookup") (eq .Title "Sub-document Mutate") (eq .Title "Transactions KV Mutate") (eq .Title "Transactions N1QL") (eq .Title "Upsert")  (eq .Title "Search Query String")}}
                     <li class="completed">
                       <a href="/examples/basic-{{.Lang}}-query-positional-param{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                         <span class="bubble"></span>
@@ -524,7 +517,7 @@
                   {{end}}
 
                   {{/* Determine If Sub Document Lookup Completed */}}
-                  {{if or (eq .Title "Sub-document Lookup") (eq .Title "Sub-document Mutate") (eq .Title "Transactions KV Mutate") (eq .Title "Transactions N1QL") (eq .Title "Upsert")}}
+                  {{if or (eq .Title "Sub-document Lookup") (eq .Title "Sub-document Mutate") (eq .Title "Transactions KV Mutate") (eq .Title "Transactions N1QL") (eq .Title "Upsert") (eq .Title "Search Query String")}}
                     <li class="completed">
                       <a href="/examples/basic-{{.Lang}}-subdoc-lookup{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                         <span class="bubble"></span>
@@ -541,7 +534,7 @@
                   {{end}}
 
                   {{/* Determine If Sub Document Mutate Completed */}}
-                  {{if or (eq .Title "Sub-document Mutate") (eq .Title "Transactions KV Mutate") (eq .Title "Transactions N1QL") (eq .Title "Upsert")}}
+                  {{if or (eq .Title "Sub-document Mutate") (eq .Title "Transactions KV Mutate") (eq .Title "Transactions N1QL") (eq .Title "Upsert") (eq .Title "Search Query String")}}
                     <li class="completed">
                       <a href="/examples/basic-{{.Lang}}-subdoc-mutate{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                         <span class="bubble"></span>
@@ -560,7 +553,7 @@
                   {{/* Show/Hide Java Transactions Steps */}}
                   {{if eq .Lang "java"}}
                       {{/* Determine If JAVA Transactions KV Mutate Completed */}}
-                      {{if or (eq .Title "Transactions KV Mutate") (eq .Title "Transactions N1QL") (eq .Title "Upsert")}}
+                      {{if or (eq .Title "Transactions KV Mutate") (eq .Title "Transactions N1QL") (eq .Title "Upsert") (eq .Title "Search Query String")}}
                         <li class="completed">
                           <a href="/examples/basic-{{.Lang}}-txn-kv-mutate{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                             <span class="bubble"></span>
@@ -577,7 +570,7 @@
                       {{end}}
 
                       {{/* Determine If JAVA Transactions N1QL Completed */}}
-                      {{if or (eq .Title "Transactions N1QL") (eq .Title "Upsert")}}
+                      {{if or (eq .Title "Transactions N1QL") (eq .Title "Upsert") (eq .Title "Search Query String")}}
                         <li class="completed">
                           <a href="/examples/basic-{{.Lang}}-txn-n1ql{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                             <span class="bubble"></span>
@@ -596,7 +589,7 @@
 
 
                   {{/* Determine If Upsert Completed */}}
-                  {{if (eq .Title "Upsert")}}
+                  {{if or (eq .Title "Upsert") (eq .Title "Search Query String")}}
                     <li class="completed">
                       <a href="/examples/basic-{{.Lang}}-upsert{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                         <span class="bubble"></span>
@@ -611,13 +604,32 @@
                       </a>
                     </li>
                   {{end}}
+
+
+                  {{/* Determine If New Example Completed */}}
+                  {{if (eq .Title "Search Query String")}}
+                    <li class="completed">
+                      <a href="/examples/basic-{{.Lang}}-search-query-string{{if .Session}}?s={{.Session.SessionId}}{{end}}">
+                        <span class="bubble"></span>
+                        Search Query String
+                      </a>
+                    </li>
+                  {{else}}
+                    <li>
+                      <a href="/examples/basic-{{.Lang}}-search-query-string{{if .Session}}?s={{.Session.SessionId}}{{end}}">
+                        <span class="bubble"></span>
+                        Search Query String
+                      </a>
+                    </li>
+                  {{end}}
+
               </ul>
             </div>
           {{end}}
 
         <div class="row example-row" style="width: 100%">
             {{if and .Lang .Title}}
-              <div class="col-xs-12 col-md-5 example-info-column" id="infoColumn">
+              <div class="col-xs-12 col-md-3 example-info-column" id="infoColumn">
                 <div class="example-heading">
                     {{if .InfoBefore}}
                       <div class="info infoBefore">{{.InfoBefore}}</div>
@@ -642,13 +654,13 @@
               </div>
             {{end}}
             {{if .Lang}}
-              <div class="col-xs-12 col-md-7" id="editorColumn">
+              <div class="col-xs-12 col-md-9" id="editorColumn">
 
-                <button id='viewToggleButton' class="col-btn toggle-btn hidden-md" onclick="toggleEditorView();"></button>
+                <button id='viewToggleButton' class="stacked-btn toggle-btn hidden-md" onclick="toggleEditorView();"></button>
 
-                <div id="editorWrapper" class="">
+                <div id="editorWrapper" class="row">
 
-                  <div id="editorDiv" class="code-editor">
+                  <div id="editorDiv" class="code-editor col-md-6">
                     <div class="sticky">
                       <form action="/run" method="post" target="output" id="form">
 
@@ -682,7 +694,7 @@
                     </div>
                   </div>
 
-                  <div class="code-output hidden" id="code-output">
+                  <div class="code-output col-md-6" id="code-output">
                     <div class="sticky">
                         {{if or .Name .Lang .Code}}
                           <h2 class="editor-label">Output</h2>
@@ -699,10 +711,10 @@
         </div>
           <div class="online-tools">
             {{if .Target.DBurl}}
-              <h2 class="home-header shell-button">Explore interactive shell</h2>
+              <h2 class="home-header hidden-ios">Explore interactive shell</h2>
             {{end}}
               {{if and (not .Session) (.Target.DBurl)}}
-                      <a href="/session-cbshell" {{if eq .Target.Status "not accessible"}}class="disabled"{{end}} class="nowrap shell-button">
+                      <a href="/session-cbshell" {{if eq .Target.Status "not accessible"}}class="disabled"{{end}} class="nowrap disabled-safari hidden-ios">
                         <u>Couchbase Shell</u></a>
               {{else if and (.Target.DBurl) (ge .SessionData.ContainerId 0)}}
 
@@ -716,7 +728,7 @@
                 </script>
 
                 <p><a target="_blank"
-                  href="/static/shell.html?t=http://{{.Host}}:{{.SessionData.port_1337}}" class="nowrap shell-button">
+                  href="/static/shell.html?t=http://{{.Host}}:{{.SessionData.port_1337}}" class="nowrap disabled-safari hidden-ios">
                     <u>Couchbase Shell</u></a> (opens a new tab and the session expire after {{.SessionsMaxAge}}
                 or until {{.SessionsMaxIdle}} of inactivity.)</p>
                 <script>
