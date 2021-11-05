@@ -464,6 +464,11 @@ body > header > div > div> h1 > a {
   pointer-events: none;
 }
 
+.disabled-tooltip {
+  filter: opacity(0.4);
+  cursor: default;
+}
+
 .dropdown {
   position: relative;
   display: inline-block;

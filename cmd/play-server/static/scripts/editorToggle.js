@@ -1,15 +1,16 @@
 function setEditorView() {
+  setOutputHeight()
   // check local storage, if no local storage default to 3 col
   let savedEditorMode = localStorage.getItem('editorMode')
 
   let isSideBySide = document.getElementById("editorWrapper").classList.contains('row');
   let isSmallScreen = window.innerWidth < 991;
 
-  if (!isSmallScreen && (savedEditorMode === "sideBySide" || savedEditorMode === null) && !isSideBySide) {
-    // set to side by side
+
+
+  if (isSmallScreen && isSideBySide) {
     toggleEditorView()
-  } else if (isSideBySide) {
-    // set to stacked
+  } else if (savedEditorMode === "stacked" && isSideBySide) {
     toggleEditorView()
   }
 }
@@ -18,7 +19,6 @@ function toggleEditorView() {
   let isSideBySide = document.getElementById("editorWrapper").classList.contains('row');
   let iframe = document.getElementById("code-output").childNodes[1].querySelector("iframe");
   let innerDoc = iframe.contentDocument || iframe.contentWindow.document;
-
 
   updateOutputHeightOnToggle(document.getElementById("code-ace").style.height, isSideBySide)
 
