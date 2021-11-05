@@ -22,7 +22,7 @@ code: |
       static async Task Main(string[] args)
       {
         var cluster = await Cluster.ConnectAsync(
-          "couchbase://{{.Host}}","{{.CBUser}}","{{.CBPswd}}"
+          "couchbase://{{.Host}}", "{{.CBUser}}", "{{.CBPswd}}"
         );
 
         var result = await cluster.SearchQueryAsync(
