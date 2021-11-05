@@ -568,6 +568,8 @@ body > header > div > div> h1 > a {
 .feedback-text {
   color: #000 !important;
   padding: 10px;
+  width: 90%;
+  max-width: 40rem;
 }
 
 .feedback-fields {
