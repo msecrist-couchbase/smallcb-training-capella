@@ -1243,16 +1243,9 @@ func HttpHandleFeedback(w http.ResponseWriter, r *http.Request) {
 	liked := r.FormValue("liked")
 	message := r.FormValue("message")
 	user := "anonymous"
-	// timeNow := fmt.Sprintf(time.Now().Format(time.RFC3339))
-	// log.Print(src_url)
-	// log.Print(liked)
-	// log.Print(message)
-	// log.Print(*feedbackURL)
 
 	requestBodyStr := fmt.Sprintf(`{"created": "%s", "page": "%s", "comment": "%s", "helpful": "%s", "user": "%s"}`, time.Now().Format(time.RFC3339), src_url, message, liked, user)
 	bodyBytes := []byte(requestBodyStr)
-	// log.Print(requestBodyStr)
-	// log.Print(bytes.NewBuffer(bodyBytes))
 
 	req, err := http.NewRequest("POST", *feedbackURL, bytes.NewBuffer(bodyBytes))
 	if err != nil {
@@ -1277,10 +1270,6 @@ func HttpHandleFeedback(w http.ResponseWriter, r *http.Request) {
 		body, _ := ioutil.ReadAll(resp.Body)
 		log.Printf("ERROR: HttpHandleFeedback, response Body: %s", string(body))
 	}
-	// fmt.Println("response Status:", resp.Status)
-	// fmt.Println("response Headers:", resp.Header)
-	// body, _ := ioutil.ReadAll(resp.Body)
-	// fmt.Println("response Body:", string(body))
 	return
 }
 
