@@ -761,20 +761,22 @@
 </main>
 
 <footer>
-  <div class="feedback">
-    <form id="feedback" action="/feedback">
-      <fieldset class="feedback-fields">
-        Was this page helpful?
-        <label for="liked" class="feedback-radio-label"> <input class="feedback-radio" type="radio" value="yes" name="liked" required/>Yes</label>
-        <label for="liked" class="feedback-radio-label"> <input class="feedback-radio" type="radio" value="no" name="liked" required/>No</label>
-        <br>
-        <input class="feedback-text" type="text" placeholder="How can we make it better?" name="message" required/>
-        <input type="hidden" name="src_url" id="src_url" value=""/>
-        <br>
-        <input type="submit" class="red-button menu-button submit-button"/>
-      </fieldset>
-    </form>
-    <div id="result"></div>
+  <div class="container">
+    <div class="feedback">
+      <form id="feedback" action="/feedback">
+        <fieldset class="feedback-fields">
+          Was this page helpful?
+          <label for="liked" class="feedback-radio-label"> <input class="feedback-radio" type="radio" value="yes" name="liked" required/>Yes</label>
+          <label for="liked" class="feedback-radio-label"> <input class="feedback-radio" type="radio" value="no" name="liked" required/>No</label>
+          <br>
+          <input class="feedback-text" type="text" placeholder="How can we make it better?" name="message" required/>
+          <input type="hidden" name="src_url" id="src_url" value=""/>
+          <br>
+          <input type="submit" class="red-button menu-button submit-button"/>
+        </fieldset>
+      </form>
+      <div id="result"></div>
+    </div>
   </div>
   <hr>
   <div>© 2021 Couchbase Labs -
