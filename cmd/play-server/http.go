@@ -671,7 +671,13 @@ func HttpHandleSessionCBShell(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 
+		sessionId := sessions.mapByNameEmail[NameEmail(name, email)]
+		if sessionId != "" {
+			log.Printf("INFO: Session already exists, deleting sessionId: %s", sessionId)
+			sessions.SessionExit(sessions.SessionGet(sessionId).SessionId)
+		}
 		session, err := sessions.SessionCreate("", name, email, Target)
+
 		if err == nil && session != nil && session.SessionId != "" {
 			StatsNumInc("http.Session.cbshell.ok", "http.Session.cbshell.create.assign")
 
@@ -698,7 +704,7 @@ func HttpHandleSessionCBShell(w http.ResponseWriter, r *http.Request) {
 				r.FormValue("init"), "0",
 				defaultBucket, Target)
 
-			for i := 1; err == nil && i < groupSize; i++ {
+			/*for i := 1; err == nil && i < groupSize; i++ {
 				var childSession *Session
 
 				childSession, err = sessions.SessionCreate(
@@ -715,7 +721,7 @@ func HttpHandleSessionCBShell(w http.ResponseWriter, r *http.Request) {
 					*containers, *containersSingleUse,
 					r.FormValue("init"), fmt.Sprintf("%d", i),
 					defaultBucket, Target)
-			}
+			}*/
 
 			if err == nil {
 				StatsNumInc("http.Session.cbshell.ok", "http.Session.cbshell.create.assign.ok")
