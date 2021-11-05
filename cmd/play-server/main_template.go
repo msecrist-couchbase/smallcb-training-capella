@@ -75,7 +75,7 @@ type MainTemplateData struct {
 	PageColor func(string) string
 
 	BodyClass string
-	BaseUrl string
+	BaseUrl   string
 }
 
 func MainTemplateEmit(w http.ResponseWriter,
@@ -145,6 +145,9 @@ func MainTemplateEmit(w http.ResponseWriter,
 			} else if Target.DBurl != "" {
 				// target couchbase
 				code = TargetTemplateExecute(Target, code, lang)
+				if strings.Contains(title, "Search Query") {
+					CheckAndCreateFtsIndex("travel-fts-index", Target.IPv4, Target.DBuser, Target.DBpwd)
+				}
 			} else {
 				// default non-session couchbase
 				code = DefaultTemplateExecute(codeHost, code)
@@ -222,7 +225,7 @@ func MainTemplateEmit(w http.ResponseWriter,
 		},
 
 		BodyClass: bodyClass,
-		BaseUrl: *baseUrl,
+		BaseUrl:   *baseUrl,
 	}
 
 	if view != "" {

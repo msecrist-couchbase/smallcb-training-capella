@@ -4,7 +4,7 @@ lang: cc
 infoBefore: |
   <div>
   <a href='/examples/basic-cc-subdoc-mutate' class="prev-button">Previous</a>
-  <a href='#' class="disable next-button" style="float:right">Next</a>
+  <a href='/examples/basic-cc-search-query-string' class="next-button" style="float:right">Next</a>
   </div>
   <br>
 code: |
