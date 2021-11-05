@@ -1,6 +1,12 @@
 title: Search Query String
 page: page-07
 lang: rb
+infoBefore: |
+  <div>
+  <a href='/examples/basic-rb-upsert' class="prev-button">Previous</a>
+  <a href='#' class="disable next-button" style="float:right">Next</a>
+  </div>
+  <br>
 code: |
   require "pp"
   require "couchbase"
