@@ -714,16 +714,18 @@
               <h2 class="home-header hidden-ios">Explore interactive shell</h2>
             {{end}}
               {{if and (not .Session) (.Target.DBurl)}}
-                      <a href="/session-cbshell" {{if eq .Target.Status "not accessible"}}class="disabled"{{end}} class="nowrap disabled-safari hidden-ios">
-                        <u>Couchbase Shell</u></a>
+                  <a href="/session-cbshell" {{if eq .Target.Status "not accessible"}}class="disabled"{{end}} class="nowrap disabled-safari hidden-ios">
+                    <u>Couchbase Shell</u></a>
+                  <script>
+                    localStorage.setItem("cbshell_window", "closed");
+                  </script>
               {{else if and (.Target.DBurl) (ge .SessionData.ContainerId 0)}}
-
                 <script>
                   var iscbshell_open = localStorage.getItem("cbshell_window");
                   if (iscbshell_open != "opened") {
                     var newTab = window.open('/static/shell.html?t=http://{{.Host}}:{{.SessionData.port_1337}}', '_blank');
                     newTab.location;
-                    localStorage.setItem("cbshell_window", "new");
+                    localStorage.setItem("cbshell_window", "opened");
                   }
                 </script>
 
