@@ -286,7 +286,7 @@ main .info-header .header-right code {
 }
 .workspace .workspace-body .code-output iframe.output {
   width: 100%;
-  height: 350px;
+  height: 500px;
   margin-bottom: 15px;
 
   border-width: 1px;
@@ -867,8 +867,8 @@ div.online-tools > p{
 }
 
 .progress-indicator>li {
-  padding-left: 2% !important;
-  padding-right: 2% !important;
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
 }
 
 .progress-indicator {
@@ -963,4 +963,20 @@ div.progress-wrapper > ul > li > a:hover {
 
 #editorColumn {
   text-align: right;
+}
+
+#editorColumn, #infoColumn {
+  -moz-transition: all 0.5s ease-in-out, left 1.5s ease-in-out;
+  -webkit-transition: all 0.5s ease-in-out, left 1.5s ease-in-out;
+  -moz-transition: all 0.5s ease-in-out, left 1.5s ease-in-out;
+  -o-transition: all 0.5s ease-in-out, left 1.5s ease-in-out;
+  transition: all 0.5s ease-in-out, left 1.5s ease-in-out;
+}
+
+#output {
+  -moz-transition: all 0.2s ease-in-out;
+  -webkit-transition: all 0.2s ease-in-out;
+  -moz-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
 }

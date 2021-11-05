@@ -3,8 +3,8 @@ page: page-03
 lang: nodejs
 infoBefore: |
   <div>
-  <a href='/examples/basic-nodejs-subdoc-mutate' class="prev-button dark-purple">Previous</a>
-  <a href='#' class="disable next-button " style="float:right">Next</a>
+  <a href='/examples/basic-nodejs-subdoc-mutate' class="prev-button">Previous</a>
+  <a href='/examples/basic-nodejs-search-query-string' class="next-button" style="float:right">Next</a>
   </div>
   <br>
 code: |

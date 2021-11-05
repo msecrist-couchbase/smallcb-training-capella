@@ -24,8 +24,15 @@ var (
 func CaptchaGenerateBase64ImageDataURL(width, height, maxCaptchas int) (
 	string, error) {
 	png, err := CaptchaGeneratePanic(width, height, maxCaptchas)
-	if err != nil {
-		return "", nil
+	if len(png) <= 0 || err != nil {
+		for attempt := 1; attempt <= 3 && (len(png) <= 0 || err != nil); attempt++ {
+			fmt.Printf("Captcha generation, retry attempt# %d\n", attempt)
+			time.Sleep(1 * time.Second)
+			png, err = CaptchaGeneratePanic(width, height, maxCaptchas)
+		}
+		if err != nil {
+			return "", err
+		}
 	}
 
 	s := base64.StdEncoding.EncodeToString(png)

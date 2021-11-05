@@ -1,0 +1,40 @@
+title: Search Query String
+page: page-07
+lang: rb
+infoBefore: |
+  <div>
+  <a href='/examples/basic-rb-upsert' class="prev-button">Previous</a>
+  <a href='#' class="disable next-button" style="float:right">Next</a>
+  </div>
+  <br>
+code: |
+  require "pp"
+  require "couchbase"
+  include Couchbase
+
+  options = Cluster::ClusterOptions.new
+  options.authenticate("{{.CBUser}}", "{{.CBPswd}}")
+  cluster = Cluster.connect("couchbase://{{.Host}}", options)
+
+  begin
+    options = Cluster::SearchOptions.new
+    options.limit = 10
+    result = cluster.search_query(
+        "travel-fts-index",
+        Cluster::SearchQuery.query_string("swanky"),
+        options
+    )
+    result.rows.each do |row|
+      puts "Found row: "
+      pp row
+    end
+    puts "Reported total rows: #{result.meta_data.metrics.total_rows}"
+  rescue Couchbase::Error::CouchbaseError => ex
+    puts "Couchbase Error: #{ex}"
+  end
+infoAfter: |
+  Basic Search query string,
+  with looping through each returned row.
+  <br/><br/>
+  Visit the docs to learn more about
+  <a target="_blank" href="https://docs.couchbase.com/ruby-sdk/current/howtos/full-text-searching-with-sdk.html">Full Text Search in Ruby</a>.
