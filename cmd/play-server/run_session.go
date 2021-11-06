@@ -238,7 +238,7 @@ func StartCbsh(session *Session, req RunRequest, containerId int, defaultBucket 
 		"/bin/sh", "-c",
 		"mkdir -p /home/cbsh/.cbsh;"+
 			" cp "+cbshConfigInst+" /home/cbsh/.cbsh/config;"+
-			" while true; do /home/play/npm_packages/bin/gritty --command ./cbsh; sleep 3; done")
+			" while true; do /home/play/npm_packages/bin/gritty --command './cbsh -s'; sleep 3; done")
 
 	out, err := ExecCmd(req.ctx, cmd, req.codeDuration)
 	if err != nil {
