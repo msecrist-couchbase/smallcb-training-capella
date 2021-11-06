@@ -235,9 +235,7 @@ h2 {
 }
 
 main {
-  /*min-height: calc(100vh - 120px);*/
-  /*min-height: 80vh;*/
-  min-height: calc(100vh - 336px);
+  min-height: calc(100vh - 224px);
   height: 100%;
 }
 
@@ -546,6 +544,7 @@ body > header > div > div> h1 > a {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
+  cursor: pointer;
   /* Fade Effect on Hover */
   -o-transition:.3s;
   -ms-transition:.3s;
@@ -567,9 +566,19 @@ body > header > div > div> h1 > a {
 
 .feedback-text {
   color: #000 !important;
-  padding: 10px;
+  padding: 9px 12px;
   width: 90%;
   max-width: 40rem;
+  display: inline;
+  border-radius: 6px;
+  margin-right: 10px;
+  margin-bottom: 18px;
+}
+
+@media (min-width: 1200px) {
+  .feedback-text {
+    padding-left: 10px;
+  }
 }
 
 .feedback-fields {
