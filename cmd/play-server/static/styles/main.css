@@ -286,8 +286,7 @@ main .info-header .header-right code {
 }
 .workspace .workspace-body .code-output iframe.output {
   width: 100%;
-  height: 500px;
-  margin-bottom: 15px;
+  height: 350px;
 
   border-width: 1px;
   border-style: solid;

@@ -583,8 +583,10 @@ body > header > div > div> h1 > a {
 
 .feedback-fields {
   border: none;
+  margin: 0;
+  padding: 0;
 }
 
 .feedback-radio-label {
-  margin: 0 10px;
+  margin: 0 12px 0 0;
 }

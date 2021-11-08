@@ -91,13 +91,28 @@
       return true;
     }
   </script>
+  {{if .Lang}}
+  <script>
+    let initPage = () => {
+      setEditorView()
+      disableSafariButtons()
+    }
+  </script>
+  {{else}}
+  <script>
+    let initPage = () => {
+      disableSafariButtons()
+    }
+  </script>
+  {{end}}
   <script>
     window.scrollTo({top: 0, behavior: "smooth"})
+    addEventListener('load', initPage)
   </script>
 {{/*    TODO: look into how AnalyticsHTML works and see if we can do this for the nav too  */}}
     {{.AnalyticsHTML}}
 </head>
-<body class="{{.BodyClass}}" onload="{{if .Lang}}setEditorView();{{end}} disableSafariButtons();">
+<body class="{{.BodyClass}}">
 <header>
   <div class="header-flex-container">
     <div class="logo">
@@ -767,7 +782,11 @@
     <div class="feedback">
       <form id="feedback" action="/feedback">
         <fieldset class="feedback-fields">
-          Was this page helpful?
+          Was this page helpful? &nbsp
+
+          <br class="hidden-sm">
+          <br class="hidden-sm">
+
           <label for="liked" class="feedback-radio-label"> <input class="feedback-radio" type="radio" value="true" name="liked" required/>Yes</label>
           <label for="liked" class="feedback-radio-label"> <input class="feedback-radio" type="radio" value="false" name="liked" required/>No</label>
           <input class="feedback-text" type="text" placeholder="How can we make it better?" name="message" required/>
