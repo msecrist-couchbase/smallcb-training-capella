@@ -40,20 +40,6 @@
         </div>
         <iframe id="shell">loading...</iframe>
       </div>
-      <hr>
-      <div class="feedback">
-        <form id="feedback" action="/feedback">
-          Was this page helpful?
-          <label> <input type="radio" value="true" name="liked" required/>yes </label>
-          <label> <input type="radio" value="false" name="liked" required/>no </label>
-          <br>
-          <input type="text" placeholder="How can we make it better?" size=100 name="message" required></input>
-          <input type="hidden" name="src_url" id="src_url" value=""></input>
-          <br>
-          <input type="submit"></input>
-        </form>
-        <div id="result"></div>
-      </div>
     </main>
   </body>
   <style>
@@ -162,26 +148,6 @@
     }
     // set form's source url
     document.getElementById('src_url').value = window.location.href;
-
-    // submit feedback
-    $("#feedback").submit(function(e) {
-
-      e.preventDefault(); // avoid to execute the actual submit of the form.
-
-      var form = $(this);
-      var url = form.attr('action');
-      
-      $.ajax({
-            type: "POST",
-            url: url,
-            data: form.serialize(), // serializes the form's elements.
-            success: function(data)
-            {
-              $( "#result" ).empty().append( "Thanks for the Feedback!" );
-              $( "#feedback" ).toggle();
-            }
-          });    
-    });
 
   </script>
 </html>
