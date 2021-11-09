@@ -10,8 +10,9 @@
   <link rel="stylesheet" type="text/css" href="/static/styles/flexboxgrid.min.css">
   <link rel="stylesheet" type="text/css" href="/static/styles/progress-wizard.min.css">
 
-{{/*  TODO: lets replace this with something else... */}}
-  <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+  <script>
+    const thumbnailUrl = location.pathname.match(/[^\/]+$/)[0] + '/static/shots/shot_thumbnail.png';
+  </script>
 
   <link rel="stylesheet" type="text/css" href="/static/styles/font-awesome/css/font-awesome.min.css">
 
@@ -38,14 +39,14 @@
   <meta property="og:url" content="http://couchbase.live/">
   <meta property="og:title" content="Couchbase Playground">
   <meta property="og:description" content="Experiment with Couchbase in a playground environment with no prior setup required!">
-  <meta property="og:image" content="../static/shots/shot_thumbnail.png">
+  <meta property="og:image" content="http://{{if .BaseUrl}}{{.BaseUrl}}{{else}}couchbase.live{{end}}/static/shots/shot_thumbnail.png">
 
   <!-- Twitter -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="http://couchbase.live/">
   <meta property="twitter:title" content="Couchbase Playground">
   <meta property="twitter:description" content="Experiment with Couchbase in a playground environment with no prior setup required!">
-  <meta property="twitter:image" content="../static/shots/shot_thumbnail.png">
+  <meta property="twitter:image" content="http://{{if .BaseUrl}}{{.BaseUrl}}{{else}}couchbase.live{{end}}/static/shots/shot_thumbnail.png">
 
 
   <style>
