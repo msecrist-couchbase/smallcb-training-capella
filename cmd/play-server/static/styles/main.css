@@ -860,7 +860,7 @@ div.example-heading > div {
 }
 
 div.online-tools > a{
-  display: block;
+  display: table;
   margin-left: 16px;
   margin-top: 8px;
 }
