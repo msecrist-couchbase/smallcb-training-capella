@@ -125,3 +125,7 @@ h2 {
 .input-wrapper > i:hover {
   filter: opacity(0.5);
 }
+
+section {
+  font-size: 12px;
+}
