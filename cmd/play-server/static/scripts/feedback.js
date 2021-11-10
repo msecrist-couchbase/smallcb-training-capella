@@ -1,24 +1,27 @@
-function handleFeedbackForm() {
+function handleFeedbackForm(feedbackUrl) {
   document.getElementById('src_url').value = window.location.href;
   const feedbackForm = document.getElementById('feedback');
+
   feedbackForm.addEventListener('submit', (event) => {
-    console.log("testing");
     event.preventDefault();
     const pageWasHelpful = event.target.elements[1].checked;
     const suggestionMsg = event.target.elements[3].value;
     const srcUrl = event.target.elements[4].value;
 
-    // TODO: use feedbackURL flag here instead
-    const feedbackUrl = 'https://devportal-api.prod.couchbase.live/pageLikes';
-
-    const data = new URLSearchParams();
-    data.append('liked', pageWasHelpful);
-    data.append('message', suggestionMsg);
-    data.append('src_url', srcUrl);
-
     fetch(feedbackUrl, {
       method: 'POST',
-      body: data
+      headers: {
+        'mode': 'cors',
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        created: new Date().toISOString(),
+        page: srcUrl,
+        comment: suggestionMsg,
+        helpful: pageWasHelpful,
+        user: 'anonymous'
+      })
     }).then((result) => {
       displayFormMessage('Thanks for the Feedback!')
     }).catch((error) => {

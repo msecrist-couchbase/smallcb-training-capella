@@ -76,6 +76,7 @@ type MainTemplateData struct {
 
 	BodyClass string
 	BaseUrl   string
+	FeedbackUrl string
 }
 
 func MainTemplateEmit(w http.ResponseWriter,
@@ -226,6 +227,7 @@ func MainTemplateEmit(w http.ResponseWriter,
 
 		BodyClass: bodyClass,
 		BaseUrl:   *baseUrl,
+		FeedbackUrl: *feedbackURL,
 	}
 
 	if view != "" {

@@ -391,6 +391,7 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 		"e":             e,
 		"bodyClass":     bodyClass,
 		"BaseUrl":       *baseUrl,
+		"FeedbackUrl":   *feedbackURL,
 	}
 
 	if r.Method == "POST" {
@@ -625,6 +626,7 @@ func HttpHandleSessionCBShell(w http.ResponseWriter, r *http.Request) {
 		"e":             e,
 		"bodyClass":     bodyClass,
 		"BaseUrl":       *baseUrl,
+		"FeedbackUrl":   *feedbackURL,
 	}
 
 	errs := 0
@@ -863,6 +865,7 @@ func HttpHandleTarget(w http.ResponseWriter, r *http.Request) {
 		"natpublicip":   *natPublicIP,
 		"bodyClass":     bodyClass,
 		"BaseUrl":       *baseUrl,
+		"FeedbackUrl":   *feedbackURL,
 	}
 
 	if runtime.GOOS != "linux" {

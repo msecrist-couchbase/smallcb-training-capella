@@ -44,7 +44,7 @@
 
   <script>
     let initPage = () => {
-      handleFeedbackForm()
+      handleFeedbackForm({{if .FeedbackUrl}}{{.FeedbackUrl}}{{else}}'https://devportal-api.prod.couchbase.live/pageLikes'{{end}})
     }
 
     addEventListener('load', initPage)

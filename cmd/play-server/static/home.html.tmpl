@@ -120,14 +120,14 @@
     let initPage = () => {
       setEditorView()
       disableSafariButtons()
-      handleFeedbackForm()
+      handleFeedbackForm({{if .FeedbackUrl}}{{.FeedbackUrl}}{{else}}'https://devportal-api.prod.couchbase.live/pageLikes'{{end}})
     }
   </script>
   {{else}}
   <script>
     let initPage = () => {
       disableSafariButtons()
-      handleFeedbackForm()
+      handleFeedbackForm({{if .FeedbackUrl}}{{.FeedbackUrl}}{{else}}'https://devportal-api.prod.couchbase.live/pageLikes'{{end}})
     }
   </script>
   {{end}}
