@@ -142,6 +142,11 @@ class CBLivePlaygroundTest(unittest.TestCase):
             page="/examples/basic-java-kv-get", ex_id="basic-java-upsert"
         )
 
+    def test_basic_java_search_query_string(self):
+        self.run_example_test(
+            page="/examples/basic-java-kv-get", ex_id="basic-java-search-query-string"
+        )
+
     # 2. Nodejs examples
     def test_basic_nodejs_kv_get(self):
         self.run_example_test(
@@ -180,6 +185,11 @@ class CBLivePlaygroundTest(unittest.TestCase):
             page="/examples/basic-nodejs-kv-get", ex_id="basic-nodejs-upsert"
         )
 
+    def test_basic_nodejs_search_query_string(self):
+        self.run_example_test(
+            page="/examples/basic-nodejs-kv-get", ex_id="basic-nodejs-search-query-string"
+        )
+
     # 3. Python examples
     def test_basic_py_kv_get(self):
         self.run_example_test(page="/examples/basic-py-kv-get", ex_id="basic-py-kv-get")
@@ -211,6 +221,9 @@ class CBLivePlaygroundTest(unittest.TestCase):
 
     def test_basic_py_upsert(self):
         self.run_example_test(page="/examples/basic-py-kv-get", ex_id="basic-py-upsert")
+
+    def test_basic_py_search_query_string(self):
+        self.run_example_test(page="/examples/basic-py-kv-get", ex_id="basic-py-search-query-string")
 
     # 4. Dotnet examples
     def test_basic_dotnet_kv_get(self):
@@ -249,6 +262,11 @@ class CBLivePlaygroundTest(unittest.TestCase):
             page="/examples/basic-dotnet-kv-get", ex_id="basic-dotnet-upsert"
         )
 
+    def test_basic_dotnet_search_query_string(self):
+        self.run_example_test(
+            page="/examples/basic-dotnet-kv-get", ex_id="basic-dotnet-search-query-string"
+        )
+
     # 5. PHP examples
     def test_basic_php_kv_get(self):
         self.run_example_test(
@@ -285,6 +303,11 @@ class CBLivePlaygroundTest(unittest.TestCase):
             page="/examples/basic-php-kv-get", ex_id="basic-php-upsert"
         )
 
+    def test_basic_php_search_query_string(self):
+        self.run_example_test(
+            page="/examples/basic-php-kv-get", ex_id="basic-php-search-query-string"
+        )
+
     # 6. Ruby examples
     def test_basic_ruby_kv_get(self):
         self.run_example_test(page="/examples/basic-rb-kv-get", ex_id="basic-rb-kv-get")
@@ -317,6 +340,9 @@ class CBLivePlaygroundTest(unittest.TestCase):
 
     def test_basic_ruby_upsert(self):
         self.run_example_test(page="/examples/basic-rb-kv-get", ex_id="basic-rb-upsert")
+
+    def test_basic_ruby_search_query_string(self):
+        self.run_example_test(page="/examples/basic-rb-kv-get", ex_id="basic-rb-search-query-string")
 
     # 7. Scala examples
     def test_basic_scala_kv_get(self):
@@ -355,6 +381,11 @@ class CBLivePlaygroundTest(unittest.TestCase):
             page="/examples/basic-scala-kv-get", ex_id="basic-scala-upsert"
         )
 
+    def test_basic_scala_search_query_string(self):
+        self.run_example_test(
+            page="/examples/basic-scala-kv-get", ex_id="basic-scala-search-query-string"
+        )
+
     # 8. Go examples
     def test_basic_go_kv_get(self):
         self.run_example_test(page="/examples/basic-go-kv-get", ex_id="basic-go-kv-get")
@@ -387,6 +418,9 @@ class CBLivePlaygroundTest(unittest.TestCase):
     def test_basic_go_upsert(self):
         self.run_example_test(page="/examples/basic-go-kv-get", ex_id="basic-go-upsert")
 
+    def test_basic_go_search_query_string(self):
+        self.run_example_test(page="/examples/basic-go-kv-get", ex_id="basic-go-search-query-string")
+
     # 9. C++ examples
     def test_basic_cc_kv_get(self):
         self.run_example_test(page="/examples/basic-cc-kv-get", ex_id="basic-cc-kv-get")
@@ -418,6 +452,9 @@ class CBLivePlaygroundTest(unittest.TestCase):
 
     def test_basic_cc_upsert(self):
         self.run_example_test(page="/examples/basic-cc-kv-get", ex_id="basic-cc-upsert")
+
+    def test_basic_cc_search_query_string(self):
+        self.run_example_test(page="/examples/basic-cc-kv-get", ex_id="basic-cc-search-query-string")
 
     @classmethod
     def tearDownClass(self):
