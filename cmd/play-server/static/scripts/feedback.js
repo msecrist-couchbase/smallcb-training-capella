@@ -22,8 +22,12 @@ function handleFeedbackForm(feedbackUrl) {
         helpful: pageWasHelpful,
         user: 'anonymous'
       })
-    }).then((result) => {
-      displayFormMessage('Thanks for the Feedback!')
+    }).then((response) => {
+      if (response.status === 201) {
+        displayFormMessage('Thanks for the Feedback!')
+      } else {
+        displayFormMessage(' An error occurred while submitting feedback.')
+      }
     }).catch((error) => {
       console.log("FETCH error: ");
       console.log(error);
