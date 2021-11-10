@@ -9,7 +9,7 @@ function handleFeedbackForm(feedbackUrl) {
     const srcUrl = event.target.elements[4].value;
 
     if (suggestionMsg === "") {
-      suggestionMsg = "[no comment added]"
+      suggestionMsg = "[none]"
     }
 
     fetch(feedbackUrl, {
