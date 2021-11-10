@@ -85,6 +85,8 @@ main .info-header .header-right {
   padding-top: 9px;
   font-family: "Ubuntu Mono", monospace;
   font-size: 14px;
+  margin-left: 30px;
+  padding-bottom: 10px;
 }
 main .info-header .header-right .head-server {
   font-size: 16px;
