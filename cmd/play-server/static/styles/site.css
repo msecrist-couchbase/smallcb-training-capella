@@ -590,3 +590,7 @@ body > header > div > div> h1 > a {
 .feedback-radio-label {
   margin: 0 12px 0 0;
 }
+
+h2.session-title {
+  white-space: inherit;
+}

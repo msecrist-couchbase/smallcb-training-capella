@@ -40,6 +40,7 @@ article .skip {
 
 article > section {
   padding-left: 17px;
+  padding-top: 20px;
 }
 article > header {
   padding-top: 2em;
