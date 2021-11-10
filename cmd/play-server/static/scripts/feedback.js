@@ -5,8 +5,12 @@ function handleFeedbackForm(feedbackUrl) {
   feedbackForm.addEventListener('submit', (event) => {
     event.preventDefault();
     const pageWasHelpful = event.target.elements[1].checked;
-    const suggestionMsg = event.target.elements[3].value;
+    let suggestionMsg = event.target.elements[3].value;
     const srcUrl = event.target.elements[4].value;
+
+    if (suggestionMsg === "") {
+      suggestionMsg = "[no comment added]"
+    }
 
     fetch(feedbackUrl, {
       method: 'POST',
