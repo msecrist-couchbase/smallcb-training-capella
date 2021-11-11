@@ -386,7 +386,7 @@
     <div class="workspace-body">
       <div class="container {{if .Lang}}container-example{{end}}">
           {{if not .Lang}}
-            <h2 class="home-header"><label for="examplesToggle">Play with Couchbase SDK Code Examples</label></h2>
+            <h2 class="home-header"><label for="examplesToggle">Click & Run Examples</label></h2>
             <div class="row example-row">
               <div class="col-xs-6 col-sm-6 col-md-4 col-lg-4">
                 <a href="/examples/basic-java-kv-get{{if $.Session}}?s={{$.Session.SessionId}}{{end}}"
@@ -791,11 +791,11 @@
           </div>
           {{if not .Lang}}
             <div class="online-tools">
-              <h2 class="home-header">Explore Online Tools to Learn More About N1QL</h2>
-              <a href="https://query-tutorial.couchbase.com/tutorial/#1" class="nowrap" target="_blank">Online N1QL Tutorial</a>
-              <a href="https://index-advisor.couchbase.com/indexadvisor/#1" class="nowrap" target="_blank">Online N1QL Index Advisor</a>
+              <h2 class="home-header">More N1QL Tools</h2>
+              <a href="https://query-tutorial.couchbase.com/tutorial/#1" class="nowrap" target="_blank">N1QL Query Tutorial</a>
+              <a href="https://index-advisor.couchbase.com/indexadvisor/#1" class="nowrap" target="_blank">N1QL Index Advisor</a>
+              <a href="https://sqlplusplus-tutorial.couchbase.com/tutorial/#1" class="nowrap" target="_blank">N1QL Analytics Tutorial</a>
               <a href="https://docs.couchbase.com/server/current/n1ql/n1ql-rest-api/index.html" class="nowrap" target="_blank">N1QL REST API Docs</a>
-              <a href="https://sqlplusplus-tutorial.couchbase.com/tutorial/#1" target="_blank">SQL++ Tutorial – N1QL for Analytics Query Language</a>
             </div>
           {{end}}
       </div>

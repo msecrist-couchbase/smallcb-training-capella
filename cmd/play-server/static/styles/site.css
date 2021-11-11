@@ -596,4 +596,5 @@ body > header > div > div> h1 > a {
 
 h2.session-title {
   white-space: inherit;
+  font-size: 16px;
 }
