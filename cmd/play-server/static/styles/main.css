@@ -740,6 +740,7 @@ a.disable {
   display: flex;
   margin: 0;
   text-decoration-line: none;
+  font-size: 14px;
 }
 
 .example-icon {
@@ -757,7 +758,7 @@ a.disable {
 
 h2.home-header {
   margin: 26px 0 18px 0;
-  font-size: 20px;
+  font-size: 16px;
   white-space: normal;
 }
 
@@ -880,6 +881,7 @@ div.online-tools > p{
   text-transform: none !important;
   margin-top: 35px !important;
   overflow-x: scroll;
+  font-size: 70% !important;
 }
 
 .return-home-button {
