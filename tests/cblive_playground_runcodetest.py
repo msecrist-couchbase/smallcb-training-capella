@@ -70,6 +70,9 @@ class CBLivePlaygroundRunCodeTest(unittest.TestCase):
     def test_basic_java_upsert(self):
         self.run_example_test(ex_id = "basic-java-upsert")
 
+    def test_basic_java_search_query_string(self):
+        self.run_example_test(ex_id = "basic-java-search-query-string")
+
     # 2. Nodejs examples
     def test_basic_nodejs_kv_get(self):
         self.run_example_test(ex_id = "basic-nodejs-kv-get")
@@ -91,6 +94,9 @@ class CBLivePlaygroundRunCodeTest(unittest.TestCase):
 
     def test_basic_nodejs_upsert(self):
         self.run_example_test(ex_id = "basic-nodejs-upsert")
+
+    def test_basic_nodejs_search_query_string(self):
+        self.run_example_test(ex_id = "basic-nodejs-search-query-string")
 
     # 3. Python examples
     def test_basic_py_kv_get(self):
@@ -114,6 +120,9 @@ class CBLivePlaygroundRunCodeTest(unittest.TestCase):
     def test_basic_py_upsert(self):
         self.run_example_test(ex_id = "basic-py-upsert")
 
+    def test_basic_py_search_query_string(self):
+        self.run_example_test(ex_id = "basic-py-search-query-string")
+
     # 4. Dotnet examples
     def test_basic_dotnet_kv_get(self):
         self.run_example_test(ex_id = "basic-dotnet-kv-get")
@@ -135,6 +144,9 @@ class CBLivePlaygroundRunCodeTest(unittest.TestCase):
 
     def test_basic_dotnet_upsert(self):
         self.run_example_test(ex_id = "basic-dotnet-upsert")
+
+    def test_basic_dotnet_search_query_string(self):
+        self.run_example_test(ex_id = "basic-dotnet-search-query-string")
 
     # 5. PHP examples
     def test_basic_php_kv_get(self):
@@ -158,27 +170,33 @@ class CBLivePlaygroundRunCodeTest(unittest.TestCase):
     def test_basic_php_upsert(self):
         self.run_example_test(ex_id = "basic-php-upsert")
 
+    def test_basic_php_search_query_string(self):
+        self.run_example_test(ex_id = "basic-php-search-query-string")
+
     # 6. Ruby examples
-    def test_basic_ruby_kv_get(self):
-        self.run_example_test(ex_id = "basic-ruby-kv-get")
+    def test_basic_rb_kv_get(self):
+        self.run_example_test(ex_id = "basic-rb-kv-get")
 
-    def test_ex_basic_ruby_query_rows(self):
-        self.run_example_test(ex_id = "basic-ruby-query-rows")
+    def test_ex_basic_rb_query_rows(self):
+        self.run_example_test(ex_id = "basic-rb-query-rows")
 
-    def test_basic_ruby_query_named_param(self):
-        self.run_example_test(ex_id = "basic-ruby-query-named-param")
+    def test_basic_rb_query_named_param(self):
+        self.run_example_test(ex_id = "basic-rb-query-named-param")
 
-    def test_basic_ruby_query_positional_param(self):
-        self.run_example_test(ex_id = "basic-ruby-query-positional-param")
+    def test_basic_rb_query_positional_param(self):
+        self.run_example_test(ex_id = "basic-rb-query-positional-param")
 
-    def test_basic_ruby_subdoc_lookup(self):
-        self.run_example_test(ex_id = "basic-ruby-subdoc-lookup")
+    def test_basic_rb_subdoc_lookup(self):
+        self.run_example_test(ex_id = "basic-rb-subdoc-lookup")
 
-    def test_basic_ruby_subdoc_mutate(self):
-        self.run_example_test(ex_id = "basic-ruby-subdoc-mutate")
+    def test_basic_rb_subdoc_mutate(self):
+        self.run_example_test(ex_id = "basic-rb-subdoc-mutate")
 
-    def test_basic_ruby_upsert(self):
-        self.run_example_test(ex_id = "basic-ruby-upsert")
+    def test_basic_rb_upsert(self):
+        self.run_example_test(ex_id = "basic-rb-upsert")
+
+    def test_basic_rb_search_query_string(self):
+        self.run_example_test(ex_id = "basic-rb-search-query-string")
 
     # 7. Scala examples
     def test_basic_scala_kv_get(self):
@@ -202,6 +220,9 @@ class CBLivePlaygroundRunCodeTest(unittest.TestCase):
     def test_basic_scala_upsert(self):
         self.run_example_test(ex_id = "basic-scala-upsert")
 
+    def test_basic_scala_search_query_string(self):
+        self.run_example_test(ex_id = "basic-scala-search-query-string")
+
     # 8. Go examples
     def test_basic_go_kv_get(self):
         self.run_example_test(ex_id = "basic-go-kv-get")
@@ -224,6 +245,9 @@ class CBLivePlaygroundRunCodeTest(unittest.TestCase):
     def test_basic_go_upsert(self):
         self.run_example_test(ex_id = "basic-go-upsert")
 
+    def test_basic_go_search_query_string(self):
+        self.run_example_test(ex_id = "basic-go-search-query-string")
+
     # 9. C++ examples
     def test_basic_cc_kv_get(self):
         self.run_example_test(ex_id = "basic-cc-kv-get")
@@ -245,6 +269,9 @@ class CBLivePlaygroundRunCodeTest(unittest.TestCase):
 
     def test_basic_cc_upsert(self):
         self.run_example_test(ex_id = "basic-cc-upsert")
+
+    def test_basic_cc_search_query_string(self):
+        self.run_example_test(ex_id = "basic-cc-search-query-string")
 
     @classmethod
     def tearDownClass(self):
