@@ -768,8 +768,10 @@
                 <script>
                   var iscbshell_open = localStorage.getItem("cbshell_window");
                   if (iscbshell_open != "opened") {
-                    var newTab = window.open('/static/shell.html?t=http://{{.Host}}:{{.SessionData.port_1337}}', '_blank');
-                    newTab.location;
+                    var cbshell_newTab = window.open('/static/shell.html?t=http://{{.Host}}:{{.SessionData.port_1337}}', '_blank');
+                    if (cbshell_newTab == null) {
+                      alert("Please allow pop-ups and redirects from this site");
+                    }
                     localStorage.setItem("cbshell_window", "opened");
                   }
                 </script>
