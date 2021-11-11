@@ -5,7 +5,34 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;1,300&display=swap" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="/static/styles/site.css">
   <link rel="stylesheet" type="text/css" href="/static/styles/session.css">
-  {{.AnalyticsHTML}}
+
+  <script src="../static/scripts/feedback.js"></script>
+
+  <!-- Primary Meta Tags -->
+  <title>Couchbase Playground</title>
+  <meta name="title" content="Couchbase Playground">
+  <meta name="description" content="Experiment with Couchbase in a playground environment with no prior setup required!">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Favicon -->
+  <link rel="shortcut icon" type="image/jpg" href="../static/cb.png"/>
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="http://couchbase.live/">
+  <meta property="og:title" content="Couchbase Playground">
+  <meta property="og:description" content="Experiment with Couchbase in a playground environment with no prior setup required!">
+  <meta property="og:image" content="../static/shots/shot_thumbnail.png">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="http://couchbase.live/">
+  <meta property="twitter:title" content="Couchbase Playground">
+  <meta property="twitter:description" content="Experiment with Couchbase in a playground environment with no prior setup required!">
+  <meta property="twitter:image" content="../static/shots/shot_thumbnail.png">
+
+
+    {{.AnalyticsHTML}}
 </head>
 <body class="{{.bodyClass}}">
   <header>
@@ -137,6 +164,27 @@
   </main>
 
   <footer>
+    <div class="container {{if .Lang}} container-example{{end}}">
+      <div class="feedback">
+        <form id="feedback">
+          <fieldset class="feedback-fields">
+            Was this page helpful? &nbsp
+
+            <br class="hidden-sm">
+            <br class="hidden-sm">
+
+            <label for="liked" class="feedback-radio-label"> <input class="feedback-radio" type="radio" value="true" name="liked" required/>Yes</label>
+            <label for="liked" class="feedback-radio-label"> <input class="feedback-radio" type="radio" value="false" name="liked" required/>No</label>
+            <input class="feedback-text" type="text" placeholder="How can we make it better?" name="message" />
+            <input type="hidden" name="src_url" id="src_url" value=""/>
+
+            <input type="submit" class="red-button menu-button submit-button"/>
+          </fieldset>
+        </form>
+        <div id="result"></div>
+      </div>
+    </div>
+    <hr>
     <div>© 2021 Couchbase Labs</div>
   </footer>
 </body>

@@ -18,7 +18,36 @@
   <script src="../static/scripts/menu.js"></script>
   <script src="../static/scripts/editorToggle.js"></script>
   <script src="../static/scripts/browserCompatibility.js"></script>
+  <script src="../static/scripts/feedback.js"></script>
+
+  <!-- Primary Meta Tags -->
+  <title>Couchbase Playground</title>
+  <meta name="title" content="Couchbase Playground">
+  <meta name="description" content="Experiment with Couchbase in a playground environment with no prior setup required!">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Favicon -->
+  <link rel="shortcut icon" type="image/jpg" href="../static/cb.png"/>
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="http://couchbase.live/">
+  <meta property="og:title" content="Couchbase Playground">
+  <meta property="og:description" content="Experiment with Couchbase in a playground environment with no prior setup required!">
+  <meta property="og:image:secure_url" content="https://couchbase.live/static/shots/shot_thumbnail.png">
+  <meta property="og:image" content="http://dev.couchbase.live/static/shots/shot_thumbnail.png">
+  <meta property="og:image" content="http://beta.couchbase.live/static/shots/shot_thumbnail.png">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="http://couchbase.live/">
+  <meta property="twitter:title" content="Couchbase Playground">
+  <meta property="twitter:description" content="Experiment with Couchbase in a playground environment with no prior setup required!">
+  <meta property="twitter:image:secure_url" content="https://couchbase.live/static/shots/shot_thumbnail.png">
+  <meta property="twitter:image" content="http://dev.couchbase.live/static/shots/shot_thumbnail.png">
+  <meta property="twitter:image" content="http://beta.couchbase.live/static/shots/shot_thumbnail.png">
+
+
   <style>
     {{if not .Session}}
     body .needs-session {
@@ -86,13 +115,30 @@
       return true;
     }
   </script>
+  {{if .Lang}}
+  <script>
+    let initPage = () => {
+      setEditorView()
+      disableSafariButtons()
+      handleFeedbackForm({{if .FeedbackUrl}}{{.FeedbackUrl}}{{else}}'https://devportal-api.prod.couchbase.live/pageLikes'{{end}})
+    }
+  </script>
+  {{else}}
+  <script>
+    let initPage = () => {
+      disableSafariButtons()
+      handleFeedbackForm({{if .FeedbackUrl}}{{.FeedbackUrl}}{{else}}'https://devportal-api.prod.couchbase.live/pageLikes'{{end}})
+    }
+  </script>
+  {{end}}
   <script>
     window.scrollTo({top: 0, behavior: "smooth"})
+    addEventListener('load', initPage)
   </script>
 {{/*    TODO: look into how AnalyticsHTML works and see if we can do this for the nav too  */}}
     {{.AnalyticsHTML}}
 </head>
-<body class="{{.BodyClass}}" onload="{{if .Lang}}setEditorView();{{end}} disableSafariButtons();">
+<body class="{{.BodyClass}}">
 <header>
   <div class="header-flex-container">
     <div class="logo">
@@ -207,8 +253,7 @@
 
 <main id="main">
     {{if .Target.DBurl}}
-      <div class="info-header">
-
+      <div class="info-header info-header-capella">
         <div class="header-right">
           <div>
             <span class="head-server">Your Couchbase:</span>
@@ -250,10 +295,10 @@
           </div>
         </div>
       </div>
-      <div class="info-header">
+      <div class="info-header info-header-capella">
           <div class="header-right">
             <span class="head-server">Your playground Capella session will expire after </span>
-            <code> {{.Target.ExpiryTime}}<code/>
+            <code> {{.Target.ExpiryTime}}</code>
 
           </div>
       </div>
@@ -341,7 +386,7 @@
     <div class="workspace-body">
       <div class="container {{if .Lang}}container-example{{end}}">
           {{if not .Lang}}
-            <h2 class="home-header"><label for="examplesToggle">Play with Couchbase SDK Code Examples</label></h2>
+            <h2 class="home-header"><label for="examplesToggle">Click Below to Run Examples</label></h2>
             <div class="row example-row">
               <div class="col-xs-6 col-sm-6 col-md-4 col-lg-4">
                 <a href="/examples/basic-java-kv-get{{if $.Session}}?s={{$.Session.SessionId}}{{end}}"
@@ -667,7 +712,7 @@
                           {{if or .Name .Lang .Code}}
                           {{if ne .Code "NONE"}}
                             <h2 class="editor-label">Code Editor</h2>
-                            <input type="submit" value="run example &nbsp &gt&gt;" class="run" id="run"
+                            <input type="submit" value="Run Now &nbsp &gt&gt;" class="run" id="run"
                                    onclick="return onRunSubmit()"/>
                           {{end}}
                         <div class="example-frame">
@@ -714,16 +759,20 @@
               <h2 class="home-header hidden-ios">Explore interactive shell</h2>
             {{end}}
               {{if and (not .Session) (.Target.DBurl)}}
-                      <a href="/session-cbshell" {{if eq .Target.Status "not accessible"}}class="disabled"{{end}} class="nowrap disabled-safari hidden-ios">
-                        <u>Couchbase Shell</u></a>
+                  <a href="/session-cbshell" {{if eq .Target.Status "not accessible"}}class="disabled"{{end}} class="nowrap disabled-safari hidden-ios">
+                    <u>Couchbase Shell</u></a>
+                  <script>
+                    localStorage.setItem("cbshell_window", "closed");
+                  </script>
               {{else if and (.Target.DBurl) (ge .SessionData.ContainerId 0)}}
-
                 <script>
                   var iscbshell_open = localStorage.getItem("cbshell_window");
                   if (iscbshell_open != "opened") {
-                    var newTab = window.open('/static/shell.html?t=http://{{.Host}}:{{.SessionData.port_1337}}', '_blank');
-                    newTab.location;
-                    localStorage.setItem("cbshell_window", "new");
+                    var cbshell_newTab = window.open('/static/shell.html?t=http://{{.Host}}:{{.SessionData.port_1337}}', '_blank');
+                    if (cbshell_newTab == null) {
+                      alert("Please allow pop-ups and redirects from this site");
+                    }
+                    localStorage.setItem("cbshell_window", "opened");
                   }
                 </script>
 
@@ -744,11 +793,11 @@
           </div>
           {{if not .Lang}}
             <div class="online-tools">
-              <h2 class="home-header">Explore Online Tools to Learn More About N1QL</h2>
-              <a href="https://query-tutorial.couchbase.com/tutorial/#1" class="nowrap" target="_blank">Online N1QL Tutorial</a>
-              <a href="https://index-advisor.couchbase.com/indexadvisor/#1" class="nowrap" target="_blank">Online N1QL Index Advisor</a>
+              <h2 class="home-header">More N1QL Tools</h2>
+              <a href="https://query-tutorial.couchbase.com/tutorial/#1" class="nowrap" target="_blank">N1QL Query Tutorial</a>
+              <a href="https://index-advisor.couchbase.com/indexadvisor/#1" class="nowrap" target="_blank">N1QL Index Advisor</a>
+              <a href="https://sqlplusplus-tutorial.couchbase.com/tutorial/#1" class="nowrap" target="_blank">N1QL Analytics Tutorial</a>
               <a href="https://docs.couchbase.com/server/current/n1ql/n1ql-rest-api/index.html" class="nowrap" target="_blank">N1QL REST API Docs</a>
-              <a href="https://sqlplusplus-tutorial.couchbase.com/tutorial/#1" target="_blank">SQL++ Tutorial – N1QL for Analytics Query Language</a>
             </div>
           {{end}}
       </div>
@@ -756,6 +805,27 @@
 </main>
 
 <footer>
+  <div class="container {{if .Lang}} container-example{{end}}">
+    <div class="feedback">
+      <form id="feedback">
+        <fieldset class="feedback-fields">
+          Was this page helpful? &nbsp
+
+          <br class="hidden-sm">
+          <br class="hidden-sm">
+
+          <label for="liked" class="feedback-radio-label"> <input class="feedback-radio" type="radio" value="true" name="liked" required/>Yes</label>
+          <label for="liked" class="feedback-radio-label"> <input class="feedback-radio" type="radio" value="false" name="liked" required/>No</label>
+          <input class="feedback-text" type="text" placeholder="How can we make it better?" name="message" />
+          <input type="hidden" name="src_url" id="src_url" value=""/>
+
+          <input type="submit" class="red-button menu-button submit-button"/>
+        </fieldset>
+      </form>
+      <div id="result"></div>
+    </div>
+  </div>
+  <hr>
   <div>© 2021 Couchbase Labs -
     <span class="ver">Couchbase Server {{.Version}}</span>
       {{range $v := .VersionSDKs}}
@@ -923,5 +993,6 @@
 
   otfix();
 </script>
+
 </body>
 </html>

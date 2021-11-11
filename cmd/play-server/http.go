@@ -1,10 +1,12 @@
 package main
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
 	"html/template"
+	"io/ioutil"
 	"log"
 	"math/rand"
 	"net"
@@ -61,6 +63,8 @@ func HttpMuxInit(mux *http.ServeMux) {
 	mux.HandleFunc("/et", HttpHandleET)
 
 	mux.HandleFunc("/", HttpHandleMain)
+
+	mux.HandleFunc("/feedback", HttpHandleFeedback)
 }
 
 // ------------------------------------------------
@@ -387,6 +391,7 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 		"e":             e,
 		"bodyClass":     bodyClass,
 		"BaseUrl":       *baseUrl,
+		"FeedbackUrl":   *feedbackURL,
 	}
 
 	if r.Method == "POST" {
@@ -621,6 +626,7 @@ func HttpHandleSessionCBShell(w http.ResponseWriter, r *http.Request) {
 		"e":             e,
 		"bodyClass":     bodyClass,
 		"BaseUrl":       *baseUrl,
+		"FeedbackUrl":   *feedbackURL,
 	}
 
 	errs := 0
@@ -667,7 +673,13 @@ func HttpHandleSessionCBShell(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 
+		sessionId := sessions.mapByNameEmail[NameEmail(name, email)]
+		if sessionId != "" {
+			log.Printf("INFO: Session already exists, deleting sessionId: %s", sessionId)
+			sessions.SessionExit(sessions.SessionGet(sessionId).SessionId)
+		}
 		session, err := sessions.SessionCreate("", name, email, Target)
+
 		if err == nil && session != nil && session.SessionId != "" {
 			StatsNumInc("http.Session.cbshell.ok", "http.Session.cbshell.create.assign")
 
@@ -694,7 +706,7 @@ func HttpHandleSessionCBShell(w http.ResponseWriter, r *http.Request) {
 				r.FormValue("init"), "0",
 				defaultBucket, Target)
 
-			for i := 1; err == nil && i < groupSize; i++ {
+			/*for i := 1; err == nil && i < groupSize; i++ {
 				var childSession *Session
 
 				childSession, err = sessions.SessionCreate(
@@ -711,7 +723,7 @@ func HttpHandleSessionCBShell(w http.ResponseWriter, r *http.Request) {
 					*containers, *containersSingleUse,
 					r.FormValue("init"), fmt.Sprintf("%d", i),
 					defaultBucket, Target)
-			}
+			}*/
 
 			if err == nil {
 				StatsNumInc("http.Session.cbshell.ok", "http.Session.cbshell.create.assign.ok")
@@ -853,6 +865,7 @@ func HttpHandleTarget(w http.ResponseWriter, r *http.Request) {
 		"natpublicip":   *natPublicIP,
 		"bodyClass":     bodyClass,
 		"BaseUrl":       *baseUrl,
+		"FeedbackUrl":   *feedbackURL,
 	}
 
 	if runtime.GOOS != "linux" {
@@ -1229,6 +1242,44 @@ func HttpHandleStaticData(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	w.Write(j)
+}
+
+// ------------------------------------------------
+
+func HttpHandleFeedback(w http.ResponseWriter, r *http.Request) {
+	StatsNumInc("http.Feedback")
+	src_url := r.FormValue("src_url")
+	liked := r.FormValue("liked")
+	message := r.FormValue("message")
+	user := "anonymous"
+
+	requestBodyStr := fmt.Sprintf(`{"created": "%s", "page": "%s", "comment": "%s", "helpful": "%s", "user": "%s"}`, time.Now().Format(time.RFC3339), src_url, message, liked, user)
+	bodyBytes := []byte(requestBodyStr)
+
+	req, err := http.NewRequest("POST", *feedbackURL, bytes.NewBuffer(bodyBytes))
+	if err != nil {
+		StatsNumInc("http.Feedback.err")
+		log.Printf("ERROR: HttpHandleFeedback, err: %v", err)
+	}
+	req.Header.Set("mode", "cors")
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Accept", "application/json")
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		StatsNumInc("http.Feedback.err")
+		log.Printf("ERROR: HttpHandleFeedback, err: %v", err)
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode == http.StatusOK {
+		StatsNumInc("http.Feedback.ok")
+	} else {
+		StatsNumInc("http.Feedback.err")
+		body, _ := ioutil.ReadAll(resp.Body)
+		log.Printf("ERROR: HttpHandleFeedback, response Body: %s", string(body))
+	}
+	return
 }
 
 // ------------------------------------------------

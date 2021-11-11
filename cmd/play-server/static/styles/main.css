@@ -39,7 +39,7 @@
   width: 120px;
   height: 70px;
   margin-top: 4px;
-  margin-left: 4px;
+  margin-left: 0px;
   border-width: 3px;
   border-style: solid;
 }
@@ -86,6 +86,12 @@ main .info-header .header-right {
   font-family: "Ubuntu Mono", monospace;
   font-size: 14px;
 }
+
+main .info-header.info-header-capella .header-right {
+  margin-left: 28px;
+  padding-bottom: 10px;
+}
+
 main .info-header .header-right .head-server {
   font-size: 16px;
 }
@@ -286,8 +292,7 @@ main .info-header .header-right code {
 }
 .workspace .workspace-body .code-output iframe.output {
   width: 100%;
-  height: 500px;
-  margin-bottom: 15px;
+  height: 350px;
 
   border-width: 1px;
   border-style: solid;
@@ -735,6 +740,7 @@ a.disable {
   display: flex;
   margin: 0;
   text-decoration-line: none;
+  font-size: 14px;
 }
 
 .example-icon {
@@ -752,7 +758,7 @@ a.disable {
 
 h2.home-header {
   margin: 26px 0 18px 0;
-  font-size: 20px;
+  font-size: 16px;
   white-space: normal;
 }
 
@@ -855,7 +861,7 @@ div.example-heading > div {
 }
 
 div.online-tools > a{
-  display: block;
+  display: table;
   margin-left: 16px;
   margin-top: 8px;
 }
@@ -875,6 +881,7 @@ div.online-tools > p{
   text-transform: none !important;
   margin-top: 35px !important;
   overflow-x: scroll;
+  font-size: 70% !important;
 }
 
 .return-home-button {
@@ -899,7 +906,7 @@ iframe#output {
 }
 
 .example-title {
-  font-size: 24px;
+  font-size: 16px;
 }
 
 .example-heading {
@@ -979,4 +986,21 @@ div.progress-wrapper > ul > li > a:hover {
   -moz-transition: all 0.2s ease-in-out;
   -o-transition: all 0.2s ease-in-out;
   transition: all 0.2s ease-in-out;
+}
+
+#run {
+  /* Fade Effect on Hover */
+  -o-transition:.3s;
+  -ms-transition:.3s;
+  -moz-transition:.3s;
+  -webkit-transition:.3s;
+  transition:.3s;
+}
+
+#infoColumn > em, .info {
+  font-size: 12px;
+}
+
+div.online-tools {
+  font-size: 12px;
 }
