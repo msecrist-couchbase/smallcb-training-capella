@@ -126,6 +126,19 @@ func GetDBHostFromURL(dburl string) string {
 	hostName = strings.Split(hostName, "?")[0]
 	return hostName
 }
+
+func GetDBSrvHostFromURL(dburl string) string {
+	sHost := strings.ReplaceAll(dburl, "couchbase://", "")
+	sHost = strings.ReplaceAll(sHost, "couchbases://", "")
+	hostName := strings.Split(sHost, ":")[0]
+	hostName = strings.Split(hostName, "?")[0]
+	_, srvs, err := net.LookupSRV("couchbases", "tcp", hostName)
+	if err != nil {
+		log.Printf("err=%v", err)
+		return ""
+	}
+	return strings.TrimSuffix(srvs[0].Target, ".")
+}
 func CheckDBAccess(dburl string) (string, string, string) {
 	hostName := GetDBHostFromURL(dburl)
 	Status := "not accessible"

@@ -258,6 +258,7 @@
           <div>
             <span class="head-server">Your Couchbase:</span>
             <span class="head-user">url:</span> <code>{{.Target.DBHost}}</code>
+            <span class="head-user">host:</span> <code>{{.Target.DBSrvHost}}</code>
             <span class="head-user">ip:</span> <code>{{.Target.IPv4}}</code>
             {{if eq .Target.Status "OK"}}
               <span class="head-user">version:</span> <code>{{.Target.Version}}</code>

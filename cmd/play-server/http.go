@@ -102,6 +102,7 @@ func HttpHandleMain(w http.ResponseWriter, r *http.Request) {
 		Target.DBuser = targetTuple[1]
 		Target.DBpwd = targetTuple[2]
 		Target.DBHost = GetDBHostFromURL(Target.DBurl)
+		Target.DBSrvHost = GetDBSrvHostFromURL(Target.DBurl)
 		if len(targetTuple) >= 4 {
 			Target.ExpiryTime = targetTuple[3]
 			if len(targetTuple) >= 5 {
@@ -817,6 +818,7 @@ func HttpHandleTarget(w http.ResponseWriter, r *http.Request) {
 		Target.DBuser = targetTuple[1]
 		Target.DBpwd = targetTuple[2]
 		Target.DBHost = GetDBHostFromURL(Target.DBurl)
+		Target.DBSrvHost = GetDBSrvHostFromURL(Target.DBurl)
 		if len(targetTuple) >= 4 {
 			Target.ExpiryTime = targetTuple[3]
 			if len(targetTuple) >= 5 {

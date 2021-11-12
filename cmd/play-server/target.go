@@ -10,6 +10,7 @@ type target struct {
 	Version            string
 	IPv4               string
 	DBHost             string
+	DBSrvHost          string
 	NetworkStatus      string
 	UserAccessStatus   string
 	SampleAccessStatus string
