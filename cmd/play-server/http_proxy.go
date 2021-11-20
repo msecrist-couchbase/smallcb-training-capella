@@ -238,6 +238,12 @@ func HttpProxy(listenProxy, // Ex: ":8091", ":8093".
 	log.Printf("INFO: HttpProxy, listenProxyActual: %s", listenProxyActual)
 
 	log.Fatal(http.ListenAndServe(listenProxyActual, proxyMux))
+	log.Printf("INFO: HttpProxy, tlsServer: %v", *tlsServer)
+	if *tlsServer {
+		log.Fatal(http.ListenAndServeTLS(*&listenProxyActual, *tlsCert, *tlsKey, proxyMux))
+	} else {
+		log.Fatal(http.ListenAndServe(listenProxyActual, proxyMux))
+	}
 }
 
 // ------------------------------------------------

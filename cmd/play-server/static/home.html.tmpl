@@ -314,8 +314,8 @@
           <div class="header-right">
             <div>
               <span class="head-server">Your Couchbase instance:</span>
-              <code><a href="http://{{.Host}}:8091/ui/index.html?lu={{.Session.CBUser}}&lp={{.Session.CBPswd}}"
-                      target="_blank">http://{{.Host}}:8091</a>
+              <code><a href="{{.SessionData.scheme}}://{{.Host}}:{{.SessionData.port_8091}}/ui/index.html?lu={{.Session.CBUser}}&lp={{.Session.CBPswd}}"
+                      target="_blank">http://{{.Host}}:{{.SessionData.port_8091}}</a>
               </code>
               <span class="head-user">username:</span> <code>{{.Session.CBUser}}</code>
               <span class="head-pass">password:</span> <code>*****</code>
@@ -341,7 +341,7 @@
           </div>
           <div class="shots">
             <a target="_blank"
-               href="http://{{.Host}}:8091/ui/index.html?lu={{.Session.CBUser}}&lp={{.Session.CBPswd}}&playgTour=welcome"
+               href="{{.SessionData.scheme}}://{{.Host}}:{{.SessionData.port_8091}}/ui/index.html?lu={{.Session.CBUser}}&lp={{.Session.CBPswd}}&playgTour=welcome"
                class="start-here">
               <u>Guided Tour</u>
               <div><br/><b>
@@ -349,33 +349,33 @@
                 </b></div>
             </a>
             <a target="_blank"
-               href="http://{{.Host}}:8091/ui/index.html?lu={{.Session.CBUser}}&lp={{.Session.CBPswd}}">
+               href="{{.SessionData.scheme}}://{{.Host}}:{{.SessionData.port_8091}}/ui/index.html?lu={{.Session.CBUser}}&lp={{.Session.CBPswd}}">
               <u>Dashboard</u>
               <div><img src="/static/shots/shot-dashboard.png"/></div>
             </a>
             <a target="_blank"
-               href="http://{{.Host}}:8091/ui/index.html?lu={{.Session.CBUser}}&lp={{.Session.CBPswd}}#/query/workbench?query=SELECT%20%2A%20FROM%20system%3Akeyspaces">
+               href="{{.SessionData.scheme}}://{{.Host}}:{{.SessionData.port_8091}}/ui/index.html?lu={{.Session.CBUser}}&lp={{.Session.CBPswd}}#/query/workbench?query=SELECT%20%2A%20FROM%20system%3Akeyspaces">
               <u>Query Workbench</u>
               <div><img src="/static/shots/shot-query-workbench.png"/></div>
             </a>
             <a target="_blank"
-               href="http://{{.Host}}:8091/ui/index.html?lu={{.Session.CBUser}}&lp={{.Session.CBPswd}}#/docs/editor">
+               href="{{.SessionData.scheme}}://{{.Host}}:{{.SessionData.port_8091}}/ui/index.html?lu={{.Session.CBUser}}&lp={{.Session.CBPswd}}#/docs/editor">
               <u>Docs Workbench</u>
               <div><img src="/static/shots/shot-documents.png"/></div>
             </a>
               {{if ge .SessionData.ContainerId 0}}
                 <a target="_blank" class="disabled-safari disabled-ios" id="shellBtn"
-                   href="/static/shell.html?t=http://{{.Host}}:{{.SessionData.port_1337}}">
+                   href="/static/shell.html?t={{.SessionData.scheme}}://{{.Host}}:{{.SessionData.port_1337}}">
                   <u>Couchbase Shell</u>
                   <div><img src="/static/shots/shot-cbsh.png"/></div>
                 </a>
                 <a target="_blank" class="disabled-safari disabled-ios"
-                   href="/static/shell-cbq.html?t=http://{{.Host}}:{{.SessionData.port_1338}}">
+                   href="/static/shell-cbq.html?t={{.SessionData.scheme}}://{{.Host}}:{{.SessionData.port_1338}}">
                   <u>Query Shell</u>
                   <div><img src="/static/shots/shot-cbq.png"/></div>
                 </a>
                 <a target="_blank" class="disabled-safari disabled-ios"
-                   href="/static/shell-terminal.html?t=http://{{.Host}}:{{.SessionData.port_1339}}">
+                   href="/static/shell-terminal.html?t={{.SessionData.scheme}}://{{.Host}}:{{.SessionData.port_1339}}">
                   <u>CLI Tools</u>
                   <div><img src="/static/shots/shot-terminal.png"/></div>
                 </a>
@@ -779,9 +779,9 @@
                   var iscbshell_open = localStorage.getItem("cbshell_window");
                   if (iscbshell_open != "opened") {
                     if (cbshell_type == "clitools") {
-                      open_url = "/static/shell-terminal.html?t=http://{{.Host}}:{{.SessionData.port_1339}}"
+                      open_url = "/static/shell-terminal.html?t={{.SessionData.scheme}}://{{.Host}}:{{.SessionData.port_1339}}"
                     } else {
-                      open_url = "/static/shell.html?t=http://{{.Host}}:{{.SessionData.port_1337}}"
+                      open_url = "/static/shell.html?t={{.SessionData.scheme}}://{{.Host}}:{{.SessionData.port_1337}}"
                     }
                     var cbshell_newTab = window.open(open_url, '_blank');
                     if (cbshell_newTab == null) {
@@ -793,11 +793,11 @@
                 </script>
 
                 <p><a target="_blank"
-                  href="/static/shell.html?t=http://{{.Host}}:{{.SessionData.port_1337}}" class="nowrap disabled-safari hidden-ios">
+                  href="/static/shell.html?t={{.SessionData.scheme}}://{{.Host}}:{{.SessionData.port_1337}}" class="nowrap disabled-safari hidden-ios">
                     <u>Couchbase Shell</u></a> (opens a new tab and the session expire after {{.SessionsMaxAge}}
                 or until {{.SessionsMaxIdle}} of inactivity.)</p>
                 <p><a target="_blank"
-                  href="/static/shell-terminal.html?t=http://{{.Host}}:{{.SessionData.port_1339}}" class="nowrap disabled-safari hidden-ios">
+                  href="/static/shell-terminal.html?t={{.SessionData.scheme}}://{{.Host}}:{{.SessionData.port_1339}}" class="nowrap disabled-safari hidden-ios">
                     <u>CLI Tools Terminal</u></a> (opens a new tab and the session expire after {{.SessionsMaxAge}}
                 or until {{.SessionsMaxIdle}} of inactivity.)</p>
                 <script>

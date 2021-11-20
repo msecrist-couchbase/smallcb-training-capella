@@ -226,6 +226,10 @@ func main() {
 	go StatsHistsRun(*statsEvery)
 
 	log.Printf("INFO: main, listen: %s", *listen)
-
-	log.Fatal(http.ListenAndServe(*listen, mux))
+	log.Printf("INFO: main, tlsServer: %v", *tlsServer)
+	if *tlsServer {
+		log.Fatal(http.ListenAndServeTLS(*listen, *tlsCert, *tlsKey, mux))
+	} else {
+		log.Fatal(http.ListenAndServe(*listen, mux))
+	}
 }

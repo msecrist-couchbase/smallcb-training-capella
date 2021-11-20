@@ -238,12 +238,18 @@ func StartCbsh(session *Session, req RunRequest, containerId int, defaultBucket 
 		return err
 	}
 
+	tlsMode := " "
+	if *tlsTerminal {
+		tlsMode = " --tls --tls_key " + *tlsKey + " --tls_cert " + *tlsCert + " "
+		log.Printf("tlsMode: %s", tlsMode)
+	}
 	cmd := exec.Command("docker", "exec",
 		"-detach", "-it", "-u", "cbsh", "-w", "/home/cbsh", containerName,
 		"/bin/sh", "-c",
 		"mkdir -p /home/cbsh/.cbsh;"+
 			" cp "+cbshConfigInst+" /home/cbsh/.cbsh/config;"+
-			" while true; do /home/play/npm_packages/bin/gritty --command './cbsh -s'; sleep 3; done")
+			" while true; do /home/play/npm_packages/bin/gritty"+tlsMode+
+			" --command './cbsh -s'; sleep 3; done")
 
 	out, err := ExecCmd(req.ctx, cmd, req.codeDuration)
 	if err != nil {
@@ -284,10 +290,16 @@ func StartCbq(session *Session, req RunRequest, containerId int, defaultBucket s
 		return err
 	}
 
+	tlsMode := " "
+	if *tlsTerminal {
+		tlsMode = " --tls --tls_key " + *tlsKey + " --tls_cert " + *tlsCert + " "
+		log.Printf("tlsMode: %s", tlsMode)
+	}
 	cmd := exec.Command("docker", "exec",
 		"-detach", "-it", "-u", "play", "-w", "/home/play", containerName,
 		"/bin/sh", "-c",
-		"cd /opt/couchbase/bin; while true; do /home/play/npm_packages/bin/gritty --command './cbq -q -u "+
+		"cd /opt/couchbase/bin; while true; do /home/play/npm_packages/bin/gritty "+tlsMode+
+			" --command './cbq -q -u "+
 			session.CBUser+" -p "+session.CBPswd+" -e "+session.CBHost+
 			"' --port 1338; sleep 3; done")
 
@@ -313,10 +325,16 @@ func StartToolsTerminal(session *Session, req RunRequest, containerId int, defau
 		return err
 	}
 
+	tlsMode := " "
+	if *tlsTerminal {
+		tlsMode = " --tls --tls_key " + *tlsKey + " --tls_cert " + *tlsCert + " "
+		log.Printf("tlsMode: %s", tlsMode)
+	}
 	cmd := exec.Command("docker", "exec",
 		"-detach", "-it", "-u", "play", "-w", "/home/play", containerName,
 		"/bin/sh", "-c",
-		"cd /opt/couchbase/bin; while true; do /home/play/npm_packages/bin/gritty --command 'bash' --port 1339; sleep 3; done")
+		"cd /opt/couchbase/bin; while true; do /home/play/npm_packages/bin/gritty "+tlsMode+
+			" --command 'bash' --port 1339; sleep 3; done")
 
 	out, err := ExecCmd(req.ctx, cmd, req.codeDuration)
 	if err != nil {
