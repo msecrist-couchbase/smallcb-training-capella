@@ -102,6 +102,7 @@ func HttpHandleMain(w http.ResponseWriter, r *http.Request) {
 		Target.DBuser = targetTuple[1]
 		Target.DBpwd = targetTuple[2]
 		Target.DBHost = GetDBHostFromURL(Target.DBurl)
+		Target.DBSrvHost = GetDBSrvHostFromURL(Target.DBurl)
 		if len(targetTuple) >= 4 {
 			Target.ExpiryTime = targetTuple[3]
 			if len(targetTuple) >= 5 {
@@ -333,6 +334,14 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 
 	Target := target{}
 
+	if r.URL.Scheme == "" && r.Header.Get("X-Forwarded-Proto") != "" {
+		r.URL.Scheme = r.Header.Get("X-Forwarded-Proto")
+	} else if r.Header.Get("X-Forwarded-Scheme") != "" {
+		r.URL.Scheme = r.Header.Get("X-Forwarded-Scheme")
+	} else if r.URL.Scheme == "" {
+		r.URL.Scheme = "http"
+	}
+
 	if *host != "127.0.0.1" && *host != "localhost" &&
 		strings.Split(r.Host, ":")[0] != *host {
 		StatsNumInc("http.Session.redirect.host")
@@ -346,7 +355,7 @@ func HttpHandleSession(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 
-		http.Redirect(w, r, "http://"+*host+"/session"+suffix, http.StatusSeeOther)
+		http.Redirect(w, r, r.URL.Scheme+"://"+*host+"/session"+suffix, http.StatusSeeOther)
 
 		log.Printf("INFO: Session redirect, from host: %v, to host: %s, suffix: %s", r.Host, *host, suffix)
 
@@ -568,6 +577,13 @@ func HttpHandleSessionCBShell(w http.ResponseWriter, r *http.Request) {
 
 	Target := target{}
 
+	if r.URL.Scheme == "" && r.Header.Get("X-Forwarded-Proto") != "" {
+		r.URL.Scheme = r.Header.Get("X-Forwarded-Proto")
+	} else if r.Header.Get("X-Forwarded-Scheme") != "" {
+		r.URL.Scheme = r.Header.Get("X-Forwarded-Scheme")
+	} else if r.URL.Scheme == "" {
+		r.URL.Scheme = "http"
+	}
 	if *host != "127.0.0.1" && *host != "localhost" &&
 		strings.Split(r.Host, ":")[0] != *host {
 		StatsNumInc("http.Session.redirect.host")
@@ -581,7 +597,7 @@ func HttpHandleSessionCBShell(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 
-		http.Redirect(w, r, "http://"+*host+"/session"+suffix, http.StatusSeeOther)
+		http.Redirect(w, r, r.URL.Scheme+"://"+*host+"/session"+suffix, http.StatusSeeOther)
 
 		log.Printf("INFO: Session redirect, from host: %v, to host: %s, suffix: %s", r.Host, *host, suffix)
 
@@ -768,6 +784,13 @@ func HttpHandleSessionCBShell(w http.ResponseWriter, r *http.Request) {
 func HttpHandleTarget(w http.ResponseWriter, r *http.Request) {
 	StatsNumInc("http.Target")
 
+	if r.URL.Scheme == "" && r.Header.Get("X-Forwarded-Proto") != "" {
+		r.URL.Scheme = r.Header.Get("X-Forwarded-Proto")
+	} else if r.Header.Get("X-Forwarded-Scheme") != "" {
+		r.URL.Scheme = r.Header.Get("X-Forwarded-Scheme")
+	} else if r.URL.Scheme == "" {
+		r.URL.Scheme = "http"
+	}
 	if *host != "127.0.0.1" && *host != "localhost" &&
 		strings.Split(r.Host, ":")[0] != *host {
 		StatsNumInc("http.Target.redirect.host")
@@ -781,7 +804,7 @@ func HttpHandleTarget(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 
-		http.Redirect(w, r, "http://"+*host+"/target"+suffix, http.StatusSeeOther)
+		http.Redirect(w, r, r.URL.Scheme+"://"+*host+"/target"+suffix, http.StatusSeeOther)
 
 		log.Printf("INFO: Target redirect, from host: %v, to host: %s, suffix: %s", r.Host, *host, suffix)
 
@@ -817,6 +840,7 @@ func HttpHandleTarget(w http.ResponseWriter, r *http.Request) {
 		Target.DBuser = targetTuple[1]
 		Target.DBpwd = targetTuple[2]
 		Target.DBHost = GetDBHostFromURL(Target.DBurl)
+		Target.DBSrvHost = GetDBSrvHostFromURL(Target.DBurl)
 		if len(targetTuple) >= 4 {
 			Target.ExpiryTime = targetTuple[3]
 			if len(targetTuple) >= 5 {

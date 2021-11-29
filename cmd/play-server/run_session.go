@@ -103,6 +103,11 @@ func SessionAssignContainer(session *Session, req RunRequest,
 		return nil, err
 	}
 
+	err = StartToolsTerminal(session, req, containerId, defaultBucket)
+	if err != nil {
+		return nil, err
+	}
+
 	containerIP, err := RetrieveIP(req, containerId)
 	if err != nil {
 		return nil, err
@@ -233,12 +238,18 @@ func StartCbsh(session *Session, req RunRequest, containerId int, defaultBucket 
 		return err
 	}
 
+	tlsMode := " "
+	if *tlsTerminal {
+		tlsMode = " --tls --tls_key " + *tlsKey + " --tls_cert " + *tlsCert + " "
+		log.Printf("tlsMode: %s", tlsMode)
+	}
 	cmd := exec.Command("docker", "exec",
 		"-detach", "-it", "-u", "cbsh", "-w", "/home/cbsh", containerName,
 		"/bin/sh", "-c",
 		"mkdir -p /home/cbsh/.cbsh;"+
 			" cp "+cbshConfigInst+" /home/cbsh/.cbsh/config;"+
-			" while true; do /home/play/npm_packages/bin/gritty --command './cbsh -s'; sleep 3; done")
+			" while true; do /home/play/npm_packages/bin/gritty"+tlsMode+
+			" --command './cbsh -s'; sleep 3; done")
 
 	out, err := ExecCmd(req.ctx, cmd, req.codeDuration)
 	if err != nil {
@@ -279,16 +290,55 @@ func StartCbq(session *Session, req RunRequest, containerId int, defaultBucket s
 		return err
 	}
 
+	tlsMode := " "
+	if *tlsTerminal {
+		tlsMode = " --tls --tls_key " + *tlsKey + " --tls_cert " + *tlsCert + " "
+		log.Printf("tlsMode: %s", tlsMode)
+	}
 	cmd := exec.Command("docker", "exec",
 		"-detach", "-it", "-u", "play", "-w", "/home/play", containerName,
 		"/bin/sh", "-c",
-		"cd /opt/couchbase/bin; while true; do /home/play/npm_packages/bin/gritty --command './cbq -q -u "+
+		"cd /opt/couchbase/bin; while true; do /home/play/npm_packages/bin/gritty "+tlsMode+
+			" --command './cbq -q -u "+
 			session.CBUser+" -p "+session.CBPswd+" -e "+session.CBHost+
 			"' --port 1338; sleep 3; done")
 
 	out, err := ExecCmd(req.ctx, cmd, req.codeDuration)
 	if err != nil {
 		return fmt.Errorf("StartCbq,"+
+			" out: %s, err: %v", out, err)
+	}
+
+	return nil
+}
+
+func StartToolsTerminal(session *Session, req RunRequest, containerId int, defaultBucket string) error {
+	containerName := fmt.Sprintf("%s%d",
+		req.containerNamePrefix, containerId)
+
+	// Ex: "vol-instances/vol-0".
+	dir := fmt.Sprintf("%s%d",
+		req.containerVolPrefix, containerId)
+
+	err := os.MkdirAll(dir+DirCode, 0777)
+	if err != nil {
+		return err
+	}
+
+	tlsMode := " "
+	if *tlsTerminal {
+		tlsMode = " --tls --tls_key " + *tlsKey + " --tls_cert " + *tlsCert + " "
+		log.Printf("tlsMode: %s", tlsMode)
+	}
+	cmd := exec.Command("docker", "exec",
+		"-detach", "-it", "-u", "play", "-w", "/home/play", containerName,
+		"/bin/sh", "-c",
+		"cd /opt/couchbase/bin; while true; do /home/play/npm_packages/bin/gritty "+tlsMode+
+			" --command 'bash' --port 1339; sleep 3; done")
+
+	out, err := ExecCmd(req.ctx, cmd, req.codeDuration)
+	if err != nil {
+		return fmt.Errorf("StartToolsTerminal,"+
 			" out: %s, err: %v", out, err)
 	}
 

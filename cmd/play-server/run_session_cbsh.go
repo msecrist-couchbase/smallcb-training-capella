@@ -92,6 +92,10 @@ func SessionAssignContainerCbsh(session *Session, req RunRequest,
 		return nil, err
 	}
 
+	err = StartToolsTerminal(session, req, containerId, defaultBucket)
+	if err != nil {
+		return nil, err
+	}
 	containerIP, err := RetrieveIP(req, containerId)
 	if err != nil {
 		return nil, err

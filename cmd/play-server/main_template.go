@@ -74,8 +74,8 @@ type MainTemplateData struct {
 
 	PageColor func(string) string
 
-	BodyClass string
-	BaseUrl   string
+	BodyClass   string
+	BaseUrl     string
 	FeedbackUrl string
 }
 
@@ -225,8 +225,8 @@ func MainTemplateEmit(w http.ResponseWriter,
 			return fmt.Sprintf("%2x%2x%2x", r, g, b)
 		},
 
-		BodyClass: bodyClass,
-		BaseUrl:   *baseUrl,
+		BodyClass:   bodyClass,
+		BaseUrl:     *baseUrl,
 		FeedbackUrl: *feedbackURL,
 	}
 
@@ -298,11 +298,24 @@ func SessionTemplateData(host string, portApp int,
 		data["CBPswd"] = session.CBPswd
 
 		if session.ContainerId >= 0 {
+			data["scheme"] = "http"
+			if *tlsTerminalProxy {
+				containerPublishPortBase = *tlsListenPortBase
+				data["scheme"] = "https"
+			}
 			portBase := containerPublishPortBase +
 				(containerPublishPortSpan * session.ContainerId)
 
 			for _, port := range portMapping {
-				data[fmt.Sprintf("port_%d", port[0])] = fmt.Sprintf("%d", portBase+port[1])
+				if port[0] == 8091 {
+					if *tlsTerminalProxy {
+						data["port_8091"] = fmt.Sprintf("%d", *tlsListenPortBase+port[0])
+					} else {
+						data["port_8091"] = fmt.Sprintf("%d", port[0])
+					}
+				} else {
+					data[fmt.Sprintf("port_%d", port[0])] = fmt.Sprintf("%d", portBase+port[1])
+				}
 			}
 
 			data["ContainerId"] = session.ContainerId
