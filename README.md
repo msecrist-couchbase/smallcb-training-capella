@@ -90,6 +90,35 @@ To stop the play server:
   make stop-play-server
 
 
+------------------------
+TLS/SSL support
+ Flags: 
+ -tlsTerminalProxy  : To use the https lister ports in the links and is based on default, -tlsListenerBase=20000 
+    NOTE: Make sure nginx has beenn started with all these ssl port listeners. A new helper script available at .github/add_nginx_ssl_listeners.sh to generate the config to copy at /etc/nginx/sites-available/playground and make a link at /etc/nginx/sites-enabled/playground.
+
+ -tlsServer : To start the play-server in TLS mode
+ -tlsTerminal : To start the gritty in TLS mode
+ -tlsKey : Supply the key file path
+ -tlsCert : supply the cert file path
+
+Production example:
+   nohup ./play-server -host cb-9380.couchbase.live -baseUrl beta.couchbase.live -containers=10 -sessionsMaxAge=35m0s -codeDuration=3m -containersSingleUse=2 -restarters=5 -containerWaitDuration=1m -tlsTerminalProxy &
+
+  To start the playserver itself (if required without front-ending with nginx) with https including gritty process, add the below to the above command.
+-tlsTerminal -tlsServer -tlsKey /var/www/cb-9380.couchbase.live/cert/playground.key -tlsCert /var/www/cb-9380.couchbase.live/cert/playground.crt
+  NOTE: Delete port fowarding rule 80 to 8080 so that any non-ssl will be forwarded to ssk using nginx automatically 
+  Example:
+    root@ip-10-0-1-169:/home/ubuntu/smallcb# sudo iptables -t nat -v -L PREROUTING -n --line-number
+Chain PREROUTING (policy ACCEPT 263 packets, 14264 bytes)
+num   pkts bytes target     prot opt in     out     source               destination         
+1     1109 64412 REDIRECT   tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:80 redir ports 8080
+2     1956  113K REDIRECT   tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:80 redir ports 8080
+3    74194 4118K DOCKER     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ADDRTYPE match dst-type LOCAL
+root@ip-10-0-1-169:/home/ubuntu/smallcb# sudo iptables -t nat -D PREROUTING 1
+
+
+
+
 -------------------------
 Production usage should set the CB_ADMIN_PASSWORD env
 variable for security and the host parameter that

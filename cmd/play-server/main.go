@@ -84,6 +84,7 @@ var PortMapping = [][]int{
 
 	[]int{1337, 40}, // The gritty port is exposed on port 10000 + 40.
 	[]int{1338, 41}, // The gritty port is exposed on port 10000 + 41.
+	[]int{1339, 42}, // The gritty port is exposed on port 10000 + 42.
 
 	[]int{8080, 45}, // 8080 (optional web app) is exposed on port 10000 + 45.
 }
@@ -225,6 +226,10 @@ func main() {
 	go StatsHistsRun(*statsEvery)
 
 	log.Printf("INFO: main, listen: %s", *listen)
-
-	log.Fatal(http.ListenAndServe(*listen, mux))
+	log.Printf("INFO: main, tlsServer: %v", *tlsServer)
+	if *tlsServer {
+		log.Fatal(http.ListenAndServeTLS(*listen, *tlsCert, *tlsKey, mux))
+	} else {
+		log.Fatal(http.ListenAndServe(*listen, mux))
+	}
 }

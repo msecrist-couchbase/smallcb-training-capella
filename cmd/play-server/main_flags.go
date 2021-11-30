@@ -102,4 +102,22 @@ var (
 
 	baseUrl = flag.String("baseUrl", "couchbase.live",
 		"base url to use as the link to homepage")
+
+	tlsServer = flag.Bool("tlsServer", false,
+		"TLS mode for server")
+
+	tlsTerminal = flag.Bool("tlsTerminal", false,
+		"TLs mode for Terminal")
+
+	tlsTerminalProxy = flag.Bool("tlsTerminalProxy", false,
+		"TLs mode for Terminal proxy")
+
+	tlsListenPortBase = flag.Int("tlsListenPortBase", 20000,
+		"base or starting port # for container instances with tls mode")
+
+	tlsKey = flag.String("tlsKey", "certs/server.key",
+		"path to the TLS key file")
+
+	tlsCert = flag.String("tlsCert", "certs/server.crt",
+		"path to the TLS certificate file")
 )
