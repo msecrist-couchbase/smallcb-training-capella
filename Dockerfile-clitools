@@ -1,0 +1,36 @@
+ENV TZ=America/Los_Angeles
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+RUN apt-get update && \
+    apt-get install -y \
+    git curl wget jq unzip zip \
+    build-essential cmake libssl-dev libevent-dev libev-dev \
+    lsb-release software-properties-common apt-transport-https gnupg2 \
+    atop htop psmisc strace time \
+    emacs vim
+
+RUN cd /opt/couchbase/bin; \
+    mkdir .cbservertools; \
+    mv couchbase-server couchdb go* cbas cbft* backup indexer install eventing* \
+    memcached projector prometheus mobile-service \
+    couch_view* couchfile* cbq-engine couchjs ct_run \
+    vbmap cbupgrade saslauthd-port sigar_port \
+    c_rehash pcre* \
+    .cbservertools
+
+COPY --from=node /usr/local/bin/node /usr/local/bin/node
+COPY --from=node /usr/local/include/node /usr/local/include/node
+COPY --from=node /usr/local/lib/node_modules /usr/local/lib/node_modules
+
+RUN ln -s ../lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm && \
+    node --version && \
+    npm --version
+
+RUN useradd -u 1001 -g couchbase -m play
+USER play
+
+RUN echo "prefix = /home/play/npm_packages" >> ~/.npmrc && \
+    PATH=/home/play/npm-packages/bin:$PATH \
+    NODE_PATH=/home/play/npm-packages/lib/node_modules:$NODE_PATH \
+    NPM_PACKAGES=/home/play/npm-packages \
+    npm install -g gritty
