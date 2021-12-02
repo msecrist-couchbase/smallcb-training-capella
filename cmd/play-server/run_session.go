@@ -334,7 +334,7 @@ func StartToolsTerminal(session *Session, req RunRequest, containerId int, defau
 		"-detach", "-it", "-u", "couchbase", "-w", "/home/play", containerName,
 		"/bin/sh", "-c",
 		"cd /opt/couchbase/bin; if [ ! -d .cbservertools ]; then mkdir .cbservertools; "+
-			"mv "+*serverTools+" .cbservertools; fi; "+
+			"for FILE in "+*serverTools+"; do  mv $FILE .cbservertools; done; fi; "+
 			"while true; do /home/play/npm_packages/bin/gritty "+tlsMode+
 			" --command 'bash' --port 1339; sleep 3; done")
 	out, err := ExecCmd(req.ctx, cmd, req.codeDuration)
