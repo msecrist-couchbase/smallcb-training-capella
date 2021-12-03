@@ -375,7 +375,7 @@
                   <div><img src="/static/shots/shot-cbq.png"/></div>
                 </a>
                 <a target="_blank" class="disabled-safari disabled-ios"
-                   href="/static/shell-terminal.html?t={{.SessionData.scheme}}://{{.Host}}:{{.SessionData.port_1339}}">
+                   href="/static/shell-terminal.html?t={{.SessionData.scheme}}://{{.Host}}:{{.SessionData.port_1339}}?connectstr={{.SessionData.CBUser}},couchbases://{{.Host}}:11207/travel-sample?ssl=no_verify">
                   <u>CLI Tools</u>
                   <div><img src="/static/shots/shot-terminal.png"/></div>
                 </a>
@@ -779,7 +779,7 @@
                   var iscbshell_open = localStorage.getItem("cbshell_window");
                   if (iscbshell_open != "opened") {
                     if (cbshell_type == "clitools") {
-                      open_url = "/static/shell-terminal.html?t={{.SessionData.scheme}}://{{.Host}}:{{.SessionData.port_1339}}"
+                      open_url = "/static/shell-terminal.html?t={{.SessionData.scheme}}://{{.Host}}:{{.SessionData.port_1339}}?connectstr={{.Target.DBuser}},couchbases://{{.Target.DBSrvHost}}:11207/travel-sample?ssl=no_verify";
                     } else {
                       open_url = "/static/shell.html?t={{.SessionData.scheme}}://{{.Host}}:{{.SessionData.port_1337}}"
                     }
@@ -797,7 +797,7 @@
                     <u>Couchbase Shell</u></a> (opens a new tab and the session expire after {{.SessionsMaxAge}}
                 or until {{.SessionsMaxIdle}} of inactivity.)</p>
                 <p><a target="_blank"
-                  href="/static/shell-terminal.html?t={{.SessionData.scheme}}://{{.Host}}:{{.SessionData.port_1339}}" class="nowrap disabled-safari hidden-ios">
+                  href="/static/shell-terminal.html?t={{.SessionData.scheme}}://{{.Host}}:{{.SessionData.port_1339}}?connectstr={{.Target.DBuser}},couchbases://{{.Target.DBSrvHost}}:11207/travel-sample?ssl=no_verify" class="nowrap disabled-safari hidden-ios">
                     <u>CLI Tools Terminal</u></a> (opens a new tab and the session expire after {{.SessionsMaxAge}}
                 or until {{.SessionsMaxIdle}} of inactivity.)</p>
                 <script>
