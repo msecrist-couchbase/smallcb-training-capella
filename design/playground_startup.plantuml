@@ -1,0 +1,38 @@
+@startuml Playground_startup
+title Playground startup process
+skinparam Style strict
+actor DevOps #red
+participant Main
+participant Admin
+participant Restarter
+participant Session
+participant Http
+participant HttpProxy
+
+
+DevOps -> Main : run play-server
+activate Main
+Main -> Admin ++ : send StatsInfo - start time and args
+return ok
+Main -> Main : read CB server and sdk versions
+Main -> Restarter ++ : prepare containers
+return ok
+Main -> Session ++ : exit the aged sessions
+return ok
+ 
+Main -> Http ++ : start a new http server (127.0.0.1:8080)
+return ok
+Main -> Http ++ : init request handlers - \n/static/, \n/static-data, \n/admin/health, \n/admin/dashboard, \n/admin/stats, \n/admin/sessions-release-containers, \n/session-exit, \n/session-info, \n/session, \n/run, \n/
+return ok
+loop containers
+    Main -> HttpProxy ++ : start proxies \n(example :8091=:10000+1,..,:8096=:10000+6,...)
+    return ok        
+end
+Main -> Admin ++ : start stats history (StatsHistsRun) sample collection
+return ok
+DevOps <-- Main : ready
+deactivate Main
+|||
+
+
+@enduml

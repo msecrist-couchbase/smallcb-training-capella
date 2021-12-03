@@ -1,0 +1,47 @@
+@startuml Playground_cbserver
+title Playground cb server
+skinparam Style strict
+actor Developer #blue
+participant Session
+participant HttpProxy
+participant Cookie
+participant httputil.ReverseProxy
+
+
+Developer -> HttpProxy ++:  request CB :8091/ url
+HttpProxy -> HttpProxy: basic auth
+alt Developer=='Developername' and pswd=='password'
+   Developer <-- HttpProxy : <font color="red">err: Developername/password rejected
+else
+    HttpProxy <-- HttpProxy : sessionId=Developer+pswd, \nsessionFrom="BasicAuth"
+end
+alt sessionId is empty() and request :8091/uilogin + POST
+    HttpProxy <-- HttpProxy : form login - Developer/pswd; \nsessionId=Developer+pswd, \nsessionFrom="form"
+end
+alt sessionId is empty()
+    HttpProxy -> Cookie ++ : get cookies (CookiesGet)
+    return ok
+end
+alt session is null
+    Developer <-- HttpProxy : <font color="red">err: Unknown session
+else session.containId < 0
+    Developer <-- HttpProxy : <font color="red">err: No container in the session
+else
+    HttpProxy -> Cookie ++: set cookie \n(example: cookie.Name="ui-auth-cb-57216.couchbase.live%3A8091"
+    return ok
+    HttpProxy -> HttpProxy: get the kind for the request urlpath
+    alt kind_response is steam response
+        HttpProxy -> HttpProxy : stream response
+    else kind_response is remap response
+        HttpProxy -> HttpProxy : remap response
+    else req contains prefix is /ui/index.html
+        Developer <-- HttpProxy : inject UI response with \nstatic file /inject.yml using session
+    end
+end
+alt modifyresponse==null and request url prefix is /ui/index.html
+    Developer <-- HttpProxy : inject UI response with static file /inject.yml without session
+end
+HttpProxy -> httputil.ReverseProxy : start reverse proxy with target proxy port (example :10001)
+Developer <-- HttpProxy : serve http
+
+@enduml

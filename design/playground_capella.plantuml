@@ -1,0 +1,17 @@
+@startuml Playground_capella
+title <font style="underscore">Playground with Capella
+skinparam Style strict
+actor Developer
+participant Http
+participant CapellaCP
+
+Developer -> Http ++ : /capella?t=token&q=newcluster
+Http -> CapellaCP ++ : create cluster
+CapellaCP -> CapellaCP : new cluster
+CapellaCP -> CapellaCP : add whitelist cidr
+CapellaCP -> CapellaCP : create db user
+
+Http <-- CapellaCP -- : cluster info - cburl, cbuser, cbpwd
+Developer <-- Http : result
+
+@enduml

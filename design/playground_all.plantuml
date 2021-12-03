@@ -1,0 +1,176 @@
+@startuml Playground
+title Playground process
+skinparam Style strict
+actor DevOps #red
+actor Developer #blue
+participant Main
+participant Admin
+participant Restarter
+participant Session
+participant Http
+participant Run
+participant RunSession
+participant MainTemplate
+participant HttpProxy
+participant Cookie
+participant httputil.ReverseProxy
+
+
+DevOps -> Main : run play-server
+activate Main
+Main -> Admin ++ : send StatsInfo - start time and args
+return ok
+Main -> Main : read CB server and sdk versions
+Main -> Restarter ++ : prepare containers
+return ok
+Main -> Session ++ : exit the aged sessions
+return ok
+ 
+Main -> Http ++ : start a new http server (127.0.0.1:8080)
+return ok
+Main -> Http ++ : init request handlers - \n/static/, \n/static-data, \n/admin/health, \n/admin/dashboard, \n/admin/stats, \n/admin/sessions-release-containers, \n/session-exit, \n/session-info, \n/session, \n/run, \n/
+return ok
+loop containers
+    Main -> HttpProxy ++ : start proxies \n(example :8091=:10000+1,..,:8096=:10000+6,...)
+    return ok        
+end
+Main -> Admin ++ : start stats history (StatsHistsRun) sample collection
+return ok
+DevOps <-- Main : ready
+deactivate Main
+|||
+
+Developer -> Http ++:  request :8080/ url
+Http -> Developer : get form values - m (mesg), s (sessionId) 
+Http -> Session ++ : get session corresponding to sessionId (s)
+return session
+alt session is empty, s is not empty, and m is empty
+    Http -> Http : redirect to /?m=session-timeout
+end
+Http -> Developer : get form value - name
+alt url path has '..'
+    Developer <-- Http: <font color="red">set Bad request status,  err: path has '..'
+end
+Http -> Developer : get form values - code, lang, view, program, from, verSDK 
+Http -> Http : fix code, replace all code: Administrator with Developername
+alt lang is java
+   Http -> Http : replace all code "public class <program>" with "class Program"
+else lang is scala
+   Http -> Http : replace all code: "object <program>"  with "object Program"
+else lang is dotnet
+    Http -> Http : replace all code: "class <program>"  with "class Program"
+end
+Http -> Http : check for verSdk incompatible with current verSDKCur
+alt verSdk incompatible with current verSDKCur
+    Developer <-- Http :  <font color="red">set Bad request status, err: incompatible sdk
+end
+Http -> MainTemplate ++ : emit with form values - title, highlights, insertBefore, insertAfter
+Developer <-- MainTemplate : html response
+deactivate MainTemplate
+deactivate Http
+
+|||
+
+Developer -> Http : request /run
+Http -> Session : get session
+alt session not null but session key is null 
+    Developer <-- Http : <font color="red"> err: Unknown session
+else session is not null and session key is not null
+    Http -> RunSession ++ : run request in session
+    group associate session container
+        alt session is null
+            Http <-- RunSession : <font color="red"> no session
+        end
+        RunSession -> RunSession : wait for ready container
+        alt  sessioncount-1 <containersingle use
+            Http <-- RunSession : <font color="red"> no container available for your session
+        end
+        RunSession -> RunSession : startinit
+        RunSession -> RunSession : startcbsh
+        RunSession -> RunSession : access session
+    end group
+    group run request in container
+        RunSession -> Run : run request in container from the session
+    end group
+    Http <-- RunSession : Emit output
+    RunSession --
+else session is null
+    Http -> Run : run single
+    group run request in single
+        Run -> Run : wait for container ready
+        alt ctx containerId
+            Run -> Run : execute make CONTAINER_NUM=containerId instance-unpause \nand return containerId
+        else time after duration
+            Http <-- Run : -1
+        else ctx done
+            Http <-- Run : ready
+        end
+        Run -> Restarter : restart container
+        Run -> Run : add rbac user username/password with admin role
+        note left
+            docker exec <containerName>
+                "/opt/couchbase/bin/couchbase-cli", "user-manage",
+                "--cluster", "http://127.0.0.1",
+                "--username", "Administrator",
+                "--password", req.cbAdminPassword,
+                "--set",
+                "--rbac-username", username,
+                "--rbac-password", password,
+                "--auth-domain", "local",
+                "--roles", roles)
+        end note
+        Run -> Run: run code in the container
+        note left
+            dircode = /tmp/play
+            dirvar = /opt/couchbase/var
+            containervolprefix = vol-instances/vol-0
+            hostvolpath = <containvolprefix>/<dircode>
+            containerName = <containerprefix>-<containerId>
+            user = play
+            code path = <dircode>/<containerName>/code.<lang>
+            docker exec <containerName> 
+            dirvar/run-code.sh or dirvar/run-<lang>.sh
+        end note
+    end group
+end
+Developer <-- Http : Emit output
+
+
+|||
+Developer -> HttpProxy ++:  request CB :8091/ url
+HttpProxy -> HttpProxy: basic auth
+alt Developer=='Developername' and pswd=='password'
+   Developer <-- HttpProxy : <font color="red">err: Developername/password rejected
+else
+    HttpProxy <-- HttpProxy : sessionId=Developer+pswd, \nsessionFrom="BasicAuth"
+end
+alt sessionId is empty() and request :8091/uilogin + POST
+    HttpProxy <-- HttpProxy : form login - Developer/pswd; \nsessionId=Developer+pswd, \nsessionFrom="form"
+end
+alt sessionId is empty()
+    HttpProxy -> Cookie ++ : get cookies (CookiesGet)
+    return ok
+end
+alt session is null
+    Developer <-- HttpProxy : <font color="red">err: Unknown session
+else session.containId < 0
+    Developer <-- HttpProxy : <font color="red">err: No container in the session
+else
+    HttpProxy -> Cookie ++: set cookie \n(example: cookie.Name="ui-auth-cb-57216.couchbase.live%3A8091"
+    return ok
+    HttpProxy -> HttpProxy: get the kind for the request urlpath
+    alt kind_response is steam response
+        HttpProxy -> HttpProxy : stream response
+    else kind_response is remap response
+        HttpProxy -> HttpProxy : remap response
+    else req contains prefix is /ui/index.html
+        Developer <-- HttpProxy : inject UI response with \nstatic file /inject.yml using session
+    end
+end
+alt modifyresponse==null and request url prefix is /ui/index.html
+    Developer <-- HttpProxy : inject UI response with static file /inject.yml without session
+end
+HttpProxy -> httputil.ReverseProxy : start reverse proxy with target proxy port (example :10001)
+Developer <-- HttpProxy : serve http
+
+@enduml
