@@ -108,8 +108,8 @@ COPY cmd/play-server/run-scala-pom.xml /run-scala-pom.xml
 COPY cmd/play-server/run-scala-log4j.properties /run-scala-log4j.properties
 
 RUN mkdir /scala && \
-    sed -i -e "s/1.1.2/${COUCHBASE_SDK_SCALA_VERSION}/g" -e "s/2.13.7/${SCALA_VERSION}/g" /home/play/helloscala/build.sbt && \
-    sed -i -e "s/1.1.2/${COUCHBASE_SDK_SCALA_VERSION}/g" -e "s/2.13/`echo ${SCALA_VERSION}|cut -f1-2 -d'.'`/g" /home/play/helloscala/run-scala-pom.xml
+    sed -i -e "s/1.2.4/${COUCHBASE_SDK_SCALA_VERSION}/g" -e "s/2.13.7/${SCALA_VERSION}/g" /home/play/helloscala/build.sbt && \
+    sed -i -e "s/1.2.4/${COUCHBASE_SDK_SCALA_VERSION}/g" -e "s/2.13/`echo ${SCALA_VERSION}|cut -f1-2 -d'.'`/g" /home/play/helloscala/run-scala-pom.xml
 
 COPY cmd/play-server/run-scala-hello.scala /home/play/helloscala/run-scala-hello.scala
 COPY cmd/play-server/run-scala-hello.scala /tmp/helloscala/run-scala-hello.scala
