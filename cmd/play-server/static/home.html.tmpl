@@ -618,7 +618,7 @@
                   {{/* Show/Hide Java Transactions Steps */}}
                   {{if eq .Lang "java"}}
                       {{/* Determine If JAVA Transactions KV Mutate Completed */}}
-                      {{if or (eq .Title "Transactions KV Mutate") (eq .Title "Transactions N1QL") (eq .Title "Upsert") (eq .Title "Search Query String")}}
+                      {{if or (eq .Title "Transactions KV Mutate") (eq .Title "Transactions N1QL") (eq .Title "Upsert") (eq .Title "Search Query String") (eq .Title "Next Steps")}}
                         <li class="completed">
                           <a href="/examples/basic-{{.Lang}}-txn-kv-mutate{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                             <span class="bubble"></span>
