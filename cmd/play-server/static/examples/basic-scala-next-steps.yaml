@@ -1,0 +1,23 @@
+title: Next Steps
+page: page-10
+lang: scala
+infoBefore: |
+  <div>
+  <a href='/examples/basic-scala-search-query-string' class="prev-button" style="float:left">Previous</a>
+  <a href='#' class="disable next-button">Next</a>
+  </div>
+  <br>
+
+code: NONE
+
+infoAfter: |
+  Sign up for a <a target="_blank" href="https://cloud.couchbase.com?href=Playground">free 30-day trial of Couchbase Capella</a>, our database-as-a-service, and get hands on with Couchbase. Connect your trial account to the Playground, import your own data, or connect a project to really test it out for yourself.
+  <br>
+  <br>
+  To learn more about using Capella and the free 30-day trial, take a look at <a target="_blank" href="https://developer.couchbase.com/learn/capella">this tutorial</a> on our Developer Portal!
+  <br>
+  <br>
+  If you're already using Couchbase Capella, you can interact with your cluster by using the interactive Couchbase shell. You can also use the Capella Control plane to check out the document viewer, import your own data, or connect to a project.
+  <br>
+  <br>
+  Have feedback for us? We'd love to hear from you. Use the form in the footer to send us your thougts!
