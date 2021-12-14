@@ -210,7 +210,7 @@
     {{end}}
     <ul id="secondaryNav">
       <li>
-        <a target="_blank" href="https://cloud.couchbase.com?href=Playground">Sign Up For a Free Capella Trial</a>
+        <a target="_blank" href="https://cloud.couchbase.com?href=Playground">Start Free Trial</a>
       </li>
       <li>
         <a target="_blank" href="https://docs.couchbase.com">Documentation</a>
@@ -397,7 +397,7 @@
     <div class="workspace-body">
       <div class="container {{if .Lang}}container-example{{end}}">
           {{if not .Lang}}
-            {{if and (not .Target) (not .Session)}}
+            {{if and (not .Target.DBurl) (not .Session)}}
               <p class="intro-paragraph">
                 Hi. Welcome to Couchbase Playground. Here are a few things you can do here.
                 <ul>

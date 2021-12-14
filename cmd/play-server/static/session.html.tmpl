@@ -94,7 +94,7 @@
   <div class="subheader-container">
     <ul id="secondaryNav">
       <li>
-        <a target="_blank" href="https://cloud.couchbase.com?href=Playground">Sign Up For a Free Capella Trial</a>
+        <a target="_blank" href="https://cloud.couchbase.com?href=Playground">Start Free Trial</a>
       </li>
       <li>
         <a target="_blank" href="https://docs.couchbase.com">Documentation</a>
@@ -162,10 +162,16 @@
             <p>{{.intro}}</p>
           {{end}}
           <p>
-            Starting a playground session allocates Couchbase Server resources to you.
+            Starting a sandbox session allocates Couchbase Server resources to you.
           </p>
           <p>
-            Your session will expire after {{.SessionsMaxAge}} total or after {{.SessionsMaxIdle}} of inactivity.
+            Benefits of a sandbox session include low friction access to a Couchbase cluster with minimal configuration.
+          </p>
+          <p>
+            You'll also be able to take a guided tour, explore the web console, experiment with the query workbench and docs workbench, as well as access Couchbase Shell.
+          </p>
+          <p>
+            Your session will expire after {{.SessionsMaxAge}} or after {{.SessionsMaxIdle}} of inactivity.
           </p>
           <p>
             Let's get started...
