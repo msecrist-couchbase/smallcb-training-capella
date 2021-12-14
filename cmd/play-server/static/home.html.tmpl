@@ -514,7 +514,7 @@
             <div class="progress-wrapper">
               <ul class="progress-indicator">
                   {{/* Determine If KV Get Completed */}}
-                  {{if or (eq .Title "Key Value Get") (eq .Title "Query Rows") (eq .Title "Query w/ Named Param") (eq .Title "Query w/ Positional Param") (eq .Title "Sub-document Lookup") (eq .Title "Sub-document Mutate") (eq .Title "Transactions KV Mutate") (eq .Title "Transactions N1QL") (eq .Title "Upsert") (eq .Title "Search Query String")}}
+                  {{if or (eq .Title "Key Value Get") (eq .Title "Query Rows") (eq .Title "Query w/ Named Param") (eq .Title "Query w/ Positional Param") (eq .Title "Sub-document Lookup") (eq .Title "Sub-document Mutate") (eq .Title "Transactions KV Mutate") (eq .Title "Transactions N1QL") (eq .Title "Upsert") (eq .Title "Search Query String") (eq .Title "Next Steps")}}
                     <li class="completed">
                       <a href="/examples/basic-{{.Lang}}-kv-get{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                         <span class="bubble"></span>
@@ -531,7 +531,7 @@
                   {{end}}
 
                   {{/* Determine If Query Rows Completed */}}
-                  {{if or (eq .Title "Query Rows") (eq .Title "Query w/ Named Param") (eq .Title "Query w/ Positional Param") (eq .Title "Sub-document Lookup") (eq .Title "Sub-document Mutate") (eq .Title "Transactions KV Mutate") (eq .Title "Transactions N1QL") (eq .Title "Upsert") (eq .Title "Search Query String")}}
+                  {{if or (eq .Title "Query Rows") (eq .Title "Query w/ Named Param") (eq .Title "Query w/ Positional Param") (eq .Title "Sub-document Lookup") (eq .Title "Sub-document Mutate") (eq .Title "Transactions KV Mutate") (eq .Title "Transactions N1QL") (eq .Title "Upsert") (eq .Title "Search Query String") (eq .Title "Next Steps")}}
                     <li class="completed">
                       <a href="/examples/basic-{{.Lang}}-query-rows{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                         <span class="bubble"></span>
@@ -548,7 +548,7 @@
                   {{end}}
 
                   {{/* Determine If Query w/ Named Param Completed */}}
-                  {{if or (eq .Title "Query w/ Named Param") (eq .Title "Query w/ Positional Param") (eq .Title "Sub-document Lookup") (eq .Title "Sub-document Mutate") (eq .Title "Transactions KV Mutate") (eq .Title "Transactions N1QL") (eq .Title "Upsert") (eq .Title "Search Query String")}}
+                  {{if or (eq .Title "Query w/ Named Param") (eq .Title "Query w/ Positional Param") (eq .Title "Sub-document Lookup") (eq .Title "Sub-document Mutate") (eq .Title "Transactions KV Mutate") (eq .Title "Transactions N1QL") (eq .Title "Upsert") (eq .Title "Search Query String") (eq .Title "Next Steps")}}
                     <li class="completed">
                       <a href="/examples/basic-{{.Lang}}-query-named-param{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                         <span class="bubble"></span>
@@ -565,7 +565,7 @@
                   {{end}}
 
                   {{/* Determine If Query w/ Positional Param Completed */}}
-                  {{if or (eq .Title "Query w/ Positional Param") (eq .Title "Sub-document Lookup") (eq .Title "Sub-document Mutate") (eq .Title "Transactions KV Mutate") (eq .Title "Transactions N1QL") (eq .Title "Upsert")  (eq .Title "Search Query String")}}
+                  {{if or (eq .Title "Query w/ Positional Param") (eq .Title "Sub-document Lookup") (eq .Title "Sub-document Mutate") (eq .Title "Transactions KV Mutate") (eq .Title "Transactions N1QL") (eq .Title "Upsert")  (eq .Title "Search Query String") (eq .Title "Next Steps")}}
                     <li class="completed">
                       <a href="/examples/basic-{{.Lang}}-query-positional-param{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                         <span class="bubble"></span>
@@ -582,7 +582,7 @@
                   {{end}}
 
                   {{/* Determine If Sub Document Lookup Completed */}}
-                  {{if or (eq .Title "Sub-document Lookup") (eq .Title "Sub-document Mutate") (eq .Title "Transactions KV Mutate") (eq .Title "Transactions N1QL") (eq .Title "Upsert") (eq .Title "Search Query String")}}
+                  {{if or (eq .Title "Sub-document Lookup") (eq .Title "Sub-document Mutate") (eq .Title "Transactions KV Mutate") (eq .Title "Transactions N1QL") (eq .Title "Upsert") (eq .Title "Search Query String") (eq .Title "Next Steps")}}
                     <li class="completed">
                       <a href="/examples/basic-{{.Lang}}-subdoc-lookup{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                         <span class="bubble"></span>
@@ -599,7 +599,7 @@
                   {{end}}
 
                   {{/* Determine If Sub Document Mutate Completed */}}
-                  {{if or (eq .Title "Sub-document Mutate") (eq .Title "Transactions KV Mutate") (eq .Title "Transactions N1QL") (eq .Title "Upsert") (eq .Title "Search Query String")}}
+                  {{if or (eq .Title "Sub-document Mutate") (eq .Title "Transactions KV Mutate") (eq .Title "Transactions N1QL") (eq .Title "Upsert") (eq .Title "Search Query String") (eq .Title "Next Steps")}}
                     <li class="completed">
                       <a href="/examples/basic-{{.Lang}}-subdoc-mutate{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                         <span class="bubble"></span>
@@ -635,7 +635,7 @@
                       {{end}}
 
                       {{/* Determine If JAVA Transactions N1QL Completed */}}
-                      {{if or (eq .Title "Transactions N1QL") (eq .Title "Upsert") (eq .Title "Search Query String")}}
+                      {{if or (eq .Title "Transactions N1QL") (eq .Title "Upsert") (eq .Title "Search Query String") (eq .Title "Next Steps")}}
                         <li class="completed">
                           <a href="/examples/basic-{{.Lang}}-txn-n1ql{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                             <span class="bubble"></span>
@@ -654,7 +654,7 @@
 
 
                   {{/* Determine If Upsert Completed */}}
-                  {{if or (eq .Title "Upsert") (eq .Title "Search Query String")}}
+                  {{if or (eq .Title "Upsert") (eq .Title "Search Query String") (eq .Title "Next Steps")}}
                     <li class="completed">
                       <a href="/examples/basic-{{.Lang}}-upsert{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                         <span class="bubble"></span>
@@ -671,8 +671,8 @@
                   {{end}}
 
 
-                  {{/* Determine If New Example Completed */}}
-                  {{if (eq .Title "Search Query String")}}
+                  {{/* Determine If Search Query String Completed */}}
+                  {{if or (eq .Title "Search Query String") (eq .Title "Next Steps")}}
                     <li class="completed">
                       <a href="/examples/basic-{{.Lang}}-search-query-string{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                         <span class="bubble"></span>
@@ -684,6 +684,23 @@
                       <a href="/examples/basic-{{.Lang}}-search-query-string{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                         <span class="bubble"></span>
                         Search Query String
+                      </a>
+                    </li>
+                  {{end}}
+
+                  {{/* Determine If Next Steps Completed */}}
+                  {{if (eq .Title "Next Steps")}}
+                    <li class="completed">
+                      <a href="/examples/basic-{{.Lang}}-next-steps{{if .Session}}?s={{.Session.SessionId}}{{end}}">
+                        <span class="bubble"></span>
+                        Next Steps
+                      </a>
+                    </li>
+                  {{else}}
+                    <li>
+                      <a href="/examples/basic-{{.Lang}}-next-steps{{if .Session}}?s={{.Session.SessionId}}{{end}}">
+                        <span class="bubble"></span>
+                        Next Steps
                       </a>
                     </li>
                   {{end}}
@@ -694,7 +711,7 @@
 
         <div class="row example-row" style="width: 100%">
             {{if and .Lang .Title}}
-              <div class="col-xs-12 col-md-3 example-info-column" id="infoColumn">
+              <div class="col-xs-12 {{if ne .Code "NONE"}}col-md-3 example-info-column-right-border{{else}}col-md-12{{end}} example-info-column" id="infoColumn">
                 <div class="example-heading">
                     {{if .InfoBefore}}
                       <div class="info infoBefore">{{.InfoBefore}}</div>
@@ -715,61 +732,64 @@
                   {{end}}
 
                   <br>
+                  {{if ne .Code "NONE"}}
                   <em>To run this example, click the button in the top right corner of the code editor.</em>
+                  {{end}}
               </div>
             {{end}}
             {{if .Lang}}
-              <div class="col-xs-12 col-md-9" id="editorColumn">
+              {{if ne .Code "NONE"}}
+                <div class="col-xs-12 col-md-9" id="editorColumn">
 
-                <button id='viewToggleButton' class="stacked-btn toggle-btn hidden-md" onclick="toggleEditorView();"></button>
+                  <button id='viewToggleButton' class="stacked-btn toggle-btn hidden-md" onclick="toggleEditorView();"></button>
 
-                <div id="editorWrapper" class="row">
+                    <div id="editorWrapper" class="row">
 
-                  <div id="editorDiv" class="code-editor col-md-6">
-                    <div class="sticky">
-                      <form action="/run" method="post" target="output" id="form">
+                      <div id="editorDiv" class="code-editor col-md-6">
+                        <div class="sticky">
+                          <form action="/run" method="post" target="output" id="form">
 
-                          {{if or .Name .Lang .Code}}
-                          {{if ne .Code "NONE"}}
-                            <h2 class="editor-label">Code Editor</h2>
-                            <input type="submit" value="Run Now &nbsp &gt&gt;" class="run" id="run"
-                                   onclick="return onRunSubmit()"/>
-                          {{end}}
-                        <div class="example-frame">
+                              {{if or .Name .Lang .Code}}
+                              {{if ne .Code "NONE"}}
+                                <h2 class="editor-label">Code Editor</h2>
+                                <input type="submit" value="Run Now &nbsp &gt&gt;" class="run" id="run"
+                                       onclick="return onRunSubmit()"/>
+                              {{end}}
+                            <div class="example-frame">
 
-                            {{if .Session}}
-                              <input name="s" type="hidden" value="{{.Session.SessionId}}"/>
-                            {{end}}
+                                {{if .Session}}
+                                  <input name="s" type="hidden" value="{{.Session.SessionId}}"/>
+                                {{end}}
 
-                          <input name="lang" type="hidden" value="{{.Lang}}" id="lang"/>
+                              <input name="lang" type="hidden" value="{{.Lang}}" id="lang"/>
 
-                            {{if ne .Code "NONE"}}
-                              <div id="code-ace" class="code-ace"></div>
+                                {{if ne .Code "NONE"}}
+                                  <div id="code-ace" class="code-ace"></div>
 
-                              <textarea id="code" name="code" class="code"
-                                        wrap="off" autocorrect="off"
-                                        autocomplete="off" autocapitalize="off"
-                                        spellcheck="false">{{.Code}}</textarea>
+                                  <textarea id="code" name="code" class="code"
+                                            wrap="off" autocorrect="off"
+                                            autocomplete="off" autocapitalize="off"
+                                            spellcheck="false">{{.Code}}</textarea>
+                                {{end}}
+                            </div>
+
+                            <input name="color" type="hidden" value="#FFF"/>
+                          </form>
                             {{end}}
                         </div>
+                      </div>
 
-                        <input name="color" type="hidden" value="#FFF"/>
-                      </form>
-                        {{end}}
+                      <div class="code-output col-md-6" id="code-output">
+                        <div class="sticky">
+                            {{if or .Name .Lang .Code}}
+                              <h2 class="editor-label">Output</h2>
+                              <iframe name="output" id="output" class="output" onload="setOutputHeight()"></iframe>
+                            {{end}}
+                        </div>
+                      </div>
                     </div>
-                  </div>
-
-                  <div class="code-output col-md-6" id="code-output">
-                    <div class="sticky">
-                        {{if or .Name .Lang .Code}}
-                          <h2 class="editor-label">Output</h2>
-                          <iframe name="output" id="output" class="output" onload="setOutputHeight()"></iframe>
-                        {{end}}
-                    </div>
-                  </div>
                 </div>
-
-              </div>
+              {{end}}
             {{end}}
 
 
