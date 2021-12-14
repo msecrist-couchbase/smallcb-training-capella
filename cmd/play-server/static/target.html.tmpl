@@ -166,7 +166,7 @@
                 {{if eq .natpublicip "YourHostIP"}}
                   <a target="_blank" href="http://www.whatismyipaddress.com">{{.natpublicip}}</a>/32
                 {{else}}
-                    {{.natpublicip}}/32
+                    <u>{{.natpublicip}}/32</u>
                 {{end}}
               to your Allowed IPs (Cluster → Connect tab → Manage Allowed IP → Add IP)
             </li>
