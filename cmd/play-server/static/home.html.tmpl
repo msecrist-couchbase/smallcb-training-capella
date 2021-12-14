@@ -394,6 +394,17 @@
     <div class="workspace-body">
       <div class="container {{if .Lang}}container-example{{end}}">
           {{if not .Lang}}
+
+            <p class="intro-paragraph">
+              Hi. Welcome to the playground. Here are a few things you can do here.
+              <ul>
+                <li>Basic: Run language-specific code examples. See output.</li>
+                <li>Sandbox: Start a temporary session. Explore the web console, take a guided tour, and experiment with your own cluster.</li>
+                <li>Capella: Get a 30-day free trial. Connect it to the playground, try sample code, explore tools, free data sets, load your own data, and more.</li>
+              </ul>
+            </p>
+
+
             <h2 class="home-header"><label for="examplesToggle">Click Below to Run Examples</label></h2>
             <div class="row example-row">
               <div class="col-xs-6 col-sm-6 col-md-4 col-lg-4">
@@ -769,7 +780,7 @@
               {{if and (not .Session) (.Target.DBurl)}}
                   <a href="/session-cbshell" {{if eq .Target.Status "not accessible"}}class="disabled"{{end}} class="nowrap disabled-safari hidden-ios">
                     <u>Couchbase Shell</u></a>
-                  <!-- TBD: enable after making not visible for the non client binaries.  
+                  <!-- TBD: enable after making not visible for the non client binaries.
                   <a href="/session-cbshell?open=clitools" {{if eq .Target.Status "not accessible"}}class="disabled"{{end}} class="nowrap disabled-safari hidden-ios" onclick="localStorage.setItem('cbshell_type', 'clitools');">
                     <u>CLI Tools Terminal</u></a>
                   -->
@@ -931,26 +942,16 @@
       theme: 'custom'
     })
 
+    // Sandbox session button on home page
     tippy('#provisionedDropdownButtonTop', {
       content: 'Starting a sandbox session will allow you to explore the Couchbase Web Console and experiment with your own cluster.',
       placement: 'top',
       theme: 'custom'
     })
 
+    // Capella session button on home page
     tippy('#capellaDropdownButtonTop', {
       content: 'Starting a Capella session will allow you to run the SDK examples against your own Couchbase Capella database.',
-      placement: 'top',
-      theme: 'custom'
-    })
-
-    tippy('#startSessionButtonInfo', {
-      content: 'Starting an online session will allow you to explore the Couchbase Web Console and experiment with your own cluster.',
-      placement: 'top',
-      theme: 'custom'
-    })
-
-    tippy('#startCapellaSessionButtonInfo', {
-      content: 'Starting an online Couchbase Capella session will allow you to experiment with your own cluster.',
       placement: 'top',
       theme: 'custom'
     })
