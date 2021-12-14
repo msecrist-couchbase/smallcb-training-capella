@@ -155,18 +155,22 @@
         {{end}}
 
         <p>
-          If you don't already have a Couchbase Capella cluster, please visit <a href="https://cloud.couchbase.com">https://cloud.couchbase.com</a> to get a free one!
+          If you don't already have a Couchbase Capella cluster, please visit <a href="https://cloud.couchbase.com">https://cloud.couchbase.com</a> to get a free one! Follow the steps below to ensure a successful connection.
           <br>
-          (NOTE: you'll need to add
-            {{if eq .natpublicip "YourHostIP"}}
-              <a target="_blank" href="http://www.whatismyipaddress.com">{{.natpublicip}}</a>/32
-            {{else}}
-                {{.natpublicip}}/32
-            {{end}}
-          to the IP Address/CIDR allow list on the 'Connect' tab in your Capella Cluster)
-          <br>
-          <br>
-          Enter the following information from your Couchbase Capella cluster's connection tab.
+          <ol>
+            <li>
+              In your Capella trial UI, add
+                {{if eq .natpublicip "YourHostIP"}}
+                  <a target="_blank" href="http://www.whatismyipaddress.com">{{.natpublicip}}</a>/32
+                {{else}}
+                    {{.natpublicip}}/32
+                {{end}}
+              to your Allowed IPs (Cluster → Connect tab → Manage Allowed IP → Add IP)
+            </li>
+            <li>Get the Database Host/URL for your Capella Cluster (Connect tab → Wide Area Network box)</li>
+            <li>Create a new database credential for Playground access (Connect tab → Database Access box → Manage Credentials → Create Database Credential)</li>
+            <li>Add the relevant information to the fields below and start your session!</li>
+          </ol>
         </p>
             <form action="/target" method="post" autocomplete="on">
 
