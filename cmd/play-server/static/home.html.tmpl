@@ -167,7 +167,7 @@
               {{else}}
                 <a href="/target-exit"
               {{end}}
-                 onclick="localStorage.setItem('infoPanel', 'show');" class="session menu-button red-button">
+                 onclick="localStorage.setItem('infoPanel', 'show');" class="session menu-button red-button" id="stopCapellaSessionButton">
                 Stop Capella Session
               </a>
             {{else if not .Target.DBurl}}
@@ -394,15 +394,16 @@
     <div class="workspace-body">
       <div class="container {{if .Lang}}container-example{{end}}">
           {{if not .Lang}}
-
-            <p class="intro-paragraph">
-              Hi. Welcome to the playground. Here are a few things you can do here.
-              <ul>
-                <li>Basic: Run language-specific code examples. See output.</li>
-                <li>Sandbox: Start a temporary session. Explore the web console, take a guided tour, and experiment with your own cluster.</li>
-                <li>Capella: Get a 30-day free trial. Connect it to the playground, try sample code, explore tools, free data sets, load your own data, and more.</li>
-              </ul>
-            </p>
+            {{if and (not .Target) (not .Session)}}
+              <p class="intro-paragraph">
+                Hi. Welcome to Couchbase Playground. Here are a few things you can do here.
+                <ul>
+                  <li>Basic: Run language-specific code examples. See output.</li>
+                  <li>Sandbox: Start a temporary session. Explore the web console, take a guided tour, and experiment with your own cluster.</li>
+                  <li>Capella: Get a 30-day free trial. Connect it to the playground, try sample code, explore tools, free data sets, load your own data, and more.</li>
+                </ul>
+              </p>
+            {{end}}
 
 
             <h2 class="home-header"><label for="examplesToggle">Click Below to Run Examples</label></h2>
@@ -961,8 +962,9 @@
       placement: 'bottom-end',
       theme: 'custom'
     })
+
     tippy('#stopCapellaSessionButton', {
-      content: 'WARNING: disconnects the examples to your Capella cluster.',
+      content: 'WARNING: disconnects the examples from Capella cluster. You\'ll have to re-enter the IP and credential information to reconnect.',
       placement: 'bottom-end',
       theme: 'custom'
     })

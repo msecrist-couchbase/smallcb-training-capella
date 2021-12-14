@@ -76,7 +76,7 @@
               </a>
             {{ else if and (.Target.DBurl) (not .Session)}}
               <a href="/target-exit"
-                 onclick="localStorage.setItem('infoPanel', 'show');" class="session menu-button red-button">
+                 onclick="localStorage.setItem('infoPanel', 'show');" class="session menu-button red-button" id="stopCapellaSessionButton">
                 Stop Capella Session
               </a>
 
@@ -335,6 +335,12 @@
       placement: 'right',
       theme: 'custom'
     });
+
+    tippy('#stopCapellaSessionButton', {
+      content: 'WARNING: disconnects the examples from Capella cluster. You\'ll have to re-enter the IP and credential information to reconnect.',
+      placement: 'bottom-end',
+      theme: 'custom'
+    })
   }
 </script>
 <script>
