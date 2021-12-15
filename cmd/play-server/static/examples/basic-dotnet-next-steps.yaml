@@ -17,7 +17,7 @@ infoAfter: |
   New to Couchbase Capella? Connect your trial account to the Playground, import your own data, or connect a project to really test it out for yourself.
   <br>
   <br>
-  To learn more about using Capella and the free 30-day trial, take a look at <a target="_blank" href="https://developer.couchbase.com/learn/capella">this tutorial</a> on our Developer Portal!
+  To learn more about using Capella, take a look at <a target="_blank" href="https://developer.couchbase.com/learn/capella">this tutorial</a> on our Developer Portal!
   <br>
   <br>
   If you're already using Couchbase Capella, you can interact with your cluster by using the interactive Couchbase shell. You can also use the Capella Control plane to check out the document viewer, import your own data, or connect to a project.
