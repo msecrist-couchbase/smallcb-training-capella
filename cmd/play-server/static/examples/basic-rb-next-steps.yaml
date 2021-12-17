@@ -23,4 +23,8 @@ infoAfter: |
   If you're already using Couchbase Capella, you can interact with your cluster by using the interactive Couchbase shell. You can also use the Capella Control plane to check out the document viewer, import your own data, or connect to a project.
   <br>
   <br>
+  Dive deeper into Couchbase with one of our <a target="_blank" href="https://learn.couchbase.com/store">training courses</a>.
+  The <a target="_blank" href="https://learn.couchbase.com/store/2358679-cb131-couchbase-associate-architect-certification-course-v7">Associate Architect course</a> is a great language-agnostic starting point!
+  <br>
+  <br>
   Have feedback for us? We'd love to hear from you. Use the form in the footer to send us your thougts!
