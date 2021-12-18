@@ -17,7 +17,9 @@ infoAfter: |
       Sign up for a <a target="_blank" href="https://cloud.couchbase.com?href=Playground">free 30-day trial</a> if you haven't already.
     </li>
     <li>
-      Connect your trial account to the Playground, import your own data, or connect a project to really test it out for yourself.
+      <a target="_blank" href="https://couchbase.live/target">Connect your trial cluster to the Playground</a>,
+      <a target="_blank" href="https://docs.couchbase.com/cloud/clusters/data-service/import-data-documents.html">import your own data</a>,
+      or <a target="_blank" href="https://docs.couchbase.com/c-sdk/current/howtos/managing-connections.html">connect a project</a> to really test it out for yourself.
     </li>
     <li>
       To learn more about using Capella, take a look at <a target="_blank" href="https://developer.couchbase.com/learn/capella">this tutorial</a> on our Developer Portal!
