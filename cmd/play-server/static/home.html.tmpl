@@ -209,9 +209,11 @@
       </div>
     {{end}}
     <ul id="secondaryNav">
+      {{if not .Target.DBurl}}
       <li>
         <a target="_blank" href="https://cloud.couchbase.com?href=Playground">Capella Trial</a>
       </li>
+      {{end}}
       <li>
         <a target="_blank" href="https://docs.couchbase.com">Documentation</a>
       </li>
