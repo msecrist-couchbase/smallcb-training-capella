@@ -1005,6 +1005,10 @@ div.online-tools {
   font-size: 12px;
 }
 
+div.next-steps {
+  font-size: 12px;
+}
+
 p.intro-paragraph {
   margin-top: 2rem;
   margin-bottom: 1rem;
@@ -1016,4 +1020,13 @@ p.intro-paragraph {
 
 .n1ql-link-wrapper > a {
   padding-right: 10px;
+}
+
+div.step-section {
+  margin-top: 8px;
+  margin-left: 16px;
+}
+
+div.step-section > ul {
+  line-height: 18px;
 }
