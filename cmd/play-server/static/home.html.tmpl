@@ -857,11 +857,12 @@
           {{if not .Lang}}
             <div class="online-tools">
               <h2 class="home-header">More N1QL Tools</h2>
-{{/*              TODO: put these on single line? */}}
-              <a href="https://query-tutorial.couchbase.com/tutorial/#1" class="nowrap" target="_blank">Query Tutorial</a>
-              <a href="https://index-advisor.couchbase.com/indexadvisor/#1" class="nowrap" target="_blank">Index Advisor</a>
-              <a href="https://sqlplusplus-tutorial.couchbase.com/tutorial/#1" class="nowrap" target="_blank">Analytics Tutorial</a>
-              <a href="https://docs.couchbase.com/server/current/n1ql/n1ql-rest-api/index.html" class="nowrap" target="_blank">REST API Docs</a>
+              <div class="n1ql-link-wrapper">
+                <a href="https://query-tutorial.couchbase.com/tutorial/#1" class="nowrap" target="_blank">Query Tutorial</a>
+                <a href="https://index-advisor.couchbase.com/indexadvisor/#1" class="nowrap" target="_blank">Index Advisor</a>
+                <a href="https://sqlplusplus-tutorial.couchbase.com/tutorial/#1" class="nowrap" target="_blank">Analytics Tutorial</a>
+                <a href="https://docs.couchbase.com/server/current/n1ql/n1ql-rest-api/index.html" class="nowrap" target="_blank">REST API Docs</a>
+              </div>
             </div>
           {{end}}
       </div>
