@@ -11,20 +11,57 @@ infoBefore: |
 code: NONE
 
 infoAfter: |
-  You can learn more about <a target="_blank" href="https://www.couchbase.com/products/capella">Couchbase Capella</a>, our database-as-a-service offering, or sign up for a <a target="_blank" href="https://cloud.couchbase.com?href=Playground">free 30-day trial</a> if you haven't already.
-  <br>
-  <br>
-  New to Couchbase Capella? Connect your trial account to the Playground, import your own data, or connect a project to really test it out for yourself.
-  <br>
-  <br>
-  To learn more about using Capella, take a look at <a target="_blank" href="https://developer.couchbase.com/learn/capella">this tutorial</a> on our Developer Portal!
-  <br>
-  <br>
-  If you're already using Couchbase Capella, you can interact with your cluster by using the interactive Couchbase shell. You can also use the Capella Control plane to check out the document viewer, import your own data, or connect to a project.
-  <br>
-  <br>
-  Dive deeper into Couchbase with one of our <a target="_blank" href="https://learn.couchbase.com/store">training courses</a>.
-  The <a target="_blank" href="https://learn.couchbase.com/store/2358679-cb131-couchbase-associate-architect-certification-course-v7">Associate Architect course</a> is a great language-agnostic starting point!
-  <br>
-  <br>
-  Have feedback for us? We'd love to hear from you. Use the form in the footer to send us your thougts!
+  <div class="next-steps">
+    <strong>Capella</strong>
+    <div class="step-section">
+      Learn more about <a target="_blank" href="https://www.couchbase.com/products/capella">Couchbase Capella</a>, our database-as-a-service offering:
+      <ul>
+        <li>
+          Sign up for a <a target="_blank" href="https://cloud.couchbase.com?href=Playground">free 30-day trial</a> if you haven't already.
+        </li>
+        <li>
+          <a target="_blank" href="https://couchbase.live/target">Connect your trial cluster to the Playground</a>
+          or <a target="_blank" href="https://docs.couchbase.com/python-sdk/current/howtos/managing-connections.html">connect a project</a> to really test it out for yourself.
+        </li>
+        <li>
+          If you're already using Couchbase Capella, you can interact with your cluster by using the interactive Couchbase shell or via the Capella Control plane to:
+          <ul>
+            <li>
+              check out the document viewer
+            </li>
+            <li>
+              connect to a project
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+
+    <strong>Tutorials</strong>
+    <div class="step-section">
+      The <a target="_blank" href="https://developer.couchbase.com/">Couchbase Developer Portal</a> has tons of tutorials, quickstart guides, and learning paths to help you get started!
+      <ul>
+        <li>
+          <a target="_blank" href="https://developer.couchbase.com/tutorial-quickstart-flask-python/">Python and Flask Tutorial</a>
+        </li>
+        <li>
+          <a target="_blank" href="https://developer.couchbase.com/learn/capella">Capella Learning Path</a>
+        </li>
+      </ul>
+    </div>
+
+
+    <strong>Training</strong>
+    <div class="step-section">
+      Dive deeper into Couchbase with one of our <a target="_blank" href="https://learn.couchbase.com/store?utf8=%E2%9C%93&ss=1&ct=78327&commit=Filter">free training courses</a>.
+      <br>
+      The <a target="_blank" href="https://learn.couchbase.com/store/2358679-cb131-couchbase-associate-architect-certification-course-v7">Associate Architect course</a> is a great language-agnostic starting point!
+      <br>
+      See all training options <a target="_blank" href="https://www.couchbase.com/academy">here</a>.
+    </div>
+
+    <br>
+    <br>
+    Have feedback for us? We'd love to hear from you. Use the form in the footer to send us your thoughts!
+  </div>
