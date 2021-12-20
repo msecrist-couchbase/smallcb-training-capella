@@ -399,17 +399,17 @@
           {{if not .Lang}}
             {{if and (not .Target.DBurl) (not .Session)}}
               <p class="intro-paragraph">
-                Welcome to Couchbase Playground. Here are a few things you can do here.
+                Welcome to Couchbase Playground. Here are a few things you can do:
                 <ul>
-                  <li>Basic: Run language-specific code examples. See output.</li>
-                  <li>Sandbox: Start a temporary session. Explore the web console, take a guided tour, and experiment with your own cluster.</li>
-                  <li>Capella DBaaS: Get a 30-day free trial. Connect it to the playground, try sample code, explore tools, free data sets, load your own data, and more.</li>
+                  <li><strong>Basic:</strong> Run language-specific code examples below.</li>
+                  <li><strong>Sandbox Session:</strong> Start a 30 minute session. Explore the web console, take a guided tour, and experiment with your own cluster.</li>
+                  <li><strong>Capella Session:</strong> Get a 30 day free trial. Connect it to the playground, try sample code, explore tools and free data sets.</li>
                 </ul>
               </p>
             {{end}}
 
 
-            <h2 class="home-header"><label for="examplesToggle">Click Below to Run Examples</label></h2>
+            <h2 class="home-header"><label for="examplesToggle">Basic: Click Below to Run Examples in your Browser</label></h2>
             <div class="row example-row">
               <div class="col-xs-6 col-sm-6 col-md-4 col-lg-4">
                 <a href="/examples/basic-java-kv-get{{if $.Session}}?s={{$.Session.SessionId}}{{end}}"
@@ -855,10 +855,11 @@
           {{if not .Lang}}
             <div class="online-tools">
               <h2 class="home-header">More N1QL Tools</h2>
-              <a href="https://query-tutorial.couchbase.com/tutorial/#1" class="nowrap" target="_blank">N1QL Query Tutorial</a>
-              <a href="https://index-advisor.couchbase.com/indexadvisor/#1" class="nowrap" target="_blank">N1QL Index Advisor</a>
-              <a href="https://sqlplusplus-tutorial.couchbase.com/tutorial/#1" class="nowrap" target="_blank">N1QL Analytics Tutorial</a>
-              <a href="https://docs.couchbase.com/server/current/n1ql/n1ql-rest-api/index.html" class="nowrap" target="_blank">N1QL REST API Docs</a>
+{{/*              TODO: put these on single line? */}}
+              <a href="https://query-tutorial.couchbase.com/tutorial/#1" class="nowrap" target="_blank">Query Tutorial</a>
+              <a href="https://index-advisor.couchbase.com/indexadvisor/#1" class="nowrap" target="_blank">Index Advisor</a>
+              <a href="https://sqlplusplus-tutorial.couchbase.com/tutorial/#1" class="nowrap" target="_blank">Analytics Tutorial</a>
+              <a href="https://docs.couchbase.com/server/current/n1ql/n1ql-rest-api/index.html" class="nowrap" target="_blank">REST API Docs</a>
             </div>
           {{end}}
       </div>
@@ -961,7 +962,7 @@
     })
 
     tippy('#capellaDropdownButton', {
-      content: 'Connect your Capella trial to the playground. Try sample code, explore tools, free data sets, load your own data and more. Don’t have a Capella cluster? Get a free 30-day trial at cloud.couchbase.com.',
+      content: 'Connect your Capella trial to the playground. Try sample code, explore tools, play with free data sets, and more. Don’t have a Capella cluster? Get a free 30-day trial at cloud.couchbase.com.',
       placement: 'left',
       theme: 'custom'
     })
@@ -975,7 +976,7 @@
 
     // Capella session button on home page
     tippy('#capellaDropdownButtonTop', {
-      content: 'Connect your Capella trial to the playground. Try sample code, explore tools, free data sets, load your own data and more. Don’t have a Capella cluster? Get a free 30-day trial at cloud.couchbase.com.',
+      content: 'Connect your Capella trial to the playground. Try sample code, explore tools, play with free data sets, and more. Don’t have a Capella cluster? Get a free 30-day trial at cloud.couchbase.com.',
       placement: 'top',
       theme: 'custom'
     })
