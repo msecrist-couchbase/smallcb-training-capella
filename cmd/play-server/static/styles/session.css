@@ -1,7 +1,8 @@
 article {
   flex-basis: 40rem;
   width: 95vw;
-  margin: 0 auto 2em auto;
+  margin: 0 auto;
+  padding-bottom: 2rem;
 }
 article form {
   margin-top: 30px;
