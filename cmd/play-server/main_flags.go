@@ -87,7 +87,7 @@ var (
 		"cookie name to store couchbase targets information")
 
 	targetsMaxAge = flag.Duration("targetsMaxAge",
-		45*24*time.Hour,
+		30*24*time.Hour,
 		"duration by age for which couchbase targets are automatically not used")
 
 	version = flag.String("version", "tmp/ns_server.app.vsn",
