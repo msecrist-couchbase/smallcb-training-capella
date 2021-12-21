@@ -21,7 +21,7 @@ infoAfter: |
         </li>
         <li>
           <a target="_blank" href="https://couchbase.live/target">Connect your trial cluster to the Playground</a>
-          or <a target="_blank" href="https://docs.couchbase.com/java-sdk/current/howtos/managing-connections.html">connect a project</a> to really test it out for yourself.
+          or connect a project to really test it out for yourself.
         </li>
         <li>
           If you're already using Couchbase Capella, you can interact with your cluster by using the interactive Couchbase shell or via the Capella Control plane to:
@@ -34,13 +34,16 @@ infoAfter: |
             </li>
           </ul>
         </li>
+        <li>
+          Take a look at the <a target="_blank" href="https://developer.couchbase.com/learn/capella">Capella Learning Path</a>!
+        </li>
       </ul>
     </div>
 
 
     <strong>Tutorials</strong>
     <div class="step-section">
-      The <a target="_blank" href="https://developer.couchbase.com/">Couchbase Developer Portal</a> has tons of tutorials, quickstart guides, and learning paths to help you get started!
+      The <a target="_blank" href="https://developer.couchbase.com/">Couchbase Developer Portal</a> has tons of <a target="_blank" href="https://developer.couchbase.com/tutorials">tutorials/quickstart guides</a> and <a target="_blank" href="https://developer.couchbase.com/learn">learning paths</a> to help you get started!
       <ul>
         <li>
           <a target="_blank" href="https://developer.couchbase.com/tutorial-quickstart-java-springboot">Java and Spring Data Tutorial</a>
@@ -50,9 +53,6 @@ infoAfter: |
         </li>
         <li>
           <a target="_blank" href="https://developer.couchbase.com/learn/java">Java Learning Path</a>
-        </li>
-        <li>
-          <a target="_blank" href="https://developer.couchbase.com/learn/capella">Capella Learning Path</a>
         </li>
       </ul>
     </div>
@@ -69,7 +69,8 @@ infoAfter: |
       <br>
       See all training options <a target="_blank" href="https://www.couchbase.com/academy">here</a>.
     </div>
-
+    <br>
+    <a target="_blank" href="https://docs.couchbase.com/home/sdk.html">See the documentation</a> to learn more about the Couchbase SDKs.
     <br>
     <br>
     Have feedback for us? We'd love to hear from you. Use the form in the footer to send us your thoughts!
