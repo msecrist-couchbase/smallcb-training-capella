@@ -11,7 +11,7 @@
     <div class="col docs">
       <div>
         <about>
-          <a href="https://docs.couchbase.com/server/current/cli/cli-intro.html">Documentation</a>
+          <a href="https://docs.couchbase.com/server/current/cli/cli-intro.html" target="_blank">Documentation</a>
         </about>
       </div>
       <iframe src="https://docs.couchbase.com/server/current/cli/cli-intro.html" height="200">loading...</iframe>
@@ -19,8 +19,10 @@
     <div class="col shell">
       <div>
         <about>
+          <span class="hint">Start using CLI tools <code>./cbc</code> or <code>./cbimport</code> or <code>./cbbackupmgr</code> or to see entire list <code>ls</code>
+          </span>
           <span class="hint">
-          Start using CLI tools <code>./couchbase-cli</code> or <code>./cbimport</code> or <code>./cbbackup</code> or to see entire list <code>ls</code>
+          <div id="connectstring"></div>
           </span>
         </about>
       </div>
@@ -129,6 +131,11 @@ body.hide .col.shell {
   let t = params.get("t");
   if (t) {
     document.getElementById("shell").src = t;
+    let connectstringParams = new URLSearchParams((new URL(t)).search);
+    let connectstr = connectstringParams.get("connectstr");
+    let u = connectstr.split(",")[0];
+    let connectstring = connectstr.split(",")[1];
+    document.getElementById("connectstring").innerHTML = `Connection String (protocol://host:port/bucket?options) = ${connectstring} <br/><br/>Example: cbc query 'SELECT h.name, h.city, h.state FROM \`travel-sample\` h WHERE h.type = "hotel" AND h.city = "Malibu" LIMIT 5' -u ${u} -P- -U ${connectstring}`;
   }
 </script>
 </html>
