@@ -1030,3 +1030,13 @@ div.step-section {
 div.step-section > ul {
   line-height: 18px;
 }
+
+.tutorial-link-wrapper {
+  margin-left: 16px;
+  margin-top: 8px;
+}
+
+.tutorial-link-wrapper > a {
+  padding-right: 12px;
+  text-wrap: none;
+}
