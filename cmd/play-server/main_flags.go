@@ -131,8 +131,7 @@ var (
 		"c_rehash pcre-config pcregrep pcretest ",
 		"List of server tools to hide for the cli tools")
 
-	cliTools = flag.String("cliTools", "cbbackupmgr cbrestore cbq cbc cbimport cbexport "+
-		"cbworkloadgen cbc-pillowfight mctimings mcstat "+
-		"cbstats cbdatarecovery",
+	cliTools = flag.String("cliTools", "cbbackupmgr cbq cbc cbimport cbexport "+
+		"cbc-pillowfight mctimings mcstat cbstats ",
 		"List of visible cli tools")
 )
