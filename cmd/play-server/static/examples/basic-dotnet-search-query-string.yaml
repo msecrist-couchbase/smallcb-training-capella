@@ -4,7 +4,7 @@ lang: dotnet
 infoBefore: |
   <div>
   <a href='/examples/basic-dotnet-upsert' class="prev-button">Previous</a>
-  <a href='#' class="disable next-button" style="float:right">Next</a>
+  <a href='/examples/basic-dotnet-next-steps' class="next-button" style="float:right">Next</a>
   </div>
   <br>
 code: |

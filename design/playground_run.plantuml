@@ -1,0 +1,78 @@
+@startuml Playground_run
+title Playground run
+skinparam Style strict
+actor Developer #blue
+participant Main
+participant Restarter
+participant Session
+participant Http
+participant Run
+participant RunSession
+participant MainTemplate
+
+Developer -> Http : request /run
+Http -> Session : get session
+alt session not null but session key is null 
+    Developer <-- Http : <font color="red"> err: Unknown session
+else session is not null and session key is not null
+    Http -> RunSession ++ : run request in session
+    group associate session container
+        alt session is null
+            Http <-- RunSession : <font color="red"> no session
+        end
+        RunSession -> RunSession : wait for ready container
+        alt  sessioncount-1 <containersingle use
+            Http <-- RunSession : <font color="red"> no container available for your session
+        end
+        RunSession -> RunSession : startinit
+        RunSession -> RunSession : startcbsh
+        RunSession -> RunSession : access session
+    end group
+    group run request in container
+        RunSession -> Run : run request in container from the session
+    end group
+    Http <-- RunSession : Emit output
+    RunSession --
+else session is null
+    Http -> Run : run single
+    group run request in single
+        Run -> Run : wait for container ready
+        alt ctx containerId
+            Run -> Run : execute make CONTAINER_NUM=containerId instance-unpause \nand return containerId
+        else time after duration
+            Http <-- Run : -1
+        else ctx done
+            Http <-- Run : ready
+        end
+        Run -> Restarter : restart container
+        Run -> Run : add rbac user username/password with admin role
+        note left
+            docker exec <containerName>
+                "/opt/couchbase/bin/couchbase-cli", "user-manage",
+                "--cluster", "http://127.0.0.1",
+                "--username", "Administrator",
+                "--password", req.cbAdminPassword,
+                "--set",
+                "--rbac-username", username,
+                "--rbac-password", password,
+                "--auth-domain", "local",
+                "--roles", roles)
+        end note
+        Run -> Run: run code in the container
+        note left
+            dircode = /tmp/play
+            dirvar = /opt/couchbase/var
+            containervolprefix = vol-instances/vol-0
+            hostvolpath = <containvolprefix>/<dircode>
+            containerName = <containerprefix>-<containerId>
+            user = play
+            code path = <dircode>/<containerName>/code.<lang>
+            docker exec <containerName> 
+            dirvar/run-code.sh or dirvar/run-<lang>.sh
+        end note
+    end group
+end
+Developer <-- Http : Emit output
+
+
+@enduml

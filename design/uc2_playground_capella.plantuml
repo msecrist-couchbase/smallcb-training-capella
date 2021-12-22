@@ -1,0 +1,20 @@
+@startuml PlaygroundCapella
+title \nUse Case#2. Playground with Capella\n
+skinparam Style strict
+skinparam lifelineStrategy solid
+
+actor Developer
+rectangle "Client" {
+    usecase "Browser\n" as UC1
+}
+rectangle "Middle Tier" {
+    usecase (Playground Middle tier\n on Sandbox) as UC2
+}
+rectangle "Data Layer" {
+    usecase (Couchbase Cluster - Enterprise\n on Capella) as UC3
+}
+Developer -> UC1
+UC1 -> UC2
+UC2 -> UC3
+
+@enduml

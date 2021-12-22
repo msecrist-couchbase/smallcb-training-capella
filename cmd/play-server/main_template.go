@@ -59,15 +59,17 @@ type MainTemplateData struct {
 	ExamplesPath string
 	Examples     []map[string]interface{} // Sorted.
 
-	Name       string        // Current example name or "".
-	Title      template.HTML // Current example title or "".
-	Lang       string        // Ex: 'py'.
-	LangAce    string        // Ex: 'python'.
-	LangPretty string        // Ex: 'Python'.
-	Code       string
-	Highlight  string
-	InfoBefore template.HTML
-	InfoAfter  template.HTML
+	Name              string        // Current example name or "".
+	Title             template.HTML // Current example title or "".
+	Lang              string        // Ex: 'py'.
+	LangAce           string        // Ex: 'python'.
+	LangPretty        string        // Ex: 'Python'.
+	Code              string
+	Highlight         string
+	InfoBefore        template.HTML
+	InfoAfter         template.HTML
+	InfoAfter_capella template.HTML
+	InfoAfter_sandbox template.HTML
 
 	AnalyticsHTML template.HTML
 	OptanonHTML   template.HTML
@@ -86,7 +88,7 @@ func MainTemplateEmit(w http.ResponseWriter,
 	Target target, containerPublishPortBase, containerPublishPortSpan int,
 	portMapping [][]int,
 	examplesPath, name, title, lang, code, highlight, view, bodyClass,
-	infoBefore, infoAfter string) error {
+	infoBefore, infoAfter string, infoAfter_capella string, infoAfter_sandbox string) error {
 	host := hostIn
 	if session == nil {
 		host = "127.0.0.1"
@@ -163,6 +165,12 @@ func MainTemplateEmit(w http.ResponseWriter,
 		if infoAfter == "" {
 			infoAfter = MapGetString(example, "infoAfter")
 		}
+		if infoAfter_capella == "" {
+			infoAfter_capella = MapGetString(example, "infoAfter_capella")
+		}
+		if infoAfter_sandbox == "" {
+			infoAfter_sandbox = MapGetString(example, "infoAfter_sandbox")
+		}
 	}
 
 	data := &MainTemplateData{
@@ -189,15 +197,17 @@ func MainTemplateEmit(w http.ResponseWriter,
 		ExamplesPath: examplesPath,
 		Examples:     examplesArr,
 
-		Name:       name,
-		Title:      template.HTML(title),
-		Lang:       lang,
-		LangAce:    LangAce[lang],
-		LangPretty: LangPretty[lang],
-		Code:       code,
-		Highlight:  highlight,
-		InfoBefore: template.HTML(AddSessionInfo(session, infoBefore)),
-		InfoAfter:  template.HTML(infoAfter),
+		Name:              name,
+		Title:             template.HTML(title),
+		Lang:              lang,
+		LangAce:           LangAce[lang],
+		LangPretty:        LangPretty[lang],
+		Code:              code,
+		Highlight:         highlight,
+		InfoBefore:        template.HTML(AddSessionInfo(session, infoBefore)),
+		InfoAfter:         template.HTML(infoAfter),
+		InfoAfter_capella: template.HTML(infoAfter_capella),
+		InfoAfter_sandbox: template.HTML(infoAfter_sandbox),
 
 		AnalyticsHTML: template.HTML(AnalyticsHTML(hostIn)),
 		OptanonHTML:   template.HTML(OptanonHTML(hostIn)),

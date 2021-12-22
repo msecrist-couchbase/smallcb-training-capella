@@ -331,11 +331,14 @@ func StartToolsTerminal(session *Session, req RunRequest, containerId int, defau
 		log.Printf("tlsMode: %s", tlsMode)
 	}
 	cmd := exec.Command("docker", "exec",
-		"-detach", "-it", "-u", "play", "-w", "/home/play", containerName,
+		"-detach", "-it", "-u", "couchbase", "-w", "/home/play", containerName,
 		"/bin/sh", "-c",
-		"cd /opt/couchbase/bin; while true; do /home/play/npm_packages/bin/gritty "+tlsMode+
-			" --command 'bash' --port 1339; sleep 3; done")
-
+		"cd /opt/couchbase/bin; "+
+			"while true; do /home/play/npm_packages/bin/gritty "+tlsMode+
+			" --command 'bash -c \"if [ ! -d .cbservertools ]; "+
+			"then mkdir .cbservertools ||true; mv * .cbservertools; cd .cbservertools; "+
+			"mv "+*cliTools+" ../; cd ..; fi; ls; bash \"' "+
+			" --port 1339; sleep 3; done")
 	out, err := ExecCmd(req.ctx, cmd, req.codeDuration)
 	if err != nil {
 		return fmt.Errorf("StartToolsTerminal,"+
