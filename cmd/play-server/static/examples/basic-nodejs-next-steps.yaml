@@ -9,8 +9,56 @@ infoBefore: |
   <br>
 
 code: NONE
+infoAfter: 
+infoAfter_capella: |
+  <div class="next-steps">
+    <strong>Capella</strong>
+    <div class="step-section">
+      Learn more about <a target="_blank" href="https://www.couchbase.com/products/capella">Couchbase Capella</a>, our database-as-a-service offering:
+      <ul>
+        <li>
+          Take a look at the <a target="_blank" href="https://developer.couchbase.com/learn/capella">Capella Learning Path</a>!
+        </li>
+      </ul>
+    </div>
 
-infoAfter: |
+
+    <strong>Tutorials</strong>
+    <div class="step-section">
+      The <a target="_blank" href="https://developer.couchbase.com/">Couchbase Developer Portal</a> has tons of <a target="_blank" href="https://developer.couchbase.com/tutorials">tutorials/quickstart guides</a> and <a target="_blank" href="https://developer.couchbase.com/learn">learning paths</a> to help you get started!
+      <ul>
+        <li>
+          <a target="_blank" href="https://developer.couchbase.com/tutorial-quickstart-nodejs">Node.js and Express Tutorial</a>
+        </li>
+        <li>
+          <a target="_blank" href="https://developer.couchbase.com/tutorial-quickstart-ottomanjs">Ottoman.js and Express Tutorial</a>
+        </li>
+        <li>
+          <a target="_blank" href="https://developer.couchbase.com/tutorial-quickstart-nextjs">Next.js Tutorial</a>
+        </li>
+      </ul>
+    </div>
+
+
+    <strong>Training</strong>
+    <div class="step-section">
+      Dive deeper into the Couchbase Node.js SDK with our free
+      <a target="_blank" href="https://learn.couchbase.com/store/2385919-cb130n-couchbase-associate-node-js-developer-certification-course-v7">Associate Node.js Developer course</a>.
+      <br>
+      Check out our
+      <a target="_blank" href="https://learn.couchbase.com/store/2358679-cb131-couchbase-associate-architect-certification-course-v7">Associate Architect course</a>
+      for a language-agnostic crash course on using Couchbase!
+      <br>
+      See all training options <a target="_blank" href="https://www.couchbase.com/academy">here</a>.
+    </div>
+    <br>
+    <a target="_blank" href="https://docs.couchbase.com/home/sdk.html">See the documentation</a> to learn more about the Couchbase SDKs.
+    <br>
+    <br>
+    Have feedback for us? We'd love to hear from you. Use the form in the footer to send us your thoughts!
+  </div>
+
+infoAfter_sandbox: |
   <div class="next-steps">
     <strong>Capella</strong>
     <div class="step-section">

@@ -730,10 +730,19 @@
                   </h2>
                 </div>
 
-                  {{if .InfoAfter}}
-                    <div class="info infoAfter">{{.InfoAfter}}</div>
+                  
+                  {{if and (.InfoAfter_capella) (.Target.DBurl)}}
+                    <div class="info infoAfter">{{.InfoAfter_capella}}</div>
+                  {{else if and (.InfoAfter_sandbox) (.Session) (not .Target.DBurl)}}
+                    <div class="info infoAfter">{{.InfoAfter_sandbox}}</div>
+                  {{else if .InfoAfter}}
+                      <div class="info infoAfter">{{.InfoAfter}}</div>
+                  {{else if .InfoAfter_sandbox}}
+                      <div class="info infoAfter">{{.InfoAfter_sandbox}}</div>
+                  {{else if .InfoAfter_capella}}
+                      <div class="info infoAfter">{{.InfoAfter_capella}}</div>
                   {{end}}
-
+                  
                   <br>
                   {{if ne .Code "NONE"}}
                   <em>To run this example, click the button in the top right corner of the code editor.</em>
@@ -869,23 +878,25 @@
           <div class="step-section">
             Learn more about <a target="_blank" href="https://www.couchbase.com/products/capella">Couchbase Capella</a>, our database-as-a-service offering:
             <ul>
-              <li>
-                Sign up for a <a target="_blank" href="https://cloud.couchbase.com?href=Playground">free 30-day trial</a> if you haven't already.
-              </li>
-              <li>
-                <a target="_blank" href="https://couchbase.live/target">Connect your trial cluster to the Playground</a> or connect a project to really test it out for yourself.
-              </li>
-              <li>
-                If you're already using Couchbase Capella, you can interact with your cluster by using the interactive Couchbase shell or via the Capella Control plane to:
-                <ul>
-                  <li>
-                    check out the document viewer
-                  </li>
-                  <li>
-                    connect to a project
-                  </li>
-                </ul>
-              </li>
+              {{if (not .Target.DBurl)}}
+                <li>
+                  Sign up for a <a target="_blank" href="https://cloud.couchbase.com?href=Playground">free 30-day trial</a> if you haven't already.
+                </li>
+                <li>
+                  <a target="_blank" href="https://couchbase.live/target">Connect your trial cluster to the Playground</a> or connect a project to really test it out for yourself.
+                </li>
+                <li>
+                  If you're already using Couchbase Capella, you can interact with your cluster by using the interactive Couchbase shell or via the Capella Control plane to:
+                  <ul>
+                    <li>
+                      check out the document viewer
+                    </li>
+                    <li>
+                      connect to a project
+                    </li>
+                  </ul>
+                </li>
+              {{end}}
               <li>
                 Take a look at the <a target="_blank" href="https://developer.couchbase.com/learn/capella">Capella Learning Path</a>!
               </li>

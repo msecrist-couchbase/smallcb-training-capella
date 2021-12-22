@@ -197,7 +197,9 @@ func HttpHandleMain(w http.ResponseWriter, r *http.Request) {
 		examplesPath, name, r.FormValue("title"),
 		lang, code, r.FormValue("highlight"), view, bodyClass,
 		r.FormValue("infoBefore"),
-		r.FormValue("infoAfter"))
+		r.FormValue("infoAfter"),
+		r.FormValue("infoAfter_capella"),
+		r.FormValue("infoAfter_sandbox"))
 	if err != nil {
 		StatsNumInc("http.Main.err", "http.Main.err.template")
 
