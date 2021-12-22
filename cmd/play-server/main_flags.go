@@ -87,7 +87,7 @@ var (
 		"cookie name to store couchbase targets information")
 
 	targetsMaxAge = flag.Duration("targetsMaxAge",
-		45*24*time.Hour,
+		30*24*time.Hour,
 		"duration by age for which couchbase targets are automatically not used")
 
 	version = flag.String("version", "tmp/ns_server.app.vsn",
@@ -120,4 +120,18 @@ var (
 
 	tlsCert = flag.String("tlsCert", "certs/server.crt",
 		"path to the TLS certificate file")
+
+	serverTools = flag.String("serverTools", "couchbase-server couchdb gometa goport "+
+		"gosecrets goxdcr gozip cbas cbft cbft-bleve backup indexer install "+
+		"eventing-consumer eventing-producer "+
+		"memcached projector prometheus mobile-service "+
+		"couch_view_file_merger couch_view_group_cleanup couch_view_group_compactor "+
+		"couch_view_index_builder couch_view_index_updater couchfile_upgrade cbq-engine couchjs ct_run "+
+		"vbmap cbupgrade saslauthd-port sigar_port "+
+		"c_rehash pcre-config pcregrep pcretest ",
+		"List of server tools to hide for the cli tools")
+
+	cliTools = flag.String("cliTools", "cbbackupmgr cbq cbc cbimport cbexport "+
+		"cbc-pillowfight mctimings mcstat cbstats ",
+		"List of visible cli tools")
 )

@@ -855,7 +855,7 @@ div.example-heading > div {
 }
 
 @media only screen and (min-width: 992px) {
-  .example-info-column {
+  .example-info-column-right-border {
     border-right: 1px solid rgba(255, 255, 255, 0.6);
   }
 }
@@ -1003,4 +1003,40 @@ div.progress-wrapper > ul > li > a:hover {
 
 div.online-tools {
   font-size: 12px;
+}
+
+div.next-steps {
+  font-size: 12px;
+}
+
+p.intro-paragraph {
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.n1ql-link-wrapper {
+  margin-left: 16px;
+}
+
+.n1ql-link-wrapper > a {
+  padding-right: 10px;
+}
+
+div.step-section {
+  margin-top: 8px;
+  margin-left: 16px;
+}
+
+div.step-section > ul {
+  line-height: 18px;
+}
+
+.tutorial-link-wrapper {
+  margin-left: 16px;
+  margin-top: 8px;
+}
+
+.tutorial-link-wrapper > a {
+  padding-right: 12px;
+  text-wrap: none;
 }

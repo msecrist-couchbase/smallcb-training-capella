@@ -22,6 +22,8 @@ SNAPSHOT_SUFFIX ?=
 
 CB_ADMIN_PASSWORD ?= small-house-secret
 
+CLITOOLS_IMAGE_NAME ?= smallcb-clitools
+
 # -------------------------------------------------
 
 # Build the docker image.
@@ -34,6 +36,14 @@ build:
             Dockerfile-suffix > \
             Dockerfile
 	docker build --network host -t $(IMAGE_NAME) ${BUILD_EXTRAS} .
+	rm Dockerfile
+
+build-clitools:
+	cat Dockerfile-args \
+            Dockerfile-from-$(IMAGE_FROM) \
+			Dockerfile-clitools > \
+            Dockerfile
+	docker build --network host -t $(CLITOOLS_IMAGE_NAME) ${BUILD_EXTRAS} .
 	rm Dockerfile
 
 # Create the vol-snapshot directory.
