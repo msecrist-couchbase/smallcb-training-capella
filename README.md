@@ -69,7 +69,7 @@ Example usage during development...
 
 During development, to see the playground web page, visit...
 
-    http://127.0.0.1:8080
+      http://127.0.0.1:8080
 
 During development, if you modify any of the Dockerfile parts
 or the ./init-couchbase parts, you will have to run `make build`
