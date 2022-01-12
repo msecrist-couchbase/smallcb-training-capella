@@ -62,7 +62,10 @@ def lambda_handler(event, context):
             response = ec2.describe_vpcs()
             vpc_id = response.get('Vpcs', [{}])[0].get('VpcId', '')
 
-        security_group_name = "capella_cluster_sg_"+capella_cluster_ip.replace('.','_')
+        capella_cluster_ip_list = sorted(capella_cluster_ip.split(','))
+        security_group_name = "capella_cluster_sg"
+        for ip in capella_cluster_ip_list:
+            security_group_name += "_"+ip.replace('.','_')
         security_group_desc = "Playground Capella cluster {} session egress security group".format(capella_cluster_ip)
         try:
             response = ec2.create_security_group(GroupName=security_group_name,
@@ -70,12 +73,16 @@ def lambda_handler(event, context):
                                              VpcId=vpc_id)
             security_group_id = response['GroupId']
             logger.info('Security Group Created %s in vpc %s.' % (security_group_id, vpc_id))
+
+            
+            ip_permissions = []
+            for ip in capella_cluster_ip_list:
+                ip_permissions.append({'IpProtocol': '-1',
+                     'IpRanges': [{'CidrIp': ip.strip() +"/32"}]})
+
             data = ec2.authorize_security_group_egress(
                 GroupId=security_group_id,
-                IpPermissions=[
-                    {'IpProtocol': '-1',
-                     'IpRanges': [{'CidrIp': capella_cluster_ip+"/32"}]},
-                ])
+                IpPermissions=ip_permissions)
             data2 = ec2.revoke_security_group_egress(
                 GroupId=security_group_id,
                 IpPermissions=[
@@ -107,7 +114,10 @@ def lambda_handler(event, context):
         mesg = f"Nice DELETE,"
         ec2 = boto3.client('ec2')
             
-        security_group_name = "capella_cluster_sg_"+capella_cluster_ip.replace('.','_')
+        capella_cluster_ip_list = sorted(capella_cluster_ip.split(','))
+        security_group_name = "capella_cluster_sg"
+        for ip in capella_cluster_ip_list:
+            security_group_name += "_"+ip.replace('.','_')
         try:
             response = ec2.describe_security_groups(
                             Filters=[

@@ -1028,6 +1028,8 @@ func HttpHandleTarget(w http.ResponseWriter, r *http.Request) {
 				data["natpublicip"] = *natPublicIP
 			}
 
+			TargetIPs := GetDBHostAllIPs((dburl))
+			log.Printf("all dburl ips: %v == %v", TargetIPs, strings.Join(TargetIPs[:], ","))
 			if *host != "127.0.0.1" && *host != "localhost" {
 				SetEgressToDB(dburl, email)
 			}

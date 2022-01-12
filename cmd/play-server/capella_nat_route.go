@@ -157,6 +157,28 @@ func GetDBHostIP(dburl string) string {
 	return IPv4
 }
 
+func GetDBHostAllIPs(dburl string) []string {
+	hostName := GetDBHostFromURL(dburl)
+	IPv4 := []string{}
+	_, srvs, err := net.LookupSRV("couchbases", "tcp", hostName)
+	if err != nil {
+		return IPv4
+	} else {
+		i := 0
+		IPv4 = make([]string, len(srvs))
+		for _, srv := range srvs {
+			ip, err := net.LookupIP(srv.Target)
+			if err != nil {
+				log.Printf("err=%v", err)
+				return IPv4
+			}
+			IPv4[i] = ip[0].To4().String()
+			i += 1
+		}
+	}
+	return IPv4
+}
+
 func CheckDBAccess(dburl string) (string, string, string) {
 	hostName := GetDBHostFromURL(dburl)
 	Status := "not accessible"
@@ -333,6 +355,7 @@ func CreateFtsIndex(indexName string, dbHost string, dbUser string, dbPwd string
 	resp, err := httpClient.Do(req)
 	if err != nil {
 		log.Printf("err=%v", err)
+		return "not able to create fts index"
 	}
 
 	defer resp.Body.Close()
@@ -400,14 +423,14 @@ func GetRunningHostInstanceId() string {
 
 // Add the egress security group and rule
 func SetEgressToDB(dburl string, email string) string {
-	TargetIP := GetDBHostIP(dburl)
-	return SetEgress("POST", TargetIP, email)
+	TargetIP := GetDBHostAllIPs(dburl)
+	return SetEgress("POST", strings.Join(TargetIP[:], ","), email)
 }
 
 // Remove the egress security group and rule
 func UnsetEgressToDB(dburl string) string {
-	TargetIP := GetDBHostIP(dburl)
-	return SetEgress("DELETE", TargetIP, "")
+	TargetIP := GetDBHostAllIPs(dburl)
+	return SetEgress("DELETE", strings.Join(TargetIP[:], ","), "")
 }
 
 // Create egress security group
