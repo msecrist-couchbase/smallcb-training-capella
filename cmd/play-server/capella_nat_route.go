@@ -139,6 +139,24 @@ func GetDBSrvHostFromURL(dburl string) string {
 	}
 	return strings.TrimSuffix(srvs[0].Target, ".")
 }
+
+func GetDBHostIP(dburl string) string {
+	hostName := GetDBHostFromURL(dburl)
+	IPv4 := ""
+	_, srvs, err := net.LookupSRV("couchbases", "tcp", hostName)
+	if err != nil {
+		return ""
+	} else {
+		ip, err := net.LookupIP(srvs[0].Target)
+		if err != nil {
+			log.Printf("err=%v", err)
+			return ""
+		}
+		IPv4 = ip[0].To4().String()
+	}
+	return IPv4
+}
+
 func CheckDBAccess(dburl string) (string, string, string) {
 	hostName := GetDBHostFromURL(dburl)
 	Status := "not accessible"
@@ -369,6 +387,79 @@ func CheckFtsIndex(indexName string, dbHost string, dbUser string, dbPwd string)
 			Status = "OK"
 		}
 	}
+	return Status
+
+}
+
+// Get the AWS instance ID
+func GetRunningHostInstanceId() string {
+	cmd := exec.Command("curl", "http://169.254.169.254/latest/meta-data/instance-id")
+	out, _ := cmd.Output()
+	return string(out)
+}
+
+// Add the egress security group and rule
+func SetEgressToDB(dburl string, email string) string {
+	TargetIP := GetDBHostIP(dburl)
+	return SetEgress("POST", TargetIP, email)
+}
+
+// Remove the egress security group and rule
+func UnsetEgressToDB(dburl string) string {
+	TargetIP := GetDBHostIP(dburl)
+	return SetEgress("DELETE", TargetIP, "")
+}
+
+// Create egress security group
+func SetEgress(reqMethod string, ipAddress string, ipAddressOwner string) string {
+
+	Status := "egress security group"
+	httpClient := http.Client{
+		Timeout: 60 * time.Second,
+	}
+	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
+
+	instanceId := GetRunningHostInstanceId()
+	payload_json := `{
+		"capella_cluster_ip": "` + ipAddress + `",
+		"capella_cluster_owner": "` + ipAddressOwner + `",
+		"instance_id":  "` + instanceId + `"
+	   }`
+	//curl -X POST -H "Content-Type: application/json" -d '{"capella_cluster_owner": "jmunta@couchbase.com",
+	// "capella_cluster_ip": "35.85.153.221", "instance_id": "i-09571effd432944e0"}' http://betaegresshandlertest-1870274407.us-west-1.elb.amazonaws.com/
+	req, err := http.NewRequest(reqMethod, *egressHandlerUrl,
+		bytes.NewBuffer([]byte(payload_json)))
+	if err != nil {
+		Status = "egress " + reqMethod + " failed"
+		log.Printf("err=%v", err)
+		return Status
+	}
+	req.Header.Set("Content-Type", "application/json")
+	if err != nil {
+		log.Printf("err=%v", err)
+	}
+	resp, err := httpClient.Do(req)
+	log.Printf("resp=%v", resp)
+	if err != nil {
+		log.Printf("err=%v", err)
+	}
+
+	defer resp.Body.Close()
+	if resp.StatusCode != http.StatusOK {
+		Status = "not able to " + reqMethod + " egress security group"
+	} else {
+		body, err := ioutil.ReadAll(resp.Body)
+		if err != nil {
+			log.Printf("err=%v", err)
+		}
+		if strings.Contains(string(body), "\"status\":\"error\"") {
+			Status = "not able to " + reqMethod + " egress security group"
+		} else {
+			Status = "OK"
+		}
+	}
+	// TBD: yet to determine if this needs some wait.
+	time.Sleep(2 * time.Second)
 	return Status
 
 }

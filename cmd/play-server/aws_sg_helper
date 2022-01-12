@@ -1,0 +1,158 @@
+
+import json
+import logging
+import base64
+import boto3
+from botocore.exceptions import ClientError
+
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
+
+
+def lambda_handler(event, context):
+    logger.info("Request: %s", event)
+    response_code = 200
+
+    http_method = event.get('httpMethod')
+    query_string = event.get('queryStringParameters')
+    headers = event.get('headers')
+    body = event.get('body')
+    is_base64 = event.get('isBase64Encoded')
+    body_dec = None
+    capella_cluster_owner = 'owner'
+    capella_cluster_ip = 'ip'
+    playground_env = 'beta.couchbase.live'
+    instance_id = 'instance_id'
+    
+    if is_base64 == 'true':
+        body_dec = base64.b64decode(body)
+        logger.info("Body decoded: %s", body_dec)
+        capella_cluster_owner = json.loads(body_dec).get('capella_cluster_owner',capella_cluster_owner)
+        capella_cluster_ip = json.loads(body_dec).get('capella_cluster_ip',capella_cluster_ip)
+        playground_env = json.loads(body_dec).get('playground_env',playground_env)
+        instance_id = json.loads(body_dec).get('instance_id',instance_id)
+    elif body:
+        logger.info("Body no encode: %s", body)
+        capella_cluster_owner = json.loads(body).get('capella_cluster_owner',capella_cluster_owner)
+        capella_cluster_ip = json.loads(body).get('capella_cluster_ip',capella_cluster_ip)
+        playground_env = json.loads(body).get('playground_env',playground_env)
+        instance_id = json.loads(body).get('instance_id',instance_id)
+    else:
+        logger.info("Body is empty: %s", body)
+        capella_cluster_owner = event.get('capella_cluster_owner')
+        capella_cluster_ip = event.get('capella_cluster_ip')
+        playground_env = event.get('playground_env')
+        instance_id = event.get('instance_id')
+        
+    if http_method == 'GET':
+        mesg = f"Got your GET"
+    elif http_method == 'POST':
+        mesg = f"Nice POST,"
+        ec2 = boto3.client('ec2')
+            
+        vpc_id = None
+        if instance_id != 'instance_id':
+                response = ec2.describe_instances(InstanceIds=[instance_id])
+                for reservation in response['Reservations']:
+                    logger.info('describe_instances = %s' % (reservation))
+                    for instance in reservation['Instances']:
+                        vpc_id = instance['VpcId']
+                        logger.info('vpc_id = %s' % (vpc_id))
+        else:
+            response = ec2.describe_vpcs()
+            vpc_id = response.get('Vpcs', [{}])[0].get('VpcId', '')
+
+        security_group_name = "capella_cluster_sg_"+capella_cluster_ip.replace('.','_')
+        security_group_desc = "Playground Capella cluster {} session egress security group".format(capella_cluster_ip)
+        try:
+            response = ec2.create_security_group(GroupName=security_group_name,
+                                             Description=security_group_desc,
+                                             VpcId=vpc_id)
+            security_group_id = response['GroupId']
+            logger.info('Security Group Created %s in vpc %s.' % (security_group_id, vpc_id))
+            data = ec2.authorize_security_group_egress(
+                GroupId=security_group_id,
+                IpPermissions=[
+                    {'IpProtocol': '-1',
+                     'IpRanges': [{'CidrIp': capella_cluster_ip+"/32"}]},
+                ])
+            data2 = ec2.revoke_security_group_egress(
+                GroupId=security_group_id,
+                IpPermissions=[
+                    {'IpProtocol': '-1',
+                     'IpRanges': [{'CidrIp': '0.0.0.0/0'}]},
+                ])
+            
+            # associate the security group with the instance
+            if instance_id != 'instance_id':
+                response = ec2.describe_instances(InstanceIds=[instance_id])
+                for reservation in response['Reservations']:
+                    logger.info('describe_instances = %s' % (reservation))
+                    for instance in reservation['Instances']:
+                        all_sg_ids = [sg['GroupId'] for sg in instance['SecurityGroups']]
+                        if security_group_id not in all_sg_ids:
+                            logger.info('Adding security group %s to instance %s' % (security_group_id, instance_id))
+                            all_sg_ids.append(security_group_id)
+                        logger.info('all_sg_ids = %s' % (all_sg_ids))
+                        ec2.modify_instance_attribute(InstanceId=instance_id,
+                                                    Groups=all_sg_ids)
+                        logger.info('Security Group %s is associated with instance %s.' % (security_group_id, instance_id))
+            
+            mesg = 'egress Successfully Set {}'.format(data)
+            logger.info('egress Successfully Set %s' % data)
+        except ClientError as e:
+            mesg = 'egress Failed {}'.format(e)
+            logger.info('egress Failed %s' % e)
+    elif http_method == 'DELETE':
+        mesg = f"Nice DELETE,"
+        ec2 = boto3.client('ec2')
+            
+        security_group_name = "capella_cluster_sg_"+capella_cluster_ip.replace('.','_')
+        try:
+            response = ec2.describe_security_groups(
+                            Filters=[
+                                dict(Name='group-name', Values=[security_group_name])
+                            ]
+                        )
+            logger.info('describe_security_groups = %s' % (response))
+            security_group_id = None
+            if len(response['SecurityGroups'])<1:
+                mesg = 'No security group {} exists!'.format(security_group_name)
+            else:
+                security_group_id = response['SecurityGroups'][0]['GroupId']
+                #disassociate the security group with the instance
+                if instance_id != 'instance_id':
+                    response = ec2.describe_instances(InstanceIds=[instance_id])
+                    for reservation in response['Reservations']:
+                        logger.info('describe_instances = %s' % (reservation))
+                        for instance in reservation['Instances']:
+                            all_sg_ids = [sg['GroupId'] for sg in instance['SecurityGroups']]
+                            if security_group_id in all_sg_ids:
+                                logger.info('Removing security group %s from instance %s' % (security_group_id, instance_id))
+                                all_sg_ids.remove(security_group_id)
+                            logger.info('all_sg_ids = %s' % (all_sg_ids))
+                            ec2.modify_instance_attribute(InstanceId=instance_id,
+                                                        Groups=all_sg_ids)
+                            logger.info('Security Group %s is disassociated with instance %s.' % (security_group_id, instance_id))
+                            break
+                logger.info('Deleting security_group_id = %s' % (security_group_id))
+                response = ec2.delete_security_group(GroupId=security_group_id)
+                logger.info('Security Group Deleted %s %s.' % (security_group_id, security_group_name))
+                
+                mesg = 'egress Successfully Deleted {}'.format(response)
+                logger.info('egress Successfully Deleted %s' % response)
+        except ClientError as e:
+            mesg = 'egress delete Failed {}'.format(e)
+            logger.info('egress delete Failed %s' % e)
+    else:
+        mesg = f"Sorry, {http_method} isn't allowed."
+        response_code = 405
+    
+        
+    response = {
+        'statusCode': response_code,
+        'body': json.dumps({'message': mesg, 'capella_cluster_owner': capella_cluster_owner, 'input': event})
+    }
+
+    logger.info("Response: %s", response)
+    return response
