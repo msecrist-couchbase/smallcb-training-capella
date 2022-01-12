@@ -70,7 +70,18 @@ def lambda_handler(event, context):
         try:
             response = ec2.create_security_group(GroupName=security_group_name,
                                              Description=security_group_desc,
-                                             VpcId=vpc_id)
+                                             VpcId=vpc_id,
+                                             TagSpecifications=[
+                                                {
+                                                    'ResourceType': 'security-group',
+                                                    'Tags': [
+                                                        {
+                                                            'Key': 'Name',
+                                                            'Value': capella_cluster_owner
+                                                        },
+                                                    ]
+                                                },
+                                            ])
             security_group_id = response['GroupId']
             logger.info('Security Group Created %s in vpc %s.' % (security_group_id, vpc_id))
 
