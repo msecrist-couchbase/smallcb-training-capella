@@ -465,6 +465,7 @@ func SetEgress(reqMethod string, ipAddress string, ipAddressOwner string) string
 	log.Printf("resp=%v", resp)
 	if err != nil {
 		log.Printf("err=%v", err)
+		return "not able to " + reqMethod + " egress security group"
 	}
 
 	defer resp.Body.Close()
