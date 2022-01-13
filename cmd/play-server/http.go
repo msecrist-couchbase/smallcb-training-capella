@@ -279,6 +279,10 @@ func HttpHandleTargetExit(w http.ResponseWriter, r *http.Request) {
 	}
 	http.SetCookie(w, targetsCookie)
 
+	if *host != "127.0.0.1" && *host != "localhost" && *egressHandlerUrl != "" {
+		UnsetEgressToDB(Target.DBurl)
+	}
+
 	// Remove cbshell session too
 	sessions.SessionExit(r.FormValue("s"))
 
@@ -1023,6 +1027,14 @@ func HttpHandleTarget(w http.ResponseWriter, r *http.Request) {
 				*natPublicIP = "YourHostIP"
 				data["natpublicip"] = *natPublicIP
 			}
+
+			TargetIPs := GetDBHostAllIPs((dburl))
+			log.Printf("all dburl ips: %v == %v", TargetIPs, strings.Join(TargetIPs[:], ","))
+			if *host != "127.0.0.1" && *host != "localhost" && *egressHandlerUrl != "" {
+				log.Printf("Setting egress with egressHandlerUrl: %s", *egressHandlerUrl)
+				SetEgressToDB(dburl, email)
+			}
+
 			Target.NatPublicIP = *natPublicIP
 			http.SetCookie(w, targetsCookie)
 			url := r.FormValue("ebase")
