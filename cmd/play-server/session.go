@@ -40,6 +40,7 @@ type SessionInfo struct {
 	Email string
 
 	CBHost     string
+	CBNodes    []string
 	CBUser     string
 	CBPswd     string
 	TargetType string

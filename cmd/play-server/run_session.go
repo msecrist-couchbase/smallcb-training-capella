@@ -93,6 +93,8 @@ func SessionAssignContainer(session *Session, req RunRequest,
 		return nil, err
 	}
 
+	session.CBNodes = []string{"127.0.0.1"}
+	log.Printf("session.CBNodes: %v", session.CBNodes)
 	err = StartCbsh(session, req, containerId, defaultBucket)
 	if err != nil {
 		return nil, err
@@ -220,11 +222,20 @@ func StartCbsh(session *Session, req RunRequest, containerId int, defaultBucket 
 	// Ex: "/opt/couchbase/var/tmp/cbsh-config".
 	cbshConfigInst := DirVar + "/tmp/cbsh-config"
 
+	nodes := ""
+	i := 0
+	for _, node := range session.CBNodes {
+		nodes += "\"" + node + "\""
+		if i < len(session.CBNodes)-1 {
+			nodes += ","
+		}
+		i++
+	}
 	cbshConfigBytes := []byte(
 		"version = 1\n\n" +
 			"[[cluster]]\n" +
 			"identifier = \"" + session.CBHost + "\"\n" +
-			"hostnames = [\"" + session.CBHost + "\"]\n" +
+			"hostnames = [" + nodes + "]\n" +
 			"username = \"" + session.CBUser + "\"\n" +
 			"password = \"" + session.CBPswd + "\"\n")
 
