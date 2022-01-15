@@ -2,12 +2,199 @@
 import json
 import logging
 import base64
+import time
 import boto3
 from botocore.exceptions import ClientError
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
+logger.addHandler(logging.StreamHandler())
 
+def get_security_group_id(ec2, security_group_name):
+    response = ec2.describe_security_groups(
+                    Filters=[
+                        dict(Name='group-name', Values=[security_group_name])
+                    ]
+                )
+    security_group_id = response['SecurityGroups'][0]['GroupId']
+    return security_group_id
+
+def add_outbound_egress_ips(ec2, security_group_id, capella_cluster_ip_list):
+    ip_permissions = []
+    for ip in capella_cluster_ip_list:
+        ip_permissions.append({'IpProtocol': '-1',
+                'IpRanges': [{'CidrIp': ip.strip() +"/32"}]})
+
+    if len(ip_permissions)>0:
+        try:
+            logger.info("Adding egress rules %s to security group %s" % (ip_permissions,security_group_id))
+            data = ec2.authorize_security_group_egress(
+                GroupId=security_group_id,
+                IpPermissions=ip_permissions)
+        except ClientError as e:
+            mesg = 'egress rule add Failed {}'.format(e)
+            logger.info('egress rule add Failed %s' % e)
+            if 'already exists' in mesg:
+                pass
+
+def revoke_outbound_egress_ips(ec2, security_group_id, capella_cluster_ip_list):
+    ip_permissions = []
+    for ip in capella_cluster_ip_list:
+        ip_permissions.append({'IpProtocol': '-1',
+                'IpRanges': [{'CidrIp': ip.strip() +"/32"}]})
+
+    if len(ip_permissions)>0:
+        try:
+            data = ec2.revoke_security_group_egress(
+                GroupId=security_group_id,
+                IpPermissions=ip_permissions)
+        except ClientError as e:
+            mesg = 'egress rule revoke Failed {}'.format(e)
+            logger.info('egress rule revoke Failed %s' % e)
+            
+def create_security_group(ec2, security_group_name, security_group_desc, vpc_id, capella_cluster_owner):
+    security_group_id = None
+    try:
+        response = ec2.create_security_group(GroupName=security_group_name,
+                                            Description=security_group_desc,
+                                            VpcId=vpc_id,
+                                            TagSpecifications=[
+                                            {
+                                                'ResourceType': 'security-group',
+                                                'Tags': [
+                                                    {
+                                                        'Key': 'Name',
+                                                        'Value': capella_cluster_owner
+                                                    },
+                                                ]
+                                            },
+                                        ])
+        security_group_id = response['GroupId']
+        logger.info('Security Group Created %s in vpc %s.' % (security_group_id, vpc_id))
+        data2 = ec2.revoke_security_group_egress(
+            GroupId=security_group_id,
+            IpPermissions=[
+                {'IpProtocol': '-1',
+                    'IpRanges': [{'CidrIp': '0.0.0.0/0'}]},
+            ])
+    except ClientError as e:
+        mesg = 'egress security group creation Failed {}'.format(e)
+        logger.info('egress security group creation Failed %s' % e)
+        if 'already exists' in mesg:
+            logger.info('Security Group already exists %s in vpc %s.' % (security_group_name, vpc_id))
+            security_group_id = get_security_group_id(ec2, security_group_name)
+            logger.info('Security Group Found %s' % security_group_id)
+        
+    return security_group_id
+
+def create_security_group_ips(ec2, security_group_name, security_group_desc, vpc_id, capella_cluster_ip_list, capella_cluster_owner):
+    security_group_id = create_security_group(ec2, security_group_name, security_group_desc, vpc_id, capella_cluster_owner)
+    if security_group_id:
+        add_outbound_egress_ips(ec2, security_group_id, capella_cluster_ip_list)
+
+"""
+    Get a security group so that new egress rules can be added
+    (5 security groups max with in an instance, 60 egress rules max in each security group)
+    Check if parent_security_group prefix security group that is lastly associated with instance id.
+    If not, create new a new security group (capella_clusters_sg_<count=1>) and associate with instanceid.
+    If yes, then add for each cluster ip, a new outbound rule in capella_clusters_sg_1
+    If limit (<60) reached, then create capella_clusters_sg_2 and associate with instanceid
+        Add the new outbound rule in capella_cluster_sg_2 with capella_cluster_sg_<ips>
+     ...    
+"""
+def get_instance_security_group_to_add(ec2, instance_id, security_group_prefix):
+    response = ec2.describe_instances(InstanceIds=[instance_id])
+    security_group_id = None
+    security_group_name = None
+    vpc_id = None
+    for reservation in response['Reservations']:
+        for instance in reservation['Instances']:
+            vpc_id = instance['VpcId']
+            matched_prefixes = []
+            for sg in instance['SecurityGroups']:
+                #logger.info('sg = %s' % (sg))
+                if sg['GroupName'].startswith(security_group_prefix):
+                    #logger.info('Security Group Found %s' % sg['GroupName'])
+                    response = ec2.describe_security_groups(
+                                Filters=[
+                                    dict(Name='group-name', Values=[sg['GroupName']])
+                                ]
+                            )
+                    ipPermissionsEgress = response['SecurityGroups'][0]['IpPermissionsEgress']
+                    #logger.info('ipPermissionsEgress = %s' % (ipPermissionsEgress))
+                    if len(ipPermissionsEgress)>0:
+                        total_egress_count = len(ipPermissionsEgress[0]['IpRanges'])
+                    else:
+                        total_egress_count = 0
+                    #logger.info('ipPermissionsEgress rules count = %d' % (total_egress_count))
+                    if total_egress_count < 60:
+                        logger.info('Security Group %s has %d less than 60 egress rules. Adding more.' % (sg['GroupName'], total_egress_count))
+                        security_group_id = response['SecurityGroups'][0]['GroupId']
+                        security_group_name = sg['GroupName']
+                    else:
+                        matched_prefixes.append(sg['GroupName'])
+            if not security_group_id:
+                logger.info('No security group found with prefix %s with <60 egress rules for instance %s' % (security_group_prefix, instance_id))
+                if len(matched_prefixes)>0:
+                    last_prefix_matched = sorted(matched_prefixes)[-1]
+                else:
+                    last_prefix_matched = security_group_prefix
+                count = last_prefix_matched.split('_')[-1]
+                try:
+                    count = int(count) + 1
+                except ValueError:
+                    count = 1
+                security_group_name = security_group_prefix + '_' + str(count)
+                security_group_id = create_security_group(ec2, security_group_name, 'Capella Security Group ' + str(count), vpc_id, 'playground')
+                all_sg_ids = [sg['GroupId'] for sg in instance['SecurityGroups']]
+                if security_group_id not in all_sg_ids:
+                    logger.info('Adding security group %s, %s to instance %s' % (security_group_name, security_group_id, instance_id))
+                    all_sg_ids.append(security_group_id)
+                logger.info('all_sg_ids = %s' % (all_sg_ids))
+                ec2.modify_instance_attribute(InstanceId=instance_id,
+                                            Groups=all_sg_ids)
+                logger.info('Security Group %s is associated with instance %s.' % (security_group_id, instance_id))
+    return security_group_id, security_group_name
+
+# Delete security group egress rules and return if any were not revoked
+def revoke_instance_security_group_matching_rule(ec2, instance_id, security_group_prefix, ip_list):
+    response = ec2.describe_instances(InstanceIds=[instance_id])
+    security_group_id = None
+    security_group_name = None
+    vpc_id = None
+    removed_list = []
+    for reservation in response['Reservations']:
+        for instance in reservation['Instances']:
+            vpc_id = instance['VpcId']
+            
+            for sg in instance['SecurityGroups']:
+                logger.info('sg = %s' % (sg))
+                if sg['GroupName'].startswith(security_group_prefix):
+                    logger.info('Security Group Found %s' % sg['GroupName'])
+                    response = ec2.describe_security_groups(
+                                Filters=[
+                                    dict(Name='group-name', Values=[sg['GroupName']])
+                                ]
+                            )
+                    ipPermissionsEgress = response['SecurityGroups'][0]['IpPermissionsEgress']
+                    logger.info('ipPermissionsEgress = %s' % (ipPermissionsEgress))
+                    security_group_id = response['SecurityGroups'][0]['GroupId']
+                    security_group_name = sg['GroupName']
+                    if len(ipPermissionsEgress)>0:
+                        for ip in ip_list:
+                            ipcidr = ip + '/32'
+                            logger.info('Checking ipcidr = %s in %s' % (ipcidr, security_group_name))
+                            for iprange in ipPermissionsEgress[0]['IpRanges']:
+                                if iprange['CidrIp'] == ipcidr:
+                                    logger.info('Revoking security group %s egress rule for %s' % (security_group_name, ip))
+                                    revoke_outbound_egress_ips(ec2, security_group_id, [ip])
+                                    removed_list.append(ip)
+                                    break
+                                
+    if len(ip_list)!=len(removed_list):
+        logger.info('Total %s vs revoked IP list %s' % (ip_list, removed_list))
+    return removed_list                    
+            
 
 def lambda_handler(event, context):
     logger.info("Request: %s", event)
@@ -21,7 +208,8 @@ def lambda_handler(event, context):
     body_dec = None
     capella_cluster_owner = 'owner'
     capella_cluster_ip = 'ip'
-    playground_env = 'beta.couchbase.live'
+    parent_security_group_name = 'capella_clusters_sg'
+    new_security_group_name = parent_security_group_name
     instance_id = 'instance_id'
     
     if is_base64 == 'true':
@@ -29,153 +217,47 @@ def lambda_handler(event, context):
         logger.info("Body decoded: %s", body_dec)
         capella_cluster_owner = json.loads(body_dec).get('capella_cluster_owner',capella_cluster_owner)
         capella_cluster_ip = json.loads(body_dec).get('capella_cluster_ip',capella_cluster_ip)
-        playground_env = json.loads(body_dec).get('playground_env',playground_env)
+        parent_security_group_name = json.loads(body_dec).get('parent_security_group_name',parent_security_group_name)
+        new_security_group_name = json.loads(body_dec).get('new_security_group_name',new_security_group_name)
         instance_id = json.loads(body_dec).get('instance_id',instance_id)
     elif body:
         logger.info("Body no encode: %s", body)
         capella_cluster_owner = json.loads(body).get('capella_cluster_owner',capella_cluster_owner)
         capella_cluster_ip = json.loads(body).get('capella_cluster_ip',capella_cluster_ip)
-        playground_env = json.loads(body).get('playground_env',playground_env)
+        parent_security_group_name = json.loads(body).get('parent_security_group_name',parent_security_group_name)
+        new_security_group_name = json.loads(body).get('new_security_group_name',new_security_group_name)
         instance_id = json.loads(body).get('instance_id',instance_id)
     else:
         logger.info("Body is empty: %s", body)
         capella_cluster_owner = event.get('capella_cluster_owner')
         capella_cluster_ip = event.get('capella_cluster_ip')
-        playground_env = event.get('playground_env')
+        parent_security_group_name = event.get('parent_security_group_name')
+        new_security_group_name = event.get('new_security_group_name')
         instance_id = event.get('instance_id')
         
     if http_method == 'GET':
-        mesg = f"Got your GET"
+        mesg = "Got your GET"
     elif http_method == 'POST':
-        mesg = f"Nice POST,"
+        mesg = "Nice POST,"
         ec2 = boto3.client('ec2')
-            
-        vpc_id = None
-        if instance_id != 'instance_id':
-                response = ec2.describe_instances(InstanceIds=[instance_id])
-                for reservation in response['Reservations']:
-                    logger.info('describe_instances = %s' % (reservation))
-                    for instance in reservation['Instances']:
-                        vpc_id = instance['VpcId']
-                        logger.info('vpc_id = %s' % (vpc_id))
-        else:
-            response = ec2.describe_vpcs()
-            vpc_id = response.get('Vpcs', [{}])[0].get('VpcId', '')
-
-        capella_cluster_ip_list = sorted(capella_cluster_ip.split(','))
-        security_group_name = "capella_cluster_sg"
-        for ip in capella_cluster_ip_list:
-            security_group_name += "_"+ip.replace('.','_')
-        security_group_desc = "Playground Capella cluster {} session egress security group".format(capella_cluster_ip)
-        security_group_id = None
-        try:
-            response = ec2.create_security_group(GroupName=security_group_name,
-                                             Description=security_group_desc,
-                                             VpcId=vpc_id,
-                                             TagSpecifications=[
-                                                {
-                                                    'ResourceType': 'security-group',
-                                                    'Tags': [
-                                                        {
-                                                            'Key': 'Name',
-                                                            'Value': capella_cluster_owner
-                                                        },
-                                                    ]
-                                                },
-                                            ])
-            security_group_id = response['GroupId']
-            logger.info('Security Group Created %s in vpc %s.' % (security_group_id, vpc_id))
-            ip_permissions = []
-            for ip in capella_cluster_ip_list:
-                ip_permissions.append({'IpProtocol': '-1',
-                     'IpRanges': [{'CidrIp': ip.strip() +"/32"}]})
-
-            data = ec2.authorize_security_group_egress(
-                GroupId=security_group_id,
-                IpPermissions=ip_permissions)
-            data2 = ec2.revoke_security_group_egress(
-                GroupId=security_group_id,
-                IpPermissions=[
-                    {'IpProtocol': '-1',
-                     'IpRanges': [{'CidrIp': '0.0.0.0/0'}]},
-                ])
-        except ClientError as e:
-            mesg = 'egress security group creation Failed {}'.format(e)
-            logger.info('egress security group creation Failed %s' % e)
-            if 'already exists' in mesg:
-                logger.info('Security Group already exists %s in vpc %s.' % (security_group_name, vpc_id))
-                response = ec2.describe_security_groups(
-                                Filters=[
-                                    dict(Name='group-name', Values=[security_group_name])
-                                ]
-                            )
-                security_group_id = response['SecurityGroups'][0]['GroupId']
-                logger.info('Security Group Found %s' % security_group_id)
-            else:
-                response_code = 500
-        
-        try:
-            # associate the security group with the instance
-            if instance_id != 'instance_id':
-                response = ec2.describe_instances(InstanceIds=[instance_id])
-                for reservation in response['Reservations']:
-                    logger.info('describe_instances = %s' % (reservation))
-                    for instance in reservation['Instances']:
-                        all_sg_ids = [sg['GroupId'] for sg in instance['SecurityGroups']]
-                        if security_group_id not in all_sg_ids:
-                            logger.info('Adding security group %s to instance %s' % (security_group_id, instance_id))
-                            all_sg_ids.append(security_group_id)
-                        logger.info('all_sg_ids = %s' % (all_sg_ids))
-                        ec2.modify_instance_attribute(InstanceId=instance_id,
-                                                    Groups=all_sg_ids)
-                        logger.info('Security Group %s is associated with instance %s.' % (security_group_id, instance_id))
-            
-            mesg = 'egress Successfully Set {}'.format(data)
-            logger.info('egress Successfully Set %s' % data)
+        try:  
+            security_group_id, security_group_name = get_instance_security_group_to_add(ec2, instance_id, parent_security_group_name)
+            logger.info("security group id={} name={}".format(security_group_id, security_group_name))
+            capella_cluster_ip_list = sorted(capella_cluster_ip.split(','))
+            add_outbound_egress_ips(ec2, security_group_id, capella_cluster_ip_list)
+            mesg = 'egress Successfully Set {}'.format(capella_cluster_ip_list)
+            logger.info('egress Successfully Set %s' % capella_cluster_ip_list)
         except ClientError as e:
             mesg = 'egress Failed {}'.format(e)
             logger.info('egress Failed %s' % e)
     elif http_method == 'DELETE':
-        mesg = f"Nice DELETE,"
+        mesg = "Nice DELETE,"
         ec2 = boto3.client('ec2')
-            
-        capella_cluster_ip_list = sorted(capella_cluster_ip.split(','))
-        security_group_name = "capella_cluster_sg"
-        for ip in capella_cluster_ip_list:
-            security_group_name += "_"+ip.replace('.','_')
         try:
-            response = ec2.describe_security_groups(
-                            Filters=[
-                                dict(Name='group-name', Values=[security_group_name])
-                            ]
-                        )
-            logger.info('describe_security_groups = %s' % (response))
-            security_group_id = None
-            if len(response['SecurityGroups'])<1:
-                mesg = 'No security group {} exists!'.format(security_group_name)
-            else:
-                security_group_id = response['SecurityGroups'][0]['GroupId']
-                #disassociate the security group with the instance
-                if instance_id != 'instance_id':
-                    response = ec2.describe_instances(InstanceIds=[instance_id])
-                    for reservation in response['Reservations']:
-                        logger.info('describe_instances = %s' % (reservation))
-                        for instance in reservation['Instances']:
-                            all_sg_ids = [sg['GroupId'] for sg in instance['SecurityGroups']]
-                            if security_group_id in all_sg_ids:
-                                logger.info('Removing security group %s from instance %s' % (security_group_id, instance_id))
-                                all_sg_ids.remove(security_group_id)
-                            logger.info('all_sg_ids = %s' % (all_sg_ids))
-                            ec2.modify_instance_attribute(InstanceId=instance_id,
-                                                        Groups=all_sg_ids)
-                            logger.info('Security Group %s is disassociated with instance %s.' % (security_group_id, instance_id))
-                            break
-                logger.info('Deleting security_group_id = %s' % (security_group_id))
-                response = ec2.delete_security_group(GroupId=security_group_id)
-                logger.info('Security Group Deleted %s %s.' % (security_group_id, security_group_name))
-                
-                mesg = 'egress Successfully Deleted {}'.format(response)
-                logger.info('egress Successfully Deleted %s' % response)
+            capella_cluster_ip_list = sorted(capella_cluster_ip.split(','))
+            deleted_ips = revoke_instance_security_group_matching_rule(ec2, instance_id, parent_security_group_name, capella_cluster_ip_list)
+            mesg = 'egress Successfully Deleted: {}'.format(deleted_ips)
+            logger.info(mesg)
         except ClientError as e:
             mesg = 'egress delete Failed {}'.format(e)
             logger.info('egress delete Failed %s' % e)
@@ -191,3 +273,37 @@ def lambda_handler(event, context):
 
     logger.info("Response: %s", response)
     return response
+
+
+def main():
+    ec2 = boto3.client('ec2')
+    parent_security_group_name = "capella_clusters_sg"
+    instance_id = 'i-0744041e18c6cf07e'
+    """
+    capella_cluster_ip = '54.201.241.104,35.88.189.192,35.85.153.221'
+    capella_cluster_ip_list = sorted(capella_cluster_ip.split(','))
+    deleted_ips = revoke_instance_security_group_matching_rule(ec2, instance_id, parent_security_group_name, capella_cluster_ip_list)
+    mesg = 'egress Successfully Deleted: {}'.format(deleted_ips)
+    logger.info(mesg)
+    """
+    
+    for index in range(1,241):
+        security_group_id, security_group_name = get_instance_security_group_to_add(ec2, instance_id, parent_security_group_name)
+        logger.info("security group id={} name={}".format(security_group_id, security_group_name))
+        capella_cluster_ip = "35.85.153."+str(index)
+        capella_cluster_ip_list = sorted(capella_cluster_ip.split(','))
+        add_outbound_egress_ips(ec2, security_group_id, capella_cluster_ip_list)
+    logger.info("Creation ...Done..sleep for 60 secs")
+    time.sleep(10)
+    logger.info("Delete...")
+    for index in range(1,241):
+        capella_cluster_ip = "35.85.153."+str(index)
+        capella_cluster_ip_list = sorted(capella_cluster_ip.split(','))
+        pending = revoke_instance_security_group_matching_rule(ec2, instance_id, parent_security_group_name, capella_cluster_ip_list)
+        if len(pending)>0:
+            logger.info("pending={}".format(pending))
+    logger.info("Delete ...Done")
+if __name__ == "__main__":
+    main()
+
+
