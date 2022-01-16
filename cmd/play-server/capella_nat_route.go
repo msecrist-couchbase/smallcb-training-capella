@@ -140,6 +140,27 @@ func GetDBSrvHostFromURL(dburl string) string {
 	return strings.TrimSuffix(srvs[0].Target, ".")
 }
 
+func GetDBSrvAllHostsFromURL(dburl string) []string {
+	sHost := strings.ReplaceAll(dburl, "couchbase://", "")
+	sHost = strings.ReplaceAll(sHost, "couchbases://", "")
+	hostName := strings.Split(sHost, ":")[0]
+	hostName = strings.Split(hostName, "?")[0]
+	nodes := []string{}
+	_, srvs, err := net.LookupSRV("couchbases", "tcp", hostName)
+	if err != nil {
+		log.Printf("err=%v", err)
+		return nodes
+	} else {
+		i := 0
+		nodes = make([]string, len(srvs))
+		for _, srv := range srvs {
+			nodes[i] = strings.TrimSuffix(srv.Target, ".")
+			i += 1
+		}
+	}
+	return nodes
+}
+
 func GetDBHostIP(dburl string) string {
 	hostName := GetDBHostFromURL(dburl)
 	IPv4 := ""
