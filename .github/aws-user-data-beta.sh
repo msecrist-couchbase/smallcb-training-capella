@@ -1,17 +1,8 @@
 #!/bin/bash -x
 exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
 exec > /tmp/couchbase-live.log 2>&1
-sudo apt -y update
-sudo apt -u upgrade
 
 su - ubuntu
-
-#Adjust logrotate config to split files on 500k chunks
-sed -i 's/1k/500k/' /home/ubuntu/smallcb-logrotate.conf 
-
-#Adjust crontab to run as the ubuntu user and every 30 minutes
-sudo sed -i 's/root\tlogrotate/ubuntu\tsudo logrotate/' /etc/crontab
-sudo sed -i 's/5  \*/*\/30  \*/' /etc/crontab
 
 #Configure golang for the root user
 export GOROOT=/usr/local/go
@@ -21,11 +12,10 @@ export GOCACHE="/home/ubuntu/.cache/go-build"
 export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
 source ~/.profile
 
-# Duplicate docker config for root
-cp -r /home/ubuntu/.docker ~/
+# pull docker image
+docker pull 598307997273.dkr.ecr.us-west-1.amazonaws.com/smallcb-beta:latest
+docker tag 598307997273.dkr.ecr.us-west-1.amazonaws.com/smallcb-beta:latest smallcb:latest
 
-#Forward port 80 to 8080 
-sudo iptables -t nat -I PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 8080
 cd /home/ubuntu
 
 # download smallcb artifact
@@ -40,6 +30,14 @@ sudo -u ubuntu tar -xvf smallcb-staging.tar.gz -C smallcb
 # CD to the working dir
 cd smallcb
 
+# Create nginx config
+chmod a+x ./devops/add_nginx_ssl_listeners.sh
+sudo sh -c './devops/add_nginx_ssl_listeners.sh > /etc/nginx/sites-available/playground'
+sudo ln -s /etc/nginx/sites-available/playground /etc/nginx/sites-enabled/playground
+sudo rm /etc/nginx/sites-enabled/default
+sudo systemctl restart nginx
+
+
 #Create the directory where the rotated logs will be stored
 sudo -u ubuntu mkdir rotated
 
@@ -49,10 +47,8 @@ SUBDOMAIN="cb-${array[2]}${array[3]}.couchbase.live"
 echo "Subdomain of this node = $SUBDOMAIN"
 
 # Added below for resolving cannot kill Docker container - permission denied
-# aa-remove-unknown
-
-# build the container
-make build create
+sudo systemctl disable apparmor.service --now
 
 #Start SmallCb
-./play-server -host "$SUBDOMAIN"  -containers=10 -sessionsMaxAge=35m0s -codeDuration=3m -containersSingleUse=2 -restarters=5 -containerWaitDuration=1m &> nohup.out &
+./play-server -host "$SUBDOMAIN" -egressHandlerUrl="http://internal-smallcb-capella-egress-beta-1883733566.us-west-1.elb.amazonaws.com/" -containers=10 -sessionsMaxAge=35m0s -codeDuration=3m -containersSingleUse=2 -restarters=5 -containerWaitDuration=3m -tlsTerminalProxy  &> nohup.out &
+

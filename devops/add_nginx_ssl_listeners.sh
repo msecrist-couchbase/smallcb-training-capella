@@ -1,10 +1,7 @@
 #!/bin/bash
-HOST="$1"
-if [ "${HOST}" == "" ]; then
-  echo "Usage: $0 HOST"
-  echo "Example: $0 cb-9380.couchbase.live"
-  exit 1
-fi
+
+PUBIP=$(curl http://169.254.169.254/latest/meta-data/public-ipv4)
+HOST="cb-$(cut -d. -f3<<<$PUBIP)$(cut -d. -f4<<<$PUBIP).couchbase.live"
 
 echo 'server {
    server_name '"${HOST}"';
@@ -14,13 +11,13 @@ echo 'server {
         proxy_set_header X-Forwarded-Proto $scheme;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header Host $http_host;
-        proxy_pass http://'"${HOST}"':8080;
+        proxy_pass http://localhost:8080;
     }
 
     listen 443 ssl;
     listen [::]:443 ssl;
-    ssl_certificate /var/www/'"${HOST}"'/cert/playground.crt;
-    ssl_certificate_key /var/www/'"${HOST}"'/cert/playground.key;
+    ssl_certificate /etc/nginx/playground.crt;
+    ssl_certificate_key /etc/nginx/playground.key;
     access_log   /var/log/nginx/'"${HOST}"'.access.log;
     error_log    /var/log/nginx/'"${HOST}"'.error.log;
 }
@@ -45,16 +42,12 @@ do
    server_name '"${HOST}"';
 
    location / {
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header Host $http_host;
-        proxy_pass http://'"${HOST}"':'"${PORT}"';
+        proxy_pass http://localhost:'"${PORT}"';
     }
     listen '"${SSL}"' ssl;
     listen [::]:'"${SSL}"' ssl;
-    ssl_certificate /var/www/'"${HOST}"'/cert/playground.crt;
-    ssl_certificate_key /var/www/'"${HOST}"'/cert/playground.key;
+    ssl_certificate /etc/nginx/playground.crt;
+    ssl_certificate_key /etc/nginx/playground.key;
     access_log   /var/log/nginx/'"${HOST}"'.access.log;
     error_log    /var/log/nginx/'"${HOST}"'.error.log;
 }'
@@ -75,15 +68,14 @@ do
         proxy_set_header X-Forwarded-Proto $scheme;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header Host $http_host;
-        proxy_pass http://'"${HOST}"':'"${PORT}"';
+        proxy_pass http://localhost:'"${PORT}"';
     }
     listen '"${SSL}"' ssl;
     listen [::]:'"${SSL}"' ssl;
-    ssl_certificate /var/www/'"${HOST}"'/cert/playground.crt;
-    ssl_certificate_key /var/www/'"${HOST}"'/cert/playground.key;
+    ssl_certificate /etc/nginx/playground.crt;
+    ssl_certificate_key /etc/nginx/playground.key;
     access_log   /var/log/nginx/'"${HOST}"'.access.log;
     error_log    /var/log/nginx/'"${HOST}"'.error.log;
 }'
  done
 done
-
