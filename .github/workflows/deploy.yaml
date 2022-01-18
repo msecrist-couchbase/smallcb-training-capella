@@ -61,8 +61,16 @@ jobs:
           sudo df -h
       - name: Install golang
         run: sudo apt -y install golang
+      - name: Test architecture
+        run: uname -a && uname -m
+      - name: Test play-server
+        run: make test-play-server
       - name: Compile play-server
-        run: make play-server
+        run: |
+          rm play-server || echo "didn't remove old binary"
+          GOOS=linux GOARCH=amd64 make build-play-server
+      - name: Read play-server architecture
+        run: file play-server
       - name: Create artifact
         run: tar -czf /tmp/$ARTIFACT_NAME *
       - name: Check Disk Usage After Build

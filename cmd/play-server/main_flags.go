@@ -134,4 +134,7 @@ var (
 	cliTools = flag.String("cliTools", "cbbackupmgr cbq cbc cbimport cbexport "+
 		"cbc-pillowfight mctimings mcstat cbstats ",
 		"List of visible cli tools")
+
+	egressHandlerUrl = flag.String("egressHandlerUrl", "http://betaegresshandlertest-1870274407.us-west-1.elb.amazonaws.com/",
+		"egress handler API URL for the Capella clusters")
 )

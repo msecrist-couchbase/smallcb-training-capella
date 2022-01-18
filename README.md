@@ -116,8 +116,44 @@ num   pkts bytes target     prot opt in     out     source               destina
 3    74194 4118K DOCKER     all  --  *      *       0.0.0.0/0            0.0.0.0/0            ADDRTYPE match dst-type LOCAL
 root@ip-10-0-1-169:/home/ubuntu/smallcb# sudo iptables -t nat -D PREROUTING 1
 
+------------------------
+Dynamic Egress API
+Purpose: To allow Capella sessions without wide outbound open (0.0.0.0/0) with dynamic security group creation for the IP addresses of cluster nodes and then associate with Playserver running aws instance id.
+API is ELB -> Lambda (python boto3)
 
+New flag:
+  -egressHandlerUrl='http://internal-smallcb-capella-egress-beta-1883733566.us-west-1.elb.amazonaws.com/'
+  -egressHandlerUrl='' (No dynamic security group and association)
 
+Example for beta env node:
+  nohup ./play-server -host cb-151238.couchbase.live -baseUrl beta.couchbase.live -egressHandlerUrl='http://internal-smallcb-capella-egress-beta-1883733566.us-west-1.elb.amazonaws.com/' -containers=10 -sessionsMaxAge=35m0s -codeDuration=3m -containersSingleUse=2 -restarters=5 -containerWaitDuration=3m -tlsTerminalProxy &
+
+Lambda function code 
+  cmd/play-server/aws_sg_handler.py
+Lambda function permission policy:
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": [
+                "ec2:DescribeSecurityGroupRules",
+                "ec2:DescribeVpcs",
+                "ec2:CreateSecurityGroup",
+                "ec2:DeleteSecurityGroup",
+                "ec2:ModifySecurityGroupRules",
+                "ec2:DescribeSecurityGroups",
+                "ec2:AuthorizeSecurityGroupEgress",
+                "ec2:RevokeSecurityGroupEgress",
+                "ec2:ModifyInstanceAttribute",
+                "ec2:DescribeInstances",
+                "ec2:CreateTags"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
 
 -------------------------
 Production usage should set the CB_ADMIN_PASSWORD env

@@ -24,6 +24,10 @@ CB_ADMIN_PASSWORD ?= small-house-secret
 
 CLITOOLS_IMAGE_NAME ?= smallcb-clitools
 
+GOOS?=
+
+GOARCH?=
+
 # -------------------------------------------------
 
 # Build the docker image.
@@ -152,7 +156,7 @@ play-server-src = \
 play-server: test-play-server build-play-server
 
 build-play-server: $(play-server-src)
-	go build ./cmd/play-server
+	GOOS=$(GOOS) GOARCH=$(GOARCH) go build ./cmd/play-server
 
 test-play-server: $(play-server-src)
 	go test ./cmd/play-server

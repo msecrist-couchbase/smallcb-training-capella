@@ -77,16 +77,20 @@ func SessionAssignContainerCbsh(session *Session, req RunRequest,
 		}
 	}()
 
+	session.CBNodes = []string{"127.0.0.1"}
 	if &Target != nil && Target.DBurl != "" {
 		Target.DBurl = strings.ReplaceAll(Target.DBurl, "couchbase://", "")
 		Target.DBurl = strings.ReplaceAll(Target.DBurl, "couchbases://", "")
 		if strings.Contains(Target.DBurl, "?") {
 			Target.DBurl = strings.Split(Target.DBurl, "?")[0]
 		}
+		dbNodes := GetDBSrvAllHostsFromURL(Target.DBurl)
 		session.CBHost = Target.DBurl
+		session.CBNodes = dbNodes
 		session.CBUser = Target.DBuser
 		session.CBPswd = Target.DBpwd
 	}
+	log.Printf("session.CBNodes: %v", session.CBNodes)
 	err = StartCbsh(session, req, containerId, defaultBucket)
 	if err != nil {
 		return nil, err
