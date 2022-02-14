@@ -11,6 +11,7 @@ code: |
   using System;
   using System.Threading.Tasks;
   using Couchbase;
+  using Couchbase.Core.Exceptions.KeyValue;
 
   namespace CouchbaseDotNetExample
   {
@@ -22,15 +23,22 @@ code: |
           "couchbase://{{.Host}}", "{{.CBUser}}", "{{.CBPswd}}"
         );
 
-        var bucket = await cluster.BucketAsync("travel-sample");
-        var scope = await bucket.ScopeAsync("_default");
-        var collection = await scope.CollectionAsync("_default");
+        // Obtain the bucket and collection
+        var bucket = await cluster.BucketAsync("couchmusic2");
+        var scope = bucket.Scope("couchify");
+        var collection = scope.Collection("track");
 
-        var result = await collection.GetAsync("airline_10");
-        var airline = result.ContentAs<dynamic>();
+        // Perform operation inside a try/catch block
+        try {
+            // Perform an asychronous Get operation
+            var result = await collection.GetAsync("00003466BBCDD2242E13D71F075D01458B8910FE");
+            var track = result.ContentAs<dynamic>();
+            Console.WriteLine(track);
+        } catch (DocumentNotFoundException ex) {
+           Console.WriteLine("Document not found!");
+        }
 
-        Console.WriteLine(airline);
-
+        // Close connection
         await cluster.DisposeAsync();
       }
     }
