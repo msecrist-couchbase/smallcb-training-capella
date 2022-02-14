@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-  <title>Couchbase Playground</title>
+  <title>Couchbase Academy - Associate Architect Lab</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;1,300&display=swap" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="/static/styles/site.css">
   <link rel="stylesheet" type="text/css" href="/static/styles/session.css">
@@ -14,8 +14,8 @@
   <script src="../static/scripts/feedback.js"></script>
 
   <!-- Primary Meta Tags -->
-  <title>Couchbase Playground</title>
-  <meta name="title" content="Couchbase Playground">
+  <title>Couchbase Academy - Associate Architect Lab</title>
+  <meta name="title" content="Couchbase Academy - Associate Architect Lab">
   <meta name="description" content="Experiment with Couchbase in a playground environment with no prior setup required!">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -25,7 +25,7 @@
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="http://couchbase.live/">
-  <meta property="og:title" content="Couchbase Playground">
+  <meta property="og:title" content="Couchbase Academy - Associate Architect Lab">
   <meta property="og:description" content="Experiment with Couchbase in a playground environment with no prior setup required!">
   <meta property="og:image:secure_url" content="https://couchbase.live/static/shots/shot_thumbnail.png">
   <meta property="og:image" content="http://dev.couchbase.live/static/shots/shot_thumbnail.png">
@@ -34,7 +34,7 @@
   <!-- Twitter -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="http://couchbase.live/">
-  <meta property="twitter:title" content="Couchbase Playground">
+  <meta property="twitter:title" content="Couchbase Academy - Associate Architect Lab">
   <meta property="twitter:description" content="Experiment with Couchbase in a playground environment with no prior setup required!">
   <meta property="twitter:image:secure_url" content="https://couchbase.live/static/shots/shot_thumbnail.png">
   <meta property="twitter:image" content="http://dev.couchbase.live/static/shots/shot_thumbnail.png">
@@ -61,7 +61,7 @@
         </a>
 
         <a href="//{{if .BaseUrl}}{{.BaseUrl}}{{else}}couchbase.live{{end}}{{if .Session}}/session-exit?s={{.Session.SessionId}}{{end}}" id="homeLink">
-          Playground
+          Associate Architect Lab Environment
         </a>
       </h1>
     </div>
@@ -89,7 +89,7 @@
   <div class="subheader-container">
     <ul id="secondaryNav">
       <li>
-        <a target="_blank" href="https://cloud.couchbase.com?href=Playground">Capella Trial</a>
+        <a target="_blank" href="https://cloud.couchbase.com?href=Academy">Capella Trial</a>
       </li>
       <li>
         <a target="_blank" href="https://docs.couchbase.com">Documentation</a>
@@ -148,7 +148,7 @@
           {{if .title}}
             {{.title}}
           {{else}}
-            Playground with Couchbase Capella
+          Connect Associate Architect Lab Environment to Couchbase Capella
           {{end}}
         </h2>
       </header>
@@ -157,7 +157,7 @@
           <p>{{.intro}}</p>
         {{end}}
         <p>
-          Connect your Capella trial to the playground. Try sample code, explore tools, free data sets, load your own data and more.
+          Connect the lab environment to your Capella trial. Try sample code, explore tools, free data sets, load your own data and more.
           <br>
           Don’t have a Capella Cluster? Start your 30-day free trial <a target="_blank" href="https://cloud.couchbase.com?href=Playground">here</a>.
         </p>
@@ -175,7 +175,7 @@
               to your Allowed IPs (Cluster → Connect tab → Manage Allowed IP → Add IP)
             </li>
             <li>Get the Database Host/URL for your Capella Cluster (Connect tab → Wide Area Network box)</li>
-            <li>Create a new database credential for Playground access (Connect tab → Database Access box → Manage Credentials → Create Database Credential)</li>
+            <li>Create a new database credential for lab environment access (Connect tab → Database Access box → Manage Credentials → Create Database Credential)</li>
             <li>Add the relevant information to the fields below and start your session!</li>
           </ol>
         </p>
@@ -293,38 +293,18 @@
               We won't sell your contact info to spammers, etc.
             </p>
             <p>
-              A playground session is intended for "tire-kicking" and learning by developers.
+              This session is intended for executing the labs for the Associate Architect course.
             </p>
             <p>
-              Do NOT put important data into a playground session.
+              Do NOT put important data into this session.
             </p>
       </section>
     </article>
   </main>
 
   <footer>
-    <div class="container {{if .Lang}} container-example{{end}}">
-      <div class="feedback">
-        <form id="feedback">
-          <fieldset class="feedback-fields">
-            Was this page helpful? &nbsp
-
-            <br class="hidden-sm">
-            <br class="hidden-sm">
-
-            <label for="liked" class="feedback-radio-label"> <input class="feedback-radio" type="radio" value="true" name="liked" required/>Yes</label>
-            <label for="liked" class="feedback-radio-label"> <input class="feedback-radio" type="radio" value="false" name="liked" required/>No</label>
-            <input class="feedback-text" type="text" placeholder="How can we make it better?" name="message" />
-            <input type="hidden" name="src_url" id="src_url" value=""/>
-
-            <input type="submit" class="red-button menu-button submit-button"/>
-          </fieldset>
-        </form>
-        <div id="result"></div>
-      </div>
-    </div>
     <hr>
-    <div>© 2021 Couchbase Labs</div>
+    <div>© 2022 Couchbase Academy (powered by Couchbase Playground)-</div>
   </footer>
 </body>
 <script>

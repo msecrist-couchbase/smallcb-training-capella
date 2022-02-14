@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-  <title>Couchbase Playground</title>
+  <title>Couchbase Academy - Associate Architect Lab</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;1,300&Ubuntu+Mono&display=swap"
         rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="/static/styles/site.css">
@@ -21,8 +21,8 @@
   <script src="../static/scripts/feedback.js"></script>
 
   <!-- Primary Meta Tags -->
-  <title>Couchbase Playground</title>
-  <meta name="title" content="Couchbase Playground">
+  <title>Couchbase Academy - Associate Architect Lab</title>
+  <meta name="title" content="Couchbase Academy - Associate Architect Lab">
   <meta name="description" content="Experiment with Couchbase in a playground environment with no prior setup required!">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -148,7 +148,7 @@
           <img src="/static/cb.png" class="hidden-sm hidden-lg"/>
         </a>
         <a href="//{{if .BaseUrl}}{{.BaseUrl}}{{else}}couchbase.live{{end}}{{if and (.Session)}}/session-exit?s={{.Session.SessionId}}{{ else if and (.Target.DBurl) (not .Session)}}/target-exit{{end}}" id="homeLink">
-          Playground
+          Associate Architect Lab Environment
         </a>
       </h1>
     </div>
@@ -171,27 +171,12 @@
                 Stop Capella Session
               </a>
             {{else if not .Target.DBurl}}
-              <a href="#" class="menu-button red-button cursor-default" id="startSessionButtonMenu">
+              <a href="/target" class="menu-button red-button cursor-default" id="capellaDropdownButton">
                 Start a Session
                 &nbsp
-                <i class="fa fa-caret-down" aria-hidden="true"></i>
+                <i class="fa fa-cloud" aria-hidden="true"></i>
               </a>
-              <ul class="dropdown-content">
-                <li>
-                  <a href="/session" id="provisionedDropdownButton">
-                    <i class="fa fa-server" aria-hidden="true"></i>
-                    &nbsp
-                    Sandbox
-                  </a>
-                </li>
-                <li>
-                  <a href="/target" id="capellaDropdownButton">
-                    <i class="fa fa-cloud" aria-hidden="true"></i>
-                    &nbsp
-                    Capella
-                  </a>
-                </li>
-              </ul>
+             
             {{end}}
         </li>
       </ul>
@@ -303,7 +288,7 @@
       </div>
       <div class="info-header info-header-capella">
           <div class="header-right">
-            <span class="head-server">Your playground Capella session will expire after </span>
+            <span class="head-server">Your lab session will expire after </span>
             <code> {{.Target.ExpiryTime}}</code>
 
           </div>
@@ -399,17 +384,21 @@
           {{if not .Lang}}
             {{if and (not .Target.DBurl) (not .Session)}}
               <p class="intro-paragraph">
-                Welcome to Couchbase Playground. Here are a few things you can do:
-                <ul>
-                  <li><strong>Basic:</strong> Run language-specific code examples below.</li>
-                  <li><strong>Sandbox Session:</strong> Start a 30 minute session. Explore the web console, take a guided tour, and experiment with your own cluster.</li>
-                  <li><strong>Capella Session:</strong> Get a 30 day free trial. Connect it to the playground, try sample code, explore tools and free data sets.</li>
-                </ul>
+                Welcome to the Couchbase Academy Associate Architect lab environment.<br><br>
+                
+                The lab exercises are intended to be run from this environment in conjunction with a Couchbase Capella Trial account.
+                You can get obtain your free 30 day Couchbase Capella trial
+                <a href="http://cloud.couchbase.com/sign-up" target="_blank">here</a>
+                <br><br>
+                If you haven't already done so, be sure to access the lab instructions at:
+                <a href="https://e-learning-labs.s3-us-west-2.amazonaws.com/cb131-lab-instructions/index.html" target="_blank">https://e-learning-labs.s3-us-west-2.amazonaws.com/cb131-lab-instructions/index.html</a>
+                
               </p>
             {{end}}
 
-
-            <h2 class="home-header"><label for="examplesToggle">Basic: Click Below to Run Examples in your Browser</label></h2>
+            
+                {{if .Target.DBurl}}
+            <h2 class="home-header"><label for="examplesToggle">Basic: Click Below to select the language you wish to run labs with</label></h2>
             <div class="row example-row">
               <div class="col-xs-6 col-sm-6 col-md-3 col-lg-3">
                 <a href="/examples/basic-java-kv-get{{if $.Session}}?s={{$.Session.SessionId}}{{end}}"
@@ -444,50 +433,9 @@
                   <h3 class="example-label">.NET</h3>
                 </a>
               </div>
-
-              <div class="col-xs-6 col-sm-6 col-md-3 col-lg-3">
-                <a href="/examples/basic-php-kv-get{{if $.Session}}?s={{$.Session.SessionId}}{{end}}"
-                   class="example-button"
-                   onclick="return pageToggle('page-06')">
-                  <object data="../static/icons/php.svg" width="14%" height="14%" class="example-icon"></object>
-                  <h3 class="example-label">PHP</h3>
-                </a>
-              </div>
-
-              <div class="col-xs-6 col-sm-6 col-md-3 col-lg-3">
-                <a href="/examples/basic-rb-kv-get{{if $.Session}}?s={{$.Session.SessionId}}{{end}}"
-                   class="example-button" onclick="return pageToggle('page-07')">
-                  <object data="../static/icons/ruby.svg" width="14%" height="14%" class="example-icon"></object>
-                  <h3 class="example-label">Ruby</h3>
-                </a>
-              </div>
-
-              <div class="col-xs-6 col-sm-6 col-md-3 col-lg-3">
-                <a href="/examples/basic-scala-kv-get{{if $.Session}}?s={{$.Session.SessionId}}{{end}}"
-                   class="example-button" onclick="return pageToggle('page-08')">
-                  <object data="../static/icons/scala.svg" width="14%" height="14%" class="example-icon"></object>
-                  <h3 class="example-label">Scala</h3>
-                </a>
-              </div>
-
-              <div class="col-xs-6 col-sm-6 col-md-3 col-lg-3">
-                <a href="/examples/basic-go-kv-get{{if $.Session}}?s={{$.Session.SessionId}}{{end}}"
-                   class="example-button"
-                   onclick="return pageToggle('page-09')">
-                  <object data="../static/icons/golang.svg" width="14%" height="14%" class="example-icon"></object>
-                  <h3 class="example-label">Go</h3>
-                </a>
-              </div>
-
-              <div class="col-xs-6 col-sm-6 col-md-3 col-lg-3">
-                <a href="/examples/basic-cc-kv-get{{if $.Session}}?s={{$.Session.SessionId}}{{end}}"
-                   class="example-button"
-                   onclick="return pageToggle('page-10')">
-                  <object data="../static/icons/cc.svg" width="14%" height="14%" class="example-icon"></object>
-                  <h3 class="example-label">C++</h3>
-                </a>
-              </div>
             </div>
+            
+            {{end}}
 
           {{if and (not .Session) (not .Target.DBurl)}}
               <br>
@@ -495,15 +443,9 @@
               <br>
               <div class="row example-row">
                 <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                  <a href="/session"
-                     class="mode-button example-button red-button" onclick="" id="provisionedDropdownButtonTop">
-                    <h3 class="example-label">Sandbox Session</h3>
-                  </a>
-                </div>
-                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                   <a href="/target"
                      class="mode-button example-button red-button" onclick="" id="capellaDropdownButtonTop">
-                    <h3 class="example-label">Capella Session</h3>
+                    <h3 class="example-label">Launch Capella Lab Session</h3>
                   </a>
                 </div>
               </div>
@@ -876,31 +818,8 @@
           <h2 class="home-header">Next Steps</h2>
           <strong>Capella</strong>
           <div class="step-section">
-            Learn more about <a target="_blank" href="https://www.couchbase.com/products/capella">Couchbase Capella</a>, our database-as-a-service offering:
-            <ul>
-              {{if (not .Target.DBurl)}}
-                <li>
-                  Sign up for a <a target="_blank" href="https://cloud.couchbase.com?href=Playground">free 30-day trial</a> if you haven't already.
-                </li>
-                <li>
-                  <a target="_blank" href="https://couchbase.live/target">Connect your trial cluster to the Playground</a> or connect a project to really test it out for yourself.
-                </li>
-                <li>
-                  If you're already using Couchbase Capella, you can interact with your cluster by using the interactive Couchbase shell or via the Capella Control plane to:
-                  <ul>
-                    <li>
-                      check out the document viewer
-                    </li>
-                    <li>
-                      connect to a project
-                    </li>
-                  </ul>
-                </li>
-              {{end}}
-              <li>
-                Take a look at the <a target="_blank" href="https://developer.couchbase.com/learn/capella">Capella Learning Path</a>!
-              </li>
-            </ul>
+            Learn more about <a target="_blank" href="https://www.couchbase.com/products/capella">Couchbase Capella</a>, our database-as-a-service offering.<br><br>
+          
           </div>
 
 
@@ -923,16 +842,14 @@
           <strong>Training</strong>
           <div class="step-section">
             Dive deeper into Couchbase with one of our <a target="_blank" href="https://learn.couchbase.com/store?utf8=%E2%9C%93&ss=1&ct=78327&commit=Filter">free training courses</a>.
-            <br>
-            The <a target="_blank" href="https://learn.couchbase.com/store/2358679-cb131-couchbase-associate-architect-certification-course-v7">Associate Architect course</a> is a great language-agnostic starting point!
+            
             <br>
             See all training options <a target="_blank" href="https://www.couchbase.com/academy">here</a>.
           </div>
           <br>
           <a target="_blank" href="https://docs.couchbase.com/home/sdk.html">See the documentation</a> to learn more about the Couchbase SDKs.
           <br>
-          <br>
-          Have feedback for us? We'd love to hear from you. Use the form in the footer to send us your thoughts!
+          
         </div>
         {{end}}
       </div>
@@ -940,28 +857,9 @@
 </main>
 
 <footer>
-  <div class="container {{if .Lang}} container-example{{end}}">
-    <div class="feedback">
-      <form id="feedback">
-        <fieldset class="feedback-fields">
-          Was this page helpful? &nbsp
-
-          <br class="hidden-sm">
-          <br class="hidden-sm">
-
-          <label for="liked" class="feedback-radio-label"> <input class="feedback-radio" type="radio" value="true" name="liked" required/>Yes</label>
-          <label for="liked" class="feedback-radio-label"> <input class="feedback-radio" type="radio" value="false" name="liked" required/>No</label>
-          <input class="feedback-text" type="text" placeholder="How can we make it better?" name="message" />
-          <input type="hidden" name="src_url" id="src_url" value=""/>
-
-          <input type="submit" class="red-button menu-button submit-button"/>
-        </fieldset>
-      </form>
-      <div id="result"></div>
-    </div>
-  </div>
+  
   <hr>
-  <div>© 2021 Couchbase Labs -
+  <div>© 2022 Couchbase Academy (powered by Couchbase Playground)-<br>
     <span class="ver">Couchbase Server {{.Version}}</span>
       {{range $v := .VersionSDKs}}
         <span class="ver-sdk">{{$v.name}} SDK: {{$v.ver}}</span>
@@ -1035,7 +933,7 @@
     })
 
     tippy('#capellaDropdownButton', {
-      content: 'Connect your Capella trial to the playground. Try sample code, explore tools, play with free data sets, and more. Don’t have a Capella cluster? Get a free 30-day trial at cloud.couchbase.com.',
+      content: 'Connect your lab environment to Couchbase Capella trial. Execute exampe code. Don’t have a Capella cluster? Get a free 30-day trial at cloud.couchbase.com.',
       placement: 'left',
       theme: 'custom'
     })
@@ -1049,7 +947,7 @@
 
     // Capella session button on home page
     tippy('#capellaDropdownButtonTop', {
-      content: 'Connect your Capella trial to the playground. Try sample code, explore tools, play with free data sets, and more. Don’t have a Capella cluster? Get a free 30-day trial at cloud.couchbase.com.',
+      content: 'Connect your lab environment to Couchbase Capella trial. Execute exampe code. Don’t have a Capella cluster? Get a free 30-day trial at cloud.couchbase.com.',
       placement: 'top',
       theme: 'custom'
     })
