@@ -1,0 +1,52 @@
+title: Search 2 - Find Tracks
+page: page-01
+lang: java
+infoBefore: |
+  NOTE: A Search index must be defined before running this search and it must be called <em>couchmusic2-track-title</em>.<br><br><div>
+  <a href='/examples/basic-java-search-find-users' class="prev-button">Previous</a>
+  <a href='/examples/basic-java-next-steps' class="next-button" style="float:right">Next</a>
+  </div>
+  <br>
+code: |
+  import com.couchbase.client.core.error.CouchbaseException;
+  import com.couchbase.client.java.*;
+  import com.couchbase.client.java.search.result.SearchResult;
+  import com.couchbase.client.java.search.SearchQuery;
+  import com.couchbase.client.java.search.result.SearchRow;
+  import com.couchbase.client.java.json.JsonObject;
+  import static com.couchbase.client.java.search.SearchOptions.*;
+  
+  class Program {
+     static Cluster cluster = Cluster.connect(
+               "couchbase://{{.Host}}", "{{.CBUser}}", "{{.CBPswd}}"
+            );
+
+    public static void main(String[] args) {
+
+      try {
+        var searchString = "rock";
+        
+        final SearchResult result =
+              cluster.searchQuery("couchmusic2-index-userprofile-genres", SearchQuery.match(searchString).fuzziness(0) );
+            
+        for (SearchRow row : result.rows()) {
+                 var docId = row.id();
+                 var score = row.score();
+                 var fields = row.fieldsAs(JsonObject.class);
+                 System.out.println("Id: " + docId + " - Score: " + score + " - Fields: " + fields);
+        }
+        
+        System.out.println("Reported total rows: "
+          + result.metaData().metrics().totalRows());
+          
+      } catch (CouchbaseException ex) {
+        System.out.println("Exception encountered: " + ex);
+      }
+    }
+    
+  }
+infoAfter: |
+  A Full-text search example using a search term and fuzziness.
+  <br/><br/>
+  Visit the docs to learn more about
+  <a target="_blank" href="https://docs.couchbase.com/java-sdk/current/howtos/full-text-searching-with-sdk.html">Full Text Search in Java</a>.

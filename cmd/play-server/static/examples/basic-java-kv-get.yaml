@@ -4,7 +4,7 @@ lang: java
 infoBefore: |
   <div>
   <a href='#' class="disable prev-button" style="float:left">Previous</a>
-  <a href='/examples/basic-java-query-rows' class="next-button">Next</a>
+  <a href='/examples/basic-java-kv-insert' class="next-button">Next</a>
   </div>
   <br>
 code: |
@@ -36,7 +36,8 @@ code: |
     }
   }
 infoAfter: |
-  Given a document's key, you can use the collection.get() method to retrieve a document from a collection.
+  If we know a document's key value, we can use the collection.get() method
+  passing a key. This returns one document.
   <br/><br/>
   See more at the SDK documentation on
   <a target="_blank" href="https://docs.couchbase.com/java-sdk/current/howtos/kv-operations.html">Java Key Value Operations</a>.

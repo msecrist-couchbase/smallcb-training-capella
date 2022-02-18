@@ -459,179 +459,126 @@
             <div class="progress-wrapper">
               <ul class="progress-indicator">
                   {{/* Determine If KV Get Completed */}}
-                  {{if or (eq .Title "Key Value Get") (eq .Title "Query Rows") (eq .Title "Query w/ Named Param") (eq .Title "Query w/ Positional Param") (eq .Title "Sub-document Lookup") (eq .Title "Sub-document Mutate") (eq .Title "Transactions KV Mutate") (eq .Title "Transactions N1QL") (eq .Title "Upsert") (eq .Title "Search Query String") (eq .Title "Next Steps")}}
+                  {{if or (eq .Title "Key Value Get") (eq .Title "Key Value Insert") (eq .Title "Data Modeling") (eq .Title "Find Playlists for username") (eq .Title "Find Tracks for Playlist") (eq .Title "Search 1 - Find Users") (eq .Title "Search 2 - Find Tracks") (eq .Title "Next Steps")}}
                     <li class="completed">
                       <a href="/examples/basic-{{.Lang}}-kv-get{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                         <span class="bubble"></span>
-                        Key Value Get
+                        Lab 2: K/V Get
                       </a>
                     </li>
                   {{else}}
                     <li>
                       <a href="/examples/basic-{{.Lang}}-kv-get{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                         <span class="bubble"></span>
-                        Key Value Get
+                        Lab 2: K/V Get
                       </a>
                     </li>
                   {{end}}
-
-                  {{/* Determine If Query Rows Completed */}}
-                  {{if or (eq .Title "Query Rows") (eq .Title "Query w/ Named Param") (eq .Title "Query w/ Positional Param") (eq .Title "Sub-document Lookup") (eq .Title "Sub-document Mutate") (eq .Title "Transactions KV Mutate") (eq .Title "Transactions N1QL") (eq .Title "Upsert") (eq .Title "Search Query String") (eq .Title "Next Steps")}}
+                  
+                  {{/* Determine If KV Insert Completed */}}
+                  {{if or (eq .Title "Key Value Insert") (eq .Title "Data Modeling") (eq .Title "Find Playlists for username") (eq .Title "Find Tracks for Playlist") (eq .Title "Search 1 - Find Users") (eq .Title "Search 2 - Find Tracks") (eq .Title "Next Steps")}}
                     <li class="completed">
-                      <a href="/examples/basic-{{.Lang}}-query-rows{{if .Session}}?s={{.Session.SessionId}}{{end}}">
+                      <a href="/examples/basic-{{.Lang}}-kv-insert{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                         <span class="bubble"></span>
-                        Query Rows
+                        Lab 2: K/V Insert
                       </a>
                     </li>
                   {{else}}
                     <li>
-                      <a href="/examples/basic-{{.Lang}}-query-rows{{if .Session}}?s={{.Session.SessionId}}{{end}}">
+                      <a href="/examples/basic-{{.Lang}}-kv-insert{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                         <span class="bubble"></span>
-                        Query Rows
+                        Lab 2: K/V Insert
                       </a>
                     </li>
                   {{end}}
 
-                  {{/* Determine If Query w/ Named Param Completed */}}
-                  {{if or (eq .Title "Query w/ Named Param") (eq .Title "Query w/ Positional Param") (eq .Title "Sub-document Lookup") (eq .Title "Sub-document Mutate") (eq .Title "Transactions KV Mutate") (eq .Title "Transactions N1QL") (eq .Title "Upsert") (eq .Title "Search Query String") (eq .Title "Next Steps")}}
+                  {{/* Determine If Data Modeling Completed */}}
+                  {{if or (eq .Title "Data Modeling") (eq .Title "Find Playlists for username") (eq .Title "Find Tracks for Playlist") (eq .Title "Search 1 - Find Users") (eq .Title "Search 2 - Find Tracks") (eq .Title "Next Steps")}}
                     <li class="completed">
-                      <a href="/examples/basic-{{.Lang}}-query-named-param{{if .Session}}?s={{.Session.SessionId}}{{end}}">
+                      <a href="/examples/basic-{{.Lang}}-data-modeling{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                         <span class="bubble"></span>
-                        Query w/ Named Param
+                        Lab 3: Data Modaling
                       </a>
                     </li>
                   {{else}}
                     <li>
-                      <a href="/examples/basic-{{.Lang}}-query-named-param{{if .Session}}?s={{.Session.SessionId}}{{end}}">
+                      <a href="/examples/basic-data-modeling{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                         <span class="bubble"></span>
-                        Query w/ Named Param
+                        Lab 2: Data Modeling
                       </a>
                     </li>
                   {{end}}
 
-                  {{/* Determine If Query w/ Positional Param Completed */}}
-                  {{if or (eq .Title "Query w/ Positional Param") (eq .Title "Sub-document Lookup") (eq .Title "Sub-document Mutate") (eq .Title "Transactions KV Mutate") (eq .Title "Transactions N1QL") (eq .Title "Upsert")  (eq .Title "Search Query String") (eq .Title "Next Steps")}}
+
+                  {{/* Determine If 'Find Playlists for username' Completed */}}
+                  {{if or (eq .Title "Find Playlists for username") (eq .Title "Find Tracks for Playlist") (eq .Title "Search 1 - Find Users") (eq .Title "Search 2 - Find Tracks") (eq .Title "Next Steps")}}
                     <li class="completed">
-                      <a href="/examples/basic-{{.Lang}}-query-positional-param{{if .Session}}?s={{.Session.SessionId}}{{end}}">
+                      <a href="/examples/basic-{{.Lang}}-query-playlist-for-username{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                         <span class="bubble"></span>
-                        Query w/ Positional Param
+                        Lab 4: Query 1
                       </a>
                     </li>
                   {{else}}
                     <li>
-                      <a href="/examples/basic-{{.Lang}}-query-positional-param{{if .Session}}?s={{.Session.SessionId}}{{end}}">
+                      <a href="/examples/basic-{{.Lang}}-query-playlist-for-username{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                         <span class="bubble"></span>
-                        Query w/ Positional Param
+                        Lab 4: Query 1
                       </a>
                     </li>
                   {{end}}
 
-                  {{/* Determine If Sub Document Lookup Completed */}}
-                  {{if or (eq .Title "Sub-document Lookup") (eq .Title "Sub-document Mutate") (eq .Title "Transactions KV Mutate") (eq .Title "Transactions N1QL") (eq .Title "Upsert") (eq .Title "Search Query String") (eq .Title "Next Steps")}}
+                  {{/* Determine If Query 'Find Tracks for Playlist' Completed */}}
+                  {{if or (eq .Title "Find Tracks for Playlist") (eq .Title "Search 1 - Find Users") (eq .Title "Search 2 - Find Tracks") (eq .Title "Next Steps")}}
                     <li class="completed">
-                      <a href="/examples/basic-{{.Lang}}-subdoc-lookup{{if .Session}}?s={{.Session.SessionId}}{{end}}">
+                      <a href="/examples/basic-{{.Lang}}-query-tracks-for-playlist{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                         <span class="bubble"></span>
-                        Sub-Document Lookup
+                        Lab 4: Query 2
                       </a>
                     </li>
                   {{else}}
                     <li>
-                      <a href="/examples/basic-{{.Lang}}-subdoc-lookup{{if .Session}}?s={{.Session.SessionId}}{{end}}">
+                      <a href="/examples/basic-{{.Lang}}-query-tracks-for-playlist{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                         <span class="bubble"></span>
-                        Sub-Document Lookup
+                        Lab 4: Query 2
                       </a>
                     </li>
                   {{end}}
 
-                  {{/* Determine If Sub Document Mutate Completed */}}
-                  {{if or (eq .Title "Sub-document Mutate") (eq .Title "Transactions KV Mutate") (eq .Title "Transactions N1QL") (eq .Title "Upsert") (eq .Title "Search Query String") (eq .Title "Next Steps")}}
+                  {{/* Determine If 'Search 1 - Find Users' Completed */}}
+                  {{if or (eq .Title "Search 1 - Find Users") (eq .Title "Search 2 - Find Tracks") (eq .Title "Next Steps")}}
                     <li class="completed">
-                      <a href="/examples/basic-{{.Lang}}-subdoc-mutate{{if .Session}}?s={{.Session.SessionId}}{{end}}">
+                      <a href="/examples/basic-{{.Lang}}-search-find-users{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                         <span class="bubble"></span>
-                        Sub-Document Mutate
+                        Lab 5: Search 1
                       </a>
                     </li>
                   {{else}}
                     <li>
-                      <a href="/examples/basic-{{.Lang}}-subdoc-mutate{{if .Session}}?s={{.Session.SessionId}}{{end}}">
+                      <a href="/examples/basic-{{.Lang}}-search-find-users{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                         <span class="bubble"></span>
-                        Sub-Document Mutate
+                        Lab 5: Search 1
                       </a>
                     </li>
                   {{end}}
 
-                  {{/* Show/Hide Java Transactions Steps */}}
-                  {{if eq .Lang "java"}}
-                      {{/* Determine If JAVA Transactions KV Mutate Completed */}}
-                      {{if or (eq .Title "Transactions KV Mutate") (eq .Title "Transactions N1QL") (eq .Title "Upsert") (eq .Title "Search Query String") (eq .Title "Next Steps")}}
-                        <li class="completed">
-                          <a href="/examples/basic-{{.Lang}}-txn-kv-mutate{{if .Session}}?s={{.Session.SessionId}}{{end}}">
-                            <span class="bubble"></span>
-                            Transactions KV Mutate
-                          </a>
-                        </li>
-                      {{else}}
-                        <li>
-                          <a href="/examples/basic-{{.Lang}}-txn-kv-mutate{{if .Session}}?s={{.Session.SessionId}}{{end}}">
-                            <span class="bubble"></span>
-                            Transactions KV Mutate
-                          </a>
-                        </li>
-                      {{end}}
-
-                      {{/* Determine If JAVA Transactions N1QL Completed */}}
-                      {{if or (eq .Title "Transactions N1QL") (eq .Title "Upsert") (eq .Title "Search Query String") (eq .Title "Next Steps")}}
-                        <li class="completed">
-                          <a href="/examples/basic-{{.Lang}}-txn-n1ql{{if .Session}}?s={{.Session.SessionId}}{{end}}">
-                            <span class="bubble"></span>
-                            Transactions N1QL
-                          </a>
-                        </li>
-                      {{else}}
-                        <li>
-                          <a href="/examples/basic-{{.Lang}}-txn-n1ql{{if .Session}}?s={{.Session.SessionId}}{{end}}">
-                            <span class="bubble"></span>
-                            Transactions N1QL
-                          </a>
-                        </li>
-                      {{end}}
-                  {{end}}
-
-
-                  {{/* Determine If Upsert Completed */}}
-                  {{if or (eq .Title "Upsert") (eq .Title "Search Query String") (eq .Title "Next Steps")}}
+                  {{/* Determine If Search 2 - Find Tracks */}}
+                  {{if or (eq .Title "Search 2 - Find Tracks") (eq .Title "Next Steps")}}
                     <li class="completed">
-                      <a href="/examples/basic-{{.Lang}}-upsert{{if .Session}}?s={{.Session.SessionId}}{{end}}">
+                      <a href="/examples/basic-{{.Lang}}-search-find-tracks{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                         <span class="bubble"></span>
-                        Upsert
+                        Lab 5: Search 2
                       </a>
                     </li>
                   {{else}}
                     <li>
-                      <a href="/examples/basic-{{.Lang}}-upsert{{if .Session}}?s={{.Session.SessionId}}{{end}}">
+                      <a href="/examples/basic-{{.Lang}}-search-find-tracks{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                         <span class="bubble"></span>
-                        Upsert
+                        Lab 5: Search 2
                       </a>
                     </li>
                   {{end}}
 
-
-                  {{/* Determine If Search Query String Completed */}}
-                  {{if or (eq .Title "Search Query String") (eq .Title "Next Steps")}}
-                    <li class="completed">
-                      <a href="/examples/basic-{{.Lang}}-search-query-string{{if .Session}}?s={{.Session.SessionId}}{{end}}">
-                        <span class="bubble"></span>
-                        Search Query String
-                      </a>
-                    </li>
-                  {{else}}
-                    <li>
-                      <a href="/examples/basic-{{.Lang}}-search-query-string{{if .Session}}?s={{.Session.SessionId}}{{end}}">
-                        <span class="bubble"></span>
-                        Search Query String
-                      </a>
-                    </li>
-                  {{end}}
+  
 
                   {{/* Determine If Next Steps Completed */}}
                   {{if (eq .Title "Next Steps")}}

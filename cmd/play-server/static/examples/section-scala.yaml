@@ -1,7 +1,0 @@
-title: ' Scala'
-page: page-08
-links:
-  - url: https://docs.couchbase.com/sdk-api/couchbase-scala-client/
-    title: API
-  - url: https://docs.couchbase.com/scala-sdk/current/hello-world/overview.html
-    title: docs

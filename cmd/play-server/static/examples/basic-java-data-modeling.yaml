@@ -1,10 +1,10 @@
-title: Next Steps
+title: Data Modeling
 page: page-10
-lang: go
+lang: java
 infoBefore: |
   <div>
-  <a href='/examples/basic-go-search-query-string' class="prev-button" style="float:left">Previous</a>
-  <a href='#' class="disable next-button">Next</a>
+  <a href='/examples/basic-java-kv-insert' class="prev-button" style="float:left">Previous</a>
+    <a href='/examples/basic-java-query-playlist-for-username' class="next-button">Next</a>
   </div>
   <br>
 
@@ -12,9 +12,10 @@ code: NONE
 infoAfter: 
 infoAfter_capella: |
   <div class="next-steps">
-    <strong>Capella</strong>
+    <strong>Data Modeling Lab</strong>
     <div class="step-section">
-      Learn more about <a target="_blank" href="https://www.couchbase.com/products/capella">Couchbase Capella</a>, our database-as-a-service offering:
+      This lab exercise does not have a code component to it. Instead, return to
+      the lab instructions - lab 3 for instructions on how to proceed.
       <ul>
         <li>
           Take a look at the <a target="_blank" href="https://developer.couchbase.com/learn/capella">Capella Learning Path</a>!
@@ -26,16 +27,28 @@ infoAfter_capella: |
     <strong>Tutorials</strong>
     <div class="step-section">
       The <a target="_blank" href="https://developer.couchbase.com/">Couchbase Developer Portal</a> has tons of <a target="_blank" href="https://developer.couchbase.com/tutorials">tutorials/quickstart guides</a> and <a target="_blank" href="https://developer.couchbase.com/learn">learning paths</a> to help you get started!
-      <br>
-      <br>
+      <ul>
+        <li>
+          <a target="_blank" href="https://developer.couchbase.com/tutorial-quickstart-java-springboot">Java and Spring Data Tutorial</a>
+        </li>
+        <li>
+          <a target="_blank" href="https://developer.couchbase.com/tutorial-java-transactions">Java Transactions Tutorial</a>
+        </li>
+        <li>
+          <a target="_blank" href="https://developer.couchbase.com/learn/java">Java Learning Path</a>
+        </li>
+      </ul>
     </div>
 
 
     <strong>Training</strong>
     <div class="step-section">
-      Dive deeper into Couchbase with one of our <a target="_blank" href="https://learn.couchbase.com/store?utf8=%E2%9C%93&ss=1&ct=78327&commit=Filter">free training courses</a>.
+      Dive deeper into the Couchbase Java SDK with our free
+        <a target="_blank" href="https://learn.couchbase.com/store/1288710-cb130j-couchbase-associate-java-developer-certification-course-v7">Associate Java Developer course</a>.
       <br>
-      The <a target="_blank" href="https://learn.couchbase.com/store/2358679-cb131-couchbase-associate-architect-certification-course-v7">Associate Architect course</a> is a great language-agnostic starting point!
+      Check out our
+      <a target="_blank" href="https://learn.couchbase.com/store/2358679-cb131-couchbase-associate-architect-certification-course-v7">Associate Architect course</a>
+      for a language-agnostic crash course on using Couchbase!
       <br>
       See all training options <a target="_blank" href="https://www.couchbase.com/academy">here</a>.
     </div>
@@ -45,7 +58,6 @@ infoAfter_capella: |
     <br>
     Have feedback for us? We'd love to hear from you. Use the form in the footer to send us your thoughts!
   </div>
-
 infoAfter_sandbox: |
   <div class="next-steps">
     <strong>Capella</strong>
@@ -80,16 +92,28 @@ infoAfter_sandbox: |
     <strong>Tutorials</strong>
     <div class="step-section">
       The <a target="_blank" href="https://developer.couchbase.com/">Couchbase Developer Portal</a> has tons of <a target="_blank" href="https://developer.couchbase.com/tutorials">tutorials/quickstart guides</a> and <a target="_blank" href="https://developer.couchbase.com/learn">learning paths</a> to help you get started!
-      <br>
-      <br>
+      <ul>
+        <li>
+          <a target="_blank" href="https://developer.couchbase.com/tutorial-quickstart-java-springboot">Java and Spring Data Tutorial</a>
+        </li>
+        <li>
+          <a target="_blank" href="https://developer.couchbase.com/tutorial-java-transactions">Java Transactions Tutorial</a>
+        </li>
+        <li>
+          <a target="_blank" href="https://developer.couchbase.com/learn/java">Java Learning Path</a>
+        </li>
+      </ul>
     </div>
 
 
     <strong>Training</strong>
     <div class="step-section">
-      Dive deeper into Couchbase with one of our <a target="_blank" href="https://learn.couchbase.com/store?utf8=%E2%9C%93&ss=1&ct=78327&commit=Filter">free training courses</a>.
+      Dive deeper into the Couchbase Java SDK with our free
+        <a target="_blank" href="https://learn.couchbase.com/store/1288710-cb130j-couchbase-associate-java-developer-certification-course-v7">Associate Java Developer course</a>.
       <br>
-      The <a target="_blank" href="https://learn.couchbase.com/store/2358679-cb131-couchbase-associate-architect-certification-course-v7">Associate Architect course</a> is a great language-agnostic starting point!
+      Check out our
+      <a target="_blank" href="https://learn.couchbase.com/store/2358679-cb131-couchbase-associate-architect-certification-course-v7">Associate Architect course</a>
+      for a language-agnostic crash course on using Couchbase!
       <br>
       See all training options <a target="_blank" href="https://www.couchbase.com/academy">here</a>.
     </div>

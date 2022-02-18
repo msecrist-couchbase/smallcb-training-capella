@@ -1,7 +1,0 @@
-title: ' C++'
-page: page-10
-links:
-  - url: https://docs.couchbase.com/sdk-api/couchbase-c-client/
-    title: API
-  - url: https://docs.couchbase.com/c-sdk/current/hello-world/overview.html
-    title: docs

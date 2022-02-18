@@ -1,7 +1,0 @@
-title: ' Go'
-page: page-09
-links:
-  - url: https://pkg.go.dev/github.com/couchbase/gocb/v2
-    title: API
-  - url: https://docs.couchbase.com/go-sdk/current/hello-world/overview.html
-    title: docs

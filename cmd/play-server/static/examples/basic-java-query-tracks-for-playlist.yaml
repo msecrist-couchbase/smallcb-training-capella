@@ -1,0 +1,56 @@
+title: Find Tracks for Playlist
+page: page-01
+lang: java
+infoBefore: |
+  NOTE: Indexes must be defined before running these queries.<br><br>
+  <div>
+  <a href='/examples/basic-java-query-playlist-for-username' class="prev-button">Previous</a>
+  <a href='/examples/basic-java-search-find-users' class="next-button">Next</a>
+  </div>
+  <br>
+code: |
+  import com.couchbase.client.core.error.DocumentNotFoundException;
+  import com.couchbase.client.java.*;
+  import com.couchbase.client.java.kv.*;
+  import com.couchbase.client.java.json.JsonObject;
+  import com.couchbase.client.java.query.QueryResult;
+  import com.couchbase.client.java.query.QueryOptions;
+  import static com.couchbase.client.java.query.QueryOptions.queryOptions;
+  
+  class Program {
+    public static void main(String[] args) {
+      var cluster = Cluster.connect(
+        "couchbase://{{.Host}}", "{{.CBUser}}", "{{.CBPswd}}"
+      );
+
+      try {
+        var bucket = cluster.bucket("couchmusic2");
+        var scope = bucket.scope("couchify");
+        var query =
+               "SELECT track.* " +
+                "FROM playlist " +
+                "INNER JOIN track ON KEYS ARRAY trackId FOR trackId IN playlist.tracks END " +
+                "WHERE playlist.id = $playlistid ";
+                  
+        QueryResult result = scope.query(query,
+          queryOptions().parameters(
+            JsonObject.create()
+              .put("playlistid", "00011b74-12be-4e60-abbf-b1c8b9b40bfe")
+           )
+        );
+        System.out.println("Tracks for playlist: '00011b74-12be-4e60-abbf-b1c8b9b40bfe'");
+        result.rowsAsObject().stream().forEach(
+          e-> System.out.println(".  track: " + e.getString("title"))
+        );
+        
+      } catch (DocumentNotFoundException ex) {
+        System.out.println("Document not found!");
+      }
+    }
+  }
+infoAfter: |
+  This example demonstrates performing a join query as well as use of a named
+  parameter.
+  <br/><br/>
+  Visit the docs to learn more about
+  <a target="_blank" href="https://docs.couchbase.com/java-sdk/current/howtos/n1ql-queries-with-sdk.html">N1QL Queries with Java</a>.

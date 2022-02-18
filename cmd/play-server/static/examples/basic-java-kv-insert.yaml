@@ -1,0 +1,62 @@
+title: Key Value Insert
+page: page-01
+lang: java
+infoBefore: |
+  <div>
+  <a href='/examples/basic-java-kv-get' class="prev-button">Previous</a>
+  <a href='/examples/basic-java-data-modeling' class="next-button">Next</a>
+  </div>
+  <br>
+code: |
+  import com.couchbase.client.core.error.DocumentNotFoundException;
+  import com.couchbase.client.core.error.DocumentExistsException;
+  import com.couchbase.client.java.*;
+  import com.couchbase.client.java.kv.*;
+  import com.couchbase.client.java.kv.MutationResult;
+  import com.couchbase.client.java.json.JsonObject;
+  import com.couchbase.client.java.kv.LookupInResult;
+  import static com.couchbase.client.java.kv.LookupInSpec.get;
+  import static com.couchbase.client.java.kv.MutateInSpec.upsert;
+  import java.util.Collections;
+  
+  class Program {
+    public static void main(String[] args) {
+      var cluster = Cluster.connect(
+        "couchbase://{{.Host}}", "{{.CBUser}}", "{{.CBPswd}}"
+      );
+      var bucket = cluster.bucket("couchmusic2");
+      var scope = bucket.scope("couchify");
+      var collection = scope.collection("country");
+
+      JsonObject content = JsonObject.create()
+        .put("countryCode", "YY")
+        .put("name", "New Country - Java")
+        .put("gdp", 40255)
+        .put("region-number", 39)
+        .put("population", 80999)
+        .put("updated", "2021-01-05T07:35:13")
+        .put("type", "country");
+
+      try {
+        collection.insert("country::YY", content);
+          
+        LookupInResult lookupResult = collection.lookupIn(
+          "country::YY", Collections.singletonList(get("name"))
+        );
+  
+        var str = lookupResult.contentAs(0, String.class);
+        System.out.println("New Document name = " + str);
+        
+      } catch (DocumentNotFoundException ex) {
+        System.out.println("Document not found!");
+      } catch (DocumentExistsException ex) {
+        System.out.println("Document already exists");
+      }
+      
+    }
+  }
+infoAfter: |
+  We insert and then retrieve our document using a basic insert and sub-document fetch to retrieve the document name.
+  <br/><br/>
+  See more at the SDK documentation on
+  <a target="_blank" href="https://docs.couchbase.com/java-sdk/current/howtos/kv-operations.html">Java Key Value Operations</a>.
