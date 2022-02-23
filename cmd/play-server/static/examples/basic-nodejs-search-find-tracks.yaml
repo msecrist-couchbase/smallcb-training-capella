@@ -1,0 +1,49 @@
+title: Search 2 - Find Tracks
+page: page-03
+lang: nodejs
+infoBefore: |
+  NOTE: A Search index must be defined before running this search and it must be called <em>couchmusic2-track-title</em>.<br><br>
+  <div>
+  <a href='/examples/basic-nodejs-search-find-users
+  ' class="prev-button">Previous</a>
+  <a href='/examples/basic-nodejs-next-steps' class="next-button" style="float:right">Next</a>
+
+  </div>
+  <br>
+code: |
+  const couchbase = require('couchbase')
+
+  const cluster = new couchbase.Cluster('couchbase://{{.Host}}', {
+    username: '{{.CBUser}}', password: '{{.CBPswd}}'
+  })
+
+  const couchmusic2 = cluster.bucket('couchmusic2')
+  const collection = couchmusic2.defaultCollection()
+
+  const searchUsersByGenre = async (genreKey) => {
+    try {
+      const result = await cluster.searchQuery(
+        "couchmusic2-track-title",
+        couchbase.SearchQuery.match(genreKey),
+        { fields: ["title","artist"] }
+      )
+      
+      // Process results
+      result.rows.forEach((hit) => {
+            const fields = hit.fields
+            console.log(`Song title: ${fields.title} - Artist: ${fields.artist}`)
+      })
+      
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  searchUsersByGenre('rose')
+    .then(() => process.exit(0))
+    
+infoAfter: |
+  A Full-text search example using a search term and adding additional fields.
+  <br/><br/>
+  Visit the docs to learn more about
+  <a target="_blank" href="https://docs.couchbase.com/nodejs-sdk/current/howtos/full-text-searching-with-sdk.html">Full Text Search in Node</a>.

@@ -1,0 +1,53 @@
+title: Find Playlists for username
+page: page-01
+lang: nodejs
+infoBefore: |
+  NOTE: Indexes must be defined before running these queries.<br><br>
+  <div>
+  <a href='/examples/basic-nodejs-data-modeling' class="prev-button">Previous</a>
+  <a href='/examples/basic-nodejs-query-tracks-for-playlist' class="next-button">Next</a>
+  </div>
+  <br>
+code: |
+  const couchbase = require('couchbase')
+  
+  const cluster = new couchbase.Cluster('couchbase://{{.Host}}', {
+    username: '{{.CBUser}}', password: '{{.CBPswd}}'
+  })
+  
+  const bucket = cluster.bucket('couchmusic2')
+  const scope = bucket.scope('couchify')
+
+  const getPlaylistsForUser = async (username) => {
+    try {
+      const query = `
+        SELECT playlist.*
+        FROM playlist
+        WHERE owner.username = $USERNAME;
+      `
+      const options = {
+        parameters: {
+          USERNAME: username
+        }
+      }
+      const result = await scope.query(query, options)
+      console.log('Query Result: ')
+      result.rows.forEach((row) => {
+          console.log('Playlist Name: ', row.name, ', Track count: ', row.tracks.length)
+        })
+    } catch (error) {
+      console.error(error)
+    }
+  }
+  
+  getPlaylistsForUser('stockadeseffusing18695')
+    .then(() => process.exit(0))
+infoAfter: |
+  This example uses named parameters passed to the cluster.query()
+  method to find all playlist documents for user having the specified
+  username.
+  This example also shows handling of query results by iterating over each
+  result item and printing select elements.
+  <br/><br/>
+  Visit the docs to learn more about
+  <a target="_blank" href="https://docs.couchbase.com/nodejs-sdk/current/howtos/n1ql-queries-with-sdk.html">N1QL Queries with Node.js</a>.

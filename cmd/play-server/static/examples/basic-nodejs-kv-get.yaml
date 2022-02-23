@@ -4,16 +4,17 @@ lang: nodejs
 infoBefore: |
   <div>
   <a href='#' class="disable prev-button" style="float:left">Previous</a>
-  <a href='/examples/basic-nodejs-query-rows' class="next-button">Next</a>
+    <a href='/examples/basic-nodejs-kv-insert' class="next-button">Next</a>
   </div>
   <br>
 code: |
   const couchbase = require('couchbase')
-
+  
+  // Connect to the cluster
   const cluster = new couchbase.Cluster('couchbase://{{.Host}}', {
     username: '{{.CBUser}}', password: '{{.CBPswd}}'
   })
-
+  
   // Obtain the bucket and collection
   const bucket = cluster.bucket('couchmusic2')
   const scope = bucket.scope('couchify');
@@ -37,8 +38,9 @@ code: |
 
   getDocument('00003466BBCDD2242E13D71F075D01458B8910FE')
     .then(() => process.exit(0))
+
 infoAfter: |
-  Given a document's key, you can use the collection.get() method to retrieve a document from a collection.
+  If we know a document's key value, we can use the collection.get() method passing a key. This returns one document.
   <br/><br/>
   See more at the SDK documentation on
   <a target="_blank" href="https://docs.couchbase.com/nodejs-sdk/current/howtos/kv-operations.html">Node.js Key Value Operations</a>.

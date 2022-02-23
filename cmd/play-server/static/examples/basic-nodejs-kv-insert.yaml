@@ -1,0 +1,71 @@
+title: Key Value Insert
+page: page-03
+lang: nodejs
+infoBefore: |
+  <div>
+  <a href='#' class="disable prev-button" style="float:left">Previous</a>
+    <a href='/examples/basic-nodejs-data-modeling' class="next-button">Next</a>
+  </div>
+  <br>
+code: |
+  const couchbase = require('couchbase')
+  
+  const cluster = new couchbase.Cluster('couchbase://{{.Host}}', {
+    username: '{{.CBUser}}', password: '{{.CBPswd}}'
+  })
+  
+  const bucket = cluster.bucket('couchmusic2')
+  const scope = bucket.scope('couchify')
+  const collection = scope.collection('country')
+
+  const country = {
+    countryCode: 'YY', name: 'New Country - Node.js',
+    gdp: 40255, regionNumber: 39, population: 80999,
+    updated: '2021-01-05T07:35:13', type: 'country'
+  }
+
+  const insertDocument = async (type, id, doc) => {
+    try {
+      const insertResult = await collection.insert(`${id}`, doc);
+      console.log('Insert Result: ')
+      console.log(insertResult)
+    } catch (err) {
+      if (err instanceof couchbase.DocumentExistsError) {
+          console.error("Document already exists!")
+      } else {
+          console.error(err)
+      }
+    }
+  }
+
+  const getSubDocument = async (key, field) => {
+    try {
+      var result = await collection.lookupIn(key, [
+        couchbase.LookupInSpec.get(field),
+      ])
+      var fieldValue = result.content[0].value
+
+      console.log('LookupIn Result: ')
+      console.log(result)
+
+      console.log('Field Value: ')
+      console.log(fieldValue)
+    } catch (error) {
+      if (err instanceof couchbase.DocumentNotFoundError) {
+          console.error("Document not found!")
+      } else {
+          console.error(err)
+      }
+    }
+  }
+
+  insertDocument(country.type, country.countryCode, country)
+    .then(
+      getSubDocument('YY', 'name')
+        .then(() => process.exit(0))
+    )
+infoAfter: |
+  We insert and then retrieve our document using a basic subdocument lookup
+  <br/><br/>
+  See more at the SDK documentation on
+  <a target="_blank" href="https://docs.couchbase.com/nodejs-sdk/current/howtos/kv-operations.html">Node.js Key Value Operations</a>.
