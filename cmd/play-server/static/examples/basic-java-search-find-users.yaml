@@ -17,11 +17,11 @@ code: |
   import static com.couchbase.client.java.search.SearchOptions.*;
   
   class Program {
-     static Cluster cluster = Cluster.connect(
-               "couchbase://{{.Host}}", "{{.CBUser}}", "{{.CBPswd}}"
-            );
 
     public static void main(String[] args) {
+      var cluster = Cluster.connect(
+        "couchbase://{{.Host}}", "{{.CBUser}}", "{{.CBPswd}}"
+      );
 
       try {
         var searchString = "rock";

@@ -38,10 +38,10 @@ code: |
         .put("type", "country");
 
       try {
-        collection.insert("country::YY", content);
+        collection.insert("YY", content);
           
         LookupInResult lookupResult = collection.lookupIn(
-          "country::YY", Collections.singletonList(get("name"))
+          "YY", Collections.singletonList(get("name"))
         );
   
         var str = lookupResult.contentAs(0, String.class);

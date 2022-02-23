@@ -17,24 +17,23 @@ code: |
   import static com.couchbase.client.java.search.SearchOptions.*;
   
   class Program {
-     static Cluster cluster = Cluster.connect(
-               "couchbase://{{.Host}}", "{{.CBUser}}", "{{.CBPswd}}"
-            );
 
     public static void main(String[] args) {
+      var cluster = Cluster.connect(
+        "couchbase://{{.Host}}", "{{.CBUser}}", "{{.CBPswd}}"
+      );
 
       try {
-        var searchString = "rock";
+        var searchString = "rose";
         
         final SearchResult result =
-              cluster.searchQuery("couchmusic2-index-userprofile-genres", SearchQuery.match(searchString).fuzziness(0) );
+              cluster.searchQuery("couchmusic2-track-title", SearchQuery.match(searchString).fuzziness(0),
+                  searchOptions().fields("title","artist"));
             
         for (SearchRow row : result.rows()) {
-                 var docId = row.id();
-                 var score = row.score();
-                 var fields = row.fieldsAs(JsonObject.class);
-                 System.out.println("Id: " + docId + " - Score: " + score + " - Fields: " + fields);
-        }
+           var fields = row.fieldsAs(JsonObject.class);
+           System.out.println("Song title: " + fields.getString("title") +
+                        " - Artist: " + fields.getString("artist"));        }
         
         System.out.println("Reported total rows: "
           + result.metaData().metrics().totalRows());
