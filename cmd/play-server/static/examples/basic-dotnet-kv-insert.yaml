@@ -1,0 +1,70 @@
+title: Key Value Insert
+page: page-05
+lang: dotnet
+infoBefore: |
+  <div>
+  <a href='#' class="disable prev-button" style="float:left">Previous</a>
+  <a href='/examples/basic-dotnet-data-modeling' class="next-button">Next</a>
+  </div>
+  <br>
+code: |
+  using System;
+  using System.Collections.Generic;
+  using System.Threading.Tasks;
+  using Couchbase;
+  using Couchbase.Core.Exceptions.KeyValue;
+  using Couchbase.KeyValue;
+
+  namespace CouchbaseDotNetExample
+  {
+      class Program
+      {
+          static async Task Main(string[] args)
+          {
+              var cluster = await Cluster.ConnectAsync(
+                  "couchbase://{{.Host}}", "{{.CBUser}}", "{{.CBPswd}}"
+              );
+              var bucket = await cluster.BucketAsync("couchmusic2");
+              var scope = bucket.Scope("couchify");
+              var collection = scope.Collection("country");
+
+              var content = new
+              {
+                  countryCode = "YY",
+                  name = "New Country - .NET",
+                  gdp = 40255,
+                  regionNumber = 39,
+                  population = 80999,
+                  updated = "2021-01-05T07:35:13",
+                  type = "country"
+              };
+
+              try
+              {
+                  await collection.InsertAsync("YY", content);
+
+                  var lookupResult = await collection.LookupInAsync("YY",
+                      new List<LookupInSpec>
+                      {
+                          LookupInSpec.Get("name")
+                      });
+
+                  var name = lookupResult.ContentAs<string>(0);
+                  Console.WriteLine($"New Document name = {name}");
+
+              } catch (DocumentNotFoundException) {
+                  Console.WriteLine("Document not found!");
+              } catch (DocumentExistsException) {
+                  Console.WriteLine("Document already exists");
+              }
+
+              await cluster.DisposeAsync();
+          }
+      }
+  }
+infoAfter: |
+  If we know a document's key value, we can use the collection.GetAsync(...) method
+  passing a key. This returns a JSON result, which can be mapped to any type (including dynamic).
+  <br/><br/>
+  See more at the SDK documentation on
+  <a target="_blank" href="https://docs.couchbase.com/dotnet-sdk/current/howtos/kv-operations.html">.NET Key Value Operations</a>.

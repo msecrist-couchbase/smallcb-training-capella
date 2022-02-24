@@ -1,0 +1,34 @@
+title: Data Modeling
+page: page-10
+lang: dotnet
+infoBefore: |
+  <div>
+  <a href='/examples/basic-dotnet-kv-insert' class="prev-button" style="float:left">Previous</a>
+    <a href='/examples/basic-dotnet-query-playlist-for-username' class="next-button">Next</a>
+  </div>
+  <br>
+
+code: NONE
+infoAfter: 
+infoAfter_capella: |
+  <div class="next-steps">
+    <strong>Data Modeling Lab</strong>
+    <div class="step-section">
+      This lab exercise does not have a code component to it. Instead, return to
+      the lab instructions - lab 3 for instructions on how to proceed.
+      <ul>
+        <li>
+          Take a look at the <a target="_blank" href="https://developer.couchbase.com/learn/capella">Capella Learning Path</a>!
+        </li>
+      </ul>
+    </div>
+
+
+
+    <br>
+    <a target="_blank" href="https://docs.couchbase.com/home/sdk.html">See the documentation</a> to learn more about the Couchbase SDKs.
+    <br>
+    <br>
+    Have feedback for us? We'd love to hear from you. Use the form in the footer to send us your thoughts!
+  </div>
+

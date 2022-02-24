@@ -1,0 +1,54 @@
+title: Find Tracks for Playlist
+page: page-01
+lang: dotnet
+infoBefore: |
+  NOTE: Indexes must be defined before running these queries.<br><br>
+  <div>
+  <a href='/examples/basic-dotnet-query-playlist-for-username' class="prev-button">Previous</a>
+  <a href='/examples/basic-dotnet-search-find-users' class="next-button">Next</a>
+  </div>
+  <br>
+code: |
+  using System;
+  using System.Threading.Tasks;
+  using Couchbase;
+  using Couchbase.Query;
+
+  namespace CouchbaseDotNetExample
+  {
+    class Program
+    {
+      static async Task Main(string[] args) {
+        var cluster = await Cluster.ConnectAsync(
+          "couchbase://{{.Host}}", "{{.CBUser}}", "{{.CBPswd}}"
+        );
+        
+        var bucket = await cluster.BucketAsync("couchmusic2");
+        var scope = bucket.Scope("couchify");
+
+        var query =
+       "SELECT track.* " +
+        "FROM playlist " +
+        "INNER JOIN track ON KEYS ARRAY trackId FOR trackId IN playlist.tracks END " +
+        "WHERE playlist.id = $playlistid ";
+          
+        var result = await scope.QueryAsync<dynamic>(
+          query, new QueryOptions().Parameter("playlistid", "00011b74-12be-4e60-abbf-b1c8b9b40bfe")
+        );
+        if (result.MetaData.Status == QueryStatus.Success) {
+         Console.WriteLine("Tracks for playlist: '00011b74-12be-4e60-abbf-b1c8b9b40bfe'");
+          await foreach (var row in result.Rows) {
+            Console.WriteLine($". {row.title}");
+          }
+        }
+        await cluster.DisposeAsync();
+      }
+    }
+  }
+infoAfter: |
+  Placeholders allow you to specify variable constraints for a query.
+  This method allows you to use named parameters, pass them to
+  cluster.queryAsync() method by query and options. 
+  <br/><br/>
+  Visit the docs to learn more about
+  <a target="_blank" href="https://docs.couchbase.com/dotnet-sdk/current/howtos/n1ql-queries-with-sdk.html">N1QL Queries with .NET</a>.

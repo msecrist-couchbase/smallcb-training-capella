@@ -1,0 +1,60 @@
+title: Search 2 - Find Tracks
+page: page-05
+lang: dotnet
+infoBefore: |
+  NOTE: A Search index must be defined before running this search and it must be called <em>couchmusic2-track-title</em>.<br><br><div>
+  <a href='/examples/basic-dotenet-search-find-users' class="prev-button">Previous</a>
+  <a href='/examples/basic-dotnet-next-steps' class="next-button" style="float:right">Next</a>
+  </div>
+  <br>
+code: |
+  using System;
+  using System.Threading.Tasks;
+  using Couchbase;
+  using Couchbase.Query;
+  using Couchbase.Search.Queries.Simple ;
+
+  namespace CouchbaseDotNetExample
+  {
+    class Program
+    {
+      
+      static async Task Main(string[] args) {
+        var cluster = await Cluster.ConnectAsync(
+          "couchbase://{{.Host}}", "{{.CBUser}}", "{{.CBPswd}}"
+        );
+
+        var bucket = await cluster.BucketAsync("couchmusic2");
+        var collection = bucket.DefaultCollection();
+
+        try {
+           var searchString = "rose";
+           
+            var result = await cluster.SearchQueryAsync(
+                       "couchmusic2-track-title",
+                       new MatchQuery(searchString).Fuzziness(0),
+                       options => {
+                           options.Fields("title", "artist");
+                       }
+                   );
+           
+           foreach (var hit in result.Hits)
+           {
+               var title = hit.Fields["title"];
+               var artist = hit.Fields["artist"];
+               Console.WriteLine($"Song title: {title} - Artist: {artist}");
+           }
+           
+        } catch (CouchbaseException ex) {
+           Console.WriteLine("Exception encountered: ", ex);
+        }
+
+        await cluster.DisposeAsync();
+      }
+    }
+  }
+infoAfter: |
+  A Full-text search example using a search term and fuzziness.
+  <br/><br/>
+  Visit the docs to learn more about
+  <a target="_blank" href="https://docs.couchbase.com/dotnet-sdk/current/howtos/full-text-searching-with-sdk.html">Full Text Search in .NET</a>.

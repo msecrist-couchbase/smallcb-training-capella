@@ -1,0 +1,59 @@
+title: Find Playlists for username
+page: page-01
+lang: dotnet
+infoBefore: |
+  NOTE: Indexes must be defined before running these queries.<br><br>
+  <div>
+  <a href='/examples/basic-dotnet-data-modeling' class="prev-button">Previous</a>
+  <a href='/examples/basic-dotnet-query-tracks-for-playlist' class="next-button">Next</a>
+  </div>
+  <br>
+code: |
+  using System;
+  using System.Threading.Tasks;
+  using Couchbase;
+  using Couchbase.Query;
+
+  namespace CouchbaseDotNetExample
+  {
+    class Program
+    {
+      static async Task Main(string[] args) {
+        var cluster = await Cluster.ConnectAsync(
+          "couchbase://{{.Host}}", "{{.CBUser}}", "{{.CBPswd}}"
+        );
+        var bucket = await cluster.BucketAsync("couchmusic2");
+        var scope = bucket.Scope("couchify");
+
+        var query =
+          "SELECT playlist.* " +
+           "FROM `playlist` " +
+          "WHERE owner.username = $username " ;
+          
+        var result = await scope.QueryAsync<dynamic>(
+                query,
+                new QueryOptions().Parameter("username", "stockadeseffusing18695")
+            );
+        //var result = await scope.QueryAsync<dynamic>(
+        //  query, options => options
+        //    .Parameter("username", "stockadeseffusing18695")
+        //);
+        if (result.MetaData.Status == QueryStatus.Success) {
+          Console.WriteLine("Results:");
+          await foreach (var row in result.Rows) {
+            Console.WriteLine($"Playlist name: {row.name}, Track count: {row.tracks.Count}");
+          }
+        }
+        await cluster.DisposeAsync();
+      }
+    }
+  }
+infoAfter: |
+  This example uses named parameters passed to the cluster.query()
+  method to find all playlist documents for user having the specified
+  username.
+  This example also shows handling of query results by iterating over each
+  result item and printing select elements.
+  <br/><br/>
+  Visit the docs to learn more about
+  <a target="_blank" href="https://docs.couchbase.com/dotnet-sdk/current/howtos/n1ql-queries-with-sdk.html">N1QL Queries with .NET</a>.

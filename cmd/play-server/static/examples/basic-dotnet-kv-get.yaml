@@ -4,7 +4,7 @@ lang: dotnet
 infoBefore: |
   <div>
   <a href='#' class="disable prev-button" style="float:left">Previous</a>
-  <a href='/examples/basic-dotnet-query-rows' class="next-button">Next</a>
+  <a href='/examples/basic-dotnet-kv-insert' class="next-button">Next</a>
   </div>
   <br>
 code: |
@@ -19,10 +19,10 @@ code: |
     {
       static async Task Main(string[] args)
       {
+        // Connect to the cluster
         var cluster = await Cluster.ConnectAsync(
           "couchbase://{{.Host}}", "{{.CBUser}}", "{{.CBPswd}}"
         );
-
         // Obtain the bucket and collection
         var bucket = await cluster.BucketAsync("couchmusic2");
         var scope = bucket.Scope("couchify");
@@ -44,7 +44,8 @@ code: |
     }
   }
 infoAfter: |
-  Given a document's key, you can use the collection.GetAsync() method to retrieve a document from a collection.
+  If we know a document's key value, we can use the collection.GetAsync(...) method
+  passing a key. This returns a JSON result, which can be mapped to any type (including dynamic).
   <br/><br/>
   See more at the SDK documentation on
   <a target="_blank" href="https://docs.couchbase.com/dotnet-sdk/current/howtos/kv-operations.html">.NET Key Value Operations</a>.
