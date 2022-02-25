@@ -1,0 +1,39 @@
+title: Search 1 - Find Users
+page: page-04
+lang: py
+infoBefore: |
+  NOTE: A Search index must be defined before running this search and it must be called <em>couchmusic2-index-userprofile-genres</em>.<br><br>
+  <div>
+  <a href='/examples/basic-py-query-tracks-for-playlist' class="prev-button">Previous</a>
+  <a href='/examples/basic-py-search-find-tracks' class="next-button" style="float:right">Next</a>
+  </div>
+  <br>
+code: |
+  #!/usr/bin/python3
+  
+  import sys
+  import traceback
+
+  from couchbase.cluster import Cluster, ClusterOptions
+  from couchbase_core.cluster import PasswordAuthenticator
+  from couchbase.exceptions import CouchbaseException
+  from couchbase.search import MatchQuery
+
+  pa = PasswordAuthenticator('{{.CBUser}}', '{{.CBPswd}}')
+  cluster = Cluster('couchbase://{{.Host}}', ClusterOptions(pa))
+  bucket = cluster.bucket('couchmusic2')
+
+  try:
+      result = cluster.search_query("couchmusic2-index-userprofile-genres",
+                                     MatchQuery("rock",fuzziness= 0))
+      for row in result.rows():
+                  print ("Id: ", row.id , "- Score: ", row.score, "- Fields: ", row.fields)
+
+  except CouchbaseException as ce:
+     print("Got unhandled Couchbase exception: ", ce)
+
+infoAfter: |
+  A Full-text search example using a search term and fuzziness.
+  <br/><br/>
+  Visit the docs to learn more about
+  <a target="_blank" href="https://docs.couchbase.com/python-sdk/current/howtos/full-text-searching-with-sdk.html">Full Text Search in Python</a>.

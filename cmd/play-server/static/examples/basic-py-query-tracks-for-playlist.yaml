@@ -1,0 +1,51 @@
+title: Find Tracks for Playlist
+page: page-04
+lang: py
+infoBefore: |
+  NOTE: Indexes must be defined before running these queries.<br><br>
+  <div>
+  <a href='/examples/basic-py-playlist-for-username' class="prev-button">Previous</a>
+  <a href='/examples/basic-py-search-find-users' class="next-button">Next</a>
+  </div>
+  <br>
+code: |
+  #!/usr/bin/python3
+  
+  import sys
+  
+  from couchbase.cluster import Cluster, ClusterOptions
+  from couchbase_core.cluster import PasswordAuthenticator
+  
+  pa = PasswordAuthenticator('{{.CBUser}}', '{{.CBPswd}}')
+  
+  cluster = Cluster('couchbase://{{.Host}}', ClusterOptions(pa))
+  bucket = cluster.bucket('couchmusic2')
+  scope = bucket.scope('couchify')
+
+  query = """
+    SELECT track.*
+    FROM playlist
+    INNER JOIN track ON KEYS ARRAY trackId FOR trackId IN playlist.tracks END
+    WHERE playlist.id = $playlistid
+  """
+
+  try:
+    result = scope.query(query, playlistid='00011b74-12be-4e60-abbf-b1c8b9b40bfe')
+  
+    print ("Tracks for playlist: 00011b74-12be-4e60-abbf-b1c8b9b40bfe")
+    for row in result:
+      # each row is an instance of the query call
+      print(".  track: ", row['title'])
+
+  
+  except:
+    print("exception:", sys.exc_info()[0])
+infoAfter: |
+  Basic N1QL query, expected to return one to many rows, we loop
+  through them and print each one.
+   <br/><br/>
+  Be sure the indexes have been created per the
+  <a target="_blank" href="https://e-learning-labs.s3-us-west-2.amazonaws.com/cb131-lab-instructions/04-n1ql-querying.html">lab instructions</a> for lab 4.
+  <br/><br/>
+  Visit the docs to learn more about
+  <a target="_blank" href="https://docs.couchbase.com/python-sdk/current/howtos/n1ql-queries-with-sdk.html">N1QL Queries with Python</a>.

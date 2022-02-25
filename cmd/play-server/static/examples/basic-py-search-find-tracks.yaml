@@ -1,0 +1,43 @@
+title: Search 2 - Find Tracks
+page: page-04
+lang: py
+infoBefore: |
+  NOTE: A Search index must be defined before running this search and it must be called <em>couchmusic2-track-title</em>.<br><br>  <div>
+  <a href='/examples/basic-py-search-find-users' class="prev-button">Previous</a>
+  <a href='/examples/basic-py-next-steps' class="next-button" style="float:right">Next</a>
+  </div>
+  <br>
+code: |
+  #!/usr/bin/python3
+  
+  import sys
+  import traceback
+
+  from couchbase.cluster import Cluster, ClusterOptions
+  from couchbase_core.cluster import PasswordAuthenticator
+  from couchbase.exceptions import CouchbaseException
+  from couchbase.search import MatchQuery
+  from couchbase.search import SearchOptions
+
+  pa = PasswordAuthenticator('{{.CBUser}}', '{{.CBPswd}}')
+  cluster = Cluster('couchbase://{{.Host}}', ClusterOptions(pa))
+  bucket = cluster.bucket('couchmusic2')
+
+  try:
+      result = cluster.search_query("couchmusic2-track-title",
+                                     MatchQuery("rose"),
+                                     SearchOptions(fields=["title","artist"]))
+
+      for row in result.rows():
+                  #print (row)
+                  print ("Song Title: ", row.fields['title'], " - Artist: ", row.fields['artist'])
+
+
+  except CouchbaseException as ce:
+     print("Got unhandled Couchbase exception: ", ce)
+
+infoAfter: |
+  A Full-text search example using a search term and including an additional field.
+  <br/><br/>
+  Visit the docs to learn more about
+  <a target="_blank" href="https://docs.couchbase.com/python-sdk/current/howtos/full-text-searching-with-sdk.html">Full Text Search in Python</a>.

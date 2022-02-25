@@ -1,0 +1,62 @@
+title: Key Value Insert
+page: page-04
+lang: py
+infoBefore: |
+  <div>
+  <a href='/examples/basic-py-kv-get' class="prev-button">Previous</a>
+  <a href='/examples/basic-py-data-modeling' class="next-button">Next</a>
+  </div>
+  <br>
+code: |
+  #!/usr/bin/python3
+  import sys
+  import couchbase.collection
+  import couchbase.subdocument as SD
+  from couchbase.cluster import Cluster, ClusterOptions
+  from couchbase_core.cluster import PasswordAuthenticator
+  from couchbase.durability import ServerDurability, Durability
+  from couchbase.exceptions import CouchbaseException
+  from couchbase.exceptions import DocumentNotFoundException
+  from couchbase.exceptions import DocumentExistsException
+
+  from datetime import timedelta
+
+  pa = PasswordAuthenticator('{{.CBUser}}', '{{.CBPswd}}')
+  cluster = Cluster('couchbase://{{.Host}}', ClusterOptions(pa))
+  bucket = cluster.bucket('couchmusic2')
+  scope = bucket.scope('couchify')
+  collection = scope.collection('country')
+  try:
+    document = dict(
+       countryCode="YY", name="New Country - Python",
+       gdp=40255, regionNumber=39, population=80999,
+       updated="2021-01-05T07:35:13", type="country"
+    )
+    result = collection.insert(
+      'YY',
+      document
+    )
+    print("INSERT SUCCESS")
+    print("cas result: ", result.cas)
+  except DocumentExistsException as e:
+        print("Document already exists")
+  except CouchbaseException as ce:
+        print("Got unhandled Couchbase exception: ", ce)
+  except:
+    print("Unexpected error:", sys.exc_info()[0])
+    raise
+    
+  try:
+    result = collection.lookup_in('YY', [SD.get('name')])
+    name = result.content_as[str](0) # "United Kingdom"
+    print("name: ", name)
+
+  except DocumentNotFoundException as e:
+        print("Document not found")
+  except CouchbaseException as ce:
+        print("Got unhandled Couchbase exception: ", ce)
+infoAfter: |
+  We insert and then retrieve our document using a basic subdocument lookup.
+  <br/><br/>
+  See more at the SDK documentation on
+  <a target="_blank" href="https://docs.couchbase.com/python-sdk/current/howtos/kv-operations.html">Python Key Value Operations</a>.

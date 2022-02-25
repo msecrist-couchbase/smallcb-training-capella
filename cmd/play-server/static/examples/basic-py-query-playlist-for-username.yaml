@@ -1,0 +1,50 @@
+title: Find Playlists for username
+page: page-04
+lang: py
+infoBefore: |
+  NOTE: Indexes must be defined before running these queries.<br><br>
+  <div>
+  <a href='/examples/basic-py-data-modeling' class="prev-button">Previous</a>
+  <a href='/examples/basic-py-query-tracks-for-playlist' class="next-button">Next</a>
+  </div>
+  <br>
+code: |
+  #!/usr/bin/python3
+  
+  import sys
+  
+  from couchbase.cluster import Cluster, ClusterOptions
+  from couchbase_core.cluster import PasswordAuthenticator
+  
+  pa = PasswordAuthenticator('{{.CBUser}}', '{{.CBPswd}}')
+  
+  cluster = Cluster('couchbase://{{.Host}}', ClusterOptions(pa))
+  bucket = cluster.bucket('couchmusic2')
+  scope = bucket.scope('couchify')
+  
+  query = """
+    SELECT playlist.* from playlist
+    WHERE owner.username = $username
+  """
+  
+  try:
+    result = scope.query(query, type='playlist', username='stockadeseffusing18695')
+  
+    for row in result:
+      # each row is an instance of the query call
+      print("Playlist Name: ", row['name'], ", Track count", len(row['tracks']) )
+  
+  except:
+    print("exception:", sys.exc_info()[0])
+infoAfter: |
+  This example uses named parameters passed to the cluster.query()
+  method to find all playlist documents for user having the specified
+  username.
+  This example also shows handling of query results by iterating over each
+  result item and printing out.
+   <br/><br/>
+  Be sure the indexes have been created per the
+  <a target="_blank" href="https://e-learning-labs.s3-us-west-2.amazonaws.com/cb131-lab-instructions/04-n1ql-querying.html">lab instructions</a> for lab 4.
+  <br/><br/>
+  Visit the docs to learn more about
+  <a target="_blank" href="https://docs.couchbase.com/python-sdk/current/howtos/n1ql-queries-with-sdk.html">N1QL Queries with Python</a>.

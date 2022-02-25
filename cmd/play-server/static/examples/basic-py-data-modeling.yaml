@@ -1,0 +1,26 @@
+title: Data Modeling
+page: page-10
+lang: py
+infoBefore: |
+  <div>
+  <a href='/examples/basic-py-kv-insert' class="prev-button" style="float:left">Previous</a>
+    <a href='/examples/basic-py-query-playlist-for-username' class="next-button">Next</a>
+  </div>
+  <br>
+
+code: NONE
+infoAfter: 
+infoAfter_capella: |
+  <div class="next-steps">
+    <strong>Data Modeling Lab</strong>
+    <div class="step-section">
+      This lab exercise does not have a code component to it. Instead, return to
+      the <a target="_blank" href="https://e-learning-labs.s3-us-west-2.amazonaws.com/cb131-lab-instructions/03-data-modeling.html">lab instructions</a> - lab 3 for instructions on how to proceed.
+    </div>
+
+
+    <br>
+    <strong>Other references</strong><br>
+    <a target="_blank" href="https://docs.couchbase.com/home/sdk.html">See the documentation</a> to learn more about the Couchbase SDKs.
+    <br>
+    </div>
