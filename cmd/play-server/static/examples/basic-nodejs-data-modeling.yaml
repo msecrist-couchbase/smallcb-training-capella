@@ -15,20 +15,12 @@ infoAfter_capella: |
     <strong>Data Modeling Lab</strong>
     <div class="step-section">
       This lab exercise does not have a code component to it. Instead, return to
-      the lab instructions - lab 3 for instructions on how to proceed.
-      <ul>
-        <li>
-          Take a look at the <a target="_blank" href="https://developer.couchbase.com/learn/capella">Capella Learning Path</a>!
-        </li>
-      </ul>
+      the <a target="_blank" href="https://e-learning-labs.s3-us-west-2.amazonaws.com/cb131-lab-instructions/03-data-modeling.html">lab instructions</a> - lab 3 for instructions on how to proceed.
     </div>
 
 
-
     <br>
+    <strong>Other references</strong><br>
     <a target="_blank" href="https://docs.couchbase.com/home/sdk.html">See the documentation</a> to learn more about the Couchbase SDKs.
     <br>
-    <br>
-    Have feedback for us? We'd love to hear from you. Use the form in the footer to send us your thoughts!
-  </div>
-
+    </div>

@@ -47,7 +47,10 @@ infoAfter: |
   method to find all playlist documents for user having the specified
   username.
   This example also shows handling of query results by iterating over each
-  result item and printing select elements.
+  result item and printing out.
+   <br/><br/>
+  Be sure the indexes have been created per the
+  <a target="_blank" href="https://e-learning-labs.s3-us-west-2.amazonaws.com/cb131-lab-instructions/04-n1ql-querying.html">lab instructions</a> for lab 4.
   <br/><br/>
   Visit the docs to learn more about
   <a target="_blank" href="https://docs.couchbase.com/nodejs-sdk/current/howtos/n1ql-queries-with-sdk.html">N1QL Queries with Node.js</a>.
