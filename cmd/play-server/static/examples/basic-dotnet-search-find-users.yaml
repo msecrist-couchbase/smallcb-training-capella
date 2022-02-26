@@ -51,6 +51,10 @@ code: |
     }
   }
 infoAfter: |
+  <strong>Lab 5</strong><br>
+  The lab instructions that correspond to this code sample can be found
+  <a target="_blank" href="https://e-learning-labs.s3-us-west-2.amazonaws.com/cb131-lab-instructions/05-full-text.html">here</a>.
+  <em>Be sure the search index has been created per the steps outlined in the instructions.</em><br><br>
   A Full-text search example using a search term and fuzziness.
   <br/><br/>
   Visit the docs to learn more about

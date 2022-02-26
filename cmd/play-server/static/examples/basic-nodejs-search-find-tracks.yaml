@@ -20,11 +20,11 @@ code: |
   const couchmusic2 = cluster.bucket('couchmusic2')
   const collection = couchmusic2.defaultCollection()
 
-  const searchUsersByGenre = async (genreKey) => {
+  const searchTracksByTitle = async (titleKey) => {
     try {
       const result = await cluster.searchQuery(
         "couchmusic2-track-title",
-        couchbase.SearchQuery.match(genreKey),
+        couchbase.SearchQuery.match(titleKey),
         { fields: ["title","artist"] }
       )
       
@@ -39,10 +39,14 @@ code: |
     }
   }
 
-  searchUsersByGenre('rose')
+  searchTracksByTitle('rose')
     .then(() => process.exit(0))
     
 infoAfter: |
+  <strong>Lab 5</strong><br>
+  The lab instructions that correspond to this code sample can be found
+  <a target="_blank" href="https://e-learning-labs.s3-us-west-2.amazonaws.com/cb131-lab-instructions/05-full-text.html">here</a>.
+  <em>Be sure the search index has been created per the steps outlined in the instructions.</em><br><br>
   A Full-text search example using a search term and adding additional fields.
   <br/><br/>
   Visit the docs to learn more about

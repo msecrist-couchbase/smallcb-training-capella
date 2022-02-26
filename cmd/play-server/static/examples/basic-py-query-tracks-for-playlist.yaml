@@ -41,11 +41,14 @@ code: |
   except:
     print("exception:", sys.exc_info()[0])
 infoAfter: |
-  Basic N1QL query, expected to return one to many rows, we loop
-  through them and print each one.
+  <strong>Lab 4</strong><br>
+  The lab instructions that correspond to this code sample can be found
+  <a target="_blank" href="https://e-learning-labs.s3-us-west-2.amazonaws.com/cb131-lab-instructions/04-n1ql-querying.html">here</a>.
+  <em>Be sure the indexes have been created per the steps outlined in the instructions.</em><br><br>
+  Placeholders allow you to specify variable constraints for a query.
+  This method allows you to use named parameters, pass them to
+  cluster.query() method by query and options.
    <br/><br/>
-  Be sure the indexes have been created per the
-  <a target="_blank" href="https://e-learning-labs.s3-us-west-2.amazonaws.com/cb131-lab-instructions/04-n1ql-querying.html">lab instructions</a> for lab 4.
-  <br/><br/>
+  
   Visit the docs to learn more about
   <a target="_blank" href="https://docs.couchbase.com/python-sdk/current/howtos/n1ql-queries-with-sdk.html">N1QL Queries with Python</a>.

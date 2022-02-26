@@ -3,7 +3,7 @@ page: page-05
 lang: dotnet
 infoBefore: |
   <div>
-  <a href='#' class="disable prev-button" style="float:left">Previous</a>
+  <a href='/examples/basic-dotnet-kv-get' class="prev-button">Previous</a>
   <a href='/examples/basic-dotnet-data-modeling' class="next-button">Next</a>
   </div>
   <br>
@@ -63,8 +63,11 @@ code: |
       }
   }
 infoAfter: |
-  If we know a document's key value, we can use the collection.GetAsync(...) method
-  passing a key. This returns a JSON result, which can be mapped to any type (including dynamic).
+  <strong>Lab 2</strong><br>
+  The lab instructions that correspond to this code sample can be found
+  <a target="_blank" href="https://e-learning-labs.s3-us-west-2.amazonaws.com/cb131-lab-instructions/02-key-value.html">here</a>.<br><br>
+
+  We insert and then retrieve a portion of the document using a basic insert and subdocument lookup.
   <br/><br/>
   See more at the SDK documentation on
   <a target="_blank" href="https://docs.couchbase.com/dotnet-sdk/current/howtos/kv-operations.html">.NET Key Value Operations</a>.
