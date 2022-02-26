@@ -695,74 +695,14 @@
 
 
         </div>
-          <div class="online-tools">
-            {{if .Target.DBurl}}
-              <h2 class="home-header hidden-ios">Explore interactive shell</h2>
-            {{end}}
-              {{if and (not .Session) (.Target.DBurl)}}
-                  <a href="/session-cbshell" {{if eq .Target.Status "not accessible"}}class="disabled"{{end}} class="nowrap disabled-safari hidden-ios">
-                    <u>Couchbase Shell</u></a>
-                  <a href="/session-cbshell?open=clitools" {{if eq .Target.Status "not accessible"}}class="disabled"{{end}} class="nowrap disabled-safari hidden-ios" onclick="localStorage.setItem('cbshell_type', 'clitools');">
-                    <u>CLI Tools Terminal</u></a>
-                  <script>
-                    localStorage.setItem("cbshell_window", "closed");
-                    localStorage.setItem("clitools_window", "closed");
-                  </script>
-              {{else if and (.Target.DBurl) (ge .SessionData.ContainerId 0)}}
-                <script>
-                  var cbshell_type = localStorage.getItem('cbshell_type');
-                  var iscbshell_open = localStorage.getItem("cbshell_window");
-                  if (iscbshell_open != "opened") {
-                    if (cbshell_type == "clitools") {
-                      open_url = "/static/shell-terminal.html?t={{.SessionData.scheme}}://{{.Host}}:{{.SessionData.port_1339}}?connectstr={{.Target.DBuser}},couchbases://{{.Target.DBSrvHost}}:11207/travel-sample?ssl=no_verify";
-                    } else {
-                      open_url = "/static/shell.html?t={{.SessionData.scheme}}://{{.Host}}:{{.SessionData.port_1337}}"
-                    }
-                    var cbshell_newTab = window.open(open_url, '_blank');
-                    if (cbshell_newTab == null) {
-                      alert("Please allow pop-ups and redirects from this site");
-                    }
-                    localStorage.setItem("cbshell_window", "opened");
-                    localStorage.removeItem('cbshell_type');
-                  }
-                </script>
 
-                <p><a target="_blank"
-                  href="/static/shell.html?t={{.SessionData.scheme}}://{{.Host}}:{{.SessionData.port_1337}}" class="nowrap disabled-safari hidden-ios">
-                    <u>Couchbase Shell</u></a> (opens a new tab and the session expire after {{.SessionsMaxAge}}
-                or until {{.SessionsMaxIdle}} of inactivity.)</p>
-                <p><a target="_blank"
-                  href="/static/shell-terminal.html?t={{.SessionData.scheme}}://{{.Host}}:{{.SessionData.port_1339}}?connectstr={{.Target.DBuser}},couchbases://{{.Target.DBSrvHost}}:11207/travel-sample?ssl=no_verify" class="nowrap disabled-safari hidden-ios">
-                    <u>CLI Tools Terminal</u></a> (opens a new tab and the session expire after {{.SessionsMaxAge}}
-                or until {{.SessionsMaxIdle}} of inactivity.)</p>
-                <script>
-                  localStorage.setItem("cbshell_window", "opened");
-                </script>
-              {{else}}
-                <script>
-                  localStorage.setItem("cbshell_window", "closed");
-                </script>
-
-              {{end}}
-
-          </div>
-          {{if not .Lang}}
-            <div class="online-tools">
-              <h2 class="home-header">More N1QL Tools</h2>
-              <div class="n1ql-link-wrapper">
-                <a href="https://query-tutorial.couchbase.com/tutorial/#1" class="nowrap" target="_blank">Query Tutorial</a>
-                <a href="https://index-advisor.couchbase.com/indexadvisor/#1" class="nowrap" target="_blank">Index Advisor</a>
-                <a href="https://sqlplusplus-tutorial.couchbase.com/tutorial/#1" class="nowrap" target="_blank">Analytics Tutorial</a>
-                <a href="https://docs.couchbase.com/server/current/n1ql/n1ql-rest-api/index.html" class="nowrap" target="_blank">REST API Docs</a>
-              </div>
-            </div>
-          {{end}}
+         
         {{if not .Lang}}
         <br>
         <br>
         <hr>
         <div class="next-steps">
-          <h2 class="home-header">Next Steps</h2>
+          <h2 class="home-header">Additional Resources</h2>
           <strong>Capella</strong>
           <div class="step-section">
             Learn more about <a target="_blank" href="https://www.couchbase.com/products/capella">Couchbase Capella</a>, our database-as-a-service offering.<br><br>
