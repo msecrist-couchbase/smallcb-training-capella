@@ -1,0 +1,46 @@
+title: Connect Verification
+page: page-01
+lang: java
+infoBefore: |
+  <div>
+  <a href='#' class="disable prev-button" style="float:left">Previous</a>
+  <a href='/examples/basic-java-kv-get' class="next-button">Next</a>
+  </div>
+  <br>
+code: |
+  import com.couchbase.client.java.*;
+  import com.couchbase.client.java.kv.*;
+  import com.couchbase.client.core.diagnostics.PingResult;
+  import com.couchbase.client.core.diagnostics.PingState;
+  import com.couchbase.client.core.service.ServiceType;
+  
+  import java.time.Duration;
+
+  class Program {
+    public static void main(String[] args) {
+       var cluster = Cluster.connect(
+          "couchbase://{{.Host}}", "{{.CBUser}}", "{{.CBPswd}}"
+       );
+
+       // Validate cluster connection
+       cluster.waitUntilReady(Duration.parse("PT10S"));
+       PingResult pingResult = cluster.ping();
+       if (pingResult.endpoints().size() == 0)
+          System.out.println("Available endpoints is 0, likely due to authentication failure");
+       PingState pingState = pingResult.endpoints().get(ServiceType.QUERY).get(0).state();
+       System.out.println("Ping State: " + pingState);
+
+       // Disconnect from the cluster
+       cluster.disconnect();
+    }
+  }
+infoAfter: |
+  <strong>Lab 2</strong><br>
+  The lab instructions that correspond to this code sample can be found
+  <a target="_blank" href="https://e-learning-labs.s3-us-west-2.amazonaws.com/cb131-lab-instructions/02-lab-env-setup.html.html">here</a>.<br><br>
+  Executing this program will verify the client code will be able to connect
+  to the Couchbase cluster. If successful, you know that you have properly set
+  up and provided the database credentials.
+  <br/><br/>
+  See more at the SDK documentation on
+  <a target="_blank" href="https://docs.couchbase.com/java-sdk/current/howtos/kv-operations.html">Java Key Value Operations</a>.
