@@ -1,14 +1,15 @@
-title: Key Value Get
+title: Connect Verification
 page: page-05
 lang: dotnet
 infoBefore: |
   <div>
-  <a href='/examples/basic-dotnet-connect' class="prev-button">Previous</a>
+  <a href='#' class="disable prev-button" style="float:left">Previous</a>
   <a href='/examples/basic-dotnet-kv-insert' class="next-button">Next</a>
   </div>
   <br>
 code: |
   using System;
+  using System.Linq;
   using System.Threading.Tasks;
   using Couchbase;
   using Couchbase.Core.Exceptions.KeyValue;
@@ -23,21 +24,13 @@ code: |
         var cluster = await Cluster.ConnectAsync(
           "couchbase://{{.Host}}", "{{.CBUser}}", "{{.CBPswd}}"
         );
-        // Obtain the bucket and collection
-        var bucket = await cluster.BucketAsync("couchmusic2");
-        var scope = bucket.Scope("couchify");
-        var collection = scope.Collection("track");
 
-        // Perform operation inside a try/catch block
-        try {
-            // Perform an asychronous Get operation
-            var result = await collection.GetAsync("00003466BBCDD2242E13D71F075D01458B8910FE");
-            var track = result.ContentAs<dynamic>();
-            Console.WriteLine(track);
-        } catch (DocumentNotFoundException ex) {
-           Console.WriteLine("Document not found!");
-        }
-
+        // Validate the connection
+        var pingResult = await cluster.PingAsync();
+        var kvResult = pingResult.Services["kv"];
+        var kvStates = kvResult.Select(k => k.State).ToList();
+        Console.WriteLine("State: " + kvStates[0]);
+       
         // Close connection
         await cluster.DisposeAsync();
       }
