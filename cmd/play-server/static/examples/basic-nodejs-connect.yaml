@@ -1,10 +1,10 @@
-title: Key Value Get
+title: Connect Verification
 page: page-03
 lang: nodejs
 infoBefore: |
   <div>
-    <a href='/examples/basic-nodejs-connect' class="prev-button" style="float:left">Previous</a>
-    <a href='/examples/basic-nodejs-kv-insert' class="next-button">Next</a>
+  <a href='#' class="disable prev-button" style="float:left">Previous</a>
+    <a href='/examples/basic-nodejs-kv-get' class="next-button">Next</a>
   </div>
   <br>
 code: |
@@ -17,27 +17,15 @@ code: |
   
   // Obtain the bucket and collection
   const bucket = cluster.bucket('couchmusic2')
-  const scope = bucket.scope('couchify');
-  const collection = scope.collection('track')
 
-  const getDocument = async (key) => {
-    // Perform operation inside a try/catch block
-    try {
-      // Perform an asynchronous Get operation
-      const result = await collection.get(key)
-      console.log('Result: ')
-      console.log(result.content)
-    } catch (err) {
-      if (err instanceof couchbase.DocumentNotFoundError) {
-          console.error("Document not found!")
-      } else {
-          console.error(err)
-      }
-    }
-  }
+  const validateConnection = async () => {
+     const pingResult = await cluster.ping();
+     const kvPingResult = pingResult.services["kv"];
+     console.log(`Status: ${kvPingResult[0].status}`);
+   }
 
-  getDocument('00003466BBCDD2242E13D71F075D01458B8910FE')
-    .then(() => process.exit(0))
+   validateConnection()
+      .then(() => process.exit(0))
 
 infoAfter: |
   <strong>Lab 2</strong><br>

@@ -401,7 +401,7 @@
             <h2 class="home-header"><label for="examplesToggle">Enter Labs: Click Below to select the language you wish to run labs with</label></h2>
             <div class="row example-row">
               <div class="col-xs-6 col-sm-6 col-md-3 col-lg-3">
-                <a href="/examples/basic-java-kv-get{{if $.Session}}?s={{$.Session.SessionId}}{{end}}"
+                <a href="/examples/basic-java-connect{{if $.Session}}?s={{$.Session.SessionId}}{{end}}"
                    class="example-button" onclick="return pageToggle('page-01')">
                   <object data="../static/icons/java.svg" width="14%" height="14%" class="example-icon"></object>
                   <h3 class="example-label">Java</h3>
@@ -409,7 +409,7 @@
               </div>
 
               <div class="col-xs-6 col-sm-6 col-md-3 col-lg-3">
-                <a href="/examples/basic-nodejs-kv-get{{if $.Session}}?s={{$.Session.SessionId}}{{end}}"
+                <a href="/examples/basic-nodejs-connect{{if $.Session}}?s={{$.Session.SessionId}}{{end}}"
                    class="example-button" onclick="return pageToggle('page-03')">
                   <object data="../static/icons/nodejs.svg" width="14%" height="14%" class="example-icon"></object>
                   <h3 class="example-label hidden-xs">Node.js</h3>
@@ -427,7 +427,7 @@
               </div>
 
               <div class="col-xs-6 col-sm-6 col-md-3 col-lg-3">
-                <a href="/examples/basic-dotnet-kv-get{{if $.Session}}?s={{$.Session.SessionId}}{{end}}"
+                <a href="/examples/basic-dotnet-connect{{if $.Session}}?s={{$.Session.SessionId}}{{end}}"
                    class="example-button" onclick="return pageToggle('page-05')">
                   <object data="../static/icons/dotnet.svg" width="14%" height="14%" class="example-icon"></object>
                   <h3 class="example-label">.NET</h3>
@@ -458,19 +458,36 @@
           {{if and .Lang .Title}}
             <div class="progress-wrapper">
               <ul class="progress-indicator">
+                  {{/* Determine if connect verification Completed */}}
+                  {{if or (eq .Title "Connect Verification") (eq .Title "Key Value Get") (eq .Title "Key Value Insert") (eq .Title "Data Modeling") (eq .Title "Find Playlists for username") (eq .Title "Find Tracks for Playlist") (eq .Title "Search 1 - Find Users") (eq .Title "Search 2 - Find Tracks") (eq .Title "Next Steps")}}
+                    <li class="completed">
+                      <a href="/examples/basic-{{.Lang}}-connect{{if .Session}}?s={{.Session.SessionId}}{{end}}">
+                        <span class="bubble"></span>
+                        Lab 2: Connect Verification
+                      </a>
+                    </li>
+                  {{else}}
+                    <li>
+                      <a href="/examples/basic-{{.Lang}}-connect{{if .Session}}?s={{.Session.SessionId}}{{end}}">
+                        <span class="bubble"></span>
+                        Lab 2: Connect Verification
+                      </a>
+                    </li>
+                  {{end}}
+                  
                   {{/* Determine If KV Get Completed */}}
                   {{if or (eq .Title "Key Value Get") (eq .Title "Key Value Insert") (eq .Title "Data Modeling") (eq .Title "Find Playlists for username") (eq .Title "Find Tracks for Playlist") (eq .Title "Search 1 - Find Users") (eq .Title "Search 2 - Find Tracks") (eq .Title "Next Steps")}}
                     <li class="completed">
                       <a href="/examples/basic-{{.Lang}}-kv-get{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                         <span class="bubble"></span>
-                        Lab 2: K/V Get
+                        Lab 3: K/V Get
                       </a>
                     </li>
                   {{else}}
                     <li>
                       <a href="/examples/basic-{{.Lang}}-kv-get{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                         <span class="bubble"></span>
-                        Lab 2: K/V Get
+                        Lab 3: K/V Get
                       </a>
                     </li>
                   {{end}}
@@ -480,14 +497,14 @@
                     <li class="completed">
                       <a href="/examples/basic-{{.Lang}}-kv-insert{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                         <span class="bubble"></span>
-                        Lab 2: K/V Insert
+                        Lab 3: K/V Insert
                       </a>
                     </li>
                   {{else}}
                     <li>
                       <a href="/examples/basic-{{.Lang}}-kv-insert{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                         <span class="bubble"></span>
-                        Lab 2: K/V Insert
+                        Lab 3: K/V Insert
                       </a>
                     </li>
                   {{end}}
@@ -497,14 +514,14 @@
                     <li class="completed">
                       <a href="/examples/basic-{{.Lang}}-data-modeling{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                         <span class="bubble"></span>
-                        Lab 3: Data Modaling
+                        Lab 4: Data Modaling
                       </a>
                     </li>
                   {{else}}
                     <li>
                       <a href="/examples/basic-{{.Lang}}-data-modeling{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                         <span class="bubble"></span>
-                        Lab 3: Data Modeling
+                        Lab 4: Data Modeling
                       </a>
                     </li>
                   {{end}}
@@ -515,14 +532,14 @@
                     <li class="completed">
                       <a href="/examples/basic-{{.Lang}}-query-playlist-for-username{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                         <span class="bubble"></span>
-                        Lab 4: Query 1
+                        Lab 5: Query 1
                       </a>
                     </li>
                   {{else}}
                     <li>
                       <a href="/examples/basic-{{.Lang}}-query-playlist-for-username{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                         <span class="bubble"></span>
-                        Lab 4: Query 1
+                        Lab 5: Query 1
                       </a>
                     </li>
                   {{end}}
@@ -532,14 +549,14 @@
                     <li class="completed">
                       <a href="/examples/basic-{{.Lang}}-query-tracks-for-playlist{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                         <span class="bubble"></span>
-                        Lab 4: Query 2
+                        Lab 5: Query 2
                       </a>
                     </li>
                   {{else}}
                     <li>
                       <a href="/examples/basic-{{.Lang}}-query-tracks-for-playlist{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                         <span class="bubble"></span>
-                        Lab 4: Query 2
+                        Lab 5: Query 2
                       </a>
                     </li>
                   {{end}}
@@ -549,14 +566,14 @@
                     <li class="completed">
                       <a href="/examples/basic-{{.Lang}}-search-find-users{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                         <span class="bubble"></span>
-                        Lab 5: Search 1
+                        Lab 6: Search 1
                       </a>
                     </li>
                   {{else}}
                     <li>
                       <a href="/examples/basic-{{.Lang}}-search-find-users{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                         <span class="bubble"></span>
-                        Lab 5: Search 1
+                        Lab 6: Search 1
                       </a>
                     </li>
                   {{end}}
@@ -566,14 +583,14 @@
                     <li class="completed">
                       <a href="/examples/basic-{{.Lang}}-search-find-tracks{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                         <span class="bubble"></span>
-                        Lab 5: Search 2
+                        Lab 6: Search 2
                       </a>
                     </li>
                   {{else}}
                     <li>
                       <a href="/examples/basic-{{.Lang}}-search-find-tracks{{if .Session}}?s={{.Session.SessionId}}{{end}}">
                         <span class="bubble"></span>
-                        Lab 5: Search 2
+                        Lab 6: Search 2
                       </a>
                     </li>
                   {{end}}

@@ -3,7 +3,7 @@ page: page-03
 lang: nodejs
 infoBefore: |
   <div>
-  <a href='#' class="disable prev-button" style="float:left">Previous</a>
+    <a href='/examples/basic-nodejs-kv-get' class="prev-button" style="float:left">Previous</a>
     <a href='/examples/basic-nodejs-data-modeling' class="next-button">Next</a>
   </div>
   <br>
