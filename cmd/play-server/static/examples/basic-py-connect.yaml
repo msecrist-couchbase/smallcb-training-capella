@@ -1,10 +1,10 @@
-title: Key Value Get
+title: Connect Verification
 page: page-04
 lang: py
 infoBefore: |
   <div>
-    <a href='/examples/basic-py-connect' class="prev-button">Previous</a>
-  <a href='/examples/basic-py-kv-insert' class="next-button">Next</a>
+  <a href='#' class="disable prev-button" style="float:left">Previous</a>
+  <a href='/examples/basic-py-kv-get' class="next-button">Next</a>
   </div>
   <br>
 code: |
@@ -16,6 +16,7 @@ code: |
   from couchbase_core.cluster import PasswordAuthenticator
   from couchbase.exceptions import CouchbaseException
   from couchbase.exceptions import DocumentNotFoundException
+  from couchbase.diagnostics import EndpointPingReport, ServiceType
   
   # Connect to the cluster
   pa = PasswordAuthenticator('{{.CBUser}}', '{{.CBPswd}}')
@@ -23,19 +24,12 @@ code: |
   
   # Obtain the bucket and collection
   bucket = cluster.bucket('couchmusic2')
-  scope = bucket.scope('couchify')
-  collection = scope.collection('track')
-  
-  # Perform operation inside a try/catch block
-  try:
-    # Perform an asynchronous Get operation
-    result = collection.get('00003466BBCDD2242E13D71F075D01458B8910FE')
-    print(result.content)
-  
-  except DocumentNotFoundException as e:
-        print("Document not found")
-  except CouchbaseException as ce:
-        print("Got unhandled Couchbase exception: ", ce)
+
+  # Validate the connection
+  pingResult = cluster.ping()
+  keyvaluePingResult = pingResult.endpoints[ServiceType.KeyValue]
+  print(keyvaluePingResult[0].state)
+
 infoAfter: |
   <strong>Lab 2</strong><br>
   The lab instructions that correspond to this code sample can be found
