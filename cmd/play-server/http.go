@@ -128,7 +128,7 @@ func HttpHandleMain(w http.ResponseWriter, r *http.Request) {
 			Target.UserAccessStatus = CheckDBUserAccess(Target.IPv4, Target.DBuser, Target.DBpwd)
 			Target.Status = Target.UserAccessStatus
 			if Target.UserAccessStatus == "OK" {
-				Target.SampleAccessStatus = CheckDBUserSampleAccess(Target.IPv4, Target.DBuser, Target.DBpwd, "travel-sample")
+				Target.SampleAccessStatus = CheckDBUserSampleAccess(Target.IPv4, Target.DBuser, Target.DBpwd, "couchmusic2")
 				Target.Status = Target.SampleAccessStatus
 			}
 		}

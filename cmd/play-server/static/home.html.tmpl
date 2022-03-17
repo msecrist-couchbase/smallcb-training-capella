@@ -261,12 +261,12 @@
                 <span class="head-user">user:</span>
                 {{if eq .Target.UserAccessStatus "OK"}}
                   <code style="color: green">{{.Target.UserAccessStatus}}</code>
-                  <span class="head-user">travel-sample:</span>
+                  <span class="head-user">couchmusic2:</span>
                   {{if eq .Target.SampleAccessStatus "OK"}}
                     <code style="color: green">{{.Target.SampleAccessStatus}}</code>
                   {{else}}
                     <code style="color: red">{{.Target.SampleAccessStatus}}</code>
-                    <span class="head-user">-->Check travel-sample import in Capella UI</span>
+                    <span class="head-user">-->Check couchmusic2 import in Capella UI</span>
                   {{end}}
                 {{else}}
                   <code style="color: red">{{.Target.UserAccessStatus}}</code>
