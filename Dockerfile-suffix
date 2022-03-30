@@ -31,7 +31,7 @@ RUN echo "prefix = /home/play/npm_packages" >> ~/.npmrc && \
     PATH=/home/play/npm-packages/bin:$PATH \
     NODE_PATH=/home/play/npm-packages/lib/node_modules:$NODE_PATH \
     NPM_PACKAGES=/home/play/npm-packages \
-    npm install -g couchbase ottoman gritty
+    npm install -g couchbase@${COUCHBASE_SDK_NODEJS_VERSION} ottoman gritty
 
 # TLS/SSL support
 RUN CUR_DIR=$PWD; cd /home/play; git clone https://github.com/jdmuntacb/gritty.git; \
@@ -41,7 +41,7 @@ RUN CUR_DIR=$PWD; cd /home/play; git clone https://github.com/jdmuntacb/gritty.g
 
 USER root
 
-RUN npm show couchbase | grep latest | cut -f 2 -d ' ' > /opt/couchbase/VERSION-sdk-nodejs.ver
+RUN cd /home/play/npm_packages/lib/node_modules && npm list couchbase | grep couchbase | cut -f 2 -d '@' > /opt/couchbase/VERSION-sdk-nodejs.ver
 
 # ------------------------------------------------
 # SDK java.
