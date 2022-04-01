@@ -4,7 +4,7 @@ lang: py
 infoBefore: |
   NOTE: Indexes must be defined before running these queries.<br><br>
   <div>
-  <a href='/examples/basic-py-playlist-for-username' class="prev-button">Previous</a>
+  <a href='/examples/basic-py-query-playlist-for-username' class="prev-button">Previous</a>
   <a href='/examples/basic-py-search-find-users' class="next-button">Next</a>
   </div>
   <br>
