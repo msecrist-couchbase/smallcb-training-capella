@@ -37,7 +37,7 @@ code: |
 infoAfter: |
   <strong>Lab 2</strong><br>
   The lab instructions that correspond to this code sample can be found
-  <a target="_blank" href="https://e-learning-labs.s3-us-west-2.amazonaws.com/cb131c-lab-instructions/02-lab-env-setup.html.html">here</a>.<br><br>
+  <a target="_blank" href="https://e-learning-labs.s3-us-west-2.amazonaws.com/cb131c-lab-instructions/02-lab-env-setup.html">here</a>.<br><br>
   Executing this program will verify the client code will be able to connect
   to the Couchbase cluster. If successful, you know that you have properly set
   up and provided the database credentials.

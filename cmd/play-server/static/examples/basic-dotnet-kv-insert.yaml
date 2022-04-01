@@ -63,9 +63,9 @@ code: |
       }
   }
 infoAfter: |
-  <strong>Lab 2</strong><br>
+  <strong>Lab 3</strong><br>
   The lab instructions that correspond to this code sample can be found
-  <a target="_blank" href="https://e-learning-labs.s3-us-west-2.amazonaws.com/cb131c-lab-instructions/02-key-value.html">here</a>.<br><br>
+  <a target="_blank" href="https://e-learning-labs.s3-us-west-2.amazonaws.com/cb131c-lab-instructions/03-key-value.html">here</a>.<br><br>
 
   We insert and then retrieve a portion of the document using a basic insert and subdocument lookup.
   <br/><br/>
