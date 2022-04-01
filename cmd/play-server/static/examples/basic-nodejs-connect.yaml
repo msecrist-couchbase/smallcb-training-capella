@@ -30,7 +30,7 @@ code: |
 infoAfter: |
   <strong>Lab 2</strong><br>
   The lab instructions that correspond to this code sample can be found
-  <a target="_blank" href="https://e-learning-labs.s3-us-west-2.amazonaws.com/cb131-lab-instructions/02-key-value.html">here</a>.<br><br>
+  <a target="_blank" href="https://e-learning-labs.s3-us-west-2.amazonaws.com/cb131c-lab-instructions/02-key-value.html">here</a>.<br><br>
   If we know a document's key value, we can use the collection.get() method passing a key. This returns one document.
   <br/><br/>
   See more at the SDK documentation on
