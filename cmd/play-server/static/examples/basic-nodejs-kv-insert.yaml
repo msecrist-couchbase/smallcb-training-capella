@@ -31,9 +31,9 @@ code: |
       console.log(insertResult)
     } catch (err) {
       if (err instanceof couchbase.DocumentExistsError) {
-          console.error("Document already exists!")
+          console.log("Document already exists!")
       } else {
-          console.error(err)
+          console.log(err)
       }
     }
   }
@@ -44,9 +44,6 @@ code: |
         couchbase.LookupInSpec.get(field),
       ])
       var fieldValue = result.content[0].value
-
-      console.log('LookupIn Result: ')
-      console.log(result)
 
       console.log('Field Value: ')
       console.log(fieldValue)
