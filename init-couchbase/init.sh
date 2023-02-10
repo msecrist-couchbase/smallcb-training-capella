@@ -6,7 +6,9 @@ CB_HOST="${CB_HOST:-127.0.0.1}"
 CB_PORT="${CB_PORT:-8091}"
 CB_NAME="${CB_NAME:-Playground}"
 
+#CB_SERVICES="${CB_SERVICES:-data,query,index,fts}"
 CB_SERVICES="${CB_SERVICES:-data,query,index,fts}"
+CB_SERVICES="data,query,index,fts"
 
 CB_KV_RAMSIZE="${CB_KV_RAMSIZE:-1024}"
 CB_INDEX_RAMSIZE="${CB_INDEX_RAMSIZE:-256}"
@@ -50,9 +52,7 @@ if ! couchbase-cli server-list -c ${CB_HOST}:${CB_PORT} -u ${CB_USER} -p ${CB_PS
         --cluster-password ${CB_PSWD} \
         --cluster-ramsize ${CB_KV_RAMSIZE} \
         --cluster-index-ramsize ${CB_INDEX_RAMSIZE} \
-        --cluster-fts-ramsize ${CB_FTS_RAMSIZE} \
-        --cluster-eventing-ramsize ${CB_EVENTING_RAMSIZE} \
-        --cluster-analytics-ramsize ${CB_ANALYTICS_RAMSIZE}
+        --cluster-fts-ramsize ${CB_FTS_RAMSIZE} 
 fi
 
 sleep 3
