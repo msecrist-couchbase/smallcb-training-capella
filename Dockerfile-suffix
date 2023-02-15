@@ -40,8 +40,7 @@ RUN CUR_DIR=$PWD; cd /home/play; git clone https://github.com/jdmuntacb/gritty.g
     gritty -h; cd $CUR_DIR
 
 USER root
-
-RUN cd /home/play/npm_packages/lib/node_modules && npm list couchbase | grep couchbase | cut -f 2 -d '@' > /opt/couchbase/VERSION-sdk-nodejs.ver
+RUN cd /home/play/npm_packages/lib/node_modules && npm list couchbase | grep couchbase | sed 1q | cut -f 2 -d '@' > /opt/couchbase/VERSION-sdk-nodejs.ver
 
 # ------------------------------------------------
 # SDK java.
@@ -69,6 +68,27 @@ RUN cp /run-java-pom.xml /home/play/hello/pom.xml && \
 USER root
 
 RUN cat /run-java-pom.xml | grep 'version>3' | cut -f 2 -d '>' | cut -f 1 -d '<' > /opt/couchbase/VERSION-sdk-java.ver
+
+# ------------------------------------------------
+# SDK kotlin
+
+COPY cmd/play-server/run-kotlin-pom.xml /run-kotlin-pom.xml
+RUN sed -i -e "s/1.0.0-dp.7/${COUCHBASE_SDK_KOTLIN_VERSION}/g" /run-kotlin-pom.xml
+
+COPY cmd/play-server/run-kotlin-hello.kt /home/play/hello/src/main/kotlin/hello.kt
+
+RUN chown -R play:couchbase /home/play
+
+USER play
+
+RUN cp /run-kotlin-pom.xml /home/play/hello/pom.xml && \
+    cd /home/play/hello && \
+    mvn package && \
+    mvn dependency:build-classpath -Dmdep.outputFile=kotlin-classpath.txt
+
+USER root
+
+RUN cat /run-kotlin-pom.xml | grep 'kotlin-client' -A 1|grep 'version>' | cut -f 2 -d '>' | cut -f 1 -d '<' > /opt/couchbase/VERSION-sdk-kotlin.ver
 
 # ------------------------------------------------
 # SDK .NET.
@@ -179,3 +199,14 @@ ENV PATH="$PATH:/home/cbsh/tutorials-cbsh"
 USER root
 
 RUN chown -R cbsh:couchbase /home/cbsh
+
+# ------------------------------------------------
+# SQL++ Tutorials Data
+
+COPY cmd/play-server/data /home/sql++-tutorial/data
+
+# ------------------------------------------------
+# CB Lite SDK
+# .Net
+RUN sed -i -e "s/3.0.0/${CB_MOBILE_VERSION}/g" /run-cblite-dotnet.sh
+RUN echo ${CB_MOBILE_VERSION} > /opt/couchbase/VERSION-sdk-cblite.ver
